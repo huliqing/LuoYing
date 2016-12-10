@@ -25,8 +25,6 @@ import name.huliqing.luoying.object.state.State;
 public class StateModule extends AbstractModule implements DataHandler<StateData> {
 
     private final SafeArrayList<State> states = new SafeArrayList<State>(State.class);
-    private List<StateListener> stateListeners;
-    
     private Control updateControl;
     
     /** 角色的抵抗设置 */
@@ -104,7 +102,51 @@ public class StateModule extends AbstractModule implements DataHandler<StateData
         this.entity.getData().addObjectData(this.resist.getData());
     }
 
-    /**
+    public State getState(String stateId) {
+        for (State s : states.getArray()) {
+            if (s.getData().getId().equals(stateId)) {
+                return s;
+            }
+        }
+        return null;
+    }
+   
+    @Override
+    public Class<StateData> getHandleType() {
+        return StateData.class;
+    }
+    
+    @Override
+    public boolean handleDataAdd(StateData data, int amount) {
+        State state = Loader.load(data);
+        boolean result = addState(state, false);
+        if (result) {
+            addEntityDataAddMessage(StateCode.DATA_ADD, data, 1);
+        } else {
+            addEntityDataAddMessage(StateCode.DATA_ADD_FAILURE, data, 1);
+        }
+        return result;
+    }
+
+    @Override
+    public boolean handleDataRemove(StateData data, int amount) {
+        State state = getState(data.getId());
+        if (state != null) {
+            removeState(state);
+            addEntityDataRemoveMessage(StateCode.DATA_REMOVE, data, amount);
+            return true;
+        } else {
+            addEntityDataRemoveMessage(StateCode.DATA_REMOVE_FAILURE_NOT_FOUND, data, amount);
+            return false;
+        }
+    }
+
+    @Override
+    public boolean handleDataUse(StateData data) {
+        return false; // ignore
+    }
+    
+     /**
      * 设置状态
      * @param state
      * @param force
@@ -118,7 +160,27 @@ public class StateModule extends AbstractModule implements DataHandler<StateData
         state.setActor(entity);
         state.setResist(resistValue);
         addStateInner(state);
-        addEntityDataAddMessage(StateCode.DATA_ADD, state.getData(), 1);
+        return true;
+    }
+    
+    private void addStateInner(State state) {
+        // 如果已经存在相同ID的状态，则要删除旧的，因状态不允许重复。
+        State oldState = getState(state.getData().getId());
+        if (oldState != null) {
+            removeState(oldState);
+        }
+        
+        // 加入data列表和处理器列表
+        states.add(state);
+        entity.getData().addObjectData(state.getData());
+        state.setActor(entity);
+        state.initialize();
+    }
+    
+    private boolean removeState(State state) {
+        states.remove(state);
+        entity.getData().removeObjectData(state.getData());
+        state.cleanup();
         return true;
     }
     
@@ -144,100 +206,5 @@ public class StateModule extends AbstractModule implements DataHandler<StateData
         // 值最高不会超过角色的最高抵抗值．该最终抵抗值可削弱一部分状态的作用．
         float resultResist = resistValue * RandomManager.getNextValue();
         return resultResist;
-    }
-    
-    private void addStateInner(State state) {
-        // 如果已经存在相同ID的状态，则要删除旧的，因状态不允许重复。
-        State oldState = getState(state.getData().getId());
-        if (oldState != null) {
-            removeState(oldState);
-        }
-        
-        // 加入data列表和处理器列表
-        states.add(state);
-        entity.getData().addObjectData(state.getData());
-        
-        state.setActor(entity);
-        state.initialize();
-        
-        // 侦听器
-        if (stateListeners != null && !stateListeners.isEmpty()) {
-            for (StateListener sl : stateListeners) {
-                sl.onStateAdded(entity, state);
-            }
-        }
-    }
-    
-    private boolean removeState(State state) {
-        if (!states.contains(state))
-            return false;
-        
-        states.remove(state);
-        entity.getData().removeObjectData(state.getData());
-        state.cleanup();
-        // 侦听器
-        if (stateListeners != null && !stateListeners.isEmpty()) {
-            for (StateListener sl : stateListeners) {
-                sl.onStateRemoved(entity, state);
-            }
-        }
-        // 消息
-        addEntityDataRemoveMessage(StateCode.DATA_REMOVE, state.getData(), 1);
-        return true;
-    }
-
-    public State getState(String stateId) {
-        for (State s : states.getArray()) {
-            if (s.getData().getId().equals(stateId)) {
-                return s;
-            }
-        }
-        return null;
-    }
-    
-    public List<State> getStates() {
-        return states;
-    }
-    
-    public void addStateListener(StateListener stateListener) {
-        if (stateListeners == null) {
-            stateListeners = new SafeArrayList<StateListener>(StateListener.class);
-        }
-        if (!stateListeners.contains(stateListener)) {
-            stateListeners.add(stateListener);
-        }
-    }
-
-    public boolean removeStateListener(StateListener stateListener) {
-        return stateListeners != null && stateListeners.remove(stateListener);
-    }
-
-    public List<StateListener> getStateListeners() {
-        return stateListeners;
-    }
-    
-    @Override
-    public Class<StateData> getHandleType() {
-        return StateData.class;
-    }
-    
-    @Override
-    public boolean handleDataAdd(StateData data, int amount) {
-        State state = Loader.load(data);
-        return addState(state, false);
-    }
-
-    @Override
-    public boolean handleDataRemove(StateData data, int amount) {
-        State state = getState(data.getId());
-        if (state != null) {
-            return removeState(state);
-        }
-        return false;
-    }
-
-    @Override
-    public boolean handleDataUse(StateData data) {
-        return false; // ignore
     }
 }

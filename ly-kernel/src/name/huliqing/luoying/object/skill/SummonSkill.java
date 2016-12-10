@@ -114,7 +114,7 @@ public class SummonSkill extends AbstractSkill {
     }
 
     @Override
-    protected void doUpdateLogic(float tpf) {
+    protected void doSkillUpdate(float tpf) {
         if (summonId == null) {
             cleanup();
             return;

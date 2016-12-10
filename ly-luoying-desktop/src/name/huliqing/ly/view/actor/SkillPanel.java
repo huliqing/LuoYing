@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.network.ActorNetwork;
+import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.layer.network.SkillNetwork;
 import name.huliqing.luoying.layer.service.DefineService;
 import name.huliqing.luoying.layer.service.SkillService;
@@ -31,6 +32,7 @@ public class SkillPanel extends ListView<Skill> implements ActorPanel {
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final GameService gameService = Factory.get(GameService.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
+    private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
 
     private Entity actor;
     private final List<Skill> datas = new ArrayList<Skill>();
@@ -93,7 +95,7 @@ public class SkillPanel extends ListView<Skill> implements ActorPanel {
                         gameNetwork.setTarget(actor, target.getEntityId());
                     }
                     
-                    skillNetwork.playSkill(actor, row.getData(), false);
+                    entityNetwork.useObjectData(actor, row.getData().getData().getUniqueId());
                     
                     // skill不会删除,所以不需要刷新
 //                    refreshPageData();

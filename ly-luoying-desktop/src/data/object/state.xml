@@ -52,8 +52,7 @@
     <stateAttribute id="stateRebornProtect2" useTime="5" bindNumberAttribute="attributeMagicDefence" addValue="99999" restore="1" />
     
     <!--增加生命值让角色复活-->
-    <stateAttribute id="stateRebornAddLife" icon="" useTime="0" 
-                          bindNumberAttribute="attributeHealth" addValue="100" restore="0" />
+    <stateAttribute id="stateRebornAddLife" icon="" useTime="0" bindNumberAttribute="attributeHealth" addValue="100" restore="0" />
     
     <!--让角色处于wait状态-->
     <stateSkill id="stateRebornWait" icon="" useTime="0" skillTypes="wait" />

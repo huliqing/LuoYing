@@ -8,6 +8,7 @@ gameSurvival.name=Survival(Defense)
 gameSurvival.des=Survival, this game is still in test state, the rules similar to the "Gold Chest" in the story mode, the gold chest can not be destroyed.the enemy will be automatically upgraded from time to time, players have kept upgrading, create more towers and summon more pets to defend against enemy until the boss is defeated.
 
 # ========== Attribute
+attributePlayer.name=Player
 attributeDead.name=Dead
 attributeBiology.name=Biology
 attributeRace.name=Race
@@ -50,7 +51,7 @@ attributeWeaponSlots.name=Weapon Slots
 attributeLocation.name=Location
 attributeColor.name=Skin Color
 attributeName.name=Name
-attributePlayer.name=Player
+attributeMessage.name=Message
 
 # ========== Basic Item
 itemGold.name=Gold
@@ -282,6 +283,21 @@ talentVision.name=Hawkeye
 talentVision.des=Vision Improvement
 talentMoveSpeed.name=Wind Walk
 talentMoveSpeed.des=Increase move speed
+
+#====state
+stateSafe.name=Absolute Defense
+stateStun.name=Dizzy
+stateWindWalk.name=Wind Walk
+stateSnowFrost.name=Frost
+stateIceFrozen.name=Frozen
+stateRebornEssential.name=Essential
+stateRebornProtect.name=Reborn Protection
+stateRebornAddLife.name=Life Restore
+stateRebornWait.name=Wait
+stateSpiderWeb.name=Spider Web
+stateSpeedUpAS.name=Frenzy
+stateScorpionVenom.name=Scorpion Poison
+stateClean.name=Cleanse
 
 #==== chat
 chatSend.name=Send Items

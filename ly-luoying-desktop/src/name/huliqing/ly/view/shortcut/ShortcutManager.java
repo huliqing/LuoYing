@@ -4,18 +4,22 @@
  */
 package name.huliqing.ly.view.shortcut;
 
+import checkers.quals.Unused;
 import com.jme3.math.Vector3f;
 import com.jme3.util.SafeArrayList;
 import com.jme3.util.TempVars;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import name.huliqing.luoying.Factory;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.data.ItemData;
 import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.data.SkinData;
-import name.huliqing.luoying.layer.service.SkillService;
+import name.huliqing.luoying.data.define.CountObject;
 import name.huliqing.luoying.xml.DataFactory;
 import name.huliqing.luoying.save.ShortcutSave;
 import name.huliqing.luoying.ui.UIUtils;
@@ -32,9 +36,8 @@ import name.huliqing.ly.constants.InterfaceConstants;
  * @author huliqing
  */
 public class ShortcutManager {
-//    private final UserCommandNetwork userCommandNetwork = Factory.get(UserCommandNetwork.class);
+    private static final Logger LOG = Logger.getLogger(ShortcutManager.class.getName());
     private final static ShortcutRoot SHORTCUT_ROOT = new ShortcutRoot();
-    
     
     // “删除”图标
     private final static UI DELETE = UIUtils.createMultView(
@@ -45,6 +48,14 @@ public class ShortcutManager {
             128, 128, InterfaceConstants.UI_RECYCLE, InterfaceConstants.UI_SHORTCUT_BACKGROUND);
     
     private final static float SPACE = 40;
+    
+    private final static Map<Class<? extends ObjectData>, Class<? extends Shortcut>> SHORTCUT_TYPE_MAP 
+            = new HashMap<Class<? extends ObjectData>, Class<? extends Shortcut>>();
+    static {
+        SHORTCUT_TYPE_MAP.put(ItemData.class, ItemShortcut.class);
+        SHORTCUT_TYPE_MAP.put(SkillData.class, SkillShortcut.class);
+        SHORTCUT_TYPE_MAP.put(SkinData.class, SkinShortcut.class);
+    }
     
     /**
      * 快捷方式默认的宽度
@@ -100,33 +111,20 @@ public class ShortcutManager {
     public static void loadShortcut(List<ShortcutSave> ss, Entity player) {
         if (ss == null || ss.isEmpty())
             return;
-        SkillService skillService = Factory.get(SkillService.class);
         float shortcutSize = LyConfig.getShortcutSize();
         for (ShortcutSave s : ss) {
             String objectId = s.getObjectId();
             ObjectData data = player.getData().getObjectData(objectId);
             if (data == null) {
                 data = DataFactory.createData(objectId);
+                if (data instanceof CountObject) {
+                    ((CountObject)data).setTotal(0);
+                }
             }
             
             // 防止物品被删除
             if (data == null) {
                 continue;
-            }
-            
-            // 包裹中只允许存放限定的物品
-            if ((!(data instanceof ItemData)) 
-                    && (!(data instanceof SkinData)) 
-                    && (!(data instanceof SkillData))
-                    ) {
-                continue;
-            }
-            
-            // 由于skill的创建过程比较特殊，SkillData只有在创建了Skill之后
-            // 才能获得skillType,所以不能直接使用createProtoData方式获得的SkillData
-            // 这会找不到SkillData中的skillType,所以需要从角色身上重新找回SkillData
-            if (data instanceof SkillData) {
-                data = skillService.getSkill(player, data.getId()).getData();
             }
             
             Shortcut shortcut = createShortcut(player, data
@@ -145,27 +143,22 @@ public class ShortcutManager {
     
     private static Shortcut createShortcut(Entity actor, ObjectData data
             , Vector3f location, float width, float height, boolean dragEnabled) {
-        Shortcut shortcut = null;
-        if (data instanceof SkillData) {
-            shortcut = new SkillShortcut();
-            
-        } else if (data instanceof SkinData) {
-            shortcut = new SkinShortcut();
-            
-        } else if (data instanceof ItemData) {
-            shortcut = new ItemShortcut();
-            
-        } else {
-            throw new UnsupportedOperationException("Could not createShortcut for objectData, objectId=" + data.getId());
-        }
-        shortcut.setActor(actor);
-        shortcut.setObjectData(data);
-        shortcut.setWidth(width);
-        shortcut.setHeight(height);
-        shortcut.setLocation(location);
-        shortcut.setDragEnagled(dragEnabled);
-        return shortcut;
         
+        Class<? extends Shortcut> clazz = SHORTCUT_TYPE_MAP.get(data.getClass());
+        
+        try {
+            Shortcut shortcut = clazz.newInstance();
+            shortcut.setActor(actor);
+            shortcut.setObjectData(data);
+            shortcut.setWidth(width);
+            shortcut.setHeight(height);
+            shortcut.setLocation(location);
+            shortcut.setDragEnagled(dragEnabled);
+            return shortcut;
+        } catch (Exception ex) {
+            LOG.log(Level.WARNING, "Could not createShortcut for objectData, objectId=" + data.getId(), ex);
+        }
+        return null;
     }
         
     /**

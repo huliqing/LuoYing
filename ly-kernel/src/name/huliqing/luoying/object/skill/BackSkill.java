@@ -42,7 +42,7 @@ public class BackSkill extends AbstractSkill {
     }
 
     @Override
-    protected void doUpdateLogic(float tpf) {
+    protected void doSkillUpdate(float tpf) {
         if (!backed && time >= trueUseTime * backPoint) {
             Vector3f loc = actor.getSpatial().getLocalTranslation();
             

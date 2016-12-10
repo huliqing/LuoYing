@@ -55,7 +55,7 @@
     
      <!--落樱飞舞：曲线拖尾--> 
      <bulletCurveTrail id="bulletCurve" extends="bulletTrailBase"  effects="effectDanceSakuraBullet"
-                       hitEffects="effectDanceSakuraHit" positions="esDanceSakuraWaypoint,esDanceSakuraWaypoint2" />
+                       hitEffects="effectDanceSakuraHit" positions="positionDanceSakuraWaypoint,positionDanceSakuraWaypoint2" />
     
      <!--电光火石-->
      <bulletCurve id="bulletFlowLight" extends="bulletStraightBase" trace="1" effects="effectFlowLight" 

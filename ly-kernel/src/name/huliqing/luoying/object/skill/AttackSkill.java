@@ -96,7 +96,7 @@ public class AttackSkill extends HitSkill {
     }
 
     @Override
-    protected void doUpdateLogic(float tpf) {
+    protected void doSkillUpdate(float tpf) {
         while (pointChecker.nextPoint(time) != -1) {
             processCheckPoint(pointChecker.getIndex());
         }

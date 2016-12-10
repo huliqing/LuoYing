@@ -27,7 +27,7 @@ public class ItemData extends ObjectData implements TradeObject{
     
     @Override
     public int getTotal() {
-        return getAsInteger("total", 1);
+        return getAsInteger("total", 0);
     }
 
     @Override

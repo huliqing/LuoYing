@@ -15,6 +15,7 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ConnData;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.layer.network.PlayNetwork;
+import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.manager.ResManager;
@@ -37,6 +38,7 @@ import name.huliqing.ly.mess.MessageMess;
 import name.huliqing.luoying.network.DefaultServerListener;
 import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.ly.LyConfig;
+import name.huliqing.ly.constants.AttrConstants;
 
 /**
  * 服务端RpgGame的抽象实现.
@@ -48,6 +50,7 @@ public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final PlayService playService = Factory.get(PlayService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
+    private final EntityService entityService = Factory.get(EntityService.class);
 
     protected GameServer gameServer;
  
@@ -116,13 +119,12 @@ public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
     protected void onAddServerPlayer(Entity actor) {
         // 设置为当前场景主玩家
         setPlayer(actor);
-        
         // 打开UI
         setUIVisiable(true);
-        
+        // 加一些生命值避免角色在死亡时存档，导致进入游戏仍是死亡状态
+        entityService.hitNumberAttribute(actor, AttrConstants.HEALTH, 100, null);
         // 让角色处于“等待”
         skillService.playSkill(actor, skillService.getSkillWaitDefault(actor), false);
-        
         // 添加客户端角色
         playNetwork.addEntity(actor);
         
@@ -136,6 +138,8 @@ public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
      * @param actor 客户端玩家最终选择的角色
      */
     protected void onAddClientPlayer(ConnData connData, Entity actor) {
+        // 加一些生命值避免角色在死亡时存档，导致进入游戏仍是死亡状态
+        entityService.hitNumberAttribute(actor, AttrConstants.HEALTH, 100, null);
         // 让角色处于“等待”
         skillService.playSkill(actor, skillService.getSkillWaitDefault(actor), false);
         // 确保处于”死亡后不被清理“

@@ -37,7 +37,6 @@ public class AttributeItem extends AbstractItem {
         entityService.hitNumberAttribute(actor, attribute, amount, null);
         
         // 物品减少
-//        itemService.removeItem(actor, data.getId(), 1);
         actor.removeObjectData(data, 1);
         
     }

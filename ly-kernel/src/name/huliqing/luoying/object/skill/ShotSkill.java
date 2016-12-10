@@ -164,7 +164,7 @@ public class ShotSkill extends HitSkill {
     }
     
     @Override
-    protected void doUpdateLogic(float tpf) {
+    protected void doSkillUpdate(float tpf) {
         checkShot();
     }
 

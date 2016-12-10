@@ -14,17 +14,23 @@
     -->
     <!--==========================================================================-->
     
+    <!--角色名字-->
+    <attributeString id="attributeName" name="attributeName" />
+    
+    <!--角色性别: 这个属性用不同的数字(整数)来定义和区分不同的性别-->
+    <attributeInteger id="attributeSex" name="attributeSex" value="0" />
+
+    <!--角色种族: 这个属性用来存放角色的种族标识，用不同的数字来定义不同的种族,存放的值由具体实现去定义。--> 
+    <attributeInteger id="attributeRace" name="attributeRace" value="0" />
+    
+    <!--判断一个角色是否为玩家-->
+    <attributeBoolean id="attributePlayer" name="attributePlayer" />
+    
     <!--死亡属性标记：1 ： 死亡， 0：没死亡. 注：角色是否死亡由这个参数直接判断，与“健康值”属性有联系，但不是由健康值直接判断。 -->
     <attributeRelateBoolean id="attributeDead" name="attributeDead" refVars="h=attributeHealth" valueEl="#{h<=0}" />
 
     <!--生物属性： 这个属性用来标记角色是否是生物，即有"生命迹象"的角色，1：表示生物; 0：表示非生物-->
     <attributeBoolean id="attributeBiology" name="attributeBiology" value="1" />
-
-    <!--角色种族: 这个属性用来存放角色的种族标识，用不同的数字来定义不同的种族,存放的值由具体实现去定义。--> 
-    <attributeInteger id="attributeRace" name="attributeRace" value="0" />
-    
-    <!--角色性别: 这个属性用不同的数字(整数)来定义和区分不同的性别-->
-    <attributeInteger id="attributeSex" name="attributeSex" value="0" />
     
     <!--角色的等级, 这个属性在运行时存放角色的等级值。-->
     <attributeInteger id="attributeLevel" name="attributeLevel" value="1" />
@@ -135,22 +141,15 @@
     <!--角色颜色-->
     <attributeVector4f id="attributeColor" name="attributeColor" value="1,1,1,1" />
     
-    <!--角色名字-->
-    <attributeString id="attributeName" name="attributeName" />
-    
-    <!--判断一个角色是否为玩家-->
-    <attributeBoolean id="attributePlayer" name="attributePlayer" />
-    
     <!--用于控制角色的游戏消息的开关：当角色执行技能、使用物品等操作时会向游戏消息控制台发送消息。-->
     <attributeBoolean id="attributeMessage" name="attributeMessage" value="0" />
-
     
     <!--==========================================================================-->
     <!--基本属性打包-->
     <!--==========================================================================-->
     
     <attributeGroup id="attributeGroupBase" name="attributeGroupBase" 
-                    attributes="attributeBiology,attributeRace,attributeSex
+                    attributes="attributeName,attributeBiology,attributeRace,attributeSex
     ,attributeLevel,attributeLevelUp,attributeXp,attributeXpNext,attributeGroup,attributeTeam,attributeVision,attributeMoveSpeed,attributeMass
     ,attributeDead,attributeMovable,attributeRotatable,attributeEssential,attributeAutoLogic,attributeAutoAi
     ,attributeTarget,attributeFollow,attributeOwner,attributeTalentPoints
@@ -159,7 +158,7 @@
     ,attributeHealthRestore,attributeManaRestore
     ,attributeAttackSpeed,attributeMagicSpeed
     ,attributeDefenceRate,attributeDuckRate,attributeGhostRate,attributeResistInterruptRate
-    ,attributeWeaponSlots,attributeLocation,attributeColor,attributeName,attributePlayer,attributeMessage
+    ,attributeWeaponSlots,attributeLocation,attributeColor,attributePlayer,attributeMessage
 " />
     
     <!--==========================================================================-->

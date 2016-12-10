@@ -18,8 +18,6 @@ import name.huliqing.luoying.layer.network.SkillNetwork;
 import name.huliqing.luoying.layer.network.SkillNetworkImpl;
 import name.huliqing.luoying.layer.network.SkinNetwork;
 import name.huliqing.luoying.layer.network.SkinNetworkImpl;
-import name.huliqing.luoying.layer.network.StateNetwork;
-import name.huliqing.luoying.layer.network.StateNetworkImpl;
 import name.huliqing.luoying.layer.network.TalentNetwork;
 import name.huliqing.luoying.layer.network.TalentNetworkImpl;
 import name.huliqing.luoying.layer.network.TaskNetwork;
@@ -47,8 +45,6 @@ import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.layer.service.SkillServiceImpl;
 import name.huliqing.luoying.layer.service.SkinService;
 import name.huliqing.luoying.layer.service.SkinServiceImpl;
-import name.huliqing.luoying.layer.service.StateService;
-import name.huliqing.luoying.layer.service.StateServiceImpl;
 import name.huliqing.luoying.layer.service.TalentService;
 import name.huliqing.luoying.layer.service.TalentServiceImpl;
 import name.huliqing.luoying.layer.service.TaskService;
@@ -78,7 +74,6 @@ public class Factory {
         CLASS_MAP.put(PlayNetwork.class, PlayNetworkImpl.class);
         CLASS_MAP.put(SkillNetwork.class, SkillNetworkImpl.class);
         CLASS_MAP.put(SkinNetwork.class, SkinNetworkImpl.class);
-        CLASS_MAP.put(StateNetwork.class, StateNetworkImpl.class);
         CLASS_MAP.put(TalentNetwork.class, TalentNetworkImpl.class);
         CLASS_MAP.put(TaskNetwork.class, TaskNetworkImpl.class);
         
@@ -97,7 +92,6 @@ public class Factory {
         CLASS_MAP.put(SkillService.class, SkillServiceImpl.class);
         CLASS_MAP.put(SkinService.class, SkinServiceImpl.class);
         CLASS_MAP.put(SoundService.class, SoundServiceImpl.class);
-        CLASS_MAP.put(StateService.class, StateServiceImpl.class);      
         CLASS_MAP.put(SystemService.class, SystemServiceImpl.class);
         CLASS_MAP.put(TalentService.class, TalentServiceImpl.class);
         CLASS_MAP.put(TaskService.class, TaskServiceImpl.class);

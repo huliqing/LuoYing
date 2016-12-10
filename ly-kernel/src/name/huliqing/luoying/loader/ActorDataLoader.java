@@ -13,13 +13,11 @@ import name.huliqing.luoying.data.ChannelData;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.data.ItemData;
 import name.huliqing.luoying.xml.Proto;
-import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.data.ResistData;
 import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.data.SkinData;
 import name.huliqing.luoying.data.TalentData;
 import name.huliqing.luoying.layer.service.DefineService;
-import name.huliqing.luoying.manager.ResManager;
 import name.huliqing.luoying.xml.DataFactory;
 
 /**
@@ -34,38 +32,23 @@ public class ActorDataLoader extends EntityDataLoader {
     public void load(Proto proto, EntityData data) {
         super.load(proto, data);
         
-        // remove20161205
-//        data.setName(ResManager.get(proto.getId() + ".name"));
-
         String matStr = proto.getAsString("mat");
         if (matStr != null) {
             data.setMat(defineService.getMatDefine().getMat(matStr));
         }
         
-        // ==== 2.items 
-        String[] itemsTemp = proto.getAsArray("items");
-        if (itemsTemp != null && itemsTemp.length > 0) {
-            for (String item : itemsTemp) {
-                if (item == null || item.trim().equals("")) {
-                    continue;
-                }
+        // items 
+        String[] items = proto.getAsArray("items");
+        if (items != null) {
+            for (String item : items) {
                 String[] itemArr = item.split("\\|");
-                String itemId = itemArr[0];
-                int itemTotal = 1;
-                if (itemArr.length >= 2) {
-                    itemTotal = Integer.parseInt(itemArr[1]);
-                }
-                ObjectData itemData = DataFactory.createData(itemId);
-                if (itemData instanceof ItemData) {
-                    ((ItemData)itemData).setTotal(itemTotal);
-                } else {
-                    continue;
-                }
+                ItemData itemData = DataFactory.createData(itemArr[0]);
+                itemData.setTotal(itemArr.length > 1 ? Integer.parseInt(itemArr[1]) : 1);
                 data.addObjectData(itemData);
             }
         }
         
-        // skinBase 基本皮肤,
+        // skinBase: 基本皮肤
         // 注1：可能部分角色没有基本皮肤，如不可换装备的角色类型
         // 注2: 基本皮肤不会存放在itemStore中，而skinOutfit会存放在itemStore
         String[] skinBases = proto.getAsArray("skinBase");
@@ -74,46 +57,49 @@ public class ActorDataLoader extends EntityDataLoader {
                 SkinData sdb = DataFactory.createData(sbt);
                 sdb.setBaseSkin(true);
                 sdb.setUsed(false);
+                sdb.setTotal(1);
                 data.addObjectData(sdb);
             }            
         }
         
-        // 包裹上的装备，没穿在身上
-        String[] skinsArr = proto.getAsArray("skins");
-        if (skinsArr != null && skinsArr.length > 0) {
-            for (String skinStr : skinsArr) {
+        // skins: 包裹上的装备，没穿在身上
+        String[] skins = proto.getAsArray("skins");
+        if (skins != null && skins.length > 0) {
+            for (String skinStr : skins) {
                 String[] skinArr = skinStr.split("\\|");
                 SkinData skinData = DataFactory.createData(skinArr[0]);
-                skinData.setTotal(skinArr.length > 1 ? Integer.parseInt(skinArr[1]) : 1);
                 skinData.setBaseSkin(false);
                 skinData.setUsed(false);
+                skinData.setTotal(skinArr.length > 1 ? Integer.parseInt(skinArr[1]) : 1);
                 data.addObjectData(skinData);
             }
         }
         
-        // skinOutfit
+        // skinOutfit: 穿在身上的装备
         String[] skinOutfit = proto.getAsArray("skinOutfit");
         if (skinOutfit != null) {
             for (String skinId : skinOutfit) {
                 SkinData sdb = DataFactory.createData(skinId);
                 sdb.setBaseSkin(false);
                 sdb.setUsed(true);
+                sdb.setTotal(1);
                 data.addObjectData(sdb);
             }
         }
         
-        // weapon - 拿在手上的武器
+        // weapon: 拿在手上的武器
         String[] weaponIds = proto.getAsArray("skinWeapon");
         if (weaponIds != null) {
             for (String wid : weaponIds) {
                 SkinData weaponData = (SkinData) DataFactory.createData(wid);
                 weaponData.setBaseSkin(false);
                 weaponData.setUsed(true);
+                weaponData.setTotal(1);
                 data.addObjectData(weaponData);
             }
         }
         
-        // 角色动画通道
+        // channels: 角色动画通道
         String[] channels = proto.getAsArray("channels");
         if (channels != null) {
             for (String id : channels) {
@@ -121,7 +107,7 @@ public class ActorDataLoader extends EntityDataLoader {
             }
         }
         
-        // 物品掉落设置
+        // drops: 物品掉落设置
         String[] drops = proto.getAsArray("drops");
         if (drops != null && drops.length > 0) {
             for (String id : drops) {
@@ -129,7 +115,7 @@ public class ActorDataLoader extends EntityDataLoader {
             }
         }
         
-        // ==== 载入技能
+        // skills: 技能
         String[] skillIds = proto.getAsArray("skills");
         if (skillIds != null && skillIds.length > 0) {
             for (String skillId : skillIds) {
@@ -137,7 +123,7 @@ public class ActorDataLoader extends EntityDataLoader {
             }
         }
         
-        // ==== 载入逻辑
+        // logics: 逻辑
         String[] logics = proto.getAsArray("logics");
         if (logics != null && logics.length > 0) {
             for (String logicId : logics) {
@@ -145,7 +131,7 @@ public class ActorDataLoader extends EntityDataLoader {
             }
         }
         
-        // 角色属性
+        // attributes: 角色属性
         String[] attributeArr = proto.getAsArray("attributes");
         if (attributeArr != null) {
             for (String attrId : attributeArr) {
@@ -153,7 +139,7 @@ public class ActorDataLoader extends EntityDataLoader {
             }
         }
         
-        // Resist
+        // resist
         String resist = proto.getAsString("resist");
         if (resist != null) {
             data.addObjectData((ResistData)DataFactory.createData(resist));

@@ -2,12 +2,12 @@
 
 name.huliqing.luoying.dataAdd=Add : %s
 name.huliqing.luoying.dataAddFailure=Could not add : %s
-name.huliqing.luoying.dataRemove=Remove: %s
+name.huliqing.luoying.dataRemove= %s Removed
 name.huliqing.luoying.dataRemoveFailure=Could not remove: %s
 name.huliqing.luoying.dataUse=Use: %s
 name.huliqing.luoying.dataUseFailure=Could not use: %s
 
-name.huliqing.luoying.levelUp=Level up to: %s
+name.huliqing.luoying.levelUp=Level up (%s)
 name.huliqing.luoying.talentPointsAdded=Talent points add: %s
 
 name.huliqing.luoying.errorItemNotEnough=Item not enough

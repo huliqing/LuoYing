@@ -11,7 +11,7 @@ public class ReadySkill extends AbstractSkill {
 
 
     @Override
-    protected void doUpdateLogic(float tpf) {}
+    protected void doSkillUpdate(float tpf) {}
 
     
 }

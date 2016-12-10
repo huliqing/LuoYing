@@ -30,7 +30,7 @@ public class HurtSkill extends AbstractSkill {
     }
 
     @Override
-    protected void doUpdateLogic(float tpf) {
+    protected void doSkillUpdate(float tpf) {
         // ignore
     }
     

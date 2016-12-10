@@ -8,10 +8,12 @@ gameSurvival.name=生存挑战(塔防)
 gameSurvival.des=生存挑战，这个小游戏仍处于测试中，规则与故事模式中的“黄金宝箱”相似，宝箱不能被破坏，敌人每隔一段时间会自动升级，玩家也要不断升级，创建更多的防御塔和召唤更多的宠物来防御敌人的进攻，直到打完最后BOSS！
 
 # ========== Attribute
+attributeName.name=名字
+attributeSex.name=性别
+attributeRace.name=种族
+attributePlayer.name=玩家
 attributeDead.name=死亡
 attributeBiology.name=生物
-attributeRace.name=种族
-attributeSex.name=性别
 attributeLevel.name=等级
 attributeLevelUp.name=可升级
 attributeXp.name=当前经验
@@ -49,8 +51,7 @@ attributeResistInterruptRate.name=韧性
 attributeWeaponSlots.name=武器槽位
 attributeLocation.name=位置
 attributeColor.name=肤色
-attributeName.name=名字
-attributePlayer.name=玩家
+attributeMessage.name=消息
 
 # ========== Basic item
 itemGold.name=金币
@@ -282,6 +283,21 @@ talentVision.name=鹰眼
 talentVision.des=提升视力
 talentMoveSpeed.name=疾风步
 talentMoveSpeed.des=提升移动速度
+
+#====state
+stateSafe.name=绝对防御
+stateStun.name=晕眩
+stateWindWalk.name=疾风步
+stateSnowFrost.name=霜冻
+stateIceFrozen.name=冰冻
+stateRebornEssential.name=精华
+stateRebornProtect.name=复活保护
+stateRebornAddLife.name=生命回复
+stateRebornWait.name=等待
+stateSpiderWeb.name=缠绕
+stateSpeedUpAS.name=狂暴
+stateScorpionVenom.name=蝎子毒
+stateClean.name=净化
 
 #==== chat
 chatSend.name=发送东西

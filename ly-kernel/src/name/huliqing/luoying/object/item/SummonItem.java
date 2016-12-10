@@ -112,7 +112,6 @@ public class SummonItem extends AbstractItem {
         tv.release();
         
         if (summonPos == null) {
-//            playNetwork.addMessage(actor, ResourceManager.get("common.summonPosError"), MessageType.notice);
             return false;
         }
         
@@ -128,7 +127,6 @@ public class SummonItem extends AbstractItem {
         }
         
         if (y < summonPos.y) {
-//            playNetwork.addMessage(actor, ResourceManager.get("common.summonPosError"), MessageType.notice);
             return false;
         }
         // 设置地点并召唤

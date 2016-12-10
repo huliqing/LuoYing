@@ -11,6 +11,6 @@ package name.huliqing.luoying.object.skill;
 public class SimpleSkill extends AbstractSkill {
 
     @Override
-    protected void doUpdateLogic(float tpf) {}
+    protected void doSkillUpdate(float tpf) {}
     
 }

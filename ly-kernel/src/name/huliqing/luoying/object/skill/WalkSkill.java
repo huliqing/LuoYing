@@ -85,7 +85,7 @@ public class WalkSkill extends AbstractSkill implements Walk{
     }
     
     @Override
-    protected void doUpdateLogic(float tpf) {}
+    protected void doSkillUpdate(float tpf) {}
 
     @Override
     protected void doUpdateAnimation(String animation, boolean loop

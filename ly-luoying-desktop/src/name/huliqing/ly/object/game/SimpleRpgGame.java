@@ -24,6 +24,7 @@ import name.huliqing.luoying.Config;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.data.EntityData;
+import name.huliqing.luoying.data.ItemData;
 import name.huliqing.luoying.data.SkinData;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.service.MessageService;
@@ -33,7 +34,7 @@ import name.huliqing.luoying.message.ConsoleMessageHandler;
 import name.huliqing.luoying.message.EntityMessage;
 import name.huliqing.luoying.message.Message;
 import name.huliqing.luoying.message.DefaultMessageHandler;
-import name.huliqing.luoying.message.EntityDataAddMessage;
+import name.huliqing.luoying.message.EntityDataRemoveMessage;
 import name.huliqing.luoying.message.EntityDataUseMessage;
 import name.huliqing.luoying.message.EntitySkillUseMessage;
 import name.huliqing.luoying.object.Loader;
@@ -439,6 +440,15 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
                 }
             }
             super.handle(message); 
+        }
+
+        @Override
+        protected void handleDataRemoveMessage(EntityDataRemoveMessage message) {
+            // 过滤掉普通物品的移除消息
+            if (message.getObjectData() instanceof ItemData) {
+                return;
+            }
+            super.handleDataRemoveMessage(message); 
         }
         
         @Override

@@ -95,8 +95,8 @@ public class ItemModule extends AbstractModule implements DataHandler<ItemData> 
         if (item.getTotal() <= 0) {
             items.remove(item);
             entity.getData().getObjectDatas().remove(item);
-            addEntityDataRemoveMessage(StateCode.DATA_REMOVE, data, count);
         }
+        addEntityDataRemoveMessage(StateCode.DATA_REMOVE, data, count);
         return true;
     }
 

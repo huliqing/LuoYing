@@ -425,13 +425,13 @@ public abstract class AbstractSkill implements Skill {
         }
         
         // 6.update logic
-        doUpdateLogic(tpf);
+        doSkillUpdate(tpf);
         
         if (time >= trueUseTime) {
             if (loop) {
                 time = 0;
             } else {
-                initialized = false;
+                doSkillEnd();
             }
         }
     }
@@ -646,8 +646,6 @@ public abstract class AbstractSkill implements Skill {
         return result;
     }
     
-    // -------------------------------------------------------------------------
-    
     // 声音控制
     public class SoundWrap {
         String soundId;
@@ -854,8 +852,16 @@ public abstract class AbstractSkill implements Skill {
     }
     
     /**
+     * 该方法会在技能结束时被自动调用,子类可以直接调用这个方法来提前结束技能。
+     */
+    protected void doSkillEnd() {
+        initialized = false;
+    }
+    
+    /**
      * 实现技能逻辑
      * @param tpf 
      */
-    protected abstract void doUpdateLogic(float tpf);
+    protected abstract void doSkillUpdate(float tpf);
+    
 }

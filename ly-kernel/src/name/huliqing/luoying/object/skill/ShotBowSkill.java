@@ -170,8 +170,8 @@ public class ShotBowSkill extends ShotSkill {
     }
 
     @Override
-    protected void doUpdateLogic(float tpf) {
-        super.doUpdateLogic(tpf);
+    protected void doSkillUpdate(float tpf) {
+        super.doSkillUpdate(tpf);
         if (shotState == 0 && arrowNode != null && time >= timeBulletTake * trueUseTime) {
             takeArrow(); // 取箭
             shotState = 1;

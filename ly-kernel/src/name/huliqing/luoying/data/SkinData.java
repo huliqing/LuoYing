@@ -33,7 +33,7 @@ public class SkinData extends ObjectData implements TradeObject, MatObject {
     
     @Override
     public int getTotal() {
-        return getAsInteger("total", 1);
+        return getAsInteger("total", 0);
     }
 
     @Override

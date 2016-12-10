@@ -50,6 +50,9 @@ public class LevelModule extends AbstractModule implements ValueChangeListener{
     // 角色初始化、或者直接设置角色的等级属性则不受这个参数的影响。
     private String bindLevelUpEnabledAttribute;
     
+    // 最近一次升级时的等级。
+    private Integer lastLevelUp;
+    
     // ---- inner
     private NumberAttribute levelAttribute;
     private NumberAttribute xpAttribute;
@@ -66,11 +69,15 @@ public class LevelModule extends AbstractModule implements ValueChangeListener{
         bindXpAttribute = data.getAsString("bindXpAttribute");
         bindXpNextAttribute = data.getAsString("bindXpNextAttribute");
         bindLevelUpEnabledAttribute = data.getAsString("bindLevelUpEnabledAttribute");
+        // 读取最近一次保存时的等级
+        lastLevelUp = data.getAsInteger("_lastLevelUp");
     }
-
+    
     @Override
     public void updateDatas() {
-        // xxx updateDatas.
+        if (lastLevelUp != null) {
+            data.setAttribute("_lastLevelUp", lastLevelUp);
+        }
     }
     
     @Override
@@ -91,10 +98,17 @@ public class LevelModule extends AbstractModule implements ValueChangeListener{
         if (xpAttribute != null) {
             xpAttribute.addListener(this);
         }
+        
         // 初始化等级
         if (levelAttribute != null) {
-            setLevel(levelAttribute.intValue());
-            levelAttribute.addListener(this);
+            if (lastLevelUp != null && lastLevelUp == levelAttribute.intValue()) {
+                // ignore, 这种情况发生在“存档载入或联网载入”时，如果最近一次升级后等级没有发生变化则不需要重新设置等级，
+                // 因为设置等级时会导致角色的属性值发生变化，例如当一个角色在死亡状态时存档，然后再载入时如果再设置等级
+                // 就会造成角色明明已经死亡，生命值却是满的，所以只有在等级变化时才应该重设等级。
+            } else {
+                setLevel(levelAttribute.intValue());
+                levelAttribute.addListener(this);
+            }
         }
     }
 
@@ -129,14 +143,13 @@ public class LevelModule extends AbstractModule implements ValueChangeListener{
      * @param newLevel 
      */
     private void setLevel(int newLevel) {
-        if (levelAttribute == null) {
-            return;
-        }
-        
         // 确保等级一致。
         if (levelAttribute.intValue() != newLevel) {
             levelAttribute.setValue(newLevel);
         }
+        
+        // 记住最近一次设置的等级
+        lastLevelUp = newLevel;
         
         // 2.升级其它等级属性,注：只有等级属性(LevelAttribute)才可以升级
         List<Attribute> attributes = entity.getAttributeManager().getAttributes();

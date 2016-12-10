@@ -2,12 +2,12 @@
 
 name.huliqing.luoying.dataAdd=获得: %s
 name.huliqing.luoying.dataAddFailure=不能获得: %s
-name.huliqing.luoying.dataRemove=移除: %s
+name.huliqing.luoying.dataRemove=%s 移除
 name.huliqing.luoying.dataRemoveFailure=不能移除: %s
 name.huliqing.luoying.dataUse=使用: %s
 name.huliqing.luoying.dataUseFailure=不能使用: %s
 
-name.huliqing.luoying.levelUp=等级提升: %s
+name.huliqing.luoying.levelUp=等级提升(%s)
 name.huliqing.luoying.talentPointsAdded=获得天赋点数: %s
 
 name.huliqing.luoying.errorItemNotEnough=Item not enough

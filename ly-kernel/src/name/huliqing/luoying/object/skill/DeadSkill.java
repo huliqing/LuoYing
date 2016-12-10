@@ -4,9 +4,7 @@
  */
 package name.huliqing.luoying.object.skill;
 
-import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.SkillData;
-import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.module.ChannelModule;
 
@@ -15,7 +13,6 @@ import name.huliqing.luoying.object.module.ChannelModule;
  * @author huliqing
  */
 public class DeadSkill extends AbstractSkill {
-    private final PlayService playService = Factory.get(PlayService.class);
     private ChannelModule channelModule;
     
     // 是否死亡后立即移出场景
@@ -45,20 +42,18 @@ public class DeadSkill extends AbstractSkill {
     }
     
     @Override
-    protected void doUpdateLogic(float tpf) {
+    protected void doSkillUpdate(float tpf) {
         // ignore
     }
 
     @Override
-    public void cleanup() {
+    protected void doSkillEnd() {
+        super.doSkillEnd();
+        // 不要放在cleanup中移除角色,因为这可能会在场景清理(场景cleanup)的时候冲突，
+        // 可能造成无限递归异常(StackOverflow)
         if (remove) {
-            
-//            playService.removeObject(actor.getSpatial());
-
             actor.removeFromScene();
         }
-        super.cleanup(); 
     }
-
     
 }

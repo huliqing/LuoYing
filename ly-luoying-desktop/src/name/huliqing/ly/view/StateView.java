@@ -9,7 +9,7 @@ import name.huliqing.luoying.ui.FrameLayout;
 import name.huliqing.luoying.ui.Icon;
 
 /**
- * 主要用于显示状态，让状态可视化。
+ * StateView显示状态图标
  * @author huliqing
  */
 public class StateView extends FrameLayout {
