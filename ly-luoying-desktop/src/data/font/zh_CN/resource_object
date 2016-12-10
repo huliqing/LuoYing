@@ -249,6 +249,14 @@ skillDualSwordWave.des=使用剑气攻击敌人，需要二刀流
 skillShotCleanBuff.name=净化术
 skillShotCleanBuff.des=净化中毒、诅咒等
 
+skillSummonSpider.name=召唤蜘蛛
+skillSummonWolf.name=召唤森林狼
+skillSummonBear.name=召唤野熊
+skillSummonScorpion.name=召唤毒蝎
+skillSummonGb.name=召唤古柏幼仔
+skillSummonRaptor.name=召唤雷彼斯
+skillSummonTrex.name=召唤雷克斯
+
 #====attribute
 attributeHealth.name=生命值
 attributeMana.name=魔法值

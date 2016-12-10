@@ -105,10 +105,11 @@ public class EntityServiceImpl implements EntityService {
         return od != null && entity.removeObjectData(od, amount);
     }
     
-    @Override
-    public boolean useObjectData(Entity entity, ObjectData data) {
-        return entity.useObjectData(data);
-    }
+    // remove20161211,看接口说明
+//    @Override
+//    public boolean useObjectData(Entity entity, ObjectData data) {
+//        return entity.useObjectData(data);
+//    }
     
     @Override
     public boolean useObjectData(Entity entity, long objectUniqueId) {

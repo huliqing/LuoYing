@@ -249,6 +249,14 @@ skillDualSwordWave.des=Use the shock wave of sword to hit enemies,need dual wiel
 skillShotCleanBuff.name=Dispel Magic
 skillShotCleanBuff.des=Disperse poisoning, curses, etc
 
+skillSummonSpider.name=Summon Spider
+skillSummonWolf.name=Summon Wolf
+skillSummonBear.name=Summon Bear
+skillSummonScorpion.name=Summon Scorpion
+skillSummonGb.name=Summon GB
+skillSummonRaptor.name=Summon Raptor
+skillSummonTrex.name=Summon Trex
+
 #====attribute
 attributeHealth.name=Health
 attributeMana.name=Mana

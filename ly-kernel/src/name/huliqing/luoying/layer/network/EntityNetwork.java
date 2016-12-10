@@ -76,13 +76,14 @@ public interface EntityNetwork extends Inject {
      */
     boolean removeObjectData(Entity entity, long objectUniqueId, int amount);
     
-    /**
-     * 让Entity使用一个物品。注：这个物品可以是角色身上存在的，也可能不是角色身上拥有的。具体由特定的模块去实现。
-     * @param entity
-     * @param data 
-     * @return  
-     */
-    boolean useObjectData(Entity entity, ObjectData data);
+    // remove20161211,不要直接使用整个data,这会需要将整个data在网络间传送，有可能造成性能和资源占用太大的问题。
+//    /**
+//     * 让Entity使用一个物品。注：这个物品可以是角色身上存在的，也可能不是角色身上拥有的。具体由特定的模块去实现。
+//     * @param entity
+//     * @param data 
+//     * @return  
+//     */
+//    boolean useObjectData(Entity entity, ObjectData data);
     
     /**
      * 让Entity使用一个指定id的物品，Entity必须存在这个物品才能使用。如果找不到这个物品时将什么也不会做。

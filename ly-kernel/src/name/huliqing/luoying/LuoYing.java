@@ -225,7 +225,6 @@ import name.huliqing.luoying.mess.EntityHitNumberAttributeMess;
 import name.huliqing.luoying.mess.EntityHitAttributeMess;
 import name.huliqing.luoying.mess.EntityRemoveMess;
 import name.huliqing.luoying.mess.EntityRemoveDataMess;
-import name.huliqing.luoying.mess.EntityUseDataMess;
 import name.huliqing.luoying.mess.EntityUseDataByIdMess;
 import name.huliqing.luoying.mess.RandomSeedMess;
 import name.huliqing.luoying.mess.SceneLoadedMess;
@@ -717,7 +716,6 @@ public class LuoYing {
         Serializer.registerClass(ActorTransformMess.class);
         Serializer.registerClass(ActorViewDirMess.class);
         
-        
         // Entity
         Serializer.registerClass(EntityAddDataMess.class);
         Serializer.registerClass(EntityAddMess.class);
@@ -726,7 +724,6 @@ public class LuoYing {
         Serializer.registerClass(EntityRemoveDataMess.class);
         Serializer.registerClass(EntityRemoveMess.class);
         Serializer.registerClass(EntityUseDataByIdMess.class);
-        Serializer.registerClass(EntityUseDataMess.class);
         
         // 随机种子
         Serializer.registerClass(RandomSeedMess.class);

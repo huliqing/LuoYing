@@ -116,7 +116,7 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
         List<SkillData> skillDatas = actor.getData().getObjectDatas(SkillData.class, new ArrayList<SkillData>());
         if (skillDatas != null && !skillDatas.isEmpty()) {
             for (SkillData sd : skillDatas) {
-                addSkill((Skill) Loader.load(sd));
+                addSkillInner((Skill) Loader.load(sd));
             }
         }
         
@@ -401,47 +401,6 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
     }
     
     /**
-     * 添加一个新技能给角色,如果相同ID的技能已经存在，则该方法什么也不会处理。
-     * @param skill 
-     * @return  true如果成功添加
-     */
-    private boolean addSkill(Skill skill) {
-        if (skills.contains(skill)) {
-            addEntityDataAddMessage(StateCode.DATA_ADD_FAILURE_DATA_EXISTS, skill.getData(), 1);
-            return false;
-        }
-        
-        skill.setActor(entity);
-        skills.add(skill);
-        skillMap.put(skill.getData().getId(), skill);
-        entity.getData().addObjectData(skill.getData());
-        addEntityDataAddMessage(StateCode.DATA_ADD, skill.getData(), 1);
-        return true;
-    }
-    
-    /**
-     * 从角色身上移除一个技能，注：被移除的技能必须是已经存在于角色身上的技能实例，
-     * 否则该方法什么也不做，并返回false.<BR>
-     * 使用{@link #getSkill(java.lang.String) } 来确保从当前角色身上获得一个存在的技能实例。
-     * @param skill
-     * @return 
-     */
-    private boolean removeSkill(Skill skill) {
-        if (!skills.contains(skill)) {
-            addEntityDataRemoveMessage(StateCode.DATA_REMOVE_FAILURE_NOT_FOUND, skill.getData(), 1);
-            return false;
-        }
-        
-        skills.remove(skill);
-        skillMap.remove(skill.getData().getId());
-        entity.getData().removeObjectData(skill.getData());
-        skill.cleanup();
-        
-        addEntityDataRemoveMessage(StateCode.DATA_REMOVE, skill.getData(), 1);
-        return true;
-    }
-    
-    /**
      * 从角色身上获取一个技能，如果角色没有指定ID的技能则返回null.
      * @param skillId
      * @return 
@@ -674,10 +633,14 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
 
     @Override
     public boolean handleDataAdd(SkillData data, int amount) {
+        // 技能不能重复
         if (getSkill(data.getId()) != null) {
-            return false; // 技能不能重复
+            addEntityDataAddMessage(StateCode.DATA_ADD_FAILURE_DATA_EXISTS, data, amount);
+            return false; 
         }
-        return addSkill((Skill) Loader.load(data));
+        addSkillInner((Skill) Loader.load(data));
+        addEntityDataAddMessage(StateCode.DATA_ADD, data, 1);
+        return true;
     }
     
     @Override
@@ -687,7 +650,12 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
             addEntityDataRemoveMessage(StateCode.DATA_REMOVE_FAILURE_NOT_FOUND, data, amount);
             return false;
         }
-        return removeSkill(skill);
+        skills.remove(skill);
+        skillMap.remove(skill.getData().getId());
+        entity.getData().removeObjectData(skill.getData());
+        skill.cleanup();
+        addEntityDataRemoveMessage(StateCode.DATA_REMOVE, skill.getData(), 1);
+        return true;
     }
     
     @Override
@@ -698,4 +666,23 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
         }
         return playSkill(skill, false);
     }
+    
+    /**
+     * 添加一个新技能给角色,如果相同ID的技能已经存在，则该方法什么也不会处理。
+     * @param skill 
+     * @return  true如果成功添加
+     */
+    private boolean addSkillInner(Skill skill) {
+        if (skills.contains(skill)) {
+            return false;
+        }
+        
+        skill.setActor(entity);
+        skills.add(skill);
+        skillMap.put(skill.getData().getId(), skill);
+        entity.getData().addObjectData(skill.getData());
+        addEntityDataAddMessage(StateCode.DATA_ADD, skill.getData(), 1);
+        return true;
+    }
+    
 }

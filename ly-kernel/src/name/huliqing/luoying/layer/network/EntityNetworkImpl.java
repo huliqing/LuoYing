@@ -11,7 +11,6 @@ import name.huliqing.luoying.mess.EntityAddDataMess;
 import name.huliqing.luoying.mess.EntityHitNumberAttributeMess;
 import name.huliqing.luoying.mess.EntityHitAttributeMess;
 import name.huliqing.luoying.mess.EntityRemoveDataMess;
-import name.huliqing.luoying.mess.EntityUseDataMess;
 import name.huliqing.luoying.mess.EntityUseDataByIdMess;
 import name.huliqing.luoying.network.Network;
 import name.huliqing.luoying.object.entity.Entity;
@@ -119,20 +118,21 @@ public class EntityNetworkImpl implements EntityNetwork {
         return entityService.removeObjectData(entity, objectUniqueId, amount);
     }
 
-    @Override
-    public boolean useObjectData(Entity entity, ObjectData data) {
-        EntityUseDataMess mess = new EntityUseDataMess();
-        mess.setEntityId(entity.getEntityId());
-        mess.setObjectData(data);
-        
-        if (network.isClient()) {
-            network.sendToServer(mess);
-            return false;
-        }
-        
-        network.broadcast(mess);
-        return entityService.useObjectData(entity, data);
-    }
+    // remove20161211,看接口说明
+//    @Override
+//    public boolean useObjectData(Entity entity, ObjectData data) {
+//        EntityUseDataMess mess = new EntityUseDataMess();
+//        mess.setEntityId(entity.getEntityId());
+//        mess.setObjectData(data);
+//        
+//        if (network.isClient()) {
+//            network.sendToServer(mess);
+//            return false;
+//        }
+//        
+//        network.broadcast(mess);
+//        return entityService.useObjectData(entity, data);
+//    }
 
     @Override
     public boolean useObjectData(Entity entity, long objectUniqueId) {

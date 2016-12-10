@@ -9,6 +9,8 @@ import com.jme3.util.TempVars;
 import java.util.List;
 import name.huliqing.luoying.Config;
 import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.data.SkillData;
+import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.ly.constants.ResConstants;
 import name.huliqing.ly.enums.MessageType;
 import name.huliqing.ly.view.talk.Talk;
@@ -34,10 +36,7 @@ import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.ly.view.talk.AbstractTalkLogic;
 import name.huliqing.luoying.object.module.SkillListenerAdapter;
-import name.huliqing.luoying.object.module.StateModule;
 import name.huliqing.luoying.object.skill.Skill;
-import name.huliqing.luoying.object.skill.BackSkill;
-import name.huliqing.luoying.object.state.State;
 import name.huliqing.ly.object.view.TimerView;
 import name.huliqing.luoying.ui.TextPanel;
 import name.huliqing.luoying.utils.MathUtils;
@@ -60,13 +59,15 @@ public class StoryTreasureTask2 extends AbstractTaskStep {
     private final LogicService logicService = Factory.get(LogicService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
+    private final GameService gameService = Factory.get(GameService.class);
+    private final SceneService sceneService = Factory.get(SceneService.class);
+    private final EntityService entityService = Factory.get(EntityService.class);
+    
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final SkinNetwork skinNetwork = Factory.get(SkinNetwork.class);
-    private final GameService gameService = Factory.get(GameService.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
-    private final SceneService sceneService = Factory.get(SceneService.class);
-    private final EntityService entityService = Factory.get(EntityService.class);
+    private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
     
     // ==== 任务位置
     private final StoryTreasureGame game;
@@ -324,25 +325,23 @@ public class StoryTreasureTask2 extends AbstractTaskStep {
                 endTalk.addListener(new TalkListener() {
                     @Override
                     public void onTalkEnd() {
-                        Skill skill = skillService.getSkill(companion, IdConstants.SKILL_BACK);
-                        if (skill == null || !(skill instanceof BackSkill)) {
-                            playNetwork.removeEntity(companion);
-                            playNetwork.removeEntity(treasure);
-                            doTaskComplete();
-                        } else {
-                            final BackSkill backSkill = (BackSkill) skill;
-                            skillService.addListener(companion, new SkillListenerAdapter() {
-                                @Override
-                                public void onSkillEnd(Skill skill) {
-                                    if (skill == backSkill) {
-                                        playNetwork.removeEntity(companion);
-                                        playNetwork.removeEntity(treasure);
-                                        doTaskComplete();
-                                    }
-                                }
-                            });
-                            skillNetwork.playSkill(companion, backSkill, true);
+                        SkillData backSkill = companion.getData().getObjectData(IdConstants.SKILL_BACK);
+                        if (backSkill == null) {
+                            backSkill = Loader.loadData(IdConstants.SKILL_BACK);
+                            entityNetwork.addObjectData(companion, backSkill, 1);
                         }
+                        final long backSkillId = backSkill.getUniqueId();
+                        skillService.addListener(companion, new SkillListenerAdapter() {
+                            @Override
+                            public void onSkillEnd(Skill skill) {
+                                if (skill.getData().getUniqueId() == backSkillId) {
+                                    playNetwork.removeEntity(companion);
+                                    playNetwork.removeEntity(treasure);
+                                    doTaskComplete();
+                                }
+                            }
+                        });
+                        entityNetwork.useObjectData(companion, backSkillId);
                     }
                 });
                 gameNetwork.talk(endTalk);
@@ -380,21 +379,6 @@ public class StoryTreasureTask2 extends AbstractTaskStep {
             return ResourceManager.get(rid, params);
         }
     }
-    
-//    // 判断战场中还有多少个敌人
-//    private int checkEnemyRemain() {
-//        List<Entity> actors = playService.findAllActor();
-//        int alive = 0;
-//        for (Entity a : actors) {
-//            if (actorService.getGroup(a) == game.groupEnemy 
-//                    && !gameService.isDead(a)
-//                    && actorService.distance(a, player) < 20
-//                    ) {
-//                alive++;
-//            }
-//        }
-//        return alive;
-//    }
     
     /**
      * 将当前战场所有敌人的目标重定向到指定的actor.

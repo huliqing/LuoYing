@@ -46,8 +46,8 @@ public class TestItem extends AbstractItem {
 //        Entity other = Loader.load(ed);
 //        playNetwork.addEntity(other);
 
-//        Entity entity = Loader.load("actorFairy");
-        Entity entity = Loader.load("actorTower");
+        Entity entity = Loader.load("actorFairy");
+//        Entity entity = Loader.load("actorTower");
         entity.getAttributeManager().getAttribute("attributeGroup", NumberAttribute.class).setValue(2);
         entity.getAttributeManager().getAttribute("attributeLevel", NumberAttribute.class).setValue(1);
         playNetwork.addEntity(entity);

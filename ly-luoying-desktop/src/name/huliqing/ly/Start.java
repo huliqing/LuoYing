@@ -138,8 +138,8 @@ public class Start extends SimpleApplication {
         
         // 6.Debug 信息
         stateView = stateManager.getState(StatsAppState.class);
-//        setDebugView(Config.debug);
-        setDebugView(false);
+        setDebugView(Config.debug);
+//        setDebugView(false);
         
         // 7.基本设定
         getInputManager().setCursorVisible(true);

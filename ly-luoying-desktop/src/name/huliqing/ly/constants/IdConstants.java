@@ -159,17 +159,18 @@ public class IdConstants {
     // =========================================================================
     
     /**
-     * @deprecated 
      * 技能：回城技能 
      */
     public final static String SKILL_BACK = "skillBack";
-    /** 
-     * @deprecated 
-     * 技能：默认的Reset技能，适应所有没有设置Reset技能的角色 
-     */
-    public final static String SKILL_RESET_DEFAULT = "skillResetBase";
-    /** @deprecated 不再使用 */
-    public final static String SKILL_SUMMON = "skillSummon";
+    
+    // remove20161211
+//    /** 
+//     * @deprecated 
+//     * 技能：默认的Reset技能，适应所有没有设置Reset技能的角色 
+//     */
+//    public final static String SKILL_RESET_DEFAULT = "skillResetBase";
+//    /** @deprecated 不再使用 */
+//    public final static String SKILL_SUMMON = "skillSummon";
     
     // =========================================================================
     // Attribute
