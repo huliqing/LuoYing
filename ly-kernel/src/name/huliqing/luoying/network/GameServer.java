@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import name.huliqing.luoying.Config;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.data.GameData;
@@ -254,15 +253,13 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
             serverDiscover.broadcast(createServerRunMess(), lanDiscoverClientPort);
         }
         
-        if (Config.debug) {
-            Logger.getLogger(GameServer.class.getName()).log(Level.INFO
-                    , "Server created: game={0}, version={1}, tcpPort={2}, udpPort={3}, running={4}"
-                    , new Object[] {server.getGameName()
-                            , server.getVersion()
-                            , serverPort
-                            , serverPort
-                            , server.isRunning()});
-        }
+        LOG.log(Level.INFO
+                , "Server created: game={0}, version={1}, tcpPort={2}, udpPort={3}, running={4}"
+                , new Object[] {server.getGameName()
+                        , server.getVersion()
+                        , serverPort
+                        , serverPort
+                        , server.isRunning()});
     }
     
     /**
@@ -282,7 +279,7 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
             try {
                 Thread.sleep(50);
             } catch (InterruptedException ex) {
-                Logger.getLogger(GameServer.class.getName()).log(Level.SEVERE, null, ex);
+                LOG.log(Level.SEVERE, null, ex);
             }
             server.close();
         }
@@ -514,7 +511,7 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
     private MessSCStarted createServerRunMess() {
         InetAddress inetAddress = envService.getLocalHostIPv4();
         if (inetAddress == null) {
-            Logger.getLogger(GameServer.class.getName()).log(Level.WARNING, "Could not getLocalHostIPv4 address");
+            LOG.log(Level.WARNING, "Could not getLocalHostIPv4 address");
             return null;
         }
         MessSCStarted mess = new MessSCStarted(inetAddress.getHostAddress()
@@ -531,7 +528,7 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
     private MessSCClosed createServerStopMess() {
         InetAddress inetAddress = envService.getLocalHostIPv4();
         if (inetAddress == null) {
-            Logger.getLogger(GameServer.class.getName()).log(Level.WARNING, "Could not getLocalHostIPv4 address");
+            LOG.log(Level.WARNING, "Could not getLocalHostIPv4 address");
             return null;
         }
         String des = gameData != null ? ResManager.get(gameData.getId() + ".name") : "Unknow";

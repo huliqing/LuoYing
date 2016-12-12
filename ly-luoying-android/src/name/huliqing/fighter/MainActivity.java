@@ -17,10 +17,9 @@ import java.util.logging.LogManager;
 import name.huliqing.fighter.ad.AdManager;
 import name.huliqing.fighter.ad.AdManager.Ad;
 import name.huliqing.fighter.ad.AndroidAbstractAdController;
-import name.huliqing.fighter.android.AndroidSaveServiceImpl;
+import name.huliqing.fighter.android.AndroidConfigServiceImpl;
 import name.huliqing.fighter.android.AndroidSystemServiceImpl;
 import name.huliqing.luoying.layer.service.ConfigService;
-import name.huliqing.luoying.layer.service.SaveService;
 import name.huliqing.luoying.layer.service.SystemService;
 import name.huliqing.luoying.utils.AdController;
 import name.huliqing.luoying.utils.AdUtils;
@@ -40,6 +39,9 @@ public class MainActivity extends Activity {
         LogManager.getLogManager().getLogger("").setLevel(Level.WARNING);
     }
     
+    /**
+     * 这个方法是在调用SimpleApplication.start()方法<b>之前</b>调用。
+     */
     private void preStart() {
         // 重要配置Start =======================================================
         
@@ -48,12 +50,10 @@ public class MainActivity extends Activity {
         
         // ==== 关于android特定环境相关。
         // 注：其它所有Service的注册替换都必须统一放在这里,避免混乱。
-        // 重要说明：这里必须放在任何调用Service之前进行注册替换，不能放在layoutDisplay中再
-        // 注册，因为在layoutDisplay在调用的时候已经太迟，core核心代码已经调用了SaveService
-        // 的一些方法，这就导致core调用的不是AndroidSaveServiceImpl，而是默认的SaveServiceImpl.java
-        // 而默认的SaveServiceImpl.java是不能支持Android的.
+        // 重要说明：这里必须放在任何调用Service之前进行注册替换，不能放在layoutDisplay中再注册
         Factory.register(SystemService.class, AndroidSystemServiceImpl.class);
-        Factory.register(SaveService.class, AndroidSaveServiceImpl.class);
+//        Factory.register(SaveService.class, AndroidSaveServiceImpl.class);
+        Factory.register(ConfigService.class, AndroidConfigServiceImpl.class);
         
         // ==== 允许android进行udp广播和接收广播
         // 申请广播开启,这句不能重复调用，关闭时用lock.release(),这必须成对出现。
@@ -66,8 +66,10 @@ public class MainActivity extends Activity {
         checkNewVersion();
     }
     
+    /**
+     * 这个方法是在调用SimpleApplication.start()方法<b>之后</b>调用。
+     */
     private void afterStart() {
-        // ==== 检查并载入广告
         loadAd();
     }
     

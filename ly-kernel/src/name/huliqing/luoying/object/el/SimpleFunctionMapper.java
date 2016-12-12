@@ -7,9 +7,7 @@ package name.huliqing.luoying.object.el;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -70,16 +68,16 @@ public class SimpleFunctionMapper extends FunctionMapper {
         }
         int modifiers = method.getModifiers();
         if (!Modifier.isPublic(modifiers)) {
-            LOG.log(Level.WARNING, "(addFunction) Skip method because it is not public, method={0}", method.getName());
+            LOG.log(Level.INFO, "(addFunction) Skip method because it is not public, method={0}", method.getName());
             return;
         }
         if (!Modifier.isStatic(modifiers)) {
-            LOG.log(Level.WARNING, "(addFunction) Skip method because it is not static, method={0}", method.getName());
+            LOG.log(Level.INFO, "(addFunction) Skip method because it is not static, method={0}", method.getName());
             return;
         }
         Class<?> retType = method.getReturnType();
         if (retType == Void.TYPE) {
-            LOG.log(Level.WARNING, "(addFunction) Skip method because it is return void type, method={0}", method.getName());
+            LOG.log(Level.INFO, "(addFunction) Skip method because it is return void type, method={0}", method.getName());
             return;
         }
 

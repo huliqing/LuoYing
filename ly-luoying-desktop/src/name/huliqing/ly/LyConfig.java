@@ -5,11 +5,13 @@
  */
 package name.huliqing.ly;
 
+import java.util.logging.Level;
 import name.huliqing.luoying.Config;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ConfigData;
 import name.huliqing.luoying.layer.service.ConfigService;
 import name.huliqing.luoying.layer.service.SystemService;
+import name.huliqing.luoying.log.LogFactory;
 import name.huliqing.ly.view.shortcut.ShortcutManager;
 
 /**
@@ -42,6 +44,11 @@ public class LyConfig {
     public static void setDebug(boolean debug) {
 //        cd.setAttribute("debug", debug); // DEBUG不要存档。
         Config.debug = debug;
+        if (Config.debug) {
+            LogFactory.resetLogger(Level.INFO, true);
+        } else {
+            LogFactory.resetLogger(Level.WARNING, false);
+        }
     }
     
     public static String getGameName() {

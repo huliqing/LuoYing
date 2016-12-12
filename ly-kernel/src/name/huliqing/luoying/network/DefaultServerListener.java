@@ -5,9 +5,7 @@
 package name.huliqing.luoying.network;
 
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.mess.GameMess;
 import name.huliqing.luoying.mess.ActorTransformMess;
-import com.jme3.network.HostedConnection;
 import java.util.LinkedList;
 import java.util.List;
 import name.huliqing.luoying.layer.service.ActorService;
@@ -18,7 +16,6 @@ import name.huliqing.luoying.object.entity.Entity;
  * @author huliqing
  */
 public abstract class DefaultServerListener extends AbstractServerListener {
-//    private static final Logger LOG = Logger.getLogger(DefaultServerListener.class.getName());
     private final ActorService actorService = Factory.get(ActorService.class);
     private final List<Entity> syncObjects = new LinkedList<Entity>();
     private float syncTimer = 0;

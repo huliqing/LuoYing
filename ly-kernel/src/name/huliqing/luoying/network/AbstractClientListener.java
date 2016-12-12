@@ -6,8 +6,6 @@ package name.huliqing.luoying.network;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
-import com.jme3.app.Application;
 import com.jme3.network.ClientStateListener.DisconnectInfo;
 import com.jme3.network.Message;
 import java.util.logging.Level;

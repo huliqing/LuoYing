@@ -83,7 +83,7 @@ public abstract class ActorLoadHelper extends AbstractGameLogic {
      */
     protected Entity load() {
         if (actorId == null) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "The load actorId could not be null!");
+            throw new NullPointerException("actorId could not be null!");
         }
         return Loader.load(actorId);
     }

@@ -9,14 +9,12 @@ import name.huliqing.luoying.layer.service.SkinService;
 import name.huliqing.luoying.network.Network;
 import name.huliqing.luoying.mess.SkinWeaponTakeOnMess;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.skin.Skin;
 
 /**
  *
  * @author huliqing
  */
 public class SkinNetworkImpl implements SkinNetwork {
-//    private static final Logger LOG = Logger.getLogger(SkinNetworkImpl.class.getName());
     private final static Network NETWORK = Network.getInstance();
     private SkinService skinService;
     

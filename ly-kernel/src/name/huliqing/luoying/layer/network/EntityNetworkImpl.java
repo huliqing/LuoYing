@@ -21,7 +21,6 @@ import name.huliqing.luoying.xml.ObjectData;
  * @author huliqing
  */
 public class EntityNetworkImpl implements EntityNetwork {
-//    private static final Logger LOG = Logger.getLogger(EntityNetworkImpl.class.getName());
     
     private final Network network = Network.getInstance();
     private EntityService entityService;

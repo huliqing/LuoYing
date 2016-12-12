@@ -30,6 +30,9 @@ import name.huliqing.luoying.utils.ThreadHelper;
  * @author huliqing
  */
 public class ActorBuildSimpleLogic extends AbstractGameLogic {
+
+    private static final Logger LOG = Logger.getLogger(ActorBuildSimpleLogic.class.getName());
+    
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final SceneService sceneService = Factory.get(SceneService.class);
@@ -175,7 +178,7 @@ public class ActorBuildSimpleLogic extends AbstractGameLogic {
                         future.cancel(true);
                     }
                     future = null;
-                    Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage());
+                    LOG.log(Level.SEVERE, e.getMessage());
                 }
             } else if (future.isCancelled()) {
                 future = null;

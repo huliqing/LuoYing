@@ -27,7 +27,7 @@ import name.huliqing.luoying.layer.service.SystemService;
  * @author huliqing
  */
 public class UDPDiscover {
-//    private final static Logger logger = Logger.getLogger(UDPDiscover.class.getName());
+    private final static Logger LOG = Logger.getLogger(UDPDiscover.class.getName());
     
     // 本地监听端口
     private final int localListenPort;
@@ -54,7 +54,7 @@ public class UDPDiscover {
             started = true;
         } catch (SocketException ex) {
             started = false;
-            Logger.getLogger(UDPDiscover.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, null, ex);
         }
     }
     
@@ -80,7 +80,7 @@ public class UDPDiscover {
             DatagramPacket packet = new DatagramPacket(data, data.length, InetAddress.getByName(ipAddress), port);
             socket.send(packet);
         } catch (Exception ex) {
-            Logger.getLogger(UDPDiscover.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, null, ex);
         }
     }
     
@@ -98,7 +98,7 @@ public class UDPDiscover {
             DatagramPacket packet = new DatagramPacket(data, data.length, getBroadcastAddress(), broadcastPort);
             socket.send(packet);
         } catch (Exception ex) {
-            Logger.getLogger(UDPDiscover.class.getName()).log(Level.SEVERE, "Could not broadcast message!", ex);
+            LOG.log(Level.SEVERE, "Could not broadcast message!", ex);
         }
     }
     

@@ -5,7 +5,6 @@
 package name.huliqing.luoying.object.actor;
 
 import com.jme3.animation.SkeletonControl;
-import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
@@ -13,7 +12,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.Config;
 import name.huliqing.luoying.data.ActorData;
-import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.object.AssetLoader;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.effect.Effect;

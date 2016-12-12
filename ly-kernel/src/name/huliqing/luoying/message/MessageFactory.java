@@ -12,7 +12,6 @@ import com.jme3.util.SafeArrayList;
  * @author huliqing
  */
 public class MessageFactory {
-//    private static final Logger LOG = Logger.getLogger(MessageFactory.class.getName());
     
     private final static SafeArrayList<MessageHandler> HANDLERS = new SafeArrayList<MessageHandler>(MessageHandler.class);
     

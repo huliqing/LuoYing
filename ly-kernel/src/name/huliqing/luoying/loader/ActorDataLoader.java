@@ -25,7 +25,6 @@ import name.huliqing.luoying.xml.DataFactory;
  * @author huliqing
  */
 public class ActorDataLoader extends EntityDataLoader {
-//    private static final Logger LOG = Logger.getLogger(ActorDataLoader.class.getName());
     private final DefineService defineService = Factory.get(DefineService.class);
 
     @Override

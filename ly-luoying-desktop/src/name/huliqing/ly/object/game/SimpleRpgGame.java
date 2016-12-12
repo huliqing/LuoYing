@@ -112,7 +112,9 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
         // 消息处理器
         messageService.addHandler(messageHandler);
         // 消息处理器(控制台,debug)
-        messageService.addHandler(ConsoleMessageHandler.getInstance());
+        if (Config.debug) {
+            messageService.addHandler(ConsoleMessageHandler.getInstance());
+        }
         
         // UI界面：头像、队伍、工具栏、攻击按钮
         // 这个UI需要依赖场景，所以放在这里初始化

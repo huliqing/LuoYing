@@ -11,7 +11,6 @@ import name.huliqing.luoying.message.StateCode;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.module.SkillModule;
 import name.huliqing.luoying.object.skill.Skill;
-import name.huliqing.luoying.object.skill.SkillType;
 import name.huliqing.luoying.object.skill.Walk;
 import name.huliqing.luoying.object.module.SkillListener;
 
@@ -20,7 +19,6 @@ import name.huliqing.luoying.object.module.SkillListener;
  * @author huliqing
  */
 public class SkillServiceImpl implements SkillService {
-//    private final static Logger LOG = Logger.getLogger(SkillServiceImpl.class.getName());
     private final DefineService defineService = Factory.get(DefineService.class);
 
     @Override

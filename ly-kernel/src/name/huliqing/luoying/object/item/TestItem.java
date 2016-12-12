@@ -6,6 +6,8 @@
 package name.huliqing.luoying.object.item;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.layer.network.EntityNetwork;
@@ -15,8 +17,6 @@ import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.layer.service.SaveService;
 import name.huliqing.luoying.layer.service.SkillService;
-import name.huliqing.luoying.object.Loader;
-import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.xml.ObjectData;
 
@@ -26,6 +26,8 @@ import name.huliqing.luoying.xml.ObjectData;
  */
 public class TestItem extends AbstractItem {
 
+    private static final Logger LOG = Logger.getLogger(TestItem.class.getName());
+    
     private final SaveService saveService = Factory.get(SaveService.class);
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
@@ -46,13 +48,18 @@ public class TestItem extends AbstractItem {
 //        Entity other = Loader.load(ed);
 //        playNetwork.addEntity(other);
 
-        Entity entity = Loader.load("actorFairy");
-//        Entity entity = Loader.load("actorTower");
-        entity.getAttributeManager().getAttribute("attributeGroup", NumberAttribute.class).setValue(2);
-        entity.getAttributeManager().getAttribute("attributeLevel", NumberAttribute.class).setValue(1);
-        playNetwork.addEntity(entity);
-        
-        entityNetwork.hitAttribute(actor, "attributeLevel", 20, null);
+//        Entity entity = Loader.load("actorFairy");
+////        Entity entity = Loader.load("actorTower");
+//        entity.getAttributeManager().getAttribute("attributeGroup", NumberAttribute.class).setValue(2);
+//        entity.getAttributeManager().getAttribute("attributeLevel", NumberAttribute.class).setValue(1);
+//        playNetwork.addEntity(entity);
+//        
+//        entityNetwork.hitAttribute(actor, "attributeLevel", 20, null);
+
+        for (int i = 0; i < 100; i++) {
+            LOG.log(Level.WARNING, "日志测试i={0}", i);
+        }
+            
         
     }
     

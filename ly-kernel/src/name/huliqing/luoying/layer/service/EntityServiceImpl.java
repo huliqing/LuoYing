@@ -21,7 +21,6 @@ import name.huliqing.luoying.xml.ObjectData;
  * @author huliqing
  */
 public class EntityServiceImpl implements EntityService {
-//    private static final Logger LOG = Logger.getLogger(EntityServiceImpl.class.getName());
     
     @Override
     public void inject() {

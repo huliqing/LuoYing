@@ -17,9 +17,7 @@ import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ActionData;
 import name.huliqing.luoying.layer.network.SkillNetwork;
-import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.module.ActorModule;
 import name.huliqing.luoying.object.module.SkillModule;
 import name.huliqing.luoying.object.skill.Skill;
 import name.huliqing.luoying.utils.DebugDynamicUtils;
@@ -30,6 +28,8 @@ import name.huliqing.luoying.utils.ThreadHelper;
  * @author huliqing
  */
 public class PathRunAction extends AbstractAction implements RunAction{
+    private static final Logger LOG = Logger.getLogger(PathRunAction.class.getName());
+    
 //    private final PlayService playService = Factory.get(PlayService.class);
 //    private final ActorService actorService = Factory.get(ActorService.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
@@ -212,7 +212,7 @@ public class PathRunAction extends AbstractAction implements RunAction{
             tempPoint = getNextPoint();
         } catch (Exception e) {
             // 多线程情况下总可能会有极小的机率发生冲突。
-            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Could not get next way point!", e);
+            LOG.log(Level.WARNING, "Could not get next way point!", e);
         }
         if (tempPoint == null) {
             return;
@@ -255,7 +255,6 @@ public class PathRunAction extends AbstractAction implements RunAction{
     }
     
     private void checkAndFindPath() {
-//        Logger.get(getClass()).log(Level.INFO, "CheckAndFindPath. actor={0}", actor.getModel().getName());
         if (future.isDone()) {
             try {
                 Boolean result = future.get();
@@ -265,7 +264,6 @@ public class PathRunAction extends AbstractAction implements RunAction{
                     finder.clearPath();
                     future = findPath(newStartPos, position, true);
 
-//                    Logger.getLogger(getClass().getName()).log(Level.INFO, "Path not found, now warp the start position and try again. new startPos={0}", newStartPos);
                 } else {
                     path = finder.getPath();
                     future = null; // 获得线路后清空
@@ -275,8 +273,7 @@ public class PathRunAction extends AbstractAction implements RunAction{
                 }
             } catch (Exception ex) {
                 // 重要：这个异常必须处理。
-//                Logger.getLogger(getClass().getName()).log(Level.WARNING, "actorName={}, error={1}"
-//                        , new Object[] {actor.getModel().getName(),ex.getMessage()});
+                LOG.log(Level.WARNING, "actor={0}, error={1}", new Object[] {actor.getData().getId(),ex.getMessage()});
                 
                 if (future != null) {
                     future.cancel(true);

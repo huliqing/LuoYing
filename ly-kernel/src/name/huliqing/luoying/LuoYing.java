@@ -217,6 +217,7 @@ import name.huliqing.luoying.object.task.CollectTask;
 import name.huliqing.luoying.loader.TaskDataLoader;
 import name.huliqing.luoying.loader.PlantEnvLoader;
 import name.huliqing.luoying.loader.RandomSceneDataLoader;
+import name.huliqing.luoying.log.LogFactory;
 import name.huliqing.luoying.manager.ResManager;
 import name.huliqing.luoying.mess.ActorSetLocationMess;
 import name.huliqing.luoying.mess.EntityAddMess;
@@ -307,6 +308,7 @@ public class LuoYing {
      */
     public static void initialize(Application app) {
         LuoYing.app = app;
+        LogFactory.initialize();
         
         // 注册需要序列化的数据，对于网络版进行序列化时需要用到。
         registerSerializer();

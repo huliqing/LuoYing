@@ -181,13 +181,13 @@ public class ResManager {
                 result.put(key, value);
             }
         } catch (IOException ioe) {
-            Logger.getLogger(ResManager.class.getName()).log(Level.SEVERE, ioe.getMessage());
+            LOG.log(Level.SEVERE, ioe.getMessage());
         } finally {
             if (br != null) {
                 try {
                     br.close();
                 } catch (Exception e) {
-                    Logger.getLogger(ResManager.class.getName()).log(Level.SEVERE, e.getMessage());
+                    LOG.log(Level.SEVERE, e.getMessage());
                 }
             }
         }

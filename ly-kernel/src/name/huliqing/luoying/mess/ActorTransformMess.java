@@ -19,7 +19,6 @@ import name.huliqing.luoying.object.module.ActorModule;
  */
 @Serializable
 public class ActorTransformMess extends GameMess {
-//    private static final Logger LOG = Logger.getLogger(MessActorTransform.class.getName());
     
     private long actorId = -1;
     private Vector3f location = new Vector3f();

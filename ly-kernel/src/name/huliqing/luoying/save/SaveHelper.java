@@ -18,10 +18,12 @@ import name.huliqing.luoying.layer.service.SaveService;
 public class SaveHelper {
     private static final Logger LOG = Logger.getLogger(SaveHelper.class.getName());
     
+    // remove20161212
     // 全局配置的键值
-    private final static String KEY_CONFIG_GLOBAL = "ly3d_config";
+//    private final static String KEY_CONFIG_GLOBAL = "ly3d_config";
+    
     // 存档列表
-    private final static String KEY_SAVE_LIST = "ly3d_saveList";
+    private final static String KEY_SAVE_LIST = "SaveList";
     // 最近一次自动存档
     private final static String KEY_SAVE_LAST = "SaveLast";
     // 存档名称格式
@@ -115,37 +117,36 @@ public class SaveHelper {
         return saveService.existsSaveKey(KEY_SAVE_LAST);
     }
     
-    /**
-     * @deprecated 不再使用
-     * 保存全局配置
-     * @param saveConfig 
-     */
-    public static void saveConfig(SaveConfig saveConfig) {
-        try {
-            SaveService saveService = Factory.get(SaveService.class);
-            saveService.saveSavable(KEY_CONFIG_GLOBAL, saveConfig);
-        } catch (Exception e) {
-            LOG.log(Level.SEVERE, "Could not saveConfig, e={0}", e);
-        }
-    }
-    
-    /**
-     * @deprecated 不再使用
-     * 载入全局配置
-     * @return 
-     */
-    public static SaveConfig loadConfig() {
-        try {
-            SaveService ss = Factory.get(SaveService.class);
-            SaveConfig sc = (SaveConfig) ss.loadSavable(KEY_CONFIG_GLOBAL);
-            return sc;
-        } catch (Exception e) {
-            LOG.log(Level.SEVERE, "Could not loadStoryLast, e={0}", e);
-        }
-        return null;
-    }
-    
-    // --------------------
+    // remove20161212
+//    /**
+//     * @deprecated 不再使用
+//     * 保存全局配置
+//     * @param saveConfig 
+//     */
+//    public static void saveConfig(SaveConfig saveConfig) {
+//        try {
+//            SaveService saveService = Factory.get(SaveService.class);
+//            saveService.saveSavable(KEY_CONFIG_GLOBAL, saveConfig);
+//        } catch (Exception e) {
+//            LOG.log(Level.SEVERE, "Could not saveConfig, e={0}", e);
+//        }
+//    }
+//    
+//    /**
+//     * @deprecated 不再使用
+//     * 载入全局配置
+//     * @return 
+//     */
+//    public static SaveConfig loadConfig() {
+//        try {
+//            SaveService ss = Factory.get(SaveService.class);
+//            SaveConfig sc = (SaveConfig) ss.loadSavable(KEY_CONFIG_GLOBAL);
+//            return sc;
+//        } catch (Exception e) {
+//            LOG.log(Level.SEVERE, "Could not loadStoryLast, e={0}", e);
+//        }
+//        return null;
+//    }
     
     private static void saveStory(SaveStory saveStory) {
         // 保存存档

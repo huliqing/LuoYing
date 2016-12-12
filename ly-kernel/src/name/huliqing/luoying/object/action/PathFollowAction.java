@@ -15,7 +15,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import name.huliqing.luoying.Config;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ActionData;
 import name.huliqing.luoying.layer.network.SkillNetwork;
@@ -226,9 +225,6 @@ public class PathFollowAction extends AbstractAction implements FollowAction {
                 finder.clearPath();
                 pathFindTimeUsed = 0;
                 future = findPath(actor.getSpatial().getWorldTranslation(), target.getWorldTranslation(), false);
-                if (Config.debug) {
-                    Logger.getLogger(getClass().getName()).log(Level.INFO, "{0} findPath.", toString());
-                }
             }
         }
         
@@ -250,8 +246,8 @@ public class PathFollowAction extends AbstractAction implements FollowAction {
         try {
             tempPoint = getNextPoint();
         } catch (Exception e) {
-            // 多线程情况下总可能会有极小的机率发生冲突。
-            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Could not get next way point!", e);
+            // 多线程情况下总可能会有机率发生冲突。
+            LOG.log(Level.WARNING, "Could not get next way point!", e);
         }
         if (tempPoint == null) {
             return;
@@ -349,7 +345,6 @@ public class PathFollowAction extends AbstractAction implements FollowAction {
                 if (!result) {
                     finder.clearPath();
                     future = findPath(actor.getSpatial().getWorldTranslation(), target.getWorldTranslation(), true);
-//                    Logger.getLogger(getClass().getName()).log(Level.INFO, "{0} findPath.", toString());
                 } else {
                     path = finder.getPath();
                     future = null; // 获得线路后清空
@@ -359,8 +354,7 @@ public class PathFollowAction extends AbstractAction implements FollowAction {
                 }
             } catch (Exception ex) {
                 // 重要：这个异常必须处理。
-                Logger.getLogger(getClass().getName()).log(Level.WARNING, "actorName={}, error={1}"
-                        , new Object[] {actor.getSpatial().getName(),ex.getMessage()});
+                LOG.log(Level.WARNING, "actorName={}, error={1}", new Object[] {actor.getSpatial().getName(),ex.getMessage()});
                 if (future != null) {
                     future.cancel(true);
                 }

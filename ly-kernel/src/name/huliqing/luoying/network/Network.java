@@ -12,7 +12,6 @@ import java.util.logging.Logger;
 import name.huliqing.luoying.Config;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.GameData;
-import name.huliqing.luoying.layer.service.ConfigService;
 import name.huliqing.luoying.network.GameServer.ServerListener;
 import name.huliqing.luoying.mess.ActorTransformDirectMess;
 import name.huliqing.luoying.layer.service.ActorService;

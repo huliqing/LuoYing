@@ -170,7 +170,6 @@ name.huliqing.ly.layer.service.GameService -> name.huliqing.ly.c.b.c:
     void saveConfig(name.huliqing.luoying.data.ConfigData) -> a
     name.huliqing.luoying.data.ConfigData loadConfig() -> d
 name.huliqing.ly.layer.service.GameServiceImpl -> name.huliqing.ly.c.b.d:
-    java.util.logging.Logger LOG -> f
     name.huliqing.luoying.layer.service.PlayService playService -> a
     name.huliqing.luoying.layer.service.EntityService entityService -> b
     name.huliqing.luoying.layer.service.ActionService actionService -> c
@@ -221,7 +220,6 @@ name.huliqing.ly.layer.service.GameServiceImpl -> name.huliqing.ly.c.b.d:
     void saveConfig(name.huliqing.luoying.data.ConfigData) -> a
     name.huliqing.luoying.data.ConfigData loadConfig() -> d
     void setMessageEnabled(name.huliqing.luoying.object.entity.Entity,boolean) -> e
-    void <clinit>() -> <clinit>
 name.huliqing.ly.loader.ChatDataLoader -> name.huliqing.ly.d.a:
     void <init>() -> <init>
     void load(name.huliqing.luoying.xml.Proto,name.huliqing.ly.data.ChatData) -> a
@@ -694,6 +692,7 @@ name.huliqing.ly.object.game.ServerNetworkRpgGame -> name.huliqing.ly.g.b.i:
     name.huliqing.luoying.layer.network.PlayNetwork playNetwork -> l
     name.huliqing.luoying.layer.service.PlayService playService -> m
     name.huliqing.luoying.layer.service.SkillService skillService -> n
+    name.huliqing.luoying.layer.service.EntityService entityService -> o
     name.huliqing.luoying.network.GameServer gameServer -> g
     void <init>() -> <init>
     void setGameServer(name.huliqing.luoying.network.GameServer) -> a
@@ -781,6 +780,7 @@ name.huliqing.ly.object.game.SimpleRpgGame$RpgMessageHandler -> name.huliqing.ly
     name.huliqing.ly.object.game.SimpleRpgGame this$0 -> a
     void <init>(name.huliqing.ly.object.game.SimpleRpgGame) -> <init>
     void handle(name.huliqing.luoying.message.Message) -> handle
+    void handleDataRemoveMessage(name.huliqing.luoying.message.EntityDataRemoveMessage) -> handleDataRemoveMessage
     void handleDataUseMessage(name.huliqing.luoying.message.EntityDataUseMessage) -> handleDataUseMessage
     void handleSkillUseMessage(name.huliqing.luoying.message.EntitySkillUseMessage) -> handleSkillUseMessage
     void displayMessage(name.huliqing.luoying.message.Message,java.lang.String) -> displayMessage
@@ -1495,13 +1495,14 @@ name.huliqing.ly.object.game.story.StoryTreasureTask2 -> name.huliqing.ly.g.b.b.
     name.huliqing.luoying.layer.service.LogicService logicService -> c
     name.huliqing.luoying.layer.service.SkillService skillService -> d
     name.huliqing.luoying.layer.service.ActorService actorService -> e
+    name.huliqing.ly.layer.service.GameService gameService -> i
+    name.huliqing.luoying.layer.service.SceneService sceneService -> k
+    name.huliqing.luoying.layer.service.EntityService entityService -> C
     name.huliqing.luoying.layer.network.SkillNetwork skillNetwork -> f
     name.huliqing.luoying.layer.network.PlayNetwork playNetwork -> g
     name.huliqing.luoying.layer.network.SkinNetwork skinNetwork -> h
-    name.huliqing.ly.layer.service.GameService gameService -> i
     name.huliqing.ly.layer.network.GameNetwork gameNetwork -> j
-    name.huliqing.luoying.layer.service.SceneService sceneService -> k
-    name.huliqing.luoying.layer.service.EntityService entityService -> C
+    name.huliqing.luoying.layer.network.EntityNetwork entityNetwork -> D
     name.huliqing.ly.object.game.story.StoryTreasureGame game -> l
     name.huliqing.luoying.logic.scene.ActorBuildLogic sceneBuilder -> m
     float buildRadius -> n
@@ -1542,8 +1543,8 @@ name.huliqing.ly.object.game.story.StoryTreasureTask2 -> name.huliqing.ly.g.b.b.
     name.huliqing.luoying.layer.service.LogicService access$1200(name.huliqing.ly.object.game.story.StoryTreasureTask2) -> l
     name.huliqing.luoying.object.entity.Entity access$1400(name.huliqing.ly.object.game.story.StoryTreasureTask2) -> m
     name.huliqing.luoying.layer.network.SkinNetwork access$1500(name.huliqing.ly.object.game.story.StoryTreasureTask2) -> n
-    void access$1600(name.huliqing.ly.object.game.story.StoryTreasureTask2) -> o
-    name.huliqing.luoying.layer.network.SkillNetwork access$1700(name.huliqing.ly.object.game.story.StoryTreasureTask2) -> p
+    name.huliqing.luoying.layer.network.EntityNetwork access$1600(name.huliqing.ly.object.game.story.StoryTreasureTask2) -> o
+    void access$1700(name.huliqing.ly.object.game.story.StoryTreasureTask2) -> p
     name.huliqing.luoying.object.entity.Entity access$1402(name.huliqing.ly.object.game.story.StoryTreasureTask2,name.huliqing.luoying.object.entity.Entity) -> a
     com.jme3.math.Vector3f access$1800(name.huliqing.ly.object.game.story.StoryTreasureTask2) -> q
     name.huliqing.luoying.layer.service.ActorService access$1900(name.huliqing.ly.object.game.story.StoryTreasureTask2) -> r
@@ -1579,9 +1580,9 @@ name.huliqing.ly.object.game.story.StoryTreasureTask2$7 -> name.huliqing.ly.g.b.
     void <init>(name.huliqing.ly.object.game.story.StoryTreasureTask2) -> <init>
     void onTalkEnd() -> a
 name.huliqing.ly.object.game.story.StoryTreasureTask2$7$1 -> name.huliqing.ly.g.b.b.bf:
-    name.huliqing.luoying.object.skill.BackSkill val$backSkill -> a
+    long val$backSkillId -> a
     name.huliqing.ly.object.game.story.StoryTreasureTask2$7 this$1 -> b
-    void <init>(name.huliqing.ly.object.game.story.StoryTreasureTask2$7,name.huliqing.luoying.object.skill.BackSkill) -> <init>
+    void <init>(name.huliqing.ly.object.game.story.StoryTreasureTask2$7,long) -> <init>
     void onSkillEnd(name.huliqing.luoying.object.skill.Skill) -> onSkillEnd
 name.huliqing.ly.object.game.story.StoryTreasureTask2$CompanionLoader -> name.huliqing.ly.g.b.b.bg:
     name.huliqing.ly.object.game.story.StoryTreasureTask2 this$0 -> a
@@ -2752,6 +2753,7 @@ name.huliqing.ly.view.actor.SkillPanel -> name.huliqing.ly.i.a.m:
     name.huliqing.luoying.layer.network.ActorNetwork actorNetwork -> d
     name.huliqing.ly.layer.service.GameService gameService -> e
     name.huliqing.ly.layer.network.GameNetwork gameNetwork -> f
+    name.huliqing.luoying.layer.network.EntityNetwork entityNetwork -> j
     name.huliqing.luoying.object.entity.Entity actor -> g
     java.util.List datas -> h
     long filterSkillTypes -> i
@@ -2765,7 +2767,7 @@ name.huliqing.ly.view.actor.SkillPanel -> name.huliqing.ly.i.a.m:
     name.huliqing.ly.layer.service.GameService access$000(name.huliqing.ly.view.actor.SkillPanel) -> a
     name.huliqing.luoying.object.entity.Entity access$100(name.huliqing.ly.view.actor.SkillPanel) -> b
     name.huliqing.ly.layer.network.GameNetwork access$200(name.huliqing.ly.view.actor.SkillPanel) -> c
-    name.huliqing.luoying.layer.network.SkillNetwork access$300(name.huliqing.ly.view.actor.SkillPanel) -> d
+    name.huliqing.luoying.layer.network.EntityNetwork access$300(name.huliqing.ly.view.actor.SkillPanel) -> d
 name.huliqing.ly.view.actor.SkillPanel$1 -> name.huliqing.ly.i.a.n:
     name.huliqing.ly.view.actor.SkillRow val$row -> a
     name.huliqing.ly.view.actor.SkillPanel this$0 -> b
@@ -2953,9 +2955,12 @@ name.huliqing.ly.view.shortcut.ItemShortcut -> name.huliqing.ly.i.b.d:
     void onDataRemoved(name.huliqing.luoying.xml.ObjectData,int) -> onDataRemoved
     void onDataUsed(name.huliqing.luoying.xml.ObjectData) -> onDataUsed
 name.huliqing.ly.view.shortcut.ShortcutManager -> name.huliqing.ly.i.b.e:
+    java.util.logging.Logger LOG -> d
     name.huliqing.ly.view.shortcut.ShortcutManager$ShortcutRoot SHORTCUT_ROOT -> a
     name.huliqing.luoying.ui.UI DELETE -> b
     name.huliqing.luoying.ui.UI RECYCLE -> c
+    java.util.Map SHORTCUT_TYPE_MAP -> e
+    void <init>() -> <init>
     void init() -> a
     void addShortcut(name.huliqing.luoying.object.entity.Entity,name.huliqing.luoying.xml.ObjectData) -> a
     void loadShortcut(java.util.List,name.huliqing.luoying.object.entity.Entity) -> a

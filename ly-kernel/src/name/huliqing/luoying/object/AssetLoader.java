@@ -13,7 +13,6 @@ import name.huliqing.luoying.utils.GeometryUtils;
  * @author huliqing
  */
 public class AssetLoader {
-//    private static final Logger LOG = Logger.getLogger(AssetLoader.class.getName());
     
     /**
      * 载入模型，但是会根据系统是否使用light进行makeUnshaded

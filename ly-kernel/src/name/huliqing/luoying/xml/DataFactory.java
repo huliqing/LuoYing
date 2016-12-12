@@ -49,7 +49,7 @@ public class DataFactory {
      */
     public static void registerData(String tagName, Class<? extends ObjectData> dataClass) {
         TAG_DATAS.put(tagName, dataClass);
-        LOG.log(Level.INFO, "registerData, {0} => {1}", new Object[] {tagName, dataClass});
+//        LOG.log(Level.INFO, "registerData, {0} => {1}", new Object[] {tagName, dataClass});
     }
     
     /**
@@ -63,7 +63,7 @@ public class DataFactory {
             return;
         }
         TAG_LOADERS.put(tagName, dataLoaderClass);
-        LOG.log(Level.INFO, "registerDataLoader, {0} => {1}", new Object[] {tagName, dataLoaderClass});
+//        LOG.log(Level.INFO, "registerDataLoader, {0} => {1}", new Object[] {tagName, dataLoaderClass});
     }
     
     /** 
@@ -77,7 +77,7 @@ public class DataFactory {
             return;
         }
         TAG_PROCESSORS.put(tagName, dataProcessorClass);
-        LOG.log(Level.INFO, "registerDataProcessor, {0} => {1}", new Object[] {tagName, dataProcessorClass});
+//        LOG.log(Level.INFO, "registerDataProcessor, {0} => {1}", new Object[] {tagName, dataProcessorClass});
     }
     
     /**

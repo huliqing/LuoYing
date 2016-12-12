@@ -15,13 +15,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import name.huliqing.luoying.Config;
 
 /**
  *
  * @author huliqing
  */
 public class SystemServiceImpl implements SystemService {
+
+    private static final Logger LOG = Logger.getLogger(SystemServiceImpl.class.getName());
     
     private String platformName;
 
@@ -45,7 +46,7 @@ public class SystemServiceImpl implements SystemService {
         try {
             return InetAddress.getLocalHost().getHostName();
         } catch (Exception e) {
-            Logger.getLogger(SystemServiceImpl.class.getName()).log(Level.INFO, "Could not get machine name!", e);
+            LOG.log(Level.INFO, "Could not get machine name!", e);
             return "Unknow";
         }
     }
@@ -74,7 +75,7 @@ public class SystemServiceImpl implements SystemService {
                 }
             }
         } catch (SocketException ex) {
-            Logger.getLogger(SystemServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, null, ex);
         }
         return null;
     }
@@ -93,13 +94,10 @@ public class SystemServiceImpl implements SystemService {
         String host = ipv4.getHostAddress();
         int index = host.lastIndexOf(".");
         String broadcast = host.substring(0, index + 1) + "255";
-        if (Config.debug) {
-            Logger.getLogger(SystemServiceImpl.class.getName()).log(Level.INFO, "broadcast address={0}", broadcast);
-        }
         try {
             return InetAddress.getByName(broadcast);
         } catch (UnknownHostException ex) {
-            Logger.getLogger(SystemServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, null, ex);
         }
         return null;
     }

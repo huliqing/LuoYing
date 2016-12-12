@@ -294,10 +294,14 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
         // 存档到系统文件 
         SaveHelper.saveStoryLast(saveStory);
         
+        // remove20161212
         // 保存全局配置
-        SaveConfig saveConfig = new SaveConfig();
-        saveConfig.setConfig(LyConfig.getConfigData());
-        SaveHelper.saveConfig(saveConfig);
+//        SaveConfig saveConfig = new SaveConfig();
+//        saveConfig.setConfig(LyConfig.getConfigData());
+//        SaveHelper.saveConfig(saveConfig);
+
+        // 保存全局配置
+        gameService.saveConfig(LyConfig.getConfigData());
     }
     
      /**

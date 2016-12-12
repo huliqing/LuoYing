@@ -60,8 +60,6 @@ public abstract class ActorMultLoadHelper extends AbstractGameLogic {
                     Entity result = future.get();
                     callback(result, lastLoadIndex);
                     
-//                    Logger.getLogger(getClass().getName()).log(Level.INFO, "callBack ok, lastLoadIndex={0}", lastLoadIndex);
-                    
                     // 递增index等待载入下一个,只有处理成功之后才可以进行下一个的载入。
                     lastLoadIndex++;
                     future = null;
@@ -91,7 +89,7 @@ public abstract class ActorMultLoadHelper extends AbstractGameLogic {
      */
     protected Entity load(String actorId) {
         if (actorId == null) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "The load actorId could not be null!");
+            throw new NullPointerException("actorId could not be null!");
         }
         return Loader.load(actorId);
     }

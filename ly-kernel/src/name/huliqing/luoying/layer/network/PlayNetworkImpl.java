@@ -21,7 +21,6 @@ import name.huliqing.luoying.object.scene.Scene;
  * @author huliqing
  */
 public class PlayNetworkImpl implements PlayNetwork {
-//    private static final Logger LOG = Logger.getLogger(PlayNetworkImpl.class.getName());
     private final Network network = Network.getInstance();
     private PlayService playService;
     

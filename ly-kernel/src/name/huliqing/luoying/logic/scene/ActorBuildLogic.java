@@ -34,6 +34,8 @@ import name.huliqing.luoying.utils.ThreadHelper;
  * @author huliqing
  */
 public class ActorBuildLogic extends AbstractGameLogic {
+
+    private static final Logger LOG = Logger.getLogger(ActorBuildLogic.class.getName());
     
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final ActorService actorService = Factory.get(ActorService.class);
@@ -175,7 +177,7 @@ public class ActorBuildLogic extends AbstractGameLogic {
                     models.add(actor);
                 }
             } catch (Exception ex) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);
+                LOG.log(Level.SEVERE, ex.getMessage(), ex);
             }
             future = null;
         }
@@ -217,7 +219,6 @@ public class ActorBuildLogic extends AbstractGameLogic {
      */
     public Vector3f getRandomPosition() {
         if (positions == null || positions.isEmpty()) {
-            Logger.getLogger(getClass().getName()).log(Level.WARNING, "No positions set! Now use Vector3f.ZERO instead.");
             return Vector3f.ZERO.clone();
         }
         

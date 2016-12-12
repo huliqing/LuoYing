@@ -4,7 +4,6 @@
  */
 package name.huliqing.luoying.network;
 
-import com.jme3.app.Application;
 import com.jme3.network.Client;
 import com.jme3.network.ClientStateListener;
 import com.jme3.network.Message;

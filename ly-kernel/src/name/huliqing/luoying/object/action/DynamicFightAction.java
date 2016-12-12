@@ -31,8 +31,6 @@ import name.huliqing.luoying.xml.ObjectData;
  * @author huliqing
  */
 public class DynamicFightAction extends PathFollowAction implements FightAction, EntityDataListener {
-//    private static final Logger LOG = Logger.getLogger(FightDynamicAction.class.getName());
-//    private final SkinService skinService = Factory.get(SkinService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     private final EntityService entityService = Factory.get(EntityService.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);

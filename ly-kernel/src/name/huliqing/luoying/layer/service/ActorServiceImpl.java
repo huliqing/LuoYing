@@ -8,7 +8,6 @@ import com.jme3.math.Vector3f;
 import com.jme3.util.TempVars;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.module.ActorModule;
@@ -19,8 +18,6 @@ import name.huliqing.luoying.object.module.ChannelModule;
  * @author huliqing
  */
 public class ActorServiceImpl implements ActorService {
-
-//    private static final Logger LOG = Logger.getLogger(ActorServiceImpl.class.getName());
 
     @Override
     public void inject() {

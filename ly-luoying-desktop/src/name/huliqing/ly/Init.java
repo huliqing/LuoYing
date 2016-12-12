@@ -8,6 +8,7 @@ package name.huliqing.ly;
 import com.jme3.app.Application;
 import com.jme3.export.Savable;
 import com.jme3.network.serializing.Serializer;
+import java.io.File;
 import java.util.Map;
 import java.util.Map.Entry;
 import name.huliqing.luoying.Factory;
@@ -17,6 +18,7 @@ import name.huliqing.luoying.data.ConfigData;
 import name.huliqing.luoying.data.GameData;
 import name.huliqing.luoying.data.GameLogicData;
 import name.huliqing.luoying.data.ModuleData;
+import name.huliqing.luoying.layer.service.ConfigService;
 import name.huliqing.luoying.loader.GameDataLoader;
 import name.huliqing.luoying.manager.ResManager;
 import name.huliqing.luoying.object.Loader;
@@ -72,6 +74,20 @@ public class Init {
         registerProcessor();
         loadData();
         
+        // 载入资源, 英文环境
+        ResManager.loadResource("/data/font/en_US/resource",               "utf-8", "en_US");
+        ResManager.loadResource("/data/font/en_US/resource_object",   "utf-8", "en_US");
+        ResManager.loadResource("/data/font/en_US/story_gb",               "utf-8", "en_US");
+        ResManager.loadResource("/data/font/en_US/story_guard",          "utf-8", "en_US");
+        ResManager.loadResource("/data/font/en_US/story_treasure",      "utf-8", "en_US");
+        
+        // 载入资源,中文环境
+        ResManager.loadResource("/data/font/zh_CN/resource",                "utf-8", "zh_CN");
+        ResManager.loadResource("/data/font/zh_CN/resource_object",    "utf-8", "zh_CN");
+        ResManager.loadResource("/data/font/zh_CN/story_gb",                "utf-8", "zh_CN");
+        ResManager.loadResource("/data/font/zh_CN/story_guard",           "utf-8", "zh_CN");
+        ResManager.loadResource("/data/font/zh_CN/story_treasure",       "utf-8", "zh_CN");
+        
         // 载入配置
         ConfigData config = (ConfigData) Loader.loadData("config");
         ConfigData configSaved = Factory.get(GameService.class).loadConfig();
@@ -82,20 +98,6 @@ public class Init {
             }
         }
         LyConfig.setConfigData(config);
-        
-        // 载入资源
-        ResManager.loadResource("/data/font/en_US/resource",               "utf-8", "en_US");
-        ResManager.loadResource("/data/font/en_US/resource_object",   "utf-8", "en_US");
-        ResManager.loadResource("/data/font/en_US/story_gb",               "utf-8", "en_US");
-        ResManager.loadResource("/data/font/en_US/story_guard",          "utf-8", "en_US");
-        ResManager.loadResource("/data/font/en_US/story_treasure",      "utf-8", "en_US");
-        
-        // 载入资源,作为中文环境
-        ResManager.loadResource("/data/font/zh_CN/resource",                "utf-8", "zh_CN");
-        ResManager.loadResource("/data/font/zh_CN/resource_object",    "utf-8", "zh_CN");
-        ResManager.loadResource("/data/font/zh_CN/story_gb",                "utf-8", "zh_CN");
-        ResManager.loadResource("/data/font/zh_CN/story_guard",           "utf-8", "zh_CN");
-        ResManager.loadResource("/data/font/zh_CN/story_treasure",       "utf-8", "zh_CN");
         
         // 设置默认环境
         ResManager.setLocale(LyConfig.getLocale());
