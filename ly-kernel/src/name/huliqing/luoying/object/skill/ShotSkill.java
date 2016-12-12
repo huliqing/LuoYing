@@ -14,7 +14,7 @@ import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.bullet.Bullet;
-import name.huliqing.luoying.object.bullet.Bullet.Listener;
+import name.huliqing.luoying.object.bullet.BulletListener;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.utils.ConvertUtils;
 import name.huliqing.luoying.utils.MathUtils;
@@ -194,7 +194,7 @@ public class ShotSkill extends HitSkill {
         bb.setEnd(getShotEndPoint(mainTarget));
         bb.setSpeed(shotSpeed);
         
-        bb.addListener(new Listener() {
+        bb.addListener(new BulletListener() {
             @Override
             public boolean onBulletFlying(Bullet bullet) {
                  if (shotHitCheck(bullet, mainTarget)) {

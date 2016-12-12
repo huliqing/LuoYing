@@ -9,9 +9,8 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.util.SafeArrayList;
 import com.jme3.util.TempVars;
-import java.util.ArrayList;
-import java.util.List;
 import name.huliqing.luoying.data.EffectData;
 import name.huliqing.luoying.object.ControlAdapter;
 import name.huliqing.luoying.object.Loader;
@@ -30,10 +29,10 @@ import name.huliqing.luoying.utils.GeometryUtils;
  */
 public class Effect extends ModelEntity<EffectData> {
     /** 动画控制,所有动画控制器都作用在animRoot上。*/
-    protected List<AnimationWrap> animations;
+    protected SafeArrayList<AnimationWrap> animations;
     
     /** 特效声音 */
-    protected List<SoundWrap> sounds;
+    protected SafeArrayList<SoundWrap> sounds;
  
     /** 特效的总的使用时间，注：特效的使用时间受特效执行速度的影响。
      * 如果特效速度为2.0则实际执行时间只有useTime的一半，反之也然 */
@@ -98,7 +97,7 @@ public class Effect extends ModelEntity<EffectData> {
         // 格式： "animId1 | startTime, animId2 | startTime, ..."
         String[] aArr = data.getAsArray("animations");
         if (aArr != null) {
-            animations = new ArrayList<AnimationWrap>(aArr.length);
+            animations = new SafeArrayList<AnimationWrap>(AnimationWrap.class);
             for (String a : aArr) {
                 String[] bArr = a.split("\\|");
                 AnimationWrap anim = new AnimationWrap();
@@ -111,7 +110,7 @@ public class Effect extends ModelEntity<EffectData> {
         // 声音: "sound1 | startTime, sound2 | startTime, ..."
         String[] cArr = data.getAsArray("sounds");
         if (cArr != null) {
-            sounds = new ArrayList<SoundWrap>(cArr.length);
+            sounds = new SafeArrayList<SoundWrap>(SoundWrap.class);
             for (String c : cArr) {
                 String[] dArr = c.split("\\|");
                 SoundWrap sw = new SoundWrap();
@@ -200,8 +199,7 @@ public class Effect extends ModelEntity<EffectData> {
     private void initAnimations() {
         // 计算Animation的实际开始时间和实际使用时间
         if (animations != null) {
-            for (int i = 0; i < animations.size(); i++) {
-                AnimationWrap aw = animations.get(i);
+            for (AnimationWrap aw : animations.getArray()) {
                 aw.trueAnimSpeed = speed;
                 aw.trueStartTime = aw.startTime / speed;
             }
@@ -239,14 +237,14 @@ public class Effect extends ModelEntity<EffectData> {
     @Override
     public void cleanup() {
          if (sounds != null) {
-            for (int i = 0; i < sounds.size(); i++) {
-                sounds.get(i).cleanup();
+            for (SoundWrap aw : sounds.getArray()) {
+                aw.cleanup();
             }
         }
         
         if (animations != null) {
-            for (int i = 0; i < animations.size(); i++) {
-                animations.get(i).cleanup();
+            for (AnimationWrap aw : animations.getArray()) {
+                aw.cleanup();
             }
         }
         
@@ -354,8 +352,8 @@ public class Effect extends ModelEntity<EffectData> {
      */
     private void updateAnimations(float tpf, float trueTimeUsed) {
         if (animations != null) {
-            for (int i = 0; i < animations.size(); i++) {
-                animations.get(i).update(tpf, trueTimeUsed);
+            for (AnimationWrap aw : animations.getArray()) {
+                aw.update(tpf, trueTimeUsed);
             }
         }
     }
@@ -366,8 +364,8 @@ public class Effect extends ModelEntity<EffectData> {
      */
     private void updateSounds(float tpf, float trueTimeUsed) {
         if (sounds != null) {
-            for (int i = 0; i < sounds.size(); i++) {
-                sounds.get(i).update(tpf, trueTimeUsed);
+            for (SoundWrap sw : sounds.getArray()) {
+                sw.update(tpf, trueTimeUsed);
             }
         }
     }

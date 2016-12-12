@@ -5,8 +5,8 @@
  */
 package name.huliqing.luoying.object.gamelogic;
 
+import com.jme3.util.SafeArrayList;
 import java.util.ArrayList;
-import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.GameLogicData;
 import name.huliqing.luoying.layer.network.EntityNetwork;
@@ -45,7 +45,7 @@ public class AttributeChangeGameLogic extends AbstractGameLogic {
     private SBooleanEl checkEl;
     
     // ---- inner
-    private final List<Actor> tempStore = new ArrayList<Actor>();
+    private final SafeArrayList<Actor> tempStore = new SafeArrayList<Actor>(Actor.class);
     
     @Override
     public void setData(GameLogicData data) {
@@ -72,7 +72,7 @@ public class AttributeChangeGameLogic extends AbstractGameLogic {
         if (tempStore.isEmpty())
             return;
         
-        for (Actor actor : tempStore) {
+        for (Actor actor : tempStore.getArray()) {
             if (checkEl.setSource(actor.getAttributeManager()).getValue()) {
                 updateAttribute(actor);
             }

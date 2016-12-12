@@ -8,6 +8,7 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.TalentData;
 import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.layer.service.EntityService;
+import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.el.LNumberEl;
 
 /**
@@ -24,7 +25,8 @@ public class AttributeTalent<T extends TalentData> extends AbstractTalent<T> {
     protected LNumberEl valueLevelEl;
     
     // ----
-    private float applyValue;
+    private float actualApplyValue;
+    
     // 判断天赋是否已经apply到角色身上, 需要这个判断是因为有可能角色是从存档中载入的，
     // 由于从存档中载入时角色的属性值已经被当前天赋改变过，所以就不再需要再去改变角色的属性，
     // 否则会造成属性值在存档后再次载入时不停的累加的bug.
@@ -38,7 +40,8 @@ public class AttributeTalent<T extends TalentData> extends AbstractTalent<T> {
         if (temp != null) {
             valueLevelEl = elService.createLNumberEl(temp);
         }
-        this.attributeApplied = data.getAsBoolean("attributeApplied", attributeApplied);
+        this.attributeApplied = data.getAsBoolean("_attributeApplied", attributeApplied);
+        this.actualApplyValue = data.getAsFloat("_actualApplyValue", actualApplyValue);
     }
     
     // 天赋data是存放在actorData.objectDatas上的，当角色存档时，天赋的一些参数也需要进行保存。
@@ -46,27 +49,39 @@ public class AttributeTalent<T extends TalentData> extends AbstractTalent<T> {
     @Override
     public void updateDatas() {
         super.updateDatas();
-        data.setAttribute("attributeApplied", attributeApplied);
+        data.setAttribute("_attributeApplied", attributeApplied);
+        data.setAttribute("_actualApplyValue", actualApplyValue);
     }
 
     @Override
     public void initialize() {
         super.initialize();
         
-        if (!attributeApplied) {
-            applyValue = valueLevelEl.setLevel(level).getValue().floatValue();
-            entityService.hitNumberAttribute(actor, bindAttribute, applyValue, null);
-            attributeApplied = true;
-            updateDatas();
+        if (attributeApplied) {
+            return;
         }
+
+        NumberAttribute attr = actor.getAttributeManager().getAttribute(bindAttribute, NumberAttribute.class);
+        if (attr == null) {
+            return;
+        }
+        
+        // 期望添加的属性值
+        float expectApplyValue = valueLevelEl.setLevel(level).getValue().floatValue();
+        // 属性值改变之前的值
+        float oldValue = attr.floatValue();
+        // 计变属性值
+        entityService.hitNumberAttribute(actor, bindAttribute, expectApplyValue, null);
+        // 实际作用的属性值
+        actualApplyValue = attr.floatValue() - oldValue;
+        attributeApplied = true;
     }
 
     @Override
     public void cleanup() {
         if (attributeApplied) {
-            entityService.hitNumberAttribute(actor, bindAttribute, -applyValue, null);
+            entityService.hitNumberAttribute(actor, bindAttribute, -actualApplyValue, null);
             attributeApplied = false;
-            updateDatas();
         }
         super.cleanup();
     }

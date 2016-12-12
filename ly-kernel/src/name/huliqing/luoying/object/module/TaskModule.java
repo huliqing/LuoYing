@@ -43,7 +43,7 @@ public class TaskModule extends AbstractModule implements DataHandler<TaskData> 
 
     @Override
     public void cleanup() {
-        for (Task task : tasks) {
+        for (Task task : tasks.getArray()) {
             task.cleanup();
         }
         tasks.clear();
@@ -56,7 +56,7 @@ public class TaskModule extends AbstractModule implements DataHandler<TaskData> 
      * @return 
      */
     public Task getTask(String taskId) {
-        for (Task t : tasks) {
+        for (Task t : tasks.getArray()) {
             if (t.getId().equals(taskId)) {
                 return t;
             }

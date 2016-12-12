@@ -13,10 +13,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.control.AbstractControl;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import com.jme3.util.SafeArrayList;
 import name.huliqing.luoying.data.BulletData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.effect.Effect;
@@ -32,7 +29,7 @@ import name.huliqing.luoying.utils.DebugDynamicUtils;
  * @author huliqing
  */
 public abstract class AbstractBullet extends ModelEntity<BulletData> implements Bullet<BulletData> {
-    private static final Logger LOG = Logger.getLogger(AbstractBullet.class.getName());
+//    private static final Logger LOG = Logger.getLogger(AbstractBullet.class.getName());
     
     // 调试
     protected boolean debug;
@@ -77,7 +74,7 @@ public abstract class AbstractBullet extends ModelEntity<BulletData> implements 
      */
     protected Entity source;
     
-    protected List<Bullet.Listener> listeners;
+    protected SafeArrayList<BulletListener> listeners;
     
     protected final Node bulletNode = new Node();
     
@@ -174,8 +171,8 @@ public abstract class AbstractBullet extends ModelEntity<BulletData> implements 
         
         // 触发子弹飞行时的侦听器，如果bulletFlying返回true,则说明击中了一个目标。
         if (listeners != null) {
-            for (int i = 0; i < listeners.size(); i++) {
-                if (listeners.get(i).onBulletFlying(this)) {
+            for (BulletListener lis : listeners.getArray()) {
+                if (lis.onBulletFlying(this)) {
                     onFiredTaget();
                 }
             }
@@ -212,9 +209,9 @@ public abstract class AbstractBullet extends ModelEntity<BulletData> implements 
     }
     
     @Override
-    public void addListener(Bullet.Listener listener) {
+    public void addListener(BulletListener listener) {
         if (listeners == null) {
-            listeners = new ArrayList<Bullet.Listener>(1);
+            listeners = new SafeArrayList<BulletListener>(BulletListener.class);
         }
         if (!listeners.contains(listener)) {
             listeners.add(listener);
@@ -222,7 +219,7 @@ public abstract class AbstractBullet extends ModelEntity<BulletData> implements 
     }
     
     @Override
-    public boolean removeListener(Bullet.Listener listener) {
+    public boolean removeListener(BulletListener listener) {
         return listeners != null && listeners.remove(listener);
     }
     

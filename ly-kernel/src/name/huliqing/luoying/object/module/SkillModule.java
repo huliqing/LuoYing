@@ -67,7 +67,7 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
     private final List<Skill> skills = new ArrayList<Skill>();
     // 一个map,用于优化获取查找技能的速度，skillMap中的内容与skills中的是一样的。
     private final Map<String, Skill> skillMap = new HashMap<String, Skill>();
-    private List<SkillListener> skillListeners;
+    private final SafeArrayList<SkillListener> skillListeners = new SafeArrayList<SkillListener>(SkillListener.class);
     
     // 当前正在执行的技能列表,
     // 如果runningSkills都执行完毕,则清空.但是lastSkill仍保持最近刚刚执行的技能的引用.
@@ -153,9 +153,9 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
                     playingSkills.remove(skill);
                     skill.cleanup();
                     // 执行侦听器
-                    if (skillListeners != null && !skillListeners.isEmpty()) {
-                        for (int i = 0; i < skillListeners.size(); i++) {
-                            skillListeners.get(i).onSkillEnd(skill);
+                    if (!skillListeners.isEmpty()) {
+                        for (SkillListener sl : skillListeners.getArray()) {
+                            sl.onSkillEnd(skill);
                         }
                     }
                 } else {
@@ -387,9 +387,9 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
         }
         
         // 执行侦听器
-        if (skillListeners != null && !skillListeners.isEmpty()) {
-            for (int i = 0; i < skillListeners.size(); i++) {
-                skillListeners.get(i).onSkillStart(lastSkill);
+        if (!skillListeners.isEmpty()) {
+            for (SkillListener sl : skillListeners.getArray()) {
+                sl.onSkillStart(lastSkill);
             }
         }
         
@@ -512,9 +512,6 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
      * @param skillListener 
      */
     public void addListener(SkillListener skillListener) {
-        if (skillListeners == null) {
-            skillListeners = new ArrayList<SkillListener>();
-        }
         if (!skillListeners.contains(skillListener)) {
             skillListeners.add(skillListener);
         }
@@ -526,7 +523,7 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
      * @return 
      */
     public boolean removeListener(SkillListener skillListener) {
-        return skillListeners != null && skillListeners.remove(skillListener);
+        return skillListeners.remove(skillListener);
     }
     
     /**

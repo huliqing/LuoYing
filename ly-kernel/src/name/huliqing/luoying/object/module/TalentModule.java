@@ -89,10 +89,8 @@ public class TalentModule extends AbstractModule implements DataHandler<TalentDa
         
         // 初始化，载入天赋
         List<TalentData> talentDatas = entity.getData().getObjectDatas(TalentData.class, new ArrayList<TalentData>());
-        if (talentDatas != null) {
-            for (TalentData td : talentDatas) {
-                addTalent((Talent) Loader.load(td));
-            }
+        for (TalentData td : talentDatas) {
+            addTalent((Talent) Loader.load(td));
         }
     }
     

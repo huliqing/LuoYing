@@ -59,7 +59,7 @@ public class SimpleGame implements Game<GameData>, SceneListener {
     public void updateDatas() {
         if (initialized) {
             scene.updateDatas();
-            for (GameLogic gl : logics) {
+            for (GameLogic gl : logics.getArray()) {
                 gl.updateDatas();
             }
         }
@@ -122,7 +122,7 @@ public class SimpleGame implements Game<GameData>, SceneListener {
      */
     @Override
     public void onSceneLoaded(Scene scene) {
-        for (GameListener gl : listeners) {
+        for (GameListener gl : listeners.getArray()) {
             gl.onGameSceneLoaded(this);
         }
     }
@@ -167,7 +167,7 @@ public class SimpleGame implements Game<GameData>, SceneListener {
     @Override
     public void cleanup() {
         // Notify 
-        for (GameListener gl : listeners) {
+        for (GameListener gl : listeners.getArray()) {
             gl.onGameExit(this);
         }
         scene.cleanup();

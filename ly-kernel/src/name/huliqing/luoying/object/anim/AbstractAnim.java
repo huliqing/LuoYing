@@ -5,9 +5,9 @@
 package name.huliqing.luoying.object.anim;
 
 import com.jme3.math.FastMath;
+import com.jme3.util.SafeArrayList;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.data.AnimData;
@@ -61,7 +61,7 @@ public abstract class AbstractAnim<E> implements Anim<AnimData, E> {
     protected float[] catmullRomFactor;
     
     // ---- 内部参数 ----
-    protected List<Listener> listeners;
+    protected SafeArrayList<Listener> listeners;
     protected E target;
     
     // 当前的动画"时间"插值。[0.0~1.0]
@@ -246,8 +246,8 @@ public abstract class AbstractAnim<E> implements Anim<AnimData, E> {
         if (listeners == null) {
             return;
         }
-        for (int i = 0; i < listeners.size(); i++) {
-            listeners.get(i).onDone(this);
+        for (Listener l : listeners.getArray()) {
+            l.onDone(this);
         }
     }
 
@@ -279,7 +279,7 @@ public abstract class AbstractAnim<E> implements Anim<AnimData, E> {
             throw new NullPointerException("Listener could not be null!");
         }
         if (listeners == null) {
-            listeners = new ArrayList<Listener>(1);
+            listeners = new SafeArrayList<Listener>(Listener.class);
         }
         if (!listeners.contains(listener)) {
             listeners.add(listener);

@@ -4,6 +4,7 @@
  */
 package name.huliqing.luoying.object.magic;
 
+import com.jme3.util.SafeArrayList;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.data.MagicData;
@@ -22,10 +23,10 @@ import name.huliqing.luoying.utils.MathUtils;
 public class StateMagic extends AbstractMagic {
     
     // 格式:stateId|timePoint,stateId|timePoint,stateId|timePoint...
-    private List<StateWrap> states;
+    private SafeArrayList<StateWrap> states;
     
     // 角色动画,格式:actorAnimId|timePoint,actorAnimId|timePoint,actorAnimId|timePoint...
-    private List<ActorAnimWrap> actorAnims;
+    private SafeArrayList<ActorAnimWrap> actorAnims;
 
     @Override
     public void setData(MagicData data) {
@@ -33,7 +34,7 @@ public class StateMagic extends AbstractMagic {
         // 状态格式:stateId|timePoint,stateId|timePoint,stateId|timePoint...
         String[] tempStates = data.getAsArray("states");
         if (tempStates != null) {
-            states = new ArrayList<StateWrap>(tempStates.length);
+            states = new SafeArrayList<StateWrap>(StateWrap.class);
             for (int i = 0; i < tempStates.length; i++) {
                 String[] stateArr = tempStates[i].split("\\|");
                 StateWrap sw = new StateWrap();
@@ -48,7 +49,7 @@ public class StateMagic extends AbstractMagic {
         // 角色动画,格式:actorAnimId|timePoint,actorAnimId|timePoint,actorAnimId|timePoint...
         String[] tempActorAnims = data.getAsArray("actorAnims");
         if (tempActorAnims != null) {
-            actorAnims = new ArrayList<ActorAnimWrap>(tempActorAnims.length);
+            actorAnims = new SafeArrayList<ActorAnimWrap>(ActorAnimWrap.class);
             for (int i = 0; i < tempActorAnims.length; i++) {
                 String[] actorAnimArr = tempActorAnims[i].split("\\|");
                 ActorAnimWrap aaw = new ActorAnimWrap();
@@ -77,12 +78,12 @@ public class StateMagic extends AbstractMagic {
     @Override
     public void cleanup() {
         if (states != null) {
-            for (StateWrap sw : states) {
+            for (StateWrap sw : states.getArray()) {
                 sw.cleanup();
             }
         }
         if (actorAnims != null) {
-            for (ActorAnimWrap aaw : actorAnims) {
+            for (ActorAnimWrap aaw : actorAnims.getArray()) {
                 aaw.cleanup();
             }
         }
@@ -91,16 +92,16 @@ public class StateMagic extends AbstractMagic {
     
     protected void doUpdateStates(float inter) {
         if (states != null) {
-            for (int i = 0; i < states.size(); i++) {
-                states.get(i).update(inter);
+            for (StateWrap sw : states.getArray()) {
+                sw.update(inter);
             }
         }
     }
     
     protected void doUpdateActorAnims(float tpf, float inter) {
         if (actorAnims != null) {
-            for (int i = 0; i < actorAnims.size(); i++) {
-                actorAnims.get(i).update(tpf, inter);
+            for (ActorAnimWrap aaw : actorAnims.getArray()) {
+                aaw.update(tpf, inter);
             }
         }
     }

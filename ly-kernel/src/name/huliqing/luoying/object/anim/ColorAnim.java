@@ -20,6 +20,7 @@ import name.huliqing.luoying.data.AnimData;
 
 /**
  * 改变一个节点的颜色
+ * @deprecated JME3.1开始可以不再使用这种方式, 
  * @author huliqing
  */
 public class ColorAnim extends AbstractAnim<Spatial> {

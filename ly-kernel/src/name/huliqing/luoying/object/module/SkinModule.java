@@ -90,38 +90,6 @@ public class SkinModule extends AbstractModule implements DataHandler<SkinData> 
         attachBaseSkin();
     }
     
-//    /**
-//     * 从角色包裹上移除装备,
-//     * @param skinData 唯一id
-//     * @param amount
-//     * @return  
-//     * @see #getSkin(Long) 
-//     */
-//    private boolean removeSkin(SkinData skinData, int amount) {
-//        Skin skin = getSkin(skinData);
-//        if (skin == null) {
-//            return false;
-//        }
-//        // 正在使用中的装备不能删除
-//        if (skinUsed != null && skinUsed.contains(skin)) {
-//            return false;
-//        }
-//        
-//        skin.getData().setTotal(skin.getData().getTotal() - amount);
-//        if (skin.getData().getTotal() <= 0) {
-//            entity.getData().removeObjectData(skin.getData());
-//            skinAll.remove(skin);
-//        }
-//        
-//        if (skinListeners != null) {
-//            for (int i = 0; i < skinListeners.size(); i++) {
-//                skinListeners.get(i).onSkinRemoved(entity, skin);
-//            }
-//        }
-//        
-//        return true;
-//    }
-    
     /**
      * 给角色换上装备
      * @param skin

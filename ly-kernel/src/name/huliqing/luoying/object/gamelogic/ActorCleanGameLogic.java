@@ -4,8 +4,7 @@
  */
 package name.huliqing.luoying.object.gamelogic;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.jme3.util.SafeArrayList;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.object.actor.Actor;
@@ -37,8 +36,8 @@ public class ActorCleanGameLogic extends AbstractGameLogic {
     private float deathDelay = 60;
     
     // ---- inner
-    private final List<Actor> actorStore = new ArrayList<Actor>();
-    private final List<Entity> removeStore = new ArrayList<Entity>();
+    private final SafeArrayList<Actor> actorStore = new SafeArrayList<Actor>(Actor.class);
+    private final SafeArrayList<Entity> removeStore = new SafeArrayList<Entity>(Entity.class);
     // 将deathDelay转为毫秒
     private float deathDelayAsMS;
 
@@ -65,7 +64,7 @@ public class ActorCleanGameLogic extends AbstractGameLogic {
         
         // 记录需要被清理的角色
         Long deadTime;
-        for (Entity a : actorStore) {
+        for (Entity a : actorStore.getArray()) {
             if (checkEl.setSource(a.getAttributeManager()).getValue()) {
                 deadTime = (Long) a.getSpatial().getUserData(USER_DATA_DEAD_TIME_FLAG);
                 if (deadTime == null) {
@@ -81,7 +80,7 @@ public class ActorCleanGameLogic extends AbstractGameLogic {
         
         // 清理角色
         if (!removeStore.isEmpty()) {
-            for (Entity a : removeStore) {
+            for (Entity a : removeStore.getArray()) {
                 playNetwork.removeEntity(a);
             }
             removeStore.clear();

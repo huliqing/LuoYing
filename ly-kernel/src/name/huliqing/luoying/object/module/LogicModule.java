@@ -105,7 +105,7 @@ public class LogicModule extends AbstractModule implements DataHandler<LogicData
 
     @Override
     public void cleanup() {
-        for (Logic logic : logics) {
+        for (Logic logic : logics.getArray()) {
             logic.cleanup();
         }
         logics.clear();
