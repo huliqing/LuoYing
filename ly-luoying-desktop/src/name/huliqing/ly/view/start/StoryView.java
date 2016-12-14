@@ -80,7 +80,7 @@ public class StoryView extends ListView<StoryData> {
             completeStage = saveStory.getStoryCount();
         }
         if (Config.debug) {
-            //completeStage = 999;
+            completeStage = 999;
         }
         for (int i = 0; i < datas.size() - 1; i++) {
             datas.get(i).enabled = (i <= completeStage);

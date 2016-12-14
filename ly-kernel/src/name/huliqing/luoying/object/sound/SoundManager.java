@@ -15,7 +15,7 @@ import java.util.Set;
  * @author huliqing
  */
 public class SoundManager {
-    
+     
     private final static SoundManager INSTANCE = new SoundManager();
     private SoundManager() {}
     public static SoundManager getInstance() {

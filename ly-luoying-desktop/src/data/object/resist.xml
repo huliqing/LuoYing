@@ -5,36 +5,57 @@
     xmlns='http://luoying.huliqing.name'
     xsi:schemaLocation='http://luoying.huliqing.name ../../../../ly-kernel/src/LuoYing/Data/meta/resist.xsd'>
 
-    <!--=====================================================================-->
-    <!--通用配置-->
-    <!--=====================================================================-->
+    <!--==========================================================================-->
+    <!-- 基本配置 -->
+    <!--==========================================================================-->
+
+    <!--火抗:暂无-->
+    <resistSimple id="resistFire" value="0" states="" icon="Interface/resist/fire.jpg"/>
+
+    <!--冰抗、霜抗-->
+    <resistSimple id="resistIce" value="0" states="stateSnowFrost,stateIceFrozen" icon="Interface/resist/snow.jpg" />
     
-    <!--非生命体: 抗所有 -->
-    <resistAll id="resistNonLife" />
+    <!--晕抗-->
+    <resistSimple id="resistDizzy" value="0" states="stateStun" icon="Interface/resist/dizzy.jpg" />
     
-    <!--=====================================================================-->
-    <!--种族通用配置-->
-    <!--=====================================================================-->
+    <!--抗缠绕 -->
+    <resistSimple id="resistEntwine" value="0" states="stateSpiderWeb" icon="Interface/resist/entwine.jpg" />
     
-    <!--人类Human -->
-    <resistSimple id="resistHuman" resists="stateStun|0.3" />
+    <!--毒抗-->
+    <resistSimple id="resistVenom" value="0" states="stateScorpionVenom" icon="Interface/resist/venom.jpg" />
     
-    <!--普通野兽-->
-    <resistSimple id="resistCreature" resists="stateStun|0.2" />
+    <!--非生命物体的抗性: 除一些特殊及冰霜状态之外，其它都完全免疫 -->
+    <resistAll id="resistForNonLife" value="1" excepts="stateSafe,stateSnowFrost,stateIceFrozen" icon="Interface/resist/nonlife.jpg" />
     
-    <!--兽人ORC-->
-    <resistSimple id="resistOrc" resists="stateStun|0.5" />
+    <!--==========================================================================-->
+    <!-- 种族、及通用配置打包 -->
+    <!--==========================================================================-->
     
-    <!--森林妖精-->
-    <resistSimple id="resistFairy" resists="stateStun|0.75" />
+    <!--种族配置：人类-->
+    <resistGroup id="resistHumanRace" resists="resistFire|0.3,resistIce|0.3,resistDizzy|0.3,resistVenom|0.3" />
     
-    <!--=====================================================================-->
-    <!--特殊角色配置-->
-    <!--=====================================================================-->
-    <resistAll id="resistTower" excepts="stateIceFrozen|0" />
+    <!--种族配置：精灵-->
+    <resistGroup id="resistElfRace" resists="resistFire|0.3,resistIce|0.3,resistDizzy|0.1,resistVenom|0.5" />
     
-    <!--蝎子-->
-    <resistSimple id="resistScorpion" resists="stateScorpionVenom|1.0" />
+    <!--种族配置：兽人-->
+    <resistGroup id="resistOrcRace" resists="resistFire|0.3,resistIce|0.3,resistDizzy|0.5,resistVenom|0.1" />
+    
+    <!--种族配置：亡灵、不死族--> 
+    <resistGroup id="resistUndeadRace" resists="resistFire|0.1,resistIce|0.1,resistDizzy|0.3,resistVenom|1" />
+    
+    <!--通用：普通野兽-->
+    <resistGroup id="resistCreatureGroup" extends="resistOrcRace" />
+    
+    <!--通用：非生命物体抗性-->
+    <resistGroup id="resistNonLifeGroup" resists="resistForNonLife" />
+    
+    <!--==========================================================================-->
+    <!-- 特殊角色抗性 -->
+    <!--==========================================================================-->
+    
+    <!--蝎子的抗性：自己带毒，所以自己100%抗毒-->
+    <resistGroup id="resistForScorpion" resists="resistFire|0.2,resistIce|0.2,resistDizzy|0.1,resistVenom|1" />
+    
 </root>
 
 

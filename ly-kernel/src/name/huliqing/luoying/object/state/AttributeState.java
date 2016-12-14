@@ -62,7 +62,7 @@ public class AttributeState extends AbstractState {
         }
         
         // data.getResist()为抵抗率，取值 [0.0~1.0], 如果为1.0则说明完全抵抗. 
-        float expectAddValue = addValue * (1 - getResist());
+        float expectAddValue = addValue * (1 - data.getResist());
         
         // 记住旧值
         float oldValue = attr.floatValue();

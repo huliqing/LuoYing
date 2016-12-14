@@ -30,6 +30,7 @@ xs:time
                 <xs:element ref="moduleLevel" />
                 <xs:element ref="moduleLogic" />
                 <xs:element ref="modulePhysics" />
+                <xs:element ref="moduleResist" />
                 <xs:element ref="moduleSkill" />
                 <xs:element ref="moduleSkin" />
                 <xs:element ref="moduleState" />
@@ -261,6 +262,18 @@ xs:time
                     <xs:attribute name="kinematic" type="bool" use="optional">
                         <xs:annotation><xs:documentation>kinematic</xs:documentation></xs:annotation>
                     </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="moduleResist">
+        <xs:annotation>
+            <xs:documentation>物理模块</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="moduleBase">
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>

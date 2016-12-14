@@ -42,4 +42,26 @@ public class StateData extends ObjectData {
         setAttribute("sourceActor", sourceActor);
     }
     
+    /**
+     * 获取获态的抵消值,这个值取值范围在[0.0~1.0], 如果没有设置则默认返回0.
+     * @return 
+     * @see #setResist(float) 
+     */
+    public float getResist() {
+        return getAsFloat("resist", 0);
+    }
+    
+    /**
+     * 设置状态削弱值，取值[0.0~1.0],该值主要用于削弱状态的作用，根据各
+     * 种状态的实际情况各自实现该功能．0表示状态不削弱，1表示状态完全被削
+     * 弱．0.5表示削弱一半，依此类推．示例：如实现一个击晕3秒的状态，如果
+     * resist=0.3,则可实现最终的击晕时间为 3 * (1 - 0.3) = 2.1秒，换句话说，
+     * 击晕效果被削弱了0.9秒．根据实现的不同，削弱方式可以完全不同，如实现
+     * 一个中毒状态效果，你可以实现为削弱中毒时间，也可以实现为削弱中毒伤害
+     * 等．
+     * @param resist 
+     */
+    public void setResist(float resist) {
+        setAttribute("resist", resist);
+    }
 }

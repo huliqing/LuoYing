@@ -54,6 +54,8 @@ public class InterfaceConstants {
     public final static String UI_ITEM_SKILL = "Interface/icon/userPanel/skill.png";
     /** 天赋: Interface/icon/userPanel/talent.png*/
     public final static String UI_ITEM_TALENT = "Interface/icon/userPanel/talent.png";
+    /** 抗性: Interface/icon/userPanel/resist.png */
+    public final static String UI_ITEM_RESIST = "Interface/icon/userPanel/resist.png";
     /** 属性：Interface/icon/userPanel/brain.png */
     public final static String UI_ITEM_ATTR = "Interface/icon/userPanel/brain.png";
     /** 任务：Interface/icon/userPanel/task.png */

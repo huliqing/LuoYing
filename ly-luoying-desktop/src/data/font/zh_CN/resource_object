@@ -307,6 +307,20 @@ stateSpeedUpAS.name=狂暴
 stateScorpionVenom.name=蝎子毒
 stateClean.name=净化
 
+#==== Resist
+resistFire.name=火焰抗性
+resistFire.des=抵抗、减弱火焰类状态的影响
+resistIce.name=冰霜抗性
+resistIce.des=抵抗、减弱冰霜、冰冻状态的影响
+resistDizzy.name=晕眩抗性
+resistDizzy.des=抵抗、减弱晕眩状态的影响
+resistEntwine.name=缠绕抗性
+resistEntwine.des=抵抗、减弱缠绕、固定类状态的影响
+resistVenom.name=毒药抗性
+resistVenom.des=抵抗、减弱中毒状态的影响
+resistForNonLife.name=非生物抗性
+resistForNonLife.des=非生物类抗性
+
 #==== chat
 chatSend.name=发送东西
 chatShop.name=购买物品

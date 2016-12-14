@@ -123,7 +123,7 @@ public class DataFactory {
             
             data.setProto(proto);
             data.setUniqueId(generateUniqueId());
-
+            
             // 如果指定了Data载入器则使用这个载入器来载入数据，否则不理, 允许不注册指定的载入器及Data类型。
             String dataLoader = proto.getDataLoaderClass();
             if (dataLoader != null) {

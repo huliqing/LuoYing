@@ -210,12 +210,38 @@ public class Data implements Savable {
         return value != null ? Long.parseLong(value.toString()) : null;
     }
     
-    public final Long getAsLong(String key, long defValue) {
+    public final long getAsLong(String key, long defValue) {
         Long value = getAsLong(key);
         if (value != null) {
             return value;
         }
         return defValue;
+    }
+    
+    /**
+     * 把参数获取为Long数组，如果没有设置该参数则返回null.
+     * @param key
+     * @return 
+     */
+    public final long[] getAsLongArray(String key) {
+        String[] strArr = getAsArray(key);
+        if (strArr != null) {
+            return toLongArray(strArr);
+        }
+        return null;
+    }
+    
+    /**
+     * 把参数获取为Long列表，如果没有设置该参数则返回null.
+     * @param key
+     * @return 
+     */
+    public final List<Long> getAsLongList(String key) {
+        String[] strArr = getAsArray(key);
+        if (strArr != null) {
+            return toLongList(strArr);
+        }
+        return null;
     }
     
     public final Float getAsFloat(String key) {
@@ -473,11 +499,27 @@ public class Data implements Savable {
      * @return 
      */
     private List<Integer> toIntegerList(String[] strArr) {
-        List<Integer> list = new ArrayList<Integer>();
+        List<Integer> list = new ArrayList<Integer>(strArr.length);
         for (String strArr1 : strArr) {
             list.add(Integer.parseInt(strArr1));
         }
         return list;
+    }
+    
+    private long[] toLongArray(String[] strArr) {
+        long[] result = new long[strArr.length];
+        for (int i = 0; i < strArr.length; i++) {
+            result[i] = Long.parseLong(strArr[i]);
+        }
+        return result;
+    }
+    
+    private List<Long> toLongList(String[] strArr) {
+        List<Long> result = new ArrayList<Long>(strArr.length);
+        for (String s : strArr) {
+            result.add(Long.parseLong(s));
+        }
+        return result;
     }
     
     @Override

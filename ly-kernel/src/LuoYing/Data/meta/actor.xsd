@@ -149,10 +149,10 @@ xs:time
                                 itemId1|total,itemId2|total,itemId3</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="resist" type="xs:string" use="optional">
+                    <xs:attribute name="resists" type="xs:string" use="optional">
                         <xs:annotation>
                             <xs:documentation>
-                                关联一个抗性设置．
+                                设置抗性，格式："resist1,resist2,..."
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>

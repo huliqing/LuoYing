@@ -5,6 +5,9 @@
  */
 package game;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  *
  * @author huliqing
@@ -12,6 +15,7 @@ package game;
 public class Test {
     
     public static void main(String[] args) {
-       
+        long[] value = new long[]{1L};
+        long ss = 1L;
     }
 }

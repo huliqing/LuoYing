@@ -6,7 +6,6 @@
 package name.huliqing.luoying.object.item;
 
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.EntityData;
@@ -17,7 +16,9 @@ import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.layer.service.SaveService;
 import name.huliqing.luoying.layer.service.SkillService;
+import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.xml.DataFactory;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
@@ -42,11 +43,11 @@ public class TestItem extends AbstractItem {
     protected void doUse(Entity actor) {
         count++;
         
-//        actor.updateDatas();
-//        EntityData ed = actor.getData().clone();
-//        ed.setUniqueId(DataFactory.generateUniqueId());
-//        Entity other = Loader.load(ed);
-//        playNetwork.addEntity(other);
+        actor.updateDatas();
+        EntityData ed = actor.getData().clone();
+        ed.setUniqueId(DataFactory.generateUniqueId());
+        Entity other = Loader.load(ed);
+        playNetwork.addEntity(other);
 
 //        Entity entity = Loader.load("actorFairy");
 ////        Entity entity = Loader.load("actorTower");
@@ -56,9 +57,6 @@ public class TestItem extends AbstractItem {
 //        
 //        entityNetwork.hitAttribute(actor, "attributeLevel", 20, null);
 
-        for (int i = 0; i < 100; i++) {
-            LOG.log(Level.WARNING, "日志测试i={0}", i);
-        }
             
         
     }

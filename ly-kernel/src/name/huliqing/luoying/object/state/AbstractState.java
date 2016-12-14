@@ -41,12 +41,6 @@ public abstract class AbstractState<T extends StateData> implements State<T> {
      */
     protected String[] effects;
     
-    /**
-     * 关闭抗性值，取值为0.0~1.0, 这个值会抵消状态的作用，值为0时无抵消作用，值为
-     * 1时，则全抵消。
-     */
-    protected float resist;
-    
     // 当角色死亡时从角色身上移除这个状态.
     protected boolean removeOnDead;
     
@@ -69,7 +63,6 @@ public abstract class AbstractState<T extends StateData> implements State<T> {
         this.data = data;
         useTime = data.getAsFloat("useTime", 30);
         timeUsed = data.getAsFloat("timeUsed", timeUsed);
-        resist = data.getAsFloat("resist", resist);
         effects = data.getAsArray("effects");
         removeOnDead = data.getAsBoolean("removeOnDead", removeOnDead);
         bindDeadAttribute = data.getAsString("bindDeadAttribute");
@@ -84,7 +77,6 @@ public abstract class AbstractState<T extends StateData> implements State<T> {
     public void updateDatas() {
         data.setAttribute("useTime", useTime);
         data.setAttribute("timeUsed", timeUsed);
-        data.setAttribute("resist", resist);
     }
     
     @Override
@@ -179,14 +171,14 @@ public abstract class AbstractState<T extends StateData> implements State<T> {
         this.actor = actor;
     }
 
-    /**
-     * 状态的持有者，即受状态影响的角色
-     * @return 
-     */
-    @Override
-    public Entity getActor() {
-        return actor;
-    }
+//    /**
+//     * 状态的持有者，即受状态影响的角色
+//     * @return 
+//     */
+//    @Override
+//    public Entity getActor() {
+//        return actor;
+//    }
 
     /**
      * 状态的产生者，也就是说，这个状态是哪一个角色发出的, 可能为null.
@@ -199,13 +191,4 @@ public abstract class AbstractState<T extends StateData> implements State<T> {
         return null;
     }
 
-    @Override
-    public float getResist() {
-        return resist;
-    }
-
-    @Override
-    public void setResist(float resist) {
-        this.resist = FastMath.clamp(resist, 0f, 1.0f);
-    }
 }

@@ -45,16 +45,18 @@ public class ActorMainPanel extends Window implements EntityDataListener, Talent
     
     private final LinearLayout tabPanel;
     private final TabButton btnAttr;  // 人物属性面板
-    private final TabButton btnTalent;  // 人物属性面板
-    private final TabButton btnWeapon;    // 武器
-    private final TabButton btnArmor; // 装备面板
-    private final TabButton btnSkill; // 技能列表
-    private final TabButton btnItem; // 物品列表
-    private final TabButton btnTask; // 任务列表
+    private final TabButton btnTalent; 
+    private final TabButton btnResist;
+    private final TabButton btnWeapon;
+    private final TabButton btnArmor;
+    private final TabButton btnSkill;
+    private final TabButton btnItem;
+    private final TabButton btnTask;
     
     private final LinearLayout bodyPanel;
     private final AttributePanel attrPanel;
     private final TalentPanel talentPanel;
+    private final ResistPanel resistPanel;
     private final WeaponPanel weaponPanel;
     private final ArmorPanel armorPanel;
     private final SkillPanel skillPanel;
@@ -105,12 +107,17 @@ public class ActorMainPanel extends Window implements EntityDataListener, Talent
         talentPanel.setPageSize(globalPageSize);
         talentPanel.setVisible(false);
         
+        resistPanel = new ResistPanel(cw, ch);
+        resistPanel.setPageSize(globalPageSize);
+        resistPanel.setVisible(false);
+        
         taskPanel = new TaskPanel(cw, ch);
         taskPanel.setPageSize(globalPageSize);
         taskPanel.setVisible(false);
         
         bodyPanel.addView(attrPanel);
         bodyPanel.addView(talentPanel);
+        bodyPanel.addView(resistPanel);
         bodyPanel.addView(weaponPanel);
         bodyPanel.addView(armorPanel);
         bodyPanel.addView(skillPanel);
@@ -120,6 +127,7 @@ public class ActorMainPanel extends Window implements EntityDataListener, Talent
         // tab button
         btnAttr = new TabButton(InterfaceConstants.UI_ITEM_ATTR, attrPanel);
         btnTalent = new TabButton(InterfaceConstants.UI_ITEM_TALENT, talentPanel);
+        btnResist = new TabButton(InterfaceConstants.UI_ITEM_RESIST, resistPanel);
         btnArmor = new TabButton(InterfaceConstants.UI_ITEM_ARMOR, armorPanel);
         btnSkill = new TabButton(InterfaceConstants.UI_ITEM_SKILL, skillPanel);
         btnItem = new TabButton(InterfaceConstants.UI_ITEM_ITEM, itemPanel);
@@ -127,6 +135,7 @@ public class ActorMainPanel extends Window implements EntityDataListener, Talent
         btnTask = new TabButton(InterfaceConstants.UI_ITEM_TASK, taskPanel);
         tabPanel.addView(btnAttr);
         tabPanel.addView(btnTalent);
+        tabPanel.addView(btnResist);
         tabPanel.addView(btnTask);
         tabPanel.addView(btnSkill);
         tabPanel.addView(btnWeapon);

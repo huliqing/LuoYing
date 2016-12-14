@@ -16,7 +16,7 @@ import name.huliqing.luoying.layer.network.SkillNetwork;
 import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.object.actor.Actor;
-import name.huliqing.luoying.object.attribute.Attribute;
+import name.huliqing.luoying.object.attribute.Attribute; 
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.entity.EntityDataListener;
 import name.huliqing.luoying.object.module.ActorListener;

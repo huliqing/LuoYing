@@ -15,7 +15,7 @@ import name.huliqing.luoying.object.skill.Skill;
 /**
  * 速度效果，提升角色或降低角色的速度
  * @author huliqing
- */
+ */ 
 public class MoveSpeedState extends AttributeState {
 //    private final PlayService playService = Factory.get(PlayService.class);
     private SkillModule skillModule;

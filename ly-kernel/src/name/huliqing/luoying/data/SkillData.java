@@ -13,7 +13,7 @@ import com.jme3.network.serializing.Serializable;
 import java.io.IOException; 
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.luoying.xml.CloneHelper;
+import name.huliqing.luoying.xml.SimpleCloner;
 
 /**
  * @author huliqing
@@ -235,9 +235,10 @@ public class SkillData extends ObjectData {
     
     @Override
     public SkillData clone() {
+        SimpleCloner cloner = new SimpleCloner();
         SkillData clone = (SkillData) super.clone();
-        clone.weaponStateLimit = CloneHelper.cloneLongArray(weaponStateLimit);
-        clone.useAttributes = CloneHelper.cloneList(useAttributes);
+        clone.weaponStateLimit = cloner.clone(weaponStateLimit);
+        clone.useAttributes = cloner.clone(useAttributes);
         return clone;
     }
     

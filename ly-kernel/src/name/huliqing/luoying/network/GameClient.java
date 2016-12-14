@@ -249,8 +249,12 @@ public class GameClient implements ClientStateListener, MessageListener<Client>{
         
         LuoYing.getApp().enqueue(new Callable() {
             @Override
-            public Object call() throws Exception {
-                listener.clientMessage(GameClient.this, m);
+            public Object call() {
+                try {
+                    listener.clientMessage(GameClient.this, m);
+                } catch (Exception e) {
+                    LOG.log(Level.SEVERE, "Message error on client!", e);
+                }
                 return null;
             }
         });

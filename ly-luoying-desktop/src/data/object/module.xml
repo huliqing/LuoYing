@@ -27,12 +27,6 @@
     <!--包裹物品管理模块: 不直接依赖其它模块-->
     <moduleItem id="moduleItem" extends="moduleBase" moduleOrder="10" />
     
-    <!--物品掉落管理模块: 不直接依赖其它模块-->
-    <moduleDrop id="moduleDrop" extends="moduleBase" moduleOrder="10" bindDeadAttribute="attributeDead" sounds="soundNote" />
-    
-    <!--对话功能管理模块: 不直接依赖其它模块 -->
-    <moduleChat id="moduleChat" extends="moduleBase" moduleOrder="10" />
-    
     <!--基本角色管理模块: 依赖 -->
     <moduleActor id="moduleActor" extends="moduleBase" moduleOrder="10" 
                 bindDeadAttribute="attributeDead"
@@ -69,11 +63,20 @@
     <!--其它模块-->
     <!--==========================================================================-->
     
+    <!--物品掉落管理模块: 不直接依赖其它模块-->
+    <moduleDrop id="moduleDrop" extends="moduleBase" moduleOrder="60" bindDeadAttribute="attributeDead" sounds="soundNote" />
+
+    <!--对话功能管理模块: 不直接依赖其它模块 -->
+    <moduleChat id="moduleChat" extends="moduleBase" moduleOrder="60" />
+    
     <!--任务管理模块：直接或间接依赖： moduleActor -->
     <moduleTask id="moduleTask" extends="moduleBase" moduleOrder="60" />
 
     <!--状态管理模块: 直接或间接依赖： moduleActor, moduleSkill -->
     <moduleState id="moduleState" extends="moduleBase" moduleOrder="60" />
+    
+    <!--抗性模块-->
+    <moduleResist id="moduleResist" extends="moduleBase" moduleOrder="60" />
     
     <!--天赋管理模块：直接或间接依赖： moduleActor-->
     <moduleTalent id="moduleTalent" extends="moduleBase" moduleOrder="60" 

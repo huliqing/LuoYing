@@ -13,7 +13,7 @@ import com.jme3.network.serializing.Serializable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.luoying.xml.CloneHelper;
+import name.huliqing.luoying.xml.SimpleCloner;
 
 /**
  * 定义场景数据
@@ -75,7 +75,7 @@ public class SceneData extends ObjectData {
     @Override
     public SceneData clone() {
         SceneData clone = (SceneData) super.clone(); 
-        clone.entityDatas = CloneHelper.cloneObjectDataList(entityDatas);
+        clone.entityDatas = SimpleCloner.deepClone(entityDatas);
         return clone;
     }
     

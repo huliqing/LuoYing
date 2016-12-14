@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://luoying.huliqing.name'
+    xsi:schemaLocation='http://luoying.huliqing.name ../../../../ly-kernel/src/LuoYing/Data/meta/resist.xsd'>
+
+    
+    <!--=====================================================================-->
+    <!--通用配置-->
+    <!--=====================================================================-->
+    
+    <!--非生命体: 抗所有 -->
+    <resistAll id="resistNonLife" />
+    
+    <!--=====================================================================-->
+    <!--种族通用配置-->
+    <!--=====================================================================-->
+    
+    <!--人类Human -->
+    <resistSimple id="resistHuman" resists="stateStun|0.3" />
+    
+    <!--普通野兽-->
+    <resistSimple id="resistCreature" resists="stateStun|0.2" />
+    
+    <!--兽人ORC-->
+    <resistSimple id="resistOrc" resists="stateStun|0.5" />
+    
+    <!--森林妖精-->
+    <resistSimple id="resistFairy" resists="stateStun|0.75" />
+    
+    <!--=====================================================================-->
+    <!--特殊角色配置-->
+    <!--=====================================================================-->
+    <resistAll id="resistTower" excepts="stateIceFrozen|0" />
+    
+    <!--蝎子-->
+    <resistSimple id="resistScorpion" resists="stateScorpionVenom|1.0" />
+</root>
+
+
+

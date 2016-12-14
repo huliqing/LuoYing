@@ -27,7 +27,6 @@ import name.huliqing.luoying.ui.UI;
  */
 public class TalentPanel extends LinearLayout implements ActorPanel{
     private final TalentService talentService = Factory.get(TalentService.class);
-//    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     private final TalentNetwork talentNetwork = Factory.get(TalentNetwork.class);
     
     private Entity actor;

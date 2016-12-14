@@ -15,7 +15,7 @@ public class TransferData {
     
     private ObjectData objectData;
     private int amount;
-    
+     
     /**
      * 获取交换的物体
      * @return 

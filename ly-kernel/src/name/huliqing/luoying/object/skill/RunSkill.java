@@ -15,7 +15,7 @@ public class RunSkill extends WalkSkill implements Walk{
     @Override
     public void setData(SkillData data) {
         super.setData(data); 
-        baseSpeed = data.getAsFloat("baseSpeed", 6);
+        baseSpeed = data.getAsFloat("baseSpeed", 6); 
     }
     
 }

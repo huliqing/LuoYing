@@ -489,8 +489,12 @@ public class GameServer implements UDPListener, ConnectionListener, MessageListe
         
         LuoYing.getApp().enqueue(new Callable() {
             @Override
-            public Object call() throws Exception {
-                listener.messageReceived(GameServer.this, source, m);
+            public Object call() {
+                try {
+                    listener.messageReceived(GameServer.this, source, m);
+                } catch (Exception e) {
+                    LOG.log(Level.SEVERE, "Message error on server!", e);
+                }
                 return null;
             }
         });

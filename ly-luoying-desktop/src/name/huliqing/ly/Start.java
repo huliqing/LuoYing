@@ -38,7 +38,6 @@ public class Start extends SimpleApplication {
         final String SETTINGS_KEY = "luoying-settings";
         AppSettings settings = new AppSettings(true);
 
-        // 载入上次的设置来覆盖
         try {
             settings.load(SETTINGS_KEY);
         } catch (BackingStoreException ex) {

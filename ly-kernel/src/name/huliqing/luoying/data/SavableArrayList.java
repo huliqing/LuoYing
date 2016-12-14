@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import name.huliqing.luoying.LuoYingException;
-import name.huliqing.luoying.xml.CloneHelper;
+import name.huliqing.luoying.xml.SimpleCloner;
 
 /**
  * SavableArrayList主要用于封装集合类型的数据为一个<b>单独的</b>Savable对象，
@@ -102,7 +102,7 @@ public class SavableArrayList<T extends Savable> implements Savable, Cloneable{
     public SavableArrayList clone() {
         try {
             SavableArrayList clone = (SavableArrayList) super.clone();
-            clone.list = CloneHelper.cloneList(list);
+            clone.list = SimpleCloner.deepClone(list);
             return clone;
         } catch (CloneNotSupportedException e) {
             throw new LuoYingException(e);

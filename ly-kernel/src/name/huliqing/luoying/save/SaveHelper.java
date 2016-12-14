@@ -18,10 +18,6 @@ import name.huliqing.luoying.layer.service.SaveService;
 public class SaveHelper {
     private static final Logger LOG = Logger.getLogger(SaveHelper.class.getName());
     
-    // remove20161212
-    // 全局配置的键值
-//    private final static String KEY_CONFIG_GLOBAL = "ly3d_config";
-    
     // 存档列表
     private final static String KEY_SAVE_LIST = "SaveList";
     // 最近一次自动存档
@@ -39,7 +35,7 @@ public class SaveHelper {
             SaveStoryList sl = (SaveStoryList) saveService.loadSavable(KEY_SAVE_LIST);
             return sl;
         } catch (Exception e) {
-            LOG.log(Level.SEVERE, "Could not loadStoryList, e={0}", e);
+            LOG.log(Level.SEVERE, "Could not loadStoryList, error=" + e.getMessage(), e);
         }
         return null;
     }
@@ -53,7 +49,7 @@ public class SaveHelper {
             ss.setSaveName(KEY_SAVE_LAST);
             saveStory(ss);
         } catch (Exception e) {
-            LOG.log(Level.SEVERE, "Could not saveStoryLast, e={0}", e);
+            LOG.log(Level.SEVERE, "Could not saveStoryLast, error=" + e.getMessage(), e);
         }
     }
     
@@ -69,7 +65,7 @@ public class SaveHelper {
                 saveStory(newSave);
             }
         } catch (Exception e) {
-            LOG.log(Level.SEVERE, "Could not saveStoryNew, e={0}", e);
+            LOG.log(Level.SEVERE, "Could not saveStoryNew, error=" + e.getMessage(), e);
         }
     }
     
@@ -79,7 +75,7 @@ public class SaveHelper {
             SaveStory saveStory = (SaveStory) saveService.loadSavable(key);
             return saveStory;
         } catch (Exception e) {
-            LOG.log(Level.SEVERE, "Could not loadStory, e={0}", e.getMessage());
+            LOG.log(Level.SEVERE, "Could not loadStory, error=" + e.getMessage(), e);
         }
         return null;
     }
@@ -88,7 +84,7 @@ public class SaveHelper {
         try {
             return loadStory(KEY_SAVE_LAST);
         } catch (Exception e) {
-            LOG.log(Level.SEVERE, "Could not loadStoryLast, e={0}", e);
+            LOG.log(Level.SEVERE, "Could not loadStoryLast, error=" + e.getMessage(), e);
         }
         return null;
     }
@@ -104,7 +100,7 @@ public class SaveHelper {
             list.removeSaveName(key);
             saveStoryList(list);
         } catch (Exception e) {
-            LOG.log(Level.SEVERE, "Could not deleteStory, e={0}", e);
+            LOG.log(Level.SEVERE, "Could not deleteStory, error=" + e.getMessage(), e);
         }
     }
     
@@ -116,37 +112,6 @@ public class SaveHelper {
         SaveService saveService = Factory.get(SaveService.class);
         return saveService.existsSaveKey(KEY_SAVE_LAST);
     }
-    
-    // remove20161212
-//    /**
-//     * @deprecated 不再使用
-//     * 保存全局配置
-//     * @param saveConfig 
-//     */
-//    public static void saveConfig(SaveConfig saveConfig) {
-//        try {
-//            SaveService saveService = Factory.get(SaveService.class);
-//            saveService.saveSavable(KEY_CONFIG_GLOBAL, saveConfig);
-//        } catch (Exception e) {
-//            LOG.log(Level.SEVERE, "Could not saveConfig, e={0}", e);
-//        }
-//    }
-//    
-//    /**
-//     * @deprecated 不再使用
-//     * 载入全局配置
-//     * @return 
-//     */
-//    public static SaveConfig loadConfig() {
-//        try {
-//            SaveService ss = Factory.get(SaveService.class);
-//            SaveConfig sc = (SaveConfig) ss.loadSavable(KEY_CONFIG_GLOBAL);
-//            return sc;
-//        } catch (Exception e) {
-//            LOG.log(Level.SEVERE, "Could not loadStoryLast, e={0}", e);
-//        }
-//        return null;
-//    }
     
     private static void saveStory(SaveStory saveStory) {
         // 保存存档

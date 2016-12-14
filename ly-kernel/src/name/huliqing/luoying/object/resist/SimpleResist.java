@@ -1,100 +1,61 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package name.huliqing.luoying.object.resist;
 
-import com.jme3.math.FastMath;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import name.huliqing.luoying.data.ResistData;
-import name.huliqing.luoying.utils.ConvertUtils;
 
 /**
- * 简单的抗性设置,注意不要同时设置多个对于同一状态的抗性，只有第一个被找到的
- * 有效．
+ * 普通的抗性设置。
  * @author huliqing
- * @param <T>
  */
-public class SimpleResist<T extends ResistData> extends AbstractResist<T> {
-
-    // 重要：该类用到clone,添加字段时注意克隆．
+public class SimpleResist extends AbstractResist {
     
-    // ---- 内部
-    // 抗性列表
-    private List<StateResist> resists;
+    private List<String> states;
+    
+    // ---- inner
+    private boolean statesChanged;
 
     @Override
-    public void setData(T data) {
-        super.setData(data); 
-        // format "state|factor,state|factor,state|factor"
-        String[] resistsArr = data.getAsArray("resists");
-        if (resistsArr != null && resistsArr.length > 0) {
-            resists = new ArrayList<StateResist>(resistsArr.length);
-            for (String str : resistsArr) {
-                String[] strArr = str.split("\\|");
-                StateResist sr = new StateResist();
-                sr.setStateId(strArr[0]);
-                if (strArr.length >= 2) {
-                    sr.setFactor(FastMath.clamp(ConvertUtils.toFloat(strArr[1], 0), 0f, 1f));
-                } else {
-                    sr.setFactor(1.0f);
-                }
-                resists.add(sr);
-            }
+    public void setData(ResistData data) {
+        super.setData(data);
+        states = data.getAsStringList("states");
+    }
+    
+    @Override
+    public void updateDatas() {
+        if (statesChanged && states != null && states.size() > 0) {
+            data.setAttribute("states", states);
+        }
+    }
+    
+    @Override
+    public boolean isResistState(String state) {
+        return states != null && states.contains(state);
+    }
+    
+    @Override
+    public void addState(String state) {
+        if (states == null) {
+            states = new ArrayList<String>();
+        }
+        if (!states.contains(state)) {
+            states.add(state);
+            statesChanged = true;
         }
     }
 
     @Override
-    public float getResist(String stateId) {
-        if (resists == null) {
-            return 0;
+    public boolean removeState(String state) {
+        if (states != null && states.remove(state)) {
+            statesChanged = true;
+            return true;
         }
-        StateResist sr;
-        for (int i = 0; i < resists.size(); i++) {
-            sr = resists.get(i);
-            if (sr.getStateId().equals(stateId)) {
-                return sr.getFactor();
-            }
-        }
-        return 0;
+        return false;
     }
-
-    /**
-     * @param stateId
-     * @param amount
-     * @return 返回的数值表示了实际添加或减少的数量．
-     * 如factor=0.9, amount=0.3 则返回的值为0.1;<br>
-     * 如factor=0.2, amount=-0.3 则返回的值为-0.2;
-     * @see StateResist#applyFactor(float) 
-     */
-    @Override
-    public float applyResist(String stateId, float amount) {
-        for (StateResist sr : resists) {
-            if (sr.getStateId().equals(stateId)) {
-                return sr.applyFactor(amount);
-            }
-        }
-        return 0;
-    }
-
-    @Override
-    public List<StateResist> getAll() {
-        return resists != null ? resists : Collections.EMPTY_LIST;
-    }
-
-    // remove20160815
-//    @Override
-//    public SimpleResist clone() {
-//        SimpleResist result = (SimpleResist) super.clone();
-//        if (resists != null) {
-//            result.resists = new ArrayList<StateResist>(resists.size());
-//            for (StateResist sr : resists) {
-//                result.resists.add(sr.clone());
-//            }
-//        }
-//        return result;
-//    }
     
 }

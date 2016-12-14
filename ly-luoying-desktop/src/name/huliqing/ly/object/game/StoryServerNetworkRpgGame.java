@@ -31,7 +31,6 @@ import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.save.ClientData;
-import name.huliqing.luoying.save.SaveConfig;
 import name.huliqing.luoying.save.SaveHelper;
 import name.huliqing.luoying.save.SaveStory;
 import name.huliqing.ly.LyConfig;
@@ -47,12 +46,9 @@ import name.huliqing.ly.view.shortcut.ShortcutManager;
  */
 public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
     private final ConfigService configService = Factory.get(ConfigService.class);
-    private final ActorService actorService = Factory.get(ActorService.class);
-    private final PlayService playService = Factory.get(PlayService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     private final GameService gameService = Factory.get(GameService.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
-//    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     
     /** 存档数据 */
     protected SaveStory saveStory = new SaveStory();
@@ -211,17 +207,11 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
         } else {
             if (Config.debug) {
                 actor = Loader.load(IdConstants.ACTOR_PLAYER_TEST);
-                gameService.setLevel(actor, 1);
+                gameService.setLevel(actor, 10);
             } else {
                 actor = Loader.load(IdConstants.ACTOR_PLAYER);
             }
         }
-        // 确保角色位置在地面上
-//        Vector3f loc = actorService.getLocation(actor);
-//        Vector3f terrainHeight = playService.getTerrainHeight(scene, loc.x, loc.z);
-//        if (terrainHeight != null) {
-//            actorService.setLocation(actor, terrainHeight.addLocal(0, 0.5f, 0));
-//        }
 
         // 给玩家指定分组
         gameService.setGroup(actor, GROUP_PLAYER);
@@ -293,12 +283,6 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
         
         // 存档到系统文件 
         SaveHelper.saveStoryLast(saveStory);
-        
-        // remove20161212
-        // 保存全局配置
-//        SaveConfig saveConfig = new SaveConfig();
-//        saveConfig.setConfig(LyConfig.getConfigData());
-//        SaveHelper.saveConfig(saveConfig);
 
         // 保存全局配置
         gameService.saveConfig(LyConfig.getConfigData());

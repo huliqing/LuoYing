@@ -307,6 +307,20 @@ stateSpeedUpAS.name=Frenzy
 stateScorpionVenom.name=Scorpion Poison
 stateClean.name=Cleanse
 
+#==== Resist
+resistFire.name=Fire Resistance
+resistFire.des=Weaken the influence of damage of fire
+resistIce.name=Frost Resistance
+resistIce.des=Weaken the influence of damage of frost.
+resistDizzy.name=Dizzy Resistance
+resistDizzy.des=Weaken the influence of damage of Dizziness.
+resistEntwine.name=Entwine Resistance
+resistEntwine.des=Weaken the influence of entwine.
+resistVenom.name=Venom Resistance
+resistVenom.des=Weaken the influence of venom.
+resistForNonLife.name=Nonliving Resistance
+resistForNonLife.des=Nonliving Resistance
+
 #==== chat
 chatSend.name=Send Items
 chatShop.name=Buy Items

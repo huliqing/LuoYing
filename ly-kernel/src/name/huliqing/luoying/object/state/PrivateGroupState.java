@@ -53,10 +53,10 @@ public class PrivateGroupState extends AbstractState {
         super.initialize();
         if (childStateDatas != null) {
             for (StateData stateData : childStateDatas.getList()) {
+                stateData.setResist(data.getResist());
                 stateData.setSourceActor(data.getSourceActor());
                 State state = Loader.load(stateData);
                 state.setActor(actor);
-                state.setResist(resist);
                 state.initialize();
                 states.add(state);
             }

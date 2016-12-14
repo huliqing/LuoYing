@@ -19,8 +19,11 @@ import com.jme3.scene.UserData;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import name.huliqing.luoying.LuoYingException;
+import name.huliqing.luoying.data.SavableArray;
 import name.huliqing.luoying.data.SavableString;
 
 /**
@@ -30,7 +33,7 @@ import name.huliqing.luoying.data.SavableString;
  */
 @Serializable
 public class ObjectData implements Savable, Cloneable {
-//    private static final Logger LOG = Logger.getLogger(ObjectData.class.getName());
+    private static final Logger LOG = Logger.getLogger(ObjectData.class.getName());
     
     // 类型ID
     protected String id;
@@ -110,11 +113,18 @@ public class ObjectData implements Savable, Cloneable {
         if (localData == null) {
             return null;
         }
+        
         Savable s = localData.get(key);
+        
         if (s instanceof UserData) {
             return ((UserData) s).getValue();
+            
         } else if (s instanceof SavableString) {
             return ((SavableString)s).getValue();
+            
+        } else if (s instanceof SavableArray) {
+            return ((SavableArray)s).getValue();
+            
         } else {
             return s;
         }
@@ -137,10 +147,16 @@ public class ObjectData implements Savable, Cloneable {
             if (localData == null) {
                 localData = new HashMap<String, Savable>();
             }
+            
             if (value instanceof String) {
                 localData.put(key, new SavableString((String) value));
+                
+            } else if (value.getClass().isArray()) {
+                localData.put(key, new SavableArray(value));
+                
             } else if (value instanceof Savable) {
                 localData.put(key, (Savable) value);
+                
             } else {
                 localData.put(key, new UserData(UserData.getObjectType(value), value));
             }
@@ -258,12 +274,28 @@ public class ObjectData implements Savable, Cloneable {
         return getProto().getAsLong(key);
     }
     
-    public final Long getAsLong(String key, long defValue) {
+    public final long getAsLong(String key, long defValue) {
         Object value = getAttributeFromLocal(key);
         if (value != null) {
             return (Long) value;
         }
         return getProto().getAsLong(key, defValue);
+    }
+    
+    public final long[] getAsLongArray(String key) {
+        Object value = getAttributeFromLocal(key);
+        if (value != null) { 
+            return (long[]) value;
+        }
+        return getProto().getAsLongArray(key); 
+    }
+    
+    public final List<Long> getAsLongList(String key) {
+        Object value = getAttributeFromLocal(key);
+        if (value != null) {
+            return (List<Long>) value;
+        }
+        return getProto().getAsLongList(key);
     }
     
     public final Float getAsFloat(String key) {
@@ -464,15 +496,18 @@ public class ObjectData implements Savable, Cloneable {
     public ObjectData clone() {
         try {
             ObjectData clone = (ObjectData) super.clone();
-            
-            // 本地数据localData的深度克隆
             if (localData != null && !localData.isEmpty()) {
-                clone.localData = new HashMap<String, Savable>(localData.size());
-                for (Entry<String, Savable> e : localData.entrySet()) {
-                    if (e.getValue() instanceof Cloneable) {
-                        clone.localData.put(e.getKey(), CloneHelper.cloneObject(e.getValue()));
+                Set<String> keys = localData.keySet();
+                for (String key : keys) {
+                    // 注：不要直接从localData中获取，因为localData中的数据是进行了包装过的。
+                    // 调用getAttributeFromLocal可以进行自动解包
+                    Object value = getAttributeFromLocal(key);
+                    if (value instanceof Cloneable) {
+                        clone.setAttribute(key, SimpleCloner.deepClone(value));
+//                        LOG.log(Level.INFO, "----=={0}, type={1}", new Object[] {value, value.getClass().getSimpleName()});
                     } else {
-                        clone.localData.put(e.getKey(), e.getValue());
+                        clone.setAttribute(key, value);
+//                        LOG.log(Level.INFO, "xxxx=={0}, type={1}", new Object[] {value, value.getClass().getSimpleName()});
                     }
                 }
             }

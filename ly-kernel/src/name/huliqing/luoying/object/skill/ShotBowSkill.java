@@ -22,7 +22,7 @@ import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.entity.ModelEntity;
 import name.huliqing.luoying.object.module.SkinModule;
 import name.huliqing.luoying.object.skin.Skin;
-import name.huliqing.luoying.object.skin.WeaponSkin;
+import name.huliqing.luoying.object.skin.WeaponSkin; 
 import name.huliqing.luoying.utils.GeometryUtils;
 
 /**

@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.object.define.MatDefine;
-import name.huliqing.luoying.xml.CloneHelper;
+import name.huliqing.luoying.xml.SimpleCloner;
 
 /**
  * @author huliqing
@@ -220,9 +220,10 @@ public class EntityData extends ObjectData {
     
     @Override
     public EntityData clone() {
+        SimpleCloner cloner = new SimpleCloner();
         EntityData clone = (EntityData) super.clone();
-        clone.moduleDatas = CloneHelper.cloneObjectDataList(moduleDatas);
-        clone.objectDatas = CloneHelper.cloneObjectDataList(objectDatas);
+        clone.moduleDatas = cloner.clone(moduleDatas);
+        clone.objectDatas = cloner.clone(objectDatas);
         return clone;
     }
     

@@ -9,30 +9,31 @@ import com.jme3.scene.control.Control;
 import com.jme3.util.SafeArrayList;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.luoying.data.ResistData;
+import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.StateData;
-import name.huliqing.luoying.manager.RandomManager;
+import name.huliqing.luoying.layer.service.MathService;
+import name.huliqing.luoying.layer.service.ResistService;
 import name.huliqing.luoying.message.StateCode;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.DataHandler;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.resist.Resist;
 import name.huliqing.luoying.object.state.State;
 
 /**
  * @author huliqing
  */
 public class StateModule extends AbstractModule implements DataHandler<StateData> {
+    private final ResistService resistService = Factory.get(ResistService.class);
+    private final MathService mathService = Factory.get(MathService.class);
 
     private final SafeArrayList<State> states = new SafeArrayList<State>(State.class);
     private Control updateControl;
     
-    /** 角色的抵抗设置 */
-    private Resist resist;
-
     @Override
     public void updateDatas() {
-        // xxx updateDatas.
+        for (State s : states.getArray()) {
+            s.updateDatas();
+        }
     }
     
     @Override
@@ -44,17 +45,12 @@ public class StateModule extends AbstractModule implements DataHandler<StateData
         };
         this.entity.getSpatial().addControl(updateControl);
         
-        // 载入抵抗设置:
-        List<ResistData> rds = actor.getData().getObjectDatas(ResistData.class, new ArrayList<ResistData>());
-        if (rds != null && !rds.isEmpty()) {
-            setResist((Resist)Loader.load(rds.get(0)));
-        }
-        
-        // 载入状态
+        // 载入状态,这里不能再计算抵抗及机率，因为这些是从配置中或存档中读取出来的，已经计算好抵抗和机率
+        // 所以直接还原状态就可以。
         List<StateData> stateDatas = actor.getData().getObjectDatas(StateData.class, new ArrayList<StateData>());
         if (stateDatas != null) {
             for (StateData sd : stateDatas) {
-                addState((State)Loader.load(sd), true);
+                addStateInner(sd);
             }
         }
     }
@@ -72,45 +68,21 @@ public class StateModule extends AbstractModule implements DataHandler<StateData
 
     @Override
     public void cleanup() {
+        // 不要直接调用removeStateInner进行清理，因为这会导致data从entity中移除，
+        // 这是不合理的.考虑到initialize -> cleanup -> initialize -> cleanup必须是可重复执行的，
+        // 如果直接调用removeStateInner清理会导致重新initialize的时候状态数据都丢了。
         for (State s : states.getArray()) {
             s.cleanup();
         }
         states.clear();
+        
+        // 移除控制器
         if (updateControl != null) {
             entity.getSpatial().removeControl(updateControl);
         }
         super.cleanup();
     }
     
-    /**
-     * 获取角色的抗性设置，如果角色没有配置这个设置，则该方法可能返回null.
-     * @return 
-     */
-    public Resist getResist() {
-        return this.resist;
-    }
-    
-    /**
-     * 设置角色的抵抗设置。
-     * @param resist 
-     */
-    public void setResist(Resist resist) {
-        if (this.resist != null) {
-            entity.getData().removeObjectData(this.resist.getData());
-        }
-        this.resist = resist;
-        this.entity.getData().addObjectData(this.resist.getData());
-    }
-
-    public State getState(String stateId) {
-        for (State s : states.getArray()) {
-            if (s.getData().getId().equals(stateId)) {
-                return s;
-            }
-        }
-        return null;
-    }
-   
     @Override
     public Class<StateData> getHandleType() {
         return StateData.class;
@@ -118,21 +90,41 @@ public class StateModule extends AbstractModule implements DataHandler<StateData
     
     @Override
     public boolean handleDataAdd(StateData data, int amount) {
-        State state = Loader.load(data);
-        boolean result = addState(state, false);
-        if (result) {
+        // 获取对指定状态的抵抗率
+        float resist = resistService.getResist(entity, data.getId());
+        
+        // 如果毫无低抗的话，则不计算机率，直接添加状态，优先级比较高
+        if (resist <= 0) {
+            removeStateInner(data);
+            data.setResist(0);
+            addStateInner(data);
             addEntityDataAddMessage(StateCode.DATA_ADD, data, 1);
-        } else {
-            addEntityDataAddMessage(StateCode.DATA_ADD_FAILURE, data, 1);
+            return true;
         }
-        return result;
+        
+        // 完全低抗，则不添加。
+        if (resist >= 1.0f) {
+            addEntityDataAddMessage(StateCode.DATA_ADD_FAILURE, data, 1);
+            return false;
+        }
+        
+        // 给预一定机率实现完全抵抗,只要抵抗率不为0，则有机会产生完全低抗
+        if (resist > mathService.getRandom()) {
+            addEntityDataAddMessage(StateCode.DATA_ADD_FAILURE, data, 1);
+            return false;
+        }
+        
+        // 移除旧的并添加新的，注意设置抗性值,抵抗效果由状态自行实现。
+        removeStateInner(data);
+        data.setResist(resist);
+        addStateInner(data);
+        addEntityDataAddMessage(StateCode.DATA_ADD, data, 1);
+        return true;
     }
 
     @Override
     public boolean handleDataRemove(StateData data, int amount) {
-        State state = getState(data.getId());
-        if (state != null) {
-            removeState(state);
+        if (removeStateInner(data)) {
             addEntityDataRemoveMessage(StateCode.DATA_REMOVE, data, amount);
             return true;
         } else {
@@ -152,59 +144,26 @@ public class StateModule extends AbstractModule implements DataHandler<StateData
      * @param force
      * @return 
      */
-    private boolean addState(State state, boolean force) {
-        float resistValue = getResistValue(state.getData().getId());
-        if (!force && resistValue >= 1.0f) {
-            return false;
-        }
-        state.setActor(entity);
-        state.setResist(resistValue);
-        addStateInner(state);
-        return true;
-    }
-    
-    private void addStateInner(State state) {
-        // 如果已经存在相同ID的状态，则要删除旧的，因状态不允许重复。
-        State oldState = getState(state.getData().getId());
-        if (oldState != null) {
-            removeState(oldState);
-        }
-        
-        // 加入data列表和处理器列表
+    private void addStateInner(StateData sdAdd) {
+        State state = Loader.load(sdAdd);
         states.add(state);
         entity.getData().addObjectData(state.getData());
         state.setActor(entity);
         state.initialize();
     }
     
-    private boolean removeState(State state) {
-        states.remove(state);
-        entity.getData().removeObjectData(state.getData());
-        state.cleanup();
-        return true;
-    }
-    
-    // 根据角色的抵抗设置计算一个抵抗值。
-    private float getResistValue(String stateId) {
-        if (resist == null) {
-            return 0;
+    private boolean removeStateInner(StateData sdRemove) {
+        if (states.isEmpty()) 
+            return false;
+        
+        for (State state : states.getArray()) {
+            if (state.getData().getUniqueId() == sdRemove.getUniqueId() || state.getData().getId().equals(sdRemove.getId())) {
+                states.remove(state);
+                entity.getData().removeObjectData(state.getData());
+                state.cleanup();
+                return true;
+            }
         }
-        float resistValue = resist.getResist(stateId);
-        // 1.毫无抗性，直接添加
-        if (resistValue <= 0) {
-            return 0;
-        }
-        // 2.完全抗性
-        if (resistValue >= 1.0f) {
-            return 1;
-        }
-        // 3.给一个完全抵抗的机会
-        if (resistValue >= RandomManager.getNextValue()) {
-            return 1;
-        }
-        // 4.抵抗不成功仍有机会根据角色的最高抵抗值随机计算一个最终抵抗值，该
-        // 值最高不会超过角色的最高抵抗值．该最终抵抗值可削弱一部分状态的作用．
-        float resultResist = resistValue * RandomManager.getNextValue();
-        return resultResist;
+        return false;
     }
 }

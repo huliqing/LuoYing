@@ -14,7 +14,7 @@ import name.huliqing.luoying.object.Loader;
 /**
  *
  * @author huliqing
- */
+ */ 
 public class SoundPlayer {
     private static final Logger LOG = Logger.getLogger(SoundPlayer.class.getName());
     

@@ -138,10 +138,12 @@ public class ActorDataLoader extends EntityDataLoader {
             }
         }
         
-        // resist
-        String resist = proto.getAsString("resist");
-        if (resist != null) {
-            data.addObjectData((ResistData)DataFactory.createData(resist));
+        // resists
+        String[] resists = proto.getAsArray("resists");
+        if (resists != null && resists.length > 0) {
+            for (String r : resists) {
+                data.addObjectData((ResistData)DataFactory.createData(r));
+            }
         }
         
         // talents

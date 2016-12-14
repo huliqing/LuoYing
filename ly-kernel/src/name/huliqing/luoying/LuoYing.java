@@ -18,7 +18,7 @@ import com.jme3.network.serializing.Serializer;
 import com.jme3.network.serializing.serializers.MapSerializer;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.UserData;
+import com.jme3.scene.UserData; 
 import com.jme3.system.AppSettings;
 import java.io.InputStream;
 import java.util.LinkedHashMap;
@@ -53,6 +53,7 @@ import name.huliqing.luoying.data.ResistData;
 import name.huliqing.luoying.data.SavableArrayList;
 import name.huliqing.luoying.data.SceneData;
 import name.huliqing.luoying.data.ProgressData;
+import name.huliqing.luoying.data.SavableArray;
 import name.huliqing.luoying.data.SavableString;
 import name.huliqing.luoying.data.ShapeData;
 import name.huliqing.luoying.data.ShortcutData;
@@ -175,8 +176,6 @@ import name.huliqing.luoying.object.position.RandomBoxPosition;
 import name.huliqing.luoying.object.position.RandomCirclePosition;
 import name.huliqing.luoying.object.position.RandomSpherePosition;
 import name.huliqing.luoying.object.position.ViewPosition;
-import name.huliqing.luoying.object.resist.AllResist;
-import name.huliqing.luoying.loader.ResistDataLoader;
 import name.huliqing.luoying.object.resist.SimpleResist;
 import name.huliqing.luoying.loader.SceneDataLoader;
 import name.huliqing.luoying.object.shape.BoxShape;
@@ -278,8 +277,11 @@ import name.huliqing.luoying.object.module.ColorModule;
 import name.huliqing.luoying.object.module.DropModule;
 import name.huliqing.luoying.object.module.LevelModule;
 import name.huliqing.luoying.object.module.PhysicsModule;
+import name.huliqing.luoying.object.module.ResistModule;
 import name.huliqing.luoying.object.scene.SimpleScene;
 import name.huliqing.luoying.object.progress.SimpleProgress;
+import name.huliqing.luoying.object.resist.AllResist;
+import name.huliqing.luoying.object.resist.GroupResist;
 import name.huliqing.luoying.object.slot.Slot;
 import name.huliqing.luoying.object.state.BooleanAttributeState;
 import name.huliqing.luoying.object.state.GroupState;
@@ -378,6 +380,7 @@ public class LuoYing {
         Serializer.registerClass(PositionData.class);
         Serializer.registerClass(ProgressData.class);
         Serializer.registerClass(ResistData.class);
+        Serializer.registerClass(SavableArray.class);
         Serializer.registerClass(SavableArrayList.class);
         Serializer.registerClass(SavableString.class);
         Serializer.registerClass(SceneData.class);
@@ -543,6 +546,7 @@ public class LuoYing {
         DataFactory.register("moduleLevel",  ModuleData.class, null, LevelModule.class);
         DataFactory.register("moduleLogic",  ModuleData.class, null, LogicModule.class);
         DataFactory.register("modulePhysics",  ModuleData.class, null, PhysicsModule.class);
+        DataFactory.register("moduleResist",  ModuleData.class, null, ResistModule.class);
         DataFactory.register("moduleSkill",  ModuleData.class, null, SkillModule.class);
         DataFactory.register("moduleSkin",  ModuleData.class, null, SkinModule.class);
         DataFactory.register("moduleState",  ModuleData.class, null, StateModule.class);
@@ -560,8 +564,9 @@ public class LuoYing {
         DataFactory.register("progressSimple", ProgressData.class, null, SimpleProgress.class);
         
         // Resist
-        DataFactory.register("resistSimple",  ResistData.class, ResistDataLoader.class, SimpleResist.class);
-        DataFactory.register("resistAll",  ResistData.class, ResistDataLoader.class, AllResist.class);
+        DataFactory.register("resistSimple",  ResistData.class, null, SimpleResist.class);
+        DataFactory.register("resistAll",  ResistData.class, null, AllResist.class);
+        DataFactory.register("resistGroup",  ResistData.class, null, GroupResist.class);
         
         // Scene
         DataFactory.register("scene", SceneData.class, SceneDataLoader.class, SimpleScene.class);
@@ -579,7 +584,7 @@ public class LuoYing {
         DataFactory.register("skillDead",  SkillData.class, SkillDataLoader.class, DeadSkill.class);
 //        DataFactory.register("skillDeadRagdoll",  SkillData.class, SkillDataLoader.class, DeadRagdollSkill.class);
         DataFactory.register("skillAttack",  SkillData.class, SkillDataLoader.class, AttackSkill.class);
-        DataFactory.register("skillShot",  SkillData.class, SkillDataLoader.class, ShotSkill.class);
+        DataFactory.register("skillShot",  SkillData.class, SkillDataLoader.class, ShotSkill.class); 
         DataFactory.register("skillShotBow",  SkillData.class, SkillDataLoader.class, ShotBowSkill.class);
         DataFactory.register("skillSummon",  SkillData.class, SkillDataLoader.class, SummonSkill.class);
         DataFactory.register("skillBack",  SkillData.class, SkillDataLoader.class, BackSkill.class);

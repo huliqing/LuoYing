@@ -5,13 +5,16 @@
     xmlns='http://luoying.huliqing.name'
     xsi:schemaLocation='http://luoying.huliqing.name ../../../../ly-kernel/src/LuoYing/Data/meta/state.xsd'>
     
-    <!-- ====================================================================-->
     <!--状态: 
     1.状态只对拥有状态的角色产生影响，不对其它目标产生作用。
     2.状态可以用来临时改变角色的各种属性值或行为
     3.状态是动态的，会有时间限制,一般在状态结束时应该恢复角色的原始状态。
     -->
-    <!-- ====================================================================-->
+
+
+    <!-- =========================================================================-->
+    <!--特殊类型-->
+    <!-- =========================================================================-->
     
     <!--测试用-->
     <statePrivateGroup id="stateGhostTest" icon="" useTime="30" states="stateGhostTest1,stateGhostTest2,stateGhostTest3" />
@@ -23,14 +26,16 @@
     <statePrivateGroup id="stateSafe" icon="Interface/skill/shield.jpg" useTime="99999" states="stateSafe1,stateSafe2" />
     <stateAttribute id="stateSafe1" useTime="99999" bindNumberAttribute="attributeDefence" addValue="99999" restore="1" />
     <stateAttribute id="stateSafe2" useTime="99999" bindNumberAttribute="attributeMagicDefence" addValue="99999" restore="1" />
-    
-    <!--晕眩: 让目标不能动也不能执行任何技能-->
-    <stateSkillLocked id="stateStun" icon="Interface/skill/stun.png" useTime="3" lockAtSkillTypes="reset"
-                      lockAllSkillTypes="1" lockLocation="1" effects="effectStateStun" />
 
-    <!--疾风步: 增加移动速度50% -->
-    <stateAttributeMove id="stateWindWalk" icon="Interface/skill/rapidWind.jpg" useTime="60" effects="effectStateWindWalkStart"
-                        bindNumberAttribute="attributeMoveSpeed" addValue="0.3" restore="1" moveEffect="effectStateWindWalk" />
+    <!-- =========================================================================-->
+    <!--火焰类型状态-->
+    <!-- =========================================================================-->
+        
+     <!--暂无-->
+
+    <!-- =========================================================================-->
+    <!--冰\霜类型状态-->
+    <!-- =========================================================================-->
     
     <!--冰霜: 减速50%-->
     <stateAttribute id="stateSnowFrost" icon="Interface/skill/snow.jpg" useTime="6" 
@@ -39,34 +44,47 @@
     <!--冰冻：6秒冰冻，让角色不能动-->
     <stateSkillLocked id="stateIceFrozen" icon="Interface/skill/ysh_33.jpg" useTime="6" lockAtFrame="1" 
                       lockAllSkillTypes="1" lockLocation="1" effects="effectFrozen" />
+
+    <!-- =========================================================================-->
+    <!--晕眩类型状态-->
+    <!-- =========================================================================-->
     
-    <!--=====================================================================-->
-    <!--魔法：复活术相关状态-->
-    <!--=====================================================================-->
+    <!--晕眩: 让目标不能动也不能执行任何技能-->
+    <stateSkillLocked id="stateStun" icon="Interface/skill/stun.png" useTime="3" lockAtSkillTypes="reset"
+                      lockAllSkillTypes="1" lockLocation="1" effects="effectStateStun" />
+    
+    <!--==========================================================================-->
+    <!--缠绕状态:蜘蛛的缠绕-->
+    <!--==========================================================================-->
+    <stateSkillLocked id="stateSpiderWeb" icon="Interface/skill/ysh_48.jpg" useTime="6" lockAtSkillTypes="reset"
+                        lockSkillTypes="walk,run,jump,idle,duck,dance" lockSkillIds="skillDanceSakura,skillDualSwordWave" 
+                        lockLocation="1" effects="effectSpiderWeb" />
+    
+    <!--==========================================================================-->
+    <!--毒素类型状态 -->
+    <!--==========================================================================-->
+    
+    <!--蝎子毒-->
+    <stateAttributeDynamic id="stateScorpionVenom" icon="Interface/skill/claw.jpg" useTime="30" bindNumberAttribute="attributeHealth" 
+                           addValue="-10" interval="3" effects="effectScorpionVenom" removeOnDead="1" bindDeadAttribute="attributeDead" />
+    
+    <!--==========================================================================-->
+    <!--特殊魔法状态-->
+    <!--==========================================================================-->
+
+    <!--复活术魔法：相关状态-->
     <!--保护角色在复活之前不被移出场景-->
     <stateBooleanAttribute id="stateRebornEssential" icon="Interface/skill/essential.png" useTime="5" bindAttribute="attributeEssential" value="1" restore="1" />
-    
     <!--复活保护：让角色在刚复活的时候有几秒钟处于受保护状态-->
     <statePrivateGroup id="stateRebornProtect" icon="Interface/skill/shield.jpg" useTime="5" states="stateRebornProtect1,stateRebornProtect2" />
     <stateAttribute id="stateRebornProtect1" useTime="5" bindNumberAttribute="attributeDefence" addValue="99999" restore="1" />
     <stateAttribute id="stateRebornProtect2" useTime="5" bindNumberAttribute="attributeMagicDefence" addValue="99999" restore="1" />
-    
     <!--增加生命值让角色复活-->
     <stateAttribute id="stateRebornAddLife" icon="" useTime="0" bindNumberAttribute="attributeHealth" addValue="100" restore="0" />
-    
     <!--让角色处于wait状态-->
     <stateSkill id="stateRebornWait" icon="" useTime="0" skillTypes="wait" />
-    
-    <!--=====================================================================-->
-    <!--缠绕状态:蜘蛛的缠绕-->
-    <!--=====================================================================-->
-    <stateSkillLocked id="stateSpiderWeb" icon="Interface/skill/ysh_48.jpg" useTime="6" lockAtSkillTypes="reset"
-                        lockSkillTypes="walk,run,jump,idle,duck,dance" lockSkillIds="skillDanceSakura,skillDualSwordWave" 
-                        lockLocation="1" effects="effectSpiderWeb" />
      
-    <!--=====================================================================-->
     <!--狂暴状态:1分钟内提升角色的攻击速度、魔法速度、躲闪、防御、连招-->
-    <!--=====================================================================-->
     <statePrivateGroup id="stateSpeedUpAS" icon="Interface/skill/ysh_88.jpg" useTime="60" 
                 states="stateSpeedUpAS1,stateSpeedUpAS2,stateSpeedUpAS3,stateSpeedUpAS4,stateSpeedUpAS5" />
     <stateAttribute id="stateSpeedUpAS1" useTime="60" bindNumberAttribute="attributeAttackSpeed" addValue="0.5" restore="1" />
@@ -75,15 +93,11 @@
     <stateAttribute id="stateSpeedUpAS4" useTime="60" bindNumberAttribute="attributeDuckRate" addValue="0.5" restore="1" />
     <stateAttribute id="stateSpeedUpAS5" useTime="60" bindNumberAttribute="attributeGhostRate" addValue="0.5" restore="1" />
     
-    <!--=====================================================================-->
-    <!--中毒状态:蝎子毒 -->
-    <!--=====================================================================-->
-    <stateAttributeDynamic id="stateScorpionVenom" icon="Interface/skill/claw.jpg" useTime="30" bindNumberAttribute="attributeHealth" 
-                           addValue="-10" interval="3" effects="effectScorpionVenom" removeOnDead="1" bindDeadAttribute="attributeDead" />
-    
-    <!--=====================================================================-->
+    <!--疾风步: 增加移动速度50% -->
+    <stateAttributeMove id="stateWindWalk" icon="Interface/skill/rapidWind.jpg" useTime="60" effects="effectStateWindWalkStart"
+                        bindNumberAttribute="attributeMoveSpeed" addValue="0.3" restore="1" moveEffect="effectStateWindWalk" />
+
     <!--净化状态:牧师的净化技能所用，可以持续净化中毒、诅咒等-->
-    <!--=====================================================================-->
     <stateClean id="stateClean" icon="Interface/skill/clean.jpg" useTime="60" states="stateScorpionVenom" />
 </root>
 

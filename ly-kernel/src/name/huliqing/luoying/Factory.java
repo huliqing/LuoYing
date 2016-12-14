@@ -52,8 +52,12 @@ import name.huliqing.luoying.layer.service.TaskServiceImpl;
 import name.huliqing.luoying.layer.service.SystemService;
 import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.layer.service.EntityServiceImpl;
+import name.huliqing.luoying.layer.service.MathService;
+import name.huliqing.luoying.layer.service.MathServiceImpl;
 import name.huliqing.luoying.layer.service.MessageService;
 import name.huliqing.luoying.layer.service.MessageServiceImpl;
+import name.huliqing.luoying.layer.service.ResistService;
+import name.huliqing.luoying.layer.service.ResistServiceImpl;
 import name.huliqing.luoying.layer.service.SoundService;
 import name.huliqing.luoying.layer.service.SoundServiceImpl;
 
@@ -85,8 +89,10 @@ public class Factory {
         CLASS_MAP.put(ElService.class, ElServiceImpl.class);
         CLASS_MAP.put(EntityService.class, EntityServiceImpl.class);
         CLASS_MAP.put(LogicService.class, LogicServiceImpl.class);
+        CLASS_MAP.put(MathService.class, MathServiceImpl.class);
         CLASS_MAP.put(MessageService.class, MessageServiceImpl.class);
         CLASS_MAP.put(PlayService.class, PlayServiceImpl.class);
+        CLASS_MAP.put(ResistService.class, ResistServiceImpl.class);
         CLASS_MAP.put(SaveService.class, SaveServiceImpl.class);
         CLASS_MAP.put(SceneService.class, SceneServiceImpl.class);
         CLASS_MAP.put(SkillService.class, SkillServiceImpl.class);

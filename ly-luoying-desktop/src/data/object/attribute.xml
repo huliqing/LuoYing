@@ -207,25 +207,26 @@
     <!--种族配置： 这些属性是直接配置给角色的。-->
     <!--==========================================================================-->
     
-    <!--配置给：非生物、种族未知、性别未知、可移动、可转向的角色。如：坦克、飞机、战车等可移动的等非生物类角色. -->
-    <attributeGroup id="attributeActorUnbiologyMovableRotatable" name="attributeActorUnbiologyMovableRotatable" 
+    <!--配置给：动态建筑物角色， 如：坦克、飞机、战车等可移动的等非生物类角色. -->
+    <attributeGroup id="attributeDynamicBuildingGroup" name="attributeDynamicBuildingGroup" 
                        attributes="attributeGroupBase,attributeBiologyNo,attributeRaceUnknow,attributeSexUnknow
 ,attributeMovableYes,attributeRotatableYes,attributeMassDynamic,attributeLevelUpNo" />
 
-    <!--配置给：非生物、种族未知、性别未知、不可移动、不可转向的角色。如：防御塔、堡垒、基地等静止角色-->
-    <attributeGroup id="attributeActorUnbiologyUnmovableUnrotatable" name="attributeActorUnbiologyUnmovableUnrotatable" 
+    <!--配置给：静态建筑物角色，如：防御塔、堡垒、基地等静止角色-->
+    <attributeGroup id="attributeStaticBuildingGroup" name="attributeStaticBuildingGroup" 
                        attributes="attributeGroupBase,attributeBiologyNo,attributeRaceUnknow,attributeSexUnknow
 ,attributeMovableNo,attributeRotatableNo,attributeMassStatic,attributeLevelUpNo" />
     
-    <!--配置给：生物、种族未知、性别未知、可移动、可转向的角色。如：虫子、怪物、野兽、飞禽、未知生物等活动类角色.-->
-    <attributeGroup id="attributeActorBiologyMovableRotatable" name="attributeActorBiologyMovableRotatable" 
+    <!--配置给：生物类角色，如：虫子、怪物、野兽、飞禽、未知生物等活动类角色.-->
+    <attributeGroup id="attributeCreatureGroup" name="attributeCreatureGroup" 
                        attributes="attributeGroupBase,attributeBiologyYes,attributeRaceUnknow,attributeSexUnknow
 ,attributeMovableYes,attributeRotatableYes,attributeMassDynamic,attributeLevelUpYes" />
 
     <!--配置给：人类女性角色-->
     <attributeGroup id="attributeHumanFemale" name="attributeHumanFemale" 
                        attributes="attributeGroupBase,attributeBiologyYes,attributeRaceHuman,attributeSexFemale
-,attributeMovableYes,attributeRotatableYes,attributeMassDynamic,attributeHumanFemaleWeaponSlot,attributeLevelUpYes" />
+,attributeMovableYes,attributeRotatableYes,attributeMassDynamic,attributeLevelUpYes
+,attributeHumanFemaleWeaponSlot" />
     
     <!--配置给：人类男性角色-->
     <attributeGroup id="attributeHumanMale" name="attributeHumanMale" 
