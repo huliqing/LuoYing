@@ -16,6 +16,7 @@ import java.util.logging.Logger;
  * @author huliqing
  */
 class ProtoUtils {
+    
     private static final Logger LOG = Logger.getLogger(ProtoUtils.class.getName());
     
     private final static String ATTRIBUTE_EXTENDS = "extends";
@@ -37,7 +38,7 @@ class ProtoUtils {
         if (extendId == null) {
             // 如果extId不存在，则说明该Proto没有继承关系，或者说继承关系已经处理过了。
             // 这个时候dataLoader和dataProcessor必须已经存在（通过自身tag配置或是继承自父tag），如果这个时候不存在，则
-            // 需要则需要确定一个 
+            // 需要确定一个 
             checkLoaderAndProcessor(proto);
             return proto;
         } else {
@@ -106,24 +107,76 @@ class ProtoUtils {
         
 //        LOG.log(Level.INFO, "processor extends result => {0}", proto);
         return proto;
-        
     }
     
     private static void checkLoaderAndProcessor(Proto proto) {
         String tagName = proto.getTagName();
         if (proto.getDataClass() == null) {
-            Class dataClass = DataFactory.getDataClass(tagName);
-            proto.setDataClass(dataClass != null ? dataClass.getName() : null);
+            Class dataClass = null;
+            String dataClassStr = proto.getAsString(Proto.DATA_CLASS);
+            if (dataClassStr != null) {
+                try {
+                    dataClass = Class.forName(dataClassStr);
+                } catch (ClassNotFoundException ex) {
+                    LOG.log(Level.SEVERE, "protoId=" + proto.getId() + ", tagName=" + proto.getTagName(), ex);
+                }
+            }
+            if (dataClass == null) {
+                dataClass = DataFactory.getDataClass(tagName);
+            }
+            proto.setDataClass(dataClass != null ? dataClass : ObjectData.class);
         }
+        // 优先从Proto参数中查找自定义的载入器，如果没有则从配置中查找，
+        // 如果再找不到DataLoader，则最后给一个NullLoader标记
         if (proto.getDataLoaderClass() == null) {
-            Class dataLoaderClass = DataFactory.getDataLoaderClass(tagName);
-            proto.setDataLoaderClass(dataLoaderClass != null ? dataLoaderClass.getName() : null);
+            Class dataLoaderClass = null;
+            String dataLoaderClassStr = proto.getAsString(Proto.DATA_LOADER_CLASS);
+            if (dataLoaderClassStr != null) {
+                try {
+                    dataLoaderClass = Class.forName(dataLoaderClassStr);
+                } catch (ClassNotFoundException ex) {
+                    LOG.log(Level.SEVERE, "protoId=" + proto.getId() + ", tagName=" + proto.getTagName(), ex);
+                }
+            }
+            if (dataLoaderClass == null) {
+                dataLoaderClass = DataFactory.getDataLoaderClass(tagName);
+            }
+            proto.setDataLoaderClass(dataLoaderClass != null ? dataLoaderClass : NullLoader.class);
         }
+        // 如果找不到DataProcessor，则最后给一个NullProcessor标记
         if (proto.getDataProcessorClass() == null) {
-            Class dataProcessorClass = DataFactory.getDataProcessorClass(tagName);
-            proto.setDataProcessorClass(dataProcessorClass != null ? dataProcessorClass.getName() : null);
+            Class dataProcessorClass = null;
+            String dataProcessorClassStr = proto.getAsString(Proto.DATA_PROCESSOR_CLASS);
+            if (dataProcessorClassStr != null) {
+                try {
+                    dataProcessorClass = Class.forName(dataProcessorClassStr);
+                } catch (ClassNotFoundException ex) {
+                    LOG.log(Level.SEVERE, "protoId=" + proto.getId() + ", tagName=" + proto.getTagName(), ex);
+                }
+            }
+            if (dataProcessorClass == null) {
+                dataProcessorClass = DataFactory.getDataProcessorClass(tagName);
+            }
+            proto.setDataProcessorClass(dataProcessorClass != null ? dataProcessorClass : NullProcessor.class);
         }
     }
+    
+    // remove20161216
+//    private static void checkLoaderAndProcessor(Proto proto) {
+//        String tagName = proto.getTagName();
+//        if (proto.getDataClass() == null) {
+//            Class dataClass = DataFactory.getDataClass(tagName);
+//            proto.setDataClass(dataClass != null ? dataClass.getName() : null);
+//        }
+//        if (proto.getDataLoaderClass() == null) {
+//            Class dataLoaderClass = DataFactory.getDataLoaderClass(tagName);
+//            proto.setDataLoaderClass(dataLoaderClass != null ? dataLoaderClass.getName() : null);
+//        }
+//        if (proto.getDataProcessorClass() == null) {
+//            Class dataProcessorClass = DataFactory.getDataProcessorClass(tagName);
+//            proto.setDataProcessorClass(dataProcessorClass != null ? dataProcessorClass.getName() : null);
+//        }
+//    }
     
    
 }

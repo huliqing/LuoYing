@@ -141,7 +141,6 @@ public class CurveBullet extends StraightBullet {
         if (!tracing) {
             float currentLength = baseSpeed * speed * timeUsed;
             cma.display(currentLength / cma.getTotalLength());
-            
             // 判断是否进入tracing,在到达最后一个路径点之前转入跟踪
             if (trace && cma.getCurrentPointIndex() >= waypoints.size() - 2) {
                 cma.cleanup();

@@ -31,7 +31,7 @@ import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.utils.GeometryUtils;
-import name.huliqing.luoying.utils.ThreadHelper;
+import name.huliqing.luoying.utils.ThreadHelper; 
 
 /**
  * 召唤技

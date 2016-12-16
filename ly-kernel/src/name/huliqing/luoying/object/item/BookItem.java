@@ -31,7 +31,7 @@ public class BookItem extends AbstractItem {
     @Override
     public int checkStateCode(Entity actor) {
         if (actor.getData().getObjectData(skill) != null) {
-            return StateCode.DATA_USE_FAILURE_SKILL_EXISTS;
+            return StateCode.DATA_USE_FAILURE;
         }
         return super.checkStateCode(actor); 
     }

@@ -25,7 +25,7 @@ public final class CurveMoveAnim extends AbstractAnim<Spatial> {
     private boolean facePath;
     // 初始旋转,只有打开facePath时才有用,该旋转会与运行时目标方向进行相乘,作为最
     // 终方向。
-    private Quaternion rotationOffset;
+    private Quaternion rotationOffset; 
     
     // ---- 内部
     private final Spline spline = new Spline();
@@ -127,7 +127,7 @@ public final class CurveMoveAnim extends AbstractAnim<Spatial> {
     }
     
     @Override
-    protected void doInit() {
+    protected void doAnimInit() {
         currentPointIndex = 0;
         target.setLocalTranslation(spline.getControlPoints().get(0));
         if (debug) {
@@ -136,7 +136,7 @@ public final class CurveMoveAnim extends AbstractAnim<Spatial> {
     }
     
     @Override
-    protected void doAnimation(float interpolation) {
+    protected void doAnimUpdate(float interpolation) {
         
         TempVars tv = TempVars.get();
         float distance = interpolation * spline.getTotalLength();

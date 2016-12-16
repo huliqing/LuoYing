@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.util.LinkedHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import name.huliqing.luoying.constants.IdConstants;
 import name.huliqing.luoying.data.ActionData;
 import name.huliqing.luoying.data.ActorData;
 import name.huliqing.luoying.data.LogicData;
@@ -36,6 +37,7 @@ import name.huliqing.luoying.data.ChannelData;
 import name.huliqing.luoying.data.ConfigData;
 import name.huliqing.luoying.data.ConnData;
 import name.huliqing.luoying.data.DefineData;
+import name.huliqing.luoying.data.DelayAnimData;
 import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.data.DropData;
 import name.huliqing.luoying.data.DropItem;
@@ -231,6 +233,7 @@ import name.huliqing.luoying.mess.SceneLoadedMess;
 import name.huliqing.luoying.mess.SkillPlayMess;
 import name.huliqing.luoying.mess.network.RequestGameInitMess;
 import name.huliqing.luoying.mess.network.RequestGameInitStartMess;
+import name.huliqing.luoying.object.anim.DelayAnim;
 import name.huliqing.luoying.object.attribute.BooleanAttribute;
 import name.huliqing.luoying.object.attribute.FloatAttribute;
 import name.huliqing.luoying.object.attribute.GroupAttribute;
@@ -350,7 +353,9 @@ public class LuoYing {
         
         Serializer.registerClass(TradeInfo.class);
         
-        Serializer.registerClass(Proto.class);
+        // Proto不在网络中传输
+//        Serializer.registerClass(Proto.class);
+
         Serializer.registerClass(AttributeApply.class);
         Serializer.registerClass(AttributeUse.class);
         Serializer.registerClass(Data.class);
@@ -397,6 +402,8 @@ public class LuoYing {
     }
     
     private static void registerProcessor() {
+        // 特殊的自定义类型
+        DataFactory.addCustomDataDefine("_TAG_FOR_DELAY_ANIM_", IdConstants.SYS_CUSTOM_ANIM_DELAY, DelayAnimData.class, null, DelayAnim.class);
         
         // Action
         DataFactory.register("actionStaticIdle", ActionData.class, ActionDataLoader.class, StaticIdleAction.class);
@@ -420,6 +427,9 @@ public class LuoYing {
         DataFactory.register("animRandomRotation",  AnimData.class, AnimDataLoader.class, RandomRotationAnim.class);
         DataFactory.register("animScale", AnimData.class, AnimDataLoader.class,  ScaleAnim.class);
         DataFactory.register("animColor",  AnimData.class, AnimDataLoader.class, ColorAnim.class);
+        
+        // 特殊的动画功能
+//        DataFactory.register("animDelay",  DelayAnimData.class, null, DelayAnim.class);
         
         // Attribute
         DataFactory.register("attributeBoolean",  AttributeData.class, null, BooleanAttribute.class);

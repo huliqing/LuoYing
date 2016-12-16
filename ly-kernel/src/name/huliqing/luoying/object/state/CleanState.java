@@ -35,21 +35,21 @@ public class CleanState extends AbstractState implements EntityDataListener {
         // 状态效果来说是有意义的,即不需要持续的清理。
         doCleanStates();
         
-        actor.addEntityDataListener(this);
+        entity.addEntityDataListener(this);
     }
 
     @Override
     public void cleanup() {
-        actor.removeEntityDataListener(this);
+        entity.removeEntityDataListener(this);
         super.cleanup(); 
     }
     
     private void doCleanStates() {
         if (states != null) {
             for (String s : states) {
-                StateData state = actor.getData().getObjectData(s);
+                StateData state = entity.getData().getObjectData(s);
                 if (state != null) {
-                    actor.removeObjectData(state, 1);
+                    entity.removeObjectData(state, 1);
                 }
             }
         }
@@ -60,7 +60,7 @@ public class CleanState extends AbstractState implements EntityDataListener {
         // 当检查到新添加的状态刚好是清除列表中的状态时，则立即清除掉。
         if (data instanceof StateData) {
             if (states != null && states.contains(data.getId())) {
-                actor.removeObjectData(data, 1);
+                entity.removeObjectData(data, 1);
             }
         }
     }

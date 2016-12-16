@@ -17,8 +17,8 @@ import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.layer.service.SaveService;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.object.Loader;
+import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.xml.DataFactory;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
@@ -43,21 +43,22 @@ public class TestItem extends AbstractItem {
     protected void doUse(Entity actor) {
         count++;
         
-        actor.updateDatas();
-        EntityData ed = actor.getData().clone();
-        ed.setUniqueId(DataFactory.generateUniqueId());
-        Entity other = Loader.load(ed);
-        playNetwork.addEntity(other);
+//        actor.updateDatas();
+//        EntityData ed = actor.getData().clone();
+//        ed.setUniqueId(DataFactory.generateUniqueId());
+//        Entity other = Loader.load(ed);
+//        playNetwork.addEntity(other);
 
-//        Entity entity = Loader.load("actorFairy");
-////        Entity entity = Loader.load("actorTower");
-//        entity.getAttributeManager().getAttribute("attributeGroup", NumberAttribute.class).setValue(2);
-//        entity.getAttributeManager().getAttribute("attributeLevel", NumberAttribute.class).setValue(1);
-//        playNetwork.addEntity(entity);
-//        
+        Entity entity = Loader.load("actorAltar");
+//        Entity entity = Loader.load("actorTower");
+        entity.getAttributeManager().getAttribute("attributeGroup", NumberAttribute.class).setValue(2);
+        entity.getAttributeManager().getAttribute("attributeLevel", NumberAttribute.class).setValue(60);
+        playNetwork.addEntity(entity);
+        
 //        entityNetwork.hitAttribute(actor, "attributeLevel", 20, null);
 
-            
+//        StateData sd = Loader.loadData("stateSnowFrost");
+//        actor.addObjectData(sd, 1);
         
     }
     

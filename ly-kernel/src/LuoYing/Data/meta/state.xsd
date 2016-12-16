@@ -323,6 +323,14 @@ xs:time
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
+                <xs:attribute name="animations" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            动画，格式： "animation1|delayTime, animation2|delayTime,..."， 这些动画会作用在角色身上,delayTime为
+                            动画的延迟执行时间，单位秒。
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
                 <xs:attribute name="removeOnDead" type="bool" use="optional">
                     <xs:annotation>
                         <xs:documentation>

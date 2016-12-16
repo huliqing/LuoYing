@@ -35,6 +35,8 @@ public class ColorModule extends AbstractModule implements ValueChangeListener{
     private final MatParamOverride ambientOverride = new MatParamOverride(VarType.Vector4, "Ambient", ColorRGBA.White.clone());
     private final MatParamOverride diffuseOverride = new MatParamOverride(VarType.Vector4, "Diffuse", ColorRGBA.White.clone());
     
+    private boolean colorInitialized;
+    
     @Override
     public void setData(ModuleData data) {
         super.setData(data); 
@@ -60,7 +62,12 @@ public class ColorModule extends AbstractModule implements ValueChangeListener{
         if (colorAttribute != null) {
             colorAttribute.removeListener(this);
         }
-        entity.getSpatial().clearMatParamOverrides();
+        if (colorInitialized) {
+            entity.getSpatial().removeMatParamOverride(colorOverride);
+            entity.getSpatial().removeMatParamOverride(useMaterialColorOverride);
+            entity.getSpatial().removeMatParamOverride(ambientOverride);
+            entity.getSpatial().removeMatParamOverride(diffuseOverride);
+        }
         super.cleanup(); 
     }
 
@@ -72,14 +79,15 @@ public class ColorModule extends AbstractModule implements ValueChangeListener{
     }
     
     private void changeColor(Vector4f vec4) {
+        if (!colorInitialized) {
+            entity.getSpatial().addMatParamOverride(colorOverride);
+            entity.getSpatial().addMatParamOverride(useMaterialColorOverride);
+            entity.getSpatial().addMatParamOverride(ambientOverride);
+            entity.getSpatial().addMatParamOverride(diffuseOverride);
+            colorInitialized = true;
+        }
         ((ColorRGBA)colorOverride.getValue()).set(vec4.x, vec4.y, vec4.z, vec4.w);
         ((ColorRGBA)ambientOverride.getValue()).set(vec4.x, vec4.y, vec4.z, vec4.w);
         ((ColorRGBA)diffuseOverride.getValue()).set(vec4.x, vec4.y, vec4.z, vec4.w);
-        // 先清除，避免重复添加
-        entity.getSpatial().clearMatParamOverrides();
-        entity.getSpatial().addMatParamOverride(colorOverride);
-        entity.getSpatial().addMatParamOverride(useMaterialColorOverride);
-        entity.getSpatial().addMatParamOverride(ambientOverride);
-        entity.getSpatial().addMatParamOverride(diffuseOverride);
     }
 }

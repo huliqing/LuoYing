@@ -69,7 +69,7 @@ public class ObjectData implements Savable, Cloneable {
      */
     public void setProto(Proto proto) {
         this.proto = proto;
-        this.id = proto.getAsString("id");
+        this.id = proto.getId();
     }
 
     public String getTagName() {
@@ -486,6 +486,14 @@ public class ObjectData implements Savable, Cloneable {
             return (ColorRGBA) value;
         }
         return getProto().getAsColor(key, defValue);
+    }
+    
+    public final <T extends Savable> T getAsSavable(String key) {
+        Object value = getAttributeFromLocal(key);
+        if (value != null) {
+            return (T) value;
+        }
+        return getProto().getAsSavable(key);
     }
     
     /**

@@ -12,7 +12,6 @@ import com.jme3.util.TempVars;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.AnimData;
@@ -111,7 +110,7 @@ public class ActorCurveMove extends ActorAnim {
     }
 
     @Override
-    protected void doInit() {
+    protected void doAnimInit() {
         // 清理后重新加载控制点
         spline.clearControlPoints();
         // 第一个点为角色的当前位置
@@ -170,7 +169,7 @@ public class ActorCurveMove extends ActorAnim {
     }
 
     @Override
-    protected void doAnimation(float interpolation) {
+    protected void doAnimUpdate(float interpolation) {
         // 正弦曲线,增强运动效果
         if (useSine) {
             interpolation = FastMath.sin(interpolation * FastMath.HALF_PI);

@@ -4,7 +4,13 @@
  */
 package name.huliqing.luoying.loader;
 
+import java.util.ArrayList;
+import java.util.List;
+import name.huliqing.luoying.constants.IdConstants;
+import name.huliqing.luoying.data.AnimData;
+import name.huliqing.luoying.data.DelayAnimData;
 import name.huliqing.luoying.data.EffectData;
+import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.xml.Proto;
 
 /**
@@ -17,38 +23,22 @@ public class EffectDataLoader<T extends EffectData> extends EntityDataLoader <T>
     @Override
     public void load(Proto proto, T store) {
         super.load(proto, store);
-        
-        // ... do effect loader
-        
-        // remove20161014
-//        store.setUseTime(proto.getAsFloat("useTime", 1.0f));
-//        store.setTracePosition(TraceType.identity(proto.getAsString("tracePosition", TraceType.no.name())));
-//        store.setTraceRotation(TraceType.identity(proto.getAsString("traceRotation", TraceType.no.name())));
-//        store.setTracePositionType(TracePositionType.identify(proto.getAsString("tracePositionType", TracePositionType.origin.name())));
-//        store.setAutoDetach(proto.getAsBoolean("autoDetach", false));
-//
-//        // 特效的初始位置
-//        Vector3f initLocation = proto.getAsVector3f("initLocation");
-//        if (initLocation != null) {
-//            store.setInitLocation(initLocation);
-//        }
-//
-//        // 特效的初始旋转
-//        float[] initRotation = proto.getAsFloatArray("initRotation");
-//        if (initRotation != null) {
-//            Quaternion rot = new Quaternion();
-//            rot.fromAngles(initRotation);
-//            store.setInitRotation(rot);
-//        }
-//
-//        // 缩放
-//        Vector3f initScale = proto.getAsVector3f("initScale");
-//        if (initScale != null) {
-//            store.setInitScale(initScale);
-//        }
-//        
-//        // 以下参数暂不开放到xml中配置。
-////        store.setSpeed(speed);
+        // animations="anim1|delayTime, anim2|delayTime,..."
+        String[] tempAnims = proto.getAsArray("animations");
+        if (tempAnims != null && tempAnims.length > 0) {
+            String[] taArr;
+            List<DelayAnimData> dads = new ArrayList<DelayAnimData>(tempAnims.length);
+            for (String ta : tempAnims) {
+                taArr = ta.split("\\|");
+                DelayAnimData dad = Loader.loadData(IdConstants.SYS_CUSTOM_ANIM_DELAY);
+                dad.setAnimData((AnimData) Loader.loadData(taArr[0]));
+                if (taArr.length > 1) {
+                    dad.setDelayTime(Float.parseFloat(taArr[1]));
+                }
+                dads.add(dad);
+            }
+            store.setDelayAnimDatas(dads);
+        }
     }
     
     

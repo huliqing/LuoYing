@@ -17,7 +17,7 @@ import name.huliqing.luoying.data.AnimData;
 public final class ScaleAnim extends AbstractAnim<Spatial> {
     // 记住原始缩放值
     private final Vector3f originScale = new Vector3f();
-    // 缩放值
+    // 缩放值 
     private Vector3f startScale = new Vector3f(1,1,1);
     private Vector3f endScale = new Vector3f(2,2,2);
     
@@ -80,7 +80,7 @@ public final class ScaleAnim extends AbstractAnim<Spatial> {
     }
     
     @Override
-    protected void doInit() {
+    protected void doAnimInit() {
         originScale.set(target.getLocalScale());
         
         // 初始化缩放中心偏移的情况
@@ -98,7 +98,7 @@ public final class ScaleAnim extends AbstractAnim<Spatial> {
     }
     
     @Override
-    protected void doAnimation(float interpolation) {
+    protected void doAnimUpdate(float interpolation) {
         
         TempVars tv = TempVars.get();
         Vector3f scale = tv.vect1;

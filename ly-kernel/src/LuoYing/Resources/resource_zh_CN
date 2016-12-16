@@ -1,27 +1,35 @@
 #use notepad++ -> 格式 -> 转为UTF-8编码格式 -> AngelCode 导出bmp font
 
 name.huliqing.luoying.dataAdd=获得: %s
-name.huliqing.luoying.dataAddFailure=不能获得: %s
+name.huliqing.luoying.dataAddFailure=%s 不能获得
+name.huliqing.luoying.dataAddFailureDataExists=%s 已经存在
+
 name.huliqing.luoying.dataRemove=%s 移除
-name.huliqing.luoying.dataRemoveFailure=不能移除: %s
+name.huliqing.luoying.dataRemoveFailure=%s 不能移除
+name.huliqing.luoying.dataRemoveFailureInUsing=%s 使用中，不能移除
+name.huliqing.luoying.dataRemoveFailureNotFound=%s 不存在
+name.huliqing.luoying.dataRemoveFailureUnDeletable=%s 不能移除
+
 name.huliqing.luoying.dataUse=使用: %s
-name.huliqing.luoying.dataUseFailure=不能使用: %s
+name.huliqing.luoying.dataUseFailure= %s 不能使用
+name.huliqing.luoying.dataUseFailureCheckEl=%s 不能使用
+name.huliqing.luoying.dataUseFailureNotEnough=%s 不足
+name.huliqing.luoying.dataUseFailureNotFound=%s 不存在
+
+name.huliqing.luoying.skillUseFailure=不能使用技能
+name.huliqing.luoying.skillUseFailureNotFound=技能不存在
+name.huliqing.luoying.skillUseFailureLocked=%s 不能使用
+name.huliqing.luoying.skillUseFailureCooldown=%s 冷却中
+name.huliqing.luoying.skillUseFailureWeaponNotAllow=当前武器不能使用: %s
+name.huliqing.luoying.skillUseFailureWeaponNeedTakeOn=武器没有取出
+name.huliqing.luoying.skillUseFailureAttributeNotEnough=灵力不足
+name.huliqing.luoying.skillUseFailureElCheck=%s 不能使用
+name.huliqing.luoying.skillUseFailureTargetNotFound=目标不存在
+name.huliqing.luoying.skillUseFailureTargetOutOfRange=目标不清晰
+name.huliqing.luoying.skillUseFailureTargetUnsuitableByElCheck=不能对指定目标使用 %s
+name.huliqing.luoying.skillUseFailureCanNotInterrupt=技能执行中
+name.huliqing.luoying.skillUseFailureByHook=%s 不能使用
+name.huliqing.luoying.skillUseFailureActorDead=不能使用技能
 
 name.huliqing.luoying.levelUp=等级提升(%s)
 name.huliqing.luoying.talentPointsAdded=获得天赋点数: %s
-
-name.huliqing.luoying.errorItemNotEnough=Item not enough
-name.huliqing.luoying.errorItemSkillExists=Skill exists
-name.huliqing.luoying.errorItemCheckEl=Could not use item(ElCheck)
-name.huliqing.luoying.errorSkillNotFound=技能不存在或找不到指定技能
-name.huliqing.luoying.errorSkillLocked=角色的技能处于锁定状态
-name.huliqing.luoying.errorSkillCooldown=技能正处于冷却状态
-name.huliqing.luoying.errorSkillWeaponNotAllow=角色所使用的当前武器不能执行该技能
-name.huliqing.luoying.errorSkillWeaponNeedTakeOn=角色武器没有取出，必须先取出武器
-name.huliqing.luoying.errorSkillAttributeNotEnough=执行技能时，需要消耗角色的一些属性值，而角色的属性值不足
-name.huliqing.luoying.errorSkillElCheck=不能执行技能(ElCheck)
-name.huliqing.luoying.errorSkillTargetNotFound=没有目标，技能需要目标才能执行，而当前没有目标
-name.huliqing.luoying.errorSkillTargetOutOfRange=目标不在技能的射程范围内
-name.huliqing.luoying.errorSkillTargetUnsuitableByElCheck=不能对指定目标使用该技能(HitElCheck)
-name.huliqing.luoying.errorSkillCanNotInterrupt=不能中断正在执行的技能
-name.huliqing.luoying.errorSkillHook=不能执行技能.(Hook)

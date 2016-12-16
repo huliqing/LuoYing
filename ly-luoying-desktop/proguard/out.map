@@ -787,8 +787,6 @@ name.huliqing.ly.object.game.SimpleRpgGame$RpgMessageHandler -> name.huliqing.ly
     void <init>(name.huliqing.ly.object.game.SimpleRpgGame,name.huliqing.ly.object.game.SimpleRpgGame$1) -> <init>
 name.huliqing.ly.object.game.StoryServerNetworkRpgGame -> name.huliqing.ly.g.b.o:
     name.huliqing.luoying.layer.service.ConfigService configService -> l
-    name.huliqing.luoying.layer.service.ActorService actorService -> m
-    name.huliqing.luoying.layer.service.PlayService playService -> n
     name.huliqing.luoying.layer.service.SkillService skillService -> o
     name.huliqing.ly.layer.service.GameService gameService -> p
     name.huliqing.luoying.layer.network.PlayNetwork playNetwork -> q
@@ -2601,6 +2599,7 @@ name.huliqing.ly.view.actor.ActorMainPanel -> name.huliqing.ly.i.a.ad:
     name.huliqing.luoying.ui.LinearLayout tabPanel -> f
     name.huliqing.ly.view.actor.ActorMainPanel$TabButton btnAttr -> g
     name.huliqing.ly.view.actor.ActorMainPanel$TabButton btnTalent -> h
+    name.huliqing.ly.view.actor.ActorMainPanel$TabButton btnResist -> y
     name.huliqing.ly.view.actor.ActorMainPanel$TabButton btnWeapon -> i
     name.huliqing.ly.view.actor.ActorMainPanel$TabButton btnArmor -> j
     name.huliqing.ly.view.actor.ActorMainPanel$TabButton btnSkill -> k
@@ -2609,6 +2608,7 @@ name.huliqing.ly.view.actor.ActorMainPanel -> name.huliqing.ly.i.a.ad:
     name.huliqing.luoying.ui.LinearLayout bodyPanel -> n
     name.huliqing.ly.view.actor.AttributePanel attrPanel -> o
     name.huliqing.ly.view.actor.TalentPanel talentPanel -> p
+    name.huliqing.ly.view.actor.ResistPanel resistPanel -> z
     name.huliqing.ly.view.actor.WeaponPanel weaponPanel -> q
     name.huliqing.ly.view.actor.ArmorPanel armorPanel -> r
     name.huliqing.ly.view.actor.SkillPanel skillPanel -> s
@@ -2746,6 +2746,35 @@ name.huliqing.ly.view.actor.ItemRow -> name.huliqing.ly.i.a.l:
     void clickEffect(boolean) -> clickEffect
     void onRelease() -> onRelease
     void display(java.lang.Object) -> a
+name.huliqing.ly.view.actor.ResistPanel -> name.huliqing.ly.i.a.ag:
+    name.huliqing.luoying.object.entity.Entity actor -> a
+    name.huliqing.luoying.ui.Text text -> b
+    name.huliqing.ly.view.actor.ResistPanel$ResistListPanel listPanel -> c
+    void <init>(float,float) -> <init>
+    void setPanelVisible(boolean) -> a
+    void setPanelUpdate(name.huliqing.luoying.object.entity.Entity) -> a
+    void setPageSize(int) -> a
+    void updateViewChildren() -> updateViewChildren
+    name.huliqing.luoying.object.entity.Entity access$000(name.huliqing.ly.view.actor.ResistPanel) -> a
+name.huliqing.ly.view.actor.ResistPanel$ResistListPanel -> name.huliqing.ly.i.a.ah:
+    java.util.List datas -> b
+    name.huliqing.ly.view.actor.ResistPanel this$0 -> a
+    void <init>(name.huliqing.ly.view.actor.ResistPanel,float,float) -> <init>
+    name.huliqing.luoying.ui.Row createEmptyRow() -> createEmptyRow
+    java.util.List getDatas() -> getDatas
+    boolean removeItem(name.huliqing.luoying.data.ResistData) -> a
+    boolean removeItem(java.lang.Object) -> removeItem
+name.huliqing.ly.view.actor.ResistRow -> name.huliqing.ly.i.a.ai:
+    name.huliqing.luoying.layer.service.PlayService playService -> a
+    name.huliqing.luoying.data.ResistData data -> b
+    name.huliqing.luoying.ui.tiles.ColumnIcon icon -> c
+    name.huliqing.luoying.ui.tiles.ColumnBody body -> d
+    name.huliqing.luoying.ui.tiles.ColumnText num -> e
+    void <init>(name.huliqing.luoying.ui.ListView) -> <init>
+    void updateViewChildren() -> updateViewChildren
+    void displayRow(name.huliqing.luoying.data.ResistData) -> a
+    void display(name.huliqing.luoying.data.ResistData) -> b
+    void displayRow(java.lang.Object) -> displayRow
 name.huliqing.ly.view.actor.SkillPanel -> name.huliqing.ly.i.a.m:
     name.huliqing.luoying.layer.service.SkillService skillService -> a
     name.huliqing.luoying.layer.service.DefineService defineService -> b

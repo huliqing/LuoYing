@@ -10,16 +10,15 @@ import name.huliqing.luoying.xml.DataProcessor;
 /**
  * 动画功能接口
  * @author huliqing
- * @param <T>
  * @param <E>
  */
-public interface Anim<T extends AnimData, E> extends DataProcessor<T>{
+public interface Anim<E> extends DataProcessor<AnimData>{
 
     @Override
-    public void setData(T data);
+    public void setData(AnimData data);
 
     @Override
-    public T getData();
+    public AnimData getData();
     
     /**
      * @see #setTarget(java.lang.Object) 

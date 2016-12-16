@@ -22,7 +22,7 @@ public final class MoveAnim extends AbstractAnim<Spatial> {
     private Vector3f endPos;
     private Vector3f startPosOffset;
     private Vector3f endPosOffset;
-    // 是否朝向目标
+    // 是否朝向目标 
     private boolean facing;
     
     // ---- inner
@@ -40,7 +40,7 @@ public final class MoveAnim extends AbstractAnim<Spatial> {
     }
     
     @Override
-    protected void doInit() {
+    protected void doAnimInit() {
         trueStartPos.set(startPos != null ? startPos : target.getWorldTranslation());
         if (startPosOffset != null) {
             trueStartPos.addLocal(startPosOffset);
@@ -59,7 +59,7 @@ public final class MoveAnim extends AbstractAnim<Spatial> {
     }
 
     @Override
-    protected void doAnimation(float interpolation) {
+    protected void doAnimUpdate(float interpolation) {
         TempVars tv = TempVars.get();
         FastMath.extrapolateLinear(interpolation, trueStartPos, trueEndPos, tv.vect1);
         target.setLocalTranslation(tv.vect1);

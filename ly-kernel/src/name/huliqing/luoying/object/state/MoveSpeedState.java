@@ -35,7 +35,7 @@ public class MoveSpeedState extends AttributeState {
     @Override
     public void initialize() {
         super.initialize();
-        skillModule = actor.getModuleManager().getModule(SkillModule.class);
+        skillModule = entity.getModuleManager().getModule(SkillModule.class);
         
         // 查找"run"技能
         List<Skill> runSkills = skillModule.getSkillRun(null);
@@ -50,9 +50,9 @@ public class MoveSpeedState extends AttributeState {
         
         if (moveEffect == null && moveEffectId != null) {
             moveEffect = Loader.load(moveEffectId);
-            moveEffect.setTraceEntity(actor.getEntityId());
-            if (actor.getScene() != null) {
-                actor.getScene().addEntity(moveEffect);
+            moveEffect.setTraceEntity(entity.getEntityId());
+            if (entity.getScene() != null) {
+                entity.getScene().addEntity(moveEffect);
             }
         }
         
@@ -94,7 +94,7 @@ public class MoveSpeedState extends AttributeState {
     private void showMoveEffect() {
         if (moveEffect.isEnd()) {
             moveEffect.initialize();
-            actor.getScene().addEntity(moveEffect);
+            entity.getScene().addEntity(moveEffect);
         }
         moveEffect.getSpatial().setCullHint(Spatial.CullHint.Never);
     }

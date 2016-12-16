@@ -17,10 +17,7 @@
     <!-- =========================================================================-->
     
     <!--测试用-->
-    <statePrivateGroup id="stateGhostTest" icon="" useTime="30" states="stateGhostTest1,stateGhostTest2,stateGhostTest3" />
-    <stateAttribute id="stateGhostTest1" useTime="30" bindNumberAttribute="attributeGhostRate" addValue="1" restore="1" />
-    <stateAttribute id="stateGhostTest2" useTime="30" bindNumberAttribute="attributeDuckRate" addValue="1" restore="1" />
-    <stateAttribute id="stateGhostTest3" useTime="30" bindNumberAttribute="attributeDefenceRate" addValue="1" restore="1" />
+    <stateAttribute id="stateTest" icon="Interface/skill/shield.jpg" useTime="40" bindNumberAttribute="" addValue="" restore="1" animations="animTestColor" />
     
     <!--保护: 用于在剧情过程中保护角色别死-->
     <statePrivateGroup id="stateSafe" icon="Interface/skill/shield.jpg" useTime="99999" states="stateSafe1,stateSafe2" />
@@ -39,7 +36,7 @@
     
     <!--冰霜: 减速50%-->
     <stateAttribute id="stateSnowFrost" icon="Interface/skill/snow.jpg" useTime="6" 
-                        bindNumberAttribute="attributeMoveSpeed" addValue="-0.3" restore="1" />
+                        bindNumberAttribute="attributeMoveSpeed" addValue="-0.5" restore="1" animations="animColorFrost" />
     
     <!--冰冻：6秒冰冻，让角色不能动-->
     <stateSkillLocked id="stateIceFrozen" icon="Interface/skill/ysh_33.jpg" useTime="6" lockAtFrame="1" 

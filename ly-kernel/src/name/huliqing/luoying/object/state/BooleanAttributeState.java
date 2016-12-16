@@ -38,7 +38,7 @@ public class BooleanAttributeState extends AbstractState {
     @Override
     public void initialize() {
         super.initialize();
-        attribute = actor.getAttributeManager().getAttribute(bindAttribute, BooleanAttribute.class);
+        attribute = entity.getAttributeManager().getAttribute(bindAttribute, BooleanAttribute.class);
         if (attribute != null) {
             originValue = attribute.getValue();
             attribute.setValue(value);

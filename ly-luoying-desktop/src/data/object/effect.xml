@@ -122,7 +122,7 @@
     <!-- ========================================================================= -->
     <!--冰雪子弹效果-->
     <!-- ========================================================================= -->
-    <effectGroup id="effectSnowBullet" extends="effectBase" useTime="9999" effects="effectSnowTrail,effectSnowFlake" 
+    <effectGroup id="effectSnowBullet" extends="effectBase" useTime="15" effects="effectSnowTrail,effectSnowFlake" 
                  traceLocation="always" traceRotation="always" />
     <effectParticle id="effectSnowTrail" extends="effectBase" useTime="6" emitter="emitterSnowTrail" />
     <effectParticle id="effectSnowFlake" extends="effectBase" useTime="6" emitter="emitterSnowFlake" />
@@ -130,7 +130,7 @@
     <!-- ========================================================================= -->
     <!--野兽召唤术--> 
     <!-- ========================================================================= -->
-    <effectGroup id="effectSummon" extends="effectBase" useTime="9999"  
+    <effectGroup id="effectSummon" extends="effectBase" useTime="5"  
                    effects="effectMagicCircle,effectHalo,effectHaloParticle" sounds="soundSummon" 
                    traceLocation="once" traceRotation="once" traceLocationOffset="0,0,4.5" />
     <effectProjection id="effectMagicCircle" extends="effectBase" useTime="4.8" scale="10,10,10"
@@ -251,7 +251,7 @@
     <!--落樱飞舞-->
     <!-- ========================================================================= -->
     <!--主效果-->
-    <effectGroup id="effectDanceSakura" extends="effectBase" useTime="9999"
+    <effectGroup id="effectDanceSakura" extends="effectBase" useTime="6"
                  traceLocation="once" traceLocationOffset="0,4.1,-2.7" traceRotation="once"
         effects="effectDanceSakuraFlare,effectDanceSakuraMagic|0.3,effectDanceSakuraHalo|0.6" />
     

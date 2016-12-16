@@ -5,6 +5,7 @@
 package name.huliqing.luoying.object.effect;
 
 import com.jme3.bounding.BoundingVolume;
+import com.jme3.material.MatParamOverride;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
@@ -156,6 +157,19 @@ public class ProjectionEffect extends Effect {
                 }
             }
         }
+        
+        // 用于兼容ColorAnim动画。
+        this.animNode.updateGeometricState(); // 更新一下，必要的，否则getWorldMatParamOverrides获取不到数据
+        List<MatParamOverride > mpos = this.animNode.getWorldMatParamOverrides();
+        if (mpos != null && !mpos.isEmpty()) {
+            for (MatParamOverride mpo : mpos) {
+                if ("Color".equals(mpo.getName()) && mpo.getValue() instanceof ColorRGBA) {
+                    ColorRGBA overrideColor = (ColorRGBA) mpo.getValue();
+                    projMat.setColor("Color", overrideColor);
+                    break;
+                }
+            }
+        }
     }
     
     // 如果projGeo检查体不在视角范围内则不渲染投射
@@ -187,7 +201,9 @@ public class ProjectionEffect extends Effect {
         // 注：这里要清理所有引用,所以每次重用这个效果时都需要重新添加接受投射的物体
         receivers.clear();
         // 移除处理器
-        scene.removeProcessor(processor);
+        if (scene != null) {
+            scene.removeProcessor(processor);
+        }
         super.cleanup();
     }
     

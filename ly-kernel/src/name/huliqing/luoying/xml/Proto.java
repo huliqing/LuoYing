@@ -14,20 +14,26 @@ import java.util.Map;
 @Serializable
 public class Proto extends Data { 
     
+//    public final static String ID = "id";
+    public final static String DATA_CLASS = "dataClass";
+    public final static String DATA_LOADER_CLASS = "dataLoaderClass";
+    public final static String DATA_PROCESSOR_CLASS = "dataProcessorClass";
+    
     private String tagName;
     private String id;
     
-    /**
-     * Only for Serializable
-     */
+    private Class dataClass;
+    private Class dataLoaderClass;
+    private Class dataProcessorClass;
+    
     public Proto() {}
     
-    public Proto(Map<String, String> attributes, String tagName) {
+    public Proto(String tagName, String id, Map<String, String> attributes) {
         super(attributes);
         this.tagName = tagName;
-        this.id = attributes.get("id");
-    } 
-
+        this.id = id;
+    }
+    
     public String getId() {
         return id;
     }
@@ -41,16 +47,16 @@ public class Proto extends Data {
      * 如果没有指定，则该方法返回null.
      * @return 
      */
-    public String getDataClass() {
-        return getAsString("dataClass");
+    public Class getDataClass() {
+        return dataClass;
     }
     
     /**
      * 数据容器类型的class全限定类名，如: "name.huliqing.fighter.data.SceneData",数据类型必须是"ProtoData".
      * @param dataClass 
      */
-    public void setDataClass(String dataClass) {
-        setAttribute("dataClass", dataClass);
+    public void setDataClass(Class dataClass) {
+        this.dataClass = dataClass;
     }
     
     /**
@@ -58,8 +64,8 @@ public class Proto extends Data {
      * 数据类必须是“DataLoader”,如果没有指定，则该方法返回null.
      * @return 
      */
-    public String getDataLoaderClass() {
-        return getAsString("dataLoaderClass");
+    public Class getDataLoaderClass() {
+        return this.dataLoaderClass;
     }
     
     /**
@@ -67,8 +73,8 @@ public class Proto extends Data {
      * 数据类必须是“DataLoader”
      * @param dataLoaderClass 
      */
-    public void setDataLoaderClass(String dataLoaderClass) {
-        setAttribute("dataLoaderClass", dataLoaderClass);
+    public void setDataLoaderClass(Class dataLoaderClass) {
+        this.dataLoaderClass = dataLoaderClass;
     }
     
     /**
@@ -76,8 +82,8 @@ public class Proto extends Data {
      * DataProcessor,如果没有指定，则该方法将返回null.
      * @return 
      */
-    public String getDataProcessorClass() {
-        return getAsString("dataProcessorClass");
+    public Class getDataProcessorClass() {
+        return dataProcessorClass;
     }
     
     /**
@@ -85,8 +91,8 @@ public class Proto extends Data {
      * DataProcessor。
      * @param dataProcessorClass
      */
-    public void setDataProcessorClass(String dataProcessorClass) {
-        setAttribute("dataProcessorClass", dataProcessorClass);
+    public void setDataProcessorClass(Class dataProcessorClass) {
+        this.dataProcessorClass = dataProcessorClass;
     }
 
     /**

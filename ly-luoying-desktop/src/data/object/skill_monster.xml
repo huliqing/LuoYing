@@ -31,10 +31,10 @@
                shotOffsets="0|3.3|0" bullets="bulletTowerFire" hitValue="40" />
     <!--防御塔：石-->
     <skillShot id="skillTowerStone" extends="skillTowerFireball" bullets="bulletTowerStone" 
-               hitValue="30" hitStates="stateStun|0.3" />
+               hitValue="30" hitStates="stateStun|0.5" />
     <!--防御塔：冰-->
     <skillShot id="skillTowerSnow"  extends="skillTowerFireball" bullets="bulletSnow" 
-               hitValue="20" hitStates="stateSnowFrost|0.6" />
+               hitValue="20" hitStates="stateSnowFrost|0.5" />
     
     <!-- spider -->
     <skillWait id="skillSpiderWait" extends="skillWaitBase" useTime="1" animation=""  animSpeed="0.0001" />

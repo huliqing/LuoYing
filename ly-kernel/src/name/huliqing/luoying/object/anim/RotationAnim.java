@@ -21,7 +21,7 @@ public final class RotationAnim extends AbstractAnim<Spatial> {
     private Vector3f axis = Vector3f.UNIT_Y.clone();
     // 旋转弧度
     private float angle = FastMath.TWO_PI;
-    // 是否反转方向
+    // 是否反转方向 
     private boolean invert;
     
     // 当动画结束后是否复原旋转位置
@@ -44,63 +44,29 @@ public final class RotationAnim extends AbstractAnim<Spatial> {
         this.restore = data.getAsBoolean("restore", restore);
     }
 
-    /**
-     * @see #setAxis(com.jme3.math.Vector3f) 
-     * @return 
-     */
-    public Vector3f getAxis() {
-        return axis;
+    @Override
+    public void updateDatas() {
+        super.updateDatas();
     }
 
-    /**
-     * 设置旋转轴
-     * @param axis 
-     */
-    public void setAxis(Vector3f axis) {
-        this.axis.set(axis);
-    }
-
-    /**
-     * 获取要旋转的弧度数
-     * @return 
-     */
-    public float getAngle() {
-        return angle;
-    }
-
-    /**
-     * 设置要旋转的<b>弧度</b>数
-     * @param angle 
-     */
-    public void setAngle(float angle) {
-        this.angle = angle;
-    }
-    
     /**
      * 设置要旋转的角度数，与 {@link #setAngle(float) } 一样，但是参数是以
      * <b>角度</b>传入的。
      * @param degree 
+     * @deprecated 后续不再开放这个参数
      */
     public void setAngleDegree(float degree) {
         this.angle = degree * FastMath.DEG_TO_RAD;
     }
-
-    public boolean isInvert() {
-        return invert;
-    }
-
-    public void setInvert(boolean invert) {
-        this.invert = invert;
-    }
-
+ 
     @Override
-    protected void doInit() {
+    protected void doAnimInit() {
         this.axis.normalizeLocal();
         origin.set(target.getLocalRotation());
     }
 
     @Override
-    protected void doAnimation(float interpolation) {
+    protected void doAnimUpdate(float interpolation) {
 //        logger.log(Level.INFO, "interpolation={0}", interpolation);
         TempVars tv = TempVars.get();
         tv.quat1.fromAngleNormalAxis(interpolation * angle * (invert ? -1 : 1), axis);

@@ -6,7 +6,6 @@ package name.huliqing.luoying.object.anim;
 
 import com.jme3.math.FastMath;
 import com.jme3.util.SafeArrayList;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,7 +16,7 @@ import name.huliqing.luoying.data.AnimData;
  * @author huliqing
  * @param <E> 
  */
-public abstract class AbstractAnim<E> implements Anim<AnimData, E> {
+public abstract class AbstractAnim<E> implements Anim<E> {
     private final static Logger LOG = Logger.getLogger(AbstractAnim.class.getName());
     
     // 默认的bezier参数: {p0,p1,p2,p3}
@@ -69,7 +68,6 @@ public abstract class AbstractAnim<E> implements Anim<AnimData, E> {
     // 当前的实际动画插值，这个插值受运动方式的影响。
     protected float trueInterpolation;
     
-    protected boolean started;
     protected boolean paused;
     protected boolean initialized;
     
@@ -79,22 +77,24 @@ public abstract class AbstractAnim<E> implements Anim<AnimData, E> {
     @Override
     public void setData(AnimData data) {
         this.data = data;
-        this.debug = data.getAsBoolean("debug", debug);
-        this.useTime = data.getAsFloat("useTime", useTime);
+        debug = data.getAsBoolean("debug", debug);
+        useTime = data.getAsFloat("useTime", useTime);
         // 不能让useTime小于0,至少取一个非常小的值。
         if (useTime <= 0) {
             useTime = 0.0001f;
         }
-        this.speed = data.getAsFloat("speed", speed);
+        speed = data.getAsFloat("speed", speed);
+        
         String tempLoop = data.getAsString("loop");
         if (tempLoop != null) {
             loop = Loop.identify(tempLoop);
         }
-        this.motionType = MotionType.identify(data.getAsString("motionType"));
-        if (this.motionType == null) {
+        
+        motionType = MotionType.identify(data.getAsString("motionType"));
+        if (motionType == null) {
             motionType = MotionType.Linear;
         }
-        
+
         if (motionType == MotionType.Bezier) {
             this.bezierFactor = data.getAsFloatArray("bezierFactor");
             if (bezierFactor.length < 4) {
@@ -114,6 +114,10 @@ public abstract class AbstractAnim<E> implements Anim<AnimData, E> {
                 catmullRomFactor = null;
             }
         }
+        
+        paused = data.getAsBoolean("paused", paused);
+        timeInterpolation = data.getAsFloat("timeInterpolation", timeInterpolation);
+        dir = data.getAsInteger("dir", dir);
     }
 
     @Override
@@ -123,7 +127,12 @@ public abstract class AbstractAnim<E> implements Anim<AnimData, E> {
 
     @Override
     public void updateDatas() {
-        // ignore
+        data.setAttribute("useTime", useTime);
+        data.setAttribute("speed", speed);
+        data.setAttribute("loop", loop.name());
+        data.setAttribute("paused", paused);
+        data.setAttribute("timeInterpolation", timeInterpolation);
+        data.setAttribute("dir", dir);
     }
     
     @Override
@@ -158,7 +167,7 @@ public abstract class AbstractAnim<E> implements Anim<AnimData, E> {
     
     @Override
     public float getInterpolation() {
-        return this.trueInterpolation;
+        return trueInterpolation;
     }
     
     @Override
@@ -178,7 +187,7 @@ public abstract class AbstractAnim<E> implements Anim<AnimData, E> {
 
     @Override
     public void start() {
-        if (started) {
+        if (initialized) {
             return;
         }
         
@@ -186,15 +195,14 @@ public abstract class AbstractAnim<E> implements Anim<AnimData, E> {
         // 当调用display(float方法时也会进行doInit,因此这里需要进行init判断，确定是否
         // 已经初始化
         if (!initialized) {
-            doInit();
+            doAnimInit();
             initialized = true;
         }
-        started = true;
     }
     
     @Override
     public void update(float tpf) {
-        if (!started || paused) {
+        if (!initialized || paused) {
             return;
         } 
         
@@ -258,12 +266,11 @@ public abstract class AbstractAnim<E> implements Anim<AnimData, E> {
 
     @Override
     public boolean isEnd() {
-        return !started;
+        return !initialized;
     }
     
     @Override
     public void cleanup() {
-        started = false;
         paused = false;
         initialized = false;
         timeInterpolation = 0;
@@ -276,7 +283,7 @@ public abstract class AbstractAnim<E> implements Anim<AnimData, E> {
     @Override
     public void addListener(Listener listener) {
         if (listener == null) {
-            throw new NullPointerException("Listener could not be null!");
+            throw new NullPointerException("listener could not be null!");
         }
         if (listeners == null) {
             listeners = new SafeArrayList<Listener>(Listener.class);
@@ -297,7 +304,7 @@ public abstract class AbstractAnim<E> implements Anim<AnimData, E> {
     @Override
     public void display(float timeInterpolation) {
         if (!initialized) {
-            doInit();
+            doAnimInit();
             initialized = true;
         }
         
@@ -336,29 +343,18 @@ public abstract class AbstractAnim<E> implements Anim<AnimData, E> {
             trueInterpolation = timeInterpolation;
         }
         
-        doAnimation(trueInterpolation);
-    }
-    
-    /**
-     * 检查插值点是否有效（在[0,1]范围内，如果无效，则抛出异常
-     * @param interpolation 
-     */
-    protected void checkValid(float interpolation) {
-        if (interpolation < 0 || interpolation > 1) {
-            throw new IllegalArgumentException(
-                    "interpolation could not less than 0 or more than 1! interpolation=" + interpolation);
-        }
+        doAnimUpdate(trueInterpolation);
     }
     
     /**
      * 初始化动画。
      */
-    protected abstract void doInit();
+    protected abstract void doAnimInit();
     
     /**
      * 实现动画，根据指定的插值位置渲染动画。
      * @param interpolation 
      */
-    protected abstract void doAnimation(float interpolation);
+    protected abstract void doAnimUpdate(float interpolation);
 
 }

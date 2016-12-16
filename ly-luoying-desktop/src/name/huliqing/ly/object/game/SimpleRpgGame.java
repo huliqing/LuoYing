@@ -473,7 +473,7 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
         
         @Override
         public void displayMessage(Message message, String details) {
-            addMessage(details, MessageType.notice);
+            addMessage("[" + message.getStateCode() + "]" + details, MessageType.notice);
         }
         
     }

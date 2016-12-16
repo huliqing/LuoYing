@@ -86,11 +86,38 @@ class DataStore {
             if (!(node instanceof Element)) {
                 continue;
             }
-            String tagName = ((Element) node).getTagName();
             Element ele = (Element) node;
-            Proto proto = new Proto(XmlUtils.getAttributes(ele), tagName);
-            PROTO_MAP.put(proto.getId(), proto);
+            Map<String, String> attributes = XmlUtils.getAttributes(ele);
+            Proto proto = new Proto(ele.getTagName(), attributes.get("id"), attributes);
+            addDataDefine(proto);
         }
+    }
+    
+    /**
+     * 添加自定义的数据类型, 注：如果指定的ID已经存在，则数据将会被覆盖。
+     * @param tagName
+     * @param id 
+     * @param dataClass
+     * @param dataLoaderClass
+     * @param dataProcessorClass
+     */
+    public void addCustomDataDefine(String tagName, String id, Class dataClass, Class dataLoaderClass, Class dataProcessorClass) {
+        Map<String, String> attributes = new HashMap<String, String>();
+        Proto proto = new Proto(tagName, id, attributes);
+        if (dataClass != null) {
+            proto.setDataClass(dataClass);
+        }
+        if (dataLoaderClass != null) {
+            proto.setDataLoaderClass(dataLoaderClass);
+        }
+        if (dataProcessorClass != null) {
+            proto.setDataProcessorClass(dataProcessorClass);
+        }
+        addDataDefine(proto);
+    }
+    
+    private void addDataDefine(Proto proto) {
+        PROTO_MAP.put(proto.getId(), proto);
     }
     
     /**

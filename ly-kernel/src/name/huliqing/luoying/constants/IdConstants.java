@@ -49,13 +49,6 @@ public class IdConstants {
     public final static String SYS_CHANNEL_FULL = "sysChannelFull";
     
     // =============================================================================
-    // HitChecker
-    // =============================================================================
-    
-    // remove20161031
-//    public final static String SYS_HITCHECK_FIGHT_DEFAULT = "sysHitCheckerFightDefault";
-    
-    // =============================================================================
     // Game
     // =============================================================================
     
@@ -112,4 +105,10 @@ public class IdConstants {
     /** sysElSkillHitNumber,  空表达式，用于动态创建表达式用, 载入这个后必须设置expression才可以使用*/
     public final static String SYS_EL_SKILLHITNUMBER  = "sysElSkillHitNumber";
     
+    // =============================================================================
+    // DelayAnim
+    // =============================================================================
+    
+    /** 自定义的数据类型_sysCustomAnimDelay_ */
+    public final static String SYS_CUSTOM_ANIM_DELAY = "_sysCustomAnimDelay_";
 }

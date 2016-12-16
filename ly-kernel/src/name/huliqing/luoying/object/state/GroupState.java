@@ -45,7 +45,7 @@ public class GroupState extends AbstractState {
             for (String sid : states) {
                 StateData stateData = Loader.loadData(sid);
                 stateData.setSourceActor(data.getSourceActor());
-                actor.addObjectData(stateData, 1);
+                entity.addObjectData(stateData, 1);
             }
         }
         childrenApplied = true;

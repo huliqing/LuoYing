@@ -51,8 +51,10 @@ public abstract class DefaultMessageHandler implements MessageHandler {
                 displayMessage(mess, ResManager.get(ResConstants.DATA_ADD, getObjectName(mess.getObjectData())));
                 break;
             case StateCode.DATA_ADD_FAILURE:
-            case StateCode.DATA_ADD_FAILURE_DATA_EXISTS:
                 displayMessage(mess, ResManager.get(ResConstants.DATA_ADD_FAILURE, getObjectName(mess.getObjectData())));
+                break;
+            case StateCode.DATA_ADD_FAILURE_DATA_EXISTS:
+                displayMessage(mess, ResManager.get(ResConstants.DATA_ADD_FAILURE_DATA_EXISTS, getObjectName(mess.getObjectData())));
                 break;
             default :
                 displayMessage(mess, mess.getMessage());
@@ -61,21 +63,27 @@ public abstract class DefaultMessageHandler implements MessageHandler {
     
     /**
      * 处理“物体移除”的消息，子类可以覆盖这个方法来拦截并自行处理消息。
-     * @param mess 
+     * @param message 
      */
-    protected void handleDataRemoveMessage(EntityDataRemoveMessage mess) {
-        switch (mess.getStateCode()) {
+    protected void handleDataRemoveMessage(EntityDataRemoveMessage message) {
+        switch (message.getStateCode()) {
             case StateCode.DATA_REMOVE:
-                displayMessage(mess, ResManager.get(ResConstants.DATA_REMOVE, getObjectName(mess.getObjectData())));
+                displayMessage(message, ResManager.get(ResConstants.DATA_REMOVE, getObjectName(message.getObjectData())));
                 break;
             case StateCode.DATA_REMOVE_FAILURE:
+                displayMessage(message, ResManager.get(ResConstants.DATA_REMOVE_FAILURE, getObjectName(message.getObjectData())));
+                break;
             case StateCode.DATA_REMOVE_FAILURE_IN_USING:
+                displayMessage(message, ResManager.get(ResConstants.DATA_REMOVE_FAILURE_IN_USING, getObjectName(message.getObjectData())));
+                break;
             case StateCode.DATA_REMOVE_FAILURE_NOT_FOUND:
+                displayMessage(message, ResManager.get(ResConstants.DATA_REMOVE_FAILURE_NOT_FOUND, getObjectName(message.getObjectData())));
+                break;
             case StateCode.DATA_REMOVE_FAILURE_UN_DELETABLE:
-                displayMessage(mess, ResManager.get(ResConstants.DATA_REMOVE_FAILURE, getObjectName(mess.getObjectData())));
+                displayMessage(message, ResManager.get(ResConstants.DATA_REMOVE_FAILURE_UN_DELETABLE, getObjectName(message.getObjectData())));
                 break;
             default :
-                displayMessage(mess, mess.getMessage());
+                displayMessage(message, message.getMessage());
         }
     }
     
@@ -89,11 +97,16 @@ public abstract class DefaultMessageHandler implements MessageHandler {
                 displayMessage(message, ResManager.get(ResConstants.DATA_USE, getObjectName(message.getObjectData())));
                 break;
             case StateCode.DATA_USE_FAILURE:
-            case StateCode.DATA_USE_FAILURE_CHECK_EL:
-            case StateCode.DATA_USE_FAILURE_NOT_ENOUGH:
-            case StateCode.DATA_USE_FAILURE_NOT_FOUND:
-            case StateCode.DATA_USE_FAILURE_SKILL_EXISTS:
                 displayMessage(message, ResManager.get(ResConstants.DATA_USE_FAILURE, getObjectName(message.getObjectData())));
+                break;
+            case StateCode.DATA_USE_FAILURE_CHECK_EL:
+                displayMessage(message, ResManager.get(ResConstants.DATA_USE_FAILURE_CHECK_EL, getObjectName(message.getObjectData())));
+                break;
+            case StateCode.DATA_USE_FAILURE_NOT_ENOUGH:
+                displayMessage(message, ResManager.get(ResConstants.DATA_USE_FAILURE_NOT_ENOUGH, getObjectName(message.getObjectData())));
+                break;
+            case StateCode.DATA_USE_FAILURE_NOT_FOUND:
+                displayMessage(message, ResManager.get(ResConstants.DATA_USE_FAILURE_NOT_FOUND, getObjectName(message.getObjectData())));
                 break;
             default :
                 displayMessage(message, message.getMessage());
@@ -109,20 +122,47 @@ public abstract class DefaultMessageHandler implements MessageHandler {
             case StateCode.SKILL_USE_OK:
                 displayMessage(message, ResManager.get(ResConstants.DATA_USE, getObjectName(message.getSkillData())));
                 break;
-            case StateCode.SKILL_USE_FAILURE_ACTOR_DEAD:
-            case StateCode.SKILL_USE_FAILURE_ATTRIBUTE_NOT_ENOUGH:
-            case StateCode.SKILL_USE_FAILURE_BY_HOOK:
-            case StateCode.SKILL_USE_FAILURE_CAN_NOT_INTERRUPT:
-            case StateCode.SKILL_USE_FAILURE_COOLDOWN:
-            case StateCode.SKILL_USE_FAILURE_ELCHECK:
-            case StateCode.SKILL_USE_FAILURE_LOCKED:
+            case StateCode.SKILL_USE_FAILURE:
+                displayMessage(message, ResManager.get(ResConstants.SKILL_USE_FAILURE));
+                break;
             case StateCode.SKILL_USE_FAILURE_NOT_FOUND:
-            case StateCode.SKILL_USE_FAILURE_TARGET_NOT_FOUND:
-            case StateCode.SKILL_USE_FAILURE_TARGET_OUT_OF_RANGE:
-            case StateCode.SKILL_USE_FAILURE_TARGET_UNSUITABLE_BY_ELCHECK:
-            case StateCode.SKILL_USE_FAILURE_WEAPON_NEED_TAKE_ON:
+                displayMessage(message, ResManager.get(ResConstants.SKILL_USE_FAILURE_NOT_FOUND));
+                break;
+            case StateCode.SKILL_USE_FAILURE_LOCKED:
+                displayMessage(message, ResManager.get(ResConstants.SKILL_USE_FAILURE_LOCKED, getObjectName(message.getSkillData())));
+                break;
+            case StateCode.SKILL_USE_FAILURE_COOLDOWN:
+                displayMessage(message, ResManager.get(ResConstants.SKILL_USE_FAILURE_COOLDOWN, getObjectName(message.getSkillData())));
+                break;
             case StateCode.SKILL_USE_FAILURE_WEAPON_NOT_ALLOW:
-                displayMessage(message, ResManager.get(ResConstants.DATA_USE_FAILURE, getObjectName(message.getSkillData())));
+                displayMessage(message, ResManager.get(ResConstants.SKILL_USE_FAILURE_WEAPON_NOT_ALLOW, getObjectName(message.getSkillData())));
+                break;
+            case StateCode.SKILL_USE_FAILURE_WEAPON_NEED_TAKE_ON:
+                displayMessage(message, ResManager.get(ResConstants.SKILL_USE_FAILURE_WEAPON_NEED_TAKE_ON));
+                break;
+            case StateCode.SKILL_USE_FAILURE_ATTRIBUTE_NOT_ENOUGH:
+                displayMessage(message, ResManager.get(ResConstants.SKILL_USE_FAILURE_ATTRIBUTE_NOT_ENOUGH));
+                break;
+            case StateCode.SKILL_USE_FAILURE_ELCHECK:
+                displayMessage(message, ResManager.get(ResConstants.SKILL_USE_FAILURE_ELCHECK, getObjectName(message.getSkillData())));
+                break;
+            case StateCode.SKILL_USE_FAILURE_TARGET_NOT_FOUND:
+                displayMessage(message, ResManager.get(ResConstants.SKILL_USE_FAILURE_TARGET_NOT_FOUND));
+                break;
+            case StateCode.SKILL_USE_FAILURE_TARGET_OUT_OF_RANGE:
+                displayMessage(message, ResManager.get(ResConstants.SKILL_USE_FAILURE_TARGET_OUT_OF_RANGE));
+                break;
+            case StateCode.SKILL_USE_FAILURE_TARGET_UNSUITABLE_BY_ELCHECK:
+                displayMessage(message, ResManager.get(ResConstants.SKILL_USE_FAILURE_TARGET_UNSUITABLE_BY_ELCHECK, getObjectName(message.getSkillData())));
+                break;
+            case StateCode.SKILL_USE_FAILURE_CAN_NOT_INTERRUPT:
+                displayMessage(message, ResManager.get(ResConstants.SKILL_USE_FAILURE_CAN_NOT_INTERRUPT));
+                break;
+            case StateCode.SKILL_USE_FAILURE_BY_HOOK:
+                displayMessage(message, ResManager.get(ResConstants.SKILL_USE_FAILURE_BY_HOOK, getObjectName(message.getSkillData())));
+                break;
+            case StateCode.SKILL_USE_FAILURE_ACTOR_DEAD:
+                displayMessage(message, ResManager.get(ResConstants.SKILL_USE_FAILURE_ACTOR_DEAD));
                 break;
             default :
                 displayMessage(message, message.getMessage());
@@ -155,6 +195,5 @@ public abstract class DefaultMessageHandler implements MessageHandler {
      * @param details
      */
     public abstract void displayMessage(Message message, String details);
-        
     
 }

@@ -64,16 +64,16 @@ public class SkillLockedState extends AbstractState implements SkillListener {
     @Override
     public void initialize() {
         super.initialize();
-        actorModule = actor.getModuleManager().getModule(ActorModule.class);
-        channelModule = actor.getModuleManager().getModule(ChannelModule.class);
-        skillModule = actor.getModuleManager().getModule(SkillModule.class);
+        actorModule = entity.getModuleManager().getModule(ActorModule.class);
+        channelModule = entity.getModuleManager().getModule(ChannelModule.class);
+        skillModule = entity.getModuleManager().getModule(SkillModule.class);
         
         // 锁定在特定标记的技能上
         if (lockAtSkillTypes > 0) {
             List<Skill> lockedSkills = skillModule.getSkillByTypes(lockAtSkillTypes, null);
             if (lockedSkills != null && !lockedSkills.isEmpty()) {
                 // 用到随机数时要使用Network.
-                skillNetwork.playSkill(actor, lockedSkills.get(FastMath.nextRandomInt(0, lockedSkills.size() - 1)), false);
+                skillNetwork.playSkill(entity, lockedSkills.get(FastMath.nextRandomInt(0, lockedSkills.size() - 1)), false);
             }
         }
         

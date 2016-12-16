@@ -4,11 +4,13 @@
  */
 package name.huliqing.luoying.object.state;
 
-import com.jme3.math.FastMath;
+import com.jme3.util.SafeArrayList;
 import java.util.ArrayList;
 import java.util.List;
+import name.huliqing.luoying.data.DelayAnimData;
 import name.huliqing.luoying.data.StateData;
 import name.huliqing.luoying.object.Loader;
+import name.huliqing.luoying.object.anim.DelayAnim;
 import name.huliqing.luoying.object.attribute.BooleanAttribute;
 import name.huliqing.luoying.object.effect.Effect;
 import name.huliqing.luoying.object.entity.Entity;
@@ -51,10 +53,12 @@ public abstract class AbstractState<T extends StateData> implements State<T> {
      */
     protected List<Effect> tempEffects;
     
+    protected SafeArrayList<DelayAnim> animations;
+    
     protected boolean initialized;
     
     /** 状态的持有者，即受状态影响的角色，不能为null */
-    protected Entity actor;
+    protected Entity entity;
         
     protected BooleanAttribute deadAttribute;
 
@@ -77,6 +81,11 @@ public abstract class AbstractState<T extends StateData> implements State<T> {
     public void updateDatas() {
         data.setAttribute("useTime", useTime);
         data.setAttribute("timeUsed", timeUsed);
+        if (animations != null) {
+            for (DelayAnim anim : animations.getArray()) {
+                anim.updateDatas();
+            }
+        }
     }
     
     @Override
@@ -87,25 +96,36 @@ public abstract class AbstractState<T extends StateData> implements State<T> {
         initialized = true;
         
         if (bindDeadAttribute != null) {
-            deadAttribute = actor.getAttributeManager().getAttribute(bindDeadAttribute, BooleanAttribute.class);
+            deadAttribute = entity.getAttributeManager().getAttribute(bindDeadAttribute, BooleanAttribute.class);
         }
         
+        // 状态效果
         if (effects != null) {
             if (tempEffects == null) {
                 tempEffects = new ArrayList<Effect>(effects.length);
             }
             // xxx: 这里要重构，因为状态在初始化的时候场景可能还不存在，这种情况发生在角色是从存档中载入的时候发生。
-            if (actor.getScene() != null) {
+            if (entity.getScene() != null) {
                 for (String effectId : effects) {
                     Effect effect = Loader.load(effectId);
-                    effect.setTraceEntity(actor.getEntityId());
-                    actor.getScene().addEntity(effect);
+                    effect.setTraceEntity(entity.getEntityId());
+                    entity.getScene().addEntity(effect);
                     tempEffects.add(effect);
                 }
             }
         }
-//        // 获取状态的施放源
-//        sourceActor = actor.getScene().getEntity(data.getSourceActor());
+        
+        // 状态的动画功能
+        if (data.getDelayAnimDatas() != null) {
+            animations = new SafeArrayList<DelayAnim>(DelayAnim.class);
+            for (DelayAnimData dad : data.getDelayAnimDatas()) {
+                DelayAnim da = Loader.load(dad);
+                animations.add(da);
+                da.getActualAnim().setTarget(entity.getSpatial());
+                da.initialize();
+            }
+        }
+        
     }
     
     @Override
@@ -126,6 +146,12 @@ public abstract class AbstractState<T extends StateData> implements State<T> {
         if (removeOnDead && deadAttribute != null && deadAttribute.getValue()) {
             initialized = false;
         }
+        
+        if (animations != null) {
+            for (DelayAnim anim : animations.getArray()) {
+                anim.update(tpf);
+            }
+        }
     }
     
     @Override
@@ -139,6 +165,12 @@ public abstract class AbstractState<T extends StateData> implements State<T> {
                 }
             }
             tempEffects.clear();
+        }
+        
+        if (animations != null) {
+            for (DelayAnim anim : animations.getArray()) {
+                anim.cleanup();
+            }
         }
         
         initialized = false;
@@ -168,25 +200,16 @@ public abstract class AbstractState<T extends StateData> implements State<T> {
      */
     @Override
     public void setActor(Entity actor) {
-        this.actor = actor;
+        this.entity = actor;
     }
-
-//    /**
-//     * 状态的持有者，即受状态影响的角色
-//     * @return 
-//     */
-//    @Override
-//    public Entity getActor() {
-//        return actor;
-//    }
-
+    
     /**
      * 状态的产生者，也就是说，这个状态是哪一个角色发出的, 可能为null.
      * @return 
      */
     protected Entity getSourceActor() {
-        if (data.getSourceActor() > 0 && actor.getScene() != null) {
-            return actor.getScene().getEntity(data.getSourceActor());
+        if (data.getSourceActor() > 0 && entity.getScene() != null) {
+            return entity.getScene().getEntity(data.getSourceActor());
         }
         return null;
     }

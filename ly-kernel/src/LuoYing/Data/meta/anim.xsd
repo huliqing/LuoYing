@@ -72,14 +72,6 @@ xs:time
                             <xs:documentation>结束时的缩放值,如"0.1,0.1,0.1"</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    
-                    <!--remove20160603不再使用-->
-<!--                    <xs:attribute name="boundFactor" type="xs:decimal" use="optional">
-                        <xs:annotation>
-                            <xs:documentation>弹性参数.一般0.3~1.0</xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>-->
-                    
                     <xs:attribute name="restore" type="bool" use="optional">
                         <xs:annotation>
                             <xs:documentation>是否在动画结束时复原缩放比率</xs:documentation>
@@ -223,20 +215,9 @@ xs:time
                             <xs:documentation>是否朝向目标</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    
-                    <!--remove20160603不再需要这两个参数-->
-<!--                    <xs:attribute name="boundFactor" type="xs:decimal" use="optional">
-                        <xs:annotation>
-                            <xs:documentation>弹性参数</xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
-                    <xs:attribute name="useSine" type="bool" use="optional" />-->
-                    
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
     </xs:element>
-    
-    
     
 </xs:schema>

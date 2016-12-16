@@ -42,9 +42,9 @@ public class AttributeDynamicState extends AbstractState {
         if (intervalUsed >= interval && bindNumberAttribute != null) {
             intervalUsed = 0;
             if (sourceActor == null) {
-                sourceActor = actor.getScene().getEntity(data.getSourceActor());
+                sourceActor = entity.getScene().getEntity(data.getSourceActor());
             }
-            entityNetwork.hitNumberAttribute(actor, bindNumberAttribute, addValue, sourceActor);
+            entityNetwork.hitNumberAttribute(entity, bindNumberAttribute, addValue, sourceActor);
         }
     }
 

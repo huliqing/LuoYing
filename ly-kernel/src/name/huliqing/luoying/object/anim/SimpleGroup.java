@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import name.huliqing.luoying.utils.MathUtils;
 
 /**
  * 简单的动画组,该组允许指定子动画在什么插值点开始执行，在子动画启动后，当
@@ -20,7 +21,7 @@ public final class SimpleGroup<E> extends AbstractAnim<E> {
     private final List<AnimWrap> anims = new ArrayList<AnimWrap>();
     
     // 记住tpf，以便在update子动画时使用
-    private float tpf;
+    private float tpf; 
     
     public SimpleGroup() {
         super();
@@ -54,24 +55,16 @@ public final class SimpleGroup<E> extends AbstractAnim<E> {
     }
 
     @Override
-    public void start() {
-        if (started) {
-            cleanup();
-        }
-        super.start();
-    }
-
-    @Override
     public void update(float tpf) {
         this.tpf = tpf;
         super.update(tpf);
     }
     
     @Override
-    protected void doInit() {}
+    protected void doAnimInit() {}
     
     @Override
-    protected void doAnimation(float interpolation) {
+    protected void doAnimUpdate(float interpolation) {
         if (anims.isEmpty()) {
             return;
         }
@@ -97,7 +90,7 @@ public final class SimpleGroup<E> extends AbstractAnim<E> {
 
     @Override
     public boolean isEnd() {
-         if (!started) {
+         if (!initialized) {
             return true;
         }
         // 如果有一个子动画还在执行，则返回false
@@ -114,9 +107,8 @@ public final class SimpleGroup<E> extends AbstractAnim<E> {
         float startInterpolation;
         boolean started = false;
         public AnimWrap(Anim anim, float startInterpolation) {
-            checkValid(startInterpolation);
             this.anim = anim;
-            this.startInterpolation = startInterpolation;
+            this.startInterpolation = MathUtils.clamp(startInterpolation, 0f, 1f);
         }
         public boolean checkToStart(float parentInterpolation) {
             if (!started && parentInterpolation >= startInterpolation) {

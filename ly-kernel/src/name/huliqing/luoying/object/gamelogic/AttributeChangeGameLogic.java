@@ -6,7 +6,6 @@
 package name.huliqing.luoying.object.gamelogic;
 
 import com.jme3.util.SafeArrayList;
-import java.util.ArrayList;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.GameLogicData;
 import name.huliqing.luoying.layer.network.EntityNetwork;
@@ -14,6 +13,7 @@ import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.object.actor.Actor;
+import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.el.SBooleanEl;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.game.Game;
@@ -88,7 +88,16 @@ public class AttributeChangeGameLogic extends AbstractGameLogic {
         
         // 注意：applyValue 有可能大于0或小于0,只有等于0时才没有意义（这里用一个接近0的值代替）
         if (Math.abs(applyValue) > 0.0001f) {
-            entityNetwork.hitNumberAttribute(actor, applyAttribute, applyValue, null);
+            
+            // 不要用递增方式，容易产生累积误差, 并且由于网络延迟原因，技能并不能始终保证在服务端和客户端同步执行，
+            // 而引起客户端和服务端属性消耗不一致.
+//            entityNetwork.hitNumberAttribute(actor, applyAttribute, applyValue, null);
+
+            NumberAttribute attr = actor.getAttributeManager().getAttribute(applyAttribute, NumberAttribute.class);
+            if (attr != null) {
+                float attrNewValue = attr.floatValue() + applyValue;
+                entityNetwork.hitAttribute(actor, applyAttribute, attrNewValue, actor);
+            }
         }
     }
 }

@@ -16,6 +16,7 @@ import javax.imageio.ImageIO;
 import name.huliqing.luoying.Config;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.TestFactory;
+import name.huliqing.luoying.appstate.CustomStatsAppState;
 import name.huliqing.luoying.object.game.GameAppState;
 import name.huliqing.luoying.ui.UIConfig;
 import name.huliqing.luoying.ui.UIFactory;
@@ -70,7 +71,6 @@ public class Start extends SimpleApplication {
         app.setShowSettings(false);
         app.setPauseOnLostFocus(false);
         app.start();
-        
     }
     
     private static Object[] createIcons() {
@@ -137,8 +137,12 @@ public class Start extends SimpleApplication {
         
         // 6.Debug 信息
         stateView = stateManager.getState(StatsAppState.class);
+        if (stateView != null) {
+            stateManager.detach(stateView);
+        }
+        stateView = new CustomStatsAppState();
+        stateManager.attach(stateView);
         setDebugView(Config.debug);
-//        setDebugView(false);
         
         // 7.基本设定
         getInputManager().setCursorVisible(true);

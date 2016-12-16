@@ -27,7 +27,7 @@ import name.huliqing.luoying.utils.MaterialUtils;
 public class HaloCircle extends Node {
     
     // 星光的半径
-    private final float radius;
+    private final float radius; 
     // 星光材质
     private final String texture;
     // 星光大小
@@ -117,7 +117,7 @@ public class HaloCircle extends Node {
     private RotationAnim createAnim() {
         RotationAnim ra = new RotationAnim();
         ra.setAngleDegree(360);
-        ra.setAxis(Vector3f.UNIT_Y);
+//        ra.setAxis(Vector3f.UNIT_Y);
         ra.setLoop(Loop.loop);
         return ra;
     }

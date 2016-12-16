@@ -51,8 +51,6 @@ public final class StateCode {
     public final static int DATA_USE_FAILURE_NOT_ENOUGH = 203;
     /** 物体不能使用：无法通过El检查的检查验证 */
     public final static int DATA_USE_FAILURE_CHECK_EL = 204;
-    /** 物体不能使用：书籍学习技能时，技能已经存在 */
-    public final static int DATA_USE_FAILURE_SKILL_EXISTS = 205; 
     
     // =============================================================================
     // Skill Module: 技能模块状态码
@@ -61,44 +59,47 @@ public final class StateCode {
     /** 技能可以正常执行 */
     public final static int SKILL_USE_OK = 300;
     
+    /** 技能不能使用(原因不确定) */
+    public final static int SKILL_USE_FAILURE = 301;
+    
     /**不能执行技能： 技能不存在或找不到指定技能 */
-    public final static int SKILL_USE_FAILURE_NOT_FOUND = 301;
+    public final static int SKILL_USE_FAILURE_NOT_FOUND = 302;
     
     /** 不能执行技能：角色的技能处于锁定状态 */
-    public final static int SKILL_USE_FAILURE_LOCKED = 302;
+    public final static int SKILL_USE_FAILURE_LOCKED = 303;
     
     /** 不能执行技能：技能正处于冷却状态 */
-    public final static int SKILL_USE_FAILURE_COOLDOWN = 303;
+    public final static int SKILL_USE_FAILURE_COOLDOWN = 304;
     
     /** 不能执行技能：角色所使用的当前武器不能执行该技能 */
-    public final static int SKILL_USE_FAILURE_WEAPON_NOT_ALLOW = 304;
+    public final static int SKILL_USE_FAILURE_WEAPON_NOT_ALLOW = 305;
     
     /** 不能执行技能：角色武器没有取出，必须先取出武器 */
-    public final static int SKILL_USE_FAILURE_WEAPON_NEED_TAKE_ON = 305;
+    public final static int SKILL_USE_FAILURE_WEAPON_NEED_TAKE_ON = 306;
     
     /** 不能执行技能：执行技能时，需要消耗角色的一些属性值，而角色的属性值不足 */
-    public final static int SKILL_USE_FAILURE_ATTRIBUTE_NOT_ENOUGH = 306;
+    public final static int SKILL_USE_FAILURE_ATTRIBUTE_NOT_ENOUGH = 307;
     
     /** 不能执行技能：技能使用时，ELCheck检查器检测到不能使用指定技能。 */
-    public final static int SKILL_USE_FAILURE_ELCHECK = 307;
+    public final static int SKILL_USE_FAILURE_ELCHECK = 308;
     
     /** 不能执行技能：没有目标，技能需要目标才能执行，而当前没有目标 */
-    public final static int SKILL_USE_FAILURE_TARGET_NOT_FOUND = 308;
+    public final static int SKILL_USE_FAILURE_TARGET_NOT_FOUND = 309;
     
     /** 不能执行技能：目标不在技能的射程范围内 */
-    public final static int SKILL_USE_FAILURE_TARGET_OUT_OF_RANGE = 309;
+    public final static int SKILL_USE_FAILURE_TARGET_OUT_OF_RANGE = 310;
     
     /** 不能执行技能：不能对指定目标使用该技能(通过El检查器） */
-    public final static int SKILL_USE_FAILURE_TARGET_UNSUITABLE_BY_ELCHECK = 310;
+    public final static int SKILL_USE_FAILURE_TARGET_UNSUITABLE_BY_ELCHECK = 311;
     
     /** 不能执行技能：不能中断正在执行的技能 */
-    public final static int SKILL_USE_FAILURE_CAN_NOT_INTERRUPT = 311;
+    public final static int SKILL_USE_FAILURE_CAN_NOT_INTERRUPT = 312;
     
     /** 不能执行技能：某些侦听器钩子不允许执行技能，比如一些状态效果会侦听角色技能的执行，并限制技能的执行。*/
-    public final static int SKILL_USE_FAILURE_BY_HOOK = 312;
+    public final static int SKILL_USE_FAILURE_BY_HOOK = 313;
     
     /** 不能执行技能： 因为角色已经死亡 */
-    public final static int SKILL_USE_FAILURE_ACTOR_DEAD = 313;
+    public final static int SKILL_USE_FAILURE_ACTOR_DEAD = 314;
     
     // =============================================================================
     // Level Module

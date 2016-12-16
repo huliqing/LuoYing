@@ -12,5 +12,5 @@ import name.huliqing.luoying.object.entity.Entity;
  * @author huliqing
  */
 public abstract class ActorAnim extends AbstractAnim<Entity> {
-    
+     
 }

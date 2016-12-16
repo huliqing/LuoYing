@@ -11,10 +11,11 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.util.SafeArrayList;
 import com.jme3.util.TempVars;
+import name.huliqing.luoying.data.DelayAnimData;
 import name.huliqing.luoying.data.EffectData;
 import name.huliqing.luoying.object.ControlAdapter;
 import name.huliqing.luoying.object.Loader;
-import name.huliqing.luoying.object.anim.Anim;
+import name.huliqing.luoying.object.anim.DelayAnim;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.entity.ModelEntity;
 import name.huliqing.luoying.object.scene.Scene;
@@ -28,8 +29,9 @@ import name.huliqing.luoying.utils.GeometryUtils;
  * @version v1.4 20161011
  */
 public class Effect extends ModelEntity<EffectData> {
+    
     /** 动画控制,所有动画控制器都作用在animRoot上。*/
-    protected SafeArrayList<AnimationWrap> animations;
+    protected SafeArrayList<DelayAnim> animations;
     
     /** 特效声音 */
     protected SafeArrayList<SoundWrap> sounds;
@@ -94,19 +96,6 @@ public class Effect extends ModelEntity<EffectData> {
     public void setData(EffectData data) {
         super.setData(data);
         
-        // 格式： "animId1 | startTime, animId2 | startTime, ..."
-        String[] aArr = data.getAsArray("animations");
-        if (aArr != null) {
-            animations = new SafeArrayList<AnimationWrap>(AnimationWrap.class);
-            for (String a : aArr) {
-                String[] bArr = a.split("\\|");
-                AnimationWrap anim = new AnimationWrap();
-                anim.animId = bArr[0];
-                anim.startTime = bArr.length > 1 ? Float.parseFloat(bArr[1]) : 0;
-                animations.add(anim);
-            }
-        }
-        
         // 声音: "sound1 | startTime, sound2 | startTime, ..."
         String[] cArr = data.getAsArray("sounds");
         if (cArr != null) {
@@ -146,7 +135,12 @@ public class Effect extends ModelEntity<EffectData> {
         data.setAttribute("timeUsed", timeUsed);
         data.setAttribute("speed", speed);
         data.setAttribute("traceEntityId", traceEntityId);
-        // xxx to save Anim\Sounds data
+        if (animations != null) {
+            for (DelayAnim da : animations.getArray()) {
+                da.updateDatas();
+            }
+        }
+        // xxx to save Sounds data
     }
 
     @Override
@@ -161,6 +155,18 @@ public class Effect extends ModelEntity<EffectData> {
     public void initEntity() {
         super.initEntity();
         
+        // 状态的动画功能
+        if (data.getDelayAnimDatas() != null) {
+            animations = new SafeArrayList<DelayAnim>(DelayAnim.class);
+            for (DelayAnimData dad : data.getDelayAnimDatas()) {
+                DelayAnim da = Loader.load(dad);
+                da.setDelayTime(da.getData().getDelayTime() / speed);
+                da.getActualAnim().setSpeed(speed);
+                da.getActualAnim().setTarget(animNode);
+                animations.add(da);
+            }
+        }
+        
         // 计算实际时间
         trueTimeTotal = useTime / speed;
     }
@@ -172,11 +178,20 @@ public class Effect extends ModelEntity<EffectData> {
             setTraceObject(findTraceObject(traceEntityId));
         }
         
+        // 计算实际时间
+        trueTimeTotal = useTime / speed;
+        
         // 1.查找被跟随的对象，并初始化位置
         initTrace();
         
-        // 2.初始化动画
-        initAnimations();
+         // 2.初始化动画
+        if (animations != null) {
+            for (DelayAnim da : animations.getArray()) {
+                da.setDelayTime(da.getData().getDelayTime() / speed);
+                da.getActualAnim().setSpeed(speed);
+                da.initialize();
+            }
+        }
     }
     
     /**
@@ -196,18 +211,6 @@ public class Effect extends ModelEntity<EffectData> {
         }
     }
     
-    private void initAnimations() {
-        // 计算Animation的实际开始时间和实际使用时间
-        if (animations != null) {
-            for (AnimationWrap aw : animations.getArray()) {
-                aw.trueAnimSpeed = speed;
-                aw.trueStartTime = aw.startTime / speed;
-            }
-        }
-        // 初始化时需要更新一次动画
-        updateAnimations(0, timeUsed);
-    }
-    
     /**
      * 更新效果逻辑
      * @param tpf 
@@ -219,10 +222,18 @@ public class Effect extends ModelEntity<EffectData> {
         updateTrace();
         
         // 更新声音
-        updateSounds(tpf, timeUsed);
+         if (sounds != null) {
+            for (SoundWrap sw : sounds.getArray()) {
+                sw.update(tpf, timeUsed);
+            }
+        }
         
         // 更新动画
-        updateAnimations(tpf, timeUsed);
+        if (animations != null) {
+            for (DelayAnim da : animations.getArray()) {
+                da.update(tpf);
+            }
+        }
         
         // 检查是否需要结束特效,
         // 如果useTime值小于0，则表示永不结束
@@ -241,10 +252,10 @@ public class Effect extends ModelEntity<EffectData> {
                 aw.cleanup();
             }
         }
-        
+
         if (animations != null) {
-            for (AnimationWrap aw : animations.getArray()) {
-                aw.cleanup();
+            for (DelayAnim anim : animations.getArray()) {
+                anim.cleanup();
             }
         }
         
@@ -326,9 +337,13 @@ public class Effect extends ModelEntity<EffectData> {
         }
         // 更新时间
         trueTimeTotal = useTime / this.speed;
-        // 更新动画时间
-        if (initialized) {
-            initAnimations();
+        
+        // 速度更新时要一起更新动画速度
+        if (animations != null) {
+            for (DelayAnim da : animations.getArray()) {
+                da.setDelayTime(da.getData().getDelayTime() / speed);
+                da.getActualAnim().setSpeed(speed);
+            }
         }
     }
     
@@ -342,30 +357,6 @@ public class Effect extends ModelEntity<EffectData> {
             }
             if (traceRotation == TraceType.always) {
                 doUpdateTraceRotation();
-            }
-        }
-    }
-    
-    /**
-     * update Animations
-     * @param tpf 
-     */
-    private void updateAnimations(float tpf, float trueTimeUsed) {
-        if (animations != null) {
-            for (AnimationWrap aw : animations.getArray()) {
-                aw.update(tpf, trueTimeUsed);
-            }
-        }
-    }
-    
-    /**
-     * update Sound
-     * @param tpf 
-     */
-    private void updateSounds(float tpf, float trueTimeUsed) {
-        if (sounds != null) {
-            for (SoundWrap sw : sounds.getArray()) {
-                sw.update(tpf, trueTimeUsed);
             }
         }
     }
@@ -426,56 +417,6 @@ public class Effect extends ModelEntity<EffectData> {
             rot.multLocal(traceRotationOffset);
         }
         effectNode.setLocalRotation(rot);
-    }
-    
-    // ----------------------------------- Inner class
-    
-    protected class AnimationWrap {
-        
-        // 绑定的动画ID,这个id是在xml中定义的原始动画id.
-        String animId;
-        // 动画的开始时间,这个时间是xml中定义的原始时间，标记着特效开始后多少秒才启动这个动画.
-        float startTime;
-        // ---- 以下为需要根据情况动态计算的参数,,这些参数的值受效果运行时影响,如效果的速度
-        // 绑定的动画控制器实例
-        Anim anim;
-        // 动画的实际开始时间，动画的实际开始时间受特效速度(speed)参数的影响,默认特效速度为1.0, 在speed=1.0时，startTime
-        // 和trueStartTime的值应该是相等的。
-        float trueStartTime;
-        // 实际的动画运行速度
-        float trueAnimSpeed = 1.0f;
-        // 判断动画是否已经启动
-        boolean started;
-        
-        void update(float tpf, float effectTimeUsed) {
-            if (started) {
-                anim.update(tpf);
-                return;
-            }
-            if (effectTimeUsed >= trueStartTime) {
-                if (anim == null) {
-                    anim = Loader.load(animId);
-                }
-                anim.setSpeed(trueAnimSpeed);
-                anim.setTarget(animNode);
-                anim.start();
-                started = true;
-            }
-        }
-        
-        void updateSpeed(float speed) {
-            trueAnimSpeed = speed;
-            if (anim != null) {
-                anim.setSpeed(speed);
-            }
-        }
-        
-        void cleanup() {
-            if (anim != null) {
-                anim.cleanup();
-            }
-            started = false;
-        }
     }
     
     protected class SoundWrap {

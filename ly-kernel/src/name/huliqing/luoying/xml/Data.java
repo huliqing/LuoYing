@@ -58,21 +58,6 @@ public class Data implements Savable {
         return data == null || data.isEmpty();
     }
     
-    // remove20161107
-//    /**
-//     * 检查某个参数中有多少个项，每个项以半角逗号分隔,如果参数不存在或没有值
-//     * ，则返回0
-//     * @param key
-//     * @return 
-//     */
-//    public final int checkAttributeLength(String key) {
-//        String value = getAsString(key);
-//        if (value == null || value.trim().isEmpty()) {
-//            return 0;
-//        }
-//        return value.split(",").length;
-//    }
-    
     /**
      * 设置一个参数值，如果value为null则清除该值。
      * @param key
@@ -467,10 +452,9 @@ public class Data implements Savable {
      * 获取参数并以Savable对象返回，获取前你必须确定你要的类型是匹配的，否则会报错。
      * @param <T>
      * @param key
-     * @param type
      * @return 
      */
-    public final <T extends Savable> T getAsSavable(String key, Class<T> type) {
+    public final <T extends Savable> T getAsSavable(String key) {
         if (!data.containsKey(key)) {
             return null;
         }

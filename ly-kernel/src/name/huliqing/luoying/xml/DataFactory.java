@@ -113,21 +113,14 @@ public class DataFactory {
         
         try {
             // 这里如果指定了特殊的data类型，则使用指定的，否则默认使用ObjectData
-            String dataClass = proto.getDataClass();
-            ObjectData data;
-            if (dataClass != null) {
-                data = (ObjectData) Class.forName(dataClass).newInstance();
-            } else {
-                data = new ObjectData();
-            }
+            ObjectData data = (ObjectData) proto.getDataClass().newInstance();
             
             data.setProto(proto);
             data.setUniqueId(generateUniqueId());
             
             // 如果指定了Data载入器则使用这个载入器来载入数据，否则不理, 允许不注册指定的载入器及Data类型。
-            String dataLoader = proto.getDataLoaderClass();
-            if (dataLoader != null) {
-                DataLoader dl = (DataLoader) Class.forName(dataLoader).newInstance();
+            if (NullLoader.class != proto.getDataLoaderClass()) {
+                DataLoader dl = (DataLoader) proto.getDataLoaderClass().newInstance();
                 dl.load(proto, data);
             }
             return (T) data;
@@ -150,14 +143,15 @@ public class DataFactory {
             LOG.log(Level.WARNING, "Data could not be null");
             return null;
         }
-        Class<? extends DataProcessor> dpClass = TAG_PROCESSORS.get(data.getTagName());
-        if (dpClass == null) {
+        
+        Class<? extends DataProcessor> dpClass = data.getProto().getDataProcessorClass();
+        if (NullProcessor.class == dpClass) {
             throw new LuoYingException("Could not find data processor to createProcessor"
                     + ", tagName=" + data.getProto().getTagName() 
                     + ", dataId=" + data.getId());
         }
         try {
-            DataProcessor dp = dpClass.newInstance();
+            DataProcessor dp =dpClass.newInstance();
             dp.setData(data);
             return (T) dp;
         } catch (Exception e) {
@@ -236,6 +230,18 @@ public class DataFactory {
      */
     public static long generateUniqueId() {
         return idGenerator.generateUniqueId();
+    }
+    
+    /**
+     * 添加数据类型定义，这个方法允许在运行时向系统添加自定义的数据类型。 注：如果指定的ID已经存在，则数据将会被覆盖。
+     * @param tagName
+     * @param id 
+     * @param dataClass
+     * @param dataLoaderClass
+     * @param dataProcessorClass
+     */
+    public static void addCustomDataDefine(String tagName, String id, Class dataClass, Class dataLoaderClass, Class dataProcessorClass) {
+        DATA_STORE.addCustomDataDefine(tagName, id, dataClass, dataLoaderClass, dataProcessorClass);
     }
     
     // remove20161129以后不再使用javascript

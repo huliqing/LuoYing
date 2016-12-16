@@ -35,7 +35,7 @@ public class SkillState extends AbstractState {
     @Override
     public void initialize() {
         super.initialize();
-        skillModule = actor.getModuleManager().getModule(SkillModule.class);
+        skillModule = entity.getModuleManager().getModule(SkillModule.class);
         
         if (skillModule == null)
             return;
@@ -45,7 +45,7 @@ public class SkillState extends AbstractState {
             return;
         
         // 这里使用随机数，所以要用skillNetwork.
-        skillNetwork.playSkill(actor, tagSkills.get(FastMath.nextRandomInt(0, tagSkills.size() - 1)), force);
+        skillNetwork.playSkill(entity, tagSkills.get(FastMath.nextRandomInt(0, tagSkills.size() - 1)), force);
     }
     
 }

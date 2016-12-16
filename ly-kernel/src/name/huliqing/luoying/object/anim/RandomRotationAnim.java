@@ -21,12 +21,12 @@ public final class RandomRotationAnim extends AbstractAnim<Spatial> {
     // 开始旋转
     private final Quaternion startRotation = new Quaternion();
     // 结束旋转，每次旋转完成后都会进行随机改变
-    private Quaternion endRotation = new Quaternion();
+    private final Quaternion endRotation = new Quaternion();
     // 随机旋转的最小和最大弧度度
     private float minAngle = 0;
     private float maxAngle = FastMath.TWO_PI;
     // 旋转轴，如果没有指定这个旋转轴，则使用随机旋转轴
-    private Vector3f axis;
+    private Vector3f axis; 
 
     @Override
     public void setData(AnimData data) {
@@ -40,14 +40,14 @@ public final class RandomRotationAnim extends AbstractAnim<Spatial> {
     }
     
     @Override
-    protected void doInit() {
+    protected void doAnimInit() {
         // 初始化旋转及生成随机结束旋转
         startRotation.set(target.getLocalRotation());
-        endRotation = MathUtils.createRandomRotationAxis(minAngle, maxAngle, axis, endRotation);
+        MathUtils.createRandomRotationAxis(minAngle, maxAngle, axis, endRotation);
     }
 
     @Override
-    protected void doAnimation(float interpolation) {
+    protected void doAnimUpdate(float interpolation) {
         TempVars tv = TempVars.get();
         Quaternion qua = tv.quat1.set(startRotation);
         qua.slerp(endRotation, interpolation);
@@ -57,7 +57,7 @@ public final class RandomRotationAnim extends AbstractAnim<Spatial> {
             if (loop == Loop.loop || loop == Loop.cycle) {
                 // 当结束一次循环之后重新产生随机旋转
                 startRotation.set(target.getLocalRotation());
-                endRotation = MathUtils.createRandomRotationAxis(minAngle, maxAngle, axis, endRotation);
+                MathUtils.createRandomRotationAxis(minAngle, maxAngle, axis, endRotation);
             }
         }
     }

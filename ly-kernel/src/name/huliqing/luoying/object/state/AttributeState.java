@@ -55,11 +55,12 @@ public class AttributeState extends AbstractState {
             return;
         }
         
-        sourceActor = getSourceActor();
-        NumberAttribute attr = actor.getAttributeManager().getAttribute(bindNumberAttribute, NumberAttribute.class);
+        NumberAttribute attr = entity.getAttributeManager().getAttribute(bindNumberAttribute, NumberAttribute.class);
         if (attr == null) {
             return;
         }
+        
+        sourceActor = getSourceActor();
         
         // data.getResist()为抵抗率，取值 [0.0~1.0], 如果为1.0则说明完全抵抗. 
         float expectAddValue = addValue * (1 - data.getResist());
@@ -69,7 +70,7 @@ public class AttributeState extends AbstractState {
         // HIT开始，expectAddValue为期望增加到属性上的值，但是最终能增加多少值是与属性类型有关系的，最终增加的值不
         // 一定与期望的一致，例如一些属性值可能会限制最大值或最小值, 所以hit后要看一下属性的当前值，计算出实际上增加了
         // 多少，这个实际增加的值（actualAddValue）很重要，因为可能需要在状态结束时还原这个值。
-        entityService.hitNumberAttribute(actor, bindNumberAttribute, expectAddValue, sourceActor);
+        entityService.hitNumberAttribute(entity, bindNumberAttribute, expectAddValue, sourceActor);
         // Hit后计算出实际增加到属性上的值,
         actualAddValue = attr.floatValue() - oldValue;
         
@@ -79,7 +80,7 @@ public class AttributeState extends AbstractState {
     @Override
     public void cleanup() {
         if (attributeApplied && restore) {
-            entityService.hitNumberAttribute(actor, bindNumberAttribute, -actualAddValue, null); // 这里不再需要设置sourceActor
+            entityService.hitNumberAttribute(entity, bindNumberAttribute, -actualAddValue, null); // 这里不再需要设置sourceActor
             attributeApplied = false;
         }
         super.cleanup();

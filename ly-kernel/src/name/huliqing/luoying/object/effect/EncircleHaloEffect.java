@@ -94,7 +94,7 @@ public class EncircleHaloEffect extends Effect {
     @Override
     protected void effectUpdate(float tpf) {
         super.effectUpdate(tpf);
-        for (HaloCircle hc : circles) {
+        for (HaloCircle hc : circles) { 
             hc.setRotateSpeed(hc.getRotateSpeed() + timeUsed * tpf);
         }
         

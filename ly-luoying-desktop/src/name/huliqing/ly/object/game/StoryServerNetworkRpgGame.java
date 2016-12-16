@@ -199,6 +199,9 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
             // 载入玩家主角的宠物(这里还不需要载入其他玩家的角色及宠物,由其他玩家重新连接的时候再载入)
             ArrayList<EntityData> actors = saveStory.getActors();
             for (EntityData ad : actors) {
+                if (ad.getUniqueId() == actor.getData().getUniqueId()) {
+                    continue;
+                }
                 Actor tempActor = Loader.load(ad);
                 if  (gameService.getOwner(tempActor) == actor.getEntityId()) {
                     playNetwork.addEntity(tempActor);

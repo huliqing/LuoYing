@@ -56,7 +56,7 @@ public class PrivateGroupState extends AbstractState {
                 stateData.setResist(data.getResist());
                 stateData.setSourceActor(data.getSourceActor());
                 State state = Loader.load(stateData);
-                state.setActor(actor);
+                state.setActor(entity);
                 state.initialize();
                 states.add(state);
             }
