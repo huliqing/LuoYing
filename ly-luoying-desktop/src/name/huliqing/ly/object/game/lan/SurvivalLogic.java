@@ -11,6 +11,7 @@ import name.huliqing.ly.constants.ResConstants;
 import name.huliqing.ly.enums.MessageType;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
+import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.layer.service.LogicService;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.layer.service.SceneService;
@@ -23,6 +24,7 @@ import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.game.Game;
 import name.huliqing.luoying.object.gamelogic.AbstractGameLogic;
+import name.huliqing.luoying.object.skill.Skill;
 import name.huliqing.ly.constants.IdConstants;
 import name.huliqing.ly.object.view.TextView;
 import name.huliqing.ly.layer.network.GameNetwork;
@@ -39,6 +41,7 @@ public class SurvivalLogic extends AbstractGameLogic {
     private final ActorService actorService = Factory.get(ActorService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     private final SceneService sceneService = Factory.get(SceneService.class);
+    private final EntityService entityService = Factory.get(EntityService.class);
     
     private final GameService gameService = Factory.get(GameService.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
@@ -110,7 +113,12 @@ public class SurvivalLogic extends AbstractGameLogic {
             @Override
             public Entity onAddBefore(Entity actor) {
                 gameService.setGroup(actor, _game.ENEMY_GROUP);
-                skillService.playSkill(actor, skillService.getSkillWaitDefault(actor), false);
+                
+//                skillService.playSkill(actor, skillService.getSkillWaitDefault(actor), false);
+                Skill waitSkill = skillService.getSkillWaitDefault(actor);
+                if (waitSkill != null) {
+                    entityService.useObjectData(actor, waitSkill.getData().getUniqueId());
+                }
 
                 TempVars tv = TempVars.get();
                 tv.vect1.set(_game.treasurePos);

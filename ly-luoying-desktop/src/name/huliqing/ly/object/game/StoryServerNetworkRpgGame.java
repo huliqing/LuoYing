@@ -16,9 +16,8 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ConnData;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.layer.network.PlayNetwork;
-import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.ConfigService;
-import name.huliqing.luoying.layer.service.PlayService;
+import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.mess.network.ClientExitMess;
 import name.huliqing.luoying.mess.ActorLoadSavedMess;
@@ -30,6 +29,7 @@ import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.scene.Scene;
+import name.huliqing.luoying.object.skill.Skill;
 import name.huliqing.luoying.save.ClientData;
 import name.huliqing.luoying.save.SaveHelper;
 import name.huliqing.luoying.save.SaveStory;
@@ -48,6 +48,7 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
     private final ConfigService configService = Factory.get(ConfigService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     private final GameService gameService = Factory.get(GameService.class);
+    private final EntityService entityService = Factory.get(EntityService.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     
     /** 存档数据 */
@@ -247,7 +248,13 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
         for (EntityData entityData : actors) {
             Actor actor = Loader.load(entityData);
             if (gameService.getOwner(actor) == clientPlayerData.getUniqueId()) {
-                skillService.playSkill(actor, skillService.getSkillWaitDefault(actor), false);
+                
+//                skillService.playSkill(actor, skillService.getSkillWaitDefault(actor), false);
+                Skill waitSkill = skillService.getSkillWaitDefault(actor);
+                if (waitSkill != null) {
+                    entityService.useObjectData(actor, waitSkill.getData().getUniqueId());
+                }
+                
                 playNetwork.addEntity(actor);
             }
         }

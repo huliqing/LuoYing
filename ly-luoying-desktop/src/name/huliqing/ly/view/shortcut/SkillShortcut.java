@@ -21,8 +21,9 @@ import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.layer.network.SkillNetwork;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.skill.Skill;
+import name.huliqing.luoying.object.entity.EntityDataListener;
 import name.huliqing.luoying.utils.MaterialUtils;
+import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
 
@@ -30,7 +31,7 @@ import name.huliqing.ly.layer.service.GameService;
  * 用于技能(skill)的快捷方式
  * @author huliqing
  */
-public class SkillShortcut extends BaseUIShortcut<SkillData> {
+public class SkillShortcut extends BaseUIShortcut<SkillData> implements EntityDataListener {
     private final SkillService skillService = Factory.get(SkillService.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private final GameService gameService = Factory.get(GameService.class);
@@ -72,8 +73,10 @@ public class SkillShortcut extends BaseUIShortcut<SkillData> {
                 @Override
                 protected void controlRender(RenderManager rm, ViewPort vp) {}
             };
-            actor.getSpatial().addControl(updateControl);
+            entity.getSpatial().addControl(updateControl);
         }
+        
+        entity.addEntityDataListener(this);
     }
     
     /**
@@ -104,8 +107,9 @@ public class SkillShortcut extends BaseUIShortcut<SkillData> {
     @Override
     public void cleanup() {
         if (updateControl != null) {
-            actor.getSpatial().removeControl(updateControl);
+            entity.getSpatial().removeControl(updateControl);
         }
+        entity.removeEntityDataListener(this);
         super.cleanup();
     }
 
@@ -117,23 +121,23 @@ public class SkillShortcut extends BaseUIShortcut<SkillData> {
     @Override
     public void onShortcutClick(boolean pressed) {
         if (!pressed) {
-            if (objectData.getCooldown() > 0) {
-                needCheckAndUpdateMask = true;
-            }
-            Skill skill = skillService.getSkill(actor, objectData.getId());
-            if (skill == null) 
-                return;
+//            if (objectData.getCooldown() > 0) {
+//                needCheckAndUpdateMask = true;
+//            }
+//            Skill skill = skillService.getSkill(actor, objectData.getId());
+//            if (skill == null) 
+//                return;
 
             // 一些技能在执行前必须设置目标对象。
             // 注意：gameService.getTarget()是获取当前游戏主目标，是“玩家行为”，不能把它
             // 放到skillNetwork.playSkill中去。
             Entity target = gameService.getTarget();
             if (target != null) {
-                gameNetwork.setTarget(actor, target.getEntityId());
+                gameNetwork.setTarget(entity, target.getEntityId());
             }
             
             // 执行技能
-            entityNetwork.useObjectData(actor, skill.getData().getUniqueId());
+            entityNetwork.useObjectData(entity, objectData.getUniqueId());
         }
     }
 
@@ -156,5 +160,24 @@ public class SkillShortcut extends BaseUIShortcut<SkillData> {
         mask.setMaterial(maskMat);
         // 非常重要，shortcut是放置在GUI上的，所以这里必须指定Bucket为GUI，否则会看不到模型。
         mask.setQueueBucket(RenderQueue.Bucket.Gui);
+    }
+
+    @Override
+    public void onDataAdded(ObjectData data, int amount) {
+        // ignore
+    }
+
+    @Override
+    public void onDataRemoved(ObjectData data, int amount) {
+        // ignore
+    }
+
+    @Override
+    public void onDataUsed(ObjectData data) {
+        if (data.getUniqueId() == objectData.getUniqueId()) {
+            if (objectData.getCooldown() > 0) {
+                needCheckAndUpdateMask = true;
+            }
+        }
     }
 }

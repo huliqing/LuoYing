@@ -14,6 +14,7 @@ import name.huliqing.ly.view.talk.TalkImpl;
 import name.huliqing.ly.view.talk.TalkListener;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
+import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.layer.service.SceneService;
 import name.huliqing.luoying.layer.service.SkillService;
@@ -22,6 +23,7 @@ import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.game.Game;
 import name.huliqing.luoying.object.gamelogic.AbstractGameLogic;
+import name.huliqing.luoying.object.skill.Skill;
 import name.huliqing.luoying.ui.Button;
 import name.huliqing.luoying.ui.TextPanel;
 import name.huliqing.luoying.ui.UI;
@@ -43,6 +45,7 @@ public class StoryTreasureTask1 extends AbstractTaskStep {
     private final GameService gameService = Factory.get(GameService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     private final SceneService sceneService = Factory.get(SceneService.class);
+    private final EntityService entityService = Factory.get(EntityService.class);
     
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
@@ -108,7 +111,13 @@ public class StoryTreasureTask1 extends AbstractTaskStep {
                 gameService.setLocation(victim, sceneService.getSceneHeight(location.x, location.z, location));
                 gameService.setGroup(victim, _game.groupPlayer);
                 gameService.setEssential(victim, true); // 设置为"必要的",这样不会被移除出场景
-                skillService.playSkill(victim, skillService.getSkillWaitDefault(victim), false);
+                
+//                skillService.playSkill(victim, skillService.getSkillWaitDefault(victim), false);
+                Skill waitSkill = skillService.getSkillWaitDefault(victim);
+                if (waitSkill != null) {
+                    entityService.useObjectData(victim, waitSkill.getData().getUniqueId());
+                }
+                
                 victim.addObjectData(Loader.loadData(IdConstants.STATE_SAFE), 1);
                 playNetwork.addEntity(victim);
                 

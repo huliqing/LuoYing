@@ -10,6 +10,7 @@ import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ActionData;
 import name.huliqing.luoying.data.SkillData;
+import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.layer.network.SkillNetwork;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.object.entity.EntityDataListener;
@@ -26,6 +27,7 @@ public class DynamicIdleAction extends AbstractAction implements IdleAction, Ent
 //    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private final SkillService skillService = Factory.get(SkillService.class);
+    private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
     private SkillModule skillModule;
     
     //  IDLE行为的最大时间间隔,单位秒
@@ -81,7 +83,10 @@ public class DynamicIdleAction extends AbstractAction implements IdleAction, Ent
             if (!skillService.isPlayingSkill(actor)) {
                 // 注：wait可能不是循环的，所以需要判断
                 if (!skillModule.isWaiting() && waitSkill != null) {
-                    skillNetwork.playSkill(actor, waitSkill, false);
+                    
+//                    skillNetwork.playSkill(actor, waitSkill, false);
+                    entityNetwork.useObjectData(actor, waitSkill.getData().getUniqueId());
+                    
                 }
             }
             return;
@@ -91,7 +96,9 @@ public class DynamicIdleAction extends AbstractAction implements IdleAction, Ent
         if (idle == null) {
             return;
         }
-        skillNetwork.playSkill(actor, idle, false);
+        
+//        skillNetwork.playSkill(actor, idle, false);
+        entityNetwork.useObjectData(actor, idle.getData().getUniqueId());
         
         intervalUsed = 0;
         interval = (intervalMax - intervalMin) * FastMath.nextRandomFloat() + intervalMin;

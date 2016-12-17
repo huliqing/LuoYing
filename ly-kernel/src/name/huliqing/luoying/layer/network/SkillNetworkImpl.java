@@ -8,7 +8,6 @@ import name.huliqing.luoying.network.Network;
 import com.jme3.math.Vector3f;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.layer.service.SkillService;
-import name.huliqing.luoying.mess.SkillPlayMess;
 import name.huliqing.luoying.mess.SkillWalkMess;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.skill.Skill;
@@ -88,25 +87,25 @@ public class SkillNetworkImpl implements SkillNetwork {
 //        return false;
 //    }
     
-    @Override
-    public boolean playSkill(Entity actor, Skill skill, boolean force) {
-        if (skill == null)
-            return false;
-        
-        SkillPlayMess mess = new SkillPlayMess();
-        mess.setActorId(actor.getData().getUniqueId());
-        mess.setSkillId(skill.getData().getId());
-        
-        // On client
-        if (NETWORK.isClient()) {
-            NETWORK.sendToServer(mess);
-            return false;
-        }
-
-        // On server
-        NETWORK.broadcast(mess);
-        return skillService.playSkill(actor, skill, force);
-    }
+//    @Override
+//    public boolean playSkill(Entity actor, Skill skill, boolean force) {
+//        if (skill == null)
+//            return false;
+//        
+//        SkillPlayMess mess = new SkillPlayMess();
+//        mess.setActorId(actor.getData().getUniqueId());
+//        mess.setSkillId(skill.getData().getId());
+//        
+//        // On client
+//        if (NETWORK.isClient()) {
+//            NETWORK.sendToServer(mess);
+//            return false;
+//        }
+//
+//        // On server
+//        NETWORK.broadcast(mess);
+//        return skillService.playSkill(actor, skill, force);
+//    }
 
     @Override
     public boolean playWalk(Entity actor, Skill walkSkill, Vector3f dir, boolean faceToDir, boolean force) {

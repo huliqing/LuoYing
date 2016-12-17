@@ -21,7 +21,7 @@ public abstract class AbstractShortcut<T extends ObjectData> implements Shortcut
     
     protected T objectData;
     
-    protected Entity actor;
+    protected Entity entity;
     protected float width;
     protected float height;
     protected final Vector3f location = new Vector3f();
@@ -74,12 +74,12 @@ public abstract class AbstractShortcut<T extends ObjectData> implements Shortcut
     
     @Override
     public Entity getActor() {
-        return actor;
+        return entity;
     }
 
     @Override
     public void setActor(Entity actor) {
-        this.actor = actor;
+        this.entity = actor;
     }
 
     @Override

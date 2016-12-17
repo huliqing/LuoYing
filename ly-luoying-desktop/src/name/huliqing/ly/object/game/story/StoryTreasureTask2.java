@@ -211,8 +211,13 @@ public class StoryTreasureTask2 extends AbstractTaskStep {
             @Override
             public Entity onAddBefore(Entity actor) {
                 gameService.setGroup(actor, game.groupEnemy);
-                skillService.playSkill(actor, skillService.getSkillWaitDefault(actor), false);
-
+                
+//                skillService.playSkill(actor, skillService.getSkillWaitDefault(actor), false);
+                Skill waitSkill = skillService.getSkillWaitDefault(actor);
+                if (waitSkill != null) {
+                    entityService.useObjectData(actor, waitSkill.getData().getUniqueId());
+                }
+                
                 TempVars tv = TempVars.get();
                 tv.vect1.set(game.treasurePos);
                 Vector3f terrainHeight = sceneService.getSceneHeight(game.getScene(), tv.vect1.x, tv.vect1.z);
@@ -413,7 +418,13 @@ public class StoryTreasureTask2 extends AbstractTaskStep {
             gameService.setLevel(companion, 40);
             gameService.setPartner(player, actor);
             gameService.setTeam(companion, gameService.getTeam(player));
-            skillService.playSkill(companion, skillService.getSkillWaitDefault(companion), false);
+            
+//            skillService.playSkill(companion, skillService.getSkillWaitDefault(companion), false);
+            Skill waitSkill = skillService.getSkillWaitDefault(companion);
+            if (waitSkill != null) {
+                entityService.useObjectData(companion, waitSkill.getData().getUniqueId());
+            }
+
             // 同伴进入战场后，刷新器不再刷怪。
             sceneBuilder.setEnabled(false);
             // 同伴进入战场后宝箱不死

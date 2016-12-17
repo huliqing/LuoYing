@@ -12,6 +12,7 @@ import java.util.Set;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.LogicData;
 import name.huliqing.luoying.data.SkillData;
+import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.layer.network.SkillNetwork;
 import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.layer.service.SkillService;
@@ -38,6 +39,7 @@ public class DefendLogic extends AbstractLogic implements EntityDataListener, Sk
     private final SkillService skillService = Factory.get(SkillService.class);
     private final EntityService entityService = Factory.get(EntityService.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
+    private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
     private ActorModule actorModule;
     private SkillModule skillModule;
     
@@ -250,7 +252,10 @@ public class DefendLogic extends AbstractLogic implements EntityDataListener, Sk
             float defendRate = entityService.getNumberAttributeValue(actor, duckRateAttribute, 0).floatValue();
             if(defendRate >= FastMath.nextRandomFloat()) {
                 Skill defendSkill = defendSkills.get(FastMath.nextRandomInt(0, defendSkills.size() - 1));
-                skillNetwork.playSkill(actor, defendSkill, false);
+                
+//                skillNetwork.playSkill(actor, defendSkill, false); // remove20161217
+                entityNetwork.useObjectData(actor, defendSkill.getData().getUniqueId());
+                
                 return true;
             }
         }
@@ -264,7 +269,10 @@ public class DefendLogic extends AbstractLogic implements EntityDataListener, Sk
             float duckRate = entityService.getNumberAttributeValue(actor, defendRateAttribute, 0).floatValue();
             if (duckRate >= FastMath.nextRandomFloat()) {
                 Skill duckSkill = duckSkills.get(FastMath.nextRandomInt(0, duckSkills.size() - 1));
-                skillNetwork.playSkill(actor, duckSkill, false);
+                
+//                skillNetwork.playSkill(actor, duckSkill, false);// remove20161217
+                entityNetwork.useObjectData(actor, duckSkill.getData().getUniqueId());
+                
                 return true;
             }
         }

@@ -6,6 +6,7 @@ package name.huliqing.luoying.object.action;
 
 import java.util.List;
 import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.layer.network.SkillNetwork;
 import name.huliqing.luoying.object.module.SkillModule;
 import name.huliqing.luoying.object.skill.Skill;
@@ -16,6 +17,7 @@ import name.huliqing.luoying.object.skill.Skill;
  */
 public class StaticIdleAction extends AbstractAction implements IdleAction {
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
+    private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
     private SkillModule skillModule;
     
     // 缓存技能id
@@ -36,7 +38,10 @@ public class StaticIdleAction extends AbstractAction implements IdleAction {
     protected void doLogic(float tpf) {
         if (!skillModule.isWaiting()) {
             if (waitSkill != null) {
-                skillNetwork.playSkill(actor, waitSkill, false);
+                
+//                skillNetwork.playSkill(actor, waitSkill, false);
+                entityNetwork.useObjectData(actor, waitSkill.getData().getUniqueId());
+                
             }
             end();
         }

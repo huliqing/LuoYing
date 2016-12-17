@@ -158,14 +158,14 @@ public class SkillServiceImpl implements SkillService {
         return skillModule.playSkill(skill, force);
     }
     
-    @Override
-    public boolean playSkill(Entity actor, Skill skill, boolean force) {
-        SkillModule c = actor.getModuleManager().getModule(SkillModule.class);
-        if (c != null) {
-            return playSkill(c, skill, force);
-        }
-        return false;
-    }
+//    @Override
+//    public boolean playSkill(Entity actor, Skill skill, boolean force) {
+//        SkillModule c = actor.getModuleManager().getModule(SkillModule.class);
+//        if (c != null) {
+//            return playSkill(c, skill, force);
+//        }
+//        return false;
+//    }
     
     @Override
     public boolean playWalk(Entity actor, Skill walkSkill, Vector3f dir, boolean faceToDir, boolean force) {

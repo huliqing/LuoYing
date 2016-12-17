@@ -160,9 +160,8 @@ public class Effect extends ModelEntity<EffectData> {
             animations = new SafeArrayList<DelayAnim>(DelayAnim.class);
             for (DelayAnimData dad : data.getDelayAnimDatas()) {
                 DelayAnim da = Loader.load(dad);
-                da.setDelayTime(da.getData().getDelayTime() / speed);
-                da.getActualAnim().setSpeed(speed);
-                da.getActualAnim().setTarget(animNode);
+                da.setSpeed(speed);
+                da.setTarget(animNode);
                 animations.add(da);
             }
         }
@@ -187,8 +186,7 @@ public class Effect extends ModelEntity<EffectData> {
          // 2.初始化动画
         if (animations != null) {
             for (DelayAnim da : animations.getArray()) {
-                da.setDelayTime(da.getData().getDelayTime() / speed);
-                da.getActualAnim().setSpeed(speed);
+                da.setSpeed(speed);
                 da.initialize();
             }
         }
@@ -341,8 +339,7 @@ public class Effect extends ModelEntity<EffectData> {
         // 速度更新时要一起更新动画速度
         if (animations != null) {
             for (DelayAnim da : animations.getArray()) {
-                da.setDelayTime(da.getData().getDelayTime() / speed);
-                da.getActualAnim().setSpeed(speed);
+                da.setSpeed(speed);
             }
         }
     }

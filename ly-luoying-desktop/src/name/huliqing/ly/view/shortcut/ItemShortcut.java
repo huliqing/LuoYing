@@ -24,18 +24,18 @@ public class ItemShortcut extends BaseUIShortcut<ItemData> implements EntityData
     @Override
     public void initialize() {
         super.initialize();
-        actor.addEntityDataListener(this);
+        entity.addEntityDataListener(this);
     }
 
     @Override
     public void cleanup() {
-        actor.removeEntityDataListener(this);
+        entity.removeEntityDataListener(this);
         super.cleanup(); 
     }
     
     @Override
     public void removeObject() {
-        gameNetwork.removeObjectData(actor, objectData.getUniqueId(), objectData.getTotal());
+        gameNetwork.removeObjectData(entity, objectData.getUniqueId(), objectData.getTotal());
     }
     
     @Override
@@ -46,9 +46,9 @@ public class ItemShortcut extends BaseUIShortcut<ItemData> implements EntityData
             // 放到skillNetwork.playSkill中去。
             Entity target = gameService.getTarget();
             if (target != null) {
-                gameNetwork.setTarget(actor, target.getEntityId());
+                gameNetwork.setTarget(entity, target.getEntityId());
             }
-            gameNetwork.useObjectData(actor, objectData.getUniqueId());
+            gameNetwork.useObjectData(entity, objectData.getUniqueId());
         }
     }
     
@@ -56,7 +56,7 @@ public class ItemShortcut extends BaseUIShortcut<ItemData> implements EntityData
     public void onDataAdded(ObjectData data, int amount) {
         if (!data.getId().equals(objectData.getId()))
             return;
-        ItemData temp = actor.getData().getObjectData(objectData.getId());
+        ItemData temp = entity.getData().getObjectData(objectData.getId());
         if (temp == null) {
             this.objectData.setTotal(0);
         } else if (temp != this.objectData) {
@@ -70,7 +70,7 @@ public class ItemShortcut extends BaseUIShortcut<ItemData> implements EntityData
         if (!data.getId().equals(objectData.getId()))
             return;
         
-        ItemData temp = actor.getData().getObjectData(objectData.getId());
+        ItemData temp = entity.getData().getObjectData(objectData.getId());
         if (temp == null) {
             this.objectData.setTotal(0);
         } else if (temp != this.objectData) {

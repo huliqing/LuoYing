@@ -13,7 +13,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.data.SkinData;
+import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
@@ -29,6 +31,7 @@ import name.huliqing.luoying.object.slot.Slot;
 public class WeaponSkin extends AbstractSkin implements Weapon {
     private static final Logger LOG = Logger.getLogger(WeaponSkin.class.getName());
     private final SkillService skillService = Factory.get(SkillService.class);
+    private final EntityService entityService = Factory.get(EntityService.class);
     
     // 武器类型
     private String weaponType;
@@ -248,10 +251,19 @@ public class WeaponSkin extends AbstractSkin implements Weapon {
                 // 防止bug
                 throw new IllegalStateException("HangControl is already initialized!");
             }
-            // 这是一个动画执行过程，在执行前标记为true,在执行后才设置为false.
-            skinSkill = Loader.load(hangSkill);
-            skinSkill.setActor(actor);
-            skillService.playSkill(actor, skinSkill, false);
+            
+            // remove20161217
+//            skinSkill = Loader.load(hangSkill);
+//            skinSkill.setActor(actor);
+//            skillService.playSkill(actor, skinSkill, false);
+
+//            SkillData sd = actor.getData().getObjectData(hangSkill);
+            skinSkill = (SkinSkill) skillService.getSkill(actor, hangSkill);
+            if (skinSkill == null) {
+                entityService.addObjectData(actor, Loader.loadData(hangSkill), 1);
+                skinSkill = (SkinSkill) skillService.getSkill(actor, hangSkill);
+            }
+            entityService.useObjectData(actor, skinSkill.getData().getUniqueId());
             
             this.actor = actor;
             this.hangTime = skinSkill.getTrueUseTime() * skinSkill.getHangTimePoint();

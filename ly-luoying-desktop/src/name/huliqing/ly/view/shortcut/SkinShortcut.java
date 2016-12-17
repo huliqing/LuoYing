@@ -23,18 +23,18 @@ public class SkinShortcut extends BaseUIShortcut<SkinData> implements EntityData
     @Override
     public void initialize() {
         super.initialize();
-        actor.addEntityDataListener(this);
+        entity.addEntityDataListener(this);
     }
 
     @Override
     public void cleanup() {
-        actor.removeEntityDataListener(this);
+        entity.removeEntityDataListener(this);
         super.cleanup(); 
     }
 
     @Override
     public void removeObject() {
-        gameNetwork.removeObjectData(actor, objectData.getUniqueId(), objectData.getTotal());
+        gameNetwork.removeObjectData(entity, objectData.getUniqueId(), objectData.getTotal());
     }
 
     @Override
@@ -42,7 +42,7 @@ public class SkinShortcut extends BaseUIShortcut<SkinData> implements EntityData
         if (pressed) {
             return;
         }
-        gameNetwork.useObjectData(actor, objectData.getUniqueId());
+        gameNetwork.useObjectData(entity, objectData.getUniqueId());
     }
 
     @Override
@@ -60,7 +60,7 @@ public class SkinShortcut extends BaseUIShortcut<SkinData> implements EntityData
         if (!data.getId().equals(objectData.getId())) {
             return;
         }
-        SkinData temp = actor.getData().getObjectData(objectData.getId());
+        SkinData temp = entity.getData().getObjectData(objectData.getId());
         if (temp == null) {
             this.objectData.setTotal(0);
         } else if (temp != this.objectData) {
@@ -74,7 +74,7 @@ public class SkinShortcut extends BaseUIShortcut<SkinData> implements EntityData
         if (!data.getId().equals(objectData.getId())) {
             return;
         }
-        SkinData temp = actor.getData().getObjectData(objectData.getId());
+        SkinData temp = entity.getData().getObjectData(objectData.getId());
         if (temp == null) {
             this.objectData.setTotal(0);
         } else if (temp != this.objectData) {

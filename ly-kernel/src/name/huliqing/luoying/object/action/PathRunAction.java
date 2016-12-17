@@ -16,6 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ActionData;
+import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.layer.network.SkillNetwork;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.module.SkillModule;
@@ -33,6 +34,7 @@ public class PathRunAction extends AbstractAction implements RunAction{
 //    private final PlayService playService = Factory.get(PlayService.class);
 //    private final ActorService actorService = Factory.get(ActorService.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
+    private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
     private SkillModule skillModule;
 
     // 需要走到的目标地址
@@ -142,7 +144,8 @@ public class PathRunAction extends AbstractAction implements RunAction{
         float distance = actor.getSpatial().getWorldTranslation().distance(position);
         if (distance <= nearest) {
             if (waitSkill != null) {
-                skillNetwork.playSkill(actor, waitSkill, false);
+//                skillNetwork.playSkill(actor, waitSkill, false);
+                entityNetwork.useObjectData(actor, waitSkill.getData().getUniqueId());
             }
             end();
             return;

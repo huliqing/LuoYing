@@ -8,6 +8,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.util.TempVars;
 import java.util.List;
 import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.layer.network.SkillNetwork;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.module.SkillModule;
@@ -19,6 +20,7 @@ import name.huliqing.luoying.object.skill.Skill;
  */
 public class SimpleRunAction extends AbstractAction implements RunAction{
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
+    private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
     private SkillModule skillModule;
 
     // 需要走到的目标地址
@@ -98,7 +100,10 @@ public class SimpleRunAction extends AbstractAction implements RunAction{
         float distance = actor.getSpatial().getWorldTranslation().distance(position);
         if (distance <= nearest) {
             if (waitSkill != null) {
-                skillNetwork.playSkill(actor, waitSkill, false);
+                
+//                skillNetwork.playSkill(actor, waitSkill, false);
+                entityNetwork.useObjectData(actor, waitSkill.getData().getUniqueId());
+                
             }
             end();
             return;

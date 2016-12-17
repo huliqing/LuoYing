@@ -17,6 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ActionData;
+import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.layer.network.SkillNetwork;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.module.SkillModule;
@@ -34,6 +35,7 @@ public class PathFollowAction extends AbstractAction implements FollowAction {
 //    private final ActorService actorService = Factory.get(ActorService.class);
 //    private final SkillService skillService = Factory.get(SkillService.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
+    private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
     
     private SkillModule skillModule;
     
@@ -152,7 +154,10 @@ public class PathFollowAction extends AbstractAction implements FollowAction {
         // target 不存在或已经脱场景
         if (target == null || target.getParent() == null) {
             if (waitSkill != null) {
-                skillNetwork.playSkill(actor, waitSkill, false);
+                
+//                skillNetwork.playSkill(actor, waitSkill, false);
+                entityNetwork.useObjectData(actor, waitSkill.getData().getUniqueId());
+                
             }
             end();
             return;
@@ -161,7 +166,8 @@ public class PathFollowAction extends AbstractAction implements FollowAction {
         // 已经到达位置，则不需要再走
         if (actor.getSpatial().getWorldTranslation().distanceSquared(target.getWorldTranslation()) <= nearestSquared) {
             if (waitSkill != null) {
-                skillNetwork.playSkill(actor, waitSkill, false);
+//                skillNetwork.playSkill(actor, waitSkill, false);
+                entityNetwork.useObjectData(actor, waitSkill.getData().getUniqueId());
             }
             end();
             return;
@@ -331,7 +337,8 @@ public class PathFollowAction extends AbstractAction implements FollowAction {
         // 随的时候角色还一直在向前冲
         if (actor != null) {
             if (waitSkill != null) {
-                skillNetwork.playSkill(actor, waitSkill, false);
+//                skillNetwork.playSkill(actor, waitSkill, false);
+                entityNetwork.useObjectData(actor, waitSkill.getData().getUniqueId());
             }
         }
         

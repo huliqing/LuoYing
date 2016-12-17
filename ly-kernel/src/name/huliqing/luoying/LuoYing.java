@@ -230,7 +230,6 @@ import name.huliqing.luoying.mess.EntityRemoveDataMess;
 import name.huliqing.luoying.mess.EntityUseDataByIdMess;
 import name.huliqing.luoying.mess.RandomSeedMess;
 import name.huliqing.luoying.mess.SceneLoadedMess;
-import name.huliqing.luoying.mess.SkillPlayMess;
 import name.huliqing.luoying.mess.network.RequestGameInitMess;
 import name.huliqing.luoying.mess.network.RequestGameInitStartMess;
 import name.huliqing.luoying.object.anim.DelayAnim;
@@ -296,7 +295,6 @@ import name.huliqing.luoying.serializer.Vector2fSerializer;
 import name.huliqing.luoying.serializer.Vector4fSerializer;
 import name.huliqing.luoying.xml.Data;
 import name.huliqing.luoying.xml.DataFactory;
-import name.huliqing.luoying.xml.Proto;
 
 /**
  * @author huliqing
@@ -749,7 +747,6 @@ public class LuoYing {
         Serializer.registerClass(SceneLoadedMess.class);
         
         // Skill
-        Serializer.registerClass(SkillPlayMess.class);
         Serializer.registerClass(SkillWalkMess.class);
         
         // Skin

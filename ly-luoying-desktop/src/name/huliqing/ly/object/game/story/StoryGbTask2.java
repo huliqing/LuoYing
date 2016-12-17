@@ -24,8 +24,7 @@ import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.game.Game;
 import name.huliqing.luoying.object.gamelogic.AbstractGameLogic;
-import name.huliqing.luoying.object.module.StateModule;
-import name.huliqing.luoying.object.state.State;
+import name.huliqing.luoying.object.skill.Skill;
 import name.huliqing.luoying.utils.MathUtils;
 import name.huliqing.ly.constants.IdConstants;
 import name.huliqing.ly.layer.service.GameService;
@@ -166,7 +165,13 @@ public class StoryGbTask2 extends AbstractTaskStep{
             @Override
             public void callback(Entity actor, int loadIndex) {
                 gameService.setGroup(actor, -1);
-                skillService.playSkill(actor, skillService.getSkillWaitDefault(actor), false);
+                
+//                skillService.playSkill(actor, skillService.getSkillWaitDefault(actor), false);
+                Skill waitSkill = skillService.getSkillWaitDefault(actor);
+                if (waitSkill != null) {
+                    entityService.useObjectData(actor, waitSkill.getData().getUniqueId());
+                }
+                
                 playNetwork.addEntity(actor);
             }
         };

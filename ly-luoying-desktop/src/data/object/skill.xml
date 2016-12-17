@@ -212,7 +212,7 @@
     <skillShot id="skillDualSwordWave" extends="skillFightTrickAttackBase" icon="Interface/skill/ysh_81.jpg"
                useTime="2" animation="dualSword_wave" magics="magicWaveHit" hitDistance="35"
                weaponStateLimit="leftSword|rightSword" sounds="" effects="effectWaveSpline,effectWaveFlash|0.6"
-               hitValue="250" hitStates="" hitMagics="" useAttributes="attributeMana|100" 
+               hitValue="250" hitStates="" hitMagics="" useAttributes="attributeMana|100" cooldown="30"
                cutTimeStartMax="0.4" cutTimeEndMax="0.34" checkEl="#{s.attributeLevel > 7}"
                bullets="bulletWave" shotTimes="0.61" shotSpeed="3" shotOffsets="0|2.1|2" />
     

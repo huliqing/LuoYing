@@ -28,7 +28,7 @@ public abstract class BaseUIShortcut<T extends ObjectData> extends AbstractShort
     protected ShortcutView view;
     protected UI icon;
     protected Text count;
-    
+     
     // 开始拖动的时间点
     private long startDragTime;
     private boolean bucketVisible;

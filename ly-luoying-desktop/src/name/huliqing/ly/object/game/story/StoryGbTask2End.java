@@ -26,6 +26,7 @@ import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.game.Game;
 import name.huliqing.luoying.object.gamelogic.AbstractGameLogic;
+import name.huliqing.luoying.object.skill.Skill;
 import name.huliqing.ly.constants.IdConstants;
 import name.huliqing.ly.constants.StoryConstants;
 import name.huliqing.ly.object.view.View;
@@ -43,7 +44,6 @@ public class StoryGbTask2End extends AbstractGameLogic {
     private final GameService gameService = Factory.get(GameService.class);
     
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
-    private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
     
@@ -121,7 +121,13 @@ public class StoryGbTask2End extends AbstractGameLogic {
             if (checkTaskOK()) {
                 gameService.setAutoLogic(gb, false);
                 actionService.playAction(gb, null);
-                skillNetwork.playSkill(gb, skillService.getSkillWaitDefault(gb), false);
+                
+//                skillNetwork.playSkill(gb, skillService.getSkillWaitDefault(gb), false);
+                Skill waitSkill = skillService.getSkillWaitDefault(gb);
+                if (waitSkill != null) {
+                    entityNetwork.useObjectData(gb, waitSkill.getData().getUniqueId());
+                }
+                
                 createTalk();
                 stage = 3;
             }

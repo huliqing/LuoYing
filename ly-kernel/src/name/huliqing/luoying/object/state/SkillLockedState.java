@@ -9,7 +9,7 @@ import com.jme3.math.Vector3f;
 import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.StateData;
-import name.huliqing.luoying.layer.network.SkillNetwork;
+import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.layer.service.DefineService;
 import name.huliqing.luoying.object.module.ActorModule;
 import name.huliqing.luoying.object.module.ChannelModule;
@@ -22,7 +22,8 @@ import name.huliqing.luoying.object.module.SkillListener;
  * @author huliqing
  */
 public class SkillLockedState extends AbstractState implements SkillListener {
-    private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
+//    private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
+    private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
     private final DefineService defineService = Factory.get(DefineService.class);
     private ActorModule actorModule;
     private SkillModule skillModule;
@@ -72,8 +73,12 @@ public class SkillLockedState extends AbstractState implements SkillListener {
         if (lockAtSkillTypes > 0) {
             List<Skill> lockedSkills = skillModule.getSkillByTypes(lockAtSkillTypes, null);
             if (lockedSkills != null && !lockedSkills.isEmpty()) {
+                
                 // 用到随机数时要使用Network.
-                skillNetwork.playSkill(entity, lockedSkills.get(FastMath.nextRandomInt(0, lockedSkills.size() - 1)), false);
+//                skillNetwork.playSkill(entity, lockedSkills.get(FastMath.nextRandomInt(0, lockedSkills.size() - 1)), false);
+
+                Skill skill = lockedSkills.get(FastMath.nextRandomInt(0, lockedSkills.size() - 1));
+                entityNetwork.useObjectData(entity, skill.getData().getUniqueId());
             }
         }
         

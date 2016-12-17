@@ -13,6 +13,7 @@ import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ActionData;
 import name.huliqing.luoying.data.SkillData;
+import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.layer.network.SkillNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.object.entity.EntityDataListener;
@@ -28,6 +29,7 @@ public class PatrolIdleAction extends AbstractAction implements IdleAction, Enti
     private final ActorService actorService = Factory.get(ActorService.class);
 //    private final SkillService skillService = Factory.get(SkillService.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
+    private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
     private SkillModule skillModule;
     
     // 限制:半径范围内的最多坐标点
@@ -227,12 +229,15 @@ public class PatrolIdleAction extends AbstractAction implements IdleAction, Enti
                 // 2.走过头(viewAngle与currentPos方向相反则判断为走过头,当方向相反时这个角度大约在170~180度.
                 // 3.存在障碍物一直走不到目标位置，达到限制的允许时间。
                 Skill idleSkill = getIdleSkill();
-                if (idleSkill != null && skillNetwork.playSkill(actor, idleSkill, false)) {
+                if (idleSkill != null && entityNetwork.useObjectData(actor, idleSkill.getData().getUniqueId())) {
                     // 如果存在idleSkill并执行成功则目的达到。
                 } else {
+                    
                     // 注意：如果idle不存在或idle执行失败（如冷却中），这时需要转到playWait
                     // 否则角色会停不下来，一直走到巡逻点外直到达到时间限制。这有点不太好。
-                    skillNetwork.playSkill(actor, waitSkill, false);
+//                    skillNetwork.playSkill(actor, waitSkill, false);
+                    entityNetwork.useObjectData(actor, waitSkill.getData().getUniqueId());
+                    
                 }
                 waitingTime = waitingTimeMax * FastMath.nextRandomFloat();
                 waiting = true;

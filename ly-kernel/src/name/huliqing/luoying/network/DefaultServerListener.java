@@ -19,7 +19,7 @@ public abstract class DefaultServerListener extends AbstractServerListener {
     private final ActorService actorService = Factory.get(ActorService.class);
     private final List<Entity> syncObjects = new LinkedList<Entity>();
     private float syncTimer = 0;
-    private final float syncFrequency = 1f/5f;
+    private final float syncFrequency = 1f/4f;
     
     private final ActorTransformMess syncTempCache = new ActorTransformMess();
 
@@ -62,10 +62,5 @@ public abstract class DefaultServerListener extends AbstractServerListener {
             gameServer.broadcast(syncTempCache);
         }
     }
-    
-//    @Override
-//    protected void onReceiveGameMess(GameServer gameServer, HostedConnection source, GameMess gameMess) {
-//        gameMess.applyOnServer(gameServer, source);
-//    }
 
 }

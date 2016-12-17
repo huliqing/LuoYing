@@ -37,6 +37,7 @@ import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.ly.mess.MessageMess;
 import name.huliqing.luoying.network.DefaultServerListener;
 import name.huliqing.luoying.object.scene.Scene;
+import name.huliqing.luoying.object.skill.Skill;
 import name.huliqing.ly.LyConfig;
 import name.huliqing.ly.constants.AttrConstants;
 
@@ -124,7 +125,12 @@ public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
         // 加一些生命值避免角色在死亡时存档，导致进入游戏仍是死亡状态
         entityService.hitNumberAttribute(actor, AttrConstants.HEALTH, 100, null);
         // 让角色处于“等待”
-        skillService.playSkill(actor, skillService.getSkillWaitDefault(actor), false);
+//        skillService.playSkill(actor, skillService.getSkillWaitDefault(actor), false);
+        Skill waitSkill = skillService.getSkillWaitDefault(actor);
+        if (waitSkill != null) {
+            entityService.useObjectData(actor, waitSkill.getData().getUniqueId());
+        }
+        
         // 添加客户端角色
         playNetwork.addEntity(actor);
         
@@ -141,7 +147,12 @@ public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
         // 加一些生命值避免角色在死亡时存档，导致进入游戏仍是死亡状态
         entityService.hitNumberAttribute(actor, AttrConstants.HEALTH, 100, null);
         // 让角色处于“等待”
-        skillService.playSkill(actor, skillService.getSkillWaitDefault(actor), false);
+//        skillService.playSkill(actor, skillService.getSkillWaitDefault(actor), false);
+        Skill waitSkill = skillService.getSkillWaitDefault(actor);
+        if (waitSkill != null) {
+            entityService.useObjectData(actor, waitSkill.getData().getUniqueId());
+        }
+        
         // 确保处于”死亡后不被清理“
         gameService.setEssential(actor, true);
         // 标记为玩家

@@ -14,12 +14,14 @@ import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.layer.service.ActorService;
+import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.layer.service.SkinService;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.layer.service.LogicService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.skill.Skill;
 import name.huliqing.luoying.ui.Icon;
 import name.huliqing.luoying.ui.LinearLayout;
 import name.huliqing.luoying.ui.Text;
@@ -38,6 +40,7 @@ public class ActorSelectView extends LinearLayout {
     private final SkinService skinService = Factory.get(SkinService.class);
     private final LogicService logicService = Factory.get(LogicService.class);
     private final GameService gameService = Factory.get(GameService.class);
+    private final EntityService entityService = Factory.get(EntityService.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     
     public interface SelectedListener {
@@ -227,7 +230,13 @@ public class ActorSelectView extends LinearLayout {
         actorService.setLocation(currentEntity, new Vector3f(0, 0.75f, 0));
         actorService.setViewDirection(currentEntity, new Vector3f(1, 0, 0));
         actorService.setPhysicsEnabled(currentEntity, false);
-        skillService.playSkill(currentEntity, skillService.getSkillWaitDefault(currentEntity), false);
+        
+//        skillService.playSkill(currentEntity, skillService.getSkillWaitDefault(currentEntity), false);
+        Skill waitSkill = skillService.getSkillWaitDefault(currentEntity);
+        if (waitSkill != null) {
+            entityService.useObjectData(currentEntity, waitSkill.getData().getUniqueId());
+        }
+        
         skinService.takeOnWeapon(currentEntity);
         actorView.detachAllChildren();
         actorView.attachChild(currentEntity.getSpatial());

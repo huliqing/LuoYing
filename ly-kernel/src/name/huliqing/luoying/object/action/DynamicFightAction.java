@@ -12,6 +12,7 @@ import name.huliqing.luoying.data.ActionData;
 import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.data.SkinData;
 import name.huliqing.luoying.layer.network.ActorNetwork;
+import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.layer.network.SkillNetwork;
 import name.huliqing.luoying.layer.network.SkinNetwork;
 import name.huliqing.luoying.layer.service.EntityService;
@@ -36,6 +37,7 @@ public class DynamicFightAction extends PathFollowAction implements FightAction,
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final SkinNetwork skinNetwork = Factory.get(SkinNetwork.class);
+    private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
     private SkinModule skinModule;
     private SkillModule skillModule;
     
@@ -162,7 +164,10 @@ public class DynamicFightAction extends PathFollowAction implements FightAction,
         // 没目标
         if (enemy == null || enemy.getScene() == null) {
             if (waitSkill != null) {
-                skillNetwork.playSkill(actor, waitSkill, false);
+                
+//                skillNetwork.playSkill(actor, waitSkill, false); // remove
+                entityNetwork.useObjectData(actor, waitSkill.getData().getUniqueId());
+                
             }
             end();
             return;
@@ -223,7 +228,11 @@ public class DynamicFightAction extends PathFollowAction implements FightAction,
         if (autoFacing) {
             actorNetwork.setLookAt(actor, enemy.getSpatial().getWorldTranslation());
         }
-        return skillNetwork.playSkill(actor, skill, false);
+        
+        // remove
+//        return skillNetwork.playSkill(actor, skill, false);
+
+        return entityNetwork.useObjectData(actor, skill.getData().getUniqueId());
     }
     
     /**

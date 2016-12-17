@@ -19,7 +19,9 @@ public final class DelayAnim implements DataProcessor<DelayAnimData> {
     private DelayAnimData data;
     
     // ---- inner
-    private float delayTime;
+    private float speed = 1.0f;
+    // 开始执行动画的时间点，当速度不变(1.0)时，这个时间和delayTime是一样的。
+    private float startTime;
     private Anim actualAnim;
     private boolean actualAnimStarted;
     private float timeUsed;
@@ -28,8 +30,8 @@ public final class DelayAnim implements DataProcessor<DelayAnimData> {
     public void setData(DelayAnimData data) {
         this.data = data;
         actualAnim = Loader.load(data.getAnimData());
-        delayTime = data.getDelayTime();
         timeUsed = data.getAsFloat("timeUsed", timeUsed);
+        speed = data.getAsFloat("speed", speed);
     }
 
     @Override
@@ -41,11 +43,8 @@ public final class DelayAnim implements DataProcessor<DelayAnimData> {
     public void updateDatas() {
         actualAnim.updateDatas();
         data.setAttribute("timeUsed", timeUsed);
-        
-        // 这个参数不保存,不去覆盖原始配置值，以支持一些外部调用时自行计算、动态设置，并且不会引起覆盖：
-        // da.setDelayTime(da.getData().getDelayTime() / speed); // 注：这
-//        data.setDelayTime(delayTime); 
-
+        data.setAttribute("speed", speed);
+//        data.setDelayTime(delayTime);  // 不改变的参数不保存
 //        data.setAttribute("actualAnimStarted", actualAnimStarted);// 注：这个参数不能保存
     }
 
@@ -56,7 +55,9 @@ public final class DelayAnim implements DataProcessor<DelayAnimData> {
     public void initialize() {
 //        LOG.log(Level.INFO, "DelayAnim initialize, id={0}, delayTime={1}, timeUsed={2}"
 //                , new Object[] {data.getId(), delayTime, timeUsed});
-        if (timeUsed >= delayTime) {
+    
+        startTime = data.getDelayTime() / speed;
+        if (timeUsed >= startTime) {
             startAnim();
         }
     }
@@ -65,7 +66,7 @@ public final class DelayAnim implements DataProcessor<DelayAnimData> {
         timeUsed += tpf;
         if (actualAnimStarted) {
             actualAnim.update(tpf);
-        } else if (timeUsed > delayTime){
+        } else if (timeUsed > startTime){
             startAnim();
         }
     }
@@ -80,13 +81,28 @@ public final class DelayAnim implements DataProcessor<DelayAnimData> {
         timeUsed = 0;
     }
     
-    public void setDelayTime(float delayTime) {
-        this.delayTime = delayTime;
+    /**
+     * 设置动画的作用目标
+     * @param object 
+     */
+    public void setTarget(Object object) {
+        actualAnim.setTarget(object);
+    }
+    
+    /**
+     * 设置动画速度
+     * @param speed 
+     */
+    public void setSpeed(float speed) {
+        this.speed = speed;
+        this.startTime = data.getDelayTime() / speed;
+        this.actualAnim.setSpeed(speed);
     }
     
     private void startAnim() {
 //        LOG.log(Level.INFO, "DelayAnim startAnim, id={0}, delayTime={1}, timeUsed={2}"
 //                , new Object[] {data.getId(), delayTime, timeUsed});
+        actualAnim.setSpeed(speed);
         actualAnim.start();
         actualAnimStarted = true;
     }

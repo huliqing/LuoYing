@@ -23,6 +23,7 @@ import name.huliqing.luoying.logic.scene.ActorMultLoadHelper;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.skill.Skill;
 import name.huliqing.luoying.ui.Button;
 import name.huliqing.luoying.ui.TextPanel;
 import name.huliqing.luoying.ui.UI;
@@ -44,14 +45,10 @@ public class StoryGbTask1 extends AbstractTaskStep {
     private final PlayService playService = Factory.get(PlayService.class);
     private final ActionService actionService = Factory.get(ActionService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
-//    private final LogicService logicService = Factory.get(LogicService.class);
-    
     private final GameService gameService = Factory.get(GameService.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
-//    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
-//    private final StateNetwork stateNetwork = Factory.get(StateNetwork.class);
     private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
     
     // 开始任务面板:说明任务信息
@@ -217,7 +214,13 @@ public class StoryGbTask1 extends AbstractTaskStep {
             // 不让乱动，不然在对话的时候会执行idle行为
             gameService.setAutoLogic(gb, false);
             actionService.playAction(gb, null);
-            skillNetwork.playSkill(gb, skillService.getSkillWaitDefault(gb), true);
+            
+//            skillNetwork.playSkill(gb, skillService.getSkillWaitDefault(gb), true);
+            Skill waitSkill = skillService.getSkillWaitDefault(gb);
+            if (waitSkill != null) {
+                entityNetwork.useObjectData(gb, waitSkill.getData().getUniqueId());
+            }
+            
             
             createGbPlayerTalk();
             stage = 6;
