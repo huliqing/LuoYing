@@ -13,26 +13,29 @@ import com.jme3.scene.Node;
  */
 public class AnimNode extends Node {
 
-    private Anim anim;
+    private final Anim anim;
+    private boolean autoDetach;
 
-    public AnimNode() {}
-    
-    public AnimNode(Anim anim) {
+    public AnimNode(Anim anim, boolean autoDetach) {
         this.anim = anim;
-    }
-    
-    public Anim getAnim() {
-        return anim;
+        this.autoDetach = autoDetach;
     }
 
-    public void setAnim(Anim anim) {
-        this.anim = anim;
+    /**
+     * 设置是否在动画结束时自动从场景脱离。
+     * @param autoDetach 
+     */
+    public void setAutoDetach(boolean autoDetach) {
+        this.autoDetach = autoDetach;
     }
-
+            
     @Override
     public final void updateLogicalState(float tpf) {
-//        super.updateLogicalState(tpf);
-        anim.update(tpf);
+        if (autoDetach && anim.isEnd()) {
+            removeFromParent();
+        } else {
+            anim.update(tpf);
+        }
     }
     
 }

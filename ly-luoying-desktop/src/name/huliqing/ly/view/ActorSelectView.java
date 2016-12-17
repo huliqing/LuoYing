@@ -27,6 +27,7 @@ import name.huliqing.luoying.ui.LinearLayout;
 import name.huliqing.luoying.ui.Text;
 import name.huliqing.luoying.ui.UIFactory;
 import name.huliqing.luoying.ui.UI;
+import name.huliqing.luoying.utils.GeometryUtils;
 import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
 
@@ -230,13 +231,11 @@ public class ActorSelectView extends LinearLayout {
         actorService.setLocation(currentEntity, new Vector3f(0, 0.75f, 0));
         actorService.setViewDirection(currentEntity, new Vector3f(1, 0, 0));
         actorService.setPhysicsEnabled(currentEntity, false);
-        
-//        skillService.playSkill(currentEntity, skillService.getSkillWaitDefault(currentEntity), false);
+        GeometryUtils.makeUnshaded(currentEntity.getSpatial());
         Skill waitSkill = skillService.getSkillWaitDefault(currentEntity);
         if (waitSkill != null) {
             entityService.useObjectData(currentEntity, waitSkill.getData().getUniqueId());
         }
-        
         skinService.takeOnWeapon(currentEntity);
         actorView.detachAllChildren();
         actorView.attachChild(currentEntity.getSpatial());

@@ -78,8 +78,6 @@
     <stateAttribute id="stateRebornProtect2" useTime="5" bindNumberAttribute="attributeMagicDefence" addValue="99999" restore="1" />
     <!--增加生命值让角色复活-->
     <stateAttribute id="stateRebornAddLife" icon="" useTime="0" bindNumberAttribute="attributeHealth" addValue="100" restore="0" />
-    <!--让角色处于wait状态-->
-    <stateSkill id="stateRebornWait" icon="" useTime="0" skillTypes="wait" />
      
     <!--狂暴状态:1分钟内提升角色的攻击速度、魔法速度、躲闪、防御、连招-->
     <statePrivateGroup id="stateSpeedUpAS" icon="Interface/skill/ysh_88.jpg" useTime="60" 

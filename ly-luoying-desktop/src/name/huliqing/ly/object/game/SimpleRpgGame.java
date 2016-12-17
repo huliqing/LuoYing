@@ -120,6 +120,9 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
         // 这个UI需要依赖场景，所以放在这里初始化
         ui = new RpgMainUI();
         addLogic(ui);
+        
+        app.getCamera().setLocation(new Vector3f(0, 50, 200));
+        app.getCamera().lookAt(new Vector3f(0,4,0), Vector3f.UNIT_Y);
     }
 
     @Override
@@ -473,7 +476,11 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
         
         @Override
         public void displayMessage(Message message, String details) {
-            addMessage("[" + message.getStateCode() + "]" + details, MessageType.notice);
+            if (Config.debug) {
+                addMessage("[" + message.getStateCode() + "]" + details, MessageType.notice);
+            } else {
+                addMessage(details, MessageType.notice);
+            }
         }
         
     }

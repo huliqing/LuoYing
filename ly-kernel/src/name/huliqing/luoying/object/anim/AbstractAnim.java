@@ -345,6 +345,18 @@ public abstract class AbstractAnim<E> implements Anim<E> {
         
         doAnimUpdate(trueInterpolation);
     }
+
+    public void setMotionType(MotionType motionType) {
+        this.motionType = motionType;
+    }
+
+    public void setBezierFactor(float[] bezierFactor) {
+        this.bezierFactor = bezierFactor;
+    }
+
+    public void setCatmullRomFactor(float[] catmullRomFactor) {
+        this.catmullRomFactor = catmullRomFactor;
+    }
     
     /**
      * 初始化动画。

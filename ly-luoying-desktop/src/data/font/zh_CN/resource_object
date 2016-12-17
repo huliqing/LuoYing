@@ -301,7 +301,6 @@ stateIceFrozen.name=冰冻
 stateRebornEssential.name=精华
 stateRebornProtect.name=复活保护
 stateRebornAddLife.name=生命回复
-stateRebornWait.name=等待
 stateSpiderWeb.name=缠绕
 stateSpeedUpAS.name=狂暴
 stateScorpionVenom.name=蝎子毒

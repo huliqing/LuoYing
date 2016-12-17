@@ -111,4 +111,11 @@ public class IdConstants {
     
     /** 自定义的数据类型_sysCustomAnimDelay_ */
     public final static String SYS_CUSTOM_ANIM_DELAY = "_sysCustomAnimDelay_";
+
+    // =============================================================================
+    // Anim
+    // =============================================================================
+    /** sysAnimCurveMove */
+    public final static String SYS_ANIM_CURVE_MOVE = "sysAnimCurveMove";
+    
 }

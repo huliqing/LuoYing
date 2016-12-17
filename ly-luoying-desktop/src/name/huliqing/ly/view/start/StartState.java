@@ -130,7 +130,7 @@ public class StartState extends AbstractAppState {
         UIState.getInstance().addUI(storyPanel);
         UIState.getInstance().addUI(savePanel);
         UIState.getInstance().addUI(settingsPanel);
-        UIState.getInstance().addUI(viewBtn);
+//        UIState.getInstance().addUI(viewBtn); // 暂屏蔽
         startPanel.setVisible(true);
         
         //----

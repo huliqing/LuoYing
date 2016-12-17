@@ -6,7 +6,12 @@
 package name.huliqing.ly.object.game;
 
 import com.jme3.app.Application;
+import com.jme3.collision.CollisionResults;
+import com.jme3.math.Quaternion;
+import com.jme3.math.Vector3f;
 import com.jme3.network.HostedConnection;
+import com.jme3.scene.CameraNode;
+import com.jme3.scene.control.CameraControl;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -27,7 +32,13 @@ import name.huliqing.luoying.mess.network.ClientsMess;
 import name.huliqing.luoying.network.GameServer;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.actor.Actor;
+import name.huliqing.luoying.object.anim.Anim;
+import name.huliqing.luoying.object.anim.AnimNode;
+import name.huliqing.luoying.object.anim.CurveMoveAnim;
+import name.huliqing.luoying.object.anim.InterpolateRotationAnim;
+import name.huliqing.luoying.object.anim.Listener;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.entity.impl.ChaseCameraEntity;
 import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.object.skill.Skill;
 import name.huliqing.luoying.save.ClientData;
@@ -62,22 +73,117 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
     private final TaskStepControl taskControl = new TaskStepControl();
     private boolean started;
     
+    private final Vector3f camStartLoc = new Vector3f();
+    private final Quaternion camStartRot = new Quaternion();
+    
     public StoryServerNetworkRpgGame() {}
 
     @Override
     public void initialize(Application app) {
         super.initialize(app);
         setUIVisiable(false);
+        camStartLoc.set(app.getCamera().getLocation());
+        camStartRot.set(app.getCamera().getRotation());
     }
     
     @Override
     public void onSceneLoaded(Scene scene) {
         super.onSceneLoaded(scene);
         loadPlayer();
+    }
+    
+    /**
+     * 载入当前主角玩家存档，如果没有存档则新开游戏
+     */
+    private void loadPlayer() {
+        Actor actor;
+        if (saveStory.getPlayer() != null) {
+            // 载入玩家主角
+            actor = Loader.load(saveStory.getPlayer());
+            
+            // 载入快捷方式
+            ShortcutManager.loadShortcut(saveStory.getShortcuts(), actor);
+            
+            // 载入玩家主角的宠物(这里还不需要载入其他玩家的角色及宠物,由其他玩家重新连接的时候再载入)
+            ArrayList<EntityData> actors = saveStory.getActors();
+            for (EntityData ad : actors) {
+                if (ad.getUniqueId() == actor.getData().getUniqueId()) {
+                    continue;
+                }
+                Actor tempActor = Loader.load(ad);
+                if  (gameService.getOwner(tempActor) == actor.getEntityId()) {
+                    playNetwork.addEntity(tempActor);
+                }
+            }
+        } else {
+            if (Config.debug) {
+                actor = Loader.load(IdConstants.ACTOR_PLAYER_TEST);
+                gameService.setLevel(actor, 10);
+            } else {
+                actor = Loader.load(IdConstants.ACTOR_PLAYER);
+            }
+        }
+        
+        // 给玩家指定分组
+        gameService.setGroup(actor, GROUP_PLAYER);
+        // 故事模式玩家队伍固定分组
+        gameService.setTeam(actor, TEAM_PLAYER);
+        // 确保角色位置在地面上
+        gameService.setOnTerrain(actor);
+        // 添加主玩家
+        onAddServerPlayer(actor);
+        
+        // ---- 镜头动画
+        final Vector3f endLoc = new Vector3f();
+        final Quaternion endRot = new Quaternion();
+        getChaseCamera().getComputeTransform(endLoc, endRot);
+        
+        Vector3f centerLoc = new Vector3f(camStartLoc).interpolateLocal(endLoc, 0.5f);
+        List<Vector3f> points = new ArrayList<Vector3f>(3);
+        points.add(camStartLoc);
+        points.add(centerLoc);
+        points.add(endLoc);
+        
+        final CameraNode cameraNode = new CameraNode("", app.getCamera());
+        cameraNode.setControlDir(CameraControl.ControlDirection.SpatialToCamera);
+        
+        CurveMoveAnim cma = Loader.load(name.huliqing.luoying.constants.IdConstants.SYS_ANIM_CURVE_MOVE);
+        final AnimNode moveAnimNode = new AnimNode(cma, true);
+        cma.setControlPoints(points);
+        cma.setUseTime(5);
+        cma.setTarget(cameraNode);
+        cma.start();
+        
+        InterpolateRotationAnim rotAnim = new InterpolateRotationAnim();
+        rotAnim.setStart(camStartRot);
+        rotAnim.setEnd(endRot);
+        rotAnim.setUseTime(6);
+        rotAnim.setTarget(cameraNode);
+        rotAnim.start();
+        rotAnim.addListener(new Listener() {
+            @Override
+            public void onDone(Anim anim) {
+                startStory();
+            }
+        });
+        AnimNode rotAnimNode = new AnimNode(rotAnim, true);
+        rotAnimNode.attachChild(cameraNode); // cameraNode会随着rotAnimNode一起移除
+        this.app.getRootNode().attachChild(moveAnimNode);
+        this.app.getRootNode().attachChild(rotAnimNode);
+        
+        setUIVisiable(false);
+        getChaseCamera().setEnabled(false);
+    }
+    
+    /**
+     * 故事模式开始
+     */
+    protected void startStory() {
+        setUIVisiable(true);
+        getChaseCamera().setEnabled(true);
         doStoryInitialize();
         taskControl.doNext();
         started = true;
-        setUIVisiable(true);
     }
     
     @Override
@@ -184,47 +290,21 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
         
         super.processGameMess(gameServer, source, m);
     }
-    
-    /**
-     * 载入当前主角玩家存档，如果没有存档则新开游戏
-     */
-    private void loadPlayer() {
-        Actor actor;
-        if (saveStory.getPlayer() != null) {
-            // 载入玩家主角
-            actor = Loader.load(saveStory.getPlayer());
-            
-            // 载入快捷方式
-            ShortcutManager.loadShortcut(saveStory.getShortcuts(), actor);
-            
-            // 载入玩家主角的宠物(这里还不需要载入其他玩家的角色及宠物,由其他玩家重新连接的时候再载入)
-            ArrayList<EntityData> actors = saveStory.getActors();
-            for (EntityData ad : actors) {
-                if (ad.getUniqueId() == actor.getData().getUniqueId()) {
-                    continue;
-                }
-                Actor tempActor = Loader.load(ad);
-                if  (gameService.getOwner(tempActor) == actor.getEntityId()) {
-                    playNetwork.addEntity(tempActor);
-                }
-            }
-        } else {
-            if (Config.debug) {
-                actor = Loader.load(IdConstants.ACTOR_PLAYER_TEST);
-                gameService.setLevel(actor, 10);
-            } else {
-                actor = Loader.load(IdConstants.ACTOR_PLAYER);
-            }
-        }
 
-        // 给玩家指定分组
-        gameService.setGroup(actor, GROUP_PLAYER);
-        // 故事模式玩家队伍固定分组
-        gameService.setTeam(actor, TEAM_PLAYER);
-        // 确保角色位置在地面上
-        gameService.setOnTerrain(actor);
-        // 添加主玩家
-        onAddServerPlayer(actor);
+    @Override
+    protected boolean onPickedTerrain(CollisionResults terrainsPicked) {
+        if (!started) {
+            return false;
+        }
+        return super.onPickedTerrain(terrainsPicked); 
+    }
+
+    @Override
+    protected boolean onPickedActor(List<Actor> actorsPicked) {
+        if (!started) {
+            return false;
+        }
+        return super.onPickedActor(actorsPicked); 
     }
     
      // 从saveStory中载入指定clientId的角色
@@ -248,13 +328,10 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
         for (EntityData entityData : actors) {
             Actor actor = Loader.load(entityData);
             if (gameService.getOwner(actor) == clientPlayerData.getUniqueId()) {
-                
-//                skillService.playSkill(actor, skillService.getSkillWaitDefault(actor), false);
                 Skill waitSkill = skillService.getSkillWaitDefault(actor);
                 if (waitSkill != null) {
                     entityService.useObjectData(actor, waitSkill.getData().getUniqueId());
                 }
-                
                 playNetwork.addEntity(actor);
             }
         }

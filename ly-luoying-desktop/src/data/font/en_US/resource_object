@@ -301,7 +301,6 @@ stateIceFrozen.name=Frozen
 stateRebornEssential.name=Essential
 stateRebornProtect.name=Reborn Protection
 stateRebornAddLife.name=Life Restore
-stateRebornWait.name=Wait
 stateSpiderWeb.name=Spider Web
 stateSpeedUpAS.name=Frenzy
 stateScorpionVenom.name=Scorpion Poison

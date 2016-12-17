@@ -33,20 +33,18 @@ public final class CurveMoveAnim extends AbstractAnim<Spatial> {
     private int currentPointIndex;
     private boolean debugInGui;
     
-    public CurveMoveAnim() {
-        super();
-    }
-
     @Override
     public void setData(AnimData data) {
         super.setData(data);
         // 路径点
         String[] positions = data.getAsArray("waypoints");
-        Vector3f[] waypoints = new Vector3f[positions.length];
-        for (int i = 0; i < positions.length; i++) {
-            waypoints[i] = ((Position)Loader.load(positions[i])).getPoint(null);
+        if (positions != null) {
+            Vector3f[] waypoints = new Vector3f[positions.length];
+            for (int i = 0; i < positions.length; i++) {
+                waypoints[i] = ((Position)Loader.load(positions[i])).getPoint(null);
+            }
+            setControlPoints(Arrays.asList(waypoints));
         }
-        setControlPoints(Arrays.asList(waypoints));
         
         float curveTension = data.getAsFloat("curveTension", 0.5f);
         spline.setCurveTension(curveTension);

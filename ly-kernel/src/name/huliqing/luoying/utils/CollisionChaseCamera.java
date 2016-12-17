@@ -16,6 +16,7 @@ import com.jme3.input.InputManager;
 import com.jme3.input.TouchInput;
 import com.jme3.input.event.TouchEvent;
 import com.jme3.math.FastMath;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
@@ -157,6 +158,10 @@ public class CollisionChaseCamera extends ChaseCamera
     @Override
     public void update(float tpf) {
         super.update(tpf);
+        
+        if (!enabled) {
+            return;
+        }
         
         if (collisionChecker.getParent() == null) {
             if (target != null) {
@@ -372,4 +377,26 @@ public class CollisionChaseCamera extends ChaseCamera
         return target;
     }
 
+    /**
+     * 计算出相机的跟随位置，但是不立即改变相机的位置。
+     * @param locStore
+     * @param rotationStore 
+     */
+    public void getComputeTransform(Vector3f locStore, Quaternion rotationStore) {
+        TempVars tv = TempVars.get();
+        Vector3f originLoc = tv.vect1.set(cam.getLocation());
+        Quaternion originRot = tv.quat1.set(cam.getRotation());
+        
+        boolean originEnabled = isEnabled();
+        setEnabled(true);
+        update(0.016f);
+        setEnabled(originEnabled);
+        
+        locStore.set(cam.getLocation());
+        rotationStore.set(cam.getRotation());
+        
+        cam.setLocation(originLoc);
+        cam.setRotation(originRot);
+        tv.release();
+    }
 }

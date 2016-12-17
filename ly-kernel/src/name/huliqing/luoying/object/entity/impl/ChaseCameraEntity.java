@@ -5,6 +5,8 @@
  */
 package name.huliqing.luoying.object.entity.impl;
 
+import com.jme3.math.Quaternion;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import java.util.ArrayList;
 import java.util.List;
@@ -91,6 +93,19 @@ public class ChaseCameraEntity extends NonModelEntity  implements SceneListener 
      */
     public void setEnabledRotation(boolean bool) {
         ccc.setEnabledRotation(bool);
+    }
+    
+    public void setEnabled(boolean enabled) {
+        ccc.setEnabled(enabled);
+    }
+    
+    /**
+     * 计算出相机的跟随位置，但是不立即改变相机的位置。
+     * @param locStore
+     * @param rotationStore 
+     */
+    public void getComputeTransform(Vector3f locStore, Quaternion rotationStore) {
+        ccc.getComputeTransform(locStore, rotationStore);
     }
     
     // ---- Listener-------------------------------------------------------------------------------------------------------------------

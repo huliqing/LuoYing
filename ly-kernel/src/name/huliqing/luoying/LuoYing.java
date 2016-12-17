@@ -640,11 +640,11 @@ public class LuoYing {
         loadData("/LuoYing/Data/module.xml");
         loadData("/LuoYing/Data/scene.xml");
         loadData("/LuoYing/Data/progress.xml");
+        loadData("/LuoYing/Data/anim.xml");
         
 //        loadData("/LuoYing/Data/config.xml");
 //        loadData("/LuoYing/Data/actor.xml");
 //        loadData("/LuoYing/Data/actorAnim.xml");
-//        loadData("/LuoYing/Data/anim.xml");
 //        loadData("/LuoYing/Data/attribute.xml");
 //        loadData("/LuoYing/Data/bullet.xml");
 //        loadData("/LuoYing/Data/define.xml");
@@ -805,7 +805,6 @@ public class LuoYing {
     
     /**
      * 获取当前光标位置
-     * @deprecated 
      * @return 
      */
     public static Vector2f getCursorPosition() {

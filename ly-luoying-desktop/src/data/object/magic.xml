@@ -21,7 +21,7 @@ loop => 0:dontLoop; 1:loop;
     <!--魔法：复活术-->
     <!--=====================================================================-->
     <magicState id="magicReborn" useTime="5" effects="effectReborn" sounds="soundResurrect" 
-           states="stateRebornEssential,stateRebornAddLife|1,stateRebornProtect|1,stateRebornWait|1" 
+           states="stateRebornEssential,stateRebornAddLife|1,stateRebornProtect|1" 
            actorAnims="actorAnimMoveUp|0.2"  />
     
     <!--=====================================================================-->

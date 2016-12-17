@@ -4,7 +4,9 @@
  */
 package name.huliqing.ly.view.shortcut;
 
-import checkers.quals.Unused;
+import com.jme3.app.Application;
+import com.jme3.app.SimpleApplication;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.util.SafeArrayList;
 import com.jme3.util.TempVars;
@@ -15,11 +17,17 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.LuoYing;
+import name.huliqing.luoying.constants.IdConstants;
+import name.huliqing.luoying.data.AnimData;
 import name.huliqing.luoying.data.ItemData;
 import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.data.SkinData;
 import name.huliqing.luoying.data.define.CountObject;
+import name.huliqing.luoying.object.Loader;
+import name.huliqing.luoying.object.anim.AbstractAnim;
+import name.huliqing.luoying.object.anim.AnimNode;
+import name.huliqing.luoying.object.anim.CurveMoveAnim;
 import name.huliqing.luoying.xml.DataFactory;
 import name.huliqing.luoying.save.ShortcutSave;
 import name.huliqing.luoying.ui.UIUtils;
@@ -101,6 +109,28 @@ public class ShortcutManager {
                 , SHORTCUT_SIZE_HEIGHT * size
                 , true);
         SHORTCUT_ROOT.addShortcut(shortcut);
+        
+        Application app = LuoYing.getApp();
+        if (app instanceof SimpleApplication) {
+            Vector2f cursor = LuoYing.getCursorPosition();
+            Vector3f start = new Vector3f(cursor.x, cursor.y, 0);
+            Vector3f end = new Vector3f(cursor.x, cursor.y + 50, 0);
+            List<Vector3f> points = new ArrayList<Vector3f>(2);
+            points.add(start);
+            points.add(end);
+            
+            CurveMoveAnim cma = Loader.load(IdConstants.SYS_ANIM_CURVE_MOVE);
+            cma.setControlPoints(points);
+            cma.setTarget(shortcut.getView());
+            cma.setUseTime(0.3f);
+            cma.setMotionType(AbstractAnim.MotionType.Bezier);
+            cma.setBezierFactor(new float[]{0,0,1f,0f});
+            cma.start();
+
+            AnimNode animNode = new AnimNode(cma, true);
+            animNode.setAutoDetach(true);
+            ((SimpleApplication) app).getGuiNode().attachChild(animNode);
+        }
     }
     
     /**
