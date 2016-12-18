@@ -6,6 +6,7 @@
 package name.huliqing.luoying.object.scene;
 
 import com.jme3.math.Vector3f;
+import com.jme3.util.SafeArrayList;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,7 +23,7 @@ public class SimpleScene extends AbstractScene {
     // 用于优化查询
     private final Map<Long, Entity> entityMap = new HashMap<Long, Entity>();
     // 优化Actor角色的查询
-    private final List<Actor> actors = new ArrayList<Actor>();
+    private final SafeArrayList<Actor> actors = new SafeArrayList<Actor>(Actor.class);
     
     @Override
     public void addEntity(Entity entity) {
@@ -54,7 +55,7 @@ public class SimpleScene extends AbstractScene {
         }
         // 优化Actor查询
         if (Actor.class.isAssignableFrom(type)) {
-            for (Actor actor : actors) {
+            for (Actor actor : actors.getArray()) {
                 if (type.isAssignableFrom(actor.getClass())) {
                     store.add((T)actor);
                 }
@@ -72,7 +73,7 @@ public class SimpleScene extends AbstractScene {
         // 优化Actor查询
         if (Actor.class.isAssignableFrom(type)) {
             float sqRadius = (float)Math.pow(radius, 2);
-            for (Actor actor : actors) {
+            for (Actor actor : actors.getArray()) {
                 if (type.isAssignableFrom(actor.getClass())) {
                     if (actor.getSpatial().getWorldTranslation().distanceSquared(location) <= sqRadius) {
                         store.add((T) actor);
@@ -87,6 +88,7 @@ public class SimpleScene extends AbstractScene {
     @Override
     public void cleanup() {
         entityMap.clear();
+        actors.clear();
         super.cleanup(); 
     }
     

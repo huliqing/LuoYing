@@ -21,7 +21,7 @@
     
     <!--魔法值恢复器-->
     <gameLogicAttributeChange id="gameLogicManaRecover" interval="5" speed="1" applyAttribute="attributeMana" 
-                              bindFactorAttribute="attributeHealthRestore" baseValue="1" checkEl="elActorUndeadCheck" />
+                              bindFactorAttribute="attributeManaRestore" baseValue="1" checkEl="elActorUndeadCheck" />
 </root>
 
 
