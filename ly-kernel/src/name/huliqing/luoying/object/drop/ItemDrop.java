@@ -36,29 +36,26 @@ public class ItemDrop extends AbstractDrop {
     // 注意：因为这里涉及到机率，所以要使用network版本（***Network.addData）
     // // 这里使用ProtoNetwork就可以，不需要直接使用ItemNetwork
     @Override
-    public boolean doDrop(Entity source, Entity target) {
+    public void doDrop(Entity source, Entity target) {
         if (target == null) {
-            return false;
+            return;
         }
         if (item == null || count <= 0 || rate <= 0) {
-            return false;
+            return;
         }
         
         // 注：如果rate>=1.0, 则忽略其它设置(dropFactor)的影响，把物品视为始终掉落的。
         if (rate >= 1.0f) {
             entityNetwork.addObjectData(target, Loader.loadData(item), count);
             playDropSounds(source);
-            return true;
+            return;
         }
         
         // 按机率掉落
         if (rate >= FastMath.nextRandomFloat()) {
             entityNetwork.addObjectData(target, Loader.loadData(item), count);
             playDropSounds(source);
-            return true;
         }
-        
-        return false;
     }
     
 }

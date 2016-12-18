@@ -33,16 +33,15 @@ public class AttributeDrop extends AbstractDrop {
     }
 
     @Override
-    public boolean doDrop(Entity source, Entity target) {
+    public void doDrop(Entity source, Entity target) {
         // 属性掉是掉给target角色的，如果target不存在，则就没有意义。
         if (target == null) {
-            return false;
+            return;
         }
         valueHitEl.setSource(source.getAttributeManager());
         valueHitEl.setTarget(target.getAttributeManager());
         entityNetwork.hitNumberAttribute(target, attribute, valueHitEl.getValue().floatValue(), source);
         playDropSounds(source);
-        return true;
     }
 
 }

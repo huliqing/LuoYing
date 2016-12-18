@@ -159,11 +159,6 @@ xs:time
                             <xs:documentation>BooleanAttribute,绑定角色的“死亡"属性, 这个属性的值用于判断角色是否死亡。</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="sounds" type="xs:string" use="optional">
-                        <xs:annotation>
-                            <xs:documentation>默认的掉落声效，格式："sound1,sound2,sound3"</xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>

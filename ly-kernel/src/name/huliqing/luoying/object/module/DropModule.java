@@ -34,8 +34,9 @@ public class DropModule extends AbstractModule implements DataHandler<DropData> 
     // 绑定角色的“死亡”属性
     private String bindDeadAttribute;
     
-    // 掉落物品时的默认提示声效
-    private String[] sounds; 
+    // remove20161218,不要再在DropModule中使用掉落声效，这会造成所有角色掉落物品的时候都会有提示音。
+//    // 掉落物品时的默认提示声效
+//    private String[] sounds; 
     
     // ---- inner
     private List<Drop> drops;
@@ -48,7 +49,7 @@ public class DropModule extends AbstractModule implements DataHandler<DropData> 
     public void setData(ModuleData data) {
         super.setData(data); 
         bindDeadAttribute = data.getAsString("bindDeadAttribute");
-        sounds = data.getAsArray("sounds");
+//        sounds = data.getAsArray("sounds");
     }
 
     @Override
@@ -120,24 +121,8 @@ public class DropModule extends AbstractModule implements DataHandler<DropData> 
         if (drops == null) {
             return;
         }
-        boolean hasDrop = false;
         for (int i = 0; i < drops.size(); i++) {
-            if (drops.get(i).doDrop(entity, target)) {
-                hasDrop = true;
-            }
-        }
-        if (hasDrop && isMessageEnabled()) {
-            playDefaultDropSound();
-        }
-    }
-    
-    // 播放默认的掉落声音
-    private void playDefaultDropSound() {
-        if (sounds == null)
-            return;
-        
-        for (String s : sounds) {
-            SoundManager.getInstance().playSound(s, entity.getSpatial().getWorldTranslation());
+            drops.get(i).doDrop(entity, target);
         }
     }
 
@@ -179,7 +164,8 @@ public class DropModule extends AbstractModule implements DataHandler<DropData> 
     @Override
     public boolean handleDataUse(DropData data) {
         Drop drop = Loader.load(data);
-        return drop.doDrop(entity, null);
+        drop.doDrop(entity, null);
+        return true;
     }
     
     private class KilledEntityAttributeListener implements EntityAttributeListener{

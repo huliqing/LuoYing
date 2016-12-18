@@ -35,26 +35,23 @@ public class SkinDrop extends AbstractDrop {
     // 注意：因为这里涉及到机率，所以要使用network版本（***Network.addData）
     // 这里使用ProtoNetwork就可以，不需要直接使用SkinNetwork
     @Override
-    public boolean doDrop(Entity source, Entity target) {
+    public void doDrop(Entity source, Entity target) {
         if (skin == null || count <= 0 || rate <= 0) {
-            return false;
+            return;
         }
         
         // 注：如果rate>=1.0, 则忽略configService全局掉落设置(dropFactor)的影响，把物品视为始终掉落的。
         if (rate >= 1.0f) {
             entityNetwork.addObjectData(target, Loader.loadData(skin), count);
             playDropSounds(source);
-            return true;
+            return;
         }
         
         // 按机率掉落，这个机率受全局掉落设置影响
         if (rate >= FastMath.nextRandomFloat()) {
             entityNetwork.addObjectData(target, Loader.loadData(skin), count);
             playDropSounds(source);
-            return true;
         }
-        
-        return false;
     }
 
 

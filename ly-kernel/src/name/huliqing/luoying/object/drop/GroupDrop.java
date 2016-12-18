@@ -28,7 +28,7 @@ public class GroupDrop extends AbstractDrop {
     }
     
     @Override
-    public boolean doDrop(Entity source, Entity target) {
+    public void doDrop(Entity source, Entity target) {
         if (drops == null && dropIds != null) {
              if (dropIds != null && dropIds.length > 0) {
                 drops = new ArrayList<Drop>(dropIds.length);
@@ -47,7 +47,6 @@ public class GroupDrop extends AbstractDrop {
         if (hasDrop) {
             playDropSounds(source);
         }
-        return hasDrop;
     }
     
 }
