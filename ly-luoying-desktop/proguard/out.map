@@ -789,13 +789,18 @@ name.huliqing.ly.object.game.StoryServerNetworkRpgGame -> name.huliqing.ly.g.b.o
     name.huliqing.luoying.layer.service.ConfigService configService -> l
     name.huliqing.luoying.layer.service.SkillService skillService -> o
     name.huliqing.ly.layer.service.GameService gameService -> p
+    name.huliqing.luoying.layer.service.EntityService entityService -> m
     name.huliqing.luoying.layer.network.PlayNetwork playNetwork -> q
     name.huliqing.luoying.save.SaveStory saveStory -> k
     name.huliqing.ly.object.game.story.TaskStepControl taskControl -> r
     boolean started -> s
+    com.jme3.math.Vector3f camStartLoc -> n
+    com.jme3.math.Quaternion camStartRot -> t
     void <init>() -> <init>
     void initialize(com.jme3.app.Application) -> initialize
     void onSceneLoaded(name.huliqing.luoying.object.scene.Scene) -> onSceneLoaded
+    void loadPlayer() -> i
+    void startStory() -> n
     void simpleUpdate(float) -> simpleUpdate
     void cleanup() -> cleanup
     name.huliqing.luoying.save.SaveStory getSaveStory() -> a
@@ -804,12 +809,17 @@ name.huliqing.ly.object.game.StoryServerNetworkRpgGame -> name.huliqing.ly.g.b.o
     void kickClient(int) -> kickClient
     void onAddClientPlayer(name.huliqing.luoying.data.ConnData,name.huliqing.luoying.object.entity.Entity) -> a
     void processGameMess(name.huliqing.luoying.network.GameServer,com.jme3.network.HostedConnection,name.huliqing.luoying.mess.GameMess) -> a
-    void loadPlayer() -> i
+    boolean onPickedTerrain(com.jme3.collision.CollisionResults) -> a
+    boolean onPickedActor(java.util.List) -> a
     boolean loadClient(name.huliqing.luoying.save.SaveStory,name.huliqing.luoying.save.ClientData,name.huliqing.luoying.data.ConnData) -> a
     void saveStory() -> j
     void storeClient(name.huliqing.luoying.save.SaveStory,java.util.List,java.lang.String,long,java.lang.String) -> a
     name.huliqing.luoying.object.actor.Actor findActor(java.util.List,long) -> a
     void doStoryInitialize() -> b
+name.huliqing.ly.object.game.StoryServerNetworkRpgGame$1 -> name.huliqing.ly.g.b.q:
+    name.huliqing.ly.object.game.StoryServerNetworkRpgGame this$0 -> a
+    void <init>(name.huliqing.ly.object.game.StoryServerNetworkRpgGame) -> <init>
+    void onDone(name.huliqing.luoying.object.anim.Anim) -> onDone
 name.huliqing.ly.object.game.lan.SurvivalBoss -> name.huliqing.ly.g.b.a.a:
     name.huliqing.luoying.layer.service.ActorService actorService -> a
     name.huliqing.luoying.layer.service.LogicService logicService -> b
@@ -818,6 +828,7 @@ name.huliqing.ly.object.game.lan.SurvivalBoss -> name.huliqing.ly.g.b.a.a:
     name.huliqing.luoying.layer.network.PlayNetwork playNetwork -> e
     name.huliqing.ly.layer.network.GameNetwork gameNetwork -> f
     name.huliqing.ly.layer.service.GameService gameService -> g
+    name.huliqing.luoying.layer.service.EntityService entityService -> v
     name.huliqing.luoying.layer.service.SceneService sceneService -> u
     name.huliqing.ly.object.game.lan.SurvivalGame _game -> h
     name.huliqing.ly.object.game.lan.SurvivalLevelLogic levelLogic -> i
@@ -877,6 +888,7 @@ name.huliqing.ly.object.game.lan.SurvivalLogic -> name.huliqing.ly.g.b.a.d:
     name.huliqing.luoying.layer.service.ActorService actorService -> c
     name.huliqing.luoying.layer.service.SkillService skillService -> d
     name.huliqing.luoying.layer.service.SceneService sceneService -> n
+    name.huliqing.luoying.layer.service.EntityService entityService -> o
     name.huliqing.ly.layer.service.GameService gameService -> e
     name.huliqing.ly.layer.network.GameNetwork gameNetwork -> f
     name.huliqing.luoying.layer.network.PlayNetwork playNetwork -> g
@@ -894,9 +906,10 @@ name.huliqing.ly.object.game.lan.SurvivalLogic -> name.huliqing.ly.g.b.a.d:
     name.huliqing.ly.object.game.lan.SurvivalGame access$000(name.huliqing.ly.object.game.lan.SurvivalLogic) -> a
     name.huliqing.ly.layer.service.GameService access$100(name.huliqing.ly.object.game.lan.SurvivalLogic) -> b
     name.huliqing.luoying.layer.service.SkillService access$200(name.huliqing.ly.object.game.lan.SurvivalLogic) -> c
-    name.huliqing.luoying.layer.service.SceneService access$300(name.huliqing.ly.object.game.lan.SurvivalLogic) -> d
-    name.huliqing.luoying.layer.service.LogicService access$400(name.huliqing.ly.object.game.lan.SurvivalLogic) -> e
-    name.huliqing.ly.object.game.lan.SurvivalLevelLogic access$500(name.huliqing.ly.object.game.lan.SurvivalLogic) -> f
+    name.huliqing.luoying.layer.service.EntityService access$300(name.huliqing.ly.object.game.lan.SurvivalLogic) -> d
+    name.huliqing.luoying.layer.service.SceneService access$400(name.huliqing.ly.object.game.lan.SurvivalLogic) -> e
+    name.huliqing.luoying.layer.service.LogicService access$500(name.huliqing.ly.object.game.lan.SurvivalLogic) -> f
+    name.huliqing.ly.object.game.lan.SurvivalLevelLogic access$600(name.huliqing.ly.object.game.lan.SurvivalLogic) -> g
 name.huliqing.ly.object.game.lan.SurvivalLogic$1 -> name.huliqing.ly.g.b.a.e:
     name.huliqing.ly.object.game.lan.SurvivalLogic this$0 -> a
     void <init>(name.huliqing.ly.object.game.lan.SurvivalLogic) -> <init>
@@ -1100,7 +1113,6 @@ name.huliqing.ly.object.game.story.StoryGbTask2End -> name.huliqing.ly.g.b.b.q:
     name.huliqing.luoying.layer.service.SkillService skillService -> c
     name.huliqing.ly.layer.service.GameService gameService -> d
     name.huliqing.luoying.layer.network.PlayNetwork playNetwork -> e
-    name.huliqing.luoying.layer.network.SkillNetwork skillNetwork -> f
     name.huliqing.ly.layer.network.GameNetwork gameNetwork -> g
     name.huliqing.luoying.layer.network.EntityNetwork entityNetwork -> h
     name.huliqing.ly.object.game.story.StoryGbGame _game -> i
@@ -1417,6 +1429,7 @@ name.huliqing.ly.object.game.story.StoryTreasureTask1 -> name.huliqing.ly.g.b.b.
     name.huliqing.ly.layer.service.GameService gameService -> d
     name.huliqing.luoying.layer.service.SkillService skillService -> e
     name.huliqing.luoying.layer.service.SceneService sceneService -> f
+    name.huliqing.luoying.layer.service.EntityService entityService -> z
     name.huliqing.luoying.layer.network.PlayNetwork playNetwork -> g
     name.huliqing.ly.layer.network.GameNetwork gameNetwork -> h
     name.huliqing.luoying.layer.network.EntityNetwork entityNetwork -> i
@@ -1454,14 +1467,15 @@ name.huliqing.ly.object.game.story.StoryTreasureTask1 -> name.huliqing.ly.g.b.b.
     name.huliqing.luoying.object.entity.Entity access$502(name.huliqing.ly.object.game.story.StoryTreasureTask1,name.huliqing.luoying.object.entity.Entity) -> b
     name.huliqing.luoying.object.entity.Entity access$500(name.huliqing.ly.object.game.story.StoryTreasureTask1) -> f
     name.huliqing.luoying.layer.service.SkillService access$600(name.huliqing.ly.object.game.story.StoryTreasureTask1) -> g
-    name.huliqing.ly.view.talk.Talk access$702(name.huliqing.ly.object.game.story.StoryTreasureTask1,name.huliqing.ly.view.talk.Talk) -> a
-    name.huliqing.luoying.object.entity.Entity access$802(name.huliqing.ly.object.game.story.StoryTreasureTask1,name.huliqing.luoying.object.entity.Entity) -> c
-    name.huliqing.luoying.object.entity.Entity access$800(name.huliqing.ly.object.game.story.StoryTreasureTask1) -> h
-    int access$902(name.huliqing.ly.object.game.story.StoryTreasureTask1,int) -> a
-    boolean access$1002(name.huliqing.ly.object.game.story.StoryTreasureTask1,boolean) -> a
-    name.huliqing.luoying.ui.TextPanel access$1100(name.huliqing.ly.object.game.story.StoryTreasureTask1) -> i
-    boolean access$1202(name.huliqing.ly.object.game.story.StoryTreasureTask1,boolean) -> b
-    java.lang.String access$1300(name.huliqing.ly.object.game.story.StoryTreasureTask1,java.lang.String) -> a
+    name.huliqing.luoying.layer.service.EntityService access$700(name.huliqing.ly.object.game.story.StoryTreasureTask1) -> h
+    name.huliqing.ly.view.talk.Talk access$802(name.huliqing.ly.object.game.story.StoryTreasureTask1,name.huliqing.ly.view.talk.Talk) -> a
+    name.huliqing.luoying.object.entity.Entity access$902(name.huliqing.ly.object.game.story.StoryTreasureTask1,name.huliqing.luoying.object.entity.Entity) -> c
+    name.huliqing.luoying.object.entity.Entity access$900(name.huliqing.ly.object.game.story.StoryTreasureTask1) -> i
+    int access$1002(name.huliqing.ly.object.game.story.StoryTreasureTask1,int) -> a
+    boolean access$1102(name.huliqing.ly.object.game.story.StoryTreasureTask1,boolean) -> a
+    name.huliqing.luoying.ui.TextPanel access$1200(name.huliqing.ly.object.game.story.StoryTreasureTask1) -> j
+    boolean access$1302(name.huliqing.ly.object.game.story.StoryTreasureTask1,boolean) -> b
+    java.lang.String access$1400(name.huliqing.ly.object.game.story.StoryTreasureTask1,java.lang.String) -> a
 name.huliqing.ly.object.game.story.StoryTreasureTask1$1 -> name.huliqing.ly.g.b.b.ar:
     name.huliqing.ly.object.game.story.StoryTreasureTask1 this$0 -> a
     void <init>(name.huliqing.ly.object.game.story.StoryTreasureTask1,java.lang.String) -> <init>
@@ -1537,17 +1551,17 @@ name.huliqing.ly.object.game.story.StoryTreasureTask2 -> name.huliqing.ly.g.b.b.
     int access$802(name.huliqing.ly.object.game.story.StoryTreasureTask2,int) -> a
     name.huliqing.ly.object.game.story.StoryTreasureGame access$900(name.huliqing.ly.object.game.story.StoryTreasureTask2) -> i
     name.huliqing.luoying.layer.service.SkillService access$1000(name.huliqing.ly.object.game.story.StoryTreasureTask2) -> j
-    name.huliqing.luoying.layer.service.SceneService access$1100(name.huliqing.ly.object.game.story.StoryTreasureTask2) -> k
-    name.huliqing.luoying.layer.service.LogicService access$1200(name.huliqing.ly.object.game.story.StoryTreasureTask2) -> l
-    name.huliqing.luoying.object.entity.Entity access$1400(name.huliqing.ly.object.game.story.StoryTreasureTask2) -> m
-    name.huliqing.luoying.layer.network.SkinNetwork access$1500(name.huliqing.ly.object.game.story.StoryTreasureTask2) -> n
-    name.huliqing.luoying.layer.network.EntityNetwork access$1600(name.huliqing.ly.object.game.story.StoryTreasureTask2) -> o
-    void access$1700(name.huliqing.ly.object.game.story.StoryTreasureTask2) -> p
-    name.huliqing.luoying.object.entity.Entity access$1402(name.huliqing.ly.object.game.story.StoryTreasureTask2,name.huliqing.luoying.object.entity.Entity) -> a
-    com.jme3.math.Vector3f access$1800(name.huliqing.ly.object.game.story.StoryTreasureTask2) -> q
-    name.huliqing.luoying.layer.service.ActorService access$1900(name.huliqing.ly.object.game.story.StoryTreasureTask2) -> r
-    name.huliqing.luoying.logic.scene.ActorBuildLogic access$2000(name.huliqing.ly.object.game.story.StoryTreasureTask2) -> s
-    name.huliqing.luoying.layer.service.EntityService access$2100(name.huliqing.ly.object.game.story.StoryTreasureTask2) -> t
+    name.huliqing.luoying.layer.service.EntityService access$1100(name.huliqing.ly.object.game.story.StoryTreasureTask2) -> k
+    name.huliqing.luoying.layer.service.SceneService access$1200(name.huliqing.ly.object.game.story.StoryTreasureTask2) -> l
+    name.huliqing.luoying.layer.service.LogicService access$1300(name.huliqing.ly.object.game.story.StoryTreasureTask2) -> m
+    name.huliqing.luoying.object.entity.Entity access$1500(name.huliqing.ly.object.game.story.StoryTreasureTask2) -> n
+    name.huliqing.luoying.layer.network.SkinNetwork access$1600(name.huliqing.ly.object.game.story.StoryTreasureTask2) -> o
+    name.huliqing.luoying.layer.network.EntityNetwork access$1700(name.huliqing.ly.object.game.story.StoryTreasureTask2) -> p
+    void access$1800(name.huliqing.ly.object.game.story.StoryTreasureTask2) -> q
+    name.huliqing.luoying.object.entity.Entity access$1502(name.huliqing.ly.object.game.story.StoryTreasureTask2,name.huliqing.luoying.object.entity.Entity) -> a
+    com.jme3.math.Vector3f access$1900(name.huliqing.ly.object.game.story.StoryTreasureTask2) -> r
+    name.huliqing.luoying.layer.service.ActorService access$2000(name.huliqing.ly.object.game.story.StoryTreasureTask2) -> s
+    name.huliqing.luoying.logic.scene.ActorBuildLogic access$2100(name.huliqing.ly.object.game.story.StoryTreasureTask2) -> t
 name.huliqing.ly.object.game.story.StoryTreasureTask2$1 -> name.huliqing.ly.g.b.b.ay:
     name.huliqing.ly.object.game.story.StoryTreasureTask2 this$0 -> a
     void <init>(name.huliqing.ly.object.game.story.StoryTreasureTask2) -> <init>
@@ -2086,6 +2100,7 @@ name.huliqing.ly.view.ActorSelectView -> name.huliqing.ly.i.f:
     name.huliqing.luoying.layer.service.SkinService skinService -> c
     name.huliqing.luoying.layer.service.LogicService logicService -> d
     name.huliqing.ly.layer.service.GameService gameService -> e
+    name.huliqing.luoying.layer.service.EntityService entityService -> t
     name.huliqing.ly.layer.network.GameNetwork gameNetwork -> f
     java.util.List models -> g
     name.huliqing.luoying.ui.LinearLayout namePanel -> h
@@ -3035,6 +3050,9 @@ name.huliqing.ly.view.shortcut.SkillShortcut -> name.huliqing.ly.i.b.h:
     void updateShortcutViewChildren(float,float) -> a
     float getTimePercent() -> f
     void createMask(com.jme3.scene.Geometry,com.jme3.material.Material) -> a
+    void onDataAdded(name.huliqing.luoying.xml.ObjectData,int) -> onDataAdded
+    void onDataRemoved(name.huliqing.luoying.xml.ObjectData,int) -> onDataRemoved
+    void onDataUsed(name.huliqing.luoying.xml.ObjectData) -> onDataUsed
 name.huliqing.ly.view.shortcut.SkillShortcut$1 -> name.huliqing.ly.i.b.i:
     name.huliqing.ly.view.shortcut.SkillShortcut this$0 -> a
     void <init>(name.huliqing.ly.view.shortcut.SkillShortcut) -> <init>

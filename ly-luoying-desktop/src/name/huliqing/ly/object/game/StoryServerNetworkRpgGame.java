@@ -38,7 +38,6 @@ import name.huliqing.luoying.object.anim.CurveMoveAnim;
 import name.huliqing.luoying.object.anim.InterpolateRotationAnim;
 import name.huliqing.luoying.object.anim.Listener;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.entity.impl.ChaseCameraEntity;
 import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.object.skill.Skill;
 import name.huliqing.luoying.save.ClientData;
@@ -154,7 +153,7 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
         cma.setTarget(cameraNode);
         cma.start();
         
-        InterpolateRotationAnim rotAnim = new InterpolateRotationAnim();
+        InterpolateRotationAnim rotAnim = Loader.load(name.huliqing.luoying.constants.IdConstants.SYS_ANIM_INTERPOLATE_ROTATION);
         rotAnim.setStart(camStartRot);
         rotAnim.setEnd(endRot);
         rotAnim.setUseTime(6);
@@ -173,6 +172,8 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
         
         setUIVisiable(false);
         getChaseCamera().setEnabled(false);
+        app.getCamera().setLocation(camStartLoc);
+        app.getCamera().setRotation(camStartRot);
     }
     
     /**

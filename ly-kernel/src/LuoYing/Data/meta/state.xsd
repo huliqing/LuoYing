@@ -34,15 +34,15 @@ xs:time
                 <!--技能锁定-->
                 <xs:element ref="stateSkillLocked" />
                 
-                <!--执行技能-->
-                <xs:element ref="stateSkill" />
+                <!--remove20161218-->
+<!--                执行技能
+                <xs:element ref="stateSkill" />-->
 
                 <!--状态清除-->
                 <xs:element ref="stateClean" />
 
                 <!--状态组-->
                 <xs:element ref="stateGroup" />
-                
                 <xs:element ref="statePrivateGroup" />
                 
             </xs:all>
@@ -110,7 +110,8 @@ xs:time
         </xs:complexType>
     </xs:element>
     
-    <xs:element name="stateSkill">
+    <!--remove20161218-->
+<!--    <xs:element name="stateSkill">
         <xs:annotation>
             <xs:documentation>执行一个技能</xs:documentation>
         </xs:annotation>
@@ -132,7 +133,7 @@ xs:time
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
-    </xs:element>
+    </xs:element>-->
     
     <xs:element name="stateSkillLocked">
         <xs:annotation>

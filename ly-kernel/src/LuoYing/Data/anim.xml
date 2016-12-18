@@ -6,10 +6,14 @@
     xsi:schemaLocation='http://luoying.huliqing.name meta/anim.xsd' >
     
     <!--==========================================================================-->
-    <!-- 动画配置 -->
+    <!-- 动画配置: 内置，用于程序运行时动态设置,使用Loader载入后需要设置参数。 -->
     <!--==========================================================================-->
 
-    <animCurveMove id="sysAnimCurveMove" useTime="1" />
+    <!--曲线移动动画: 载入后需要设置路径点-->
+    <animCurveMove id="sysAnimCurveMove" useTime="1"  />
+
+    <!--插值旋转动画：载入后需要设置旋转起点和结束点-->
+    <animInterpolateRotation id="sysAnimInterpolateRotation" useTime="1" start="0,0,0,1" end="0,0,0,1" />
 
 </root>
 

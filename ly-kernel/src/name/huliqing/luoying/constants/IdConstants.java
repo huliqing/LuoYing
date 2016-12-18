@@ -115,7 +115,10 @@ public class IdConstants {
     // =============================================================================
     // Anim
     // =============================================================================
-    /** sysAnimCurveMove */
+    /** 曲线移动动画： sysAnimCurveMove */
     public final static String SYS_ANIM_CURVE_MOVE = "sysAnimCurveMove";
+    
+    /** 插值旋转动画：sysAnimInterpolateRotation */
+    public final static String SYS_ANIM_INTERPOLATE_ROTATION = "sysAnimInterpolateRotation";
     
 }

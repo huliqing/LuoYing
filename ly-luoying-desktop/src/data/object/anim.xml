@@ -11,7 +11,6 @@
     <animRotation id="animTest3" loop="loop" axis="0,1,0" degree="360" invert="0" />
     <animColor id="animTestColor" useTime="1" startColor="0.5,0.5,1,1" endColor="0.75,0.75,1,1" loop="cycle" />
     
-    
     <!--==========================================================================-->
     <!-- 通用Animation -->
     <!-- "X,Y,Z"代表轴向; i代表invert; S代表show; H代表hide; I代表fadeIn; O代表fadeOut-->

@@ -9,15 +9,14 @@ import com.jme3.animation.AnimControl;
 import com.jme3.animation.Animation;
 import com.jme3.animation.LoopMode;
 import com.jme3.scene.Spatial;
+import com.jme3.util.SafeArrayList;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.constants.IdConstants;
 import name.huliqing.luoying.data.ChannelData;
 import name.huliqing.luoying.data.ModuleData;
-import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.object.AssetLoader;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.channel.Channel;
@@ -38,7 +37,7 @@ public class ChannelModule extends AbstractModule implements ChannelControl {
     
     // ---- inner
     // 通道处理器列表
-    private final List<Channel> channels = new LinkedList<Channel>();
+    private final SafeArrayList<Channel> channels = new SafeArrayList<Channel>(Channel.class);
     // 保存一个完整的id引用
     private String[] fullChannelsIds;
     // 默认blendTime,秒
@@ -62,7 +61,7 @@ public class ChannelModule extends AbstractModule implements ChannelControl {
     @Override
     public void updateDatas() {
         if (isInitialized()) {
-            for (Channel c : channels) {
+            for (Channel c : channels.getArray()) {
                 c.updateDatas();
             }
         }
@@ -118,7 +117,7 @@ public class ChannelModule extends AbstractModule implements ChannelControl {
     public Channel getChannel(String channelId) {
         if (channels == null) 
             return null;
-        for (Channel ch : channels) {
+        for (Channel ch : channels.getArray()) {
             if (ch.getId().equals(channelId)) {
                 return ch;
             }
@@ -141,12 +140,16 @@ public class ChannelModule extends AbstractModule implements ChannelControl {
         if (!initialized) {
             return;
         }
+        if (animControl == null) {
+            return;
+        }
         
         // 检查动画是否存在
         checkAndLoadAnim(animName);
         
         Channel sampleChannel = channels.get(0);
         AnimControl ac = sampleChannel.getAnimChannel().getControl();
+        
         Animation anim = ac.getAnim(animName);
         if (anim == null) {
             LOG.log(Level.WARNING, "Could not find animation:{0}", animName);
@@ -172,7 +175,7 @@ public class ChannelModule extends AbstractModule implements ChannelControl {
      * @return 
      */
     public boolean checkAndLoadAnim(String animName) {
-        if (animName == null) {
+        if (animName == null || animControl == null) {
             return false;
         }
         if (animControl.getAnim(animName) != null) {
@@ -232,7 +235,7 @@ public class ChannelModule extends AbstractModule implements ChannelControl {
 
     @Override
     public void reset() {
-        for (Channel channel : channels) {
+        for (Channel channel : channels.getArray()) {
             channel.reset();
         }
         resetState = true;
@@ -241,7 +244,7 @@ public class ChannelModule extends AbstractModule implements ChannelControl {
     @Override
     public void resetToAnimationTime(String anim, float timeInter) {
         checkAndLoadAnim(anim);
-        for (Channel ch : channels) {
+        for (Channel ch : channels.getArray()) {
             ch.resetToAnimationTime(anim, timeInter);
         }
         resetState = true;
@@ -253,7 +256,7 @@ public class ChannelModule extends AbstractModule implements ChannelControl {
         if (speed <= 0) {
             speed = 0.00001f;
         }
-        for (Channel ch : channels) {
+        for (Channel ch : channels.getArray()) {
             ch.updateSpeed(speed);
         }
     }
@@ -270,7 +273,7 @@ public class ChannelModule extends AbstractModule implements ChannelControl {
         }
         // 如果没有指定要锁定那些通道，则默认为全部通道
         if (channelIds == null) {
-            for (Channel c : channels) {
+            for (Channel c : channels.getArray()) {
                 c.setLock(locked);
             }
             return;

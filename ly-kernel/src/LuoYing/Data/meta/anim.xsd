@@ -22,6 +22,7 @@ xs:time
                 <xs:element ref="animMove" />
                 <xs:element ref="animCurveMove" />
                 <xs:element ref="animRotation" />
+                <xs:element ref="animInterpolateRotation" />
                 <xs:element ref="animRandomRotation" />
                 <xs:element ref="animScale" />
                 <xs:element ref="animColor" />
@@ -146,6 +147,28 @@ xs:time
                                 旋转结束时是否复原开始时的旋转属性,如果打开这个参数，则动画开始时会记住
                                 物体的旋转前的旋转属性，在结束的时候再复原该旋转属性。
                             </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="animInterpolateRotation">
+        <xs:annotation>
+            <xs:documentation>插值旋转动画</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="animBase">
+                    <xs:attribute name="start" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>指定开始旋转值(Quaternion)，格式： "0,0,0,1"</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="end" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>指定结束旋转值(Quaternion)， 格式："0,0,0,1"</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
                 </xs:extension>

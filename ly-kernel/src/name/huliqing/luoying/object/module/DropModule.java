@@ -126,7 +126,7 @@ public class DropModule extends AbstractModule implements DataHandler<DropData> 
                 hasDrop = true;
             }
         }
-        if (hasDrop) {
+        if (hasDrop && isMessageEnabled()) {
             playDefaultDropSound();
         }
     }

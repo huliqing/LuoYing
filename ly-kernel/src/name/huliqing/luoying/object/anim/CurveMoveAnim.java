@@ -182,15 +182,6 @@ public final class CurveMoveAnim extends AbstractAnim<Spatial> {
         return store;
     }
 
-    public void setDebug(boolean debug, boolean inGui) {
-        this.debug = debug;
-        this.debugInGui = inGui;
-    }
-
-    public boolean isDebug() {
-        return debug;
-    }
-
     public Spline getSpline() {
         return spline;
     }

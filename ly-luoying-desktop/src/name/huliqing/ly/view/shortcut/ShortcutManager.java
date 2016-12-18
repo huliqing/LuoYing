@@ -114,9 +114,11 @@ public class ShortcutManager {
         if (app instanceof SimpleApplication) {
             Vector2f cursor = LuoYing.getCursorPosition();
             Vector3f start = new Vector3f(cursor.x, cursor.y, 0);
-            Vector3f end = new Vector3f(cursor.x, cursor.y + 50, 0);
+            Vector3f end = new Vector3f(cursor.x + 50, cursor.y, 0);
+            Vector3f center = new Vector3f(start).interpolateLocal(end, 0.5f).addLocal(0, 50, 0);
             List<Vector3f> points = new ArrayList<Vector3f>(2);
             points.add(start);
+            points.add(center);
             points.add(end);
             
             CurveMoveAnim cma = Loader.load(IdConstants.SYS_ANIM_CURVE_MOVE);
@@ -124,7 +126,7 @@ public class ShortcutManager {
             cma.setTarget(shortcut.getView());
             cma.setUseTime(0.3f);
             cma.setMotionType(AbstractAnim.MotionType.Bezier);
-            cma.setBezierFactor(new float[]{0,0,1f,0f});
+            cma.setBezierFactor(new float[]{0,0,1f,1f});
             cma.start();
 
             AnimNode animNode = new AnimNode(cma, true);

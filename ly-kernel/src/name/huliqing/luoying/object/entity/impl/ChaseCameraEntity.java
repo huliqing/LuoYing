@@ -108,8 +108,6 @@ public class ChaseCameraEntity extends NonModelEntity  implements SceneListener 
         ccc.getComputeTransform(locStore, rotationStore);
     }
     
-    // ---- Listener-------------------------------------------------------------------------------------------------------------------
-    
     @Override
     public void onSceneLoaded(Scene scene) {
         // ignore

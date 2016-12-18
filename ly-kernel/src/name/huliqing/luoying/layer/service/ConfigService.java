@@ -4,7 +4,6 @@
  */
 package name.huliqing.luoying.layer.service;
 
-import java.util.logging.Level;
 import name.huliqing.luoying.Inject;
 
 /**
@@ -70,6 +69,5 @@ public interface ConfigService extends Inject {
      * @param volume 
      */
     void setSoundVolume(float volume);
-    
-    
+
 }
