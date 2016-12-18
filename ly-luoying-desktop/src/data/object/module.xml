@@ -64,7 +64,7 @@
     <!--==========================================================================-->
     
     <!--物品掉落管理模块: 不直接依赖其它模块-->
-    <moduleDrop id="moduleDrop" extends="moduleBase" moduleOrder="60" bindDeadAttribute="attributeDead" sounds="soundNote" />
+    <moduleDrop id="moduleDrop" extends="moduleBase" moduleOrder="60" bindDeadAttribute="attributeDead" />
 
     <!--对话功能管理模块: 不直接依赖其它模块 -->
     <moduleChat id="moduleChat" extends="moduleBase" moduleOrder="60" />

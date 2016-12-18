@@ -25,15 +25,18 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.data.ItemData;
+import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.data.SkinData;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.service.MessageService;
 import name.huliqing.luoying.layer.service.SkillService;
+import name.huliqing.luoying.layer.service.SoundService;
 import name.huliqing.luoying.manager.PickManager;
 import name.huliqing.luoying.message.ConsoleMessageHandler;
 import name.huliqing.luoying.message.EntityMessage;
 import name.huliqing.luoying.message.Message;
 import name.huliqing.luoying.message.DefaultMessageHandler;
+import name.huliqing.luoying.message.EntityDataAddMessage;
 import name.huliqing.luoying.message.EntityDataRemoveMessage;
 import name.huliqing.luoying.message.EntityDataUseMessage;
 import name.huliqing.luoying.message.EntitySkillUseMessage;
@@ -48,7 +51,9 @@ import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.ui.UIEventListener;
 import name.huliqing.luoying.ui.state.PickListener;
 import name.huliqing.luoying.ui.state.UIState;
+import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.ly.LyConfig;
+import name.huliqing.ly.constants.IdConstants;
 import name.huliqing.ly.enums.MessageType;
 import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
@@ -68,6 +73,7 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
     private final MessageService messageService = Factory.get(MessageService.class);
     private final SkillService skillService = Factory.get(SkillService.class);
     private final GameService gameService = Factory.get(GameService.class);
+    private final SoundService soundService = Factory.get(SoundService.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     
@@ -438,13 +444,29 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
         
         @Override
         public void handle(Message message) {
-            // 如果不是当前玩家的消息则不显示
+            // 全局过滤：如果不是当前玩家的消息则不显示
             if (message instanceof EntityMessage) {
                 if (((EntityMessage) message).getEntity() != player) {
                     return;
                 }
             }
             super.handle(message); 
+        }
+
+        @Override
+        protected void handleDataAddMessage(EntityDataAddMessage mess) {
+            ObjectData objectData = mess.getObjectData();
+            // 特殊技能的获得不需要提示
+            if (objectData instanceof SkillData) {
+                if ((filterSkillType & ((SkillData) objectData).getTypes()) != 0) {
+                    return;
+                }
+            }
+            // 获得物品或装备时给一个提示音
+            if (objectData instanceof ItemData || objectData instanceof SkinData) {
+                soundService.playSound(IdConstants.SOUND_GET_ITEM, player.getSpatial().getWorldTranslation());
+            }
+            super.handleDataAddMessage(mess); 
         }
 
         @Override
