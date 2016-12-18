@@ -49,11 +49,14 @@ public class TestItem extends AbstractItem {
 //        Entity other = Loader.load(ed);
 //        playNetwork.addEntity(other);
 
-        Entity entity = Loader.load("actorDiNa");
+//        Entity entity = Loader.load("actorDiNa");
+        Entity entity = Loader.load("actorTreasure");
 //        Entity entity = Loader.load("actorTower");
+
+
         entity.getAttributeManager().getAttribute("attributeGroup", NumberAttribute.class).setValue(actor.getAttributeManager().getAttribute("attributeGroup", NumberAttribute.class).intValue());
 //        entity.getAttributeManager().getAttribute("attributeLevel", NumberAttribute.class).setValue(60);
-        entity.getAttributeManager().getAttribute("attributeHealth", NumberAttribute.class).setValue(0);
+//        entity.getAttributeManager().getAttribute("attributeHealth", NumberAttribute.class).setValue(10);
         playNetwork.addEntity(entity);
         
 //        entityNetwork.hitAttribute(actor, "attributeLevel", 20, null);

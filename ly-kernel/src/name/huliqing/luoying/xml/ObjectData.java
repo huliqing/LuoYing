@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.LuoYingException;
 import name.huliqing.luoying.data.SavableArray;
@@ -45,7 +44,7 @@ public class ObjectData implements Savable, Cloneable {
     protected HashMap<String, Savable> localData;
     
     // 原形数据,不在Network过程中进行序列化传输。
-    // 因为proto可以直接从本地获取，不需要进行network传输，减少网络流量
+    // 因为proto可以直接从本地获取，不需要进行network传输，也不需要档存。
     private transient Proto proto;
     
     public ObjectData() {}
@@ -504,11 +503,16 @@ public class ObjectData implements Savable, Cloneable {
     public ObjectData clone() {
         try {
             ObjectData clone = (ObjectData) super.clone();
+            
+            // 这里要把localData为null,以便重新创建本地变量(localData)实例。
+            // 非常重要: 这引起过一个BUG，买卖物品时,买家和卖家引用了同一个"物品数量"
+            clone.localData = null; 
+            
             if (localData != null && !localData.isEmpty()) {
                 Set<String> keys = localData.keySet();
                 for (String key : keys) {
                     // 注：不要直接从localData中获取，因为localData中的数据是进行了包装过的。
-                    // 调用getAttributeFromLocal可以进行自动解包
+                    // 调用getAttributeFromLocal可以进行自动解包,并通过setAttribute来自动再打包。
                     Object value = getAttributeFromLocal(key);
                     if (value instanceof Cloneable) {
                         clone.setAttribute(key, SimpleCloner.deepClone(value));
