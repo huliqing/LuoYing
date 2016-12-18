@@ -21,21 +21,29 @@ public class GroupAttribute extends AbstractAttribute<Void> {
     // 初始配置的属性（id )
     private String[] attributeIds;
     
-    private List<Attribute> attributes;
+    // ---- inner
     // 标记着子属性是否已经添加到module上。
     private boolean attributesApplied;
+    
+    // 这个参数用于记住由GroupAttribute打包并添加到module上的所有属性的唯一id.
+    // 在清理时只清理这些指定id的属性就可以。不应该使用属性id或名称，因为属性是可以在运行时替换的。
+    // GroupAttribute添加上去的属性有可能在运行时被其它相同名称的属性替换掉，对于这些则GroupAttribute不应该在退出时清理。
+    // 即只清理那些”明确的“由自己添加到模块上的属性”实例“就可以。
+    private long[] attributeAppliedIds;
     
     @Override
     public void setData(AttributeData data) {
         super.setData(data); 
         this.attributeIds = data.getAsArray("attributes");
-        this.attributesApplied = data.getAsBoolean("attributesApplied", false);
+        this.attributesApplied = data.getAsBoolean("_attributesApplied", attributesApplied);
+        this.attributeAppliedIds = data.getAsLongArray("_attributeAppliedIds");
     }
     
     @Override
     public void updateDatas() {
         super.updateDatas();
-        data.setAttribute("attributesApplied", attributesApplied);
+        data.setAttribute("_attributesApplied", attributesApplied);
+        data.setAttribute("_attributeAppliedIds", attributeAppliedIds);
     }  
     
     @Override
@@ -56,24 +64,32 @@ public class GroupAttribute extends AbstractAttribute<Void> {
         
         // 添加属性到attributeModule,注意要标记attributesApplied=true,并更新到data中去, 那么当下次从存档中载入时，
         // 就不再需要在这里载入到module中去了，因为会从attributeModule中直接载入。
-        attributes = getAttributes();
-        for (Attribute ad : attributes) {
-            module.addAttribute(ad);
+        List<Attribute> attributes = getAttributes();
+        attributeAppliedIds = new long[attributes.size()];
+        for (int i = 0; i < attributes.size(); i++) {
+            Attribute attr = attributes.get(i);
+            module.addAttribute(attr);
+            attributeAppliedIds[i] = attr.getData().getUniqueId();
         }
         attributesApplied = true;
-        updateDatas();
     }
     
     @Override
     public void cleanup() {
-        if (attributes != null) {
-            for (Attribute attr : attributes) {
-                module.removeAttribute(attr);
+        if (attributesApplied) {
+            if (attributeAppliedIds != null) {
+               Attribute attr;
+                for (long attrId : attributeAppliedIds) {
+                    attr = module.getAttribute(attrId);
+                    // 属性有可能在运行时被替换，所以当GroupAttribute清理时，
+                    // 这些由GroupAttribute添加上去的属性并不能绝对保存还存在着。
+                    if (attr != null)  {
+                        module.removeAttribute(attr);
+                    }
+                }
             }
-            attributes.clear();
-            attributes = null;
+            attributeAppliedIds = null;
             attributesApplied = false;
-            updateDatas();
         }
         super.cleanup();
     }
@@ -94,7 +110,7 @@ public class GroupAttribute extends AbstractAttribute<Void> {
 
     @Override
     protected boolean doSetValue(Void newValue) {
-        throw new UnsupportedOperationException("Not supported yet."); 
+        return false; // ignore
     }
 
 

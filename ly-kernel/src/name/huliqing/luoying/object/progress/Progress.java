@@ -10,7 +10,7 @@ import name.huliqing.luoying.data.ProgressData;
 import name.huliqing.luoying.xml.DataProcessor;
 
 /**
- * 场景载入器,主要用于在场景载入过程中提供一个载入动画及进度。
+ * Progress用于实现动画载入功能，例如进度条载入动画等。
  * @author huliqing
  */
 public interface Progress extends DataProcessor<ProgressData>{
@@ -29,7 +29,6 @@ public interface Progress extends DataProcessor<ProgressData>{
     
     /**
      * 更新并渲染进度条，给定的参数progress取值为 0.0~1.0， 1.0表示100%载入完成, 0.5表示%50完成，依此类推。
-     * 该方法会在场景实体载入过程中被持续调用，直到场景所有实体载入完成。
      * @param progress 
      */
     void display(float progress);
@@ -38,24 +37,5 @@ public interface Progress extends DataProcessor<ProgressData>{
      * 清理并释放资源
      */
     void cleanup();
-    
-//    /**
-//     * 添加一个载入器的侦听器，用于侦听场景的载入是否完成。
-//     * @param listener 
-//     */
-//    void addListener(ProgressListener listener);
-//    
-//    /**
-//     * 移除指定的侦听器
-//     * @param listener 
-//     * @return  
-//     */
-//    boolean removeListener(ProgressListener listener);
-//    
-//    /**
-//     * 开始载入场景
-//     * @param scene 
-//     */
-//    void loadScene(Scene scene);
     
 }

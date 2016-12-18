@@ -26,6 +26,14 @@ public interface AttributeManager {
     <T extends Attribute> T getAttribute(String attrName);
     
     /**
+     * 通过唯一ID来获取指定的属性
+     * @param <T>
+     * @param attrUniqueId
+     * @return 
+     */
+    <T extends Attribute> T getAttribute(long attrUniqueId);
+    
+    /**
      * 查找指定的属性，如果找不到或者指定的属性类型不匹配则返回null.
      * @param <T>
      * @param attrName 属性名称，<b>不</b>是属性ID(<b>Not</b>id)

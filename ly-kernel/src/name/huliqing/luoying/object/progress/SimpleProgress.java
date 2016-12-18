@@ -15,7 +15,7 @@ import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.utils.MaterialUtils;
 
 /**
- *
+ * 非常简单的进度条载入动画
  * @author huliqing
  */
 public class SimpleProgress extends AbstractProgress {
@@ -34,13 +34,13 @@ public class SimpleProgress extends AbstractProgress {
         float pHeight = sh * 0.01f;
         float leftMargin = (sw - pWidth) * 0.5f;
         
-        progress = new Node();
         background = createBox("background", ColorRGBA.Gray);
         
         foreground = createBox("foreground", ColorRGBA.Green);
         foreground.setLocalScale(0, 1, 1);
         foreground.setLocalTranslation(0, 0, 1);
         
+        progress = new Node();
         progress.attachChild(background);
         progress.attachChild(foreground);
         progress.setLocalScale(pWidth, pHeight, 1);

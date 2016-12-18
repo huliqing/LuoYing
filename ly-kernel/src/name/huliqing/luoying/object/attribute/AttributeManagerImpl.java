@@ -95,6 +95,11 @@ public class AttributeManagerImpl implements AttributeManager {
     public <T extends Attribute> T getAttribute(String attrName) {
         return (T) store.getAttributeByName(attrName);
     }
+
+    @Override
+    public <T extends Attribute> T getAttribute(long attrUniqueId) {
+        return (T) store.getAttributeByUniqueId(attrUniqueId);
+    }
     
     /**
      * 查找指定的属性，如果找不到或者指定的属性类型不匹配则返回null.
