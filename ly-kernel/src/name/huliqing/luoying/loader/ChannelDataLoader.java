@@ -17,10 +17,6 @@ public class ChannelDataLoader implements DataLoader<ChannelData> {
 
     @Override
     public void load(Proto proto, ChannelData data) {
-        // remove20160930
-//        data.setFromRootBones(proto.getAsArray("fromRootBones"));
-//        data.setToRootBones(proto.getAsArray("toRootBones"));
-//        data.setBones(proto.getAsArray("bones"));
     }
     
 }

@@ -12,7 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * 用于获取拥有继承关系的物体原形。
+ * 物体原形工具，Proto是有继承关系的, Proto的继承是一个线性的链，通过ProtoUtils来获取完整的Proto。
  * @author huliqing
  */
 class ProtoUtils {
@@ -160,23 +160,5 @@ class ProtoUtils {
             proto.setDataProcessorClass(dataProcessorClass != null ? dataProcessorClass : NullProcessor.class);
         }
     }
-    
-    // remove20161216
-//    private static void checkLoaderAndProcessor(Proto proto) {
-//        String tagName = proto.getTagName();
-//        if (proto.getDataClass() == null) {
-//            Class dataClass = DataFactory.getDataClass(tagName);
-//            proto.setDataClass(dataClass != null ? dataClass.getName() : null);
-//        }
-//        if (proto.getDataLoaderClass() == null) {
-//            Class dataLoaderClass = DataFactory.getDataLoaderClass(tagName);
-//            proto.setDataLoaderClass(dataLoaderClass != null ? dataLoaderClass.getName() : null);
-//        }
-//        if (proto.getDataProcessorClass() == null) {
-//            Class dataProcessorClass = DataFactory.getDataProcessorClass(tagName);
-//            proto.setDataProcessorClass(dataProcessorClass != null ? dataProcessorClass.getName() : null);
-//        }
-//    }
-    
    
 }

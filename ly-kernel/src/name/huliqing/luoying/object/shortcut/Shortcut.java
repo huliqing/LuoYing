@@ -13,7 +13,7 @@ import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.xml.DataProcessor;
 
 /**
- *
+ * 快捷方式接口
  * @author huliqing
  * @param <T>
  */

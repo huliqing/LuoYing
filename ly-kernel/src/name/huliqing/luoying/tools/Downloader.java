@@ -29,7 +29,7 @@ public interface Downloader {
 
         /**
          * 发生下载失败时
-         * @param e
+         * @param errorMessage
          */
         void error(String errorMessage);
     }
@@ -37,6 +37,7 @@ public interface Downloader {
     /**
      * 获取总文件长度。
      * @return 
+     * @throws java.io.IOException 
      */
     long getLength() throws IOException ;
     

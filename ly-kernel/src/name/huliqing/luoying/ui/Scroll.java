@@ -5,7 +5,7 @@
 package name.huliqing.luoying.ui;
 
 /**
- *
+ * 滚动条功能
  * @author huliqing
  */
 public interface Scroll {

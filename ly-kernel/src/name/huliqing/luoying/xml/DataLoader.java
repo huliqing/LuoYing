@@ -6,7 +6,7 @@ package name.huliqing.luoying.xml;
 
 
 /**
- * 载入数据接口
+ * XML数据载入器
  * @author huliqing
  * @param <T>
  */

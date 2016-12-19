@@ -14,12 +14,14 @@ import java.io.UnsupportedEncodingException;
 public class PacketParse {
     
     // 消息头
-    private String HEAD = "ly3d";
+    private final String HEAD = "ly3d";
     
     /**
      * 将要发送的信息进行编码
-     * @param message
+     * @param code
+     * @param content
      * @return 
+     * @throws java.io.UnsupportedEncodingException 
      */
     public byte[] encode(String code, String content) throws UnsupportedEncodingException {
         //return (HEAD + code + (content != null ? content : "")).getBytes();
@@ -31,6 +33,7 @@ public class PacketParse {
      * 回null,因为这可能是其它机器发送的广播信息。
      * @param data
      * @return 
+     * @throws java.io.UnsupportedEncodingException 
      */
     public String[] decode(byte[] data) throws UnsupportedEncodingException {
 //        Logger.getLogger(PacketParse.class.getName()).log(Level.INFO, "Raw message before decode:{0}", new String(data));

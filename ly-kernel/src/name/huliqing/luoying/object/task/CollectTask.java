@@ -11,9 +11,7 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ItemData;
 import name.huliqing.luoying.data.TaskData;
 import name.huliqing.luoying.layer.network.EntityNetwork;
-import name.huliqing.luoying.layer.network.TaskNetwork;
 import name.huliqing.luoying.layer.service.EntityService;
-import name.huliqing.luoying.layer.service.TaskService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.entity.Entity;
@@ -31,10 +29,6 @@ import name.huliqing.luoying.xml.ObjectData;
  * @param <T>
  */
 public class CollectTask<T extends TaskData> extends AbstractTask<T> implements ActorListener {
-//    private final ActorService actorService = Factory.get(ActorService.class);
-    private final TaskService taskService = Factory.get(TaskService.class);
-    private final TaskNetwork taskNetwork = Factory.get(TaskNetwork.class);
-//    private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
     private final EntityService entityService = Factory.get(EntityService.class);
     private ActorModule actorModule;
@@ -47,10 +41,6 @@ public class CollectTask<T extends TaskData> extends AbstractTask<T> implements 
     private float dropFactor = 0.5f;
     
     // ---- inner
-
-// remove20161010    
-// 显示任务目标
-//    private GoldPanel goldPanel;
     
     // 标记是否已经收集完毕
     private boolean collected;
@@ -189,71 +179,5 @@ public class CollectTask<T extends TaskData> extends AbstractTask<T> implements 
         /** 需要收集的物品总量 */
         int total;
     }
-
-    // remove20161010
-//    @Override
-//    public Window getTaskDetail() {
-//        Window win = super.getTaskDetail();
-//        // 如果是已经完成过的任务则不显示进度
-//        if (data.isCompletion()) {
-//            if (goldPanel != null) {
-//                goldPanel.setVisible(false);
-//                win.resize();
-//            }
-//            return win;
-//        }
-//        
-//        // 展示任务进度
-//        if (goldPanel == null) {
-//            goldPanel = new GoldPanel(win.getContentWidth(), UIFactory.getUIConfig().getTitleHeight());
-//            win.addView(goldPanel);
-//            win.resize();
-//            win.setToCorner(UI.Corner.CC);
-//        }
-//        goldPanel.update(actor);
-//        
-//        return win;
-//    }
-
-    // remove20161010
-//    // 任务目标，列出需要收集的物品列表和收集进度
-//    private class GoldPanel extends LinearLayout {
-//        // 任务说明
-//        private Text label;
-//        
-//        public GoldPanel(float width, float height) {
-//            super(width, height);
-//            setLayout(Layout.horizontal);
-//            setBackground(UIFactory.getUIConfig().getBackground(), true);
-//            setBackgroundColor(UIFactory.getUIConfig().getDesColor(), true);
-//            label = new Text(ResourceManager.get(ResConstants.TASK_PROGRESS) + ": ");
-//            label.setHeight(height);
-//            label.setVerticalAlignment(BitmapFont.VAlign.Center);
-//            addView(label);
-//            
-//            // 目标：列出需要收集的物品及数量
-//            float ilWidth = (width - label.getWidth()) / items.size();
-//            for (ItemWrap iw : items) {
-//                IconLabel<ItemWrap> il = new IconLabel<ItemWrap>(iw
-//                        , ((ObjectData)DataFactory.createData(iw.itemId)).getIcon()
-//                        , "0/" + iw.total);
-//                il.setWidth(ilWidth);
-//                il.setHeight(height);
-//                addView(il);
-//            }
-//        }
-//        
-//        // 更新所收集物品的进度
-//        void update(Entity actor) {
-//            IconLabel<ItemWrap> temp;
-//            for (UI ui : getViews()) {
-//                if (ui instanceof IconLabel) {
-//                    temp = (IconLabel) ui;
-//                    temp.setLabel(taskService.getItemTotal(actor, CollectTask.this, temp.getId().itemId)
-//                            + "/" + temp.getId().total);
-//                }
-//            }
-//        }
-//    }
    
 }

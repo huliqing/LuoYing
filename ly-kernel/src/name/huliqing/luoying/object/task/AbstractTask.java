@@ -28,7 +28,6 @@ public abstract class AbstractTask<T extends TaskData> implements Task<T> {
     protected List<RewardAttribute> rewardAttributes;
     
     // ---- inner
-//    protected Window detailWin;
     protected boolean initialized;
 
     @Override
@@ -126,19 +125,6 @@ public abstract class AbstractTask<T extends TaskData> implements Task<T> {
         data.setCompletion(true);
     }
 
-    // remove20161010
-//    @Override
-//    public Window getTaskDetail() {
-//        if (detailWin == null) {
-//            detailWin = new DetailWindow(playService.getScreenWidth() * 0.5f
-//                    , playService.getScreenHeight() * 0.4f);
-//            detailWin.setCloseable(true);
-//            detailWin.resize();
-//            detailWin.setToCorner(UI.Corner.CC);
-//        }
-//        return detailWin;
-//    }
-
     // 奖励的物品及数量
     protected class RewardItem {
         String itemId;
@@ -150,77 +136,5 @@ public abstract class AbstractTask<T extends TaskData> implements Task<T> {
         String attributeName;
         float value;
     }
-    
-    // remove20161010
-//    private class DetailWindow extends Window {
-//        // 任务说明
-//        private final Text taskDetail;
-//        // 任务奖励：列出任务完成后的奖励物品列表
-//        private final LinearLayout taskRewardPanel;
-//        private final Text rewardHead;
-//        
-//        public DetailWindow(float width, float height) {
-//            super(width, height);
-//            setTitle(ResourceManager.get(ResConstants.TASK_TASK) + "-" + ResourceManager.getObjectName(data.getId()));
-//            setPadding(10, 10, 10, 10);
-//            
-//            float cw = getContentWidth();
-//            float ch = getContentHeight();
-//            float panelHeight = UIFactory.getUIConfig().getTitleHeight();
-//            taskDetail = new Text(ResourceManager.getObjectDes(data.getId()));
-//            taskDetail.setWidth(cw);
-////            taskDetail.setHeight(ch - panelHeight);// 不要固定高度
-//            taskDetail.updateView();
-//            taskDetail.resize(); // 缩小宽度
-//            
-//            // 列出要奖励的东西
-//            taskRewardPanel = new LinearLayout(cw, panelHeight);
-//            taskRewardPanel.setLayout(Layout.horizontal);
-//            
-//            rewardHead = new Text(ResourceManager.get(ResConstants.TASK_REWARD) + ":  ");
-//            rewardHead.setHeight(panelHeight);
-//            rewardHead.setVerticalAlignment(BitmapFont.VAlign.Center);
-//            taskRewardPanel.addView(rewardHead);
-//            
-//            // remove20160829
-////            if (rewardExp > 0) {
-////                IconLabel il = new IconLabel("_EXP_", InterfaceConstants.ITEM_EXP, rewardExp + "");
-////                taskRewardPanel.addView(il);
-////            }
-//
-//            if (rewardAttributes != null && !rewardAttributes.isEmpty()) {
-//                for (RewardAttribute ra : rewardAttributes) {
-//                    IconLabel label = new IconLabel(ra.attributeName
-//                            ,  ((ObjectData)DataFactory.createData(ra.attributeName)).getIcon()
-//                            , ra.value + "");
-//                    taskRewardPanel.addView(label);
-//                }
-//            }
-//            
-//            if (rewardItems != null) {
-//                for (RewardItem ri : rewardItems) {
-//                    IconLabel label = new IconLabel(ri.itemId
-//                            , ((ObjectData)DataFactory.createData(ri.itemId)).getIcon()
-//                            , ri.count + "");
-//                    taskRewardPanel.addView(label);
-//                }
-//            }
-//            
-//            List<UI> cuis = taskRewardPanel.getViews();
-//            if (cuis.size() > 1) {
-//                float iconLabelWidth = (cw - rewardHead.getWidth()) / (cuis.size() - 1);
-//                IconLabel temp;
-//                for (UI ui : cuis) {
-//                    if (ui instanceof IconLabel) {
-//                        temp = (IconLabel) ui;
-//                        temp.setWidth(iconLabelWidth);
-//                        temp.setHeight(panelHeight);
-//                    }
-//                }
-//            }
-//            
-//            addView(taskDetail);
-//            addView(taskRewardPanel);
-//        }
-//    }
+   
 }

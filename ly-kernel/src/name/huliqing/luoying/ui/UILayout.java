@@ -172,8 +172,7 @@ public abstract class UILayout extends AbstractUI {
 //    }
     
     /**
-     * 更新子组件,主要更新子组件的宽度，高度等
-     * @param children 
+     * 更新子组件,主要更新子组件的宽度，高度等 
      */
     protected abstract void updateViewChildren();
     

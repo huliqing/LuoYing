@@ -32,19 +32,21 @@ import name.huliqing.luoying.data.SavableString;
  */
 @Serializable
 public class ObjectData implements Savable, Cloneable {
-    private static final Logger LOG = Logger.getLogger(ObjectData.class.getName());
+//    private static final Logger LOG = Logger.getLogger(ObjectData.class.getName());
     
-    // 类型ID
+    /** 类型ID */
     protected String id;
     
-    // 全局唯一ID,当前游戏的全局唯一ID
+    /** 全局唯一ID,当前游戏的全局唯一ID */
     protected long uniqueId;
     
-    // 本地数据,读取或设置数据时优先从本地localData中获取.
+    /** 本地数据,读取或设置数据时优先从本地localData中获取*/
     protected HashMap<String, Savable> localData;
     
-    // 原形数据,不在Network过程中进行序列化传输。
-    // 因为proto可以直接从本地获取，不需要进行network传输，也不需要档存。
+    /** 
+     * 原形数据,不在Network过程中进行序列化传输。
+     *因为proto可以直接从本地获取，不需要进行network传输，也不需要档存。
+     */
     private transient Proto proto;
     
     public ObjectData() {}
@@ -500,6 +502,7 @@ public class ObjectData implements Savable, Cloneable {
      * 注意：除物体的uniqueId之外，其它字段都尽量进行深度克隆。
      * @return 
      */
+    @Override
     public ObjectData clone() {
         try {
             ObjectData clone = (ObjectData) super.clone();

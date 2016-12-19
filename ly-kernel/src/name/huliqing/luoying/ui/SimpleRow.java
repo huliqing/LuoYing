@@ -10,6 +10,7 @@ import com.jme3.font.BitmapFont.VAlign;
 /**
  *
  * @author huliqing
+ * @param <T>
  */
 public class SimpleRow<T> extends Row<T> {
     

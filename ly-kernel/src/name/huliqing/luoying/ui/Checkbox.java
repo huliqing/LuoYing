@@ -42,11 +42,6 @@ public class Checkbox extends AbstractUI {
             @Override
             public void onClick(UI ui, boolean isPress) {
                 if (isPress) return;
-                
-                // remove
-//                checked = !checked;
-//                updateFlag();
-                
                 setChecked(!isChecked());
             }
         });

@@ -10,6 +10,7 @@ import java.util.Arrays;
 /**
  * 快速高效的堆栈。
  * @author huliqing
+ * @param <T>
  */
 public final class FastStack<T> {
     

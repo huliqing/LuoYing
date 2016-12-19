@@ -17,7 +17,6 @@ import name.huliqing.luoying.object.skill.Skill;
  * @author huliqing
  */ 
 public class MoveSpeedState extends AttributeState {
-//    private final PlayService playService = Factory.get(PlayService.class);
     private SkillModule skillModule;
     
     private String moveEffectId;

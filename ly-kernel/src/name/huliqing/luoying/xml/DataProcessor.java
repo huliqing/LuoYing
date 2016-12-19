@@ -5,7 +5,7 @@
 package name.huliqing.luoying.xml;
 
 /**
- *
+ * DataProcessor数据处理器
  * @author huliqing
  * @param <T>
  */

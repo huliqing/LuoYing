@@ -14,7 +14,6 @@ import java.util.Map;
 @Serializable
 public class Proto extends Data { 
     
-//    public final static String ID = "id";
     public final static String DATA_CLASS = "dataClass";
     public final static String DATA_LOADER_CLASS = "dataLoaderClass";
     public final static String DATA_PROCESSOR_CLASS = "dataProcessorClass";
@@ -22,6 +21,7 @@ public class Proto extends Data {
     private String tagName;
     private String id;
     
+    // 注：由于这些class的存在，Proto可能无法正常序列化，但是Proto本身的设计也不是用来传输的,所以没有关系。
     private Class dataClass;
     private Class dataLoaderClass;
     private Class dataProcessorClass;

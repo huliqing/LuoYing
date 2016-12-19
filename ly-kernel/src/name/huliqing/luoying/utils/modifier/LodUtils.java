@@ -26,7 +26,8 @@ public class LodUtils {
         try {
             spatial = am.loadModel(file);
         } catch (Exception e) {
-            Logger.getLogger(LodUtils.class.getName()).log(Level.WARNING, "Could not load model:{0}, error={1}", new String[] {file, e.getMessage()});
+            Logger.getLogger(LodUtils.class.getName()).log(Level.WARNING, "Could not load model:{0}, error={1}"
+                    , new String[] {file, e.getMessage()});
             return;
         }
         
@@ -45,7 +46,8 @@ public class LodUtils {
                             geo.addControl(lodControl);
                         }
                     } catch (Exception e) {
-                        Logger.getLogger(getClass().getName()).log(Level.WARNING, "Could not generate Lod for:{0}", geo.getName());
+                        Logger.getLogger(getClass().getName()).log(Level.WARNING, "Could not generate Lod for:{0}"
+                                , geo.getName());
                     }
                     Logger.getLogger(getClass().getName()).log(Level.INFO, "Make lod for:{0} ok!", geo.getName());
                 }

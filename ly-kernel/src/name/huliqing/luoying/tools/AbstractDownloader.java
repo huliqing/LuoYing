@@ -68,7 +68,7 @@ public abstract class AbstractDownloader implements Downloader {
         
         public AtomicBoolean breakOff = new AtomicBoolean(false);
         private InputStream in;
-        private OutputStream out;
+        private final OutputStream out;
         
         public LoadThread(InputStream in, OutputStream out) {
             this.in = in;

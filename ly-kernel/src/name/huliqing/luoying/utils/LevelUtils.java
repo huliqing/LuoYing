@@ -6,7 +6,7 @@ package name.huliqing.luoying.utils;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import name.huliqing.luoying.Config;
+//import name.huliqing.luoying.Config;
 
 /**
  * 管理角色等级相关信息

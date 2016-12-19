@@ -11,6 +11,7 @@ import name.huliqing.luoying.data.ShortcutData;
 import name.huliqing.luoying.object.entity.Entity;
 
 /**
+ * 快捷方式基类
  * @author huliqing
  * @param <T>
  */

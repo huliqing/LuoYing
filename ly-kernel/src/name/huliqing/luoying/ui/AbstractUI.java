@@ -18,14 +18,13 @@ import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.shape.Quad;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import name.huliqing.luoying.constants.AssetConstants;
 
 /**
  * UI基类
  * @author huliqing
  */
 public abstract class AbstractUI extends Node implements UI {
-    // remove20160309不要再去主动设置UI的z向值，这会影响UI的层叠显示顺序
-//    public static int globalZIndex = 1;
     
     /**
      *  一个空的listener，可用于添加到一些UI上，让这些UI可阻止事件继续穿透
@@ -338,7 +337,7 @@ public abstract class AbstractUI extends Node implements UI {
     
     private void createEventGeo() {
         eventGeo = new Geometry("", new Quad(1, 1));
-        Material mat = new Material(UIFactory.getUIConfig().getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        Material mat = new Material(UIFactory.getUIConfig().getAssetManager(), AssetConstants.MATERIAL_UNSHADED);
         eventGeo.setMaterial(mat);
         eventGeo.setCullHint(CullHint.Always);
         super.attachChildAt(eventGeo, 0);
@@ -425,6 +424,7 @@ public abstract class AbstractUI extends Node implements UI {
 //        if (parentView != null) {
 //            return parentView.fireClickInner(isPressed, fired);
 //        }
+        
         return fired;
     }
     
@@ -699,7 +699,8 @@ public abstract class AbstractUI extends Node implements UI {
     @Override
     public int attachChildAt(Spatial child, int index) {
         if (child == background || child == eventGeo) {
-            throw new IllegalArgumentException("Cound not attach background or eventGeo! View=" + getName() + ",child=" + child);
+            throw new IllegalArgumentException("Cound not attach background or eventGeo! View=" + getName() 
+                    + ",child=" + child);
         }
         
         // 确保被添加的子节点不在background和eventGeo前面

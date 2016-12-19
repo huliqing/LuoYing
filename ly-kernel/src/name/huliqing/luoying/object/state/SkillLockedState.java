@@ -22,7 +22,6 @@ import name.huliqing.luoying.object.module.SkillListener;
  * @author huliqing
  */
 public class SkillLockedState extends AbstractState implements SkillListener {
-//    private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
     private final DefineService defineService = Factory.get(DefineService.class);
     private ActorModule actorModule;
@@ -73,10 +72,6 @@ public class SkillLockedState extends AbstractState implements SkillListener {
         if (lockAtSkillTypes > 0) {
             List<Skill> lockedSkills = skillModule.getSkillByTypes(lockAtSkillTypes, null);
             if (lockedSkills != null && !lockedSkills.isEmpty()) {
-                
-                // 用到随机数时要使用Network.
-//                skillNetwork.playSkill(entity, lockedSkills.get(FastMath.nextRandomInt(0, lockedSkills.size() - 1)), false);
-
                 Skill skill = lockedSkills.get(FastMath.nextRandomInt(0, lockedSkills.size() - 1));
                 entityNetwork.useObjectData(entity, skill.getData().getUniqueId());
             }

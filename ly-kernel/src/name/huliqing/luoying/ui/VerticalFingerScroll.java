@@ -15,7 +15,7 @@ package name.huliqing.luoying.ui;
 public class VerticalFingerScroll extends AbstractUI implements Scroll {
  
     // 普通的滚动组件
-    private VerticalScroll inner;
+    private final VerticalScroll inner;
     
     public VerticalFingerScroll(UI parent, float width) {
         super(width, 1);

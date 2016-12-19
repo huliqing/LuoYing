@@ -24,13 +24,16 @@ public class DataFactory {
     private static IdGenerator idGenerator = new SimpleIdGenerator();
     
     // TagName -> ObjectData,用于注册自定义的数据容器
-    private final static Map<String, Class<? extends ObjectData>> TAG_DATAS = new HashMap<String, Class<? extends ObjectData>>();
+    private final static Map<String, Class<? extends ObjectData>> TAG_DATAS 
+            = new HashMap<String, Class<? extends ObjectData>>();
     
     // TagName -> DataLoader, 自定义数据载入器
-    private final static Map<String, Class<? extends DataLoader>> TAG_LOADERS = new HashMap<String, Class<? extends DataLoader>>();
+    private final static Map<String, Class<? extends DataLoader>> TAG_LOADERS 
+            = new HashMap<String, Class<? extends DataLoader>>();
     
     // TagName -> DataProcessor, 自定义数据处理器
-    private final static Map<String, Class<? extends DataProcessor>> TAG_PROCESSORS = new HashMap<String, Class<? extends DataProcessor>>();
+    private final static Map<String, Class<? extends DataProcessor>> TAG_PROCESSORS 
+            = new HashMap<String, Class<? extends DataProcessor>>();
     
     private final static DataStore DATA_STORE = new DataStore();
     
@@ -240,7 +243,8 @@ public class DataFactory {
      * @param dataLoaderClass
      * @param dataProcessorClass
      */
-    public static void addCustomDataDefine(String tagName, String id, Class dataClass, Class dataLoaderClass, Class dataProcessorClass) {
+    public static void addCustomDataDefine(String tagName, String id, Class dataClass, Class dataLoaderClass
+            , Class dataProcessorClass) {
         DATA_STORE.addCustomDataDefine(tagName, id, dataClass, dataLoaderClass, dataProcessorClass);
     }
     

@@ -80,7 +80,7 @@ public class AttributeState extends AbstractState {
     @Override
     public void cleanup() {
         if (attributeApplied && restore) {
-            entityService.hitNumberAttribute(entity, bindNumberAttribute, -actualAddValue, null); // 这里不再需要设置sourceActor
+            entityService.hitNumberAttribute(entity, bindNumberAttribute, -actualAddValue, null); // 这里不需要sourceActor
             attributeApplied = false;
         }
         super.cleanup();

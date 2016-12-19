@@ -39,13 +39,11 @@ public class Image extends Geometry {
     
     public void setWidth(float width) {
         this.width = width;
-//        setLocalScale(new Vector3f(width, height, 1f));
         setLocalScale(width, height, 1);
     }
     
     public void setHeight(float height) {
         this.height = height;
-//        setLocalScale(new Vector3f(width, height, 1f));
         setLocalScale(width, height, 1);
     }
     
@@ -63,19 +61,6 @@ public class Image extends Geometry {
     
     public void setFile(String file) {
         
-        // remove20160216
-//        try {
-//            Texture2D texture = (Texture2D) UIFactory.getUIConfig().getAssetManager().loadTexture(file);
-//            material.setTexture("Texture", texture);
-//        } catch (Exception e) {
-//            Texture2D texture = (Texture2D) UIFactory.getUIConfig().getAssetManager().loadTexture(
-//                    UIFactory.getUIConfig().getMissIcon());
-//            material.setTexture("Texture", texture);
-//            if (Config.debug) {
-//                e.printStackTrace();
-//            }
-//        }
-        
         TextureKey texKey;
         Texture2D tex;
         try {
@@ -86,11 +71,6 @@ public class Image extends Geometry {
             texKey = new TextureKey(UIFactory.getUIConfig().getMissIcon(), true);
             tex = (Texture2D) UIFactory.getUIConfig().getAssetManager().loadTexture(texKey);
             material.setTexture("Texture", tex);
-//            if (Config.debug) {
-//                Logger.getLogger(Image.class.getName()).log(Level.WARNING
-//                        , "image file not load, use default \"Miss\" file instead. file={0}"
-//                        , file);
-//            }
         }
     }
     

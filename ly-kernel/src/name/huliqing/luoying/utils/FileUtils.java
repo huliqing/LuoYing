@@ -57,6 +57,7 @@ public class FileUtils {
      * 保存文件
      * @param saveString 保存的字符串信息
      * @param savePath 保存的绝对路径
+     * @return 
      */
     public static boolean saveFile(String saveString, String savePath) {
         try {
@@ -119,9 +120,9 @@ public class FileUtils {
     }
     
     /**
-     * 读取文件，文件路径如: <br />
-     * "/data/object/config.xml" <br />
-     * "/data/ly16.png" <br />
+     * 读取文件，文件路径如: <br >
+     * "/data/object/config.xml" <br>
+     * "/data/ly16.png" <br>
      * ...
      * @param path
      * @return 

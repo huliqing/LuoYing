@@ -34,7 +34,7 @@ public class InputUtils {
      * 绑定鼠标事件
      * @param inputManager
      * @param mapName
-     * @param key
+     * @param button
      * @param listener 
      */
     public static void bindMouse(InputManager inputManager, String mapName, int button, InputListener listener) {
