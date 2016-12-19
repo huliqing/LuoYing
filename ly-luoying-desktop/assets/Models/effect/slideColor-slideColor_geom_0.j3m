@@ -1,0 +1,21 @@
+Material MyMaterial : MatDefs/SlideColor/SlideColor.j3md {
+    MaterialParameters {
+        StartColor : 1.0 1.0 1.0 1.0
+        EndColor : 0.0 0.0 3.0 1.0
+        TexAnimY : true
+        TexChangeDir : true
+        MaskMap : Flip Repeat Textures/effect/mask.jpg
+        TexMap : Flip Repeat Textures/effect/particles.jpg
+    }
+    AdditionalRenderState {
+      FaceCull Off
+      Wireframe Off
+      DepthWrite Off
+      PolyOffset 0.0 0.0
+      AlphaTestFalloff 0.01
+      Blend Additive
+      PointSprite Off
+      ColorWrite On
+      DepthTest On
+    }
+}

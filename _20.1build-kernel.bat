@@ -1,1 +1,1 @@
-cmd /k gradlew buildKernel --stacktrace --info
+cmd /k gradlew buildKernel --info

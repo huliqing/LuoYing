@@ -1,0 +1,13 @@
+Material My Material : Common/MatDefs/Light/Lighting.j3md {
+     MaterialParameters {
+        DiffuseMap : Flip Scenes/seaside/island.png
+        UseAlpha : false
+        UseMaterialColors : true
+        Ambient : 0.8 0.8 0.8 1.0
+        Diffuse : 0.6 0.6 0.6 1.0
+     }
+    AdditionalRenderState {
+      Blend Alpha
+      FaceCull Off
+    }
+}

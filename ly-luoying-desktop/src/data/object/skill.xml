@@ -196,7 +196,7 @@
                             hitValue="40" hitEl="elSkillAbsoluteAttack" hitAngle="360"
                             shotTimes="0.39,0.41,0.43,0.45,0.48,0.50,0.52,0.54,0.56,0.58,0.61,0.63,0.65,0.67,0.69,0.72,0.74,0.76,0.78,0.80"
                             bullets="bulletCurve" shotOffsets="0|4.1|-2.7" multTarget="1"
-                            cutTimeStartMax="0.07" cutTimeEndMax="0.07" checkEl="#{s.attributeLevel > 5}" shotSpeed="2" />
+                            cutTimeStartMax="0.07" cutTimeEndMax="0.07" checkEl="#{s.attributeLevel >= 5}" shotSpeed="2" />
     
     <!-- =================================================================== -->
     <!--二刀流:左右手-->
@@ -213,7 +213,7 @@
                useTime="2" animation="dualSword_wave" magics="magicWaveHit" hitDistance="35"
                weaponStateLimit="leftSword|rightSword" sounds="" effects="effectWaveSpline,effectWaveFlash|0.6"
                hitValue="250" hitStates="" hitMagics="" useAttributes="attributeMana|100" cooldown="30"
-               cutTimeStartMax="0.4" cutTimeEndMax="0.34" checkEl="#{s.attributeLevel > 7}"
+               cutTimeStartMax="0.4" cutTimeEndMax="0.34" checkEl="#{s.attributeLevel >= 5}"
                bullets="bulletWave" shotTimes="0.61" shotSpeed="3" shotOffsets="0|2.1|2" />
     
     <!-- =================================================================== -->
@@ -228,7 +228,7 @@
              icon="Interface/skill/ysh_89.jpg"
              hitValue="250" useAttributes="attributeMana|50"
              shotSpeed="4" sounds="soundBowPull|0.23,soundShot|0.83" 
-             effects="effectLightningShot|0.3" checkEl="#{s.attributeLevel > 5}" bullets="bulletArrowQuick" />
+             effects="effectLightningShot|0.3" checkEl="#{s.attributeLevel >= 3}" bullets="bulletArrowQuick" />
     
     <!--技能箭：寒冰箭-->
     <skillShotBow id="skillIceShot" extends="skillFightTrickAttackShotBowBase" 
@@ -237,7 +237,7 @@
              effects="effectIceSmoke|0.3" 
              sounds="soundBowPull|0.23,soundShot|0.83" 
              bullets="bulletIceTrailUp,bulletIceTrailLeft,bulletIceTrailRight" 
-             checkEl="#{s.attributeLevel > 7}" multTarget="1" 
+             checkEl="#{s.attributeLevel >= 5}" multTarget="1" 
              shotTimes="0.83,0.88,0.93"
              hitStates="stateIceFrozen" />
     
@@ -261,11 +261,11 @@
    
     <!--疾风步-->
     <skillShot id="skillShotWindWalk" extends="skillPastorBuffBase" icon="Interface/skill/rapidWind.jpg" 
-               useTime="1" cooldown="2" useAttributes="attributeMana|40" hitStates="stateWindWalk|1" checkEl="#{s.attributeLevel > 3}" />
+               useTime="1" cooldown="2" useAttributes="attributeMana|40" hitStates="stateWindWalk|1" checkEl="#{s.attributeLevel >= 3}" />
     
     <!--复活术-->
     <skillShot id="skillShotReborn" extends="skillPastorBuffBase" icon="Interface/skill/ysh_05.jpg" 
-               useTime="1" cooldown="30" useAttributes="attributeMana|50" hitCheckEl="elSkillRebornCheck" hitMagics="magicReborn" checkEl="#{s.attributeLevel > 5}" />
+               useTime="1" cooldown="30" useAttributes="attributeMana|50" hitCheckEl="elSkillRebornCheck" hitMagics="magicReborn" />
     
      <!--净化术-->
     <skillShot id="skillShotCleanBuff" extends="skillPastorBuffBase" icon="Interface/skill/clean.jpg" 

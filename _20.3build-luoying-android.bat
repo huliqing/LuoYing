@@ -1,1 +1,1 @@
-cmd /k gradlew buildLuoYingAndroid
+cmd /k gradlew buildLuoYingAndroid --profile

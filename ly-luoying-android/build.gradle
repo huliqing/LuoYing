@@ -143,9 +143,6 @@ android {
     productFlavors {
         
         // 参考格式:
-//        general {
-//            applicationId = 'name.huliqing.fighter'
-//        }
 //        play {
 //            applicationId = 'name.huliqing.luoying'
 //        }

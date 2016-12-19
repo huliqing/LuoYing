@@ -11,6 +11,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.util.SafeArrayList;
 import com.jme3.util.TempVars;
+import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.data.DelayAnimData;
 import name.huliqing.luoying.data.EffectData;
 import name.huliqing.luoying.object.ControlAdapter;
@@ -168,6 +169,9 @@ public class Effect extends ModelEntity<EffectData> {
         
         // 计算实际时间
         trueTimeTotal = useTime / speed;
+        
+        // 
+        LuoYing.preloadScene(effectNode);
     }
 
     @Override
