@@ -23,7 +23,6 @@ _layout*.*
 /ly-kernel/build.xml
 /ly-kernel/MANIFEST.MF
 /ly-kernel/dist/
-/ly-kernel/libs/
 
 /ly-editor/nbproject/private/
 /ly-editor/build/
@@ -46,9 +45,7 @@ _layout*.*
 /ly-luoying-desktop/MANIFEST.MF
 
 /ly-luoying-desktop/dist/
-/ly-luoying-desktop/mobile/assets/
-/ly-luoying-desktop/mobile/libs/
-/ly-luoying-desktop/libs/
+/ly-luoying-desktop/mobile/
 /ly-luoying-desktop/bulletjme.dll
 /ly-luoying-desktop/resources/
 /ly-luoying-desktop/dist_example/
@@ -61,7 +58,6 @@ _layout*.*
 /ly-luoying-android/build/
 /ly-luoying-android/gen/
 /ly-luoying-android/nbandroid/
-/ly-luoying-android/libs/
 /ly-luoying-android/libs-doc/
 /ly-luoying-android/private/
 
