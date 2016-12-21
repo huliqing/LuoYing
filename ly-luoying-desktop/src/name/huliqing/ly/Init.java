@@ -1,14 +1,27 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * LuoYing is a program used to make 3D RPG game.
+ * Copyright (c) 2014-2016 Huliqing <31703299@qq.com>
+ * 
+ * This file is part of LuoYing.
+ *
+ * LuoYing is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LuoYing is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with LuoYing.  If not, see <http://www.gnu.org/licenses/>.
  */
 package name.huliqing.ly;
 
 import com.jme3.app.Application;
 import com.jme3.export.Savable;
 import com.jme3.network.serializing.Serializer;
-import java.io.File;
 import java.util.Map;
 import java.util.Map.Entry;
 import name.huliqing.luoying.Factory;
@@ -18,7 +31,6 @@ import name.huliqing.luoying.data.ConfigData;
 import name.huliqing.luoying.data.GameData;
 import name.huliqing.luoying.data.GameLogicData;
 import name.huliqing.luoying.data.ModuleData;
-import name.huliqing.luoying.layer.service.ConfigService;
 import name.huliqing.luoying.loader.GameDataLoader;
 import name.huliqing.luoying.manager.ResManager;
 import name.huliqing.luoying.object.Loader;

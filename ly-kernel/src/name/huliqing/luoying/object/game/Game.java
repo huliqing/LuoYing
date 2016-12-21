@@ -1,6 +1,21 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * LuoYing is a program used to make 3D RPG game.
+ * Copyright (c) 2014-2016 Huliqing <31703299@qq.com>
+ * 
+ * This file is part of LuoYing.
+ *
+ * LuoYing is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LuoYing is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with LuoYing.  If not, see <http://www.gnu.org/licenses/>.
  */
 package name.huliqing.luoying.object.game;
 
@@ -10,12 +25,9 @@ import name.huliqing.luoying.data.GameData;
 import name.huliqing.luoying.xml.DataProcessor;
 import name.huliqing.luoying.object.gamelogic.GameLogic;
 import name.huliqing.luoying.object.scene.Scene;
-import name.huliqing.luoying.object.task.Task;
 
 /**
- * 任务控制器，主要用于控制任务的执行。通过 {@link #addTask(Task) }
- * 来添加任务，多个任务形成一个任务链。每个任务执行完毕后会继续下一个任务的
- * 执行。
+ * 游戏接口
  * @author huliqing
  * @param <T>
  */
@@ -63,7 +75,7 @@ public interface Game<T extends GameData> extends DataProcessor<T> {
     boolean isEnabled();
     
     /**
-     * 游戏场景,
+     * 设置游戏场景,
      * @param scene 
      */
     void setScene(Scene scene);

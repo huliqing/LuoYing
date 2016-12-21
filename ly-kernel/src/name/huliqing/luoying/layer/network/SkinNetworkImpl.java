@@ -1,6 +1,21 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * LuoYing is a program used to make 3D RPG game.
+ * Copyright (c) 2014-2016 Huliqing <31703299@qq.com>
+ * 
+ * This file is part of LuoYing.
+ *
+ * LuoYing is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LuoYing is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with LuoYing.  If not, see <http://www.gnu.org/licenses/>.
  */
 package name.huliqing.luoying.layer.network;
 
@@ -22,65 +37,6 @@ public class SkinNetworkImpl implements SkinNetwork {
     public void inject() {
         skinService = Factory.get(SkinService.class);
     }
-    
-    // remove20161111
-//    @Override
-//    public void addSkin(Entity actor, String skinId, int amount) {
-//        if (NETWORK.isClient()) {
-//            // ignore 客户端不能主动添加物品
-//        } else {
-//            MessSkinAdd mess = new MessSkinAdd();
-//            mess.setActorId(actor.getData().getUniqueId());
-//            mess.setSkinId(skinId);
-//            mess.setCount(amount);
-//            NETWORK.broadcast(mess);
-//        }
-//    }
-//
-//    @Override
-//    public void removeSkin(Entity actor, String skinId, int amount) {
-//        MessSkinRemove mess = new MessSkinRemove();
-//        mess.setActorId(actor.getData().getUniqueId());
-//        mess.setSkinId(skinId);
-//        mess.setCount(amount);
-//        if (NETWORK.isClient()) {
-//            NETWORK.sendToServer(mess);
-//        } else {
-//            NETWORK.broadcast(mess);
-//            skinService.removeSkin(actor, skinId, amount);
-//        }
-//    }
-    
-     // remove20161111
-//    @Override
-//    public void attachSkin(Entity actor, Skin skin) {
-//        if (!skin.canUse(actor)) {
-//            return;
-//        }
-//        
-//        MessSkinAttach mess = new MessSkinAttach();
-//        mess.setActorId(actor.getData().getUniqueId());
-//        mess.setSkinId(skin.getData().getId());
-//        if (NETWORK.isClient()) {
-//            NETWORK.sendToServer(mess);
-//        } else {
-//            NETWORK.broadcast(mess);
-//            skinService.attachSkin(actor, skin);
-//        }
-//    }
-//
-//    @Override
-//    public void detachSkin(Entity actor, Skin skin) {
-//        MessSkinDetach mess = new MessSkinDetach();
-//        mess.setActorId(actor.getData().getUniqueId());
-//        mess.setSkinId(skin.getData().getId());
-//        if (NETWORK.isClient()) {
-//            NETWORK.sendToServer(mess);
-//        } else {
-//            NETWORK.broadcast(mess);
-//            skinService.detachSkin(actor, skin);
-//        }
-//    }
 
     @Override
     public void takeOnWeapon(Entity actor) {

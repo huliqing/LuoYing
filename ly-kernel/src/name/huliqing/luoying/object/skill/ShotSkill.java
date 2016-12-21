@@ -1,6 +1,21 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * LuoYing is a program used to make 3D RPG game.
+ * Copyright (c) 2014-2016 Huliqing <31703299@qq.com>
+ * 
+ * This file is part of LuoYing.
+ *
+ * LuoYing is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LuoYing is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with LuoYing.  If not, see <http://www.gnu.org/licenses/>.
  */
 package name.huliqing.luoying.object.skill;
 
@@ -20,7 +35,7 @@ import name.huliqing.luoying.utils.ConvertUtils;
 import name.huliqing.luoying.utils.MathUtils;
 
 /**
- * 射击技能的基本类
+ * 远程技能
  * @author huliqing
  */
 public class ShotSkill extends HitSkill {
@@ -103,37 +118,6 @@ public class ShotSkill extends HitSkill {
             shotTargetType = ShotTargetType.identifyByName(tempSTT);
         }
     }
-    
-    /**
-     * 获取下一个ShotOffset位置
-     * @return 
-     */
-    protected Vector3f getShotOffset() {
-        if (indexShotOffset >= shotOffsets.length) {
-            indexShotOffset = 0;
-        }
-        // 取得当前索引位置的offset
-        return shotOffsets[indexShotOffset++];
-    }
-    
-    /**
-     * 获取下一个子弹ID
-     * @return 
-     */
-    protected String getShotBullet() {
-        if (indexBullet >= bullets.length)
-            indexBullet = 0;
-        return bullets[indexBullet++];
-    }
-    
-    // 获取下一个目标
-    protected Entity getShotTarget() {
-        if (tempTargets.isEmpty()) 
-            return null;
-        if (indexTarget >= tempTargets.size())
-            indexTarget = 0;
-        return tempTargets.get(indexTarget++);
-    }
 
     @Override
     public void initialize() {
@@ -164,6 +148,14 @@ public class ShotSkill extends HitSkill {
     }
     
     @Override
+    public void cleanup() {
+        indexBullet = 0;
+        indexShotOffset = 0;
+        indexTarget = 0;
+        super.cleanup();
+    }
+    
+    @Override
     protected void doSkillUpdate(float tpf) {
         checkShot();
     }
@@ -177,7 +169,7 @@ public class ShotSkill extends HitSkill {
         }
     }
     
-    protected void doShotTarget() {
+    private void doShotTarget() {
         final Entity mainTarget = getShotTarget();
         
         if (mainTarget == null) {
@@ -209,6 +201,37 @@ public class ShotSkill extends HitSkill {
     }
     
     /**
+     * 获取下一个ShotOffset位置
+     * @return 
+     */
+    protected Vector3f getShotOffset() {
+        if (indexShotOffset >= shotOffsets.length) {
+            indexShotOffset = 0;
+        }
+        // 取得当前索引位置的offset
+        return shotOffsets[indexShotOffset++];
+    }
+    
+    /**
+     * 获取下一个子弹ID
+     * @return 
+     */
+    private String getShotBullet() {
+        if (indexBullet >= bullets.length)
+            indexBullet = 0;
+        return bullets[indexBullet++];
+    }
+    
+    // 获取下一个目标
+    private Entity getShotTarget() {
+        if (tempTargets.isEmpty()) 
+            return null;
+        if (indexTarget >= tempTargets.size())
+            indexTarget = 0;
+        return tempTargets.get(indexTarget++);
+    }
+    
+    /**
      * 获取射击的目标结束点
      * @param target
      * @return 
@@ -229,7 +252,7 @@ public class ShotSkill extends HitSkill {
      * @param store
      * @return 
      */
-    protected Vector3f convertToWorldPos(Vector3f store) {
+    private Vector3f convertToWorldPos(Vector3f store) {
         TempVars tv = TempVars.get();
         tv.quat1.lookAt(actorService.getViewDirection(actor), Vector3f.UNIT_Y);
         tv.quat1.mult(store, store);
@@ -238,7 +261,7 @@ public class ShotSkill extends HitSkill {
         return store;
     }
     
-    protected boolean shotHitCheck(Bullet bullet, Entity mainTarget) {
+    private boolean shotHitCheck(Bullet bullet, Entity mainTarget) {
         // 注：这里是为了提高性能，只有在击中主目标之后才会进行伤害检测。
         // 即使打开了multHit也必须在击中主目标之后才开始全部检测。否则在子弹
         // 飞行过程中作全面检测会非常伤性能。
@@ -277,12 +300,4 @@ public class ShotSkill extends HitSkill {
         return false;
     }
 
-    @Override
-    public void cleanup() {
-        indexBullet = 0;
-        indexShotOffset = 0;
-        indexTarget = 0;
-        super.cleanup();
-    }
-   
 }

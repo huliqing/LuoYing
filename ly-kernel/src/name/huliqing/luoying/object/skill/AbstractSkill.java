@@ -1,6 +1,21 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * LuoYing is a program used to make 3D RPG game.
+ * Copyright (c) 2014-2016 Huliqing <31703299@qq.com>
+ * 
+ * This file is part of LuoYing.
+ *
+ * LuoYing is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LuoYing is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with LuoYing.  If not, see <http://www.gnu.org/licenses/>.
  */
 package name.huliqing.luoying.object.skill;
 
@@ -97,19 +112,14 @@ public abstract class AbstractSkill implements Skill {
     protected boolean loop;
     
     /**
-     * 影响技能执行速度的角色属性，指向一个attribute id,默认技能的执行速度为1，当设置了这个值之后，
-     * 目标角色的指定属性的值将会影响到技能的执行速度。
-    */
+     * 绑定一个角色属性，这个属性将直接控制技能的执行速度，默认技能的执行速度为1。
+     */
     protected String bindSpeedAttribute;
     
-    /**
-     * 绑定一个防止技能被中断的“概率”属性。
-     */
+    /** 绑定一个防止技能被中断的“概率”属性。*/
     protected String bindInterruptRateAttribute;
 
-    /**
-     * 用于剪裁cutTimeEndMax的角色属性。
-     */
+    /** 用于剪裁cutTimeEndMax的角色属性。*/
     protected String bindCutTimeEndAttribute;
     
     // 这两个参数标记useTime中可以剔除掉的<b>最高</b>时间比率.
@@ -125,7 +135,8 @@ public abstract class AbstractSkill implements Skill {
     
     /** 技能的等级公式，该公式与技能等级（level）可以计算出当前技能的一个等级值。*/
     protected LNumberEl levelEl;
-    /** 技能升级等级公式，该公式中的每一个等级值表示每次技能升级时需要的sp数(skillPoints)*/
+    
+    /** 技能升级等级公式，该公式中的每一个等级值表示每次技能升级时需要的sp数(skill points)*/
     protected LNumberEl levelUpEl;
     
     /** checkEl用于检查角色是否可以使用这个技能 */
@@ -145,8 +156,9 @@ public abstract class AbstractSkill implements Skill {
     // 优化性能,这样就不需要在update中不停的去计算trueUseTime
     // 只在start的时候计算一次，在update中不再去计算
     protected float trueUseTime;
+    
     // 优化性能，因为特效的速度需要和技能的速度同步，所以在执行特效的时候也需要
-    // 同步设置速度,这个trueSpeed用于缓存技能的实际速度，在每次init的时候计算一次
+    // 同步设置速度,这个trueSpeed用于缓存技能的实际速度，在每次初始化的时候计算一次
     // 在执行过程中就不再需要计算。
     protected float trueSpeed;
     
@@ -698,7 +710,8 @@ public abstract class AbstractSkill implements Skill {
                     try {
                         traceObject = sc.getAttachmentsNode(boneName);
                     } catch (Exception e) {
-                        LOG.log(Level.WARNING, "Bone not found, bone name={0}, skill={1}, actor={2}", new Object[]{boneName, data.getId(), actor.getData().getId()});
+                        LOG.log(Level.WARNING, "Bone not found, bone name={0}, skill={1}, actor={2}"
+                                , new Object[]{boneName, data.getId(), actor.getData().getId()});
                         return;
                     };
                 }

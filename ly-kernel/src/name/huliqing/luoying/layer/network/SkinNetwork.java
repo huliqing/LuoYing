@@ -1,48 +1,31 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * LuoYing is a program used to make 3D RPG game.
+ * Copyright (c) 2014-2016 Huliqing <31703299@qq.com>
+ * 
+ * This file is part of LuoYing.
+ *
+ * LuoYing is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LuoYing is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with LuoYing.  If not, see <http://www.gnu.org/licenses/>.
  */
 package name.huliqing.luoying.layer.network;
 
 import name.huliqing.luoying.Inject;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.skin.Skin;
 
 /**
  * @author huliqing
  */
 public interface SkinNetwork extends Inject {
-    
-//    /**
-//     * 给角色添加skin装备
-//     * @param actor
-//     * @param skinId
-//     * @param amount 
-//     */
-//    void addSkin(Entity actor, String skinId, int amount);
-//    
-//    /**
-//     * 移除角色身上的skin装备。
-//     * @param actor
-//     * @param skinId
-//     * @param amount
-//     */
-//    void removeSkin(Entity actor, String skinId, int amount);
-    
-//    /**
-//     * 给角色换上装备,注：换装备的时候需要考虑冲突的装备，并把冲突的装备换
-//     * 下来
-//     * @param actor
-//     * @param skin
-//     */
-//    void attachSkin(Entity actor, Skin skin);
-//    
-//    /**
-//     * 脱下角色的装备，注：脱下装备时需要判断及补上缺失的装备
-//     * @param actor
-//     * @param skin
-//     */
-//    void detachSkin(Entity actor, Skin skin);
     
     /**
      * 让角色取出武器。

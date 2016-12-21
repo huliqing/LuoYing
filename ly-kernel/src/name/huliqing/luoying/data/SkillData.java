@@ -1,6 +1,21 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * LuoYing is a program used to make 3D RPG game.
+ * Copyright (c) 2014-2016 Huliqing <31703299@qq.com>
+ * 
+ * This file is part of LuoYing.
+ *
+ * LuoYing is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LuoYing is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with LuoYing.  If not, see <http://www.gnu.org/licenses/>.
  */
 package name.huliqing.luoying.data;
 
@@ -39,8 +54,6 @@ public class SkillData extends ObjectData {
     // 技能允许的最高等级
     private int maxLevel;
     
-    // 技能点数（技能熟练度），每次执行技能该值会递增，并经验公式来判断是否升级技能。
-    private int playCount;
     
     // 技能类型
     private long types;
@@ -51,7 +64,10 @@ public class SkillData extends ObjectData {
     // 技能的优先级,优先级高的可以打断优先级低的技能
     private int prior;
     
-    /** 最近一次使用技能的时间,用于判断技能冷却限制 */
+    // 技能点数（技能熟练度），每次执行技能该值会递增，并经验公式来判断是否升级技能。
+    private int playCount;
+    
+    // 最近一次使用技能的时间,用于判断技能冷却限制
     private long lastPlayTime;
     
     public String getIcon() {

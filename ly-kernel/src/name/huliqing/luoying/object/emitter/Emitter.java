@@ -1,7 +1,21 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * LuoYing is a program used to make 3D RPG game.
+ * Copyright (c) 2014-2016 Huliqing <31703299@qq.com>
+ * 
+ * This file is part of LuoYing.
+ *
+ * LuoYing is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LuoYing is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with LuoYing.  If not, see <http://www.gnu.org/licenses/>.
  */
 package name.huliqing.luoying.object.emitter;
 
@@ -10,6 +24,7 @@ import com.jme3.effect.ParticleEmitter;
 import com.jme3.effect.ParticleMesh;
 import com.jme3.material.Material;
 import name.huliqing.luoying.LuoYing;
+import name.huliqing.luoying.constants.AssetConstants;
 import name.huliqing.luoying.data.EmitterData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.xml.DataProcessor;
@@ -116,7 +131,7 @@ public class Emitter<T extends EmitterData> implements DataProcessor<T> {
             pe.setShape(new EmitterShapeWrap((Position) Loader.load(data.getShape())));
         }
         AssetManager am = LuoYing.getAssetManager();
-        Material mat = new Material(am, "Common/MatDefs/Misc/Particle.j3md");
+        Material mat = new Material(am, AssetConstants.MATERIAL_PARTICLE);
         mat.setTexture("Texture", am.loadTexture(data.getTexture()));
         pe.setMaterial(mat);
         return pe;
