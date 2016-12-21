@@ -1,6 +1,6 @@
 /*
  * LuoYing is a program used to make 3D RPG game.
- * Copyright (c) 2014-2016 Huliqing <Email: 31703299@qq.com>
+ * Copyright (c) 2014-2016 Huliqing <31703299@qq.com>
  * 
  * This file is part of LuoYing.
  *

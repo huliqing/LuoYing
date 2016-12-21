@@ -43,7 +43,6 @@ archivesBaseName = appArchivesBaseName
 version = appVersionName
 
 // 主方法名称，不能改
-def mainClass = "name.huliqing.luoying.LuoYing"
 def fullArchivesName                = archivesBaseName + "-" + version;
 // 最终输出的：未经过混淆的原始核心jar包名称 
 def fullArchivesNameJar             = fullArchivesName + ".jar"
@@ -115,7 +114,7 @@ jar {
         attributes  'VersionName' : appVersionName,
                     'VersionCode' : appVersionCode,
                     'Class-Path' : getLibsClassPath(),
-                    'Main-Class' : mainClass
+                    'Main-Class' : mainclass.replace('/', '.')
     }
     exclude('**/*.xsd') 
     exclude('**/meta') 

@@ -3031,8 +3031,6 @@ name.huliqing.ly.view.shortcut.ShortcutManager$ShortcutRoot -> name.huliqing.ly.
     void clearShortcuts() -> b
     void <init>(name.huliqing.ly.view.shortcut.ShortcutManager$1) -> <init>
 name.huliqing.ly.view.shortcut.SkillShortcut -> name.huliqing.ly.i.b.h:
-    name.huliqing.luoying.layer.service.SkillService skillService -> e
-    name.huliqing.luoying.layer.network.SkillNetwork skillNetwork -> f
     name.huliqing.ly.layer.service.GameService gameService -> h
     name.huliqing.ly.layer.network.GameNetwork gameNetwork -> i
     name.huliqing.luoying.layer.network.EntityNetwork entityNetwork -> d
@@ -3390,8 +3388,6 @@ name.huliqing.ly.view.system.SystemMainPanel$TabButton -> name.huliqing.ly.i.d.n
     void <init>(name.huliqing.ly.view.system.SystemMainPanel,java.lang.String,name.huliqing.luoying.ui.UI) -> <init>
     void updateViewChildren() -> updateViewChildren
 name.huliqing.ly.view.system.SystemPerformancePanel -> name.huliqing.ly.i.d.o:
-    java.util.logging.Logger LOG -> a
-    name.huliqing.luoying.layer.service.ConfigService configService -> b
     java.util.List datas -> c
     void <init>(float,float) -> <init>
     name.huliqing.luoying.ui.Row createEmptyRow() -> createEmptyRow
@@ -3402,7 +3398,6 @@ name.huliqing.ly.view.system.SystemPerformancePanel -> name.huliqing.ly.i.d.o:
     java.lang.String get(java.lang.String) -> a
     boolean removeItem(java.lang.Object) -> removeItem
     void addItem(java.lang.Object) -> addItem
-    void <clinit>() -> <clinit>
 name.huliqing.ly.view.system.SystemSoundPanel -> name.huliqing.ly.i.d.p:
     java.util.List datas -> a
     name.huliqing.ly.view.system.RowCheckbox soundEnable -> b
