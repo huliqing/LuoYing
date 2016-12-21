@@ -45,13 +45,6 @@ _layout*.*
 /ly-luoying-desktop/OpenAL64.dll
 /ly-luoying-desktop/MANIFEST.MF
 
-#/ly-luoying-desktop/assets/3d_objects/
-#/ly-luoying-desktop/assets/Interface/
-#/ly-luoying-desktop/assets/Models/
-#/ly-luoying-desktop/assets/Scenes/
-#/ly-luoying-desktop/assets/Sounds/
-#/ly-luoying-desktop/assets/Textures/
-
 /ly-luoying-desktop/dist/
 /ly-luoying-desktop/mobile/assets/
 /ly-luoying-desktop/mobile/libs/
@@ -73,20 +66,3 @@ _layout*.*
 /ly-luoying-android/private/
 
 /ly-sample/
-/ly-sample/SimpleRpgGame/build/
-/ly-sample/SimpleRpgGame/.gradle/
-/ly-sample/SimpleRpgGame/.nb-gradle/
-/ly-sample/SimpleRpgGame/build/
-/ly-sample/SimpleRpgGame/nbproject/
-/ly-sample/SimpleRpgGame/preview-application.html
-/ly-sample/SimpleRpgGame/openal.dylib
-/ly-sample/SimpleRpgGame/master-application.jnlp
-/ly-sample/SimpleRpgGame/lwjgl64.dll
-/ly-sample/SimpleRpgGame/build.xml
-/ly-sample/SimpleRpgGame/bulletjme64.dll
-/ly-sample/SimpleRpgGame/liblwjgl.dylib
-/ly-sample/SimpleRpgGame/OpenAL64.dll
-/ly-sample/SimpleRpgGame/MANIFEST.MF
-/ly-sample/SimpleRpgGame/dist/
-/ly-sample/SimpleRpgGame/libs/
-/ly-sample/SimpleRpgGame/bulletjme.dll
