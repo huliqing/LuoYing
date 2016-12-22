@@ -180,13 +180,11 @@ public abstract class AbstractServerListener implements ServerListener {
         // 清理场景实体数据
         if (clone.getSceneData() != null) {
             clone.getSceneData().setEntityDatas(null);
-            clone.getSceneData().setUniqueId(gameData.getUniqueId());
         }
         
         // GUI场景不清理,这个必须是固定的
 //        if (clone.getGuiSceneData() != null) {
 //            clone.getGuiSceneData().setEntityDatas(null);
-//            clone.getGuiSceneData().setUniqueId(gameData.getGuiSceneData().getUniqueId());
 //        }
         
         gameServer.send(coon, new GameDataMess(clone));

@@ -105,8 +105,8 @@ public class AttributeChangeGameLogic extends AbstractGameLogic {
         
         float applyValue = (baseValue + factorValue) * interval * speed;
             
-        // 不要用递增方式，容易产生累积误差, 并且由于网络延迟原因，技能并不能始终保证在服务端和客户端同步执行，
-        // 而引起客户端和服务端属性消耗不一致.
+        // remove20161220,不要用递增方式，容易产生累积误差, 并且由于网络延迟原因，
+        // 技能并不能始终保证在服务端和客户端同步执行，而引起客户端和服务端属性消耗不一致.
 //            entityNetwork.hitNumberAttribute(actor, applyAttribute, applyValue, null);
 
         NumberAttribute attr = actor.getAttributeManager().getAttribute(applyAttribute, NumberAttribute.class);
@@ -114,7 +114,8 @@ public class AttributeChangeGameLogic extends AbstractGameLogic {
             float attrNewValue = attr.floatValue() + applyValue;
             entityNetwork.hitAttribute(actor, applyAttribute, attrNewValue, actor);
             
-            LOG.log(Level.INFO, "applyAttribute={0}, applyValue={1}, entity={2}", new Object[] {applyAttribute, applyValue, actor.getData().getId()});
+//            LOG.log(Level.INFO, "applyAttribute={0}, applyValue={1}, entity={2}"
+//                    , new Object[] {applyAttribute, applyValue, actor.getData().getId()});
         }
     }
 }

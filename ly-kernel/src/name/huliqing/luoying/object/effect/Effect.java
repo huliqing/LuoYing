@@ -40,7 +40,7 @@ import name.huliqing.luoying.object.sound.SoundManager;
 import name.huliqing.luoying.utils.GeometryUtils;
 
 /**
- * 特效, 特效可以添加到EffectManager上，也可以直接添加到一个Node下面,所有效果都有一个执行时间.
+ * 特效, 作为一个Entity可以直接添加到场景，也可以直接添加到一个Node下面。
  * @author huliqing
  * @version v1.4 20161011
  */

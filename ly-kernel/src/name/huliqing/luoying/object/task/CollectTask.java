@@ -83,9 +83,7 @@ public class CollectTask<T extends TaskData> extends AbstractTask<T> implements 
         // 监听当前角色的行为,当角色杀怪时判断打死的是不是任务指定的目标NPC，以便
         // 给角色掉落任务物品
         // 不要使用与普通掉落物品一样的方式去掉落任务物品，因为任务物品只有在接
-        // 受了任务之后才会对任务执行者掉落物品.并且任务物品的收集方式与普通物品
-        // 不太一样，因任务物品不可使用、删除、出售等，所以任务物品不会保存在普通
-        // 角色包裹中。
+        // 受了任务之后才会对任务执行者掉落物品.
         actorModule = actor.getModuleManager().getModule(ActorModule.class);
         if (actorModule != null) {
             actorModule.addActorListener(this);

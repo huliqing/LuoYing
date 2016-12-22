@@ -51,8 +51,7 @@ public interface Bullet<T extends EntityData> extends Entity<T> {
     /**
      * 销毁子弹，调用这个方法之后，子弹的逻辑将不会再执行，等着被清理、回收的节奏。一般来说，
      * 应该只有在子弹明确击中目标后或者希望立确销毁子弹的时候才应该调用这个方法，因为调用这个方法之后子弹将立即从
-     * 场景中消失,在某些情况下可能会显得很突兀。在不能确定是否应该让自己立即销失的情况下应该调用
-     * {@link #requestConsume() }以让子弹决定如何消息。
+     * 场景中消失
      * @see #requestConsume() 
      */
     void consume();
