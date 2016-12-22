@@ -45,6 +45,16 @@ public class JfxSwingUtils {
     }
     
     /**
+     * 创建游戏
+     * @param appClass
+     * @param settings
+     * @return 
+     */
+    public static JfxSwing create(String appClass, AppSettings settings) {
+        return create(appClass, settings, new VBox());
+    }
+    
+    /**
      * 使用指定的settings及指定的jfxRoot根节点来创建游戏。
      * @param appClass
      * @param settings

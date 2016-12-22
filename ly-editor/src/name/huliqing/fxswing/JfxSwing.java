@@ -157,6 +157,16 @@ public class JfxSwing {
     }
     
     /**
+     * 使用指定的settings来创建游戏。
+     * @param appClass
+     * @param settings
+     * @return 
+     */
+    public static JfxSwing create(String appClass, AppSettings settings) {
+        return JfxSwingUtils.create(appClass, settings);
+    }
+    
+    /**
      * 使用指定的settings及指定的jfxRoot根节点来创建游戏。
      * @param appClass
      * @param settings
