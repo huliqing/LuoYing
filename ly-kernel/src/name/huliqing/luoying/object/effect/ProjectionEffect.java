@@ -46,7 +46,7 @@ import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.Config;
 import name.huliqing.luoying.constants.AssetConstants;
 import name.huliqing.luoying.data.EffectData;
-import name.huliqing.luoying.object.entity.impl.SimpleTerrainEntity;
+import name.huliqing.luoying.object.entity.TerrainEntity;
 import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.utils.GeometryUtils;
 
@@ -56,7 +56,6 @@ import name.huliqing.luoying.utils.GeometryUtils;
  * @author huliqing
  */
 public class ProjectionEffect extends Effect {
-//    private final PlayService playService = Factory.get(PlayService.class);
 
     // 需要投射的材质贴图
     private Texture texture;
@@ -163,9 +162,9 @@ public class ProjectionEffect extends Effect {
         
         // 判断是否有接受投射的物体，如果没有的话偿试把地形添加进来。
         if (receivers.isEmpty()) {
-            List<SimpleTerrainEntity> tes = scene.getEntities(SimpleTerrainEntity.class, null);
+            List<TerrainEntity> tes = scene.getEntities(TerrainEntity.class, null);
             if (tes != null && !tes.isEmpty()) {
-                for (SimpleTerrainEntity te : tes) {
+                for (TerrainEntity te : tes) {
                     if (te.getSpatial() != null) {
                         addReceiver(te.getSpatial());
                     }

@@ -200,7 +200,7 @@ public abstract class ServerNetworkRpgGame extends NetworkRpgGame {
     }
     
     /**
-     * 处理来自服务端的肖息。如果该方法返回true,则阻止后续的处理。
+     * 处理来自服务端的肖息
      * @param gameServer
      * @param source
      * @param m

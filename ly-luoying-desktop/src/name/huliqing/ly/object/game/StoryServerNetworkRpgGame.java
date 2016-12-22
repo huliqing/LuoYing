@@ -65,7 +65,7 @@ import name.huliqing.ly.object.game.story.TaskStepControl;
 import name.huliqing.ly.view.shortcut.ShortcutManager;
 
 /**
- * 服务模式服务端
+ * 故事模式服务端
  * @author huliqing
  */
 public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
@@ -467,7 +467,7 @@ public abstract class StoryServerNetworkRpgGame extends ServerNetworkRpgGame {
     }
     
     /**
-     * 故事模式的初始化，该方法的调用在gameInitialize之后。并且是在主玩家(player)载入之后才会被调用。
+     * 故事模式的初始化，该方法在主玩家(player)载入之后才会被调用。
      */
     protected abstract void doStoryInitialize();
 }

@@ -26,7 +26,7 @@ import com.jme3.scene.Spatial;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.object.entity.impl.SimpleTerrainEntity;
+import name.huliqing.luoying.object.entity.TerrainEntity;
 import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.utils.GeometryUtils;
 
@@ -64,9 +64,9 @@ public class SceneServiceImpl implements SceneService {
 
     @Override
     public Vector3f getSceneHeight(Scene scene, float x, float z) {
-        List<SimpleTerrainEntity> sos = scene.getEntities(SimpleTerrainEntity.class, new ArrayList<SimpleTerrainEntity>());
+        List<TerrainEntity> sos = scene.getEntities(TerrainEntity.class, new ArrayList<TerrainEntity>());
         Vector3f terrainHeight = null;
-        for (SimpleTerrainEntity so : sos) {
+        for (TerrainEntity so : sos) {
             Spatial terrain = so.getSpatial();
             Vector3f terrainPoint = getHeight(terrain, x, z);
             if (terrainPoint != null) {
