@@ -16,27 +16,36 @@ import com.jme3.input.controls.Trigger;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.util.TempVars;
-import java.util.logging.Logger;
+import name.huliqing.editor.forms.Action;
+import name.huliqing.editor.forms.Mode;
 
 /**
  *
  * @author huliqing
  */
 public class EditorInputManager implements ActionListener {
-    private static final Logger LOG = Logger.getLogger(EditorInputManager.class.getName());
+//    private static final Logger LOG = Logger.getLogger(EditorInputManager.class.getName());
     
     private final String MAP_ML = "ML";
     private final String MAP_MR = "MR";
     private final String MAP_MM = "MM";
-    private final String MAP_SHIFT = "SHIFT";
+    private final String MAP_KEY_SHIFT = "SHIFT";
+    // 控制模式：全局、局部
+    private final String MAP_MODE = "Mode";
+    private final int KEY_MODE = KeyInput.KEY_TAB;
+    private int modeIndex;
+    // 控制行为: 移动、旋转、缩放
+    private final String MAP_ACTION_MOVE = "G";
+    private final String MAP_ACTION_ROTATION = "R";
+    private final String MAP_ACTION_SCALE = "S";
+    private final int KEY_ACTION_MOVE = KeyInput.KEY_G;
+    private final int KEY_ACTION_ROTATION = KeyInput.KEY_R;
+    private final int KEY_ACTION_SCALE = KeyInput.KEY_S;
     
     private boolean mouse_left_pressed;
     private boolean mouse_middle_pressed;
     private boolean mouse_right_pressed;
     private boolean key_shift_pressed;
-    
-    private Editor editor;
-    private boolean initialized;
     
     private final Vector2f lastCP = new Vector2f();
     private final Vector3f lastChasePos = new Vector3f();
@@ -45,14 +54,20 @@ public class EditorInputManager implements ActionListener {
     // 相机的缩放速度
     private final float camZoomSpeed = 1.0f;
     
+    private Editor editor;
+    private boolean initialized;
+    
     public void initialize(Editor editor) {
         if (initialized) {
             return;
         }
         initialized = true;
         this.editor = editor;
+        
         lastCP.set(editor.getInputManager().getCursorPosition());
-        lastChasePos.set(editor.chaseObj.getLocalTranslation());
+        if (editor.getForm() != null) {
+            lastChasePos.set(editor.getForm().getChaseObj().getLocalTranslation());
+        }
         
         // 鼠标按键
         InputManager inputManager = editor.getInputManager();
@@ -63,53 +78,106 @@ public class EditorInputManager implements ActionListener {
         inputManager.addMapping(MAP_MR, triggerMR);
         inputManager.addMapping(MAP_MM, triggerMM);
         
-        // 键盘按键
+        // 键盘按键SHIFT
         Trigger triggerKLShift = new KeyTrigger(KeyInput.KEY_LSHIFT);
         Trigger triggerKRShift = new KeyTrigger(KeyInput.KEY_RSHIFT);
-        inputManager.addMapping(MAP_SHIFT, triggerKLShift, triggerKRShift);
+        inputManager.addMapping(MAP_KEY_SHIFT, triggerKLShift, triggerKRShift);
         
+        // 键盘按键: 控制模式
+        inputManager.addMapping(MAP_MODE, new KeyTrigger(KEY_MODE));
+        
+        // 键盘按键: 控制操作行为：移动、旋转、缩放
+        inputManager.addMapping(MAP_ACTION_MOVE, new KeyTrigger(KEY_ACTION_MOVE));
+        inputManager.addMapping(MAP_ACTION_ROTATION, new KeyTrigger(KEY_ACTION_ROTATION));
+        inputManager.addMapping(MAP_ACTION_SCALE, new KeyTrigger(KEY_ACTION_SCALE));
+        
+        // --------- mapping
         String[] mpNames = new String[] {
-              MAP_ML, MAP_MR, MAP_MM
-            , MAP_SHIFT
+                // 鼠标
+              MAP_ML, MAP_MR, MAP_MM 
+                // 左右Shift
+            , MAP_KEY_SHIFT 
+                // 切换模式
+            , MAP_MODE
+                // 切换操作行为
+            , MAP_ACTION_MOVE, MAP_ACTION_ROTATION, MAP_ACTION_SCALE 
         };
         inputManager.addListener(this, mpNames);
+        // 跟随距离来调整相机的缩放强度，距离越大，缩放强度越大
         inputManager.addListener(this, CameraInput.CHASECAM_ZOOMIN);
         inputManager.addListener(this, CameraInput.CHASECAM_ZOOMOUT);
     }
     
     @Override
     public void onAction(String name, boolean isPressed, float tpf) {
+        // 鼠标: 左\中\右键操作
         if (MAP_ML.equals(name)) {
             mouse_left_pressed = isPressed; 
             lastCP.set(editor.getInputManager().getCursorPosition());
-            lastChasePos.set(editor.chaseObj.getLocalTranslation());
+            lastChasePos.set(editor.getForm().getChaseObj().getLocalTranslation());
+            if (isPressed) {
+                editor.getForm().getLocationObj().onActionStart();
+            } else {
+                editor.getForm().getLocationObj().onActionEnd();
+            }
         } else if (MAP_MR.equals(name)) {
             mouse_right_pressed = isPressed;
             lastCP.set(editor.getInputManager().getCursorPosition());
-            lastChasePos.set(editor.chaseObj.getLocalTranslation());
+            lastChasePos.set(editor.getForm().getChaseObj().getLocalTranslation());
+            // 调用pick方法
+            editor.getForm().onPick();
         } else if (MAP_MM.equals(name)) {
             mouse_middle_pressed = isPressed;
             lastCP.set(editor.getInputManager().getCursorPosition());
-            lastChasePos.set(editor.chaseObj.getLocalTranslation());
-        } else if (MAP_SHIFT.equals(name)) {
+            lastChasePos.set(editor.getForm().getChaseObj().getLocalTranslation());
+        } 
+        
+        // 按键: SHIFT(左、右)
+        else if (MAP_KEY_SHIFT.equals(name)) {
             key_shift_pressed = isPressed;
             lastCP.set(editor.getInputManager().getCursorPosition());
-            lastChasePos.set(editor.chaseObj.getLocalTranslation());
-        } else if (CameraInput.CHASECAM_ZOOMIN.equals(name) || CameraInput.CHASECAM_ZOOMOUT.equals(name)) {
-            // 跟随距离来调整相机的缩放强度，距离越大，缩放强度越大
-            float distance = editor.getCamera().getLocation().distance(editor.chaseObj.getLocalTranslation());
-            editor.editorCam.setZoomSensitivity(distance * 0.1f * camZoomSpeed);
+            lastChasePos.set(editor.getForm().getChaseObj().getLocalTranslation());
+            
+        } 
+        
+        // 切换模式
+        else if (MAP_MODE.equals(name)) {
+            if (isPressed) return;
+            modeIndex++;
+            if (modeIndex >= Mode.values().length) {
+                modeIndex = 0;
+            }
+            editor.getForm().setMode(Mode.values()[modeIndex]);
+        }
+        
+        // 切换操作行为
+        else if (MAP_ACTION_MOVE.equals(name)) {
+            if (isPressed) return;
+            editor.getForm().setAction(Action.LOCATION);
+        } else if (MAP_ACTION_ROTATION.equals(name)) {
+            if (isPressed) return;
+            editor.getForm().setAction(Action.ROTATION);
+        } else if (MAP_ACTION_SCALE.equals(name)) {
+            if (isPressed) return;
+            editor.getForm().setAction(Action.SCALE);
+        }
+        
+        // 跟随距离来调整相机的缩放强度，距离越大，缩放强度越大
+        else if (CameraInput.CHASECAM_ZOOMIN.equals(name) || CameraInput.CHASECAM_ZOOMOUT.equals(name)) {
+            float distance = editor.getCamera().getLocation().distance(editor.getForm().getChaseObj().getLocalTranslation());
+            editor.getForm().getEditorCamera().setZoomSensitivity(distance * 0.1f * camZoomSpeed);
+            
         } 
         actionCheck();
     }
     
     private void actionCheck() {
         if (mouse_middle_pressed && key_shift_pressed) {
-            editor.editorCam.setEnableRotation(false);
-            editor.editorCam.setEnabledRotationV(false);
+            editor.getForm().getEditorCamera().setEnableRotation(false);
+            editor.getForm().getEditorCamera().setEnabledRotationV(false);
         } else {
-            editor.editorCam.setEnableRotation(true);
-            editor.editorCam.setEnabledRotationV(true);
+            editor.getForm().getEditorCamera().setEnableRotation(true);
+            editor.getForm().getEditorCamera().setEnabledRotationV(true);
         }
     }
 
@@ -129,7 +197,7 @@ public class EditorInputManager implements ActionListener {
                Vector3f chasePos = tv.vect4.set(lastChasePos);
                chasePos.subtractLocal(right.multLocal(xDist * camMoveSpeed * distance));
                chasePos.subtractLocal(up.multLocal(yDist * camMoveSpeed * distance));
-               editor.chaseObj.setLocalTranslation(chasePos);
+               editor.getForm().getChaseObj().setLocalTranslation(chasePos);
                tv.release();
            }
         }

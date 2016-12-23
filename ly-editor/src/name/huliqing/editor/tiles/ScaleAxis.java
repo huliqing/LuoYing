@@ -22,16 +22,26 @@ import name.huliqing.luoying.utils.MaterialUtils;
  *
  * @author huliqing
  */
-public class TileScale extends Node {
+public class ScaleAxis extends Node implements AxisObj {
     
-    public TileScale() {
+    private final Axis axisX;
+    private final Axis axisY;
+    private final Axis axisZ;
+    
+    public ScaleAxis() {
+        Spatial axisXInner = createAxis("axisXInner", new ColorRGBA(1.0f, 0.1f, 0.1f, 1.0f));
+        axisXInner.rotate(0, 0, -FastMath.PI / 2);
+        axisX = new Axis(new Vector3f(1,0,0));
+        axisX.attachChild(axisXInner);
         
-        Spatial axisX = createAxis("axisX", new ColorRGBA(1.0f, 0.1f, 0.1f, 1.0f));
-        Spatial axisY = createAxis("axisY", new ColorRGBA(0.1f, 1.0f, 0.1f, 1.0f));
-        Spatial axisZ = createAxis("axisZ", new ColorRGBA(0.1f, 0.1f, 1.0f, 1.0f));
+        Spatial axisYInner = createAxis("axisYInner", new ColorRGBA(0.1f, 1.0f, 0.1f, 1.0f));
+        axisY = new Axis(new Vector3f(0,1,0));
+        axisY.attachChild(axisYInner);
         
-        axisX.rotate(0, 0, -FastMath.PI / 2);
-        axisZ.rotate(FastMath.PI / 2, 0, 0);
+        Spatial axisZInner = createAxis("axisZInner", new ColorRGBA(0.1f, 0.1f, 1.0f, 1.0f));
+        axisZInner.rotate(FastMath.PI / 2, 0, 0);
+        axisZ = new Axis(new Vector3f(0,0,1));
+        axisZ.attachChild(axisZInner);
         
         attachChild(axisX);
         attachChild(axisY);
@@ -48,7 +58,7 @@ public class TileScale extends Node {
         mat.getAdditionalRenderState().setDepthTest(false);
         
         // 轴线
-        Geometry line = new Geometry("line" + name, new Line(new Vector3f(), new Vector3f(0,1,0)));
+        Geometry line = new Geometry(name, new Line(new Vector3f(), new Vector3f(0,1,0)));
         line.setMaterial(mat);
         node.attachChild(line);
         
@@ -61,5 +71,20 @@ public class TileScale extends Node {
         node.attachChild(boxGeo);
         
         return node;
+    }
+
+    @Override
+    public Axis getAxisX() {
+        return axisX;
+    }
+
+    @Override
+    public Axis getAxisY() {
+        return axisY;
+    }
+
+    @Override
+    public Axis getAxisZ() {
+        return axisZ;
     }
 }

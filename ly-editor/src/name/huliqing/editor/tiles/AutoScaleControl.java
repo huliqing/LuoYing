@@ -22,6 +22,13 @@ public class AutoScaleControl extends AbstractControl {
     private final float size = 0.1f;
     private Camera camera;
     
+    /**
+     * 强制立即更新，计算缩放
+     */
+    public void forceUpdate() {
+        controlUpdate(0.016f);
+    }
+    
     @Override
     protected void controlUpdate(float tpf) {
          if (camera == null || spatial.getCullHint() == Spatial.CullHint.Always) {

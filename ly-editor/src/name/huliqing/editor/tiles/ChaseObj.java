@@ -6,6 +6,7 @@
 package name.huliqing.editor.tiles;
 
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 
 /**
  *
@@ -13,11 +14,12 @@ import com.jme3.scene.Node;
  */
 public class ChaseObj extends Node {
     
-    private final TileLocation tileLocation;
+    private final LocationAxis tileLocation;
     
     public ChaseObj() {
-        tileLocation = new TileLocation();
+        tileLocation = new LocationAxis();
         tileLocation.addControl(new AutoScaleControl());
         attachChild(tileLocation);
+        setCullHint(Spatial.CullHint.Always);
     }
 }

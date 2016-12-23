@@ -45,6 +45,15 @@ public class MaterialUtils {
         return mat;
     }
     
+    public static Material createLighting(ColorRGBA color) {
+        Material mat = new Material(LuoYing.getAssetManager(), AssetConstants.MATERIAL_LIGHTING);
+        if (color != null) {
+            mat.setColor("Diffuse", color);
+            mat.setBoolean("UseMaterialColors", true);
+        }
+        return mat;
+    }
+    
     public static Material createWireFrame() {
         return createWireFrame(null);
     }

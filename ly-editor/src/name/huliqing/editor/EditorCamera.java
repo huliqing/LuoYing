@@ -8,15 +8,12 @@ import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Spatial;
-import java.util.logging.Logger;
 
 /**
- *
  * @author huliqing
  */
 public class EditorCamera extends ChaseCamera {
-
-    private static final Logger LOG = Logger.getLogger(EditorCamera.class.getName());
+//    private static final Logger LOG = Logger.getLogger(EditorCamera.class.getName());
     
     private boolean hRotationEnabled = true;
     private boolean vRotationEnabled = true;
@@ -85,7 +82,7 @@ public class EditorCamera extends ChaseCamera {
             targetDistance = minDistance;
         }
         
-        // 让垂直旋转可以自由执行
+        // 去掉这段代码，以让垂直旋转可以自由执行
 //        if (veryCloseRotation) {
 //            if ((targetVRotation < minVerticalRotation) && (targetDistance > (minDistance + 1.0f))) {
 //                targetVRotation = minVerticalRotation;
@@ -117,7 +114,7 @@ public class EditorCamera extends ChaseCamera {
             targetVRotation = lastGoodRot;
         }
         
-        // 让垂直旋转可以自由执行
+        // 去掉这段代码，以让垂直旋转可以自由执行
 //        if (veryCloseRotation) {
 //            if ((targetVRotation < minVerticalRotation) && (targetDistance > (minDistance + 1.0f))) {
 //                targetVRotation = minVerticalRotation;
@@ -131,4 +128,22 @@ public class EditorCamera extends ChaseCamera {
 //        }
         
     }
+    
+    /**
+     * 清理相机的按键绑定
+     */
+    public void cleanup() {
+        String[] inputs = {CameraInput.CHASECAM_TOGGLEROTATE,
+            CameraInput.CHASECAM_DOWN,
+            CameraInput.CHASECAM_UP,
+            CameraInput.CHASECAM_MOVELEFT,
+            CameraInput.CHASECAM_MOVERIGHT,
+            CameraInput.CHASECAM_ZOOMIN,
+            CameraInput.CHASECAM_ZOOMOUT};
+        for (String input : inputs) {
+            inputManager.deleteMapping(input);
+        }
+    }
+    
+    
 }

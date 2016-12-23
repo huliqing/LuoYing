@@ -46,6 +46,9 @@ public class AssetConstants {
     /** Common/MatDefs/Misc/Unshaded.j3md */
     public final static String MATERIAL_UNSHADED = "Common/MatDefs/Misc/Unshaded.j3md";
     
+    /** Common/MatDefs/Light/Lighting.j3md */
+    public final static String MATERIAL_LIGHTING = "Common/MatDefs/Light/Lighting.j3md";
+    
     /** Common/MatDefs/Misc/Particle.j3md */
     public final static String MATERIAL_PARTICLE = "Common/MatDefs/Misc/Particle.j3md";
     

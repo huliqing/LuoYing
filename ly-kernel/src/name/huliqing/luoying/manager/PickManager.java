@@ -33,11 +33,6 @@ import com.jme3.scene.Spatial;
  */
 public class PickManager {
     
-//    public static class PickResult {
-//        public Spatial spatial;
-//        public CollisionResult result;
-//    }
-    
     /**
      * 找出最接近的,可被选择的对象.如果最接近的对象不能被选择,则返回null.
      * @param inputManager (not null)
@@ -59,19 +54,5 @@ public class PickManager {
         root.collideWith(ray, resultStore);
         return resultStore;
     }
-    
-//    private static Spatial findPickable(Spatial s) {
-//        if (s == null) {
-//            return null;
-//        }
-//        
-//        // 可被选择的对象.
-//        ObjectData od = s.getUserData(ObjectData.USER_DATA);
-//        if ((od instanceof PickObject) && ((PickObject)od).isPickable()) {
-//            return s;
-//        } else {
-//            return findPickable(s.getParent());
-//        }
-//    }
    
 }
