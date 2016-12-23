@@ -10,6 +10,6 @@ package name.huliqing.editor;
  * @author huliqing
  */
 public class AssetConstants {
- 
+  
     public final static String MODEL_CONE = "Models/cone.j3o";
 }

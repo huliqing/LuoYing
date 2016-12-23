@@ -25,6 +25,7 @@ import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
 import com.jme3.texture.Texture;
 import name.huliqing.luoying.LuoYing;
+import name.huliqing.luoying.constants.AssetConstants;
 
 /**
  *
@@ -32,15 +33,29 @@ import name.huliqing.luoying.LuoYing;
  */
 public class MaterialUtils {
     
+    public static Material createUnshaded() {
+        return createUnshaded(null);
+    }
+    
+    public static Material createUnshaded(ColorRGBA color) {
+        Material mat = new Material(LuoYing.getAssetManager(), AssetConstants.MATERIAL_UNSHADED);
+        if (color != null) {
+            mat.setColor("Color", color);
+        }
+        return mat;
+    }
+    
     public static Material createWireFrame() {
-        return createWireFrame(ColorRGBA.White);
+        return createWireFrame(null);
     }
     
     public static Material createWireFrame(ColorRGBA color) {
-        Material mat = new Material(LuoYing.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        Material mat = new Material(LuoYing.getAssetManager(), AssetConstants.MATERIAL_UNSHADED);
         mat.getAdditionalRenderState().setWireframe(true);
         mat.getAdditionalRenderState().setFaceCullMode(RenderState.FaceCullMode.Off);
-        mat.setColor("Color", color);
+        if (color != null) {
+            mat.setColor("Color", color);
+        }
         return mat;
     }
     
@@ -64,7 +79,7 @@ public class MaterialUtils {
      * @return 
      */
     public static Material createTransparent(Texture tex) {
-        Material mat = new Material(LuoYing.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        Material mat = new Material(LuoYing.getAssetManager(), AssetConstants.MATERIAL_UNSHADED);
         mat.getAdditionalRenderState().setAlphaTest(true);
         mat.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.AlphaAdditive);
         mat.getAdditionalRenderState().setColorWrite(true);
@@ -84,20 +99,15 @@ public class MaterialUtils {
      */
     public static Material createParticle(String texture) {
         AssetManager am = LuoYing.getAssetManager();
-        Material mat = new Material(am, "Common/MatDefs/Misc/Particle.j3md");
+        Material mat = new Material(am, AssetConstants.MATERIAL_PARTICLE);
         mat.setTexture("Texture", am.loadTexture(texture));
         return mat;
     }
     
     public static Material createSkillCooldown(ColorRGBA maskColor) {
-        final Material mat = new Material(LuoYing.getAssetManager(),"MatDefs/Skill/Cooldown.j3md");
+        final Material mat = new Material(LuoYing.getAssetManager(), AssetConstants.MATERIAL_SKILL_COOLDOWN);
         mat.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Alpha);
         mat.setColor("Color", maskColor);
-        return mat;
-    }
-    
-    public static Material createUnshaded() {
-        Material mat = new Material(LuoYing.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
         return mat;
     }
 }

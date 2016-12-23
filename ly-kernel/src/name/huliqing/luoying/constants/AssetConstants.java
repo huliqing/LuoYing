@@ -70,6 +70,9 @@ public class AssetConstants {
     /** LuoYing/Assets/MatDefs/Projection/projection.j3md */
     public final static String MATERIAL_PROJECTION = "LuoYing/Assets/MatDefs/Projection/projection.j3md";
     
+    /** LuoYing/Assets/MatDefs/Skill/cooldown.j3md */
+    public final static String MATERIAL_SKILL_COOLDOWN = "LuoYing/Assets/MatDefs/Skill/cooldown.j3md";
+    
     /** =========================================================================== */
     // Textures
     /** =========================================================================== */

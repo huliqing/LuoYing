@@ -1,10 +1,14 @@
 package name.huliqing.editor;
 
+import com.jme3.input.CameraInput;
 import com.jme3.input.ChaseCamera;
 import com.jme3.input.InputManager;
+import com.jme3.input.MouseInput;
+import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Spatial;
+import java.util.logging.Logger;
 
 /**
  *
@@ -12,24 +16,37 @@ import com.jme3.scene.Spatial;
  */
 public class EditorCamera extends ChaseCamera {
 
+    private static final Logger LOG = Logger.getLogger(EditorCamera.class.getName());
+    
+    private boolean hRotationEnabled = true;
+    private boolean vRotationEnabled = true;
+
     public EditorCamera(Camera cam, InputManager inputManager) {
         super(cam, inputManager);
+        // 使用鼠标中键来实现旋转，和blender一样        
+        setToggleRotationTrigger(new MouseButtonTrigger(MouseInput.BUTTON_MIDDLE));
+
         setSmoothMotion(false);
         setTrailingEnabled(false);
         setInvertVerticalAxis(true);
-        setZoomSensitivity(1f);
+        setZoomSensitivity(3f);
         setRotationSpeed(5f);
         setRotationSensitivity(5);
         setMinDistance(0.0001f);
         setMaxDistance(Float.MAX_VALUE);
-        setDefaultDistance(15);
+        setDefaultDistance(20);
         setChasingSensitivity(5);
         setDownRotateOnCloseViewOnly(true); 
         setUpVector(Vector3f.UNIT_Y);
         // 不要隐藏光标,否则在MAC系统下鼠标点击后会上下错位
         setHideCursorOnRotate(false);
+        setEnableRotation(true);
     }
     
+    /**
+     * 设置要跟随的目标对象。
+     * @param spatial 
+     */
     public void setChase(Spatial spatial) {
         if (target != null) {
             target.removeControl(this);
@@ -37,13 +54,28 @@ public class EditorCamera extends ChaseCamera {
         spatial.addControl(this);
     }
     
+    /**
+     * 是否打开水平旋转
+     * @param hRotation 
+     */
+    public void setEnableRotation(boolean hRotation) {
+        hRotationEnabled = hRotation;
+    }
+    
+    /**
+     * 设置是否打开垂直旋转
+     * @param vRotation 
+     */
+    public void setEnabledRotationV(boolean vRotation) {
+        this.vRotationEnabled = vRotation;
+    }
+
     //move the camera toward or away the target
     @Override
     protected void zoomCamera(float value) {
         if (!enabled) {
             return;
         }
-
         zooming = true;
         targetDistance += value * zoomSensitivity;
         if (targetDistance > maxDistance) {
@@ -61,9 +93,20 @@ public class EditorCamera extends ChaseCamera {
 //        }
     }
     
+    @Override
+    protected void rotateCamera(float value) {
+        if (!hRotationEnabled) {
+            return;
+        }
+        super.rotateCamera(value);
+    }
+    
     //rotate the camera around the target on the vertical plane
     @Override
     protected void vRotateCamera(float value) {
+        if (!vRotationEnabled) {
+            return;
+        }
         if (!canRotate || !enabled) {
             return;
         }
