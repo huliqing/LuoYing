@@ -5,28 +5,17 @@
  */
 package name.huliqing.editor.select;
 
-import com.jme3.math.Quaternion;
-import com.jme3.math.Vector3f;
+import com.jme3.scene.Spatial;
 
 /**
  *
  * @author huliqing
  */
 public interface SelectObj<T> {
+   
+    Spatial getSelectedSpatial();
     
     void setObject(T object);
     
     T getObject();
-    
-    Vector3f getLocation();
-    
-    void setLocation(Vector3f location);
-    
-    Quaternion getRotation();
-    
-    void setRotation(Quaternion rotation);
-    
-    Vector3f getScale();
-    
-    void setScale(Vector3f scale);
 }

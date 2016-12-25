@@ -9,7 +9,6 @@ import com.jme3.material.Material;
 import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
-import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -30,16 +29,16 @@ public class RotationAxis extends Node implements AxisObj {
     public RotationAxis() {
         Spatial rotX = createTorus("rotX", ColorRGBA.Red);
         rotX.rotate(0, FastMath.PI / 2, 0);
-        axisX = new Axis(new Vector3f(1,0,0));
+        axisX = new Axis(Axis.Type.x);
         axisX.attachChild(rotX);
         
         Spatial rotY = createTorus("rotY", ColorRGBA.Green);
         rotY.rotate(FastMath.PI / 2, 0, 0);
-        axisY = new Axis(new Vector3f(0,1,0));
+        axisY = new Axis(Axis.Type.y);
         axisY.attachChild(rotY);
         
         Spatial rotZ = createTorus("rotZ", ColorRGBA.Blue);
-        axisZ = new Axis(new Vector3f(0,0,1));
+        axisZ = new Axis(Axis.Type.z);
         axisZ.attachChild(rotZ);
         
         attachChild(axisX);
@@ -50,14 +49,24 @@ public class RotationAxis extends Node implements AxisObj {
     }
     
     private Spatial createTorus(String name, ColorRGBA color) {
+        Node torus = new Node(name);
+        
+        // 可见的旋转圈
         Material mat = MaterialUtils.createUnshaded(color);
         mat.getAdditionalRenderState().setFaceCullMode(RenderState.FaceCullMode.Off);
         mat.getAdditionalRenderState().setDepthTest(false);
+        Geometry torusInner = new Geometry(name + "tours", new Torus(60, 4, 0.015f, 1.0f));
+        torusInner.setMaterial(mat);
         
-        Torus torus = new Torus(60, 4, 0.015f, 1.0f);
-        Geometry geo = new Geometry(name, torus);
-        geo.setMaterial(mat);
-        return geo;
+        // 用于优化点选
+        Geometry torusOuter = new Geometry(name + "picker", new Torus(20, 4, 0.15f, 1.0f));
+        torusOuter.setMaterial(MaterialUtils.createUnshaded());
+        torusOuter.setCullHint(CullHint.Never);
+        
+        torus.attachChild(torusInner);
+        torus.attachChild(torusOuter);
+        
+        return torus;
     }
 
     @Override

@@ -8,17 +8,16 @@ package name.huliqing.editor.forms;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
 import name.huliqing.editor.Editor;
 import name.huliqing.editor.EditorCamera;
 import name.huliqing.editor.select.EmptySelectObj;
 import name.huliqing.editor.select.SelectObj;
-import name.huliqing.editor.tiles.AbstractActionObj;
 import name.huliqing.editor.tiles.ChaseObj;
 import name.huliqing.editor.tiles.Grid;
 import name.huliqing.editor.tiles.LocationObj;
 import name.huliqing.editor.tiles.RotationObj;
 import name.huliqing.editor.tiles.ScaleObj;
+import name.huliqing.editor.tiles.TransformObj;
 
 /**
  *
@@ -28,6 +27,12 @@ public abstract class BaseForm implements Form {
     
     // 网格
     protected Grid grid;
+    
+    // 变换模式
+    protected TransformMode mode = TransformMode.GLOBAL;
+    // 当前的选择模式
+    protected TransformType type = TransformType.LOCATION;
+    
     // 被镜头跟随的物体
     protected ChaseObj chaseObj;
     // 物体选择、操作标记（位置）
@@ -40,10 +45,6 @@ public abstract class BaseForm implements Form {
     protected EditorCamera editorCam;
     // 当前选择的物体
     protected SelectObj selectObj = new EmptySelectObj();
-    // 当前的选择模式
-    protected Action action = Action.LOCATION;
-    // 变换模式
-    protected Mode mode = Mode.GLOBAL;
     
     protected Editor editor;
     protected boolean initialized;
@@ -75,7 +76,9 @@ public abstract class BaseForm implements Form {
         localRoot.attachChild(rotationObj);
         localRoot.attachChild(scaleObj);
         localRoot.attachChild(chaseObj);
-   
+        
+        setTransformType(TransformType.LOCATION);
+        
         updateActionState();
     }
 
@@ -93,20 +96,22 @@ public abstract class BaseForm implements Form {
         localRoot.detachAllChildren();
         initialized = false;
     }
-
+    
     @Override
-    public LocationObj getLocationObj() {
-        return locationObj;
+    public void setTransformType(TransformType type) {
+        this.type = type;
+        updateActionState();
     }
 
     @Override
-    public RotationObj getRotationObj() {
-        return rotationObj;
+    public TransformMode getTransformMode() {
+        return mode;
     }
-
+    
     @Override
-    public ScaleObj getScaleObj() {
-        return scaleObj;
+    public void setTransformMode(TransformMode mode) {
+        this.mode = mode;
+        updateActionState();
     }
     
     @Override
@@ -115,40 +120,45 @@ public abstract class BaseForm implements Form {
     }
     
     @Override
-    public void setSelectObj(SelectObj object) {
-        this.selectObj = object;
-        updateActionState();
-    }
-
-    @Override
-    public SelectObj getSelectObj() {
-        return selectObj;
-    }
-
-    @Override
     public EditorCamera getEditorCamera() {
         return editorCam;
     }
 
     @Override
-    public void setAction(Action action) {
-        this.action = action;
-        updateActionState();
+    public TransformObj getTransformObj() {
+        switch (type) {
+            case LOCATION:
+                return locationObj;
+            case ROTATION:
+                return rotationObj;
+            case SCALE:
+                return scaleObj;
+            default:
+                throw new IllegalArgumentException("Unknow action type=" + type);
+        }
     }
     
     @Override
-    public void setMode(Mode mode) {
-        this.mode = mode;
+    public SelectObj getSelected() {
+        return selectObj;
+    }
+    
+    /**
+     * 把一个物体设置为当前的选择的主物体
+     * @param object 
+     */
+    protected void setSelected(SelectObj object) {
+        this.selectObj = object;
         updateActionState();
     }
     
-    protected void updateActionState() {
+    private void updateActionState() {
         locationObj.setVisible(false);
         rotationObj.setVisible(false);
         scaleObj.setVisible(false);
         
-        AbstractActionObj activeObj;
-        switch (action) {
+        TransformObj activeObj;
+        switch (type) {
             case LOCATION:
                 activeObj = locationObj;
                 break;
@@ -159,16 +169,16 @@ public abstract class BaseForm implements Form {
                 activeObj = scaleObj;
                 break;
             default:
-                throw new IllegalArgumentException("Unknow action type=" + action);
+                throw new IllegalArgumentException("Unknow action type=" + type);
         }
         activeObj.setVisible(true);
-        activeObj.setLocalTranslation(selectObj.getLocation());
+        activeObj.setLocalTranslation(selectObj.getSelectedSpatial().getWorldTranslation());
         switch (mode) {
             case GLOBAL:
                 activeObj.setLocalRotation(new Quaternion());
                 break;
             case LOCAL:
-                activeObj.setLocalRotation(selectObj.getRotation());
+                activeObj.setLocalRotation(selectObj.getSelectedSpatial().getWorldRotation());
                 break;
             default:
                 throw new IllegalArgumentException("Unknow mode type=" + mode);

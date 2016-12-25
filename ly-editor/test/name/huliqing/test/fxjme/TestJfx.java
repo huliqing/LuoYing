@@ -48,7 +48,7 @@ public class TestJfx extends Application {
         settings.setFrameRate(30);
         
         // setKeepResolution保持分辨率不要太大，以节省性能。
-        jfxView = JfxSystem.startApp(TestEditorApp.class.getName(), settings);
+        jfxView = JfxSystem.startApp(TestEditor.class.getName(), settings);
         jfxView.setResolutionLimit(width, height);
         jfxView.setUseDepthBuffer(true);
         

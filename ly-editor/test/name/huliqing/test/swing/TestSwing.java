@@ -26,7 +26,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.OverlayLayout;
 import javax.swing.SwingUtilities;
-import name.huliqing.test.fxjme.TestEditorApp;
+import name.huliqing.test.fxjme.TestEditor;
 
 /**
  *
@@ -119,7 +119,7 @@ public class TestSwing {
     
     public static void main(String[] args){
 
-        createCanvas(TestEditorApp.class.getName());
+        createCanvas(TestEditor.class.getName());
 
         SwingUtilities.invokeLater(new Runnable(){
             @Override

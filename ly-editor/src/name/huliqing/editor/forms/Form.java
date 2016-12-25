@@ -5,13 +5,12 @@
  */
 package name.huliqing.editor.forms;
 
+import java.util.List;
 import name.huliqing.editor.Editor;
 import name.huliqing.editor.EditorCamera;
 import name.huliqing.editor.select.SelectObj;
 import name.huliqing.editor.tiles.ChaseObj;
-import name.huliqing.editor.tiles.LocationObj;
-import name.huliqing.editor.tiles.RotationObj;
-import name.huliqing.editor.tiles.ScaleObj;
+import name.huliqing.editor.tiles.TransformObj;
 
 /**
  *
@@ -27,34 +26,39 @@ public interface Form {
     
     void cleanup();
     
-    LocationObj getLocationObj();
-    
-    RotationObj getRotationObj();
-    
-    ScaleObj getScaleObj();
-    
-    ChaseObj getChaseObj();
-    
-    void setSelectObj(SelectObj object);
-    
-    SelectObj getSelectObj();
-    
-    EditorCamera getEditorCamera();
-    
-    /**
-     * 设置行为
-     * @param action 
-     */
-    void setAction(Action action);
+    TransformMode getTransformMode();
     
     /**
      * 设置变换模式
-     * @param mode 
+     * @param tm 
      */
-    void setMode(Mode mode);
+    void setTransformMode(TransformMode tm);
+    
+    /**
+     * 设置行为
+     * @param tt 
+     */
+    void setTransformType(TransformType tt);
+    
+    EditorCamera getEditorCamera();
+    
+    ChaseObj getChaseObj();
+    
+    /**
+     * 获取当前的操作物体
+     * @return 
+     */
+    TransformObj getTransformObj();
+    
+    /**
+     * 获取当前正被选中的物体
+     * @return 
+     */
+    SelectObj getSelected();
     
     /**
      * 当点击选择时该方法被调用，子类实现这个方法来选择场景物体
      */
     void onPick();
+    
 }

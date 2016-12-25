@@ -63,11 +63,11 @@ public class Starter {
         sp.maxHeightProperty().bind(db);
         // 必须延迟一帧进行设置dividerPosition,否则无效
 //        sp.setDividerPosition(0, 0.3);
-        js.runOnJfx(() -> {sp.setDividerPositions(0.25);});
- 
+        js.runOnJfx(() -> {sp.setDividerPositions(0.2);});
+        
         VBox propertyPanel = new VBox();
         propertyPanel.setStyle("-fx-background-color:#c0c0c0;");
-        propertyPanel.getChildren().add(new Label("this is Left"));
+        propertyPanel.getChildren().add(new Label(""));
         
         SplitPane rightPane = new SplitPane();
         rightPane.setBackground(Background.EMPTY);

@@ -31,16 +31,16 @@ public class ScaleAxis extends Node implements AxisObj {
     public ScaleAxis() {
         Spatial axisXInner = createAxis("axisXInner", new ColorRGBA(1.0f, 0.1f, 0.1f, 1.0f));
         axisXInner.rotate(0, 0, -FastMath.PI / 2);
-        axisX = new Axis(new Vector3f(1,0,0));
+        axisX = new Axis(Axis.Type.x);
         axisX.attachChild(axisXInner);
         
         Spatial axisYInner = createAxis("axisYInner", new ColorRGBA(0.1f, 1.0f, 0.1f, 1.0f));
-        axisY = new Axis(new Vector3f(0,1,0));
+        axisY = new Axis(Axis.Type.y);
         axisY.attachChild(axisYInner);
         
         Spatial axisZInner = createAxis("axisZInner", new ColorRGBA(0.1f, 0.1f, 1.0f, 1.0f));
         axisZInner.rotate(FastMath.PI / 2, 0, 0);
-        axisZ = new Axis(new Vector3f(0,0,1));
+        axisZ = new Axis(Axis.Type.z);
         axisZ.attachChild(axisZInner);
         
         attachChild(axisX);
@@ -52,25 +52,32 @@ public class ScaleAxis extends Node implements AxisObj {
     }
     
     private Spatial createAxis(String name, ColorRGBA color) {
-        Node node = new Node(name);
+        Node axis = new Node(name);
         Material mat = MaterialUtils.createUnshaded(color);
         mat.getAdditionalRenderState().setFaceCullMode(RenderState.FaceCullMode.Off);
         mat.getAdditionalRenderState().setDepthTest(false);
         
         // 轴线
-        Geometry line = new Geometry(name, new Line(new Vector3f(), new Vector3f(0,1,0)));
+        Geometry line = new Geometry(name + "line", new Line(new Vector3f(), new Vector3f(0,1,0)));
         line.setMaterial(mat);
-        node.attachChild(line);
+        axis.attachChild(line);
         
-        // 一个圆锥箭头
-        Geometry boxGeo = new Geometry("box", new Box(0.5f, 0.5f, 0.5f));
+        // BOX
+        Geometry boxGeo = new Geometry(name + "box", new Box(0.5f, 0.5f, 0.5f));
         boxGeo.setMaterial(mat);
         boxGeo.setLocalTranslation(0, 1, 0);
         boxGeo.setLocalScale(0.1f, 0.1f, 0.1f);
         boxGeo.setQueueBucket(RenderQueue.Bucket.Translucent);
-        node.attachChild(boxGeo);
+        axis.attachChild(boxGeo);
         
-        return node;
+        // for pick
+        Geometry outer = new Geometry(name + "picker", new Box(0.15f, 0.5f, 0.15f));
+        outer.setLocalTranslation(0, 0.5f, 0);
+        outer.setMaterial(MaterialUtils.createUnshaded());
+//        outer.setCullHint(CullHint.Always);
+        axis.attachChild(outer);
+        
+        return axis;
     }
 
     @Override

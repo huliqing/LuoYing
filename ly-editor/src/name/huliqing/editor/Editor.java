@@ -5,6 +5,7 @@
  */
 package name.huliqing.editor;
 
+import name.huliqing.editor.action.ActionManager;
 import com.jme3.app.SimpleApplication;
 import name.huliqing.editor.forms.Form;
 import name.huliqing.editor.forms.SimpleForm;
@@ -15,7 +16,7 @@ import name.huliqing.editor.forms.SimpleForm;
  */
 public class Editor extends SimpleApplication{
     
-    private final EditorInputManager editorInputManager = new EditorInputManager();
+    private final ActionManager editorInputManager = new ActionManager();
     
     private static Editor instance;
     private Form form;

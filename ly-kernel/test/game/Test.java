@@ -5,8 +5,8 @@
  */
 package game;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.jme3.math.FastMath;
+import com.jme3.math.Vector3f;
 
 /**
  *
@@ -15,7 +15,16 @@ import java.util.Map;
 public class Test {
     
     public static void main(String[] args) {
-        long[] value = new long[]{1L};
-        long ss = 1L;
+//        Vector3f dir1 = new Vector3f(1,0,0).normalizeLocal();
+//        Vector3f dir2 = new Vector3f(1,-1,0).normalizeLocal();
+//        System.out.println(dir1.dot(dir2));
+
+        Vector3f vec1 = new Vector3f(FastMath.nextRandomFloat(), FastMath.nextRandomFloat(), FastMath.nextRandomFloat());
+        vec1.normalizeLocal();
+        vec1.normalizeLocal();
+        vec1.normalizeLocal();
+        vec1.normalizeLocal();
+        vec1.normalizeLocal();
+        
     }
 }

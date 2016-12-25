@@ -24,7 +24,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.OverlayLayout;
 import javax.swing.SwingUtilities;
-import name.huliqing.test.fxjme.TestEditorApp;
+import name.huliqing.test.fxjme.TestEditor;
 
 /**
  *
@@ -120,7 +120,7 @@ public class TestSwing2 {
     }
 
     public Canvas createCanvas() {
-        String appClass = TestEditorApp.class.getName();
+        String appClass = TestEditor.class.getName();
         AppSettings settings = new AppSettings(true);
         settings.setWidth(640);
         settings.setHeight(480);

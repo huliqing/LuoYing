@@ -1,0 +1,141 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package name.huliqing.editor.action;
+
+import com.jme3.math.FastMath;
+import com.jme3.math.Quaternion;
+import com.jme3.math.Vector2f;
+import com.jme3.math.Vector3f;
+import com.jme3.renderer.Camera;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
+import com.jme3.scene.shape.Quad;
+import name.huliqing.editor.forms.TransformMode;
+import name.huliqing.luoying.manager.PickManager;
+
+/**
+ *
+ * @author huliqing
+ */
+public class Picker {
+    
+    public final static Quaternion PLANE_XY = new Quaternion().fromAngleAxis(0, new Vector3f(1, 0, 0));
+    public final static Quaternion PLANE_YZ = new Quaternion().fromAngleAxis(-FastMath.PI / 2, new Vector3f(0, 1, 0));
+    public final static Quaternion PLANE_XZ = new Quaternion().fromAngleAxis(FastMath.PI / 2, new Vector3f(1, 0, 0));
+    
+    private final Node plane = new Node();
+    private Quaternion origineRotation;
+    private TransformMode mode;
+    
+    // 被
+    private Spatial selectedSpatial;
+    private Vector3f startSpatialLocation;
+    private Vector3f startPickLoc;
+    private Vector3f endPickLoc;
+    
+    public Picker() {
+        float size = 1000;
+        Geometry g = new Geometry("plane", new Quad(size, size));
+        g.setLocalTranslation(-size / 2, -size / 2, 0);
+        plane.attachChild(g);
+    }
+    
+    public void startPick(Spatial selectedSpatial, TransformMode mode, Camera cam, Vector2f mouseLoc, Quaternion planeRotation) {
+        this.selectedSpatial = selectedSpatial;
+        this.mode = mode;
+        
+        startSpatialLocation = selectedSpatial.getWorldTranslation().clone();
+        setTransformation(planeRotation, cam);
+        plane.setLocalTranslation(startSpatialLocation);
+        
+        startPickLoc = PickManager.pick(cam, mouseLoc, plane);
+        
+    }
+    
+    public void setTransformation(Quaternion planeRotation, Camera camera) {
+        Quaternion rot = new Quaternion();
+        if (null != mode) {
+            switch (mode) {
+                case LOCAL:
+                    rot.set(selectedSpatial.getWorldRotation());
+                    rot.multLocal(planeRotation);
+                    origineRotation = selectedSpatial.getWorldRotation().clone();
+                    break;
+                    
+                case GLOBAL:
+                    rot.set(planeRotation);
+                    origineRotation = new Quaternion(Quaternion.IDENTITY);
+                    break;
+                    
+//                case CAMERA: 
+//                    rot.set(camera.getRotation());
+//                    origineRotation = camera.getRotation();
+//                    break;
+                    
+                default:
+                    throw new UnsupportedOperationException("Unsupported mode=" + mode);
+            }
+        }
+        plane.setLocalRotation(rot);
+    }
+    
+    public boolean updatePick(Camera cam, Vector2f screenLoc) {
+        if (startPickLoc == null) {
+            return false;
+        }
+        endPickLoc = PickManager.pick(cam, screenLoc, plane);
+        return endPickLoc != null;
+    }
+    
+    public void endPick() {
+        startPickLoc = null;
+        endPickLoc = null;
+    }
+    
+    public Vector3f getTranslation() {
+        return endPickLoc.subtract(startPickLoc);
+    }
+    
+    public Vector3f getTranslation(Vector3f axisConstrainte) {
+        Vector3f localConstrainte = (origineRotation.mult(axisConstrainte)).normalize();
+        Vector3f constrainedTranslation = localConstrainte.mult(getTranslation().dot(localConstrainte));
+        return constrainedTranslation;
+    }
+    
+    /**
+     * @return the Quaternion rotation in the WorldSpace
+     */
+    public Quaternion getRotation() {
+        return getRotation(Quaternion.IDENTITY);
+    }
+
+    /**
+     *
+     * @return the Quaternion rotation in the ToolSpace
+     */
+    public Quaternion getLocalRotation() {
+        return getRotation(origineRotation.inverse());
+    }
+
+    /**
+     * Get the Rotation into a specific custom space.
+     * @param transforme the rotation to the custom space (World to Custom space)
+     * @return the Rotation in the custom space
+     */
+    public Quaternion getRotation(Quaternion transforme) {
+        Vector3f v1, v2;
+        v1 = transforme.mult(startPickLoc.subtract(startSpatialLocation).normalize());
+        v2 = transforme.mult(endPickLoc.subtract(startSpatialLocation).normalize());
+        Vector3f axis = v1.cross(v2);
+        float angle = v1.angleBetween(v2);
+        return new Quaternion().fromAngleAxis(angle, axis);
+    }
+    
+//    public Vector3f getLocalTranslation(Vector3f axisConstrainte) {
+//        return getTranslation(origineRotation.inverse().mult(axisConstrainte));
+//    }
+}

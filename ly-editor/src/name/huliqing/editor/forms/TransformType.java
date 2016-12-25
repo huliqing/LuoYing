@@ -6,14 +6,22 @@
 package name.huliqing.editor.forms;
 
 /**
- * 物体的变换模式
+ * 标记着操作类型
  * @author huliqing
  */
-public enum Mode {
+public enum TransformType {
+    /**
+     * 位移操作
+     */
+    LOCATION,
     
-    /** 全局模式，在目标所在的世界空间中变换 */
-    GLOBAL,
+    /**
+     * 旋转操作
+     */
+    ROTATION,
     
-    /** 局部模式，在目标的本地空间中变换 */
-    LOCAL
+    /**
+     * 缩放操作
+     */
+    SCALE
 }

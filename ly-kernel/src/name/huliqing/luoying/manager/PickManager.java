@@ -20,12 +20,13 @@
 package name.huliqing.luoying.manager;
 
 import com.jme3.collision.CollisionResults;
-import com.jme3.input.InputManager;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Spatial;
+import com.jme3.util.TempVars;
+import name.huliqing.luoying.utils.TempPick;
 
 /**
  * 鼠标选择工具类
@@ -34,25 +35,60 @@ import com.jme3.scene.Spatial;
 public class PickManager {
     
     /**
-     * 找出最接近的,可被选择的对象.如果最接近的对象不能被选择,则返回null.
-     * @param inputManager (not null)
-     * @param camera (not null)
-     * @param root (not null)
-     * @param resultStore
+     * 获取鼠标点击到物体的世界位置点, 如果没有点击到指定的物体，则返回null.
+     * @param camera
+     * @param screenLoc
+     * @param pickRoot 
      * @return 
      */
-    public static CollisionResults pick(InputManager inputManager, Camera camera, Spatial root, CollisionResults resultStore) {
-        if (resultStore == null) {
-            resultStore = new CollisionResults();
+    public static Vector3f pick(Camera camera, Vector2f screenLoc, Spatial pickRoot) {
+        TempPick tp = TempPick.get();
+        CollisionResults cr = tp.results;
+        cr.clear();
+        pick(camera, screenLoc, pickRoot, cr);
+        Vector3f result = null;
+        if (cr.size() > 0) {
+            result = cr.getClosestCollision().getContactPoint();
         }
-        Vector2f v2d = inputManager.getCursorPosition();
-        Vector3f click3d = camera.getWorldCoordinates(v2d, 0);
-        // 注意DIR方向向量必须归一化，否则可能在collideWith的时候获取不到结果。
-        // 实测：没归一化时与ray产生不到碰撞结果。
-        Vector3f dir = camera.getWorldCoordinates(v2d, 1).subtract(click3d).normalizeLocal();
-        Ray ray = new Ray(click3d, dir);
-        root.collideWith(ray, resultStore);
-        return resultStore;
+        tp.release();
+        return result;
     }
-   
+    
+    /**
+     * 找出最接近的,可被选择的对象.如果最接近的对象不能被选择,则返回null.
+     * @param camera (not null)
+     * @param screenLoc
+     * @param pickRoot (not null)
+     * @param store
+     * @return 
+     */
+    public static CollisionResults pick(Camera camera, Vector2f screenLoc, Spatial pickRoot, CollisionResults store) {
+        TempPick tp = TempPick.get();
+        Ray ray = getPickRay(camera, screenLoc, tp.ray);
+        pickRoot.collideWith(ray, store);
+        tp.release();
+        return store;
+    }
+    
+    /**
+     * 获取一条鼠标点击屏幕的射线。
+     * @param camera
+     * @param screenLoc
+     * @param store
+     * @return 
+     */
+    public static Ray getPickRay(Camera camera, Vector2f screenLoc, Ray store) {
+        if (store == null) {
+            store = new Ray();
+        }
+        TempVars tv = TempVars.get();
+        Vector3f origin = camera.getWorldCoordinates(screenLoc, 0, tv.vect1);
+        Vector3f dir = camera.getWorldCoordinates(screenLoc, 1, tv.vect2).subtractLocal(origin).normalizeLocal(); // 注意归一化
+        store.setOrigin(origin);
+        store.setDirection(dir);
+        tv.release();
+        return store;
+    }
+
+
 }
