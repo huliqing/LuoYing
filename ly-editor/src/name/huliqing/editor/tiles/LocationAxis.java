@@ -13,12 +13,12 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.Geometry;
+import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Line;
-import name.huliqing.editor.AssetConstants;
-import name.huliqing.editor.Editor;
+import name.huliqing.luoying.utils.GeometryUtils;
 import name.huliqing.luoying.utils.MaterialUtils;
 
 /**
@@ -66,7 +66,9 @@ public class LocationAxis extends Node implements AxisObj {
         axis.attachChild(line);
         
         // 一个圆锥箭头
-        Spatial cone = Editor.getEditor().getAssetManager().loadModel(AssetConstants.MODEL_CONE);
+//        Spatial cone = Editor.getEditor().getAssetManager().loadModel(AssetConstants.MODEL_CONE);
+        Mesh coneMesh = GeometryUtils.createCone(20, 1, 1);
+        Geometry cone = new Geometry("cone", coneMesh);
         cone.setMaterial(mat);
         cone.setLocalTranslation(0, 1, 0);
         cone.setLocalScale(0.05f, 0.1f, 0.05f);
@@ -77,7 +79,7 @@ public class LocationAxis extends Node implements AxisObj {
         Geometry outer = new Geometry(name + "outer", new Box(0.15f, 0.5f, 0.15f));
         outer.setLocalTranslation(0, 0.5f, 0);
         outer.setMaterial(MaterialUtils.createUnshaded());
-        outer.setCullHint(CullHint.Never);
+        outer.setCullHint(CullHint.Always);
         axis.attachChild(outer);
         
         return axis;

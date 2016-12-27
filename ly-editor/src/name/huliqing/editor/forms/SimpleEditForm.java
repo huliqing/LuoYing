@@ -5,7 +5,6 @@
  */
 package name.huliqing.editor.forms;
 
-import com.jme3.collision.CollisionResults;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.math.ColorRGBA;
@@ -16,17 +15,15 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import name.huliqing.editor.Editor;
-import name.huliqing.editor.select.SpatialSelectObj;
-import name.huliqing.luoying.manager.PickManager;
 import name.huliqing.luoying.utils.MaterialUtils;
 
 /**
  *
  * @author huliqing
  */
-public class SimpleForm extends BaseForm {
+public class SimpleEditForm extends EditForm {
 
-    private final CollisionResults pickResults = new CollisionResults();
+//    private final CollisionResults pickResults = new CollisionResults();
     
     private final Node root = new Node();
     
@@ -45,9 +42,9 @@ public class SimpleForm extends BaseForm {
                 ,FastMath.nextRandomInt(-5, 5)
                 ,FastMath.nextRandomInt(-5, 5)
         );
-        root.rotate(FastMath.nextRandomFloat() * FastMath.TWO_PI
-                    , FastMath.nextRandomFloat() * FastMath.TWO_PI
-                    , FastMath.nextRandomFloat() * FastMath.TWO_PI);
+//        root.rotate(FastMath.nextRandomFloat() * FastMath.TWO_PI
+//                    , FastMath.nextRandomFloat() * FastMath.TWO_PI
+//                    , FastMath.nextRandomFloat() * FastMath.TWO_PI);
         
         
         Spatial sinbad = editor.getAssetManager().loadModel("Models/test/Sinbad.mesh.j3o");
@@ -67,9 +64,9 @@ public class SimpleForm extends BaseForm {
             
             ge.rotate(0, FastMath.PI / 2f, 0);
             
-//            ge.rotate(FastMath.nextRandomFloat() * FastMath.TWO_PI
-//                    , FastMath.nextRandomFloat() * FastMath.TWO_PI
-//                    , FastMath.nextRandomFloat() * FastMath.TWO_PI);
+            ge.rotate(FastMath.nextRandomFloat() * FastMath.TWO_PI
+                    , FastMath.nextRandomFloat() * FastMath.TWO_PI
+                    , FastMath.nextRandomFloat() * FastMath.TWO_PI);
             
             root.attachChild(ge);
         }
@@ -77,15 +74,15 @@ public class SimpleForm extends BaseForm {
         localRoot.addLight(new AmbientLight(new ColorRGBA(1,1,1,1).multLocal(2)));
     }
 
-    @Override
-    public void onPick() {
-        pickResults.clear();
-        PickManager.pick(editor.getCamera(), editor.getInputManager().getCursorPosition(), root, pickResults);
-        if (pickResults.size() > 0) {
-            Spatial picked = pickResults.getClosestCollision().getGeometry();
-            setSelected(new SpatialSelectObj(picked));
-        }
-    }
+//    @Override
+//    public void onPick() {
+//        pickResults.clear();
+//        PickManager.pick(editor.getCamera(), editor.getInputManager().getCursorPosition(), root, pickResults);
+//        if (pickResults.size() > 0) {
+//            Spatial picked = pickResults.getClosestCollision().getGeometry();
+//            setSelected(new SpatialSelectObj(picked));
+//        }
+//    }
 
     
 }

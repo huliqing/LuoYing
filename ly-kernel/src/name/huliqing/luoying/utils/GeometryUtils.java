@@ -34,6 +34,7 @@ import com.jme3.material.MatParam;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
 import com.jme3.math.Ray;
 import com.jme3.math.Transform;
 import com.jme3.math.Vector3f;
@@ -46,9 +47,13 @@ import com.jme3.scene.SceneGraphVisitor;
 import com.jme3.scene.SceneGraphVisitorAdapter;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.UserData;
+import com.jme3.scene.VertexBuffer;
 import com.jme3.shader.VarType;
 import com.jme3.texture.Texture;
+import com.jme3.util.BufferUtils;
 import com.jme3.util.TempVars;
+import java.nio.FloatBuffer;
+import java.nio.ShortBuffer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -418,7 +423,7 @@ public class GeometryUtils {
         int checkPlane = bv.getCheckPlane();
         bv.setCheckPlane(0);
         Camera.FrustumIntersect interset = cam.contains(bv);
-        boolean result = interset == FrustumIntersect.Outside ? false : true;
+        boolean result = interset != FrustumIntersect.Outside;
         bv.setCheckPlane(checkPlane);
         return result;
     }
@@ -549,6 +554,66 @@ public class GeometryUtils {
             targets.add(sharedMesh);
         }
     }
+    
+    public static Mesh createCone(int radialSamples, float radius, float height) {
+        Mesh cone = new Mesh();
+
+        float fInvRS = 1.0f / radialSamples;
+
+        // Generate points on the unit circle to be used in computing the mesh
+        // points on a dome slice.
+        float[] afSin = new float[radialSamples];
+        float[] afCos = new float[radialSamples];
+        for (int i = 0; i < radialSamples; i++) {
+            float fAngle = FastMath.TWO_PI * fInvRS * i;
+            afCos[i] = FastMath.cos(fAngle);
+            afSin[i] = FastMath.sin(fAngle);
+        }
+
+        FloatBuffer vb = BufferUtils.createVector3Buffer(radialSamples + 2);
+        cone.setBuffer(VertexBuffer.Type.Position, 3, vb);
+
+        TempVars vars = TempVars.get();
+        Vector3f tempVa = vars.vect1;
+
+        for (int i = 0; i < radialSamples; i++) {
+            Vector3f kRadial = tempVa.set(afCos[i], 0, afSin[i]);
+            kRadial.mult(radius, tempVa);
+            vb.put(tempVa.x).put(tempVa.y).put(tempVa.z);
+
+            BufferUtils.populateFromBuffer(tempVa, vb, i);
+
+        }
+        vars.release();
+
+        // top of the cone
+        vb.put(0).put(height).put(0);
+        // base of the cone
+        vb.put(0).put(0).put(0);
+
+        ShortBuffer ib = BufferUtils.createShortBuffer(3 * (radialSamples) * 2);
+        cone.setBuffer(VertexBuffer.Type.Index, 3, ib);
+
+        short top = (short) radialSamples;
+        short bot = (short) (radialSamples + 1);
+
+        for (int i = 0; i < radialSamples; i++) {
+            short a = (short) i;
+            short b = (short) ((i + 1) % radialSamples);
+            ib.put(top);
+            ib.put(b);
+            ib.put(a);
+
+            ib.put(a);
+            ib.put(b);
+            ib.put(bot);
+        }
+
+        cone.updateBound();
+
+        return cone;
+    }
+    
 }
 
 

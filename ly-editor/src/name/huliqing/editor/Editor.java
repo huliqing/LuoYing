@@ -5,10 +5,9 @@
  */
 package name.huliqing.editor;
 
-import name.huliqing.editor.action.ActionManager;
 import com.jme3.app.SimpleApplication;
-import name.huliqing.editor.forms.Form;
-import name.huliqing.editor.forms.SimpleForm;
+import name.huliqing.editor.events.JmeEvent;
+import name.huliqing.editor.forms.SimpleEditForm;
 
 /**
  *
@@ -16,26 +15,17 @@ import name.huliqing.editor.forms.SimpleForm;
  */
 public class Editor extends SimpleApplication{
     
-    private final ActionManager editorInputManager = new ActionManager();
-    
-    private static Editor instance;
     private Form form;
 
     @Override
     public void simpleInitApp() {
-        instance = this;
-        editorInputManager.initialize(this);
-        setForm(new SimpleForm());
+        JmeEvent.registerInputManager(inputManager);
+        setForm(new SimpleEditForm());
     }
     
     @Override
     public void simpleUpdate(float tpf) {
         form.update(tpf);
-        editorInputManager.update(tpf);
-    }
-    
-    public static Editor getEditor() {
-        return instance;
     }
     
     public Form getForm() {

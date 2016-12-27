@@ -27,6 +27,7 @@ public class ScaleAxis extends Node implements AxisObj {
     private final Axis axisX;
     private final Axis axisY;
     private final Axis axisZ;
+    private final Spatial center;
     
     public ScaleAxis() {
         Spatial axisXInner = createAxis("axisXInner", new ColorRGBA(1.0f, 0.1f, 0.1f, 1.0f));
@@ -43,6 +44,9 @@ public class ScaleAxis extends Node implements AxisObj {
         axisZ = new Axis(Axis.Type.z);
         axisZ.attachChild(axisZInner);
         
+        center = createCenterBox("center");
+        
+        attachChild(center);
         attachChild(axisX);
         attachChild(axisY);
         attachChild(axisZ);
@@ -62,7 +66,7 @@ public class ScaleAxis extends Node implements AxisObj {
         line.setMaterial(mat);
         axis.attachChild(line);
         
-        // BOX
+        // 小box
         Geometry boxGeo = new Geometry(name + "box", new Box(0.5f, 0.5f, 0.5f));
         boxGeo.setMaterial(mat);
         boxGeo.setLocalTranslation(0, 1, 0);
@@ -74,10 +78,16 @@ public class ScaleAxis extends Node implements AxisObj {
         Geometry outer = new Geometry(name + "picker", new Box(0.15f, 0.5f, 0.15f));
         outer.setLocalTranslation(0, 0.5f, 0);
         outer.setMaterial(MaterialUtils.createUnshaded());
-//        outer.setCullHint(CullHint.Always);
+        outer.setCullHint(CullHint.Always);
         axis.attachChild(outer);
         
         return axis;
+    }
+    
+    private Spatial createCenterBox(String name) {
+        Geometry centerSpatial = new Geometry(name + "center", new Box(0.2f, 0.2f, 0.2f));
+        centerSpatial.setMaterial(MaterialUtils.createUnshaded(ColorRGBA.White));
+        return centerSpatial;
     }
 
     @Override
@@ -93,5 +103,9 @@ public class ScaleAxis extends Node implements AxisObj {
     @Override
     public Axis getAxisZ() {
         return axisZ;
+    }
+    
+    public Spatial getCenter() {
+        return center;
     }
 }

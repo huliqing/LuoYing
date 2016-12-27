@@ -58,7 +58,11 @@ public class ScaleObj extends TransformObj {
         }
         return selectAxis;
     }
-
+    
+    public boolean isPickCenter(Ray ray) {
+        return tileScale.getCenter().getWorldBound().intersects(ray);
+    }
+    
     @Override
     public void showDebugLine(Axis axis, boolean visible) {
         super.showDebugLine(axis, visible);

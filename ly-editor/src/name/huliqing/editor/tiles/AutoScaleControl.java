@@ -13,7 +13,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 
 /**
- *
+ * 动态控制场景中物体的大小
  * @author huliqing
  */
 public class AutoScaleControl extends AbstractControl {

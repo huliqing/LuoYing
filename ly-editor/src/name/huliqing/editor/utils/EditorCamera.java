@@ -1,4 +1,4 @@
-package name.huliqing.editor;
+package name.huliqing.editor.utils;
 
 import com.jme3.input.CameraInput;
 import com.jme3.input.ChaseCamera;

@@ -61,7 +61,7 @@ public class RotationAxis extends Node implements AxisObj {
         // 用于优化点选
         Geometry torusOuter = new Geometry(name + "picker", new Torus(20, 4, 0.15f, 1.0f));
         torusOuter.setMaterial(MaterialUtils.createUnshaded());
-        torusOuter.setCullHint(CullHint.Never);
+        torusOuter.setCullHint(CullHint.Always);
         
         torus.attachChild(torusInner);
         torus.attachChild(torusOuter);

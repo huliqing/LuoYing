@@ -14,7 +14,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Quad;
-import name.huliqing.editor.forms.TransformMode;
+import name.huliqing.editor.forms.Mode;
 import name.huliqing.luoying.manager.PickManager;
 
 /**
@@ -29,7 +29,7 @@ public class Picker {
     
     private final Node plane = new Node();
     private Quaternion origineRotation;
-    private TransformMode mode;
+    private Mode mode;
     
     // 被
     private Spatial selectedSpatial;
@@ -44,7 +44,7 @@ public class Picker {
         plane.attachChild(g);
     }
     
-    public void startPick(Spatial selectedSpatial, TransformMode mode, Camera cam, Vector2f mouseLoc, Quaternion planeRotation) {
+    public void startPick(Spatial selectedSpatial, Mode mode, Camera cam, Vector2f mouseLoc, Quaternion planeRotation) {
         this.selectedSpatial = selectedSpatial;
         this.mode = mode;
         
@@ -71,10 +71,10 @@ public class Picker {
                     origineRotation = new Quaternion(Quaternion.IDENTITY);
                     break;
                     
-//                case CAMERA: 
-//                    rot.set(camera.getRotation());
-//                    origineRotation = camera.getRotation();
-//                    break;
+                case CAMERA: 
+                    rot.set(camera.getRotation());
+                    origineRotation = camera.getRotation();
+                    break;
                     
                 default:
                     throw new UnsupportedOperationException("Unsupported mode=" + mode);
@@ -106,6 +106,10 @@ public class Picker {
         return constrainedTranslation;
     }
     
+    public Vector3f getLocalTranslation(Vector3f axisConstrainte) {
+        return getTranslation(origineRotation.inverse().mult(axisConstrainte));
+    }
+    
     /**
      * @return the Quaternion rotation in the WorldSpace
      */
@@ -135,7 +139,31 @@ public class Picker {
         return new Quaternion().fromAngleAxis(angle, axis);
     }
     
-//    public Vector3f getLocalTranslation(Vector3f axisConstrainte) {
-//        return getTranslation(origineRotation.inverse().mult(axisConstrainte));
-//    }
+     /**
+     *
+     * @return the vector from the tool origin to the start location, in
+     * WorldSpace
+     */
+    public Vector3f getStartOffset() {
+        return startPickLoc.subtract(startSpatialLocation);
+    }
+    
+    /**
+     *
+     * @return the angle between the start location and the final location
+     */
+    public float getAngle() {
+        Vector3f v1, v2;
+        v1 = startPickLoc.subtract(startSpatialLocation);
+        v2 = endPickLoc.subtract(startSpatialLocation);
+        return v1.angleBetween(v2);
+    }
+    
+    /**
+     * @return the vector from the tool origin to the final location, in
+     * WorldSpace
+     */
+    public Vector3f getFinalOffset() {
+        return endPickLoc.subtract(startSpatialLocation);
+    }
 }

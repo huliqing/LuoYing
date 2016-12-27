@@ -9,7 +9,7 @@ package name.huliqing.editor.forms;
  * 物体的变换模式
  * @author huliqing
  */
-public enum TransformMode {
+public enum Mode {
     
     /** 全局模式，在目标所在的世界空间中变换 */
     GLOBAL,
@@ -17,6 +17,6 @@ public enum TransformMode {
     /** 局部模式，在目标的本地空间中变换 */
     LOCAL, 
     
-//    /** 以相机视角模式 */
-//    CAMERA,
+    /** 以相机视角模式 */
+    CAMERA,
 }

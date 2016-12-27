@@ -6,6 +6,8 @@
 package name.huliqing.test.fxjme;
 
 import com.jme3.math.Vector3f;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -13,13 +15,16 @@ import com.jme3.math.Vector3f;
  */
 public class Test {
     public static void main(String[] args) {
-        Vector3f obj1 = new Vector3f(1,1,1);
-        Vector3f obj2 = new Vector3f(2,2,2);
-        
-        Vector3f obj3 = obj1;
-        
-        obj1 = obj2;
-        
-        System.out.println("obj3=" + obj3);
+//        Vector3f a = new Vector3f(1,0,0);
+//        Vector3f b = new Vector3f(0,1,0);
+//        List<Vector3f> test = new ArrayList<Vector3f>();
+//        test.add(a);
+//        test.add(b);
+
+        List<Integer> test = new ArrayList<Integer>();
+        test.add(1);
+        test.add(2);
+        test.add(3);
+        test.stream().filter(t -> t == 2).forEach(t -> {System.out.println("t=" + t);});
     }
 }
