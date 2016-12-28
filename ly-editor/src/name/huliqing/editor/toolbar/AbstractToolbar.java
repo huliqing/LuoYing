@@ -3,14 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor;
+package name.huliqing.editor.toolbar;
 
 import com.jme3.util.SafeArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import name.huliqing.editor.forms.Form;
 import name.huliqing.editor.tools.Tool;
-import name.huliqing.editor.tools.ToolbarListener;
 
 /**
  *
@@ -68,13 +68,14 @@ public abstract class AbstractToolbar<F extends Form> implements Toolbar<F> {
     }
     
     @Override
-    public void add(Tool tool) {
+    public <T extends Toolbar> T add(Tool tool) {
         if (!tools.contains(tool)) {
             tools.add(tool);
             for (ToolbarListener tl : listeners.getArray()) {
                 tl.onToolAdded(tool);
             }
         }
+        return (T) this;
     }
     
     @Override
@@ -104,7 +105,7 @@ public abstract class AbstractToolbar<F extends Form> implements Toolbar<F> {
     }
 
     @Override
-    public void setActivated(Tool tool, boolean activated) {
+    public <T extends Toolbar> T setActivated(Tool tool, boolean activated) {
         for (Tool t : tools.getArray()) {
             if (t == tool) {
                 if (activated) {
@@ -113,23 +114,25 @@ public abstract class AbstractToolbar<F extends Form> implements Toolbar<F> {
                 } else {
                     toolDeactivated(t);
                 }
-                return;
+                break;
             }
         }
+        return (T) this;
     }
     
     @Override
-    public void setActivated(String tool, boolean activated) {
+    public <T extends Toolbar> T setActivated(String tool, boolean activated) {
         for (Tool t : tools.getArray()) {
             if (t.getName().equals(tool)) {
                 setActivated(t, activated);
-                return;
+                break;
             }
         }
+        return (T) this;
     }
 
     @Override
-    public void setEnabled(String tool, boolean enabled) {
+    public <T extends Toolbar> T setEnabled(String tool, boolean enabled) {
         for (Tool t : tools.getArray()) {
             if (tool.equals(t.getName())) {
                 if (enabled) {
@@ -138,9 +141,10 @@ public abstract class AbstractToolbar<F extends Form> implements Toolbar<F> {
                     toolDeactivated(t);
                     toolDisabled(t);
                 }
-                return;
+                break;
             }
         }
+        return (T) this;
     }
     
     private void toolActivated(Tool t) {

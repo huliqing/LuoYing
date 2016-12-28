@@ -1,5 +1,6 @@
 
-.local旋转时要及时更新transformObj
+ok.local旋转时要及时更新transformObj
 .全局缩放在缩放经过了旋转的物体时有BUG.
 .undo,redo
-.scale需要同时三轴缩放
+ok.scale需要同时三轴缩放
+scale的中心点缩放样式要透明

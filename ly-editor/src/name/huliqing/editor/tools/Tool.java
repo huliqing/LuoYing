@@ -5,7 +5,7 @@
  */
 package name.huliqing.editor.tools;
 
-import name.huliqing.editor.Toolbar;
+import name.huliqing.editor.toolbar.Toolbar;
 
 /**
  * 编辑工具

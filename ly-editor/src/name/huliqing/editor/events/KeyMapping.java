@@ -28,6 +28,12 @@ public interface KeyMapping {
     void cleanup();
     
     /**
+     * 获取匹配名称
+     * @return 
+     */
+    String getMappingName();
+    
+    /**
      * 判断按键是否匹配
      * @return 
      */

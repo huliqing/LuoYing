@@ -5,12 +5,14 @@
  */
 package name.huliqing.editor.tools;
 
+import name.huliqing.editor.toolbar.EditToolbar;
 import com.jme3.input.InputManager;
-import java.util.logging.Level;
 import java.util.logging.Logger;
+import name.huliqing.editor.Editor;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.EventListener;
 import name.huliqing.editor.events.JmeEvent;
+import name.huliqing.editor.forms.EditForm;
 
 /**
  *
@@ -20,16 +22,15 @@ public abstract class EditTool implements Tool<EditToolbar> {
 
     private static final Logger LOG = Logger.getLogger(EditTool.class.getName());
 
-    /**
-     * 编辑工具名称
-     */
-    protected final String name;
-    protected boolean initialized;
+    protected Editor editor;
+    protected EditForm form;
     protected EditToolbar toolbar;
     
     protected EventHelper eventHelper;
     protected InputManager inputManager;
     protected final EventListener eventListener = new ToolEventListener();
+    protected final String name; // 编工具名称
+    protected boolean initialized;
     
     public EditTool(String name) {
         this.name = name; 
@@ -46,6 +47,8 @@ public abstract class EditTool implements Tool<EditToolbar> {
             throw new IllegalStateException("Tool already initialized, name=" + name + ", class=" + getClass().getName());
         }
         initialized = true;
+        editor = toolbar.getForm().getEditor();
+        form = toolbar.getForm();
         inputManager = toolbar.getForm().getEditor().getInputManager();
         if (eventHelper != null) {
             eventHelper.initialize();
@@ -80,7 +83,7 @@ public abstract class EditTool implements Tool<EditToolbar> {
      * @param name
      * @return 
      */
-    protected JmeEvent bindEvent(String name) {
+    protected final JmeEvent bindEvent(String name) {
         if (eventHelper == null) {
             eventHelper = new EventHelper(eventListener);
         }

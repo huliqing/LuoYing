@@ -15,7 +15,6 @@ import com.jme3.input.controls.MouseButtonTrigger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -35,7 +34,15 @@ public class JmeKeyMapping extends AbstractKeyMapping {
     // 默认使用 -1,这样不会误匹配到其它事件
     private int code = -1;
     private boolean usePressed;
-    private boolean negative; // for mouse axis
+    // 仅对MouseAxis类型按键有效
+    private boolean negative;
+    
+    // 按键匹配的有效时间，毫秒，仅对于非usePressed类型的按键。
+    // 对于”弹起“匹配类型的按键必须有一个有效时间限制，超过这个时间之后，无论如何则都视为不匹配，
+    // 否则当按键弹起之后会处于一直为匹配的状态。
+    private float validTime = 50;
+    // 最近一次匹配的时间,单位毫秒
+    private long lastMappingTime;
     
     private final InputManager inputManager;
     private final ActionListener actionListener = new MappingActionListener();
@@ -69,6 +76,11 @@ public class JmeKeyMapping extends AbstractKeyMapping {
         mappingResult = false;
         super.cleanup();
     }
+
+    @Override
+    public String getMappingName() {
+        return mappingName;
+    }
     
     /**
      * 判断当前事件是否匹配。
@@ -76,7 +88,17 @@ public class JmeKeyMapping extends AbstractKeyMapping {
      */
     @Override
     public boolean isMatch() {
-        return mappingResult;
+        // 对于"按下"类型的匹配，始终使用当按键按下时的匹配结果，直到按键弹起。
+        if (usePressed) {
+            return mappingResult;
+        }
+        
+        // 对于"弹起"类型的匹配，会有一个弹起后的有效匹配时间限制。
+        float timeDelay = System.currentTimeMillis() - lastMappingTime;
+        boolean finalResult = mappingResult && timeDelay <= validTime;
+//        LOG.log(Level.INFO, "mappingName={0}, timeDelay={1}, validTime={2}, mappingResult={3}, finalResult={4}"
+//            , new Object[] {mappingName, timeDelay, validTime, mappingResult, finalResult});
+        return finalResult;
     }
     
     /**
@@ -139,6 +161,16 @@ public class JmeKeyMapping extends AbstractKeyMapping {
         this.usePressed = usePressed;
         return (T) this;
     }
+    
+    /**
+     * 设置一个按键的有效匹配时间，默认情况下，对于使用"按下(usePressed=true)"的按键匹配，当按键按下后匹配结果始终为true,
+     * 而对于"弹起(usePressed=false)"匹配类型的按键，当按键弹起后匹配结果为true,则需要有一个匹配结果的有效时间限制，
+     * 默认情况下为50秒毫秒。
+     * @param timeInMilli “弹起”类型匹配的有效匹配结果时间限制，单位毫秒。 
+     */
+    public void setValidTime(float timeInMilli) {
+        this.validTime = timeInMilli;
+    }
 
     /**
      * 判断是否使用按键的”按下“状态作为匹配判断。
@@ -146,6 +178,14 @@ public class JmeKeyMapping extends AbstractKeyMapping {
      */
     public boolean isUsePressed() {
         return usePressed;
+    }
+
+    /**
+     * 针对Axis类型，判断是否使用Negative匹配
+     * @return 
+     */
+    public boolean isNegative() {
+        return negative;
     }
 
     /**
@@ -214,7 +254,8 @@ public class JmeKeyMapping extends AbstractKeyMapping {
     private void onActionMappingCheck(String name, boolean isPressed, float tpf) {
         // 判断是否匹配（name不需要判断，因为name是唯一的）
         this.mappingResult = usePressed == isPressed;
-        LOG.log(Level.INFO, "KeyMapping trigger, name={0}, result={1}", new Object[]{name, mappingResult});
+        this.lastMappingTime = System.currentTimeMillis();
+//        LOG.log(Level.INFO, "KeyMapping trigger, name={0}, result={1}", new Object[]{name, mappingResult});
         // 事件响应
         for (KeyMappingListener el : listeners) {
             el.onKeyMapping(this);

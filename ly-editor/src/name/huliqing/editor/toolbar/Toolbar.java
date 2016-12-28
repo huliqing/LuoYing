@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor;
+package name.huliqing.editor.toolbar;
 
 import java.util.List;
+import name.huliqing.editor.forms.Form;
 import name.huliqing.editor.tools.Tool;
-import name.huliqing.editor.tools.ToolbarListener;
 
 /**
  * 编辑工具接口
@@ -16,8 +16,15 @@ import name.huliqing.editor.tools.ToolbarListener;
  */
 public interface Toolbar<F extends Form> {
     
+    /**
+     * 初始化工具栏
+     */
     void initialize();
     
+    /**
+     * 判断工具栏是否已经初始化
+     * @return 
+     */
     boolean isInitialized();
     
    /**
@@ -33,9 +40,11 @@ public interface Toolbar<F extends Form> {
     
     /**
      * 添加一个编辑工具
+     * @param <T>
      * @param tool 编辑工具
+     * @return 
      */
-    void add(Tool tool);
+    <T extends Toolbar> T add(Tool tool);
     
     /**
      * 移除指定的工具
@@ -60,28 +69,43 @@ public interface Toolbar<F extends Form> {
     /**
      * 激活或取消激活指定的工具, 当激活一个工具时，如果该工具处于disabled状态，则该工具会被自动设置为enabled状态.
      * {@link #setEnabled(java.lang.String, boolean) }
+     * @param <T>
      * @param tool
      * @param activated 
+     * @return  
      */
-    void setActivated(Tool tool, boolean activated);
+    <T extends Toolbar> T setActivated(Tool tool, boolean activated);
     
     /**
      * 通过名称来激活指定的tool
+     * @param <T>
      * @param tool
      * @param activated 
+     * @return  
      */
-    void setActivated(String tool, boolean activated);
+    <T extends Toolbar> T setActivated(String tool, boolean activated);
     
     /**
      * 打开或关闭一个工具, 注：如果是关闭工具，如果工具当前处于激活状态，则该工具会被自动取消激活。
      * {@link #setActivated(java.lang.String, boolean) }
+     * @param <T>
      * @param tool
      * @param valid 
+     * @return  
      */
-    void setEnabled(String tool, boolean valid);
+    <T extends Toolbar> T setEnabled(String tool, boolean valid);
     
+    /**
+     * 添加一个侦听器，用于侦听工具的添加、移除、关闭、激活等操作
+     * @param listener 
+     */
     void addListener(ToolbarListener listener);
     
+    /**
+     * 移除指定的侦听器
+     * @param listener
+     * @return 
+     */
     boolean removeListener(ToolbarListener listener);
     
     /**
@@ -90,5 +114,9 @@ public interface Toolbar<F extends Form> {
      */
     F getForm();
     
+    /**
+     * 设置工具栏所在的编辑窗口
+     * @param form 
+     */
     void setForm(F form);
 }

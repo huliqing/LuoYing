@@ -79,4 +79,5 @@ public class JmeEvent extends AbstractEvent {
                     + "use JmeEvent.registerInputManager(InputManager) to register inputManager.");
         }
     }
+
 }

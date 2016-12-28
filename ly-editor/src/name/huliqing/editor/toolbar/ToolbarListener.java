@@ -3,7 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.tools;
+package name.huliqing.editor.toolbar;
+
+import name.huliqing.editor.tools.Tool;
 
 /**
  *

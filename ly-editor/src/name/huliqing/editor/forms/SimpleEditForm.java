@@ -23,8 +23,6 @@ import name.huliqing.luoying.utils.MaterialUtils;
  */
 public class SimpleEditForm extends EditForm {
 
-//    private final CollisionResults pickResults = new CollisionResults();
-    
     private final Node root = new Node();
     
     @Override
@@ -42,9 +40,9 @@ public class SimpleEditForm extends EditForm {
                 ,FastMath.nextRandomInt(-5, 5)
                 ,FastMath.nextRandomInt(-5, 5)
         );
-//        root.rotate(FastMath.nextRandomFloat() * FastMath.TWO_PI
-//                    , FastMath.nextRandomFloat() * FastMath.TWO_PI
-//                    , FastMath.nextRandomFloat() * FastMath.TWO_PI);
+        root.rotate(FastMath.nextRandomFloat() * FastMath.TWO_PI
+                    , FastMath.nextRandomFloat() * FastMath.TWO_PI
+                    , FastMath.nextRandomFloat() * FastMath.TWO_PI);
         
         
         Spatial sinbad = editor.getAssetManager().loadModel("Models/test/Sinbad.mesh.j3o");
@@ -58,9 +56,9 @@ public class SimpleEditForm extends EditForm {
             Geometry ge = new Geometry("", box);
             ge.setMaterial(MaterialUtils.createLighting(ColorRGBA.Gray));
             
-            ge.setLocalTranslation(FastMath.nextRandomInt(-5, 5)
-                    , FastMath.nextRandomInt(-5, 5)
-                    , FastMath.nextRandomInt(-5, 5));
+            ge.setLocalTranslation(FastMath.nextRandomInt(-20, 20)
+                    , FastMath.nextRandomInt(0, 20)
+                    , FastMath.nextRandomInt(-20, 20));
             
             ge.rotate(0, FastMath.PI / 2f, 0);
             
@@ -73,16 +71,5 @@ public class SimpleEditForm extends EditForm {
         localRoot.addLight(new DirectionalLight(new Vector3f(0,-1,0), new ColorRGBA(1,1,1,1).multLocal(1.5f)));
         localRoot.addLight(new AmbientLight(new ColorRGBA(1,1,1,1).multLocal(2)));
     }
-
-//    @Override
-//    public void onPick() {
-//        pickResults.clear();
-//        PickManager.pick(editor.getCamera(), editor.getInputManager().getCursorPosition(), root, pickResults);
-//        if (pickResults.size() > 0) {
-//            Spatial picked = pickResults.getClosestCollision().getGeometry();
-//            setSelected(new SpatialSelectObj(picked));
-//        }
-//    }
-
     
 }

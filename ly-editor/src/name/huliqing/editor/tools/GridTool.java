@@ -24,7 +24,7 @@ public class GridTool extends EditTool {
     @Override
     public void initialize() {
         super.initialize(); 
-        toolbar.getForm().getEditRoot().attachChild(grid);
+        form.getEditRoot().getParent().attachChild(grid); // 放在editRoot的父节点，这样不会被场景选择到。
     }
 
     @Override

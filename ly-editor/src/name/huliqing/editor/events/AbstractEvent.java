@@ -120,7 +120,13 @@ public abstract class AbstractEvent implements Event, KeyMappingListener{
             }
         }
         match = tempResult; // 匹配结果
-        LOG.log(Level.INFO, "Event trigger, name={0}, result={1}", new Object[]{name, match});
+//        if (LOG.isLoggable(Level.INFO)) {
+//            for (KeyMapping km : keyMappings) {
+//                LOG.log(Level.INFO, "KeyMapping name={0}, mappingResult={1}"
+//                        , new Object[] {km.getMappingName(), km.isMatch()});
+//            }
+//            LOG.log(Level.INFO, "====Event trigger, name={0}, result={1}", new Object[]{name, match});
+//        }
         for (EventListener l : listeners) {
             l.onEvent(this);
         }

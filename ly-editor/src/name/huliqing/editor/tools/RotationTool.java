@@ -7,9 +7,7 @@ package name.huliqing.editor.tools;
 
 import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
-import com.jme3.math.Vector3f;
-import com.jme3.scene.Spatial;
-import com.jme3.util.TempVars;
+import java.util.logging.Logger;
 import name.huliqing.editor.action.Picker;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.JmeEvent;
@@ -17,20 +15,20 @@ import name.huliqing.editor.forms.EditFormListener;
 import name.huliqing.editor.forms.Mode;
 import name.huliqing.editor.select.SelectObj;
 import name.huliqing.editor.tiles.Axis;
-import name.huliqing.editor.tiles.LocationObj;
+import name.huliqing.editor.tiles.RotationObj;
 import name.huliqing.luoying.manager.PickManager;
 
 /**
- * 移动编辑工具
+ * 旋转编辑工具
  * @author huliqing
  */
-public class MoveTool extends EditTool implements EditFormListener{
-//    private static final Logger LOG = Logger.getLogger(MoveTool.class.getName());
+public class RotationTool extends EditTool implements EditFormListener{
     
+    private static final Logger LOG = Logger.getLogger(RotationTool.class.getName());
     private final Ray ray = new Ray();
-    // 物体选择、操作标记（位置）
-    private final LocationObj transformObj = new LocationObj();
-
+    
+    // 变换控制物体
+    private final RotationObj transformObj = new RotationObj();
     // 当前操作的轴向
     private Axis actionAxis;
     // 行为操作开始时编辑器中的被选择的物体，以及该物体的位置
@@ -40,12 +38,14 @@ public class MoveTool extends EditTool implements EditFormListener{
     private boolean picking;
     
     // 开始变换时物体的位置(local)
-    private final Vector3f startSpatialLoc = new Vector3f();
-    
-    public MoveTool(String name) {
+    private final Quaternion startRotate = new Quaternion();
+    private final Quaternion startWorldRotate = new Quaternion();
+    private final Quaternion lastRotate = new Quaternion();
+
+    public RotationTool(String name) {
         super(name);
     }
-    
+
     @Override
     public void initialize() {
         super.initialize();
@@ -53,67 +53,63 @@ public class MoveTool extends EditTool implements EditFormListener{
         form.addListener(this);
         updateMarkerState();
     }
-    
+
     @Override
     public void cleanup() {
-        form.removeListener(this);
         transformObj.removeFromParent();
-        super.cleanup();
+        form.removeListener(this);
+        super.cleanup(); 
     }
-    
-    /**
-     * 绑定移动按键
-     * @return 
-     */
-    public JmeEvent bindMoveEvent() {
-        return bindEvent(name + "moveEvent");
+
+    public JmeEvent bindRotationEvent() {
+        return bindEvent(name + "rotationEvent"); 
     }
-    
+
     @Override
     protected void onToolEvent(Event e) {
         if (e.isMatch()) {
-            onActionStart();
+            startAction();
         } else {
-            onActionEnd();
+            endAction();
         }
     }
 
-    private void onActionStart() {
+    private void startAction() {
         PickManager.getPickRay(editor.getCamera(), editor.getInputManager().getCursorPosition(), ray);
-
         actionAxis = transformObj.pickTransformAxis(ray);
         selectObj = form.getSelected();
-        
-        if (actionAxis != null && selectObj != null) {
+        if (transformObj != null && actionAxis != null && selectObj != null) {
+            picking = true;
             Quaternion planRotation = Picker.PLANE_XY;
             switch (actionAxis.getType()) {
                 case x:
-                    planRotation = Picker.PLANE_XY;
-                    break;
-                case y:
                     planRotation = Picker.PLANE_YZ;
                     break;
-                case z:
+                case y:
                     planRotation = Picker.PLANE_XZ;
+                    break;
+                case z:
+                    planRotation = Picker.PLANE_XY;
                     break;
                 default:
                     throw new UnsupportedOperationException();
             }
             picker.startPick(selectObj.getSelectedSpatial(), form.getMode()
-                    , editor.getCamera(), editor.getInputManager().getCursorPosition(), planRotation);
+                    , editor.getCamera(), editor.getInputManager().getCursorPosition()
+                    ,planRotation);
             transformObj.showDebugLine(actionAxis, true);
-            startSpatialLoc.set(selectObj.getSelectedSpatial().getLocalTranslation());
-            picking = true;
+            startRotate.set(selectObj.getSelectedSpatial().getLocalRotation());
+            startWorldRotate.set(selectObj.getSelectedSpatial().getWorldRotation());
 //            LOG.log(Level.INFO, "StartSpatialLoc={0}", startSpatialLoc);
         }
     }
 
-    private void onActionEnd() {
+    private void endAction() {
+        transformObj.showDebugLine(actionAxis, false);
         if (picking) {
             picker.endPick();
-            picking = false;
         }
-        transformObj.showDebugLine(actionAxis, false);
+        picking = false;
         actionAxis = null;
         selectObj = null;
     }
@@ -127,22 +123,10 @@ public class MoveTool extends EditTool implements EditFormListener{
             return;
         }
         
-        TempVars tv = TempVars.get();
-        Vector3f diff = picker.getTranslation(actionAxis.getDirection(tv.vect2));
-        
-        Spatial parent = selectObj.getSelectedSpatial().getParent();
-        if (parent != null) {
-            tv.quat1.set(parent.getWorldRotation()).inverseLocal().mult(diff, diff);
-            diff.divideLocal(parent.getWorldScale());
-        } 
-        
-        Vector3f finalLocalPos = tv.vect1.set(startSpatialLoc).addLocal(diff);
-        selectObj.getSelectedSpatial().setLocalTranslation(finalLocalPos);
-        transformObj.setLocalTranslation(selectObj.getSelectedSpatial().getWorldTranslation());
-        
-        tv.release();
+        Quaternion rotation = startRotate.mult(picker.getRotation(startWorldRotate.inverse()));
+        selectObj.getSelectedSpatial().setLocalRotation(rotation);
     }
-
+    
     @Override
     public void onModeChanged(Mode mode) {
         updateMarkerState();
@@ -152,10 +136,9 @@ public class MoveTool extends EditTool implements EditFormListener{
     public void onSelectChanged(SelectObj selectObj) {
         updateMarkerState();
     }
-    
+
     private void updateMarkerState() {
-        selectObj = form.getSelected();
-        if (selectObj == null) {
+        if (form.getSelected() == null) {
             transformObj.setVisible(false);
             return;
         }
@@ -176,6 +159,4 @@ public class MoveTool extends EditTool implements EditFormListener{
                 throw new IllegalArgumentException("Unknow mode type=" + mode);
         }
     }
-
-
 }

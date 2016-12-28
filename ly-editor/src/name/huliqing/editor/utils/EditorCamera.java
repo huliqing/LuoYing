@@ -5,9 +5,11 @@ import com.jme3.input.ChaseCamera;
 import com.jme3.input.InputManager;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.MouseButtonTrigger;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Spatial;
+import com.jme3.util.TempVars;
 
 /**
  * @author huliqing
@@ -31,7 +33,7 @@ public class EditorCamera extends ChaseCamera {
         setRotationSensitivity(5);
         setMinDistance(0.0001f);
         setMaxDistance(Float.MAX_VALUE);
-        setDefaultDistance(20);
+        setDefaultDistance(15);
         setChasingSensitivity(5);
         setDownRotateOnCloseViewOnly(true); 
         setUpVector(Vector3f.UNIT_Y);
@@ -145,5 +147,30 @@ public class EditorCamera extends ChaseCamera {
         }
     }
     
+    public Camera getCamera() {
+        return cam;
+    }
     
+    /**
+     * 计算出相机的跟随位置，但是不立即改变相机的位置。
+     * @param locStore 
+     * @param rotationStore 
+     */
+    public void getComputeTransform(Vector3f locStore, Quaternion rotationStore) {
+        TempVars tv = TempVars.get();
+        Vector3f originLoc = tv.vect1.set(cam.getLocation());
+        Quaternion originRot = tv.quat1.set(cam.getRotation());
+        
+        boolean originEnabled = isEnabled();
+        setEnabled(true);
+        update(0.016f);
+        setEnabled(originEnabled);
+        
+        locStore.set(cam.getLocation());
+        rotationStore.set(cam.getRotation());
+        
+        cam.setLocation(originLoc);
+        cam.setRotation(originRot);
+        tv.release();
+    }
 }

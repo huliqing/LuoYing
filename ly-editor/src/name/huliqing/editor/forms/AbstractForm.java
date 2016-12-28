@@ -5,8 +5,7 @@
  */
 package name.huliqing.editor.forms;
 
-import name.huliqing.editor.Toolbar;
-import name.huliqing.editor.Form;
+import name.huliqing.editor.toolbar.Toolbar;
 import name.huliqing.editor.Editor;
 
 /**

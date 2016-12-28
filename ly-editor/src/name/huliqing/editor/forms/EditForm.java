@@ -12,7 +12,7 @@ import java.util.List;
 import name.huliqing.editor.Editor;
 import name.huliqing.editor.select.EmptySelectObj;
 import name.huliqing.editor.select.SelectObj;
-import name.huliqing.editor.tools.EditToolbar;
+import name.huliqing.editor.toolbar.EditToolbar;
 
 /**
  * 3D模型编辑器窗口
@@ -58,10 +58,8 @@ public abstract class EditForm extends AbstractForm {
     public void setMode(Mode mode) {
         boolean changed = this.mode != mode;
         this.mode = mode;
-        if (changed && !listeners.isEmpty()) {
-            listeners.forEach(l -> {
-                l.onModeChanged(mode);
-            });
+        if (changed) {
+            listeners.forEach(l -> {l.onModeChanged(mode);});
         }
     }
     
@@ -76,7 +74,7 @@ public abstract class EditForm extends AbstractForm {
     public void setSelected(SelectObj selectObj) {
         boolean changed = this.selectObj != selectObj;
         this.selectObj = selectObj;
-        if (changed && !listeners.isEmpty()) {
+        if (changed) {
             listeners.forEach(l -> {l.onSelectChanged(selectObj);});
         }
     }
@@ -89,5 +87,13 @@ public abstract class EditForm extends AbstractForm {
         return localRoot;
     }
     
+    public void addListener(EditFormListener listener) {
+        if (!listeners.contains(listener)) {
+            listeners.add(listener);
+        }
+    }
     
+    public boolean removeListener(EditFormListener listener) {
+        return listeners.remove(listener);
+    }
 }

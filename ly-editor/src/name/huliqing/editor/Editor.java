@@ -5,6 +5,7 @@
  */
 package name.huliqing.editor;
 
+import name.huliqing.editor.forms.Form;
 import com.jme3.app.SimpleApplication;
 import name.huliqing.editor.events.JmeEvent;
 import name.huliqing.editor.forms.SimpleEditForm;

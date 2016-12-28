@@ -38,8 +38,7 @@ public class PickTool extends EditTool {
     }
 
     private void doPick() {
-        Editor editor = toolbar.getForm().getEditor();
-        Node editRoot = toolbar.getForm().getEditRoot();
+        Node editRoot = form.getEditRoot();
         pickResults.clear();
         PickManager.pick(editor.getCamera(), editor.getInputManager().getCursorPosition(), editRoot, pickResults);
         if (pickResults.size() > 0) {
