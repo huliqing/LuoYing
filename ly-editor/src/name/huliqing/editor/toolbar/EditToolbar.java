@@ -14,7 +14,7 @@ import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.EventListener;
 import name.huliqing.editor.events.JmeEvent;
 import name.huliqing.editor.forms.EditForm;
-import name.huliqing.editor.tools.CameraTool2;
+import name.huliqing.editor.tools.CameraTool;
 import name.huliqing.editor.tools.GridTool;
 import name.huliqing.editor.tools.ModeTool;
 import name.huliqing.editor.tools.MoveTool;
@@ -35,7 +35,7 @@ public class EditToolbar extends AbstractToolbar<EditForm> implements EventListe
     private UndoRedoTool undoRedoTool;
     
 //    private CameraTool cameraTool;
-    private CameraTool2 cameraTool2;
+    private CameraTool cameraTool2;
     
     private ModeTool modeTool;
     private GridTool gridTool;
@@ -60,7 +60,7 @@ public class EditToolbar extends AbstractToolbar<EditForm> implements EventListe
         undoRedoTool.bindUndoEvent().bindKey(KeyInput.KEY_LCONTROL, true).bindKey(KeyInput.KEY_Z, false);
         undoRedoTool.bindRedoEvent().bindKey(KeyInput.KEY_LSHIFT, true).bindKey(KeyInput.KEY_Z, false);
         
-        cameraTool2 = new CameraTool2("CameraTool");
+        cameraTool2 = new CameraTool("CameraTool");
         cameraTool2.bindDragEvent().bindButton(MouseInput.BUTTON_MIDDLE, true).bindKey(KeyInput.KEY_LSHIFT, true);
         cameraTool2.bindToggleRotateEvent().bindButton(MouseInput.BUTTON_MIDDLE, true);
         cameraTool2.bindZoomInEvent().bindAxis(MouseInput.AXIS_WHEEL, false, false);
