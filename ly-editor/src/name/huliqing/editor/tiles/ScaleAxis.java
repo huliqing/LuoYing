@@ -11,6 +11,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue;
+import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
@@ -19,37 +20,40 @@ import com.jme3.scene.shape.Line;
 import name.huliqing.luoying.utils.MaterialUtils;
 
 /**
- *
+ * 缩放控制轴
  * @author huliqing
  */
 public class ScaleAxis extends Node implements AxisObj {
     
-    private final Axis axisX;
-    private final Axis axisY;
-    private final Axis axisZ;
+    private final AxisNode axisXNode;
+    private final AxisNode axisYNode;
+    private final AxisNode axisZNode;
     private final Spatial center;
     
     public ScaleAxis() {
-        Spatial axisXInner = createAxis("axisXInner", new ColorRGBA(1.0f, 0.1f, 0.1f, 1.0f));
+        Spatial axisXInner = createAxis("axisXInner", AxisObj.AXIS_COLOR_X);
         axisXInner.rotate(0, 0, -FastMath.PI / 2);
-        axisX = new Axis(Axis.Type.x);
+        Axis axisX = new Axis(Axis.Type.x);
         axisX.attachChild(axisXInner);
+        axisXNode = new AxisNode(axisX, AxisObj.AXIS_COLOR_X);
         
-        Spatial axisYInner = createAxis("axisYInner", new ColorRGBA(0.1f, 1.0f, 0.1f, 1.0f));
-        axisY = new Axis(Axis.Type.y);
+        Spatial axisYInner = createAxis("axisYInner", AxisObj.AXIS_COLOR_Y);
+        Axis axisY = new Axis(Axis.Type.y);
         axisY.attachChild(axisYInner);
+        axisYNode = new AxisNode(axisY, AxisObj.AXIS_COLOR_Y);
         
-        Spatial axisZInner = createAxis("axisZInner", new ColorRGBA(0.1f, 0.1f, 1.0f, 1.0f));
+        Spatial axisZInner = createAxis("axisZInner", AxisObj.AXIS_COLOR_Z);
         axisZInner.rotate(FastMath.PI / 2, 0, 0);
-        axisZ = new Axis(Axis.Type.z);
+        Axis axisZ = new Axis(Axis.Type.z);
         axisZ.attachChild(axisZInner);
+        axisZNode = new AxisNode(axisZ, AxisObj.AXIS_COLOR_Z);
         
         center = createCenterBox("center");
         
         attachChild(center);
-        attachChild(axisX);
-        attachChild(axisY);
-        attachChild(axisZ);
+        attachChild(axisXNode);
+        attachChild(axisYNode);
+        attachChild(axisZNode);
         
         // 默认放在半透明中桶中，这样可以盖住其它所有物体
         setQueueBucket(RenderQueue.Bucket.Translucent);
@@ -86,26 +90,31 @@ public class ScaleAxis extends Node implements AxisObj {
     
     private Spatial createCenterBox(String name) {
         Geometry centerSpatial = new Geometry(name + "center", new Box(0.2f, 0.2f, 0.2f));
-        centerSpatial.setMaterial(MaterialUtils.createUnshaded(ColorRGBA.White));
+        Material mat = MaterialUtils.createUnshaded(new ColorRGBA(1f, 1f, 0f, 0.3f));
+        mat.getAdditionalRenderState().setDepthTest(false);
+        mat.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Alpha);
+        centerSpatial.setMaterial(mat);
+        centerSpatial.setQueueBucket(Bucket.Translucent);
         return centerSpatial;
     }
 
     @Override
-    public Axis getAxisX() {
-        return axisX;
+    public AxisNode getAxisX() {
+        return axisXNode;
     }
 
     @Override
-    public Axis getAxisY() {
-        return axisY;
+    public AxisNode getAxisY() {
+        return axisYNode;
     }
 
     @Override
-    public Axis getAxisZ() {
-        return axisZ;
+    public AxisNode getAxisZ() {
+        return axisZNode;
     }
     
     public Spatial getCenter() {
         return center;
     }
+    
 }

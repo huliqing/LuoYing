@@ -10,6 +10,7 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import name.huliqing.fxswing.Jfx;
 
 /**
  *
@@ -17,10 +18,9 @@ import javafx.scene.control.MenuItem;
  */
 public class MenuView extends MenuBar {
     
-    private Menu fileMenu;
-    private MenuItem quick = new MenuItem("Quick");
-    
-    private Menu helpMenu;
+    private final Menu fileMenu;
+    private final MenuItem quick;
+    private final Menu helpMenu;
     
     public MenuView() {
         fileMenu = new Menu("File");
@@ -31,9 +31,13 @@ public class MenuView extends MenuBar {
         fileMenu.getItems().add(quick);
 
         getMenus().addAll(fileMenu, helpMenu);
+        
+        quick.setOnAction(e -> {
+            Jfx.getMainFrame().dispose();
+        });
     }
     
-    public void setOnQuick(EventHandler<ActionEvent> event) {
-        quick.setOnAction(event);
-    }
+//    public void setOnQuick(EventHandler<ActionEvent> event) {
+//        quick.setOnAction(event);
+//    }
 }

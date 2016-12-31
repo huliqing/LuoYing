@@ -141,11 +141,12 @@ public class Picker {
     
      /**
      *
+     * @param store
      * @return the vector from the tool origin to the start location, in
      * WorldSpace
      */
-    public Vector3f getStartOffset() {
-        return startPickLoc.subtract(startSpatialLocation);
+    public Vector3f getStartOffset(Vector3f store) {
+        return startPickLoc.subtract(startSpatialLocation, store);
     }
     
     /**

@@ -103,49 +103,50 @@ public abstract class AbstractToolbar<F extends Form> implements Toolbar<F> {
         }
         return null;
     }
-
+    
     @Override
     public <T extends Toolbar> T setActivated(Tool tool, boolean activated) {
-        for (Tool t : tools.getArray()) {
-            if (t == tool) {
-                if (activated) {
-                    toolEnabled(t);
-                    toolActivated(t);
-                } else {
-                    toolDeactivated(t);
-                }
-                break;
-            }
+        if (activated) {
+            toolEnabled(tool);
+            toolActivated(tool);
+        } else {
+            toolDeactivated(tool);
         }
         return (T) this;
     }
     
+//    @Override
+//    public <T extends Toolbar> T setActivated(String tool, boolean activated) {
+//        for (Tool t : tools.getArray()) {
+//            if (t.getName().equals(tool)) {
+//                setActivated(t, activated);
+//                break;
+//            }
+//        }
+//        return (T) this;
+//    }
+    
     @Override
-    public <T extends Toolbar> T setActivated(String tool, boolean activated) {
-        for (Tool t : tools.getArray()) {
-            if (t.getName().equals(tool)) {
-                setActivated(t, activated);
-                break;
-            }
+    public <T extends Toolbar> T setEnabled(Tool tool, boolean enabled) {
+        if (enabled) {
+            toolEnabled(tool);
+        } else {
+            toolDeactivated(tool);
+            toolDisabled(tool);
         }
         return (T) this;
     }
 
-    @Override
-    public <T extends Toolbar> T setEnabled(String tool, boolean enabled) {
-        for (Tool t : tools.getArray()) {
-            if (tool.equals(t.getName())) {
-                if (enabled) {
-                    toolEnabled(t);
-                } else {
-                    toolDeactivated(t);
-                    toolDisabled(t);
-                }
-                break;
-            }
-        }
-        return (T) this;
-    }
+//    @Override
+//    public <T extends Toolbar> T setEnabled(String tool, boolean enabled) {
+//        for (Tool t : tools.getArray()) {
+//            if (t.getName().equals(tool)) {
+//                setEnabled(t, enabled);
+//                break;
+//            }
+//        }
+//        return (T) this;
+//    }
     
     private void toolActivated(Tool t) {
         if (!toolsActivated.contains(t)) {

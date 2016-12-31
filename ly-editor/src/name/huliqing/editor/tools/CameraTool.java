@@ -24,6 +24,7 @@ import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.JmeEvent;
 import name.huliqing.editor.events.JmeKeyMapping;
 import name.huliqing.editor.tiles.ChaseObj;
+import name.huliqing.editor.utils.BestEditCamera.View;
 import name.huliqing.editor.utils.EditorCamera;
 import name.huliqing.luoying.object.anim.AnimNode;
 import name.huliqing.luoying.object.anim.CurveMoveAnim;
@@ -35,6 +36,7 @@ import name.huliqing.luoying.object.anim.InterpolateRotationAnim;
  */
 public class CameraTool extends EditTool implements ActionListener {
 
+    
     private static final Logger LOG = Logger.getLogger(CameraTool.class.getName());
     
     private final String EVENT_DRAG = "cameraDragEvent";
@@ -43,6 +45,13 @@ public class CameraTool extends EditTool implements ActionListener {
     private final String EVENT_ZOOM_OUT = "cameraZoomOutEvent";
     private final String EVENT_RECHASE = "cameraRechaseEvent";
     private final String EVENT_RESET = "cameraResetEvent";
+    
+    private final String EVENT_VIEW_FRONT = "camViewFrontEvent";
+    private final String EVENT_VIEW_BACK = "camViewBackEvent";
+    private final String EVENT_VIEW_LEFT= "camViewLeftEvent";
+    private final String EVENT_VIEW_RIGHT = "camViewRightEvent";
+    private final String EVENT_VIEW_TOP = "camViewTopEvent";
+    private final String EVENT_VIEW_BOTTOM = "camViewBottomEvent";
     
     // 镜头
     private EditorCamera editorCam;
@@ -102,6 +111,30 @@ public class CameraTool extends EditTool implements ActionListener {
         chaseObj.removeFromParent();
         super.cleanup(); 
     }
+    
+    /**
+     * 把镜头移动场景中选择的物体
+     */
+    public void doChaseSelected() {
+        if (form.getSelected() != null) {
+            doChase(form.getSelected().getSelectedSpatial().getWorldTranslation());
+        }
+    }
+    
+    /**
+     * 把镜头移动到场景原点
+     */
+    public void doChaseOrigin() {
+        doChase(new Vector3f());
+    }
+    
+    /**
+     * 让相机转到指定的视角
+     * @param view 
+     */
+    public void doSwitchView(View view) {
+        // ///
+    }
  
     /**
      * 绑定拖动事件，用来拖动相机在场景中的视角。
@@ -151,6 +184,30 @@ public class CameraTool extends EditTool implements ActionListener {
         return bindEvent(EVENT_RESET);
     }
     
+    public JmeEvent bindViewFrontEvent() {
+        return bindEvent(EVENT_VIEW_FRONT);
+    }
+    
+    public JmeEvent bindViewBackEvent() {
+        return bindEvent(EVENT_VIEW_BACK);
+    }
+    
+    public JmeEvent bindViewLeftEvent() {
+        return bindEvent(EVENT_VIEW_LEFT);
+    }
+    
+    public JmeEvent bindViewRightEvent() {
+        return bindEvent(EVENT_VIEW_RIGHT);
+    }
+    
+    public JmeEvent bindViewTopEvent() {
+        return bindEvent(EVENT_VIEW_TOP);
+    }
+    
+    public JmeEvent bindViewBottomEvent() {
+        return bindEvent(EVENT_VIEW_BOTTOM);
+    }
+    
     @Override
     protected void onToolEvent(Event e) {
         if (e.getName().equals(EVENT_DRAG)) {
@@ -167,16 +224,37 @@ public class CameraTool extends EditTool implements ActionListener {
         } 
         
         // 重定向相机跟随
-        else if (e.getName().equals(EVENT_RECHASE)) {
-            if (e.isMatch() && form.getSelected() != null) {
-                doChase(form.getSelected().getSelectedSpatial().getWorldTranslation());
-            }
+        else if (e.isMatch() && e.getName().equals(EVENT_RECHASE)) {
+            doChaseSelected();
         }
         
         // 重置相机跟随到原点
-        else if (e.getName().equals(EVENT_RESET)) {
-            if (e.isMatch()) {
-                doChase(new Vector3f());
+        else if (e.isMatch() && e.getName().equals(EVENT_RESET)) {
+            doChaseOrigin();
+        }
+        
+        // 相机视角
+        else if (e.isMatch()) {
+            switch (e.getName()) {
+                case EVENT_VIEW_BACK:
+                        doSwitchView(View.back);
+                        break;
+                case EVENT_VIEW_BOTTOM:
+                        doSwitchView(View.bottom);
+                        break;
+                case EVENT_VIEW_FRONT:
+                        doSwitchView(View.front);
+                        break;
+                case EVENT_VIEW_LEFT:
+                        doSwitchView(View.left);
+                        break;
+                case EVENT_VIEW_RIGHT:
+                        doSwitchView(View.right);
+                        break;
+                case EVENT_VIEW_TOP:
+                        doSwitchView(View.top);
+                        break;
+                default:
             }
         }
         
@@ -241,7 +319,6 @@ public class CameraTool extends EditTool implements ActionListener {
                    tv.release();
                }
         }
-        
     }
     
     private Trigger[] convertKeyMapping(JmeEvent event) {
@@ -280,4 +357,6 @@ public class CameraTool extends EditTool implements ActionListener {
 //            LOG.log(Level.INFO, "cameraZoomSpeed={0}", zoomSpeed);
         } 
     }
+    
+    
 }

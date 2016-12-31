@@ -16,26 +16,26 @@ public class JfxSwingTest {
     
     public static void main(String[] args) {
         
-        JfxSwing js = JfxSwingUtils.create(JmeAppTest.class.getName(), 640, 480);
-        js.getMainFrame().setLocationRelativeTo(null);
-        js.getMainFrame().setVisible(true);
+        Jfx.create(JmeAppTest.class.getName(), 640, 480);
+        Jfx.getMainFrame().setLocationRelativeTo(null);
+        Jfx.getMainFrame().setVisible(true);
         
-        js.runOnJfx(()-> {
+        Jfx.runOnJfx(()-> {
             Button btn = new Button("Close app!");
             btn.setOnAction((e) -> {
                 System.exit(0);
             });
             TextField text = new TextField("This is a textfield");
-            js.getJfxRoot().getChildren().addAll(btn, text);
+            Jfx.getJfxRoot().getChildren().addAll(btn, text);
         });
         
-        js.runOnJfx(() -> {
+        Jfx.runOnJfx(() -> {
             Button btn = new Button("Click点击，生成新的按钮");
             btn.setOnAction((e) -> {
                 Button newButton = new Button("I'm new button");
-                js.getJfxRoot().getChildren().add(newButton);
+                Jfx.getJfxRoot().getChildren().add(newButton);
             });
-            js.getJfxRoot().getChildren().add(btn);
+            Jfx.getJfxRoot().getChildren().add(btn);
         });
 
         

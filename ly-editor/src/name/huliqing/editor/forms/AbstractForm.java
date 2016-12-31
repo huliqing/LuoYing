@@ -5,6 +5,8 @@
  */
 package name.huliqing.editor.forms;
 
+import java.util.ArrayList;
+import java.util.List;
 import name.huliqing.editor.toolbar.Toolbar;
 import name.huliqing.editor.Editor;
 
@@ -17,6 +19,7 @@ public abstract class AbstractForm implements Form {
     protected Editor editor;
     protected boolean initialized;
     protected Toolbar toolbar;
+    protected List<FormListener> listeners;
 
     @Override
     public void initialize(Editor editor) {
@@ -66,6 +69,9 @@ public abstract class AbstractForm implements Form {
             toolbar.setForm(this);
             toolbar.initialize();
         }
+        if (listeners != null) {
+            listeners.forEach(t -> {t.onToolbarChanged(this, newToolbar);});
+        }
     }
 
     @Override
@@ -73,4 +79,19 @@ public abstract class AbstractForm implements Form {
         return toolbar;
     }
 
+    @Override
+    public void addListener(FormListener listener) {
+        if (listeners == null) {
+            listeners = new ArrayList<FormListener>();
+        }
+        if (!listeners.contains(listener)) {
+            listeners.add(listener);
+        }
+    }
+
+    @Override
+    public boolean removeListener(FormListener listener) {
+        return listeners != null && listeners.remove(listener);
+    }
+    
 }

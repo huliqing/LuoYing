@@ -17,11 +17,11 @@ import name.huliqing.luoying.utils.MaterialUtils;
  *
  * @author huliqing
  */
-public class DebugLine extends Node {
+public class AxisLine extends Node {
     
     private final Geometry line;
     
-    public DebugLine() {
+    public AxisLine() {
         Line lineShape = new Line(new Vector3f(0, 0, -10000)
                 , new Vector3f(0, 0, 10000));
         line = new Geometry("debugLine", lineShape);

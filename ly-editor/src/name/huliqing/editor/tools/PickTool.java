@@ -8,10 +8,11 @@ package name.huliqing.editor.tools;
 import com.jme3.collision.CollisionResults;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import name.huliqing.editor.Editor;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.JmeEvent;
+import name.huliqing.editor.select.SelectObj;
 import name.huliqing.editor.select.SpatialSelectObj;
+import name.huliqing.editor.undoredo.UndoRedo;
 import name.huliqing.luoying.manager.PickManager;
 
 /**
@@ -43,8 +44,35 @@ public class PickTool extends EditTool {
         PickManager.pick(editor.getCamera(), editor.getInputManager().getCursorPosition(), editRoot, pickResults);
         if (pickResults.size() > 0) {
             Spatial picked = pickResults.getClosestCollision().getGeometry();
-            toolbar.getForm().setSelected(new SpatialSelectObj(picked));
+            SelectObj before = form.getSelected();
+            SelectObj after = new SpatialSelectObj(picked);
+            form.setSelected(after);
+            form.addUndoRedo(new PickUndoRedo(before, after));
         }
     }
     
+    private class PickUndoRedo implements UndoRedo {
+        private final SelectObj before;
+        private final SelectObj after;
+        
+        public PickUndoRedo(SelectObj before, SelectObj after) {
+            this.before = before;
+            this.after = after;
+        }
+        
+        @Override
+        public void undo() {
+            if (before != null) {
+                form.setSelected(before);
+            }
+        }
+
+        @Override
+        public void redo() {
+            if (after != null) {
+                form.setSelected(after);
+            }
+        }
+    
+    }
 }

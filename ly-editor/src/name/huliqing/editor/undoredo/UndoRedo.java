@@ -3,15 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor;
+package name.huliqing.editor.undoredo;
 
 /**
  *
  * @author huliqing
  */
-public class Test {
+public interface UndoRedo {
     
-    public static void main(String[] args) {
+    void undo();
     
-    }
+    void redo();
 }

@@ -5,6 +5,8 @@
  */
 package name.huliqing.editor.tools;
 
+import java.util.ArrayList;
+import java.util.List;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.JmeEvent;
 import name.huliqing.editor.forms.Mode;
@@ -15,8 +17,22 @@ import name.huliqing.editor.forms.Mode;
  */
 public class ModeTool extends EditTool {
     
+    public interface ModeChangedListener {
+        void onModeChanged(Mode newMode);
+    }
+    
+    private List<ModeChangedListener> listeners;
+    
     public ModeTool(String name) {
         super(name);
+    }
+    
+    public Mode getMode() {
+        return form.getMode();
+    }
+    
+    public void setMode(Mode mode) {
+        form.setMode(mode);
     }
     
     /**
@@ -39,7 +55,21 @@ public class ModeTool extends EditTool {
                 mode = ms[++idx];
             }
             form.setMode(mode);
+            if (listeners != null) {
+                listeners.forEach(t -> {t.onModeChanged(mode);});
+            }
         }
     }
     
+    public void addListener(ModeChangedListener listener) {
+        if (listeners == null) {
+            listeners = new ArrayList<>();
+        }
+        if (!listeners.contains(listener)) {
+            listeners.add(listener);
+        }
+    }
+    public boolean removeListener(ModeChangedListener listener) {
+        return listeners != null &&  listeners.remove(listener);
+    }
 }

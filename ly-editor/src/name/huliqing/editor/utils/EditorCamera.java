@@ -1,7 +1,5 @@
 package name.huliqing.editor.utils;
 
-import com.jme3.input.CameraInput;
-import com.jme3.input.ChaseCamera;
 import com.jme3.input.InputManager;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.MouseButtonTrigger;
@@ -14,8 +12,9 @@ import com.jme3.util.TempVars;
 /**
  * @author huliqing
  */
-public class EditorCamera extends ChaseCamera {
+public class EditorCamera extends SimpleChaseCamera {
 //    private static final Logger LOG = Logger.getLogger(EditorCamera.class.getName());
+    
     
     private boolean hRotationEnabled = true;
     private boolean vRotationEnabled = true;
@@ -25,20 +24,13 @@ public class EditorCamera extends ChaseCamera {
         // 使用鼠标中键来实现旋转，和blender一样        
         setToggleRotationTrigger(new MouseButtonTrigger(MouseInput.BUTTON_MIDDLE));
 
-        setSmoothMotion(false);
-        setTrailingEnabled(false);
         setInvertVerticalAxis(true);
         setZoomSensitivity(3f);
         setRotationSpeed(5f);
-        setRotationSensitivity(5);
         setMinDistance(0.0001f);
         setMaxDistance(Float.MAX_VALUE);
         setDefaultDistance(15);
-        setChasingSensitivity(5);
-        setDownRotateOnCloseViewOnly(true); 
         setUpVector(Vector3f.UNIT_Y);
-        // 不要隐藏光标,否则在MAC系统下鼠标点击后会上下错位
-        setHideCursorOnRotate(false);
         setEnableRotation(true);
     }
     
@@ -68,29 +60,6 @@ public class EditorCamera extends ChaseCamera {
     public void setEnabledRotationV(boolean vRotation) {
         this.vRotationEnabled = vRotation;
     }
-
-    //move the camera toward or away the target
-    @Override
-    protected void zoomCamera(float value) {
-        if (!enabled) {
-            return;
-        }
-        zooming = true;
-        targetDistance += value * zoomSensitivity;
-        if (targetDistance > maxDistance) {
-            targetDistance = maxDistance;
-        }
-        if (targetDistance < minDistance) {
-            targetDistance = minDistance;
-        }
-        
-        // 去掉这段代码，以让垂直旋转可以自由执行
-//        if (veryCloseRotation) {
-//            if ((targetVRotation < minVerticalRotation) && (targetDistance > (minDistance + 1.0f))) {
-//                targetVRotation = minVerticalRotation;
-//            }
-//        }
-    }
     
     @Override
     protected void rotateCamera(float value) {
@@ -106,49 +75,16 @@ public class EditorCamera extends ChaseCamera {
         if (!vRotationEnabled) {
             return;
         }
-        if (!canRotate || !enabled) {
-            return;
-        }
-        vRotating = true;
-        float lastGoodRot = targetVRotation;
-        targetVRotation += value * rotationSpeed;
-        if (targetVRotation > maxVerticalRotation) {
-            targetVRotation = lastGoodRot;
-        }
-        
-        // 去掉这段代码，以让垂直旋转可以自由执行
-//        if (veryCloseRotation) {
-//            if ((targetVRotation < minVerticalRotation) && (targetDistance > (minDistance + 1.0f))) {
-//                targetVRotation = minVerticalRotation;
-//            } else if (targetVRotation < -FastMath.DEG_TO_RAD * 90) {
-//                targetVRotation = lastGoodRot;
-//            }
-//        } else {
-//            if ((targetVRotation < minVerticalRotation)) {
-//                targetVRotation = lastGoodRot;
-//            }
-//        }
-        
-    }
-    
-    /**
-     * 清理相机的按键绑定
-     */
-    public void cleanup() {
-        String[] inputs = {CameraInput.CHASECAM_TOGGLEROTATE,
-            CameraInput.CHASECAM_DOWN,
-            CameraInput.CHASECAM_UP,
-            CameraInput.CHASECAM_MOVELEFT,
-            CameraInput.CHASECAM_MOVERIGHT,
-            CameraInput.CHASECAM_ZOOMIN,
-            CameraInput.CHASECAM_ZOOMOUT};
-        for (String input : inputs) {
-            inputManager.deleteMapping(input);
-        }
+        super.vRotateCamera(value);
     }
     
     public Camera getCamera() {
         return cam;
+    }
+
+    @Override
+    protected void computePosition() {
+        super.computePosition(); 
     }
     
     /**
@@ -173,4 +109,6 @@ public class EditorCamera extends ChaseCamera {
         cam.setRotation(originRot);
         tv.release();
     }
+    
+    
 }

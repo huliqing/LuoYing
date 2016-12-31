@@ -22,33 +22,36 @@ import name.huliqing.luoying.utils.GeometryUtils;
 import name.huliqing.luoying.utils.MaterialUtils;
 
 /**
- *
+ * 位移控制轴
  * @author huliqing
  */
 public class LocationAxis extends Node implements AxisObj {
     
-    private final Axis axisX;
-    private final Axis axisY;
-    private final Axis axisZ;
+    private final AxisNode axisXNode;
+    private final AxisNode axisYNode;
+    private final AxisNode axisZNode;
 
     public LocationAxis() {
         
-        Spatial axisXInner = createAxis("axisXInner", new ColorRGBA(1.0f, 0.1f, 0.1f, 1.0f));
+        Spatial axisXInner = createAxis("axisXInner", AxisObj.AXIS_COLOR_X);
         axisXInner.rotate(0, 0, -FastMath.PI / 2);
-        axisX = new Axis(Axis.Type.x);
+        Axis axisX = new Axis(Axis.Type.x);
         axisX.attachChild(axisXInner);
+        axisXNode = new AxisNode(axisX, AxisObj.AXIS_COLOR_X);
         
-        axisY = new Axis(Axis.Type.y);
-        axisY.attachChild(createAxis("axisYInner", new ColorRGBA(0.1f, 1.0f, 0.1f, 1.0f)));
+        Axis axisY = new Axis(Axis.Type.y);
+        axisY.attachChild(createAxis("axisYInner", AxisObj.AXIS_COLOR_Y));
+        axisYNode = new AxisNode(axisY, AxisObj.AXIS_COLOR_Y);
         
-        Spatial axisZInner = createAxis("axisZInner", new ColorRGBA(0.1f, 0.1f, 1.0f, 1.0f));
+        Spatial axisZInner = createAxis("axisZInner", AxisObj.AXIS_COLOR_Z);
         axisZInner.rotate(FastMath.PI / 2, 0, 0);
-        axisZ = new Axis(Axis.Type.z);
+        Axis axisZ = new Axis(Axis.Type.z);
         axisZ.attachChild(axisZInner);
+        axisZNode = new AxisNode(axisZ, AxisObj.AXIS_COLOR_Z);
         
-        attachChild(axisX);
-        attachChild(axisY);
-        attachChild(axisZ);
+        attachChild(axisXNode);
+        attachChild(axisYNode);
+        attachChild(axisZNode);
         
         // 默认放在半透明中桶中，这样可以盖住其它所有物体
         setQueueBucket(RenderQueue.Bucket.Translucent);
@@ -86,18 +89,19 @@ public class LocationAxis extends Node implements AxisObj {
     }
 
     @Override
-    public Axis getAxisX() {
-        return axisX;
+    public AxisNode getAxisX() {
+        return axisXNode;
     }
 
     @Override
-    public Axis getAxisY() {
-        return axisY;
+    public AxisNode getAxisY() {
+        return axisYNode;
     }
 
     @Override
-    public Axis getAxisZ() {
-        return axisZ;
+    public AxisNode getAxisZ() {
+        return axisZNode;
     }
+   
 
 }

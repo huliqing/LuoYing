@@ -1,6 +1,11 @@
+____.全局缩放在缩放经过了旋转的物体时有BUG.
+____.undo\redo的按键冲突
 
 ok.local旋转时要及时更新transformObj
-.全局缩放在缩放经过了旋转的物体时有BUG.
-.undo,redo
+ok.undo,redo
 ok.scale需要同时三轴缩放
-scale的中心点缩放样式要透明
+ok.scale的中心点缩放样式要透明
+
+
+.添加一个JFX工具栏
+.建一个panel来同步canvas位置和大小

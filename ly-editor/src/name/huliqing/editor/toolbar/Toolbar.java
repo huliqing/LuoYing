@@ -77,23 +77,14 @@ public interface Toolbar<F extends Form> {
     <T extends Toolbar> T setActivated(Tool tool, boolean activated);
     
     /**
-     * 通过名称来激活指定的tool
-     * @param <T>
-     * @param tool
-     * @param activated 
-     * @return  
-     */
-    <T extends Toolbar> T setActivated(String tool, boolean activated);
-    
-    /**
      * 打开或关闭一个工具, 注：如果是关闭工具，如果工具当前处于激活状态，则该工具会被自动取消激活。
      * {@link #setActivated(java.lang.String, boolean) }
      * @param <T>
      * @param tool
-     * @param valid 
+     * @param enabled 
      * @return  
      */
-    <T extends Toolbar> T setEnabled(String tool, boolean valid);
+    <T extends Toolbar> T setEnabled(Tool tool, boolean enabled);
     
     /**
      * 添加一个侦听器，用于侦听工具的添加、移除、关闭、激活等操作

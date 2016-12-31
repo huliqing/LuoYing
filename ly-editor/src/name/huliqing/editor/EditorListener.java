@@ -5,13 +5,13 @@
  */
 package name.huliqing.editor;
 
+import name.huliqing.editor.forms.Form;
+
 /**
  *
  * @author huliqing
  */
-public class Test {
+public interface EditorListener {
     
-    public static void main(String[] args) {
-    
-    }
+    void onFormChanged(Editor editor, Form newForm);
 }

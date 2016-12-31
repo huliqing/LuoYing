@@ -39,4 +39,8 @@ public interface Form {
      * @return 
      */
     Toolbar getToolbar();
+    
+    void addListener(FormListener listener);
+    
+    boolean removeListener(FormListener listener);
 }

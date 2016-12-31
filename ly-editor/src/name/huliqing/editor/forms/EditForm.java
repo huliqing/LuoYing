@@ -13,6 +13,8 @@ import name.huliqing.editor.Editor;
 import name.huliqing.editor.select.EmptySelectObj;
 import name.huliqing.editor.select.SelectObj;
 import name.huliqing.editor.toolbar.EditToolbar;
+import name.huliqing.editor.undoredo.UndoRedo;
+import name.huliqing.editor.undoredo.UndoRedoManager;
 
 /**
  * 3D模型编辑器窗口
@@ -20,8 +22,10 @@ import name.huliqing.editor.toolbar.EditToolbar;
  */
 public abstract class EditForm extends AbstractForm {
     
+    protected final UndoRedoManager undoRedoManager = new UndoRedoManager();
+    
     // 侦听器
-    protected final List<EditFormListener> listeners = new ArrayList<EditFormListener>();
+    protected final List<EditFormListener> editFormListeners = new ArrayList<EditFormListener>();
     
     // 变换模式
     protected Mode mode = Mode.GLOBAL;
@@ -59,7 +63,7 @@ public abstract class EditForm extends AbstractForm {
         boolean changed = this.mode != mode;
         this.mode = mode;
         if (changed) {
-            listeners.forEach(l -> {l.onModeChanged(mode);});
+            editFormListeners.forEach(l -> {l.onModeChanged(mode);});
         }
     }
     
@@ -75,7 +79,7 @@ public abstract class EditForm extends AbstractForm {
         boolean changed = this.selectObj != selectObj;
         this.selectObj = selectObj;
         if (changed) {
-            listeners.forEach(l -> {l.onSelectChanged(selectObj);});
+            editFormListeners.forEach(l -> {l.onSelectChanged(selectObj);});
         }
     }
     
@@ -87,13 +91,21 @@ public abstract class EditForm extends AbstractForm {
         return localRoot;
     }
     
-    public void addListener(EditFormListener listener) {
-        if (!listeners.contains(listener)) {
-            listeners.add(listener);
+    public void addEditFormListener(EditFormListener listener) {
+        if (!editFormListeners.contains(listener)) {
+            editFormListeners.add(listener);
         }
     }
     
-    public boolean removeListener(EditFormListener listener) {
-        return listeners.remove(listener);
+    public boolean removeEditFormListener(EditFormListener listener) {
+        return editFormListeners.remove(listener);
+    }
+
+    public UndoRedoManager getUndoRedoManager() {
+        return undoRedoManager;
+    }
+    
+    public void addUndoRedo(UndoRedo undoRedo) {
+        undoRedoManager.add(undoRedo);
     }
 }

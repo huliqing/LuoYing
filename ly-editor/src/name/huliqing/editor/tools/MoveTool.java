@@ -5,6 +5,8 @@
  */
 package name.huliqing.editor.tools;
 
+import com.jme3.bullet.control.CharacterControl;
+import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
@@ -16,8 +18,9 @@ import name.huliqing.editor.events.JmeEvent;
 import name.huliqing.editor.forms.EditFormListener;
 import name.huliqing.editor.forms.Mode;
 import name.huliqing.editor.select.SelectObj;
-import name.huliqing.editor.tiles.Axis;
-import name.huliqing.editor.tiles.LocationObj;
+import name.huliqing.editor.tiles.AxisNode;
+import name.huliqing.editor.tiles.LocationControlObj;
+import name.huliqing.editor.undoredo.UndoRedo;
 import name.huliqing.luoying.manager.PickManager;
 
 /**
@@ -29,18 +32,19 @@ public class MoveTool extends EditTool implements EditFormListener{
     
     private final Ray ray = new Ray();
     // 物体选择、操作标记（位置）
-    private final LocationObj transformObj = new LocationObj();
+    private final LocationControlObj controlObj = new LocationControlObj();
 
     // 当前操作的轴向
-    private Axis actionAxis;
+    private AxisNode controlAxis;
     // 行为操作开始时编辑器中的被选择的物体，以及该物体的位置
     private SelectObj selectObj;
     
     private final Picker picker = new Picker();
-    private boolean picking;
+    private boolean transforming;
     
-    // 开始变换时物体的位置(local)
+    // 开始移动时和结束移动时物体的位置(local)
     private final Vector3f startSpatialLoc = new Vector3f();
+    private final Vector3f lastSpatialLoc = new Vector3f();
     
     public MoveTool(String name) {
         super(name);
@@ -49,15 +53,15 @@ public class MoveTool extends EditTool implements EditFormListener{
     @Override
     public void initialize() {
         super.initialize();
-        form.getEditRoot().getParent().attachChild(transformObj);
-        form.addListener(this);
+        form.getEditRoot().getParent().attachChild(controlObj);
+        form.addEditFormListener(this);
         updateMarkerState();
     }
     
     @Override
     public void cleanup() {
-        form.removeListener(this);
-        transformObj.removeFromParent();
+        form.addEditFormListener(this);
+        controlObj.removeFromParent();
         super.cleanup();
     }
     
@@ -81,12 +85,12 @@ public class MoveTool extends EditTool implements EditFormListener{
     private void onActionStart() {
         PickManager.getPickRay(editor.getCamera(), editor.getInputManager().getCursorPosition(), ray);
 
-        actionAxis = transformObj.pickTransformAxis(ray);
+        controlAxis = controlObj.getPickAxis(ray);
         selectObj = form.getSelected();
         
-        if (actionAxis != null && selectObj != null) {
+        if (controlAxis != null && selectObj != null) {
             Quaternion planRotation = Picker.PLANE_XY;
-            switch (actionAxis.getType()) {
+            switch (controlAxis.getType()) {
                 case x:
                     planRotation = Picker.PLANE_XY;
                     break;
@@ -101,26 +105,32 @@ public class MoveTool extends EditTool implements EditFormListener{
             }
             picker.startPick(selectObj.getSelectedSpatial(), form.getMode()
                     , editor.getCamera(), editor.getInputManager().getCursorPosition(), planRotation);
-            transformObj.showDebugLine(actionAxis, true);
             startSpatialLoc.set(selectObj.getSelectedSpatial().getLocalTranslation());
-            picking = true;
+            controlObj.setAxisVisible(false);
+            controlObj.setAxisLineVisible(false);
+            controlAxis.setAxisLineVisible(true);
+            transforming = true;
 //            LOG.log(Level.INFO, "StartSpatialLoc={0}", startSpatialLoc);
         }
     }
 
     private void onActionEnd() {
-        if (picking) {
+        if (transforming) {
             picker.endPick();
-            picking = false;
+            // undo redo
+            MoveUndo undoRedo = new MoveUndo(selectObj.getSelectedSpatial(), startSpatialLoc, lastSpatialLoc);
+            form.addUndoRedo(undoRedo);
         }
-        transformObj.showDebugLine(actionAxis, false);
-        actionAxis = null;
+        transforming = false;
+        controlObj.setAxisVisible(true);
+        controlObj.setAxisLineVisible(false);
+        controlAxis = null;
         selectObj = null;
     }
     
     @Override
     public void update(float tpf) {
-        if (!picking)
+        if (!transforming)
             return;
         
         if (!picker.updatePick(editor.getCamera(), editor.getInputManager().getCursorPosition())) {
@@ -128,7 +138,7 @@ public class MoveTool extends EditTool implements EditFormListener{
         }
         
         TempVars tv = TempVars.get();
-        Vector3f diff = picker.getTranslation(actionAxis.getDirection(tv.vect2));
+        Vector3f diff = picker.getTranslation(controlAxis.getDirection(tv.vect2));
         
         Spatial parent = selectObj.getSelectedSpatial().getParent();
         if (parent != null) {
@@ -138,8 +148,8 @@ public class MoveTool extends EditTool implements EditFormListener{
         
         Vector3f finalLocalPos = tv.vect1.set(startSpatialLoc).addLocal(diff);
         selectObj.getSelectedSpatial().setLocalTranslation(finalLocalPos);
-        transformObj.setLocalTranslation(selectObj.getSelectedSpatial().getWorldTranslation());
-        
+        controlObj.setLocalTranslation(selectObj.getSelectedSpatial().getWorldTranslation());
+        lastSpatialLoc.set(finalLocalPos);
         tv.release();
     }
 
@@ -156,26 +166,66 @@ public class MoveTool extends EditTool implements EditFormListener{
     private void updateMarkerState() {
         selectObj = form.getSelected();
         if (selectObj == null) {
-            transformObj.setVisible(false);
+            controlObj.setVisible(false);
             return;
         }
-        transformObj.setVisible(true);
-        transformObj.setLocalTranslation(form.getSelected().getSelectedSpatial().getWorldTranslation());
+        controlObj.setVisible(true);
+        controlObj.setLocalTranslation(form.getSelected().getSelectedSpatial().getWorldTranslation());
         Mode mode = form.getMode();
         switch (form.getMode()) {
             case GLOBAL:
-                transformObj.setLocalRotation(new Quaternion());
+                controlObj.setLocalRotation(new Quaternion());
                 break;
             case LOCAL:
-                transformObj.setLocalRotation(form.getSelected().getSelectedSpatial().getWorldRotation());
+                controlObj.setLocalRotation(form.getSelected().getSelectedSpatial().getWorldRotation());
                 break;
             case CAMERA:
-                transformObj.setLocalRotation(editor.getCamera().getRotation());
+                controlObj.setLocalRotation(editor.getCamera().getRotation());
                 break;
             default:
                 throw new IllegalArgumentException("Unknow mode type=" + mode);
         }
     }
 
+    private class MoveUndo implements UndoRedo {
 
+        private final Spatial spatial;
+        private final Vector3f before = new Vector3f();
+        private final Vector3f after = new Vector3f();
+        
+        public MoveUndo(Spatial spatial, Vector3f startPosition, Vector3f lastPosition) {
+            this.spatial = spatial;
+            this.before.set(startPosition);
+            this.after.set(lastPosition);
+        }
+        
+        @Override
+        public void undo() {
+            spatial.setLocalTranslation(before);
+            RigidBodyControl control = spatial.getControl(RigidBodyControl.class);
+            if (control != null) {
+                control.setPhysicsLocation(spatial.getWorldTranslation());
+            }
+            CharacterControl character = spatial.getControl(CharacterControl.class);
+            if (character != null) {
+                character.setPhysicsLocation(spatial.getWorldTranslation());
+            }
+            updateMarkerState();
+        }
+
+        @Override
+        public void redo() {
+            spatial.setLocalTranslation(after);
+            RigidBodyControl control = spatial.getControl(RigidBodyControl.class);
+            if (control != null) {
+                control.setPhysicsLocation(spatial.getWorldTranslation());
+            }
+            CharacterControl character = spatial.getControl(CharacterControl.class);
+            if (character != null) {
+                character.setPhysicsLocation(spatial.getWorldTranslation());
+            }
+            updateMarkerState();
+        }
+        
+    }
 }

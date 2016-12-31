@@ -3,15 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor;
+package name.huliqing.editor.forms;
+
+import name.huliqing.editor.toolbar.Toolbar;
 
 /**
  *
  * @author huliqing
  */
-public class Test {
+public interface FormListener {
     
-    public static void main(String[] args) {
-    
-    }
+    void onToolbarChanged(Form form, Toolbar newToolbar);
 }
