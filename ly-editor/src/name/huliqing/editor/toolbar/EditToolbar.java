@@ -33,13 +33,11 @@ public class EditToolbar extends AbstractToolbar<EditForm> implements EventListe
     private final Map<Tool, ToggleMappingEvent> toggleMapping = new HashMap<Tool, ToggleMappingEvent>();
     
     private UndoRedoTool undoRedoTool;
-    
-//    private CameraTool cameraTool;
-    private CameraTool cameraTool2;
-    
+    private CameraTool cameraTool;
     private ModeTool modeTool;
     private GridTool gridTool;
     private PickTool pickTool;
+    
     private MoveTool moveTool;
     private RotationTool rotationTool;
     private ScaleTool scaleTool;
@@ -59,32 +57,38 @@ public class EditToolbar extends AbstractToolbar<EditForm> implements EventListe
         
         undoRedoTool.bindUndoRedoEvent().bindKey(KeyInput.KEY_Z, true);
         
-        cameraTool2 = new CameraTool("CameraTool");
-        cameraTool2.bindDragEvent().bindButton(MouseInput.BUTTON_MIDDLE, true).bindKey(KeyInput.KEY_LSHIFT, true);
-        cameraTool2.bindToggleRotateEvent().bindButton(MouseInput.BUTTON_MIDDLE, true);
-        cameraTool2.bindZoomInEvent().bindAxis(MouseInput.AXIS_WHEEL, false, false);
-        cameraTool2.bindZoomOutEvent().bindAxis(MouseInput.AXIS_WHEEL, true, false);
-        cameraTool2.bindRechaseEvent().bindKey(KeyInput.KEY_DECIMAL, true);
-        cameraTool2.bindResetEvent().bindKey(KeyInput.KEY_LSHIFT, true).bindKey(KeyInput.KEY_C, true);
-        cameraTool2.bindViewFrontEvent().bindKey(KeyInput.KEY_NUMPAD1, true);
-        cameraTool2.bindViewRightEvent().bindKey(KeyInput.KEY_NUMPAD3, true);
-        cameraTool2.bindViewTopEvent().bindKey(KeyInput.KEY_NUMPAD7, true);
-        cameraTool2.bindViewOrthoPerspEvent().bindKey(KeyInput.KEY_NUMPAD5, true);
+        cameraTool = new CameraTool("CameraTool");
+        cameraTool.bindDragEvent().bindButton(MouseInput.BUTTON_MIDDLE, true).bindKey(KeyInput.KEY_LSHIFT, true);
+        cameraTool.bindToggleRotateEvent().bindButton(MouseInput.BUTTON_MIDDLE, true);
+        cameraTool.bindZoomInEvent().bindAxis(MouseInput.AXIS_WHEEL, false, false);
+        cameraTool.bindZoomOutEvent().bindAxis(MouseInput.AXIS_WHEEL, true, false);
+        cameraTool.bindRechaseEvent().bindKey(KeyInput.KEY_DECIMAL, true);
+        cameraTool.bindResetEvent().bindKey(KeyInput.KEY_LSHIFT, true).bindKey(KeyInput.KEY_C, true);
+        cameraTool.bindViewFrontEvent().bindKey(KeyInput.KEY_NUMPAD1, true);
+        cameraTool.bindViewRightEvent().bindKey(KeyInput.KEY_NUMPAD3, true);
+        cameraTool.bindViewTopEvent().bindKey(KeyInput.KEY_NUMPAD7, true);
+        cameraTool.bindViewOrthoPerspEvent().bindKey(KeyInput.KEY_NUMPAD5, true);
 
         modeTool.bindModeEvent().bindKey(KeyInput.KEY_TAB, false);
         pickTool.bindPickEvent().bindButton(MouseInput.BUTTON_RIGHT, true);
+        
         moveTool.bindMoveEvent().bindButton(MouseInput.BUTTON_LEFT, true);
+        moveTool.bindFreeMoveStartEvent().bindKey(KeyInput.KEY_G, false);
+        moveTool.bindFreeMoveApplyEvent().bindButton(MouseInput.BUTTON_LEFT, false);
+        moveTool.bindFreeMoveCancelEvent().bindButton(MouseInput.BUTTON_RIGHT, false);
         
         scaleTool.bindScaleEvent().bindButton(MouseInput.BUTTON_LEFT, true);
-        scaleTool.bindFullScaleStartEvent().bindKey(KeyInput.KEY_S, false);
-        scaleTool.bindFullScaleApplyEvent().bindButton(MouseInput.BUTTON_LEFT, false);
-        scaleTool.bindFullScaleCancelEvent().bindButton(MouseInput.BUTTON_RIGHT, false);
+        scaleTool.bindFreeScaleStartEvent().bindKey(KeyInput.KEY_S, false);
+        scaleTool.bindFreeScaleApplyEvent().bindButton(MouseInput.BUTTON_LEFT, false);
+        scaleTool.bindFreeScaleCancelEvent().bindButton(MouseInput.BUTTON_RIGHT, false);
         
         rotationTool.bindRotationEvent().bindButton(MouseInput.BUTTON_LEFT, true);
+        rotationTool.bindFreeRotationStartEvent().bindKey(KeyInput.KEY_R, false);
+        rotationTool.bindFreeRotationApplyEvent().bindButton(MouseInput.BUTTON_LEFT, false);
+        rotationTool.bindFreeRotationCancelEvent().bindButton(MouseInput.BUTTON_RIGHT, false);
         
         add(undoRedoTool);
-//        add(cameraTool);
-        add(cameraTool2);
+        add(cameraTool);
         add(modeTool);
         add(gridTool);
         add(pickTool);
@@ -98,8 +102,7 @@ public class EditToolbar extends AbstractToolbar<EditForm> implements EventListe
         addToggleMapping(KeyInput.KEY_R, new ToggleMappingEvent(rotationTool, conflicts));
         
         setActivated(undoRedoTool, true);
-//        setActivated(cameraTool, true); 
-        setActivated(cameraTool2, true); 
+        setActivated(cameraTool, true);
         setActivated(modeTool, true);
         setActivated(gridTool, true);
         setActivated(pickTool, true);

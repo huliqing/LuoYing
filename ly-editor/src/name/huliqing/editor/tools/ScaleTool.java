@@ -36,9 +36,9 @@ public class ScaleTool extends EditTool implements EditFormListener{
     private final static String EVENT_SCALE_Y = "scaleYEvent";
     private final static String EVENT_SCALE_Z = "scaleZEvent";
     // 点击按键进行全缩放
-    private final static String EVENT_FULL_SCALE_START = "fullScaleStartEvent";
-    private final static String EVENT_FULL_SCALE_APPLY = "fullScaleApplyEvent";
-    private final static String EVENT_FULL_SCALE_CANCEL = "fullScaleCancelEvent";
+    private final static String EVENT_FREE_SCALE_START = "fullScaleStartEvent";
+    private final static String EVENT_FREE_SCALE_APPLY = "fullScaleApplyEvent";
+    private final static String EVENT_FREE_SCALE_CANCEL = "fullScaleCancelEvent";
     
     private final Ray ray = new Ray();
     
@@ -50,17 +50,19 @@ public class ScaleTool extends EditTool implements EditFormListener{
     private final Vector3f startScale = new Vector3f();
     private final Vector3f afterScale = new Vector3f();
     
-    // 全局缩放，整体缩放
-    private boolean fullScale;
-    // 局部缩放，按轴缩放
-    private boolean axisScale;
-    // 当前操作的轴向
-    private AxisNode controlAxis;
     // 是否当前正在缩放操作
     private boolean transforming;
+    // 自由操作，整体缩放
+    private boolean freeScale;
+    // 当前操作的轴向
+    private AxisNode controlAxis;
 
     public ScaleTool(String name) {
         super(name);
+        // 绑定三个按键：x,y,z用于在fullScale时转化为按指定轴缩放
+        bindEvent(EVENT_SCALE_X).bindKey(KeyInput.KEY_X, true);
+        bindEvent(EVENT_SCALE_Y).bindKey(KeyInput.KEY_Y, true);
+        bindEvent(EVENT_SCALE_Z).bindKey(KeyInput.KEY_Z, true);
     }
 
     @Override
@@ -68,12 +70,6 @@ public class ScaleTool extends EditTool implements EditFormListener{
         super.initialize(); 
         form.getEditRoot().getParent().attachChild(controlObj);
         form.addEditFormListener(this);
-        
-        // 绑定三个按键：x,y,z用于在fullScale时转化为按指定轴缩放
-        bindEvent(EVENT_SCALE_X).bindKey(KeyInput.KEY_X, true);
-        bindEvent(EVENT_SCALE_Y).bindKey(KeyInput.KEY_Y, true);
-        bindEvent(EVENT_SCALE_Z).bindKey(KeyInput.KEY_Z, true);
-        
         updateMarkerState();
     }
 
@@ -96,24 +92,24 @@ public class ScaleTool extends EditTool implements EditFormListener{
      * 绑定一个开始全局缩放的按键事件
      * @return 
      */
-    public JmeEvent bindFullScaleStartEvent() {
-        return bindEvent(EVENT_FULL_SCALE_START);
+    public JmeEvent bindFreeScaleStartEvent() {
+        return bindEvent(EVENT_FREE_SCALE_START);
     }
     
     /**
      * 绑定一个应用全局缩放的按键事件
      * @return 
      */
-    public JmeEvent bindFullScaleApplyEvent() {
-        return bindEvent(EVENT_FULL_SCALE_APPLY);
+    public JmeEvent bindFreeScaleApplyEvent() {
+        return bindEvent(EVENT_FREE_SCALE_APPLY);
     }
     
     /**
      * 绑定一个取消全局缩放的按键事件
      * @return 
      */
-    public JmeEvent bindFullScaleCancelEvent() {
-        return bindEvent(EVENT_FULL_SCALE_CANCEL);
+    public JmeEvent bindFreeScaleCancelEvent() {
+        return bindEvent(EVENT_FREE_SCALE_CANCEL);
     }
     
     @Override
@@ -141,21 +137,21 @@ public class ScaleTool extends EditTool implements EditFormListener{
         }
         
         // 整体缩放开始
-        else if (EVENT_FULL_SCALE_START.equals(e.getName())) {
+        else if (EVENT_FREE_SCALE_START.equals(e.getName())) {
             if (e.isMatch()) {
                 startFullScale();
             }
         }
         
         // 整体缩放应用
-        else if (EVENT_FULL_SCALE_APPLY.equals(e.getName())) {
-            if (e.isMatch() && fullScale) {
+        else if (EVENT_FREE_SCALE_APPLY.equals(e.getName())) {
+            if (e.isMatch() && freeScale) {
                 endScale();
             }
         }
         
         // 整体缩放取消
-        else if (EVENT_FULL_SCALE_CANCEL.equals(e.getName())) {
+        else if (EVENT_FREE_SCALE_CANCEL.equals(e.getName())) {
             if (e.isMatch()) {
                 cancelScale();
             }
@@ -177,8 +173,7 @@ public class ScaleTool extends EditTool implements EditFormListener{
     }
     
     private void startFullScale() {
-        axisScale = false;
-        fullScale = true;
+        freeScale = true;
         transforming = true;
         controlAxis = null;
         controlObj.setAxisVisible(false);
@@ -190,8 +185,7 @@ public class ScaleTool extends EditTool implements EditFormListener{
     
     // 普通的按轴缩放
     private void startScale(AxisNode scaleAxis) {
-        axisScale = true;
-        fullScale = false;
+        freeScale = false;
         transforming = true;
         controlAxis = scaleAxis;
         controlObj.setAxisVisible(false);
@@ -224,9 +218,8 @@ public class ScaleTool extends EditTool implements EditFormListener{
             picker.endPick();
             form.addUndoRedo(new ScaleUndoRedo(selectObj.getSelectedSpatial(), startScale, afterScale));
         }
-        fullScale = false;
-        axisScale = false;
         transforming = false;
+        freeScale = false;
         controlAxis = null;
         controlObj.setAxisVisible(true);
         controlObj.setAxisLineVisible(false);
@@ -237,23 +230,31 @@ public class ScaleTool extends EditTool implements EditFormListener{
      */
     private void cancelScale() {
         if (transforming) {
-            endScale();
+            picker.endPick();
             selectObj.getSelectedSpatial().setLocalScale(startScale);
             transforming = false;
+            // 更新一次位置,因为操作取消了
+            updateMarkerState();
         }
+        endScale();
     }
 
     @Override
     public void update(float tpf) {
+        // 对于相机视角，Marker必须实时随着相机的移动旋转而更新
+        if (form.getMode() == Mode.CAMERA) {
+            updateMarkerState();
+        }
+        
         if (!transforming) {
             return;
         }
-
+        
         if (!picker.updatePick(editor.getCamera(), editor.getInputManager().getCursorPosition())) {
             return;
         }
 
-        if (fullScale) {
+        if (freeScale) {
             
             TempVars tv = TempVars.get();
             Vector3f constraintAxis = picker.getStartOffset(tv.vect1).normalizeLocal();

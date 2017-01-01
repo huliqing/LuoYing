@@ -30,19 +30,19 @@ public class SimpleEditForm extends EditForm {
         super.initialize(editor);
         localRoot.attachChild(root);
         
-        root.setLocalTranslation(
-                FastMath.nextRandomInt(-5, 5)
-                ,FastMath.nextRandomInt(0, 5)
-                ,FastMath.nextRandomInt(-5, 5)
-        );
-        root.setLocalScale(
-                FastMath.nextRandomInt(-5, 5)
-                ,FastMath.nextRandomInt(-5, 5)
-                ,FastMath.nextRandomInt(-5, 5)
-        );
-        root.rotate(FastMath.nextRandomFloat() * FastMath.TWO_PI
-                    , FastMath.nextRandomFloat() * FastMath.TWO_PI
-                    , FastMath.nextRandomFloat() * FastMath.TWO_PI);
+//        root.setLocalTranslation(
+//                FastMath.nextRandomInt(-5, 5)
+//                ,FastMath.nextRandomInt(0, 5)
+//                ,FastMath.nextRandomInt(-5, 5)
+//        );
+//        root.setLocalScale(
+//                FastMath.nextRandomInt(-5, 5)
+//                ,FastMath.nextRandomInt(-5, 5)
+//                ,FastMath.nextRandomInt(-5, 5)
+//        );
+//        root.rotate(FastMath.nextRandomFloat() * FastMath.TWO_PI
+//                    , FastMath.nextRandomFloat() * FastMath.TWO_PI
+//                    , FastMath.nextRandomFloat() * FastMath.TWO_PI);
         
         
         Spatial sinbad = editor.getAssetManager().loadModel("Models/test/Sinbad.mesh.j3o");

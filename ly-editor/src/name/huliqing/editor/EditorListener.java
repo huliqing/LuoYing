@@ -13,5 +13,17 @@ import name.huliqing.editor.forms.Form;
  */
 public interface EditorListener {
     
+    /**
+     * 当切换编辑器时该方法被调用
+     * @param editor
+     * @param newForm 
+     */
     void onFormChanged(Editor editor, Form newForm);
+    
+    /**
+     * 当编辑器窗品大小变化时该方法被调用
+     * @param w
+     * @param h 
+     */
+    void onReshape(int w, int h);
 }

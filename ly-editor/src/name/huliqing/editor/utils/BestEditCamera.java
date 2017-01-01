@@ -181,16 +181,16 @@ public class BestEditCamera implements ActionListener, AnalogListener {
                 cam.setLocation(new Vector3f(focus.x, focus.y, focus.z + dist));
                 cam.lookAt(focus, Vector3f.UNIT_Y);
                 break;
-            case left:
-                cam.setLocation(new Vector3f(focus.x + dist, focus.y, focus.z));
+            case back:
+                cam.setLocation(new Vector3f(focus.x, focus.y, focus.z - dist));
                 cam.lookAt(focus, Vector3f.UNIT_Y);
                 break;
-            case right:
+            case left:
                 cam.setLocation(new Vector3f(focus.x - dist, focus.y, focus.z));
                 cam.lookAt(focus, Vector3f.UNIT_Y);
                 break;
-            case back:
-                cam.setLocation(new Vector3f(focus.x, focus.y, focus.z - dist));
+            case right:
+                cam.setLocation(new Vector3f(focus.x + dist, focus.y, focus.z));
                 cam.lookAt(focus, Vector3f.UNIT_Y);
                 break;
             case top:
@@ -256,5 +256,10 @@ public class BestEditCamera implements ActionListener, AnalogListener {
     public Camera getCamera() {
         return cam;
     }
+
+    public View getView() {
+        return view;
+    }
+    
     
 }

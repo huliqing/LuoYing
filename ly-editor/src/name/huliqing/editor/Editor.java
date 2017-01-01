@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.editor.events.JmeEvent;
 import name.huliqing.editor.forms.SimpleEditForm;
+import name.huliqing.editor.manager.ConfigManager;
 
 /**
  *
@@ -21,23 +22,33 @@ public class Editor extends SimpleApplication{
     
     private List<EditorListener> listeners;
     private Form form;
-
+    
     @Override
     public void simpleInitApp() {
-        JmeEvent.registerInputManager(inputManager);
-        setForm(new SimpleEditForm());
         StatsAppState stats = this.stateManager.getState(StatsAppState.class);
         if (stats != null) {
             stateManager.detach(stats);
         }
         stateManager.attach(new EditorStatsAppState());
         
-  
+        // 初始化
+        ConfigManager.initialize(this);
+        // 注册InputManager
+        JmeEvent.registerInputManager(inputManager);
+        setForm(new SimpleEditForm());
     }
     
     @Override
     public void simpleUpdate(float tpf) {
         form.update(tpf);
+    }
+    
+    @Override
+    public void reshape(int w, int h){
+        super.reshape(w, h);
+        if (listeners != null) {
+            listeners.forEach(t -> {t.onReshape(w, h);});
+        }
     }
     
     public Form getForm() {

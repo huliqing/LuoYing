@@ -5,7 +5,10 @@
  */
 package name.huliqing.editor.tools;
 
+import com.jme3.font.BitmapFont;
+import com.jme3.font.BitmapText;
 import com.jme3.input.KeyInput;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
@@ -13,10 +16,18 @@ import com.jme3.scene.CameraNode;
 import com.jme3.scene.control.CameraControl;
 import java.util.Arrays;
 import java.util.logging.Logger;
+import name.huliqing.editor.Editor;
+import name.huliqing.editor.EditorListener;
+import name.huliqing.editor.constants.ResConstants;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.JmeEvent;
+import name.huliqing.editor.forms.Form;
+import name.huliqing.editor.forms.Mode;
+import name.huliqing.editor.manager.ConfigManager;
+import name.huliqing.editor.manager.ResManager;
 import name.huliqing.editor.utils.BestEditCamera;
 import name.huliqing.editor.utils.BestEditCamera.View;
+import name.huliqing.fxswing.Jfx;
 import name.huliqing.luoying.object.anim.Anim;
 import name.huliqing.luoying.object.anim.AnimNode;
 import name.huliqing.luoying.object.anim.CurveMoveAnim;
@@ -25,7 +36,7 @@ import name.huliqing.luoying.object.anim.CurveMoveAnim;
  * 场景镜头工具
  * @author huliqing
  */
-public class CameraTool extends EditTool {
+public class CameraTool extends EditTool implements EditorListener {
     
     private static final Logger LOG = Logger.getLogger(CameraTool.class.getName());
     
@@ -58,22 +69,37 @@ public class CameraTool extends EditTool {
     // 默认相机定位时的最近距离
     private final float defFocusDistance = 2f;
     
+    // 视角及提示
+    private final BitmapText viewText = new BitmapText(ConfigManager.getFont());
+    private View view;
+    private boolean ortho;
+    
     public CameraTool(String name) {
         super(name);
         LCtrEvent = bindEvent("LCtrPressedEvent").bindKey(KeyInput.KEY_LCONTROL, true);
         RCtrEvent = bindEvent("RCtrPressedEvent").bindKey(KeyInput.KEY_RCONTROL, true);
+        viewText.setSize(ConfigManager.FONT_SIZE);
+        viewText.setColor(new ColorRGBA(0.9f, 0.9f, 0.9f, 1));
+        viewText.setAlignment(BitmapFont.Align.Left);
+        viewText.setVerticalAlignment(BitmapFont.VAlign.Top);
     }
 
     @Override
     public void initialize() {
         super.initialize();
         editorCam = new BestEditCamera(editor.getCamera(), editor.getInputManager());
+        view = editorCam.getView();
+        updateViewText();
+        editor.getGuiNode().attachChild(viewText);
+        editor.addListener(this);
     }
 
     @Override
     public void cleanup() {
+        editor.removeListener(this);
         editorCam.cleanup();
         editorCam = null;
+        viewText.removeFromParent();
         super.cleanup(); 
     }
     
@@ -184,7 +210,6 @@ public class CameraTool extends EditTool {
                 default:
             }
         }
-        
     }
     
     /**
@@ -243,7 +268,59 @@ public class CameraTool extends EditTool {
                     , (cp.y - lastCursorPos.y) * -panMoveSpeed);
             lastCursorPos.set(cp);
         }
+        
+        // 更新视角提示信息
+        if (editorCam.getView() != view || ortho != editorCam.getCamera().isParallelProjection()
+                ) {
+            view = editorCam.getView();
+            ortho = editorCam.getCamera().isParallelProjection();
+            updateViewText();
+        }
     }
 
+    public void updateViewText() {
+        String textKey = "";
+        switch (view) {
+            case back:
+                textKey = ResConstants.VIEW_BACK;
+                break;
+            case bottom:
+                textKey = ResConstants.VIEW_BOTTOM;
+                break;
+            case front:
+                textKey = ResConstants.VIEW_FRONT;
+                break;
+            case left:
+                textKey = ResConstants.VIEW_LEFT;
+                break;
+            case right:
+                textKey = ResConstants.VIEW_RIGHT;
+                break;
+            case top:
+                textKey = ResConstants.VIEW_TOP;
+                break;
+            case user:
+                textKey = ResConstants.VIEW_USER;
+                break;
+            default:
+                break;
+        }
+        String orthoKey = editorCam.getCamera().isParallelProjection() ? ResConstants.VIEW_ORTHO : ResConstants.VIEW_PERSP;
+        ResManager resManager = ConfigManager.getResManager();
+        String viewTextStr = resManager.get(textKey) + " " + resManager.get(orthoKey);
+        viewText.setText(viewTextStr);
+        float y = editorCam.getCamera().getHeight() - 10;
+        viewText.setLocalTranslation(10, y, 0);
+    }
+
+    @Override
+    public void onFormChanged(Editor editor, Form newForm) {
+        // ignore
+    }
+
+    @Override
+    public void onReshape(int w, int h) {
+        updateViewText();
+    }
     
 }

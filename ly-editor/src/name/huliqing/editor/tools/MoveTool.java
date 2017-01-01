@@ -7,6 +7,7 @@ package name.huliqing.editor.tools;
 
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.input.KeyInput;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
@@ -30,24 +31,39 @@ import name.huliqing.luoying.manager.PickManager;
 public class MoveTool extends EditTool implements EditFormListener{
 //    private static final Logger LOG = Logger.getLogger(MoveTool.class.getName());
     
+    private final static String EVENT_MOVE = "moveEvent";
+    private final static String EVENT_MOVE_X = "moveXEvent";
+    private final static String EVENT_MOVE_Y = "moveYEvent";
+    private final static String EVENT_MOVE_Z = "moveZEvent";
+    
+    private final static String EVENT_FREE_MOVE_START = "freeMoveStartEvent";
+    private final static String EVENT_FREE_MOVE_APPLY = "freeMoveApplyEvent";
+    private final static String EVENT_FREE_MOVE_CANCEL = "freeMoveCancelEvent";
+    
     private final Ray ray = new Ray();
+    private final Picker picker = new Picker();
     // 物体选择、操作标记（位置）
     private final LocationControlObj controlObj = new LocationControlObj();
 
     // 当前操作的轴向
-    private AxisNode controlAxis;
+    private AxisNode moveAxis;
     // 行为操作开始时编辑器中的被选择的物体，以及该物体的位置
     private SelectObj selectObj;
-    
-    private final Picker picker = new Picker();
-    private boolean transforming;
     
     // 开始移动时和结束移动时物体的位置(local)
     private final Vector3f startSpatialLoc = new Vector3f();
     private final Vector3f lastSpatialLoc = new Vector3f();
     
+    // 自由移动
+    private boolean transforming;
+    private boolean freeMove;
+    
     public MoveTool(String name) {
         super(name);
+        // 绑定三个按键：x,y,z用于在自由旋转的时候转化到按轴旋转
+        bindEvent(EVENT_MOVE_X).bindKey(KeyInput.KEY_X, false);
+        bindEvent(EVENT_MOVE_Y).bindKey(KeyInput.KEY_Y, false);
+        bindEvent(EVENT_MOVE_Z).bindKey(KeyInput.KEY_Z, false);
     }
     
     @Override
@@ -70,51 +86,109 @@ public class MoveTool extends EditTool implements EditFormListener{
      * @return 
      */
     public JmeEvent bindMoveEvent() {
-        return bindEvent(name + "moveEvent");
+        return bindEvent(EVENT_MOVE);
+    }
+    
+    public JmeEvent bindFreeMoveStartEvent() {
+        return bindEvent(EVENT_FREE_MOVE_START);
+    }
+    public JmeEvent bindFreeMoveApplyEvent() {
+        return bindEvent(EVENT_FREE_MOVE_APPLY);
+    }
+    public JmeEvent bindFreeMoveCancelEvent() {
+        return bindEvent(EVENT_FREE_MOVE_CANCEL);
     }
     
     @Override
     protected void onToolEvent(Event e) {
-        if (e.isMatch()) {
-            onActionStart();
-        } else {
-            onActionEnd();
-        }
-    }
-
-    private void onActionStart() {
-        PickManager.getPickRay(editor.getCamera(), editor.getInputManager().getCursorPosition(), ray);
-
-        controlAxis = controlObj.getPickAxis(ray);
         selectObj = form.getSelected();
+        if (selectObj == null) {
+            endMove();
+            return;
+        }
         
-        if (controlAxis != null && selectObj != null) {
-            Quaternion planRotation = Picker.PLANE_XY;
-            switch (controlAxis.getType()) {
-                case x:
-                    planRotation = Picker.PLANE_XY;
-                    break;
-                case y:
-                    planRotation = Picker.PLANE_YZ;
-                    break;
-                case z:
-                    planRotation = Picker.PLANE_XZ;
-                    break;
-                default:
-                    throw new UnsupportedOperationException();
+        if (e.getName().equals(EVENT_MOVE)) {
+            if (e.isMatch()) {
+                PickManager.getPickRay(editor.getCamera(), editor.getInputManager().getCursorPosition(), ray);
+                AxisNode axis = controlObj.getPickAxis(ray);
+                if (axis != null) {
+                    startMove(axis);
+                }
+            } else {
+                endMove();
             }
-            picker.startPick(selectObj.getSelectedSpatial(), form.getMode()
-                    , editor.getCamera(), editor.getInputManager().getCursorPosition(), planRotation);
-            startSpatialLoc.set(selectObj.getSelectedSpatial().getLocalTranslation());
-            controlObj.setAxisVisible(false);
-            controlObj.setAxisLineVisible(false);
-            controlAxis.setAxisLineVisible(true);
-            transforming = true;
-//            LOG.log(Level.INFO, "StartSpatialLoc={0}", startSpatialLoc);
+        }
+        
+        // 开始自由操作
+        else if (EVENT_FREE_MOVE_START.equals(e.getName())) {
+            if (e.isMatch()) {
+                startFreeMove();
+            }
+            // 应用自由操作
+        } else if (EVENT_FREE_MOVE_APPLY.equals(e.getName())) {
+            if (e.isMatch() && freeMove) {
+                endMove();
+            }
+            // 取消操作
+        } else if (EVENT_FREE_MOVE_CANCEL.equals(e.getName())) { 
+            if (e.isMatch()) {
+                cancelMove();
+            }
+        }
+        
+        // 从自由操作转到约束操作
+        else if (transforming && e.isMatch() && EVENT_MOVE_X.equals(e.getName())) {
+            cancelMove();
+            startMove(controlObj.getAxisX());
+        }
+        else if (transforming && e.isMatch() && EVENT_MOVE_Y.equals(e.getName())) {
+            cancelMove();
+            startMove(controlObj.getAxisY());
+        }
+        else if (transforming && e.isMatch() && EVENT_MOVE_Z.equals(e.getName())) {
+            cancelMove();
+            startMove(controlObj.getAxisZ());
         }
     }
+    
+    private void startFreeMove() {
+        freeMove = true;
+        transforming = true;
+        picker.startPick(selectObj.getSelectedSpatial(), Mode.CAMERA
+                , editor.getCamera(), editor.getInputManager().getCursorPosition(), Picker.PLANE_XY);
+        startSpatialLoc.set(selectObj.getSelectedSpatial().getLocalTranslation());
+        controlObj.setAxisVisible(false);
+        controlObj.setAxisLineVisible(false);
+    }
 
-    private void onActionEnd() {
+    private void startMove(AxisNode axis) {
+        moveAxis = axis;
+        transforming = true;
+        freeMove = false;
+        Quaternion planRotation = Picker.PLANE_XY;
+        switch (moveAxis.getType()) {
+            case x:
+                planRotation = Picker.PLANE_XY;
+                break;
+            case y:
+//                planRotation = Picker.PLANE_YZ;
+                planRotation = Picker.PLANE_XY;
+                break;
+            case z:
+                planRotation = Picker.PLANE_XZ;
+                break;
+            default:
+                throw new UnsupportedOperationException();
+        }
+        picker.startPick(selectObj.getSelectedSpatial(), form.getMode()
+                , editor.getCamera(), editor.getInputManager().getCursorPosition(), planRotation);
+        startSpatialLoc.set(selectObj.getSelectedSpatial().getLocalTranslation());
+        controlObj.setAxisVisible(false);
+        controlObj.setAxisLineVisible(false);
+        moveAxis.setAxisLineVisible(true);
+    }
+
+    private void endMove() {
         if (transforming) {
             picker.endPick();
             // undo redo
@@ -122,14 +196,31 @@ public class MoveTool extends EditTool implements EditFormListener{
             form.addUndoRedo(undoRedo);
         }
         transforming = false;
+        freeMove = false;
+        moveAxis = null;
         controlObj.setAxisVisible(true);
         controlObj.setAxisLineVisible(false);
-        controlAxis = null;
-        selectObj = null;
+        
+    }
+    
+    private void cancelMove() {
+        if (transforming) {
+            picker.endPick();
+            selectObj.getSelectedSpatial().setLocalTranslation(startSpatialLoc);
+            transforming = false;
+            // 更新一次位置,因为操作取消了
+            updateMarkerState();
+        }
+        endMove();
     }
     
     @Override
     public void update(float tpf) {
+        // 对于相机视角，Marker必须实时随着相机的移动旋转而更新
+        if (form.getMode() == Mode.CAMERA) {
+            updateMarkerState();
+        }
+        
         if (!transforming)
             return;
         
@@ -138,7 +229,13 @@ public class MoveTool extends EditTool implements EditFormListener{
         }
         
         TempVars tv = TempVars.get();
-        Vector3f diff = picker.getTranslation(controlAxis.getDirection(tv.vect2));
+        
+        Vector3f diff;
+        if (freeMove) {
+            diff = picker.getTranslation();
+        } else {
+            diff = picker.getTranslation(moveAxis.getDirection(tv.vect2));
+        }
         
         Spatial parent = selectObj.getSelectedSpatial().getParent();
         if (parent != null) {

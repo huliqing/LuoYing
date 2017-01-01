@@ -19,15 +19,7 @@ import name.huliqing.editor.forms.FormListener;
 import name.huliqing.editor.toolbar.EditToolbar;
 import name.huliqing.editor.toolbar.Toolbar;
 import name.huliqing.editor.toolbar.ToolbarListener;
-import name.huliqing.editor.tools.GridTool;
-import name.huliqing.editor.tools.ModeTool;
-import name.huliqing.editor.tools.MoveTool;
-import name.huliqing.editor.tools.PickTool;
-import name.huliqing.editor.tools.RotationTool;
-import name.huliqing.editor.tools.ScaleTool;
 import name.huliqing.editor.tools.Tool;
-import name.huliqing.editor.ui.toolview.ModeToolView;
-import name.huliqing.editor.ui.toolview.ToggleToolView;
 import name.huliqing.editor.ui.toolview.ToolView;
 import name.huliqing.editor.ui.toolview.ToolViewFactory;
 import name.huliqing.fxswing.Jfx;
@@ -147,6 +139,11 @@ public class ToolBarView extends ToolBar implements EditorListener, FormListener
     @Override
     public void onToolbarChanged(Form form, Toolbar newToolbar) {
         Jfx.runOnJfx(() -> {resetToolbar();});
+    }
+
+    @Override
+    public void onReshape(int w, int h) {
+        // ignore
     }
     
 }

@@ -1,0 +1,11 @@
+#use notepad++ -> 格式 -> 转为UTF-8编码格式 -> AngelCode 导出bmp font
+view.front= 前视图
+view.back=后视图
+view.left=左视图
+view.right=右视图
+view.top=顶视图
+view.bottom=底视图
+view.user=自由视图
+view.ortho=正交
+view.persp=透视
+

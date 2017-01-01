@@ -19,7 +19,7 @@ import com.jme3.scene.control.AbstractControl;
 public class AutoScaleControl extends AbstractControl {
     
     private final Vector3f lastCamLoc = new Vector3f();
-    private final float size = 0.1f;
+    private final float size = 0.15f;
     private Camera camera;
     
     /**

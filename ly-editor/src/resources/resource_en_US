@@ -1,0 +1,10 @@
+#use notepad++ -> 格式 -> 转为UTF-8编码格式 -> AngelCode 导出bmp font
+view.front=Front
+view.back=Back
+view.left=Left
+view.right=Right
+view.top=Top
+view.bottom=Bottom
+view.user=User
+view.ortho=Ortho
+view.persp=Persp
