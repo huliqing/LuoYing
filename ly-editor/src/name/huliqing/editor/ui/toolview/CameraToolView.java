@@ -13,6 +13,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Skin;
 import javafx.scene.control.Tooltip;
+import javafx.util.StringConverter;
+import name.huliqing.editor.constants.ResConstants;
+import name.huliqing.editor.manager.ConfigManager;
 import name.huliqing.editor.toolbar.Toolbar;
 import name.huliqing.editor.tools.CameraTool;
 import name.huliqing.editor.tools.Tool;
@@ -25,7 +28,7 @@ import name.huliqing.fxswing.Jfx;
  */
 public class CameraToolView extends AbstractToolView {
     
-    private final CameraCombo<String> view = new CameraCombo<>();
+    private final CameraCombo<ActionItem> view = new CameraCombo<>();
     private CameraTool cameraTool;
 
     @Override
@@ -44,49 +47,63 @@ public class CameraToolView extends AbstractToolView {
     }
 
     @Override
-    public void initialize(Tool tool, Toolbar toolbar, String displayName, String icon, String tooltip) {
-        super.initialize(tool, toolbar, displayName, icon, tooltip);
+    public void initialize(Tool tool, Toolbar toolbar, String name, String tooltip, String icon) {
+        super.initialize(tool, toolbar, name, tooltip, icon);
         cameraTool = (CameraTool) tool;
+        view.setName(name);
         if (tooltip != null && !tooltip.isEmpty()) {
             view.setTooltip(new Tooltip(tooltip));
         }
-        view.setName(displayName);
-        view.getItems().add("当前(.)");
-        view.getItems().add("原点(Shift+C)");
-        view.getItems().add("Front");
-        view.getItems().add("Back");
-        view.getItems().add("Left");
-        view.getItems().add("Right");
-        view.getItems().add("Top");
-        view.getItems().add("Bottom");
-        view.valueProperty().addListener(new ChangeListener<String>() {
+        
+        view.setConverter(new ActionItemConverter());
+        view.getItems().add(new ActionItem(ConfigManager.getRes(ResConstants.VIEW_FOCUS_ORIGIN), 0));
+        view.getItems().add(new ActionItem(ConfigManager.getRes(ResConstants.VIEW_FOCUS_TARGET), 1));
+        
+        view.getItems().add(new ActionItem(ConfigManager.getRes(ResConstants.VIEW_BACK), 11));
+        view.getItems().add(new ActionItem(ConfigManager.getRes(ResConstants.VIEW_BOTTOM), 12));
+        view.getItems().add(new ActionItem(ConfigManager.getRes(ResConstants.VIEW_FRONT), 13));
+        view.getItems().add(new ActionItem(ConfigManager.getRes(ResConstants.VIEW_LEFT), 14));
+        view.getItems().add(new ActionItem(ConfigManager.getRes(ResConstants.VIEW_RIGHT), 15));
+        view.getItems().add(new ActionItem(ConfigManager.getRes(ResConstants.VIEW_TOP), 16));
+        
+        view.getItems().add(new ActionItem(ConfigManager.getRes(ResConstants.VIEW_ORTHO), 20));
+        view.getItems().add(new ActionItem(ConfigManager.getRes(ResConstants.VIEW_PERSP), 21));
+
+        view.valueProperty().addListener(new ChangeListener<ActionItem>() {
+            
             @Override
-            public void changed(ObservableValue observable, String oldValue, String newValue) {
+            public void changed(ObservableValue observable, ActionItem oldValue, ActionItem newValue) {
                 Jfx.runOnJme(() -> {
-                    switch (newValue) {
-                        case "当前(.)":
-                            cameraTool.doChaseSelected();
-                            break;
-                        case "原点(Shift+C)":
+                    switch (newValue.value) {
+                        case 0:
                             cameraTool.doChaseOrigin();
                             break;
-                        case "Front":
-                            cameraTool.doSwitchView(BestEditCamera.View.front);
+                        case 1:
+                            cameraTool.doChaseSelected();
                             break;
-                        case "Back":
+                        case 11:
                             cameraTool.doSwitchView(BestEditCamera.View.back);
                             break;
-                        case "Left":
+                        case 12:
+                            cameraTool.doSwitchView(BestEditCamera.View.bottom);
+                            break;
+                        case 13:
+                            cameraTool.doSwitchView(BestEditCamera.View.front);
+                            break;
+                        case 14:
                             cameraTool.doSwitchView(BestEditCamera.View.left);
                             break;
-                        case "Right":
+                        case 15:
                             cameraTool.doSwitchView(BestEditCamera.View.right);
                             break;
-                        case "Top":
+                        case 16:
                             cameraTool.doSwitchView(BestEditCamera.View.top);
                             break;
-                        case "Bottom":
-                            cameraTool.doSwitchView(BestEditCamera.View.bottom);
+                        case 20:
+                            cameraTool.doOrthoView();
+                            break;
+                        case 21:
+                            cameraTool.doPerspView();
                             break;
                         default:
                             break;
@@ -137,4 +154,30 @@ public class CameraToolView extends AbstractToolView {
 
     }
 
+    private class ActionItemConverter<T extends ActionItem>  extends StringConverter<T> {
+
+        @Override
+        public String toString(T object) {
+            return object.name;
+        }
+
+        @Override
+        public T fromString(String string) {
+            ActionItem item = new ActionItem();
+            item.name = string;
+            return (T)item;
+        }
+        
+    }
+    
+    private class ActionItem {
+        public String name;
+        public int value;
+        
+        public ActionItem() {}
+        public ActionItem(String name, int value) {
+            this.name = name;
+            this.value = value;
+        }
+    }
 }

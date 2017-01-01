@@ -5,11 +5,9 @@ ok.local旋转时要及时更新transformObj
 ok.undo,redo
 ok.scale需要同时三轴缩放
 ok.scale的中心点缩放样式要透明
-
-
 ok.添加一个JFX工具栏
 ok.建一个panel来同步canvas位置和大小
-.在左上角显示当前视角：user/front ortho/...
-.按r直接旋转
-.按g直接移动
+ok.在左上角显示当前视角：user/front ortho/...
+ok.按r直接旋转
+ok.按g直接移动
 

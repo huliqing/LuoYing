@@ -20,5 +20,20 @@ public class ResConstants {
     public final static String VIEW_USER = "view.user";
     public final static String VIEW_ORTHO = "view.ortho";
     public final static String VIEW_PERSP = "view.persp";
+    public final static String VIEW_FOCUS_TARGET = "view.focus.target";
+    public final static String VIEW_FOCUS_ORIGIN = "view.focus.origin";
+    
+    public final static String TOOL_MODE = "tool.mode";
+    public final static String TOOL_MODE_TIP = "tool.mode.tip";
+    public final static String TOOL_CAMERA = "tool.camera";
+    public final static String TOOL_CAMERA_TIP = "tool.camera.tip";
+    public final static String TOOL_GRID = "tool.grid";
+    public final static String TOOL_GRID_TIP = "tool.grid.tip";
+    public final static String TOOL_MOVE = "tool.move";
+    public final static String TOOL_MOVE_TIP = "tool.move.tip";
+    public final static String TOOL_ROTATION = "tool.rotation";
+    public final static String TOOL_ROTATION_TIP = "tool.rotation.tip";
+    public final static String TOOL_SCALE = "tool.scale";
+    public final static String TOOL_SCALE_TIP = "tool.scale.tip";
     
 }

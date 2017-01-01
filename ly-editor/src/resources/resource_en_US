@@ -1,10 +1,25 @@
 #use notepad++ -> 格式 -> 转为UTF-8编码格式 -> AngelCode 导出bmp font
 view.front=Front
 view.back=Back
-view.left=Left
 view.right=Right
+view.left=Left
 view.top=Top
 view.bottom=Bottom
 view.user=User
 view.ortho=Ortho
 view.persp=Persp
+view.focus.target=Focus Target
+view.focus.origin=Focus Origin
+
+tool.mode=Mode
+tool.mode.tip=Change mode(Tab)
+tool.camera=Camera
+tool.camera.tip=Camera mode
+tool.grid=Grid
+tool.grid.tip=Switch display grid
+tool.move=Move
+tool.move.tip=Toggle the move operation(G)
+tool.rotation=Rotation
+tool.rotation.tip=Toggle the rotation operation(R)
+tool.scale=Scale
+tool.scale.tip=Toggle the scale operation(S)

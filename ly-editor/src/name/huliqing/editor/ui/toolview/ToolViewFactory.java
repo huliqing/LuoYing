@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import name.huliqing.editor.constants.ResConstants;
+import name.huliqing.editor.manager.ConfigManager;
 import name.huliqing.editor.toolbar.Toolbar;
 import name.huliqing.editor.tools.CameraTool;
 import name.huliqing.editor.tools.GridTool;
@@ -30,12 +32,24 @@ public class ToolViewFactory {
             = new HashMap<>();
     
     static {
-        tvMapping.put(GridTool.class, new ResourceMapping(ToggleToolView.class, "网格", "/name/huliqing/editor/ui/icon/grid.png", "打开/关闭网格"));
-        tvMapping.put(MoveTool.class, new ResourceMapping(ToggleToolView.class, "移动", "/name/huliqing/editor/ui/icon/move.png", "打开移动功能(G)"));
-        tvMapping.put(RotationTool.class, new ResourceMapping(ToggleToolView.class, "旋转", "/name/huliqing/editor/ui/icon/rotation.png", "打开旋转功能(R)"));
-        tvMapping.put(ScaleTool.class, new ResourceMapping(ToggleToolView.class, "缩放", "/name/huliqing/editor/ui/icon/scale.png", "打开缩放功能(S)"));
-        tvMapping.put(ModeTool.class, new ResourceMapping(ModeToolView.class, "模式", "", "切换模式(Tab)"));
-        tvMapping.put(CameraTool.class, new ResourceMapping(CameraToolView.class, "相机视角", "", "切换相机视角"));
+        tvMapping.put(ModeTool.class, new ResourceMapping(ModeToolView.class
+                , ResConstants.TOOL_MODE, ResConstants.TOOL_MODE_TIP, null));
+        
+        tvMapping.put(CameraTool.class, new ResourceMapping(CameraToolView.class
+                , ResConstants.TOOL_CAMERA, ResConstants.TOOL_CAMERA_TIP, null));
+        
+        tvMapping.put(GridTool.class, new ResourceMapping(ToggleToolView.class
+                , ResConstants.TOOL_GRID, ResConstants.TOOL_GRID_TIP, "/name/huliqing/editor/ui/icon/grid.png"));
+        
+        tvMapping.put(MoveTool.class, new ResourceMapping(ToggleToolView.class
+                , ResConstants.TOOL_MOVE, ResConstants.TOOL_MOVE_TIP, "/name/huliqing/editor/ui/icon/move.png"));
+        
+        tvMapping.put(RotationTool.class, new ResourceMapping(ToggleToolView.class
+                , ResConstants.TOOL_ROTATION, ResConstants.TOOL_ROTATION_TIP, "/name/huliqing/editor/ui/icon/rotation.png"));
+        
+        tvMapping.put(ScaleTool.class, new ResourceMapping(ToggleToolView.class
+                , ResConstants.TOOL_SCALE, ResConstants.TOOL_SCALE_TIP, "/name/huliqing/editor/ui/icon/scale.png"));
+        
     }
     
     public final static ToolView createToolView(Tool tool, Toolbar toolbar) {
@@ -43,7 +57,7 @@ public class ToolViewFactory {
             ResourceMapping rm = tvMapping.get(tool.getClass());
             if (rm != null) {
                 ToolView tv = rm.clazz.newInstance();
-                tv.initialize(tool, toolbar, rm.displayName, rm.icon, rm.tooltip);
+                tv.initialize(tool, toolbar, rm.getName(), rm.getToolTip(), rm.getIcon());
                 return tv;
             } else {
                 LOG.log(Level.WARNING, "Mapping not found for toolName={0}, toolClass={1}, skipped."
@@ -56,16 +70,26 @@ public class ToolViewFactory {
     }
     
     private static class ResourceMapping {
-        public Class<? extends ToolView> clazz;
-        public String displayName;
-        public String icon;
-        public String tooltip;
+        private Class<? extends ToolView> clazz;
+        private String nameKey;
+        private String tipKey;
+        private String icon;
         
-        public ResourceMapping(Class<? extends ToolView>clazz, String displayName, String icon, String tooltip) {
+        public ResourceMapping(Class<? extends ToolView>clazz, String nameKey, String tipKey, String icon) {
             this.clazz = clazz;
-            this.displayName = displayName;
+            this.nameKey = nameKey;
+            this.tipKey = tipKey;
             this.icon = icon;
-            this.tooltip = tooltip;
+        }
+        
+        public String getName() {
+            return ConfigManager.getResManager().get(nameKey);
+        }
+        public String getToolTip() {
+            return ConfigManager.getResManager().get(tipKey);
+        }
+        public String getIcon() {
+            return icon;
         }
     }
     

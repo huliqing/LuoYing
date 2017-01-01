@@ -10,8 +10,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Tooltip;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import name.huliqing.editor.forms.Mode;
 import name.huliqing.editor.toolbar.Toolbar;
 import name.huliqing.editor.tools.ModeTool;
@@ -55,8 +53,8 @@ public class ModeToolView extends AbstractToolView implements ModeTool.ModeChang
     }
 
     @Override
-    public void initialize(Tool tool, Toolbar toolbar, String displayName, String icon, String tooltip) {
-        super.initialize(tool, toolbar, displayName, icon, tooltip);
+    public void initialize(Tool tool, Toolbar toolbar, String name, String tooltip, String icon) {
+        super.initialize(tool, toolbar, name, tooltip, icon);
         modeTool = (ModeTool) tool;
         modeTool.addListener(this);
         view.getItems().clear();

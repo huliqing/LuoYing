@@ -10,7 +10,6 @@ import com.jme3.scene.Node;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.editor.Editor;
-import name.huliqing.editor.select.EmptySelectObj;
 import name.huliqing.editor.select.SelectObj;
 import name.huliqing.editor.toolbar.EditToolbar;
 import name.huliqing.editor.undoredo.UndoRedo;
@@ -31,7 +30,7 @@ public abstract class EditForm extends AbstractForm {
     protected Mode mode = Mode.GLOBAL;
     
     // 当前选择的物体
-    protected SelectObj selectObj = new EmptySelectObj();
+    protected SelectObj selectObj;
     
     // 编辑场景的根节点
     protected final Node localRoot = new Node();

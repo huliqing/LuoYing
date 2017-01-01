@@ -35,4 +35,8 @@ public class ConfigManager {
     public final static ResManager getResManager() {
         return RES_MANAGER;
     }
+    
+    public final static String getRes(String resKey) {
+        return RES_MANAGER.get(resKey);
+    }
 }

@@ -50,7 +50,7 @@ public abstract class AbstractToolView implements ToolView {
     }
 
     @Override
-    public void initialize(Tool tool, Toolbar toolbar, String displayName, String icon, String tooltip) {
+    public void initialize(Tool tool, Toolbar toolbar, String name, String tooltip, String icon) {
         this.tool = tool;
         this.toolbar = toolbar;
     }

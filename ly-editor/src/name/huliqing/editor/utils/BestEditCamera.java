@@ -224,6 +224,26 @@ public class BestEditCamera implements ActionListener, AnalogListener {
             return false;
         }
     }
+    
+    public void doOrthoMode() {
+        if (!cam.isParallelProjection()) {
+            float aspect = (float) cam.getWidth() / cam.getHeight();
+            cam.setParallelProjection(true);
+            float h = cam.getFrustumTop();
+            float w;
+            float dist = cam.getLocation().distance(focus);
+            float fovY = FastMath.atan(h) / (FastMath.DEG_TO_RAD * .5f);
+            h = FastMath.tan(fovY * FastMath.DEG_TO_RAD * .5f) * dist;
+            w = h * aspect;
+            cam.setFrustum(-1000, 1000, -w, w, h, -h);
+        }
+    }
+    
+    public void doPerspMode() {
+        float aspect = (float) cam.getWidth() / cam.getHeight();
+        cam.setParallelProjection(false);
+        cam.setFrustumPerspective(45f, aspect, 1, 1000);
+    }
 
     public Vector3f getFocus() {
         return focus;

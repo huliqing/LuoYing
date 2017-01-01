@@ -236,6 +236,14 @@ public class CameraTool extends EditTool implements EditorListener {
         editorCam.doSwitchView(view);
     }
     
+    public void doOrthoView() {
+        editorCam.doOrthoMode();
+    }
+    
+    public void doPerspView() {
+        editorCam.doPerspMode();
+    }
+    
     private void doChase(Vector3f position) {
         Camera camera = editorCam.getCamera();
         Vector3f camEndLoc = new Vector3f().set(position).subtractLocal(camera.getDirection().mult(defFocusDistance));

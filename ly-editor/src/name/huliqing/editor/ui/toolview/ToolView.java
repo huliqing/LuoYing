@@ -39,9 +39,9 @@ public interface ToolView {
      * 初始化toolview
      * @param tool 工具
      * @param toolbar 工具栏
-     * @param displayName 工具显示名称
-     * @param icon 图标
+     * @param name 工具显示名称
      * @param tooltip 提示
+     * @param icon 图标
      */
-    void initialize(Tool tool, Toolbar toolbar, String displayName, String icon, String tooltip);
+    void initialize(Tool tool, Toolbar toolbar, String name, String tooltip, String icon);
 }

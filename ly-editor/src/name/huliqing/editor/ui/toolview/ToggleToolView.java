@@ -39,9 +39,9 @@ public class ToggleToolView extends AbstractToolView {
     }
 
     @Override
-    public void initialize(Tool tool, Toolbar toolbar, String displayName, String icon, String tooltip) {
-        super.initialize(tool, toolbar, displayName, icon, tooltip);
-        view.setText(displayName);
+    public void initialize(Tool tool, Toolbar toolbar, String name, String tooltip, String icon) {
+        super.initialize(tool, toolbar, name, tooltip, icon);
+        view.setText(name);
         view.selectedProperty().addListener((ObservableValue<? extends Boolean> observable
                     , Boolean oldValue, Boolean newValue) -> {
             setActivated(newValue);
@@ -50,6 +50,11 @@ public class ToggleToolView extends AbstractToolView {
             @Override
             protected double computeValue() {return 14;}
         };
+        
+        // tooltip
+        if (tooltip != null && !tooltip.isEmpty()) {
+            view.setTooltip(new Tooltip(tooltip));
+        }
         
         // icon
         if (icon != null && !icon.equals("")) {
@@ -60,10 +65,6 @@ public class ToggleToolView extends AbstractToolView {
             view.setGraphic(imageView);
         }
         
-        // tooltip
-        if (tooltip != null && !tooltip.isEmpty()) {
-            view.setTooltip(new Tooltip(tooltip));
-        }
     }
     
 }
