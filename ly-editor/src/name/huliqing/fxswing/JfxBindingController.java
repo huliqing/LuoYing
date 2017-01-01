@@ -23,7 +23,8 @@ import javax.swing.SwingUtilities;
  * 让JWindow始终覆盖在JFrame上
  * @author huliqing
  */
-public final class JfxBindingController implements WindowListener, WindowStateListener, WindowFocusListener, ComponentListener {
+public class JfxBindingController implements WindowListener, WindowStateListener, WindowFocusListener, ComponentListener {
+//    private static final Logger LOG = Logger.getLogger(JfxBindingController.class.getName());
 
     private JWindow win;
     private JFrame frame;
@@ -53,17 +54,17 @@ public final class JfxBindingController implements WindowListener, WindowStateLi
 
     @Override
     public void windowOpened(WindowEvent e) {
-//        System.out.println(e.getWindow().getName() + "=windowOpened");
+//        LOG.info(e.getWindow().getName() + "=windowOpened");
     }
 
     @Override
     public void windowClosing(WindowEvent e) {
-//        System.out.println(e.getWindow().getName() + "=windowClosing");
+//        LOG.info(e.getWindow().getName() + "=windowClosing");
     }
 
     @Override
     public void windowClosed(WindowEvent e) {
-//        System.out.println(e.getWindow().getName() + "=windowClosed");
+//        LOG.info(e.getWindow().getName() + "=windowClosed");
     }
 
     /**
@@ -75,12 +76,12 @@ public final class JfxBindingController implements WindowListener, WindowStateLi
     @Override
     public void windowIconified(WindowEvent e) {
         win.setBackground(java.awt.Color.WHITE);
-//        System.out.println(e.getWindow().getName() + "=windowIconified");
+//        LOG.info(e.getWindow().getName() + "=windowIconified");
     }
 
     @Override
     public void windowDeiconified(WindowEvent e) {
-//        System.out.println(e.getWindow().getName() + "=windowDeiconified");
+//        LOG.info(e.getWindow().getName() + "=windowDeiconified");
     }
 
     /**
@@ -95,27 +96,27 @@ public final class JfxBindingController implements WindowListener, WindowStateLi
         win.setBackground(TRANSPARENT);
         updateLocation(win, e.getWindow());
         updateSize(win, e.getWindow());
-//        System.out.println(e.getWindow().getName() + "=windowActivated");
+//        LOG.info(e.getWindow().getName() + "=windowActivated");
     }
 
     @Override
     public void windowDeactivated(WindowEvent e) {
-//        System.out.println(e.getWindow().getName() + "=windowDeactivated");
+//        LOG.info(e.getWindow().getName() + "=windowDeactivated");
     }
 
     @Override
     public void windowStateChanged(WindowEvent e) {
-//        System.out.println(e.getWindow().getName() + "=windowStateChanged:" + e.getOldState() + "->" + e.getNewState());
+//        LOG.info(e.getWindow().getName() + "=windowStateChanged:" + e.getOldState() + "->" + e.getNewState());
     }
 
     @Override
     public void windowGainedFocus(WindowEvent e) {
-//        System.out.println(e.getWindow().getName() + "=windowGainedFocus");
+//        LOG.info(e.getWindow().getName() + "=windowGainedFocus");
     }
 
     @Override
     public void windowLostFocus(WindowEvent e) {
-//        System.out.println(e.getWindow().getName() + "=windowLostFocus");
+//        LOG.info(e.getWindow().getName() + "=windowLostFocus");
     }
 
     @Override
@@ -125,31 +126,31 @@ public final class JfxBindingController implements WindowListener, WindowStateLi
         // 这里特别让fxWin更新一下，因为一些情况下当主窗口调整大小的时候fxWin中JFXPanel的JFX组件的宽度和高度的更新稍
         // 微有一些延迟。
         SwingUtilities.updateComponentTreeUI(win);
-//        System.out.println(e.getComponent().getName() + "=componentResized");
+//        LOG.info(e.getComponent().getName() + "=componentResized");
     }
 
     @Override
     public void componentMoved(ComponentEvent e) {
         updateLocation(win, frame);
-//        System.out.println(e.getComponent().getName() + "=componentMoved");
+//        LOG.info(e.getComponent().getName() + "=componentMoved");
     }
 
     @Override
     public void componentShown(ComponentEvent e) {
-//        System.out.println(e.getComponent().getName() + "=componentShown");
+//        LOG.info(e.getComponent().getName() + "=componentShown");
     }
 
     @Override
     public void componentHidden(ComponentEvent e) {
-//        System.out.println(e.getComponent().getName() + "=componentHidden");
+//        LOG.info(e.getComponent().getName() + "=componentHidden");
     }
 
-    private void updateSize(JWindow win, Container parent) {
+    protected void updateSize(JWindow win, Container parent) {
         Insets insets =parent.getInsets();
         win.setSize(parent.getSize().width - insets.left - insets.right, parent.getSize().height - insets.top - insets.bottom);
     }
     
-    private void updateLocation(JWindow win, Container parent) {
+    protected void updateLocation(JWindow win, Container parent) {
         Insets insets =parent.getInsets();
         win.setLocation(parent.getLocation().x + insets.left, parent.getLocation().y + insets.top);
     }

@@ -57,8 +57,7 @@ public class EditToolbar extends AbstractToolbar<EditForm> implements EventListe
         rotationTool = new RotationTool("rotationTool");
         scaleTool = new ScaleTool("scaleTool");
         
-        undoRedoTool.bindUndoEvent().bindKey(KeyInput.KEY_LCONTROL, true).bindKey(KeyInput.KEY_Z, false);
-        undoRedoTool.bindRedoEvent().bindKey(KeyInput.KEY_LSHIFT, true).bindKey(KeyInput.KEY_Z, false);
+        undoRedoTool.bindUndoRedoEvent().bindKey(KeyInput.KEY_Z, true);
         
         cameraTool2 = new CameraTool("CameraTool");
         cameraTool2.bindDragEvent().bindButton(MouseInput.BUTTON_MIDDLE, true).bindKey(KeyInput.KEY_LSHIFT, true);
@@ -67,11 +66,8 @@ public class EditToolbar extends AbstractToolbar<EditForm> implements EventListe
         cameraTool2.bindZoomOutEvent().bindAxis(MouseInput.AXIS_WHEEL, true, false);
         cameraTool2.bindRechaseEvent().bindKey(KeyInput.KEY_DECIMAL, true);
         cameraTool2.bindResetEvent().bindKey(KeyInput.KEY_LSHIFT, true).bindKey(KeyInput.KEY_C, true);
-//        cameraTool2.bindViewBackEvent().bindKey(KeyInput.KEY_LSHIFT, true).bindKey(KeyInput.KEY_C, true);
-//        cameraTool2.bindViewBottomEvent().bindKey(KeyInput.KEY_LSHIFT, true).bindKey(KeyInput.KEY_C, true);
         cameraTool2.bindViewFrontEvent().bindKey(KeyInput.KEY_NUMPAD1, true);
-//        cameraTool2.bindViewLeftEvent().bindKey(KeyInput.KEY_LSHIFT, true).bindKey(KeyInput.KEY_C, true);
-//        cameraTool2.bindViewRightEvent().bindKey(KeyInput.KEY_LSHIFT, true).bindKey(KeyInput.KEY_C, true);
+        cameraTool2.bindViewRightEvent().bindKey(KeyInput.KEY_NUMPAD3, true);
         cameraTool2.bindViewTopEvent().bindKey(KeyInput.KEY_NUMPAD7, true);
         cameraTool2.bindViewOrthoPerspEvent().bindKey(KeyInput.KEY_NUMPAD5, true);
 

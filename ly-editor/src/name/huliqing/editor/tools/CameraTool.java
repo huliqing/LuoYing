@@ -5,6 +5,7 @@
  */
 package name.huliqing.editor.tools;
 
+import com.jme3.input.KeyInput;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
@@ -36,14 +37,16 @@ public class CameraTool extends EditTool {
     private final String EVENT_RESET = "cameraResetEvent";
     
     private final String EVENT_VIEW_FRONT = "camViewFrontEvent";
-    private final String EVENT_VIEW_BACK = "camViewBackEvent";
-    private final String EVENT_VIEW_LEFT= "camViewLeftEvent";
     private final String EVENT_VIEW_RIGHT = "camViewRightEvent";
     private final String EVENT_VIEW_TOP = "camViewTopEvent";
-    private final String EVENT_VIEW_BOTTOM = "camViewBottomEvent";
     
     private final String EVENT_ORTHO_PERSP = "camViewOrthoPersp";
-        
+    
+    // 判断Ctr是否按下的事件
+    private final JmeEvent LCtrEvent;
+    private final JmeEvent RCtrEvent;
+    private boolean ctrPressed;
+    
     // 镜头
     private BestEditCamera editorCam;
     
@@ -52,11 +55,13 @@ public class CameraTool extends EditTool {
     // 最近一次记录光标的位置
     private final Vector2f lastCursorPos = new Vector2f();
     private final float panMoveSpeed = 0.001f;
-    
+    // 默认相机定位时的最近距离
     private final float defFocusDistance = 2f;
     
     public CameraTool(String name) {
         super(name);
+        LCtrEvent = bindEvent("LCtrPressedEvent").bindKey(KeyInput.KEY_LCONTROL, true);
+        RCtrEvent = bindEvent("RCtrPressedEvent").bindKey(KeyInput.KEY_RCONTROL, true);
     }
 
     @Override
@@ -124,14 +129,6 @@ public class CameraTool extends EditTool {
         return bindEvent(EVENT_VIEW_FRONT);
     }
     
-    public JmeEvent bindViewBackEvent() {
-        return bindEvent(EVENT_VIEW_BACK);
-    }
-    
-    public JmeEvent bindViewLeftEvent() {
-        return bindEvent(EVENT_VIEW_LEFT);
-    }
-    
     public JmeEvent bindViewRightEvent() {
         return bindEvent(EVENT_VIEW_RIGHT);
     }
@@ -140,15 +137,16 @@ public class CameraTool extends EditTool {
         return bindEvent(EVENT_VIEW_TOP);
     }
     
-    public JmeEvent bindViewBottomEvent() {
-        return bindEvent(EVENT_VIEW_BOTTOM);
-    }
     public JmeEvent bindViewOrthoPerspEvent() {
         return bindEvent(EVENT_ORTHO_PERSP);
     }
     
     @Override
     protected void onToolEvent(Event e) {
+        if (e == LCtrEvent || e == RCtrEvent) {
+            ctrPressed = e.isMatch();
+        }
+        
         if (e.getName().equals(EVENT_DRAG)) {
             dragEnabled = e.isMatch();
             if (dragEnabled) {
@@ -170,23 +168,14 @@ public class CameraTool extends EditTool {
         // 相机视角
         else if (e.isMatch()) {
             switch (e.getName()) {
-                case EVENT_VIEW_BACK:
-                        doSwitchView(BestEditCamera.View.back);
-                        break;
-                case EVENT_VIEW_BOTTOM:
-                        doSwitchView(BestEditCamera.View.bottom);
-                        break;
                 case EVENT_VIEW_FRONT:
-                        doSwitchView(BestEditCamera.View.front);
-                        break;
-                case EVENT_VIEW_LEFT:
-                        doSwitchView(BestEditCamera.View.left);
+                        doSwitchView(ctrPressed ? BestEditCamera.View.back : BestEditCamera.View.front);
                         break;
                 case EVENT_VIEW_RIGHT:
-                        doSwitchView(BestEditCamera.View.right);
+                        doSwitchView(ctrPressed ? BestEditCamera.View.left : BestEditCamera.View.right);
                         break;
                 case EVENT_VIEW_TOP:
-                        doSwitchView(BestEditCamera.View.top);
+                        doSwitchView(ctrPressed ? BestEditCamera.View.bottom : BestEditCamera.View.top);
                         break;
                 // 正交、透视切换
                 case EVENT_ORTHO_PERSP:

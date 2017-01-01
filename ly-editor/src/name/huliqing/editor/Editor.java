@@ -7,6 +7,7 @@ package name.huliqing.editor;
 
 import name.huliqing.editor.forms.Form;
 import com.jme3.app.SimpleApplication;
+import com.jme3.app.StatsAppState;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.editor.events.JmeEvent;
@@ -25,6 +26,13 @@ public class Editor extends SimpleApplication{
     public void simpleInitApp() {
         JmeEvent.registerInputManager(inputManager);
         setForm(new SimpleEditForm());
+        StatsAppState stats = this.stateManager.getState(StatsAppState.class);
+        if (stats != null) {
+            stateManager.detach(stats);
+        }
+        stateManager.attach(new EditorStatsAppState());
+        
+  
     }
     
     @Override

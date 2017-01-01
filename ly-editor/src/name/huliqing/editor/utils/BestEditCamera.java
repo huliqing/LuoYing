@@ -10,12 +10,10 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.util.TempVars;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class BestEditCamera implements ActionListener, AnalogListener {
 
-    private static final Logger LOG = Logger.getLogger(BestEditCamera.class.getName());
+//    private static final Logger LOG = Logger.getLogger(BestEditCamera.class.getName());
     
     public enum View {
         front, back, left, right, top, bottom, user;
@@ -172,7 +170,7 @@ public class BestEditCamera implements ActionListener, AnalogListener {
             float w = h * aspect;
             cam.setFrustum(-1000, 1000, -w, w, h, -h);
         }
-        LOG.log(Level.INFO, "doZoomCamera, Camera location={0}", cam.getLocation());
+//        LOG.log(Level.INFO, "doZoomCamera, Camera location={0}", cam.getLocation());
     }
 
     public void doSwitchView(View view) {

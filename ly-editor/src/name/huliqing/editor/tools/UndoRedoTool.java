@@ -5,6 +5,7 @@
  */
 package name.huliqing.editor.tools;
 
+import com.jme3.input.KeyInput;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.JmeEvent;
 
@@ -14,30 +15,48 @@ import name.huliqing.editor.events.JmeEvent;
  */
 public class UndoRedoTool extends EditTool {
     
-    private final String EVENT_UNDO = "undoEvent";
-    private final String EVENT_REDO = "redoEvent";
+    private final String EVENT_UNDO_REDO = "undoRedoEvent";
+    
+    private final JmeEvent LCtrEvent;
+    private final JmeEvent RCtrEvent;
+    private boolean ctrPressed;
+    
+    private final JmeEvent LShiftEvent;
+    private final JmeEvent RShiftEvent;
+    private boolean shiftPressed;
 
     public UndoRedoTool(String name) {
         super(name);
+        LCtrEvent = bindEvent("LCtrEvent").bindKey(KeyInput.KEY_LCONTROL, true);
+        RCtrEvent = bindEvent("RCtrEvent").bindKey(KeyInput.KEY_RCONTROL, true);
+        LShiftEvent = bindEvent("LShiftEvent").bindKey(KeyInput.KEY_LSHIFT, true);
+        RShiftEvent = bindEvent("RShiftEvent").bindKey(KeyInput.KEY_RSHIFT, true);
     }
     
-    public JmeEvent bindUndoEvent() {
-        return bindEvent(EVENT_UNDO);
+    /**
+     * 绑定一个UndoRedo按键如(z).
+     * 配合ctr和shift进行undo\redo
+     * @return 
+     */
+    public JmeEvent bindUndoRedoEvent() {
+        return bindEvent(EVENT_UNDO_REDO);
     }
     
-    public JmeEvent bindRedoEvent() {
-        return bindEvent(EVENT_REDO);
-    }
-
     @Override
     protected void onToolEvent(Event e) {
-        if (!e.isMatch()) {
-            return;
+        if (e == LCtrEvent || e == RCtrEvent) {
+            ctrPressed = e.isMatch();
+        } else if (e == LShiftEvent || e == RShiftEvent) {
+            shiftPressed = e.isMatch();
         }
-        if (EVENT_UNDO.equals(e.getName())) {
-            form.getUndoRedoManager().undo();
-        } else if (EVENT_REDO.equals(e.getName())){
-            form.getUndoRedoManager().redo();
+        
+        // 优先redo,后再undo,因为按键存在冲突
+        if (e.isMatch() && EVENT_UNDO_REDO.equals(e.getName())) {
+            if (ctrPressed && shiftPressed) {
+                form.getUndoRedoManager().redo();
+            } else if (ctrPressed) {
+                form.getUndoRedoManager().undo();
+            }
         }
     }
     

@@ -39,17 +39,23 @@ public class Starter {
         Jfx.runOnJfx(() -> {
             Jfx.getJfxRoot().getChildren().add(createScene());
         });
+        
     }
     
     private Node createScene() {
         MenuView menuView = new MenuView();
         VBox propertyPanel = new VBox();
+        
         VBox editPane = new VBox();
         editPane.setBackground(Background.EMPTY);
+
         ToolBarView toolbarView = new ToolBarView();
         
         SimpleLayout layout = new SimpleLayout(Jfx.getJfxRoot());
         layout.setZones(menuView,propertyPanel,editPane,toolbarView);
+        
+        Jfx.getBindingController().bindCanvasToJfxRegion(Jfx.getJmeCanvas(), editPane);
+        
         return layout;
     }
  

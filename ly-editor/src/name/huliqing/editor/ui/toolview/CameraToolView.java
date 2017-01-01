@@ -16,6 +16,7 @@ import javafx.scene.control.Tooltip;
 import name.huliqing.editor.toolbar.Toolbar;
 import name.huliqing.editor.tools.CameraTool;
 import name.huliqing.editor.tools.Tool;
+import name.huliqing.editor.utils.BestEditCamera;
 import name.huliqing.fxswing.Jfx;
 
 /**
@@ -52,6 +53,12 @@ public class CameraToolView extends AbstractToolView {
         view.setName(displayName);
         view.getItems().add("当前(.)");
         view.getItems().add("原点(Shift+C)");
+        view.getItems().add("Front");
+        view.getItems().add("Back");
+        view.getItems().add("Left");
+        view.getItems().add("Right");
+        view.getItems().add("Top");
+        view.getItems().add("Bottom");
         view.valueProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue observable, String oldValue, String newValue) {
@@ -62,6 +69,24 @@ public class CameraToolView extends AbstractToolView {
                             break;
                         case "原点(Shift+C)":
                             cameraTool.doChaseOrigin();
+                            break;
+                        case "Front":
+                            cameraTool.doSwitchView(BestEditCamera.View.front);
+                            break;
+                        case "Back":
+                            cameraTool.doSwitchView(BestEditCamera.View.back);
+                            break;
+                        case "Left":
+                            cameraTool.doSwitchView(BestEditCamera.View.left);
+                            break;
+                        case "Right":
+                            cameraTool.doSwitchView(BestEditCamera.View.right);
+                            break;
+                        case "Top":
+                            cameraTool.doSwitchView(BestEditCamera.View.top);
+                            break;
+                        case "Bottom":
+                            cameraTool.doSwitchView(BestEditCamera.View.bottom);
                             break;
                         default:
                             break;
