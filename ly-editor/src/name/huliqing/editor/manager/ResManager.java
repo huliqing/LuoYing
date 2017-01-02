@@ -31,7 +31,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * 资源文件读取类
+ * 资源文件管理
  * @author huliqing
  */
 public class ResManager {
@@ -154,6 +154,9 @@ public class ResManager {
     }
     
     private String getString(Map<String, String> resource, String key, Object[] params) {
+        if (resource == null) {
+            return "<" + key + ">";
+        }
         String value = resource.get(key);
         if (value == null) {
             value = "<" + key + ">";

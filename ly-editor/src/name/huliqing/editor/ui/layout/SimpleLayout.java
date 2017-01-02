@@ -74,7 +74,6 @@ public class SimpleLayout extends VBox {
         rightZone.getChildren().clear();
         
         contentZone.getItems().addAll(leftZone, rightZone);
-        
         leftZone.setContent(property);
         rightZone.getChildren().addAll(edit, toolbar);
         
@@ -84,14 +83,13 @@ public class SimpleLayout extends VBox {
         
         DoubleBinding contentHeight = root.heightProperty().subtract(menuBar.heightProperty());
         contentZone.minHeightProperty().bind(contentHeight);
-        contentZone.maxHeightProperty().bind(contentHeight);
         
         leftZone.minHeightProperty().bind(contentZone.heightProperty());
-        leftZone.maxHeightProperty().bind(contentZone.heightProperty());
         
         rightZone.minHeightProperty().bind(contentZone.heightProperty());
-        rightZone.maxHeightProperty().bind(contentZone.heightProperty());
         
+        property.minWidthProperty().bind(leftZone.widthProperty());
+        property.minHeightProperty().bind(leftZone.heightProperty());
         edit.minHeightProperty().bind(rightZone.heightProperty().subtract(toolbar.heightProperty()));
         
         // 必须延迟一帧进行设置dividerPosition,否则无效

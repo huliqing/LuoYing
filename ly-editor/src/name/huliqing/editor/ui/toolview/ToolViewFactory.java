@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.editor.constants.ResConstants;
-import name.huliqing.editor.manager.ConfigManager;
+import name.huliqing.editor.manager.Manager;
 import name.huliqing.editor.toolbar.Toolbar;
 import name.huliqing.editor.tools.CameraTool;
 import name.huliqing.editor.tools.GridTool;
@@ -83,10 +83,10 @@ public class ToolViewFactory {
         }
         
         public String getName() {
-            return ConfigManager.getResManager().get(nameKey);
+            return Manager.getResManager().get(nameKey);
         }
         public String getToolTip() {
-            return ConfigManager.getResManager().get(tipKey);
+            return Manager.getResManager().get(tipKey);
         }
         public String getIcon() {
             return icon;

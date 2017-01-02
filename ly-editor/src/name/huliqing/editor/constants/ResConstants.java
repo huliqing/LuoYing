@@ -11,6 +11,18 @@ package name.huliqing.editor.constants;
  */
 public class ResConstants {
     
+    /** menu.file */
+    public final static String MENU_FILE = "menu.file";
+    /** menu.file.assets */
+    public final static String MENU_FILE_ASSETS = "menu.file.assets";
+    /** menu.file.assetsRecent */
+    public final static String MENU_FILE_ASSETS_RECENT = "menu.file.assetsRecent";
+    public final static String MENU_FILE_ASSETS_RECENT_CLEAN = "menu.file.assetsRecent.clean";
+    /** menu.file.quick */
+    public final static String MENU_FILE_QUICK = "menu.file.quick";
+    /** menu.help */
+    public final static String MENU_HELP = "menu.help";
+    
     public final static String VIEW_FRONT = "view.front";
     public final static String VIEW_BACK = "view.back";
     public final static String VIEW_LEFT = "view.left";

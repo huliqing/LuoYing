@@ -1,4 +1,10 @@
 #use notepad++ -> 格式 -> 转为UTF-8编码格式 -> AngelCode 导出bmp font
+
+menu.file=File
+menu.file.quick=Quick
+menu.file.assets=Select assets
+menu.help=Help
+
 view.front=Front
 view.back=Back
 view.right=Right

@@ -15,7 +15,7 @@ import javafx.scene.control.Skin;
 import javafx.scene.control.Tooltip;
 import javafx.util.StringConverter;
 import name.huliqing.editor.constants.ResConstants;
-import name.huliqing.editor.manager.ConfigManager;
+import name.huliqing.editor.manager.Manager;
 import name.huliqing.editor.toolbar.Toolbar;
 import name.huliqing.editor.tools.CameraTool;
 import name.huliqing.editor.tools.Tool;
@@ -56,18 +56,18 @@ public class CameraToolView extends AbstractToolView {
         }
         
         view.setConverter(new ActionItemConverter());
-        view.getItems().add(new ActionItem(ConfigManager.getRes(ResConstants.VIEW_FOCUS_ORIGIN), 0));
-        view.getItems().add(new ActionItem(ConfigManager.getRes(ResConstants.VIEW_FOCUS_TARGET), 1));
+        view.getItems().add(new ActionItem(Manager.getRes(ResConstants.VIEW_FOCUS_ORIGIN), 0));
+        view.getItems().add(new ActionItem(Manager.getRes(ResConstants.VIEW_FOCUS_TARGET), 1));
         
-        view.getItems().add(new ActionItem(ConfigManager.getRes(ResConstants.VIEW_BACK), 11));
-        view.getItems().add(new ActionItem(ConfigManager.getRes(ResConstants.VIEW_BOTTOM), 12));
-        view.getItems().add(new ActionItem(ConfigManager.getRes(ResConstants.VIEW_FRONT), 13));
-        view.getItems().add(new ActionItem(ConfigManager.getRes(ResConstants.VIEW_LEFT), 14));
-        view.getItems().add(new ActionItem(ConfigManager.getRes(ResConstants.VIEW_RIGHT), 15));
-        view.getItems().add(new ActionItem(ConfigManager.getRes(ResConstants.VIEW_TOP), 16));
+        view.getItems().add(new ActionItem(Manager.getRes(ResConstants.VIEW_BACK), 11));
+        view.getItems().add(new ActionItem(Manager.getRes(ResConstants.VIEW_BOTTOM), 12));
+        view.getItems().add(new ActionItem(Manager.getRes(ResConstants.VIEW_FRONT), 13));
+        view.getItems().add(new ActionItem(Manager.getRes(ResConstants.VIEW_LEFT), 14));
+        view.getItems().add(new ActionItem(Manager.getRes(ResConstants.VIEW_RIGHT), 15));
+        view.getItems().add(new ActionItem(Manager.getRes(ResConstants.VIEW_TOP), 16));
         
-        view.getItems().add(new ActionItem(ConfigManager.getRes(ResConstants.VIEW_ORTHO), 20));
-        view.getItems().add(new ActionItem(ConfigManager.getRes(ResConstants.VIEW_PERSP), 21));
+        view.getItems().add(new ActionItem(Manager.getRes(ResConstants.VIEW_ORTHO), 20));
+        view.getItems().add(new ActionItem(Manager.getRes(ResConstants.VIEW_PERSP), 21));
 
         view.valueProperty().addListener(new ChangeListener<ActionItem>() {
             

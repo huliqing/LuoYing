@@ -5,6 +5,7 @@
  */
 package name.huliqing.editor;
 
+import name.huliqing.editor.manager.Manager;
 import name.huliqing.editor.forms.Form;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.StatsAppState;
@@ -12,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.editor.events.JmeEvent;
 import name.huliqing.editor.forms.SimpleEditForm;
-import name.huliqing.editor.manager.ConfigManager;
 
 /**
  *
@@ -32,9 +32,10 @@ public class Editor extends SimpleApplication{
         stateManager.attach(new EditorStatsAppState());
         
         // 初始化
-        ConfigManager.initialize(this);
+        Manager.initialize(this);
         // 注册InputManager
         JmeEvent.registerInputManager(inputManager);
+        
         setForm(new SimpleEditForm());
     }
     
@@ -80,4 +81,12 @@ public class Editor extends SimpleApplication{
     public boolean removeListener(EditorListener listener) {
         return listeners != null && listeners.remove(listener);
     }
+
+    @Override
+    public void stop() {
+        Manager.saveOnQuick();
+        super.stop(); 
+    }
+    
+    
 }

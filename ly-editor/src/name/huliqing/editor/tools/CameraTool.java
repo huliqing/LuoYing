@@ -23,7 +23,7 @@ import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.JmeEvent;
 import name.huliqing.editor.forms.Form;
 import name.huliqing.editor.forms.Mode;
-import name.huliqing.editor.manager.ConfigManager;
+import name.huliqing.editor.manager.Manager;
 import name.huliqing.editor.manager.ResManager;
 import name.huliqing.editor.utils.BestEditCamera;
 import name.huliqing.editor.utils.BestEditCamera.View;
@@ -70,7 +70,7 @@ public class CameraTool extends EditTool implements EditorListener {
     private final float defFocusDistance = 2f;
     
     // 视角及提示
-    private final BitmapText viewText = new BitmapText(ConfigManager.getFont());
+    private final BitmapText viewText = new BitmapText(Manager.getFont());
     private View view;
     private boolean ortho;
     
@@ -78,7 +78,7 @@ public class CameraTool extends EditTool implements EditorListener {
         super(name);
         LCtrEvent = bindEvent("LCtrPressedEvent").bindKey(KeyInput.KEY_LCONTROL, true);
         RCtrEvent = bindEvent("RCtrPressedEvent").bindKey(KeyInput.KEY_RCONTROL, true);
-        viewText.setSize(ConfigManager.FONT_SIZE);
+        viewText.setSize(Manager.FONT_SIZE);
         viewText.setColor(new ColorRGBA(0.9f, 0.9f, 0.9f, 1));
         viewText.setAlignment(BitmapFont.Align.Left);
         viewText.setVerticalAlignment(BitmapFont.VAlign.Top);
@@ -314,7 +314,7 @@ public class CameraTool extends EditTool implements EditorListener {
                 break;
         }
         String orthoKey = editorCam.getCamera().isParallelProjection() ? ResConstants.VIEW_ORTHO : ResConstants.VIEW_PERSP;
-        ResManager resManager = ConfigManager.getResManager();
+        ResManager resManager = Manager.getResManager();
         String viewTextStr = resManager.get(textKey) + " " + resManager.get(orthoKey);
         viewText.setText(viewTextStr);
         float y = editorCam.getCamera().getHeight() - 10;

@@ -3,22 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.ui;
+package name.huliqing.editor.formview;
 
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Region;
+import name.huliqing.editor.forms.Form;
 
 /**
  *
  * @author huliqing
  */
-public class PropertyView extends GridPane {
+public class SimpleFormView {
     
+    // 3d edit form
+    private Form form;
     
-    public PropertyView() {
-            
-//        this.a
-        
-//            getChildren().add(table);
-    }
+    // jfx view
+    private Region view;
+    
     
 }
