@@ -10,19 +10,24 @@ import com.jme3.app.LegacyApplication;
 import com.jme3.system.AppSettings;
 import com.jme3.system.JmeCanvasContext;
 import java.awt.Canvas;
-import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
+import javafx.geometry.Bounds;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
 import javax.swing.JFrame;
 import javax.swing.JWindow;
 import javax.swing.SwingUtilities;
@@ -49,10 +54,13 @@ public class Jfx {
      */
     private static Application jmeApp;
     
+    private static JFXPanel jfxPanel;
+    
     /**
      * JFX根节点，包含于JFXPanel下面。
      */
     private static Pane jfxRoot;
+    
     
     /**
      * 主编辑3d Canvas界面，位于mainFrame中
@@ -206,7 +214,7 @@ public class Jfx {
         jWindow.setLocationRelativeTo(null);
         jWindow.setVisible(true);
         
-        final JFXPanel jfxPanel = new JFXPanel();
+        jfxPanel = new JFXPanel();
         jWindow.getContentPane().add(jfxPanel);
 
         Platform.runLater(() -> {
@@ -283,5 +291,23 @@ public class Jfx {
      */
     public static <V> Future<V> runOnJme(Callable<V> callable) {
         return jmeApp.enqueue(callable);
+    }
+    
+    /**
+     * 强制刷新UI
+     */
+    public static void forceUpdateJfxUI() {
+        // 注：这里使用一个特殊的方式来刷新一下JFX UI, 因为在JFX嵌入Swing时，
+        // 一些情况下，如在程序中动态添加JFX UI时发现无法实时刷新界面。即使调用requestLayout都没有用。
+        // 只有在手动调整一下界面大小的时候才会刷新，这可能是一个BUG。
+        // 这里使用一种比较特殊的方式处理：稍微改变一下swing组件的高度大小，然后再改回来。
+        int width = jfxWindow.getWidth();
+        int height = jfxWindow.getHeight();
+        Jfx.runOnSwing(() -> {
+            jfxWindow.setSize(width, height + 1); 
+            Jfx.runOnSwing(() -> {
+                jfxWindow.setSize(width, height);
+            });
+        });
     }
 }

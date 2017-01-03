@@ -14,7 +14,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Quad;
-import name.huliqing.editor.forms.Mode;
+import name.huliqing.editor.editforms.Mode;
 
 /**
  *

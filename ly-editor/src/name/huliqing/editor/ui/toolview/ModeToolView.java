@@ -10,7 +10,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Tooltip;
-import name.huliqing.editor.forms.Mode;
+import name.huliqing.editor.editforms.Mode;
 import name.huliqing.editor.toolbar.Toolbar;
 import name.huliqing.editor.tools.ModeTool;
 import name.huliqing.editor.tools.Tool;

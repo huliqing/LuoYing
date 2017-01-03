@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.forms;
+package name.huliqing.editor.editforms;
 
 import name.huliqing.editor.select.SelectObj;
 
@@ -11,7 +11,7 @@ import name.huliqing.editor.select.SelectObj;
  *
  * @author huliqing
  */
-public interface EditFormListener {
+public interface SimpleEditFormListener {
     
     /**
      * 当编辑模式变化时该方法被调用

@@ -3,15 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.forms;
+package name.huliqing.editor.editforms;
 
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Node;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.editor.Editor;
+import name.huliqing.editor.formview.FormView;
 import name.huliqing.editor.select.SelectObj;
-import name.huliqing.editor.toolbar.EditToolbar;
 import name.huliqing.editor.undoredo.UndoRedo;
 import name.huliqing.editor.undoredo.UndoRedoManager;
 
@@ -19,12 +19,12 @@ import name.huliqing.editor.undoredo.UndoRedoManager;
  * 3D模型编辑器窗口
  * @author huliqing
  */
-public abstract class EditForm extends AbstractForm {
+public class SimpleEditForm extends AbstractForm {
     
     protected final UndoRedoManager undoRedoManager = new UndoRedoManager();
     
     // 侦听器
-    protected final List<EditFormListener> editFormListeners = new ArrayList<EditFormListener>();
+    protected final List<SimpleEditFormListener> editFormListeners = new ArrayList<SimpleEditFormListener>();
     
     // 变换模式
     protected Mode mode = Mode.GLOBAL;
@@ -33,24 +33,17 @@ public abstract class EditForm extends AbstractForm {
     protected SelectObj selectObj;
     
     // 编辑场景的根节点
-    protected final Node localRoot = new Node();
-
+    protected final Node editRoot = new Node();
+    
     @Override
-    public void initialize(Editor editor) {
-        super.initialize(editor);
-        editor.getFlyByCamera().setEnabled(false);
-        editor.getInputManager().setCursorVisible(true);
-        editor.getViewPort().setBackgroundColor(ColorRGBA.DarkGray);
-        editor.getRootNode().attachChild(localRoot);
-        
-        // 编辑用的工具栏
-        setToolbar(new EditToolbar());
-        
+    public void initialize(FormView formView) {
+        super.initialize(formView);
+        formView.getEditor().getRootNode().attachChild(editRoot);
     }
 
     @Override
     public void cleanup() {
-        localRoot.detachAllChildren();
+        editRoot.detachAllChildren();
         super.cleanup();
     }
     
@@ -87,16 +80,16 @@ public abstract class EditForm extends AbstractForm {
      * @return 
      */
     public Node getEditRoot() {
-        return localRoot;
+        return editRoot;
     }
     
-    public void addEditFormListener(EditFormListener listener) {
+    public void addEditFormListener(SimpleEditFormListener listener) {
         if (!editFormListeners.contains(listener)) {
             editFormListeners.add(listener);
         }
     }
     
-    public boolean removeEditFormListener(EditFormListener listener) {
+    public boolean removeEditFormListener(SimpleEditFormListener listener) {
         return editFormListeners.remove(listener);
     }
 

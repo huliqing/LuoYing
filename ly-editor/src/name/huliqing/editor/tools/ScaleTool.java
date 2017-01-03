@@ -14,19 +14,19 @@ import com.jme3.util.TempVars;
 import name.huliqing.editor.action.Picker;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.JmeEvent;
-import name.huliqing.editor.forms.EditFormListener;
-import name.huliqing.editor.forms.Mode;
+import name.huliqing.editor.editforms.Mode;
 import name.huliqing.editor.select.SelectObj;
 import name.huliqing.editor.tiles.AxisNode;
 import name.huliqing.editor.tiles.ScaleControlObj;
 import name.huliqing.editor.undoredo.UndoRedo;
 import name.huliqing.luoying.manager.PickManager;
+import name.huliqing.editor.editforms.SimpleEditFormListener;
 
 /**
  * 缩放编辑工具
  * @author huliqing
  */
-public class ScaleTool extends EditTool implements EditFormListener{
+public class ScaleTool extends EditTool implements SimpleEditFormListener{
 
 //    private static final Logger LOG = Logger.getLogger(ScaleTool.class.getName());
     
@@ -258,7 +258,7 @@ public class ScaleTool extends EditTool implements EditFormListener{
             
             TempVars tv = TempVars.get();
             Vector3f constraintAxis = picker.getStartOffset(tv.vect1).normalizeLocal();
-            float diff = picker.getLocalTranslation(constraintAxis).dot(constraintAxis) + 1f;
+            float diff = picker.getLocalTranslation(constraintAxis).dot(constraintAxis) * 0.5f + 1f; // * 0.5减少一些缩放强度
             Vector3f scale = startScale.mult(diff, tv.vect2);
             selectObj.getSelectedSpatial().setLocalScale(scale);
             afterScale.set(scale);
@@ -273,7 +273,7 @@ public class ScaleTool extends EditTool implements EditFormListener{
             Vector3f pickTranslation = picker.getTranslation(axis);
             Quaternion worldRotInverse = tv.quat1.set(selectObj.getSelectedSpatial().getWorldRotation()).inverse();
             worldRotInverse.mult(pickTranslation, diff);
-            diff.multLocal(2);
+            diff.multLocal(0.5f);
             newScale.addLocal(diff);
             selectObj.getSelectedSpatial().setLocalScale(newScale);
             afterScale.set(newScale);

@@ -12,10 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;
-import name.huliqing.editor.Editor;
-import name.huliqing.editor.EditorListener;
-import name.huliqing.editor.forms.Form;
-import name.huliqing.editor.forms.FormListener;
+import name.huliqing.editor.editforms.EditForm;
 import name.huliqing.editor.toolbar.EditToolbar;
 import name.huliqing.editor.toolbar.Toolbar;
 import name.huliqing.editor.toolbar.ToolbarListener;
@@ -23,34 +20,27 @@ import name.huliqing.editor.tools.Tool;
 import name.huliqing.editor.ui.toolview.ToolView;
 import name.huliqing.editor.ui.toolview.ToolViewFactory;
 import name.huliqing.fxswing.Jfx;
+import name.huliqing.editor.editforms.EditFormListener;
+import name.huliqing.editor.formview.FormView;
 
 /**
  *
  * @author huliqing
  */
-public class ToolBarView extends ToolBar implements EditorListener, FormListener, ToolbarListener{
+public class ToolBarView extends ToolBar implements EditFormListener, ToolbarListener{
 
     private static final Logger LOG = Logger.getLogger(ToolBarView.class.getName());
     
-    private Form form;
+    private final FormView formView;
     private EditToolbar  toolbar;
-    
-    // 暂位按钮，避免正式的工具按钮在未载入之前工具栏因为没有任何东西而导致被自动缩小而看不到。
-    private final Button empty = new Button("");
     
     private final Map<Tool, ToolView> toolViewMap = new HashMap<Tool, ToolView>();
     
-    public ToolBarView() {
-        Editor editor = (Editor) Jfx.getJmeApp();
-        editor.addListener(this);
-        form = editor.getForm();
-        if (form != null) {
-            form.addListener(this);
-            resetToolbar();
-        }
-        // 暂位,避免
-        empty.setVisible(false);
-        getItems().add(empty);
+    public ToolBarView(FormView formView) {
+        this.formView = formView;
+        
+        resetToolbar();
+        
     }
 
     private void resetToolbar() {
@@ -59,11 +49,10 @@ public class ToolBarView extends ToolBar implements EditorListener, FormListener
         if (toolbar != null) {
            toolbar.removeListener(this);
         }
-        if (form == null) {
-            return;
-        }
-        toolbar = (EditToolbar) form.getToolbar();
+
+        toolbar = (EditToolbar) formView.getEditForm().getToolbar();
         if (toolbar == null) {
+            LOG.log(Level.WARNING, "Toolbar not found from EditForm! editForm={0}", formView.getEditForm());
             return;
         }
         toolbar.addListener(this);
@@ -125,25 +114,10 @@ public class ToolBarView extends ToolBar implements EditorListener, FormListener
             return null;
         }
     }
-
-    @Override
-    public void onFormChanged(Editor editor, Form newForm) {
-        if (form != null) {
-            form.removeListener(this);
-        }
-        form = newForm;
-        form.addListener(this);
-        Jfx.runOnJfx(() -> {resetToolbar();});
-    }
     
     @Override
-    public void onToolbarChanged(Form form, Toolbar newToolbar) {
-        Jfx.runOnJfx(() -> {resetToolbar();});
-    }
-
-    @Override
-    public void onReshape(int w, int h) {
-        // ignore
+    public void onToolbarChanged(EditForm form, Toolbar newToolbar) {
+//        Jfx.runOnJfx(() -> {resetToolbar();});
     }
     
 }

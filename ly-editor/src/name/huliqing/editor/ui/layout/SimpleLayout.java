@@ -15,7 +15,7 @@ import javafx.scene.layout.VBox;
 import name.huliqing.fxswing.Jfx;
 
 /**
- *
+ * @deprecated 使用MainLayout代替
  * @author huliqing
  */
 public class SimpleLayout extends VBox {

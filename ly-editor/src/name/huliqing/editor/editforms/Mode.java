@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.forms;
+package name.huliqing.editor.editforms;
 
 /**
  * 物体的变换模式

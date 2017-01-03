@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.forms;
+package name.huliqing.editor.editforms;
 
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
@@ -14,23 +14,23 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
-import name.huliqing.editor.Editor;
+import name.huliqing.editor.formview.FormView;
+import name.huliqing.editor.toolbar.EditToolbar;
 import name.huliqing.luoying.utils.MaterialUtils;
 
 /**
  *
  * @author huliqing
  */
-public class SimpleEditForm extends EditForm {
+public class StartEditForm extends SimpleEditForm {
 
     private final Node root = new Node();
     
     @Override
-    public void initialize(Editor editor) {
-        super.initialize(editor);
-        localRoot.attachChild(root);
-        
-        Spatial sinbad = editor.getAssetManager().loadModel("Models/test/Sinbad.mesh.j3o");
+    public void initialize(FormView formView) {
+        super.initialize(formView);
+        editRoot.attachChild(root);
+        Spatial sinbad = formView.getEditor().getAssetManager().loadModel("Models/test/Sinbad.mesh.j3o");
         root.attachChild(sinbad);
         root.setLocalScale(0.2f);
         
@@ -53,8 +53,11 @@ public class SimpleEditForm extends EditForm {
             
             root.attachChild(ge);
         }
-        localRoot.addLight(new DirectionalLight(new Vector3f(0,-1,0), new ColorRGBA(1,1,1,1).multLocal(1.5f)));
-        localRoot.addLight(new AmbientLight(new ColorRGBA(1,1,1,1).multLocal(2)));
+        editRoot.addLight(new DirectionalLight(new Vector3f(0,-1,0), new ColorRGBA(1,1,1,1).multLocal(1.5f)));
+        editRoot.addLight(new AmbientLight(new ColorRGBA(1,1,1,1).multLocal(2)));
+        
+         // 编辑用的工具栏
+        setToolbar(new EditToolbar());
     }
     
 }

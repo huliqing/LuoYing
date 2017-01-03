@@ -7,7 +7,6 @@ package name.huliqing.fxswing;
 
 import java.awt.Canvas;
 import java.awt.Container;
-import java.util.logging.Logger;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.layout.Region;
@@ -59,11 +58,19 @@ public class CanvasJfxBindingController extends JfxBindingController {
         if (canvas == null || jfxRegion == null)
             return;
         Jfx.runOnSwing(() -> {
-            canvas.setSize(jfxRegion.widthProperty().intValue(), jfxRegion.heightProperty().intValue());
             Transform transform = jfxRegion.localToSceneTransformProperty().getValue();
-            canvas.setLocation((int) transform.getTx(), (int) transform.getTy());
+            int width = jfxRegion.widthProperty().intValue();
+            int height = jfxRegion.heightProperty().intValue();
+            int localX = (int) transform.getTx();
+            int localY = (int) transform.getTy();
+//            System.out.println("resizeCanvasSize, width=" + jfxRegion.widthProperty().intValue() 
+//                    + ", height=" + jfxRegion.heightProperty().intValue()
+//                    + ", locationX=" + transform.getTx()
+//                    + ", locationY=" + transform.getTy()
+//            );
+            canvas.setSize(width, height);
+            canvas.setLocation(localX, localY);
         });
     }
-
     
 }

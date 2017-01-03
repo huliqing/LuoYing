@@ -9,7 +9,7 @@ import com.jme3.util.SafeArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import name.huliqing.editor.forms.Form;
+import name.huliqing.editor.formview.FormView;
 import name.huliqing.editor.tools.Tool;
 
 /**
@@ -17,7 +17,7 @@ import name.huliqing.editor.tools.Tool;
  * @author huliqing
  * @param <F> Form类型
  */
-public abstract class AbstractToolbar<F extends Form> implements Toolbar<F> {
+public abstract class AbstractToolbar<F extends FormView> implements Toolbar<F> {
 
     private static final Logger LOG = Logger.getLogger(AbstractToolbar.class.getName());
 
@@ -38,15 +38,16 @@ public abstract class AbstractToolbar<F extends Form> implements Toolbar<F> {
      */
     protected final SafeArrayList<Tool> toolsActivated = new SafeArrayList<Tool>(Tool.class);
     
-    protected F form;
+    protected F formView;
     protected boolean initialized;
 
     @Override
-    public void initialize() {
+    public void initialize(F formView) {
         if (initialized) {
             throw new IllegalStateException();
         }
         initialized = true;
+        this.formView = formView;
     }
 
     @Override
@@ -115,17 +116,6 @@ public abstract class AbstractToolbar<F extends Form> implements Toolbar<F> {
         return (T) this;
     }
     
-//    @Override
-//    public <T extends Toolbar> T setActivated(String tool, boolean activated) {
-//        for (Tool t : tools.getArray()) {
-//            if (t.getName().equals(tool)) {
-//                setActivated(t, activated);
-//                break;
-//            }
-//        }
-//        return (T) this;
-//    }
-    
     @Override
     public <T extends Toolbar> T setEnabled(Tool tool, boolean enabled) {
         if (enabled) {
@@ -136,17 +126,6 @@ public abstract class AbstractToolbar<F extends Form> implements Toolbar<F> {
         }
         return (T) this;
     }
-
-//    @Override
-//    public <T extends Toolbar> T setEnabled(String tool, boolean enabled) {
-//        for (Tool t : tools.getArray()) {
-//            if (t.getName().equals(tool)) {
-//                setEnabled(t, enabled);
-//                break;
-//            }
-//        }
-//        return (T) this;
-//    }
     
     private void toolActivated(Tool t) {
         if (!toolsActivated.contains(t)) {
@@ -228,13 +207,9 @@ public abstract class AbstractToolbar<F extends Form> implements Toolbar<F> {
     }
 
     @Override
-    public F getForm() {
-        return form;
+    public F getFormView() {
+        return formView;
     }
 
-    @Override
-    public void setForm(F form) {
-        this.form = form;
-    }
     
 }

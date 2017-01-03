@@ -34,6 +34,8 @@ public class Manager {
 
         // 载入字体
         font = app.getAssetManager().loadFont("/resources/font/chinese.fnt");
+        
+        app.getAssetManager().registerLocator("", EditAssetLocator.class);
     }
     
     // 资源文件必须优先载入,因为JFX也要依赖这个资源

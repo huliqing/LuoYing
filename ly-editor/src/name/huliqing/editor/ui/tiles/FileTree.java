@@ -17,7 +17,7 @@ import javafx.util.Callback;
  * 目标树组件
  * @author huliqing
  */
-public class FileTree extends TreeView {
+public class FileTree extends TreeView<File> {
 
     private final Callback<TreeView<File>, TreeCell<File>> cellCallback = new CellCallback();
     

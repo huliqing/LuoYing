@@ -12,19 +12,19 @@ import com.jme3.scene.Spatial;
 import name.huliqing.editor.action.Picker;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.JmeEvent;
-import name.huliqing.editor.forms.EditFormListener;
-import name.huliqing.editor.forms.Mode;
+import name.huliqing.editor.editforms.Mode;
 import name.huliqing.editor.select.SelectObj;
 import name.huliqing.editor.tiles.AxisNode;
 import name.huliqing.editor.tiles.RotationControlObj;
 import name.huliqing.editor.undoredo.UndoRedo;
 import name.huliqing.luoying.manager.PickManager;
+import name.huliqing.editor.editforms.SimpleEditFormListener;
 
 /**
  * 旋转编辑工具
  * @author huliqing
  */
-public class RotationTool extends EditTool implements EditFormListener{
+public class RotationTool extends EditTool implements SimpleEditFormListener{
 //    private static final Logger LOG = Logger.getLogger(RotationTool.class.getName());
     
     private final static String EVENT_ROTATION = "rotationEvent";

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.JmeEvent;
-import name.huliqing.editor.forms.Mode;
+import name.huliqing.editor.editforms.Mode;
 
 /**
  *

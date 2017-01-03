@@ -6,13 +6,14 @@
 package name.huliqing.editor;
 
 import name.huliqing.editor.manager.Manager;
-import name.huliqing.editor.forms.Form;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.StatsAppState;
+import com.jme3.math.ColorRGBA;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.editor.events.JmeEvent;
-import name.huliqing.editor.forms.SimpleEditForm;
+import name.huliqing.editor.formview.FormView;
+import name.huliqing.editor.formview.SimpleFormView;
 
 /**
  *
@@ -21,7 +22,7 @@ import name.huliqing.editor.forms.SimpleEditForm;
 public class Editor extends SimpleApplication{
     
     private List<EditorListener> listeners;
-    private Form form;
+    private FormView formView;
     
     @Override
     public void simpleInitApp() {
@@ -30,18 +31,21 @@ public class Editor extends SimpleApplication{
             stateManager.detach(stats);
         }
         stateManager.attach(new EditorStatsAppState());
+        flyCam.setEnabled(false);
+        inputManager.setCursorVisible(true);
+        viewPort.setBackgroundColor(ColorRGBA.DarkGray);
         
         // 初始化
         Manager.initialize(this);
         // 注册InputManager
         JmeEvent.registerInputManager(inputManager);
         
-        setForm(new SimpleEditForm());
+        setFormView(new SimpleFormView());
     }
     
     @Override
     public void simpleUpdate(float tpf) {
-        form.update(tpf);
+        formView.update(tpf);
     }
     
     @Override
@@ -52,20 +56,20 @@ public class Editor extends SimpleApplication{
         }
     }
     
-    public Form getForm() {
-        return form;
+    public FormView getFormView() {
+        return formView;
     }
 
-    public void setForm(Form newForm) {
-        if (form != null) {
-            form.cleanup();
+    public void setFormView(FormView newFormView) {
+        if (formView != null && formView.isInitialized()) {
+            formView.cleanup();
         }
-        form = newForm;
-        if (!form.isInitialized()) {
-            form.initialize(this);
+        formView = newFormView;
+        if (!formView.isInitialized()) {
+            formView.initialize(this);
         }
         if (listeners != null) {
-            listeners.forEach(t -> {t.onFormChanged(this, newForm);});
+            listeners.forEach(t -> {t.onFormChanged(this, formView);});
         }
     }
     

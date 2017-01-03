@@ -6,14 +6,14 @@
 package name.huliqing.editor;
 
 import com.jme3.system.AppSettings;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.Background;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import name.huliqing.editor.manager.EditManager;
 import name.huliqing.editor.ui.AssetsView;
 import name.huliqing.editor.ui.MenuView;
-import name.huliqing.editor.ui.ToolBarView;
-import name.huliqing.editor.ui.layout.SimpleLayout;
+import name.huliqing.editor.ui.layout.MainLayout;
 import name.huliqing.fxswing.Jfx;
 
 /**
@@ -38,26 +38,32 @@ public class Starter {
         Jfx.getMainFrame().setLocationRelativeTo(null);
         Jfx.getMainFrame().setVisible(true);
         Jfx.runOnJfx(() -> {
-            Jfx.getJfxRoot().getChildren().add(createScene());
+            // 创建Jfx主场景
+            Pane jfxEditZone = initMainSceneInJfx(Jfx.getJfxRoot());
+            // 初始化FormView
+            Jfx.runOnJme(() -> {
+                initFormViewInJme(jfxEditZone);
+            });
         });
         
     }
     
-    private Node createScene() {
+    private Pane initMainSceneInJfx(Pane root) {
         MenuView menuView = new MenuView();
         AssetsView assetView = new AssetsView();
+        VBox jfxEditZone = new VBox();
+        jfxEditZone.setBackground(Background.EMPTY);
         
-        VBox editPane = new VBox();
-        editPane.setBackground(Background.EMPTY);
-
-        ToolBarView toolbarView = new ToolBarView();
+        MainLayout mainLayout = new MainLayout(root);
+        mainLayout.setZones(menuView, assetView, jfxEditZone);
+        root.getChildren().add(mainLayout);
         
-        SimpleLayout layout = new SimpleLayout(Jfx.getJfxRoot());
-        layout.setZones(menuView, assetView, editPane, toolbarView);
-        
-        Jfx.getBindingController().bindCanvasToJfxRegion(Jfx.getJmeCanvas(), editPane);
-        
-        return layout;
+        return jfxEditZone;
+    }
+    
+    private void initFormViewInJme(Pane jfxEditZone) {
+        EditManager.registerEditZone(jfxEditZone);
+        EditManager.openTestFormView();
     }
  
 }

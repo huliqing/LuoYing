@@ -6,7 +6,7 @@
 package name.huliqing.editor.toolbar;
 
 import java.util.List;
-import name.huliqing.editor.forms.Form;
+import name.huliqing.editor.formview.FormView;
 import name.huliqing.editor.tools.Tool;
 
 /**
@@ -14,12 +14,13 @@ import name.huliqing.editor.tools.Tool;
  * @author huliqing
  * @param <F> Form类型
  */
-public interface Toolbar<F extends Form> {
+public interface Toolbar<F extends FormView> {
     
     /**
      * 初始化工具栏
+     * @param formView
      */
-    void initialize();
+    void initialize(F formView);
     
     /**
      * 判断工具栏是否已经初始化
@@ -99,15 +100,5 @@ public interface Toolbar<F extends Form> {
      */
     boolean removeListener(ToolbarListener listener);
     
-    /**
-     * 获取工具栏所在的当前编辑窗口
-     * @return 
-     */
-    F getForm();
-    
-    /**
-     * 设置工具栏所在的编辑窗口
-     * @param form 
-     */
-    void setForm(F form);
+    F getFormView();
 }

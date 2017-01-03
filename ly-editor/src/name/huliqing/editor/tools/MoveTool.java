@@ -16,19 +16,19 @@ import com.jme3.util.TempVars;
 import name.huliqing.editor.action.Picker;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.JmeEvent;
-import name.huliqing.editor.forms.EditFormListener;
-import name.huliqing.editor.forms.Mode;
+import name.huliqing.editor.editforms.Mode;
 import name.huliqing.editor.select.SelectObj;
 import name.huliqing.editor.tiles.AxisNode;
 import name.huliqing.editor.tiles.LocationControlObj;
 import name.huliqing.editor.undoredo.UndoRedo;
 import name.huliqing.luoying.manager.PickManager;
+import name.huliqing.editor.editforms.SimpleEditFormListener;
 
 /**
  * 移动编辑工具
  * @author huliqing
  */
-public class MoveTool extends EditTool implements EditFormListener{
+public class MoveTool extends EditTool implements SimpleEditFormListener{
 //    private static final Logger LOG = Logger.getLogger(MoveTool.class.getName());
     
     private final static String EVENT_MOVE = "moveEvent";

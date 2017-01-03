@@ -21,13 +21,11 @@ import name.huliqing.editor.EditorListener;
 import name.huliqing.editor.constants.ResConstants;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.JmeEvent;
-import name.huliqing.editor.forms.Form;
-import name.huliqing.editor.forms.Mode;
+import name.huliqing.editor.formview.FormView;
 import name.huliqing.editor.manager.Manager;
 import name.huliqing.editor.manager.ResManager;
 import name.huliqing.editor.utils.BestEditCamera;
 import name.huliqing.editor.utils.BestEditCamera.View;
-import name.huliqing.fxswing.Jfx;
 import name.huliqing.luoying.object.anim.Anim;
 import name.huliqing.luoying.object.anim.AnimNode;
 import name.huliqing.luoying.object.anim.CurveMoveAnim;
@@ -322,7 +320,7 @@ public class CameraTool extends EditTool implements EditorListener {
     }
 
     @Override
-    public void onFormChanged(Editor editor, Form newForm) {
+    public void onFormChanged(Editor editor, FormView formView) {
         // ignore
     }
 

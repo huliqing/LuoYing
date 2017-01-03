@@ -3,18 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.forms;
+package name.huliqing.editor.editforms;
 
-import name.huliqing.editor.Editor;
+import name.huliqing.editor.formview.FormView;
 import name.huliqing.editor.toolbar.Toolbar;
 
 /**
- *
+ * 编辑器的3D编辑器接口,这个界面主要作为3D环境来编辑3D物体
  * @author huliqing
  */
-public interface Form {
+public interface EditForm {
     
-    void initialize(Editor editor);
+    void initialize(FormView formView);
     
     boolean isInitialized();
     
@@ -22,11 +22,7 @@ public interface Form {
     
     void cleanup();
     
-    /**
-     * 获取整个编辑器
-     * @return 
-     */
-    Editor getEditor();
+    FormView getFormView();
     
     /**
      * 设置工具栏
@@ -39,8 +35,8 @@ public interface Form {
      * @return 
      */
     Toolbar getToolbar();
+        
+    void addListener(EditFormListener listener);
     
-    void addListener(FormListener listener);
-    
-    boolean removeListener(FormListener listener);
+    boolean removeListener(EditFormListener listener);
 }

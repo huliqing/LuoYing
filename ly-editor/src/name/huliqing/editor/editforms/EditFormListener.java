@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.forms;
+package name.huliqing.editor.editforms;
 
 import name.huliqing.editor.toolbar.Toolbar;
 
@@ -11,7 +11,7 @@ import name.huliqing.editor.toolbar.Toolbar;
  *
  * @author huliqing
  */
-public interface FormListener {
+public interface EditFormListener {
     
-    void onToolbarChanged(Form form, Toolbar newToolbar);
+    void onToolbarChanged(EditForm view, Toolbar newToolbar);
 }

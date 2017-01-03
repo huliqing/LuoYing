@@ -5,20 +5,20 @@
  */
 package name.huliqing.editor.formview;
 
-import javafx.scene.layout.Region;
-import name.huliqing.editor.forms.Form;
+import name.huliqing.editor.Editor;
+import name.huliqing.editor.editforms.SimpleEditForm;
+import name.huliqing.editor.editviews.SimpleEditView;
 
 /**
- *
+ * 普通的编辑界面
  * @author huliqing
  */
-public class SimpleFormView {
-    
-    // 3d edit form
-    private Form form;
-    
-    // jfx view
-    private Region view;
+public class SimpleFormView extends AbstractFormView<SimpleEditForm, SimpleEditView> {
+
+    @Override
+    public void initialize(Editor editor) {
+        super.initialize(editor);
+    }
     
     
 }

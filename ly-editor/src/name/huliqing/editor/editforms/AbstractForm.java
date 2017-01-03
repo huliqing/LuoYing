@@ -3,34 +3,33 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.forms;
+package name.huliqing.editor.editforms;
 
 import java.util.ArrayList;
 import java.util.List;
+import name.huliqing.editor.formview.FormView;
 import name.huliqing.editor.toolbar.Toolbar;
-import name.huliqing.editor.Editor;
 
 /**
  *
  * @author huliqing
  */
-public abstract class AbstractForm implements Form {
+public abstract class AbstractForm implements EditForm {
 
-    protected Editor editor;
     protected boolean initialized;
+    protected FormView formView;    
     protected Toolbar toolbar;
-    protected List<FormListener> listeners;
+    protected List<EditFormListener> listeners;
 
     @Override
-    public void initialize(Editor editor) {
+    public void initialize(FormView formView) {
         if (initialized) {
-            throw new IllegalArgumentException();
+            throw new IllegalStateException();
         }
         initialized = true; 
-        this.editor = editor;
+        this.formView = formView;
         if (toolbar != null && !toolbar.isInitialized()) {
-            toolbar.setForm(this);
-            toolbar.initialize();
+            toolbar.initialize(formView);
         }
     }
 
@@ -53,10 +52,10 @@ public abstract class AbstractForm implements Form {
         }
         initialized = false;
     }
-
+    
     @Override
-    public Editor getEditor() {
-        return editor;
+    public FormView getFormView() {
+        return formView;
     }
 
     @Override
@@ -66,8 +65,7 @@ public abstract class AbstractForm implements Form {
         }
         toolbar = newToolbar;
         if (isInitialized() && !toolbar.isInitialized()) {
-            toolbar.setForm(this);
-            toolbar.initialize();
+            toolbar.initialize(formView);
         }
         if (listeners != null) {
             listeners.forEach(t -> {t.onToolbarChanged(this, newToolbar);});
@@ -80,9 +78,9 @@ public abstract class AbstractForm implements Form {
     }
 
     @Override
-    public void addListener(FormListener listener) {
+    public void addListener(EditFormListener listener) {
         if (listeners == null) {
-            listeners = new ArrayList<FormListener>();
+            listeners = new ArrayList<EditFormListener>();
         }
         if (!listeners.contains(listener)) {
             listeners.add(listener);
@@ -90,8 +88,9 @@ public abstract class AbstractForm implements Form {
     }
 
     @Override
-    public boolean removeListener(FormListener listener) {
+    public boolean removeListener(EditFormListener listener) {
         return listeners != null && listeners.remove(listener);
     }
+
     
 }
