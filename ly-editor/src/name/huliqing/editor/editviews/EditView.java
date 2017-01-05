@@ -5,15 +5,16 @@
  */
 package name.huliqing.editor.editviews;
 
-import name.huliqing.editor.formview.FormView;
+import name.huliqing.editor.editforms.EditForm;
 
 /**
  * 编辑器的UI界面接口, 主要作为编辑器的UI编辑界面，包含各种编辑工具等。
  * @author huliqing
+ * @param <T>
  */
-public interface EditView {
+public interface EditView<T extends EditForm> {
     
-    void initialize(FormView formView);
+    void initialize(T editForm);
     
     boolean isInitialized();
     
@@ -21,5 +22,4 @@ public interface EditView {
     
     void cleanup();
     
-    FormView getFormView();
 }

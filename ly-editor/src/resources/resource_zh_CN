@@ -7,6 +7,17 @@ menu.file.assetsRecent=打开最近使用的文件夹
 menu.file.assetsRecent.clean=清除记录
 menu.help=帮助
 
+popup.edit=编辑
+popup.rename=重命名
+popup.refresh=刷新
+popup.delete=删除
+
+alert.rename.title=重命名
+alert.rename.header=重命名文件：%s
+alert.delete.title=删除
+alert.delete.header.single=确定要删除文件吗？
+alert.delete.header.mult=确定要删除这 %s 项吗？
+
 view.front=前视图
 view.back=后视图
 view.right=右视图

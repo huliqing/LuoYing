@@ -36,7 +36,7 @@ public abstract class AbstractFormView<F extends EditForm, V extends EditView> i
         }
         // 初始化UI界面
         if (view != null) {
-            view.initialize(this);
+            view.initialize(form);
         }
     }
 
@@ -99,7 +99,7 @@ public abstract class AbstractFormView<F extends EditForm, V extends EditView> i
         }
         view = newView;
         if (isInitialized() && !view.isInitialized()) {
-            view.initialize(this);
+            view.initialize(form);
         }
     }
 }

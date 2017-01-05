@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;
 import name.huliqing.editor.editforms.EditForm;
 import name.huliqing.editor.toolbar.EditToolbar;
@@ -21,7 +20,6 @@ import name.huliqing.editor.ui.toolview.ToolView;
 import name.huliqing.editor.ui.toolview.ToolViewFactory;
 import name.huliqing.fxswing.Jfx;
 import name.huliqing.editor.editforms.EditFormListener;
-import name.huliqing.editor.formview.FormView;
 
 /**
  *
@@ -31,16 +29,14 @@ public class ToolBarView extends ToolBar implements EditFormListener, ToolbarLis
 
     private static final Logger LOG = Logger.getLogger(ToolBarView.class.getName());
     
-    private final FormView formView;
+    private final EditForm form;
     private EditToolbar  toolbar;
     
     private final Map<Tool, ToolView> toolViewMap = new HashMap<Tool, ToolView>();
     
-    public ToolBarView(FormView formView) {
-        this.formView = formView;
-        
+    public ToolBarView(EditForm formView) {
+        this.form = formView;
         resetToolbar();
-        
     }
 
     private void resetToolbar() {
@@ -50,9 +46,9 @@ public class ToolBarView extends ToolBar implements EditFormListener, ToolbarLis
            toolbar.removeListener(this);
         }
 
-        toolbar = (EditToolbar) formView.getEditForm().getToolbar();
+        toolbar = (EditToolbar) form.getToolbar();
         if (toolbar == null) {
-            LOG.log(Level.WARNING, "Toolbar not found from EditForm! editForm={0}", formView.getEditForm());
+            LOG.log(Level.WARNING, "Toolbar not found from EditForm! editForm={0}", form);
             return;
         }
         toolbar.addListener(this);

@@ -23,6 +23,18 @@ public class ResConstants {
     /** menu.help */
     public final static String MENU_HELP = "menu.help";
     
+    public final static String POPUP_EDIT = "popup.edit";
+    public final static String POPUP_RENAME = "popup.rename";
+    public final static String POPUP_REFRESH = "popup.refresh";
+    public final static String POPUP_DELETE= "popup.delete";
+    
+    public final static String ALERT_RENAME_TITLE = "alert.rename.title";
+    public final static String ALERT_RENAME_HEADER = "alert.rename.header";
+    
+    public final static String ALERT_DELETE_TITLE = "alert.delete.title";
+    public final static String ALERT_DELETE_HEADER_SINGLE = "alert.delete.header.single";
+    public final static String ALERT_DELETE_HEADER_MULT = "alert.delete.header.mult";
+    
     public final static String VIEW_FRONT = "view.front";
     public final static String VIEW_BACK = "view.back";
     public final static String VIEW_LEFT = "view.left";

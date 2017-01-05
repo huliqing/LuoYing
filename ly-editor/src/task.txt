@@ -11,3 +11,6 @@ ok.在左上角显示当前视角：user/front ortho/...
 ok.按r直接旋转
 ok.按g直接移动
 
+.asset资源重命名功能
+.初始界面功能
+

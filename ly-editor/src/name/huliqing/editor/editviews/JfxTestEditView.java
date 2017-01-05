@@ -5,12 +5,11 @@
  */
 package name.huliqing.editor.editviews;
 
-import javafx.application.Platform;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import name.huliqing.editor.editviews.SimpleEditView;
+import name.huliqing.editor.editforms.SpatialEditForm;
 import name.huliqing.editor.formview.FormView;
 import name.huliqing.editor.ui.ToolBarView;
 import name.huliqing.fxswing.Jfx;
@@ -19,7 +18,7 @@ import name.huliqing.fxswing.Jfx;
  * 测试用
  * @author huliqing
  */
-public class JfxTestEditView extends SimpleEditView {
+public class JfxTestEditView extends SimpleEditView<SpatialEditForm> {
 
     private final Pane root;
     private Region editPanel;
@@ -30,8 +29,8 @@ public class JfxTestEditView extends SimpleEditView {
     }
     
     @Override
-    public void initialize(FormView formView) {
-        super.initialize(formView);
+    public void initialize(SpatialEditForm form) {
+        super.initialize(form);
 
         Jfx.runOnJfx(() -> {
             initializeJfx();
@@ -50,7 +49,7 @@ public class JfxTestEditView extends SimpleEditView {
     public void initializeJfx() {
         editPanel = new VBox();
         editPanel.setBackground(Background.EMPTY);
-        toolbarView = new ToolBarView(formView);
+        toolbarView = new ToolBarView(form);
         
         root.getChildren().addAll(editPanel, toolbarView);
         

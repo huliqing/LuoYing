@@ -46,6 +46,7 @@ public class MenuView extends MenuBar implements ConfigManager.ConfigChangedList
         rebuildAssetRecent();
         
         Manager.getConfigManager().addListener(this);
+        
     }
 
     private void openAssetsChooser() {

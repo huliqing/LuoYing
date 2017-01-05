@@ -89,5 +89,8 @@ public class Manager {
     public final static String getRes(String resKey) {
         return getResManager().get(resKey);
     }
+    public final static String getRes(String resKey, Object[] params) {
+        return getResManager().get(resKey, params);
+    }
     
 }

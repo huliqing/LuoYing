@@ -5,23 +5,24 @@
  */
 package name.huliqing.editor.editviews;
 
-import name.huliqing.editor.formview.FormView;
+import name.huliqing.editor.editforms.EditForm;
 
 /**
  *
  * @author huliqing
+ * @param <T>
  */
-public class SimpleEditView implements EditView  {
-    protected FormView formView;
+public class SimpleEditView<T extends EditForm> implements EditView<T>  {
+    protected T form;
     protected boolean initialized;
 
     @Override
-    public void initialize(FormView formView) {
+    public void initialize(T form) {
         if (initialized) {
             throw new IllegalArgumentException();
         }
         initialized = true; 
-        this.formView = formView;
+        this.form = form;
     }
 
     @Override
@@ -38,8 +39,11 @@ public class SimpleEditView implements EditView  {
         initialized = false;
     }
 
-    @Override
-    public FormView getFormView() {
-        return formView;
+    public void onDragStarted() {
+        // 由子类实现
+    }
+    
+    public void onDragEnded() {
+        // 由子类实现
     }
 }
