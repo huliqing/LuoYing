@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.control.ToolBar;
-import name.huliqing.editor.editforms.EditForm;
+import name.huliqing.editor.edit.EditForm;
 import name.huliqing.editor.toolbar.EditToolbar;
 import name.huliqing.editor.toolbar.Toolbar;
 import name.huliqing.editor.toolbar.ToolbarListener;
@@ -19,7 +19,7 @@ import name.huliqing.editor.tools.Tool;
 import name.huliqing.editor.ui.toolview.ToolView;
 import name.huliqing.editor.ui.toolview.ToolViewFactory;
 import name.huliqing.fxswing.Jfx;
-import name.huliqing.editor.editforms.EditFormListener;
+import name.huliqing.editor.edit.EditFormListener;
 
 /**
  *

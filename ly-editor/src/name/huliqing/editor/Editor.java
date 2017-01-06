@@ -11,9 +11,9 @@ import com.jme3.app.StatsAppState;
 import com.jme3.math.ColorRGBA;
 import java.util.ArrayList;
 import java.util.List;
+import name.huliqing.editor.edit.EditView;
 import name.huliqing.editor.events.JmeEvent;
-import name.huliqing.editor.formview.FormView;
-import name.huliqing.editor.formview.SimpleFormView;
+import name.huliqing.luoying.LuoYing;
 
 /**
  *
@@ -22,7 +22,8 @@ import name.huliqing.editor.formview.SimpleFormView;
 public class Editor extends SimpleApplication{
     
     private List<EditorListener> listeners;
-    private FormView formView;
+    private EditView editView;
+    private boolean initialized;
     
     @Override
     public void simpleInitApp() {
@@ -40,36 +41,37 @@ public class Editor extends SimpleApplication{
         // 注册InputManager
         JmeEvent.registerInputManager(inputManager);
         
-        setFormView(new SimpleFormView());
+        LuoYing.initialize(this);
+        
+        initialized = true;
     }
     
     @Override
     public void simpleUpdate(float tpf) {
-        formView.update(tpf);
+        if (editView != null) {
+            editView.update(tpf);
+        }
     }
     
     @Override
     public void reshape(int w, int h){
         super.reshape(w, h);
-        if (listeners != null) {
+        if (listeners != null && listeners.size() > 0) {
             listeners.forEach(t -> {t.onReshape(w, h);});
         }
     }
     
-    public FormView getFormView() {
-        return formView;
+    public EditView getFormView() {
+        return editView;
     }
 
-    public void setFormView(FormView newFormView) {
-        if (formView != null && formView.isInitialized()) {
-            formView.cleanup();
+    public void setFormView(EditView newEditView) {
+        if (editView != null) {
+            editView.cleanup();
         }
-        formView = newFormView;
-        if (!formView.isInitialized()) {
-            formView.initialize(this);
-        }
-        if (listeners != null) {
-            listeners.forEach(t -> {t.onFormChanged(this, formView);});
+        editView = newEditView;
+        if (initialized) {
+            editView.initialize(this);
         }
     }
     
@@ -85,12 +87,11 @@ public class Editor extends SimpleApplication{
     public boolean removeListener(EditorListener listener) {
         return listeners != null && listeners.remove(listener);
     }
-
+    
     @Override
     public void stop() {
         Manager.saveOnQuick();
         super.stop(); 
     }
-    
     
 }

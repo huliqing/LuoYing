@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.editviews;
+package name.huliqing.editor.edit;
 
-import name.huliqing.editor.editforms.EditForm;
+import name.huliqing.editor.Editor;
 
 /**
  * 编辑器的UI界面接口, 主要作为编辑器的UI编辑界面，包含各种编辑工具等。
@@ -14,12 +14,14 @@ import name.huliqing.editor.editforms.EditForm;
  */
 public interface EditView<T extends EditForm> {
     
-    void initialize(T editForm);
-    
-    boolean isInitialized();
+    void initialize(Editor editor);
     
     void update(float tpf);
     
     void cleanup();
+    
+    Editor getEditor();
+    
+    T getEditForm();
     
 }

@@ -11,7 +11,7 @@ import name.huliqing.editor.Editor;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.EventListener;
 import name.huliqing.editor.events.JmeEvent;
-import name.huliqing.editor.editforms.SimpleEditForm;
+import name.huliqing.editor.edit.SimpleEditForm;
 
 /**
  *
@@ -21,10 +21,9 @@ public abstract class EditTool implements Tool<EditToolbar> {
 
     private static final Logger LOG = Logger.getLogger(EditTool.class.getName());
 
-    protected Editor editor;
     protected SimpleEditForm form;
     protected EditToolbar toolbar;
-    
+    protected Editor editor;
     protected EventHelper eventHelper;
     protected final EventListener eventListener = new ToolEventListener();
     protected final String name; // 编工具名称
@@ -45,8 +44,8 @@ public abstract class EditTool implements Tool<EditToolbar> {
             throw new IllegalStateException("Tool already initialized, name=" + name + ", class=" + getClass().getName());
         }
         initialized = true;
-        editor = toolbar.getFormView().getEditor();
-        form = toolbar.getFormView().getEditForm();
+        form = toolbar.getEditForm();
+        this.editor = form.getEditor();
         if (eventHelper != null) {
             eventHelper.initialize();
         }

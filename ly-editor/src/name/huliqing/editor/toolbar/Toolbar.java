@@ -6,7 +6,7 @@
 package name.huliqing.editor.toolbar;
 
 import java.util.List;
-import name.huliqing.editor.formview.FormView;
+import name.huliqing.editor.edit.EditForm;
 import name.huliqing.editor.tools.Tool;
 
 /**
@@ -14,13 +14,13 @@ import name.huliqing.editor.tools.Tool;
  * @author huliqing
  * @param <F> Form类型
  */
-public interface Toolbar<F extends FormView> {
+public interface Toolbar<F extends EditForm> {
     
     /**
      * 初始化工具栏
-     * @param formView
+     * @param edit
      */
-    void initialize(F formView);
+    void initialize(F edit);
     
     /**
      * 判断工具栏是否已经初始化
@@ -100,5 +100,5 @@ public interface Toolbar<F extends FormView> {
      */
     boolean removeListener(ToolbarListener listener);
     
-    F getFormView();
+    F getEditForm();
 }

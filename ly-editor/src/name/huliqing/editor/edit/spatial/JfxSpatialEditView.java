@@ -3,14 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.editviews;
+package name.huliqing.editor.edit.spatial;
 
+import java.util.logging.Logger;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import name.huliqing.editor.editforms.SpatialEditForm;
+import name.huliqing.editor.edit.JfxEditView;
 import name.huliqing.editor.manager.EditManager;
 import name.huliqing.editor.ui.ToolBarView;
 import name.huliqing.fxswing.Jfx;
@@ -19,7 +20,9 @@ import name.huliqing.fxswing.Jfx;
  * Spatial编辑UI界面
  * @author huliqing
  */
-public class JfxSpatialEditView extends SimpleEditView<SpatialEditForm> {
+public class JfxSpatialEditView extends JfxEditView<SpatialEditForm> {
+
+    private static final Logger LOG = Logger.getLogger(JfxSpatialEditView.class.getName());
 
     private final Pane root;
     private Region editPanel;
@@ -32,27 +35,11 @@ public class JfxSpatialEditView extends SimpleEditView<SpatialEditForm> {
     
     public JfxSpatialEditView(Pane root) {
         this.root = root;
+        this.form = new SpatialEditForm();
     }
-    
+
     @Override
-    public void initialize(SpatialEditForm form) {
-        super.initialize(form);
-        this.form = form;
-        Jfx.runOnJfx(() -> {
-            initializeJfx();
-        });
-    }
-    
-    @Override
-    public void cleanup() {
-        Jfx.runOnJfx(() -> {
-            root.getChildren().remove(editPanel);
-            root.getChildren().remove(toolbarView);
-        });
-        super.cleanup(); 
-    }
-    
-    public void initializeJfx() {
+    protected void jfxInitialize() {
         editPanel = new VBox();
         toolbarView = new ToolBarView(form);
         root.getChildren().addAll(editPanel, toolbarView);
@@ -78,20 +65,27 @@ public class JfxSpatialEditView extends SimpleEditView<SpatialEditForm> {
         });
         
         // 强制刷新一下UI，必须的，否则界面无法实时刷新(JFX嵌入Swing的一个BUG)
-        Jfx.forceUpdateJfxUI();
-        Jfx.getBindingController().bindCanvasToJfxRegion(Jfx.getJmeCanvas(), editPanel);
+        Jfx.jfxForceUpdate();
+        Jfx.jfxCanvasBind(editPanel);
     }
 
     @Override
-    public void onDragStarted() {
-        super.onDragStarted();
+    protected void jfxCleanup() {
+        root.getChildren().remove(editPanel);
+        root.getChildren().remove(toolbarView);
+    }
+
+    @Override
+    public void jfxOnDragStarted() {
+        super.jfxOnDragStarted();
         Jfx.runOnJfx(() -> {editPanel.setStyle(STYLE_ON_DRAG_STARTED);});
     }
 
     @Override
-    public void onDragEnded() {
-        super.onDragEnded(); 
+    public void jfxOnDragEnded() {
+        super.jfxOnDragEnded(); 
         Jfx.runOnJfx(() -> editPanel.setStyle(STYLE_ON_DRAG_ENDED));
     }
+
     
 }

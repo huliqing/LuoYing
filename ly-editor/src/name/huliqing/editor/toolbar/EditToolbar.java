@@ -10,10 +10,10 @@ import com.jme3.input.MouseInput;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
+import name.huliqing.editor.edit.SimpleEditForm;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.EventListener;
 import name.huliqing.editor.events.JmeEvent;
-import name.huliqing.editor.formview.SimpleFormView;
 import name.huliqing.editor.tools.CameraTool;
 import name.huliqing.editor.tools.GridTool;
 import name.huliqing.editor.tools.ModeTool;
@@ -27,7 +27,7 @@ import name.huliqing.editor.tools.UndoRedoTool;
 /**
  * @author huliqing
  */
-public class EditToolbar extends AbstractToolbar<SimpleFormView> implements EventListener {
+public class EditToolbar extends AbstractToolbar<SimpleEditForm> implements EventListener {
 
     private static final Logger LOG = Logger.getLogger(EditToolbar.class.getName());
     private final Map<Tool, ToggleMappingEvent> toggleMapping = new HashMap<Tool, ToggleMappingEvent>();
@@ -43,11 +43,10 @@ public class EditToolbar extends AbstractToolbar<SimpleFormView> implements Even
     private ScaleTool scaleTool;
     
     @Override
-    public void initialize(SimpleFormView formView) {
+    public void initialize(SimpleEditForm formView) {
         super.initialize(formView);
         
         undoRedoTool = new UndoRedoTool("undoRedoTool");
-//        cameraTool = new CameraTool("CameraTool");
         modeTool = new ModeTool("modeTool");
         gridTool = new GridTool("gridTool");
         pickTool = new PickTool("pickTool");

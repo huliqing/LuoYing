@@ -3,21 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.editforms;
+package name.huliqing.editor.edit;
 
-import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Node;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.editor.Editor;
-import name.huliqing.editor.formview.FormView;
 import name.huliqing.editor.select.SelectObj;
 import name.huliqing.editor.undoredo.UndoRedo;
 import name.huliqing.editor.undoredo.UndoRedoManager;
 
 /**
  * 3D模型编辑器窗口
- * @author huliqing
+ * @author huliqing 
  */
 public class SimpleEditForm extends AbstractForm {
     
@@ -36,14 +34,14 @@ public class SimpleEditForm extends AbstractForm {
     protected final Node editRoot = new Node();
     
     @Override
-    public void initialize(FormView formView) {
-        super.initialize(formView);
-        formView.getEditor().getRootNode().attachChild(editRoot);
+    public void initialize(Editor editor) {
+        super.initialize(editor);
+        editor.getRootNode().attachChild(editRoot);
     }
 
     @Override
     public void cleanup() {
-        editRoot.detachAllChildren();
+        editRoot.removeFromParent();
         super.cleanup();
     }
     

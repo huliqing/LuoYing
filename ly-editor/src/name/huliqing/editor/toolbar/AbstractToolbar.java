@@ -9,7 +9,7 @@ import com.jme3.util.SafeArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import name.huliqing.editor.formview.FormView;
+import name.huliqing.editor.edit.EditForm;
 import name.huliqing.editor.tools.Tool;
 
 /**
@@ -17,7 +17,7 @@ import name.huliqing.editor.tools.Tool;
  * @author huliqing
  * @param <F> Form类型
  */
-public abstract class AbstractToolbar<F extends FormView> implements Toolbar<F> {
+public abstract class AbstractToolbar<F extends EditForm> implements Toolbar<F> {
 
     private static final Logger LOG = Logger.getLogger(AbstractToolbar.class.getName());
 
@@ -38,16 +38,16 @@ public abstract class AbstractToolbar<F extends FormView> implements Toolbar<F> 
      */
     protected final SafeArrayList<Tool> toolsActivated = new SafeArrayList<Tool>(Tool.class);
     
-    protected F formView;
+    protected F editForm;
     protected boolean initialized;
 
     @Override
-    public void initialize(F formView) {
+    public void initialize(F editForm) {
         if (initialized) {
             throw new IllegalStateException();
         }
         initialized = true;
-        this.formView = formView;
+        this.editForm = editForm;
     }
 
     @Override
@@ -207,8 +207,8 @@ public abstract class AbstractToolbar<F extends FormView> implements Toolbar<F> 
     }
 
     @Override
-    public F getFormView() {
-        return formView;
+    public F getEditForm() {
+        return editForm;
     }
 
     

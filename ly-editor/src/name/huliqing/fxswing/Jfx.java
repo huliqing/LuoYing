@@ -124,7 +124,7 @@ public class Jfx {
      */
     public static CanvasJfxBindingController getBindingController() {
         return bindingController;
-    } 
+    }
     
     /**
      * 创建游戏,默认帧率60.
@@ -294,9 +294,9 @@ public class Jfx {
     }
     
     /**
-     * 强制刷新UI
+     * 强制刷新JFx UI
      */
-    public static void forceUpdateJfxUI() {
+    public static void jfxForceUpdate() {
         // 注：这里使用一个特殊的方式来刷新一下JFX UI, 因为在JFX嵌入Swing时，
         // 一些情况下，如在程序中动态添加JFX UI时发现无法实时刷新界面。即使调用requestLayout都没有用。
         // 只有在手动调整一下界面大小的时候才会刷新，这可能是一个BUG。
@@ -309,5 +309,9 @@ public class Jfx {
                 jfxWindow.setSize(width, height);
             });
         });
+    }
+    
+    public static void jfxCanvasBind(Region target) {
+        bindingController.jfxCanvasBind(target);
     }
 }

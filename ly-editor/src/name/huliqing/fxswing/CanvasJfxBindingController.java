@@ -33,14 +33,14 @@ public class CanvasJfxBindingController extends JfxBindingController {
         updateCanvasBinding();
     };
     
-    public void bindCanvasToJfxRegion(Canvas canvas, Region jfxRegion) {
+    public void jfxCanvasBind(Region jfxRegion) {
         // remove old listener.
         if (this.jfxRegion != null) {
             this.jfxRegion.widthProperty().removeListener(sizeChangedListener);
             this.jfxRegion.heightProperty().removeListener(sizeChangedListener);
             this.jfxRegion.localToSceneTransformProperty().removeListener(localChangedListener);
         }
-        this.canvas = canvas;
+        this.canvas = Jfx.getJmeCanvas();
         this.jfxRegion = jfxRegion;
         
         jfxRegion.widthProperty().addListener(sizeChangedListener);

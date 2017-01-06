@@ -7,13 +7,12 @@ package name.huliqing.editor.manager;
 
 import javafx.scene.layout.Pane;
 import name.huliqing.editor.Editor;
-import name.huliqing.editor.editforms.SpatialEditForm;
-import name.huliqing.editor.editviews.EditView;
-import name.huliqing.editor.editviews.JfxSpatialEditView;
-import name.huliqing.editor.editviews.SimpleEditView;
-import name.huliqing.editor.formview.FormView;
-import name.huliqing.editor.formview.SimpleFormView;
+import name.huliqing.editor.edit.EditView;
+import name.huliqing.editor.edit.JfxEditView;
+import name.huliqing.editor.edit.scene.JfxSceneEditView;
+import name.huliqing.editor.edit.spatial.JfxSpatialEditView;
 import name.huliqing.fxswing.Jfx;
+import name.huliqing.luoying.constants.IdConstants;
 
 /**
  *
@@ -28,40 +27,42 @@ public class EditManager {
     }
     
     public static void openTestFormView() {
-        Jfx.runOnJme(() -> {
-            Editor editor = (Editor) Jfx.getJmeApp();
-            FormView formView = new SimpleFormView();
-            formView.setEditForm(new SpatialEditForm());
-            formView.setEditView(new JfxSpatialEditView(jfxEditZone));
-            editor.setFormView(formView);
-        });
+//        Editor editor = (Editor) Jfx.getJmeApp();
+//        JfxSceneEditView ev = new JfxSceneEditView(jfxEditZone);
+//        editor.setFormView(ev);
+        openSceneEditor(IdConstants.SYS_SCENE_TEST);
     }
     
     public static void openSpatialEditor(String fileAbsolutePath) {
-        Jfx.runOnJme(() -> {
-            
-            Editor editor = (Editor) Jfx.getJmeApp();
-            SpatialEditForm form = new SpatialEditForm();
-            form.setFilePath(fileAbsolutePath);
-            EditView view = new JfxSpatialEditView(jfxEditZone);
-
-            FormView formView = new SimpleFormView();
-            formView.setEditForm(form);
-            formView.setEditView(view);
-            editor.setFormView(formView);
-        
-        });
+        Editor editor = (Editor) Jfx.getJmeApp();
+        EditView ev = editor.getFormView();
+        if (ev instanceof JfxSpatialEditView) {
+            ((JfxSpatialEditView) ev).getEditForm().setFilePath(fileAbsolutePath);
+        } else {
+            JfxSpatialEditView newEv = new JfxSpatialEditView(jfxEditZone);
+            newEv.getEditForm().setFilePath(fileAbsolutePath);
+            editor.setFormView(newEv);
+        }
+    }
+    
+    public static void openSceneEditor(String sceneId) {
+        Editor editor = (Editor) Jfx.getJmeApp();
+        JfxSceneEditView newEv = new JfxSceneEditView(jfxEditZone);
+        newEv.getEditForm().setScene(sceneId);
+        editor.setFormView(newEv);
     }
 
     public static void notifyDragStarted() {
         Editor editor = (Editor) Jfx.getJmeApp();
-        SimpleEditView sev = (SimpleEditView) editor.getFormView().getEditView();
-        sev.onDragStarted();
+        JfxEditView sev = (JfxEditView) editor.getFormView();
+        sev.jfxOnDragStarted();
     }
     
     public static void notifyDragEnded() {
         Editor editor = (Editor) Jfx.getJmeApp();
-        SimpleEditView sev = (SimpleEditView) editor.getFormView().getEditView();
-        sev.onDragEnded();
+        JfxEditView sev = (JfxEditView) editor.getFormView();
+        sev.jfxOnDragEnded();
     }
+    
+    
 }

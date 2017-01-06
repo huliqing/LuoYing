@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.editforms;
+package name.huliqing.editor.edit;
 
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.editor.formview.FormView;
+import name.huliqing.editor.Editor;
 import name.huliqing.editor.toolbar.Toolbar;
 
 /**
@@ -17,19 +17,19 @@ import name.huliqing.editor.toolbar.Toolbar;
 public abstract class AbstractForm implements EditForm {
 
     protected boolean initialized;
-    protected FormView formView;    
     protected Toolbar toolbar;
     protected List<EditFormListener> listeners;
+    protected Editor editor;
 
     @Override
-    public void initialize(FormView formView) {
+    public void initialize(Editor editor) {
         if (initialized) {
             throw new IllegalStateException();
         }
         initialized = true; 
-        this.formView = formView;
+        this.editor = editor;
         if (toolbar != null && !toolbar.isInitialized()) {
-            toolbar.initialize(formView);
+            toolbar.initialize(this);
         }
     }
 
@@ -52,11 +52,6 @@ public abstract class AbstractForm implements EditForm {
         }
         initialized = false;
     }
-    
-    @Override
-    public FormView getFormView() {
-        return formView;
-    }
 
     @Override
     public void setToolbar(Toolbar newToolbar) {
@@ -65,7 +60,7 @@ public abstract class AbstractForm implements EditForm {
         }
         toolbar = newToolbar;
         if (isInitialized() && !toolbar.isInitialized()) {
-            toolbar.initialize(formView);
+            toolbar.initialize(this);
         }
         if (listeners != null) {
             listeners.forEach(t -> {t.onToolbarChanged(this, newToolbar);});
@@ -90,6 +85,11 @@ public abstract class AbstractForm implements EditForm {
     @Override
     public boolean removeListener(EditFormListener listener) {
         return listeners != null && listeners.remove(listener);
+    }
+
+    @Override
+    public Editor getEditor() {
+        return editor;
     }
 
     

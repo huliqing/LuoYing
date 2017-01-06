@@ -16,12 +16,10 @@ import com.jme3.scene.CameraNode;
 import com.jme3.scene.control.CameraControl;
 import java.util.Arrays;
 import java.util.logging.Logger;
-import name.huliqing.editor.Editor;
 import name.huliqing.editor.EditorListener;
 import name.huliqing.editor.constants.ResConstants;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.JmeEvent;
-import name.huliqing.editor.formview.FormView;
 import name.huliqing.editor.manager.Manager;
 import name.huliqing.editor.manager.ResManager;
 import name.huliqing.editor.utils.BestEditCamera;
@@ -317,11 +315,6 @@ public class CameraTool extends EditTool implements EditorListener {
         viewText.setText(viewTextStr);
         float y = editorCam.getCamera().getHeight() - 10;
         viewText.setLocalTranslation(10, y, 0);
-    }
-
-    @Override
-    public void onFormChanged(Editor editor, FormView formView) {
-        // ignore
     }
 
     @Override

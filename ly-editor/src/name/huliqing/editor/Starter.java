@@ -11,8 +11,8 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import name.huliqing.editor.manager.EditManager;
-import name.huliqing.editor.ui.AssetsView;
 import name.huliqing.editor.ui.MenuView;
+import name.huliqing.editor.ui.ResourceView;
 import name.huliqing.editor.ui.layout.MainLayout;
 import name.huliqing.fxswing.Jfx;
 
@@ -50,12 +50,13 @@ public class Starter {
     
     private Pane initMainSceneInJfx(Pane root) {
         MenuView menuView = new MenuView();
-        AssetsView assetView = new AssetsView();
+        ResourceView resourceView = new ResourceView();
+
         VBox jfxEditZone = new VBox();
         jfxEditZone.setBackground(Background.EMPTY);
         
         MainLayout mainLayout = new MainLayout(root);
-        mainLayout.setZones(menuView, assetView, jfxEditZone);
+        mainLayout.setZones(menuView, resourceView, jfxEditZone);
         root.getChildren().add(mainLayout);
         
         return jfxEditZone;

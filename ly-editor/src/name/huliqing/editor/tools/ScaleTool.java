@@ -14,13 +14,13 @@ import com.jme3.util.TempVars;
 import name.huliqing.editor.action.Picker;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.JmeEvent;
-import name.huliqing.editor.editforms.Mode;
+import name.huliqing.editor.edit.Mode;
 import name.huliqing.editor.select.SelectObj;
 import name.huliqing.editor.tiles.AxisNode;
 import name.huliqing.editor.tiles.ScaleControlObj;
 import name.huliqing.editor.undoredo.UndoRedo;
 import name.huliqing.luoying.manager.PickManager;
-import name.huliqing.editor.editforms.SimpleEditFormListener;
+import name.huliqing.editor.edit.SimpleEditFormListener;
 
 /**
  * 缩放编辑工具

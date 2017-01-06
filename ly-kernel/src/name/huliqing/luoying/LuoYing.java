@@ -342,7 +342,7 @@ public class LuoYing {
         
         // 载入系统数据
         try {
-            loadSysData();
+            reloadSysData();
             LOG.log(Level.INFO, "loadSysData ok.");
         } catch (Exception e) {
             throw new LuoYingException("Could not load SysData!", e);
@@ -645,7 +645,7 @@ public class LuoYing {
         DataFactory.register("taskCollect",  TaskData.class, TaskDataLoader.class, CollectTask.class);
     }
     
-    private static void loadSysData() throws LuoYingException {
+    public static void reloadSysData() throws LuoYingException {
         
         loadData("/LuoYing/Data/action.xml");
         loadData("/LuoYing/Data/channel.xml");
@@ -718,6 +718,10 @@ public class LuoYing {
      */
     public static void loadData(InputStream inputStream, String encoding) throws LuoYingException {
         DataFactory.loadData(inputStream, encoding);
+    }
+    
+    public static void clearData() {
+        DataFactory.clearData();
     }
     
     private static void registerMessage() {

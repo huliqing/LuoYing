@@ -24,7 +24,7 @@
     
     <!-- 默认的测试场景 -->
     <scene id="sysSceneTest" entities="sysEntitySky,sysEntityDirectionalLight,sysEntityTerrain,sysEntityTree,sysEntityPhysics,sysEntityShadow,sysEntityAdvanceWater
-,sysEntityBoundary,sysEntityChaseCamera" />
+,sysEntityBoundary" />
 
     
 </root>

@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.editforms;
+package name.huliqing.editor.edit;
 
-import name.huliqing.editor.formview.FormView;
+import name.huliqing.editor.Editor;
 import name.huliqing.editor.toolbar.Toolbar;
 
 /**
@@ -14,15 +14,13 @@ import name.huliqing.editor.toolbar.Toolbar;
  */
 public interface EditForm {
     
-    void initialize(FormView formView);
+    void initialize(Editor editor);
     
     boolean isInitialized();
     
     void update(float tpf);
     
     void cleanup();
-    
-    FormView getFormView();
     
     /**
      * 设置工具栏
@@ -39,4 +37,6 @@ public interface EditForm {
     void addListener(EditFormListener listener);
     
     boolean removeListener(EditFormListener listener);
+    
+    Editor getEditor();
 }

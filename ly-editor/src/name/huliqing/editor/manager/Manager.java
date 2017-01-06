@@ -5,10 +5,8 @@
  */
 package name.huliqing.editor.manager;
 
-import name.huliqing.editor.manager.ResManager;
 import com.jme3.app.Application;
 import com.jme3.font.BitmapFont;
-import name.huliqing.editor.manager.ConfigManager;
 
 /**
  * 全局管理器
