@@ -22,6 +22,7 @@ package name.huliqing.luoying.xml;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -51,6 +52,7 @@ public class DataFactory {
             = new HashMap<String, Class<? extends DataProcessor>>();
     
     private final static DataStore DATA_STORE = new DataStore();
+    private final static DataStoreLoader DATA_STORE_LOADER = new DataStoreLoader();
     
     /**
      * 注册一个ID生成器，该ID生成器将用于为所有Data生成唯一id.
@@ -223,7 +225,10 @@ public class DataFactory {
      */
     public static void loadData(InputStream inputStream, String encoding) throws LuoYingException {
         try {
-            DATA_STORE.loadData(inputStream, encoding != null ? encoding : "utf-8");
+            List<Proto> protos = DATA_STORE_LOADER.loadData(inputStream, encoding);
+            if (protos != null && !protos.isEmpty()) {
+                DATA_STORE.addProtos(protos);
+            }
         } catch (ParserConfigurationException ex) {
             throw new LuoYingException(ex);
         } catch (SAXException ex) {
@@ -233,6 +238,14 @@ public class DataFactory {
         }
     }
     
+    public static Proto createProtoByExtends(String newId, String extProtoId) {
+        return DATA_STORE.createProtoByExtends(newId, extProtoId);
+    }
+    
+    public static void addProto(Proto proto) {
+        DATA_STORE.addProto(proto);
+    }
+    
     /**
      * 通过ID获取原形
      * @param id
@@ -240,6 +253,10 @@ public class DataFactory {
      */
     public static Proto getProto(String id) {
         return ProtoUtils.getProto(DATA_STORE, id);
+    }
+    
+    public static void clearData() {
+        DATA_STORE.clearData();
     }
     
     /**
@@ -260,16 +277,7 @@ public class DataFactory {
      */
     public static void addCustomDataDefine(String tagName, String id, Class dataClass, Class dataLoaderClass
             , Class dataProcessorClass) {
-        DATA_STORE.addCustomDataDefine(tagName, id, dataClass, dataLoaderClass, dataProcessorClass);
+        DATA_STORE.addCustomProto(tagName, id, dataClass, dataLoaderClass, dataProcessorClass);
     }
-    
-    // remove20161129以后不再使用javascript
-//    /**
-//     * 获取所有的JavaScript代码内容，返回的列表是不可修改的 unmodifiableList
-//     * @return 
-//     */
-//    public static List<String> getJavaScripts() {
-//        return DATA_STORE.getJavaScripts();
-//    }
     
 }

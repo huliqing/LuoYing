@@ -34,8 +34,6 @@ class ProtoUtils {
     
     private static final Logger LOG = Logger.getLogger(ProtoUtils.class.getName());
     
-    private final static String ATTRIBUTE_EXTENDS = "extends";
-    
     /**
      * 获取object原形
      * @param dataStore
@@ -49,7 +47,7 @@ class ProtoUtils {
             return null;
         }
         
-        String extendId = proto.getAsString(ATTRIBUTE_EXTENDS);
+        String extendId = proto.getAsString(Proto.ATTRIBUTE_EXTENDS);
         if (extendId == null) {
             // 如果extId不存在，则说明该Proto没有继承关系，或者说继承关系已经处理过了。
             // 这个时候dataLoader和dataProcessor必须已经存在（通过自身tag配置或是继承自父tag），如果这个时候不存在，则
@@ -89,7 +87,7 @@ class ProtoUtils {
 //        }
 
         // 继承方式是这样的：从父类向下逐层继承
-        String extendId=  parent.getAsString(ATTRIBUTE_EXTENDS);
+        String extendId=  parent.getAsString(Proto.ATTRIBUTE_EXTENDS);
         if (extendId != null) {
             // 检查是否存在无尽继承
             checker.add(parent.getId());
@@ -115,7 +113,7 @@ class ProtoUtils {
         protoMap.putAll(merger);
         
         // 移除掉这个参数，这样下次就不需要再去递归继承了，以节省性能。
-        protoMap.remove(ATTRIBUTE_EXTENDS); 
+        protoMap.remove(Proto.ATTRIBUTE_EXTENDS); 
         
         // 检查dataLoader和dataProcessor,如果没有的话则应该动态确定一个。
         checkLoaderAndProcessor(proto);
