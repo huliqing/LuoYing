@@ -87,7 +87,6 @@ public class IdConstants {
     // =============================================================================
     // Scene Loader
     // =============================================================================
-    
 
     /** 简单的场景载入器 */
     public final static String SYS_PROGRESS_SIMPLE = "sysProgressSimple";
@@ -97,11 +96,27 @@ public class IdConstants {
     // =============================================================================
     
     /** 内置的天空盒物体: sysEntitySky */
-    public final static String SYS_ENV_SKY = "sysEntitySky";
+    public final static String SYS_ENTITY_SKY = "sysEntitySky";
     /** 内置直射光物体：sysEntityDirectionalLight */
-    public final static String SYS_ENV_DIRECTIONAL_LIGHT = "sysEntityDirectionalLight";
+    public final static String SYS_ENTITY_DIRECTIONAL_LIGHT = "sysEntityDirectionalLight";
     /** 内置环境光物体: sysEntityAmbientLight */
-    public final static String SYS_ENV_AMBIENT_LIGHT = "sysEntityAmbientLight";
+    public final static String SYS_ENTITY_AMBIENT_LIGHT = "sysEntityAmbientLight";
+    /** sysEntityTerrain */
+    public final static String SYS_ENTITY_TERRAIN = "sysEntityTerrain";
+    /** sysEntityTree */
+    public final static String SYS_ENTITY_TREE = "sysEntityTree";
+    /** sysEntityPhysics */
+    public final static String SYS_ENTITY_PHYSICS = "sysEntityPhysics";
+    /** sysEntityShadow */
+    public final static String SYS_ENTITY_SHADOW = "sysEntityShadow";
+    /** sysEntityChaseCamera */
+    public final static String SYS_ENTITY_CHASE_CAMERA = "sysEntityChaseCamera";
+    /** sysEntitySimpleWater */
+    public final static String SYS_ENTITY_SIMPLE_WATER = "sysEntitySimpleWater";
+    /** sysEntityAdvanceWater */
+    public final static String SYS_ENTITY_ADVANCE_WATER = "sysEntityAdvanceWater";
+    /** sysEntityBoundary */
+    public final static String SYS_ENTITY_BOUNDARY = "sysEntityBoundary";
     
     // =============================================================================
     // El

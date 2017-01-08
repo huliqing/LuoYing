@@ -137,19 +137,15 @@ public class Data implements Savable {
         String temp = getAsString(key);
         if (temp == null) 
             return null;
-        String[] result = temp.split(",");
-        for (int i = 0; i < result.length; i++) {
-            result[i] = result[i].trim();
-        }
-        return result;
+        return Converter.getAsArray(temp);
     }
 
     public final Byte getAsByte(String key) {
         Object value = getAttribute(key);
-        if (value instanceof Byte) {
-            return (Byte) value;
+        if (value != null) {
+            return Converter.getAsByte(value);
         }
-        return value != null ? Byte.parseByte(value.toString()) : null;
+        return null;
     }
     
     public final byte getAsByte(String key, byte defValue) {
@@ -162,10 +158,10 @@ public class Data implements Savable {
     
     public final Integer getAsInteger(String key) {
         Object value = getAttribute(key);
-        if (value instanceof Integer) {
-            return (Integer) value;
+        if (value != null) {
+            return Converter.getAsInteger(value);
         }
-        return value != null ? Integer.parseInt(value.toString()) : null;
+        return null;
     }
     
     public final int getAsInteger(String key, int defValue) {
@@ -182,9 +178,9 @@ public class Data implements Savable {
      * @return 
      */
     public final int[] getAsIntegerArray(String key) {
-        String[] strArr = getAsArray(key);
-        if (strArr != null) {
-            return toIntegerArray(strArr);
+        Object value = getAttribute(key);
+        if (value != null) {
+            return Converter.getAsIntegerArray(value);
         }
         return null;
     }
@@ -195,19 +191,19 @@ public class Data implements Savable {
      * @return 
      */
     public final List<Integer> getAsIntegerList(String key) {
-        String[] strArr = getAsArray(key);
-        if (strArr != null) {
-            return toIntegerList(strArr);
+        Object value = getAttribute(key);
+        if (value != null) {
+            return Converter.getAsIntegerList(value);
         }
         return null;
     }
     
     public final Long getAsLong(String key) {
         Object value = getAttribute(key);
-        if (value instanceof Long) {
-            return (Long) value;
+        if (value != null) {
+            return Converter.getAsLong(value);
         }
-        return value != null ? Long.parseLong(value.toString()) : null;
+        return null;
     }
     
     public final long getAsLong(String key, long defValue) {
@@ -224,9 +220,9 @@ public class Data implements Savable {
      * @return 
      */
     public final long[] getAsLongArray(String key) {
-        String[] strArr = getAsArray(key);
-        if (strArr != null) {
-            return toLongArray(strArr);
+        Object value = getAttribute(key);
+        if (value != null) {
+            return Converter.getAsLongArray(value);
         }
         return null;
     }
@@ -237,19 +233,19 @@ public class Data implements Savable {
      * @return 
      */
     public final List<Long> getAsLongList(String key) {
-        String[] strArr = getAsArray(key);
-        if (strArr != null) {
-            return toLongList(strArr);
+        Object value = getAttribute(key);
+        if (value != null) {
+            return Converter.getAsLongList(value);
         }
         return null;
     }
     
     public final Float getAsFloat(String key) {
         Object value = getAttribute(key);
-        if (value instanceof Float) {
-            return (Float) value;
+        if (value != null) {
+            return Converter.getAsFloat(value);
         }
-        return value != null ? Float.parseFloat(value.toString()) : null;
+        return null;
     }
     
     public final float getAsFloat(String key, float defValue) {
@@ -261,25 +257,19 @@ public class Data implements Savable {
     }
     
     public final float[] getAsFloatArray(String key) {
-        String value = getAsString(key);
-        if (value == null) {
-            return null;
+        Object value = getAttribute(key);
+        if (value != null) {
+            return Converter.getAsFloatArray(value);
         }
-        String[] tempArr = value.split(",");
-        float[] resultArr = new float[tempArr.length];
-        for (int i = 0; i < resultArr.length; i++) {
-            resultArr[i] = Float.parseFloat(tempArr[i]);
-        }
-        return resultArr;
+        return null;
     }
     
     public final Boolean getAsBoolean(String key) {
         Object value = getAttribute(key);
-        if (value == null || (value instanceof Boolean)) {
-            return (Boolean) value;
+        if (value != null) {
+            return Converter.getAsBoolean(value);
         }
-        String strValue = value.toString();
-        return (strValue.equals("1") || strValue.equalsIgnoreCase("true"));
+        return null;
     }
     
     public final boolean getAsBoolean(String key, boolean defValue) {
@@ -298,18 +288,10 @@ public class Data implements Savable {
      */
     public final List<String> getAsStringList(String key) {
         Object value = getAttribute(key);
-        if (value instanceof List) {
-            return (List) value;
+        if (value != null) {
+            return Converter.getAsStringList(value);
         }
-        
-        String[] arr = getAsArray(key);
-        if (arr == null)
-            return null;
-        
-//        return Arrays.asList(arr); // 不要再使用asList, asList使用的是内部类，这会在序列化时异常
-        List<String> result = new ArrayList<String>(arr.length);
-        Collections.addAll(result, arr);
-        return result;
+        return null;
     }
     
     /**
@@ -318,11 +300,11 @@ public class Data implements Savable {
      * @return 
      */
     public final Vector2f getAsVector2f(String key) {
-        String temp = getAsString(key);
-        if (temp == null) 
-            return null;
-        String[] arr = temp.split(",");
-        return new Vector2f(Float.parseFloat(arr[0]), Float.parseFloat(arr[1]));
+        Object value = getAttribute(key);
+        if (value != null) {
+            return Converter.getAsVector2f(value);
+        }
+        return null;
     }
     
     /**
@@ -332,8 +314,11 @@ public class Data implements Savable {
      * @return 
      */
     public final Vector2f getAsVector2f(String key, Vector2f defValue) {
-        Vector2f temp = getAsVector2f(key);
-        return temp != null ? temp : defValue;
+        Vector2f value = getAsVector2f(key);
+        if (value != null) {
+            return value;
+        }
+        return defValue;
     }
     
     /**
@@ -342,11 +327,11 @@ public class Data implements Savable {
      * @return 
      */
     public final Vector3f getAsVector3f(String key) {
-        String temp = getAsString(key);
-        if (temp == null) 
-            return null;
-        String[] arr = temp.split(",");
-        return new Vector3f(Float.parseFloat(arr[0]), Float.parseFloat(arr[1]), Float.parseFloat(arr[2]));
+        Object value = getAttribute(key);
+        if (value != null) {
+            return Converter.getAsVector3f(value);
+        }
+        return null;
     }
     
     /**
@@ -356,8 +341,11 @@ public class Data implements Savable {
      * @return 
      */
     public final Vector3f getAsVector3f(String key, Vector3f defValue) {
-        Vector3f temp = getAsVector3f(key);
-        return temp != null ? temp : defValue;
+        Vector3f value = getAsVector3f(key);
+        if (value != null) {
+            return value;
+        }
+        return defValue;
     }
     
     /**
@@ -366,16 +354,11 @@ public class Data implements Savable {
      * @return 
      */
     public final Vector3f[] getAsVector3fArray(String key) {
-        String temp = getAsString(key);
-        if (temp == null) 
-            return null;
-        String[] arrStr = temp.split(",");
-        Vector3f[] result = new Vector3f[arrStr.length];
-        for (int i = 0; i < arrStr.length; i++) {
-            String[] xyz = arrStr[i].split("\\|");
-            result[i] = new Vector3f(Float.parseFloat(xyz[0]), Float.parseFloat(xyz[1]), Float.parseFloat(xyz[2]));
+        Object value = getAttribute(key);
+        if (value != null) {
+            return Converter.getAsVector3fArray(value);
         }
-        return result;
+        return null;
     }
     
     /**
@@ -384,14 +367,11 @@ public class Data implements Savable {
      * @return 
      */
     public final Vector4f getAsVector4f(String key) {
-        String temp = getAsString(key);
-        if (temp == null) 
-            return null;
-        String[] arr = temp.split(",");
-        return new Vector4f(Float.parseFloat(arr[0])
-                , Float.parseFloat(arr[1])
-                , Float.parseFloat(arr[2])
-                , Float.parseFloat(arr[3]));
+        Object value = getAttribute(key);
+        if (value != null) {
+            return Converter.getAsVector4f(value);
+        }
+        return null;
     }
     
     /**
@@ -401,8 +381,11 @@ public class Data implements Savable {
      * @return 
      */
     public final Vector4f getAsVector4f(String key, Vector4f defValue) {
-        Vector4f temp = getAsVector4f(key);
-        return temp != null ? temp : defValue;
+        Vector4f value = getAsVector4f(key);
+        if (value != null) {
+            return value;
+        }
+        return defValue;
     }
     
     /**
@@ -412,16 +395,11 @@ public class Data implements Savable {
      * @return 
      */
     public final Quaternion getAsQuaternion(String key) {
-        String temp = getAsString(key);
-        if (temp == null) 
-            return null;
-        String[] arr = temp.split(",");
-        if (arr.length < 3) 
-            return null;
-        
-        Quaternion qua = new Quaternion();
-        qua.fromAngles(Float.parseFloat(arr[0]), Float.parseFloat(arr[1]), Float.parseFloat(arr[2]));
-        return qua;
+        Object value = getAttribute(key);
+        if (value != null) {
+            return Converter.getAsQuaternion(value);
+        }
+        return null;
     }
     
     /**
@@ -432,8 +410,11 @@ public class Data implements Savable {
      * @return 
      */
     public final Quaternion getAsQuaternion(String key, Quaternion defValue) {
-        Quaternion temp = getAsQuaternion(key);
-        return temp != null ? temp : defValue;
+        Quaternion value = getAsQuaternion(key);
+        if (value != null) {
+            return value;
+        }
+        return defValue;
     }
     
     /**
@@ -442,14 +423,11 @@ public class Data implements Savable {
      * @return 
      */
     public final ColorRGBA getAsColor(String key) {
-        String temp = getAsString(key);
-        if (temp == null) 
-            return null;
-        String[] arr = temp.split(",");
-        return new ColorRGBA(Float.parseFloat(arr[0])
-                , Float.parseFloat(arr[1])
-                , Float.parseFloat(arr[2])
-                , Float.parseFloat(arr[3]));
+        Object value = getAttribute(key);
+        if (value != null) {
+            return Converter.getAsColor(value);
+        }
+        return null;
     }
     
     /**
@@ -459,8 +437,11 @@ public class Data implements Savable {
      * @return 
      */
     public final ColorRGBA getAsColor(String key, ColorRGBA defValue) {
-        ColorRGBA temp = getAsColor(key);
-        return temp != null ? temp : defValue;
+        ColorRGBA value = getAsColor(key);
+        if (value != null) {
+            return value;
+        }
+        return defValue;
     }
     
     /**
@@ -470,55 +451,8 @@ public class Data implements Savable {
      * @return 
      */
     public final <T extends Savable> T getAsSavable(String key) {
-        if (!data.containsKey(key)) {
-            return null;
-        }
-        Object object = data.get(key);
-        return (T) object;
-    }
-    
-    /**
-     * 将字符串数组转换为整形数组，注：strArr不能为null,并且必须都是数字类型。
-     * 否则会报错。
-     * @param strArr
-     * @return 
-     */
-    private int[] toIntegerArray(String[] strArr) {
-        int[] result = new int[strArr.length];
-        for (int i = 0; i < strArr.length; i++) {
-            result[i] = Integer.parseInt(strArr[i]);
-        }
-        return result;
-    }
-    
-    /**
-     * 将字符串数组转换为List数组，注：strArr不能为null,并且必须都是数字类型。
-     * 否则会报错。
-     * @param strArr
-     * @return 
-     */
-    private List<Integer> toIntegerList(String[] strArr) {
-        List<Integer> list = new ArrayList<Integer>(strArr.length);
-        for (String strArr1 : strArr) {
-            list.add(Integer.parseInt(strArr1));
-        }
-        return list;
-    }
-    
-    private long[] toLongArray(String[] strArr) {
-        long[] result = new long[strArr.length];
-        for (int i = 0; i < strArr.length; i++) {
-            result[i] = Long.parseLong(strArr[i]);
-        }
-        return result;
-    }
-    
-    private List<Long> toLongList(String[] strArr) {
-        List<Long> result = new ArrayList<Long>(strArr.length);
-        for (String s : strArr) {
-            result.add(Long.parseLong(s));
-        }
-        return result;
+        Object value = data.get(key);
+        return (T) value;
     }
     
     @Override

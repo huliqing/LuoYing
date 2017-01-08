@@ -64,6 +64,8 @@ public class ChaseCameraEntity extends NonModelEntity  implements SceneListener 
         ccc.setDownRotateOnCloseViewOnly(data.getAsBoolean("downRotateOnCloseViewOnly", ccc.getDownRotateOnCloseViewOnly())); 
         ccc.setUpVector(data.getAsVector3f("upVector", ccc.getUpVector()));
         ccc.setHideCursorOnRotate(data.getAsBoolean("hideCursorOnRotate", ccc.isHideCursorOnRotate()));
+        // 默认要关闭，以避免冲突。
+        ccc.setEnabled(false);
     }
 
     @Override

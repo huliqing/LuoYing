@@ -35,7 +35,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Logger;
 import name.huliqing.luoying.LuoYingException;
 import name.huliqing.luoying.data.SavableArray;
 import name.huliqing.luoying.data.SavableString;
@@ -217,41 +216,41 @@ public class ObjectData implements Savable, Cloneable {
      * @return 
      */
     public final String[] getAsArray(String key) {
-        Object value = getAttributeFromLocal(key);
-        if (value != null) {
-            return (String[]) value;
+        Object localValue = getAttributeFromLocal(key);
+        if (localValue != null) {
+            return Converter.getAsArray(localValue);
         }
         return getProto().getAsArray(key);
     }
     
     public final Byte getAsByte(String key) {
-        Object value = getAttributeFromLocal(key);
-        if (value != null) {
-            return (Byte) value;
+        Object localValue = getAttributeFromLocal(key);
+        if (localValue != null) {
+            return Converter.getAsByte(localValue);
         }
         return getProto().getAsByte(key);
     }
     
     public final byte getAsByte(String key, byte defValue) {
-        Object value = getAttributeFromLocal(key);
-        if (value != null) {
-            return (Byte) value;
+        Object localValue = getAttributeFromLocal(key);
+        if (localValue != null) {
+            return Converter.getAsByte(localValue);
         }
         return getProto().getAsByte(key, defValue);
     }
     
     public final Integer getAsInteger(String key) {
-        Object value = getAttributeFromLocal(key);
-        if (value != null) {
-            return (Integer) value;
+        Object localValue = getAttributeFromLocal(key);
+        if (localValue != null) {
+            return Converter.getAsInteger(localValue);
         }
         return getProto().getAsInteger(key);
     }
     
     public final int getAsInteger(String key, int defValue) {
-        Object value = getAttributeFromLocal(key);
-        if (value != null) {
-            return (Integer) value;
+        Object localValue = getAttributeFromLocal(key);
+        if (localValue != null) {
+            return Converter.getAsInteger(localValue);
         }
         return getProto().getAsInteger(key, defValue);
     }
@@ -262,9 +261,9 @@ public class ObjectData implements Savable, Cloneable {
      * @return 
      */
     public final int[] getAsIntegerArray(String key) {
-        Object value = getAttributeFromLocal(key);
-        if (value != null) {
-            return (int[]) value;
+        Object localValue = getAttributeFromLocal(key);
+        if (localValue != null) {
+            return Converter.getAsIntegerArray(localValue);
         }
         return getProto().getAsIntegerArray(key);
     }
@@ -275,25 +274,25 @@ public class ObjectData implements Savable, Cloneable {
      * @return 
      */
     public final List<Integer> getAsIntegerList(String key) {
-        Object value = getAttributeFromLocal(key);
-        if (value != null) {
-            return (List<Integer>) value;
+        Object localValue = getAttributeFromLocal(key);
+        if (localValue != null) {
+            return Converter.getAsIntegerList(localValue);
         }
         return getProto().getAsIntegerList(key);
     }
     
     public final Long getAsLong(String key) {
-        Object value = getAttributeFromLocal(key);
-        if (value != null) {
-            return (Long) value;
+        Object localValue = getAttributeFromLocal(key);
+        if (localValue != null) {
+            return Converter.getAsLong(localValue);
         }
         return getProto().getAsLong(key);
     }
     
     public final long getAsLong(String key, long defValue) {
-        Object value = getAttributeFromLocal(key);
-        if (value != null) {
-            return (Long) value;
+        Object localValue = getAttributeFromLocal(key);
+        if (localValue != null) {
+            return Converter.getAsLong(localValue);
         }
         return getProto().getAsLong(key, defValue);
     }
@@ -301,7 +300,7 @@ public class ObjectData implements Savable, Cloneable {
     public final long[] getAsLongArray(String key) {
         Object value = getAttributeFromLocal(key);
         if (value != null) { 
-            return (long[]) value;
+            return Converter.getAsLongArray(value);
         }
         return getProto().getAsLongArray(key); 
     }
@@ -309,7 +308,7 @@ public class ObjectData implements Savable, Cloneable {
     public final List<Long> getAsLongList(String key) {
         Object value = getAttributeFromLocal(key);
         if (value != null) {
-            return (List<Long>) value;
+            return Converter.getAsLongList(value);
         }
         return getProto().getAsLongList(key);
     }
@@ -317,7 +316,7 @@ public class ObjectData implements Savable, Cloneable {
     public final Float getAsFloat(String key) {
         Object value = getAttributeFromLocal(key);
         if (value != null) {
-            return (Float) value;
+            return Converter.getAsFloat(value);
         }
         return getProto().getAsFloat(key);
     }
@@ -325,7 +324,7 @@ public class ObjectData implements Savable, Cloneable {
     public final float getAsFloat(String key, float defValue) {
         Object value = getAttributeFromLocal(key);
         if (value != null) {
-            return (Float) value;
+            return Converter.getAsFloat(value);
         }
         return getProto().getAsFloat(key, defValue);
     }
@@ -333,7 +332,7 @@ public class ObjectData implements Savable, Cloneable {
     public final float[] getAsFloatArray(String key) {
         Object value = getAttributeFromLocal(key);
         if (value != null) {
-            return (float[]) value;
+            return Converter.getAsFloatArray(value);
         }
         return getProto().getAsFloatArray(key);
     }
@@ -341,7 +340,7 @@ public class ObjectData implements Savable, Cloneable {
     public final Boolean getAsBoolean(String key) {
         Object value = getAttributeFromLocal(key);
         if (value != null) {
-            return (Boolean) value;
+            return Converter.getAsBoolean(value);
         }
         return getProto().getAsBoolean(key);
     }
@@ -349,7 +348,7 @@ public class ObjectData implements Savable, Cloneable {
     public final boolean getAsBoolean(String key, boolean defValue) {
         Object value = getAttributeFromLocal(key);
         if (value != null) {
-            return (Boolean) value;
+            return Converter.getAsBoolean(value);
         }
         return getProto().getAsBoolean(key, defValue);
     }
@@ -363,7 +362,7 @@ public class ObjectData implements Savable, Cloneable {
     public final List<String> getAsStringList(String key) {
         Object value = getAttributeFromLocal(key);
         if (value != null) {
-            return (List<String>) value;
+            return Converter.getAsStringList(value);
         }
         return getProto().getAsStringList(key);
     }
@@ -371,7 +370,7 @@ public class ObjectData implements Savable, Cloneable {
     public final Vector2f getAsVector2f(String key) {
         Object value = getAttributeFromLocal(key);
         if (value != null) {
-            return (Vector2f) value;
+            return Converter.getAsVector2f(value);
         }
         return getProto().getAsVector2f(key);
     }
@@ -379,7 +378,7 @@ public class ObjectData implements Savable, Cloneable {
     public final Vector2f getAsVector2f(String key, Vector2f defValue) {
         Object value = getAttributeFromLocal(key);
         if (value != null) {
-            return (Vector2f) value;
+            return Converter.getAsVector2f(value);
         }
         return getProto().getAsVector2f(key, defValue);
     }
@@ -395,7 +394,7 @@ public class ObjectData implements Savable, Cloneable {
     public final Vector3f getAsVector3f(String key) {
         Object value = getAttributeFromLocal(key);
         if (value != null) {
-            return (Vector3f) value;
+            return Converter.getAsVector3f(value);
         }
         return getProto().getAsVector3f(key);
     }
@@ -403,7 +402,7 @@ public class ObjectData implements Savable, Cloneable {
     public final Vector3f getAsVector3f(String key, Vector3f defValue) {
         Object value = getAttributeFromLocal(key);
         if (value != null) {
-            return (Vector3f) value;
+            return Converter.getAsVector3f(value);
         }
         return getProto().getAsVector3f(key, defValue);
     }
@@ -416,7 +415,7 @@ public class ObjectData implements Savable, Cloneable {
     public final Vector3f[] getAsVector3fArray(String key) {
         Object value = getAttributeFromLocal(key);
         if (value != null) {
-            return (Vector3f[]) value;
+            return Converter.getAsVector3fArray(value);
         }
         return getProto().getAsVector3fArray(key);
     }
@@ -429,7 +428,7 @@ public class ObjectData implements Savable, Cloneable {
     public final Vector4f getAsVector4f(String key) {
         Object value = getAttributeFromLocal(key);
         if (value != null) {
-            return (Vector4f) value;
+            return Converter.getAsVector4f(value);
         }
         return getProto().getAsVector4f(key);
     }
@@ -443,7 +442,7 @@ public class ObjectData implements Savable, Cloneable {
     public final Vector4f getAsVector4f(String key, Vector4f defValue) {
         Object value = getAttributeFromLocal(key);
         if (value != null) {
-            return (Vector4f) value;
+            return Converter.getAsVector4f(value);
         }
         return getProto().getAsVector4f(key, defValue);
     }
@@ -457,7 +456,7 @@ public class ObjectData implements Savable, Cloneable {
     public final Quaternion getAsQuaternion(String key) {
         Object value = getAttributeFromLocal(key);
         if (value != null) {
-            return (Quaternion) value;
+            return Converter.getAsQuaternion(value);
         }
         return getProto().getAsQuaternion(key);
     }
@@ -472,7 +471,7 @@ public class ObjectData implements Savable, Cloneable {
     public final Quaternion getAsQuaternion(String key, Quaternion defValue) {
         Object value = getAttributeFromLocal(key);
         if (value != null) {
-            return (Quaternion) value;
+            return Converter.getAsQuaternion(value);
         }
         return getProto().getAsQuaternion(key, defValue);
     }
@@ -485,7 +484,7 @@ public class ObjectData implements Savable, Cloneable {
     public final ColorRGBA getAsColor(String key) {
         Object value = getAttributeFromLocal(key);
         if (value != null) {
-            return (ColorRGBA) value;
+            return Converter.getAsColor(value);
         }
         return getProto().getAsColor(key);
     }
@@ -499,7 +498,7 @@ public class ObjectData implements Savable, Cloneable {
     public final ColorRGBA getAsColor(String key, ColorRGBA defValue) {
         Object value = getAttributeFromLocal(key);
         if (value != null) {
-            return (ColorRGBA) value;
+            return Converter.getAsColor(value);
         }
         return getProto().getAsColor(key, defValue);
     }
