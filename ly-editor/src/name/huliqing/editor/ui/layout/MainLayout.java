@@ -61,11 +61,11 @@ public class MainLayout extends VBox {
         contentZone.getItems().addAll(resourceZone, editZone);
         
         // -- zone size
-        minHeightProperty().bind(root.heightProperty());
-        minWidthProperty().bind(root.widthProperty());
-        contentZone.minHeightProperty().bind(heightProperty().subtract(menuBar.heightProperty()));
-        resourceZone.minHeightProperty().bind(contentZone.heightProperty());
-        editZone.minHeightProperty().bind(contentZone.heightProperty());
+        prefHeightProperty().bind(root.heightProperty());
+        prefWidthProperty().bind(root.widthProperty());
+        contentZone.prefHeightProperty().bind(heightProperty().subtract(menuBar.heightProperty()));
+        resourceZone.prefHeightProperty().bind(contentZone.heightProperty());
+        editZone.prefHeightProperty().bind(contentZone.heightProperty());
         
         // remove20170107,起到效果，原因不明，可能和JFXPanel与Swing的整合有关。必须使用下面的特殊方式处理:
 //        contentZone.setDividerPositions(0.2f);

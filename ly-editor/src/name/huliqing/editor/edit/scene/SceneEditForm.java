@@ -12,6 +12,7 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.constants.IdConstants;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.object.Loader;
+import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.game.Game;
 import name.huliqing.luoying.object.scene.Scene;
 
@@ -55,8 +56,17 @@ public class SceneEditForm extends SimpleEditForm {
         super.cleanup(); 
     }
     
+    public Scene getScene() {
+        return editScene;
+    }
+    
     public void setScene(String sceneId) {
         this.editSceneId = sceneId;
     }
 
+    public void addEntity(Entity entity) {
+        if (editScene != null) {
+            editScene.addEntity(entity);
+        }
+    }
 }

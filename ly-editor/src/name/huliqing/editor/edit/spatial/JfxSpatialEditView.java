@@ -28,10 +28,8 @@ public class JfxSpatialEditView extends JfxEditView<SpatialEditForm> {
     private Region editPanel;
     private Region toolbarView;
     
-    // 当进行DragAndDrop操作时editPanel不能全透明，否则editPanel显应不了事件
-    private final static String STYLE_ON_DRAG_STARTED = "-fx-background-color:rgba(0,0,0,0.01)";
-    // 在DragAndDrop操作结束之后要重新把editPanel设置为透明
-    private final static String STYLE_ON_DRAG_ENDED = "-fx-background-color:rgba(0,0,0,0)";
+    // editPanel不能完全透明，完全透明则响应不了事件，在响应事件时还需要设置为visible=true
+    private final static String STYLE_EDIT_PANEL = "-fx-background-color:rgba(0,0,0,0.01)";
     
     public JfxSpatialEditView(Pane root) {
         this.root = root;
@@ -46,8 +44,9 @@ public class JfxSpatialEditView extends JfxEditView<SpatialEditForm> {
         
         // editPanel放在splitPane中，不能绑定min宽度，否则拉大后无法缩小，让其自动大小就可以
 //        editPanel.minWidthProperty().bind(root.widthProperty()); 
-        editPanel.minHeightProperty().bind(root.heightProperty().subtract(toolbarView.heightProperty()));
-
+        editPanel.prefHeightProperty().bind(root.heightProperty().subtract(toolbarView.heightProperty()));
+        editPanel.setVisible(false);
+        editPanel.setStyle(STYLE_EDIT_PANEL);
         editPanel.setOnDragOver(e -> {
             Dragboard db = e.getDragboard();
             if (db.hasFiles()) {
@@ -78,13 +77,13 @@ public class JfxSpatialEditView extends JfxEditView<SpatialEditForm> {
     @Override
     public void jfxOnDragStarted() {
         super.jfxOnDragStarted();
-        Jfx.runOnJfx(() -> {editPanel.setStyle(STYLE_ON_DRAG_STARTED);});
+        editPanel.setVisible(true);
     }
 
     @Override
     public void jfxOnDragEnded() {
-        super.jfxOnDragEnded(); 
-        Jfx.runOnJfx(() -> editPanel.setStyle(STYLE_ON_DRAG_ENDED));
+        super.jfxOnDragEnded();
+        editPanel.setVisible(false);
     }
 
     

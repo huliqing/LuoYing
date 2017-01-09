@@ -29,11 +29,20 @@ public class Manager {
 
         // 载入配置
         initializeConfig();
+        
+        ComponentManager.loadComponents();
 
         // 载入字体
         font = app.getAssetManager().loadFont("/resources/font/chinese.fnt");
         
         app.getAssetManager().registerLocator("", EditAssetLocator.class);
+        
+        ConverterManager.initialize();
+    }
+    
+    public static void cleanup() {
+        CONFIG_MANAGER.saveConfig();
+        ComponentManager.clearComponents();
     }
     
     // 资源文件必须优先载入,因为JFX也要依赖这个资源
@@ -55,10 +64,6 @@ public class Manager {
         }
         CONFIG_MANAGER.loadConfig();
         configLoaded = true;
-    }
-    
-    public static void saveOnQuick() {
-        CONFIG_MANAGER.saveConfig();
     }
     
     public final static BitmapFont getFont() {

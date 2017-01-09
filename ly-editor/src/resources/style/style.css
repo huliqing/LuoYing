@@ -1,0 +1,49 @@
+
+/*
+.list-view .list-cell:empty {-fx-background-color: lightgray;}
+.list-view .list-cell:filled {-fx-background-color: lightgray;}
+.list-view .list-cell:even {-fx-background-color: tan;}
+.list-view .list-cell:odd {-fx-background-color: lightgray;}
+.list-view .list-cell:selected {-fx-background-color: lightgray;}
+*/
+
+.text-field {
+    -fx-background-radius: 7;
+    -fx-border-width: 0;
+}
+
+/* titled-pane */
+.titled-pane {
+    -fx-animated: false;
+    -fx-collapsible: true;
+}
+.titled-pane > .title {
+    -fx-background-color: lightgray;
+    -fx-background-radius:0;
+    -fx-alignment: CENTER_LEFT;
+}
+.titled-pane > .title > .text {
+    -fx-font-size: 12;
+    -fx-font-weight: bold;
+}
+.titled-pane > .title > .arrow-button > .arrow {
+    -fx-background-color: black;
+}
+.titled-pane > .content {
+    -fx-background-color: lightgray;
+    -fx-border-width:0;
+    -fx-padding: 5;
+}
+
+/* list-view */
+.list-view {
+    -fx-border-width: 0;
+}
+.list-view .list-cell {
+    -fx-background-radius: 10;   
+}
+
+#propertyPanel {
+    /*-fx-background-color: lightgray;*/
+    /* -fx-background-radius: 5; */
+}

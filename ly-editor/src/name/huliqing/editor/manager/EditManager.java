@@ -16,10 +16,10 @@ import name.huliqing.luoying.constants.IdConstants;
 
 /**
  *
- * @author huliqing
+ * @author huliqing 
  */
 public class EditManager {
-    
+     
     private static Pane jfxEditZone;
     
     public final static void registerEditZone(Pane jfxEditZone) {

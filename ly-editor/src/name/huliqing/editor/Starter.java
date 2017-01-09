@@ -38,6 +38,8 @@ public class Starter {
         Jfx.getMainFrame().setLocationRelativeTo(null);
         Jfx.getMainFrame().setVisible(true);
         Jfx.runOnJfx(() -> {
+            Jfx.getJfxRoot().getStylesheets().add("resources/style/style.css");
+            
             // 创建Jfx主场景
             Pane jfxEditZone = initMainSceneInJfx(Jfx.getJfxRoot());
             // 初始化FormView

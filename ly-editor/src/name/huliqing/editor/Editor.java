@@ -90,7 +90,7 @@ public class Editor extends SimpleApplication{
     
     @Override
     public void stop() {
-        Manager.saveOnQuick();
+        Manager.cleanup();
         super.stop(); 
     }
     

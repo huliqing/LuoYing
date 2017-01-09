@@ -258,7 +258,7 @@ public class ScaleTool extends EditTool implements SimpleEditFormListener{
             
             TempVars tv = TempVars.get();
             Vector3f constraintAxis = picker.getStartOffset(tv.vect1).normalizeLocal();
-            float diff = picker.getLocalTranslation(constraintAxis).dot(constraintAxis) * 0.5f + 1f; // * 0.5减少一些缩放强度
+            float diff = picker.getLocalTranslation(constraintAxis).dot(constraintAxis) * 0.1f + 1f; // * 0.1减少一些缩放强度
             Vector3f scale = startScale.mult(diff, tv.vect2);
             selectObj.getSelectedSpatial().setLocalScale(scale);
             afterScale.set(scale);

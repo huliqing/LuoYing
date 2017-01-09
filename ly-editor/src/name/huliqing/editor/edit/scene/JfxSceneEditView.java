@@ -7,15 +7,22 @@ package name.huliqing.editor.edit.scene;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import name.huliqing.editor.constants.DataFormatConstants;
 import name.huliqing.editor.edit.JfxEditView;
+import name.huliqing.editor.manager.ComponentManager.Component;
 import name.huliqing.editor.ui.ToolBarView;
+import name.huliqing.editor.components.EntityComponents;
+import name.huliqing.editor.manager.ConverterManager;
+import name.huliqing.editor.converter.DataConverter;
+import name.huliqing.editor.ui.layout.SceneEditLayout;
 import name.huliqing.fxswing.Jfx;
+import name.huliqing.luoying.object.Loader;
+import name.huliqing.luoying.object.entity.Entity;
 
 /**
  *
@@ -26,12 +33,15 @@ public class JfxSceneEditView extends JfxEditView<SceneEditForm>{
     private static final Logger LOG = Logger.getLogger(JfxSceneEditView.class.getName());
 
     private final Pane root;
+    private final SceneEditLayout layout = new SceneEditLayout();
     
-    private final BorderPane layout = new BorderPane();
-    private HBox propertyPanel; // left
-    private VBox editPanel;   // center
-    private VBox components; // right
-    private ToolBarView toolbarView; // bottom
+    private HBox propertyPanel;
+    private VBox editPanel;
+    private VBox components;
+    private ToolBarView toolbarView;
+    
+    // editPanel不能完全透明，完全透明则响应不了事件，在响应事件时还需要设置为visible=true
+    private final static String STYLE_EDIT_PANEL = "-fx-background-color:rgba(0,0,0,0.01)";
     
     public JfxSceneEditView(Pane root) {
         this.root = root;
@@ -45,22 +55,44 @@ public class JfxSceneEditView extends JfxEditView<SceneEditForm>{
         editPanel = new VBox();
         components = new VBox();
         toolbarView = new ToolBarView(form);
-        layout.setLeft(propertyPanel);
-        layout.setCenter(editPanel);
-        layout.setRight(components);
-        layout.setBottom(toolbarView);
         
-//        propertyPanel.getChildren().add(new Label("top"));
-        propertyPanel.getChildren().add(new Button("left"));
-        components.getChildren().add(new Button("right"));
+        layout.setZoneComponents(components);
+        layout.setZoneEdit(editPanel);
+        layout.setZoneProperty(propertyPanel);
+        layout.setZoneToolbar(toolbarView);
+        layout.buildLayout();
         
-        components.setPrefWidth(200);
-        propertyPanel.setPrefWidth(100);
-        toolbarView.setPrefHeight(30);
         layout.prefWidthProperty().bind(root.widthProperty());
         layout.prefHeightProperty().bind(root.heightProperty());
-        editPanel.prefWidthProperty().bind(layout.widthProperty().subtract(propertyPanel.widthProperty()).subtract(components.widthProperty()));
-        editPanel.prefHeightProperty().bind(layout.heightProperty().subtract(toolbarView.heightProperty()));
+        
+        
+        editPanel.setVisible(false);
+        editPanel.setStyle(STYLE_EDIT_PANEL);
+        editPanel.setOnDragOver(e -> {
+            Dragboard db = e.getDragboard();
+            if (db.hasContent(DataFormatConstants.COMPONENT_ENTITY)) {
+                e.acceptTransferModes(TransferMode.ANY);
+            }
+            e.consume();
+        });
+        editPanel.setOnDragDropped(e -> {
+            Dragboard db = e.getDragboard();
+            if (db.hasContent(DataFormatConstants.COMPONENT_ENTITY)) {
+                Component c = (Component) db.getContent(DataFormatConstants.COMPONENT_ENTITY);
+                e.setDropCompleted(true);
+                Jfx.runOnJme(() -> {
+                    Entity entity = Loader.load(c.id);
+                    form.addEntity(entity);
+                });
+            }
+            e.consume();
+        });
+        
+        EntityComponents ec = new EntityComponents();
+        components.getChildren().add(ec.getNode());
+        
+        DataConverter dc = ConverterManager.createConverter(form.getScene().getData(), null);
+        propertyPanel.getChildren().add(dc.getNode());
         
         Jfx.jfxForceUpdate();
         Jfx.jfxCanvasBind(editPanel);
@@ -79,5 +111,17 @@ public class JfxSceneEditView extends JfxEditView<SceneEditForm>{
                 LOG.log(Level.WARNING, "Could not load scene! sceneId={0}", sceneId);
             }
         });
+    }
+    
+    @Override
+    public void jfxOnDragStarted() {
+        super.jfxOnDragStarted();
+        editPanel.setVisible(true);
+    }
+
+    @Override
+    public void jfxOnDragEnded() {
+        super.jfxOnDragEnded(); 
+        editPanel.setVisible(false);
     }
 }
