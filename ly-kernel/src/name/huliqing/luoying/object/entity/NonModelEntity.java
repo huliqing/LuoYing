@@ -36,9 +36,9 @@ public abstract class NonModelEntity <T extends EntityData> extends AbstractEnti
      * {@link #getSpatial() } 方法的调用返回, 避免在调用getSpatial的时候返回null.
      */
     private final Node NULL_ROOT = new Node(getClass().getName());
-    
+
     @Override
-    public Spatial getSpatial() {
+    protected Spatial initSpatial() {
         return NULL_ROOT;
     }
     

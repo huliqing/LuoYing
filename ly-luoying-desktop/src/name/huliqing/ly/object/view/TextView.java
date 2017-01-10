@@ -116,5 +116,6 @@ public class TextView<T extends ViewData> extends AbstractView<T> {
         textUI.setText(text);
     }
 
+
     
 }

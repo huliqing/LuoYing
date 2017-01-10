@@ -93,6 +93,7 @@ public abstract class NetworkRpgGame extends SimpleRpgGame implements LanGame {
         
         ChaseCameraEntity cc = getChaseCamera();  
         if (cc != null) {
+            cc.setEnabled(true);
             cc.setChase(actorPanel.getActorView());
         }
     }

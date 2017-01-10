@@ -37,6 +37,14 @@ public class ActorData extends ModelEntityData implements MatObject {
         return getAsString("file");
     }
     
+    /**
+     * 获取图标。
+     * @return 
+     */
+    public String getIcon() {
+        return getAsString("icon");
+    }
+    
 //    /**
 //     * 扩展的骨骼动画目标路径，这个参数指向一个asset中的目录,
 //     * 如："Models/actor/anim" 当角色使用的技能中找不到相应的动画时将会从这个目录中查找动画文件

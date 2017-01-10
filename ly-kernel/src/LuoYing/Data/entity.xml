@@ -26,7 +26,7 @@
     <entitySimpleWater id="sysEntitySimpleWaterBase" waterModel="LuoYing/Assets/MatDefs/SimpleWater/water.mesh.j3o" scale="300,1,300" 
         location="0,-2.5,0" rotation="0,0,0" waterColor="0.6, 0.8, 0.9, 1" texScale="10" waveSpeed="0.003" distortionScale="0.4"
         foamMap="LuoYing/Assets/MatDefs/SimpleWater/foam.jpg" foamScale="1,1" 
-        foamMaskMap="LuoYing/Assets/MatDefs/SimpleWater/foamMask.jpg" foamMaskScale="1.8, 1.8"
+        foamMaskMap="LuoYing/Assets/MatDefs/SimpleWater/foamMask.jpg" foamMaskScale="1.8, 1.8" 
     />
 
     <!--高级水体，资源占用较大，不能用在移动平台 -->

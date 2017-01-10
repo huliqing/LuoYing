@@ -19,8 +19,6 @@
  */
 package name.huliqing.luoying.data;
 
-import com.jme3.math.Quaternion;
-import com.jme3.math.Vector3f;
 import com.jme3.network.serializing.Serializable;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
@@ -33,61 +31,10 @@ import com.jme3.scene.Spatial.CullHint;
 @Serializable
 public class ModelEntityData extends EntityData {
     
-    private final static String ATTR_LOCATION = "location";
-    private final static String ATTR_ROTATION = "rotation";
-    private final static String ATTR_SCALE = "scale";
     private final static String ATTR_SHADOW_MODE = "shadowMode";
     private final static String ATTR_CULL_HINT = "cullHint";
     private final static String ATTR_QUEUE_BUCKET = "queueBucket";
     private final static String ATTR_PREFER_UNSHADED = "preferUnshaded";
-    
-    /**
-     * 获取模型的位置，如果没有设置这个参数，则返回null.
-     * @return 有可能返回null.
-     */
-    public Vector3f getLocation() {
-        return getAsVector3f(ATTR_LOCATION);
-    }
-    
-    /**
-     * 设置模型的位置
-     * @param location 
-     */
-    public void setLocation(Vector3f location) {
-        setAttribute(ATTR_LOCATION, location);
-    }
-    
-    /**
-     * 获取模型的旋转变换，如果没有设置这个参数，则返回null.
-     * @return 有可能返回null.
-     */
-    public Quaternion getRotation() {
-        return getAsQuaternion(ATTR_ROTATION);
-    }
-    
-    /**
-     * 设置模型旋转变换
-     * @param rotation 
-     */
-    public void setRotation(Quaternion rotation) {
-        setAttribute(ATTR_ROTATION, rotation);
-    }
-    
-    /**
-     * 获取模型的缩放变换，如果没有设置这个参数，则返回null.
-     * @return 有可能返回null.
-     */
-    public Vector3f getScale() {
-        return getAsVector3f(ATTR_SCALE);
-    }
-    
-    /**
-     * 设置模型缩放
-     * @param scale 
-     */
-    public void setScale(Vector3f scale) {
-        setAttribute(ATTR_SCALE, scale);
-    }
     
     /**
      * 获取ShadowMode, 如果没有设置这个参数则可能返回null.

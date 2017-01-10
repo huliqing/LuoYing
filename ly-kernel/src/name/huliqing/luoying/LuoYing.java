@@ -325,8 +325,8 @@ public class LuoYing {
      * @param app
      */
     public static void initialize(Application app) {
-        LuoYing.app = app;
-        LogFactory.initialize();
+        LuoYing.app = app; 
+        LogFactory.initialize(); 
         
         // 注册需要序列化的数据，对于网络版进行序列化时需要用到。
         registerSerializer();

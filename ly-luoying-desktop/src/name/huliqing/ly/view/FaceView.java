@@ -39,6 +39,7 @@ import name.huliqing.ly.constants.InterfaceConstants;
 import name.huliqing.luoying.data.StateData;
 import name.huliqing.ly.layer.service.ChatService;
 import name.huliqing.luoying.layer.service.PlayService;
+import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.anim.Loop;
 import name.huliqing.luoying.object.anim.ColorAnim;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
@@ -264,9 +265,9 @@ public final class FaceView extends LinearLayout implements EntityDataListener{
         }
         
         public void setActor(Entity actor) {
-            String icon = actor.getData().getIcon();
-            if (icon == null) {
-                icon = InterfaceConstants.UI_MISS;
+            String icon = InterfaceConstants.UI_MISS;
+            if (actor instanceof Actor) {
+                icon = ((Actor) actor).getData().getIcon();
             }
             Texture tex;
             try {

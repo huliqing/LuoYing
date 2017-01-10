@@ -110,12 +110,6 @@ public class SendChat<T extends ChatData> extends Chat<T> {
     }
 
     @Override
-    public void initEntity() {
-        super.initEntity();
-        
-    }
-
-    @Override
     public void onInitScene(Scene scene) {
         super.onInitScene(scene); 
         

@@ -187,6 +187,7 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
         ui.getTeamView().setMainActor(newPlayer);
         ChaseCameraEntity cce = getChaseCamera();
         if (cce != null) {
+            cce.setEnabled(true);
             cce.setChase(newPlayer.getSpatial());
         }
     }
@@ -392,6 +393,7 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
         // 在按下鼠标拖动(UI)的时候同时出现3D镜头在旋转的问题．
         ChaseCameraEntity cce = getChaseCamera();
         if (cce != null) {
+            cce.setEnabled(true);
             cce.setEnabledRotation(enabled);
         }
     }

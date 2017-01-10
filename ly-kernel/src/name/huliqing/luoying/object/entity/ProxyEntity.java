@@ -19,20 +19,16 @@
  */
 package name.huliqing.luoying.object.entity;
 
-import com.jme3.scene.Spatial;
+import name.huliqing.luoying.object.entity.impl.PlatformProxyEntity;
 import name.huliqing.luoying.object.scene.Scene;
 
 /**
  * 代理类型的实体，这种实体类型自己不做实际的任何功能，只是把功能委托给另一个实际的实体去处理。
  * 提供这样一种类型主要是为了在一些特别的情况下，特别是在运行时系统可以根据实际情况切换不同的实体类型。
  * 比如运行时根据不同的平台可以切换不同类型的实体来运行，参考 {@link PlatformProxyEntity} <br>
- * 
- * 
- * 
  * @author huliqing
- * @see ProxyEntity
  */
-public abstract class ProxyEntity extends AbstractEntity {
+public abstract class ProxyEntity extends NonModelEntity {
 
     // 被代理的直接对象, 代理允许实现一个代理链，即可以像下面这样实现代理:
     // ProxyEntityA -> ProxyEntityB -> WaterEntity.
@@ -49,6 +45,11 @@ public abstract class ProxyEntity extends AbstractEntity {
             proxyEntity.updateDatas();
         }
     }
+    
+//    @Override
+//    public Spatial getSpatial() {
+//        return proxyEntity.getSpatial();
+//    }
     
     @Override
     public void onInitScene(Scene scene) {
@@ -79,11 +80,6 @@ public abstract class ProxyEntity extends AbstractEntity {
         super.cleanup();
     }
 
-    @Override
-    public Spatial getSpatial() {
-        return proxyEntity.getSpatial();
-    }
-    
     /**
      * 获取当前实体所代理的实际对象，代理可以是一个代理链，而这个方法返回的是代理链最后的实际代理对象。
      * @return 

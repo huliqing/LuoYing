@@ -134,6 +134,11 @@ public abstract class AbstractView<T extends ViewData> extends AbstractEntity<T>
         data.setAttribute("timeUsed", timeUsed);
         data.setAttribute("useTime", useTime);
     }
+
+    @Override
+    protected Spatial initSpatial() {
+        return viewRoot;
+    }
     
     @Override
     public final void initEntity() {
@@ -180,11 +185,6 @@ public abstract class AbstractView<T extends ViewData> extends AbstractEntity<T>
         } else if (cornerPosition != null) {
             viewRoot.setToCorner(cornerPosition);
         }
-    }
-
-    @Override
-    public Spatial getSpatial() {
-        return viewRoot;
     }
     
     protected final void viewUpdate(float tpf) {

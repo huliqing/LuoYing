@@ -44,7 +44,7 @@ public class EffectDataLoader<T extends EffectData> extends EntityDataLoader <T>
             String[] taArr;
             List<DelayAnimData> dads = new ArrayList<DelayAnimData>(tempAnims.length);
             for (String ta : tempAnims) {
-                taArr = ta.split("\\|");
+                taArr = ta.split("\\|"); 
                 DelayAnimData dad = Loader.loadData(IdConstants.SYS_CUSTOM_ANIM_DELAY);
                 dad.setAnimData((AnimData) Loader.loadData(taArr[0]));
                 if (taArr.length > 1) {

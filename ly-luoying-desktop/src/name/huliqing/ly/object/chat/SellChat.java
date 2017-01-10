@@ -124,11 +124,6 @@ public class SellChat<T extends ChatData> extends Chat<T> {
         win.setToCorner(UI.Corner.CC);
         return win;
     }
-    
-    @Override
-    public void initEntity() {
-        super.initEntity();
-    }
 
     @Override
     public void onInitScene(Scene scene) {

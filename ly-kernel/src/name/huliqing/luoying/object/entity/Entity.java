@@ -95,12 +95,8 @@ public interface Entity<T extends EntityData> extends DataProcessor<T>{
      * 一个Entity可以是有形的或是无形的存在，有形的如：花、草、树木、动物、生物、各种角色等拥有模型的物体。
      * 无形的Entity可以是如：物理环境、光照系统、水体环境、天空系统、包围盒、阴影及各种SceneProcessor或Filter等。
      * <br>
-     * 1.对于有形的Entity，这个方法必须返回一个代表物体在场景中的实际存在，如对于角色一般应该返回角色的模型节点.<br>
-     * 2.对于无形的Entity，这个方法可以返回null<br>
-     * 
-     * 注：一般这个Spatial只作为<b>只读</b>使用，外部在引用这个Spatial的时候不应该直接去<b>写操作</b>
-     * 这个Spatial的各种属性，而是应该通过Entity(DataProcessor)所定义的各种接口API来改变Entity的各种行为，
-     * 这可以避免状态的不同步，特别是在Network环境下。
+     * 1.对于有形的Entity，这个方法应该返回一个代表物体在场景中的实际存在，如对于角色一般应该返回角色的模型节点.<br>
+     * 2.对于无形的Entity，这个方法可以返回一个空的Node,不要返回null.<br>
      * @return 
      * @see ModelEntity
      * @see NoneModelEntity

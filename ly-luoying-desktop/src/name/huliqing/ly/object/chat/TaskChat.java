@@ -96,11 +96,6 @@ public class TaskChat extends Chat {
     }
 
     @Override
-    public void initEntity() {
-        super.initEntity();
-    }
-
-    @Override
     public void onInitScene(Scene scene) {
         super.onInitScene(scene); 
         // fix bug:如果requestPanel已经存在，即可能已经接过任务，则先移除，

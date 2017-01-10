@@ -49,7 +49,7 @@ public class ActorDataLoader extends EntityDataLoader {
         if (matStr != null) {
             data.setMat(defineService.getMatDefine().getMat(matStr));
         }
-        
+         
         // items 
         String[] items = proto.getAsArray("items");
         if (items != null) {

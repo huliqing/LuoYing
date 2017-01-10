@@ -31,7 +31,7 @@ import name.huliqing.luoying.utils.MathUtils;
  * @param <T>
  */
 public class PlantEnvLoader<T extends ModelEntityData> extends EntityDataLoader<T> {
-
+ 
     @Override
     public void load(Proto proto, T store) {
         super.load(proto, store);

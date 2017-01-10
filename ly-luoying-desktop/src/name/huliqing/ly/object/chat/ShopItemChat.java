@@ -166,11 +166,6 @@ public class ShopItemChat<T extends ChatData> extends Chat<T> implements EntityD
     }
 
     @Override
-    public void initEntity() {
-        super.initEntity();
-    }
-
-    @Override
     public void onInitScene(Scene scene) {
         super.onInitScene(scene); 
         win.setTitle(getChatName() + "-" + gameService.getName(actor));

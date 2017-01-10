@@ -107,6 +107,15 @@ public abstract class Chat<T extends ChatData> extends AbstractEntity<T> {
     public void updateDatas() {
         super.updateDatas();
     }
+
+    @Override
+    protected Spatial initSpatial() {
+        // 1.创建并Chat界面并设置动画效果
+        if (chatUI == null) {
+            chatUI = createChatUI(width, height);
+        }
+        return chatUI.getDisplay();
+    }
     
     @Override
     public void initEntity() {}
@@ -120,10 +129,11 @@ public abstract class Chat<T extends ChatData> extends AbstractEntity<T> {
             return;
         }
         
-        // 1.创建并Chat界面并设置动画效果
-        if (chatUI == null) {
-            chatUI = createChatUI(width, height);
-        }
+        // remove20170110,moveto initSpatial
+//        // 1.创建并Chat界面并设置动画效果
+//        if (chatUI == null) {
+//            chatUI = createChatUI(width, height);
+//        }
         
         // 2.将界面加入主场景,并启动动画
         if (chatUI != null) {
@@ -134,6 +144,8 @@ public abstract class Chat<T extends ChatData> extends AbstractEntity<T> {
         if (closeParent && parent != null) {
             scene.removeEntity(parent);
         }
+        
+        // ChatUI不会运行Control,所以需要把control加在SceneRoot中
         scene.getRoot().addControl(control);
     }
     

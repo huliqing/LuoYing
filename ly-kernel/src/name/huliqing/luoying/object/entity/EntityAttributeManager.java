@@ -53,6 +53,15 @@ public class EntityAttributeManager extends AttributeManagerImpl {
         }
     }
     
+    public void cleanup() {
+        // 清理的时候只从store中清理即可，不要从entity.getData()中清理掉，因为
+        List<Attribute> attributes = store.getAttributes();
+        for (Attribute attr : attributes) {
+            attr.cleanup();
+        }
+        store.clear();
+    }
+    
     /**
      * 添加新的属性，注：如果已经存在相同id或名称的属性，则旧的属性会被替换掉。
      * @param attribute 
