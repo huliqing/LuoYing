@@ -6,12 +6,10 @@
 package name.huliqing.editor.tools;
 
 import com.jme3.collision.CollisionResults;
-import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
+import com.jme3.math.Ray;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.JmeEvent;
 import name.huliqing.editor.select.SelectObj;
-import name.huliqing.editor.select.SpatialSelectObj;
 import name.huliqing.editor.undoredo.UndoRedo;
 import name.huliqing.luoying.manager.PickManager;
 
@@ -39,15 +37,24 @@ public class PickTool extends EditTool {
     }
 
     private void doPick() {
-        Node editRoot = form.getEditRoot();
-        pickResults.clear();
-        PickManager.pick(editor.getCamera(), editor.getInputManager().getCursorPosition(), editRoot, pickResults);
-        if (pickResults.size() > 0) {
-            Spatial picked = pickResults.getClosestCollision().getGeometry();
+        // remove20170111
+//        Node editRoot = form.getEditRoot();
+//        pickResults.clear();
+//        PickManager.pick(editor.getCamera(), editor.getInputManager().getCursorPosition(), editRoot, pickResults);
+//        if (pickResults.size() > 0) {
+//            Spatial picked = pickResults.getClosestCollision().getGeometry();
+//            SelectObj before = form.getSelected();
+//            SelectObj after = new SpatialSelectObj(picked);
+//            form.setSelected(after);
+//            form.addUndoRedo(new PickUndoRedo(before, after));
+//        }
+
+        Ray pickRay = PickManager.getPickRay(editor.getCamera(), editor.getInputManager().getCursorPosition(), null);
+        SelectObj newSelectObj = form.doPick(pickRay);
+        if (newSelectObj != null) {
             SelectObj before = form.getSelected();
-            SelectObj after = new SpatialSelectObj(picked);
-            form.setSelected(after);
-            form.addUndoRedo(new PickUndoRedo(before, after));
+            form.setSelected(newSelectObj);
+            form.addUndoRedo(new PickUndoRedo(before, newSelectObj));
         }
     }
     

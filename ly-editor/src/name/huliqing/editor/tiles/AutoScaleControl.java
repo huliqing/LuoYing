@@ -19,8 +19,22 @@ import com.jme3.scene.control.AbstractControl;
 public class AutoScaleControl extends AbstractControl {
     
     private final Vector3f lastCamLoc = new Vector3f();
-    private final float size = 0.15f;
+    private float size = 0.15f;
     private Camera camera;
+    
+    public AutoScaleControl() {}
+    
+    public AutoScaleControl(float size) {
+        this.size = size;
+    }
+    
+    /**
+     * 设置图标大小，默认0.15f
+     * @param size 
+     */
+    public void setSize(float size) {
+        this.size = size;
+    }
     
     /**
      * 强制立即更新，计算缩放
@@ -34,18 +48,12 @@ public class AutoScaleControl extends AbstractControl {
          if (camera == null || spatial.getCullHint() == Spatial.CullHint.Always) {
             return;
         }
-        // 自动缩放
-//        Vector3f camloc = Editor.getApp().getCamera().getLocation();
         Vector3f camloc = camera.getLocation();
-        if (Float.compare(camloc.x, lastCamLoc.x) != 0
-                || Float.compare(camloc.y, lastCamLoc.y) != 0
-                || Float.compare(camloc.z, lastCamLoc.z) != 0) {
-            float scale = size * spatial.getWorldTranslation().distance(camloc);
-            if (scale > 0) {
-                spatial.setLocalScale(scale);
-            }
-            lastCamLoc.set(camloc);
+        float scale = size * spatial.getWorldTranslation().distance(camloc);
+        if (scale > 0) {
+            spatial.setLocalScale(scale);
         }
+        lastCamLoc.set(camloc);
     }
 
     @Override

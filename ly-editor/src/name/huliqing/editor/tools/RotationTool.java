@@ -8,7 +8,6 @@ package name.huliqing.editor.tools;
 import com.jme3.input.KeyInput;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
-import com.jme3.scene.Spatial;
 import name.huliqing.editor.action.Picker;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.JmeEvent;
@@ -157,10 +156,10 @@ public class RotationTool extends EditTool implements SimpleEditFormListener{
     private void startFreeRotation() {
         freeRotation = true;
         transforming = true;
-        picker.startPick(selectObj.getSelectedSpatial(), Mode.CAMERA
+        picker.startPick(selectObj.getReadOnlySelectedSpatial(), Mode.CAMERA
                 , editor.getCamera(), editor.getInputManager().getCursorPosition(), Picker.PLANE_XY);
-        startRotate.set(selectObj.getSelectedSpatial().getLocalRotation());
-        startWorldRotate.set(selectObj.getSelectedSpatial().getWorldRotation());
+        startRotate.set(selectObj.getReadOnlySelectedSpatial().getLocalRotation());
+        startWorldRotate.set(selectObj.getReadOnlySelectedSpatial().getWorldRotation());
         controlObj.setAxisVisible(false);
         controlObj.setAxisLineVisible(false);
     }
@@ -183,11 +182,11 @@ public class RotationTool extends EditTool implements SimpleEditFormListener{
             default:
                 throw new UnsupportedOperationException();
         }
-        picker.startPick(selectObj.getSelectedSpatial(), form.getMode()
+        picker.startPick(selectObj.getReadOnlySelectedSpatial(), form.getMode()
                 , editor.getCamera(), editor.getInputManager().getCursorPosition()
                 ,planRotation);
-        startRotate.set(selectObj.getSelectedSpatial().getLocalRotation());
-        startWorldRotate.set(selectObj.getSelectedSpatial().getWorldRotation());
+        startRotate.set(selectObj.getReadOnlySelectedSpatial().getLocalRotation());
+        startWorldRotate.set(selectObj.getReadOnlySelectedSpatial().getWorldRotation());
         controlObj.setAxisVisible(false);
         controlObj.setAxisLineVisible(false);
         rotationAxis.setAxisLineVisible(true);
@@ -197,7 +196,7 @@ public class RotationTool extends EditTool implements SimpleEditFormListener{
     private void endRotation() {
         if (transforming) {
             picker.endPick();
-            form.addUndoRedo(new RotationUndoRedo(selectObj.getSelectedSpatial(), startRotate, afterRotate));
+            form.addUndoRedo(new RotationUndoRedo(selectObj, startRotate, afterRotate));
         }
         transforming = false;
         freeRotation = false;
@@ -209,7 +208,7 @@ public class RotationTool extends EditTool implements SimpleEditFormListener{
     private void cancelRotation() {
         if (transforming) {
             picker.endPick();
-            selectObj.getSelectedSpatial().setLocalRotation(startRotate);
+            selectObj.setLocalRotation(startRotate);
             transforming = false;
             // 更新一次位置,因为操作取消了
             updateMarkerState();
@@ -232,7 +231,7 @@ public class RotationTool extends EditTool implements SimpleEditFormListener{
         }
 
         Quaternion rotation = startRotate.mult(picker.getRotation(startWorldRotate.inverse()));
-        selectObj.getSelectedSpatial().setLocalRotation(rotation);
+        selectObj.setLocalRotation(rotation);
         afterRotate.set(rotation);
         
     }
@@ -253,14 +252,14 @@ public class RotationTool extends EditTool implements SimpleEditFormListener{
             return;
         }
         controlObj.setVisible(true);
-        controlObj.setLocalTranslation(form.getSelected().getSelectedSpatial().getWorldTranslation());
+        controlObj.setLocalTranslation(form.getSelected().getReadOnlySelectedSpatial().getWorldTranslation());
         Mode mode = form.getMode();
         switch (form.getMode()) {
             case GLOBAL:
                 controlObj.setLocalRotation(new Quaternion());
                 break;
             case LOCAL:
-                controlObj.setLocalRotation(form.getSelected().getSelectedSpatial().getWorldRotation());
+                controlObj.setLocalRotation(form.getSelected().getReadOnlySelectedSpatial().getWorldRotation());
                 break;
             case CAMERA:
                 controlObj.setLocalRotation(editor.getCamera().getRotation());
@@ -271,24 +270,24 @@ public class RotationTool extends EditTool implements SimpleEditFormListener{
     }
     
     private class RotationUndoRedo implements UndoRedo {
-        private final Spatial spatial;
+        private final SelectObj selectObj;
         private final Quaternion before = new Quaternion();
         private final Quaternion after = new Quaternion();
-        public RotationUndoRedo(Spatial spatial, Quaternion before, Quaternion after) {
-            this.spatial = spatial;
+        public RotationUndoRedo(SelectObj selectObj, Quaternion before, Quaternion after) {
+            this.selectObj = selectObj; 
             this.before.set(before);
             this.after.set(after);
         }
         
         @Override
         public void undo() {
-            spatial.setLocalRotation(before);
+            selectObj.setLocalRotation(before);
             updateMarkerState();
         }
 
         @Override
         public void redo() {
-            spatial.setLocalRotation(after);
+            selectObj.setLocalRotation(after);
             updateMarkerState();
         }
         

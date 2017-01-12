@@ -6,7 +6,7 @@
 package name.huliqing.editor.converter;
 
 import java.util.List;
-import javafx.scene.Node;
+import javafx.scene.layout.Pane;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
@@ -22,7 +22,7 @@ public interface DataConverter<T extends ObjectData> {
      */
     T getData();
     
-    Node getNode();
+    Pane getLayout();
     
     void initialize(T data, List<PropertyConverterDefine> propertyConverterDefines, PropertyConverter parent);
 

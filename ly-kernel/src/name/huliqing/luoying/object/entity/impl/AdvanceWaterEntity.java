@@ -40,14 +40,9 @@ import name.huliqing.luoying.object.entity.WaterEntity;
  */
 public class AdvanceWaterEntity extends NonModelEntity implements WaterEntity, SceneListener {
 
-    private String causticsTexture;
-    private String foamTexture;
-    private String heightTexture;
-    private String normalTexture;
-    
-    // 是否使用场景中的直射光源，打开这个选项后Water会从场景中找到第一个可用的直射光源作为水体渲染时使用的光源。
-    // 否则使用Water默认设置的光源。默认true
-    private boolean useSceneLight = true;
+//    // 是否使用场景中的直射光源，打开这个选项后Water会从场景中找到第一个可用的直射光源作为水体渲染时使用的光源。
+//    // 否则使用Water默认设置的光源。默认true
+//    private boolean useSceneLight = true;
     
     // ---- inner
     private WaterFilter water;
@@ -58,17 +53,17 @@ public class AdvanceWaterEntity extends NonModelEntity implements WaterEntity, S
     @Override
     public void setData(EntityData data) {
         super.setData(data); 
-        this.causticsTexture = data.getAsString("causticsTexture");
-        this.foamTexture = data.getAsString("foamTexture");
-        this.heightTexture = data.getAsString("heightTexture");
-        this.normalTexture = data.getAsString("normalTexture");
-        // ---- custom 
-        useSceneLight = data.getAsBoolean("useSceneLight", useSceneLight);
+//        useSceneLight = data.getAsBoolean("useSceneLight", useSceneLight);
     }
 
     @Override
     public void updateDatas() {
         super.updateDatas();
+        if (isInitialized()) {
+            data.setAttribute("center", water.getCenter());
+            data.setAttribute("radius", water.getRadius());
+            data.setAttribute("waterHeight", water.getWaterHeight());
+        }
     }
 
     @Override
@@ -119,15 +114,22 @@ public class AdvanceWaterEntity extends NonModelEntity implements WaterEntity, S
         water.setWindDirection(data.getAsVector2f("windDirection", water.getWindDirection()));
         radiusSquared = water.getRadius() * water.getRadius();
         
+        String causticsTexture = data.getAsString("causticsTexture");
         if (causticsTexture != null) {
             water.setCausticsTexture((Texture2D) LuoYing.getApp().getAssetManager().loadTexture(causticsTexture));
         }
+        
+        String foamTexture = data.getAsString("foamTexture");
         if (foamTexture != null) {
             water.setFoamTexture((Texture2D) LuoYing.getApp().getAssetManager().loadTexture(foamTexture));
         }
+        
+        String heightTexture = data.getAsString("heightTexture");
         if (heightTexture != null) {
             water.setHeightTexture((Texture2D) LuoYing.getApp().getAssetManager().loadTexture(heightTexture));
         }
+        
+        String normalTexture = data.getAsString("normalTexture");
         if (normalTexture != null) {
             water.setNormalTexture((Texture2D) LuoYing.getApp().getAssetManager().loadTexture(normalTexture));
         }
@@ -152,6 +154,31 @@ public class AdvanceWaterEntity extends NonModelEntity implements WaterEntity, S
         scene.removeFilter(water);
         water = null;
         super.cleanup();
+    }
+
+    public float getWaterHeight() {
+        return water.getWaterHeight();
+    }
+    
+    public void setWaterHeight(float waterHeight) {
+        water.setWaterHeight(waterHeight);
+    }
+    
+    public Vector3f getCenter() {
+        return water.getCenter();
+    }
+    
+    public void setCenter(Vector3f center) {
+        water.setCenter(center);
+    }
+    
+    public float getRadius() {
+        return water.getRadius();
+    }
+    
+    public void setRadius(float radius) {
+        water.setRadius(radius);
+        radiusSquared = radius * radius;
     }
     
     @Override

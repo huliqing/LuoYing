@@ -126,11 +126,11 @@ public class SceneLoader {
             progress.display((float) count / entityDatas.size());
         }
    
-        // test
+//        // test
 //        try {
 //            Thread.sleep(100);
 //        } catch (InterruptedException ex) {
-//            Logger.getLogger(SceneLoader.class.getName()).log(Level.SEVERE, null, ex);
+////            Logger.getLogger(SceneLoader.class.getName()).log(Level.SEVERE, null, ex);
 //        }
     }
     

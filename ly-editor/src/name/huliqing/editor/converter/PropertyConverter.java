@@ -25,7 +25,7 @@ public interface PropertyConverter<T extends ObjectData> {
      * 获取界面节点
      * @return 
      */
-    Node getNode();
+    Node getLayout();
     
     /**
      * 通过父组件，当前字段转换器发生了变化

@@ -71,6 +71,14 @@ public class DirectionalLightEntity extends NonModelEntity implements LightEntit
         return light;
     }
     
+    public Vector3f getDirection() {
+        return light.getDirection();
+    }
+    
+    public void setDirection(Vector3f direction) {
+        light.setDirection(direction);
+    }
+    
 //    private Spatial createDebugArrow(DirectionalLight light) {
 //        Node node = new Node();
 //        Spatial arrow1 = DebugUtils.createArrow(Vector3f.ZERO, Vector3f.ZERO.add(light.getDirection().normalize()), light.getColor());

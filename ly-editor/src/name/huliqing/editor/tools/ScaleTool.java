@@ -9,7 +9,6 @@ import com.jme3.input.KeyInput;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Spatial;
 import com.jme3.util.TempVars;
 import name.huliqing.editor.action.Picker;
 import name.huliqing.editor.events.Event;
@@ -71,6 +70,8 @@ public class ScaleTool extends EditTool implements SimpleEditFormListener{
         form.getEditRoot().getParent().attachChild(controlObj);
         form.addEditFormListener(this);
         updateMarkerState();
+        
+        
     }
 
     @Override
@@ -178,9 +179,9 @@ public class ScaleTool extends EditTool implements SimpleEditFormListener{
         controlAxis = null;
         controlObj.setAxisVisible(false);
         controlObj.setAxisLineVisible(false);
-        picker.startPick(selectObj.getSelectedSpatial(), Mode.CAMERA, editor.getCamera()
+        picker.startPick(selectObj.getReadOnlySelectedSpatial(), Mode.CAMERA, editor.getCamera()
                 , editor.getInputManager().getCursorPosition(), editor.getCamera().getRotation());
-        startScale.set(selectObj.getSelectedSpatial().getLocalScale());
+        startScale.set(selectObj.getReadOnlySelectedSpatial().getLocalScale());
     }
     
     // 普通的按轴缩放
@@ -205,9 +206,9 @@ public class ScaleTool extends EditTool implements SimpleEditFormListener{
             default:
                 throw new UnsupportedOperationException();
         }
-        picker.startPick(selectObj.getSelectedSpatial(), form.getMode(), editor.getCamera()
+        picker.startPick(selectObj.getReadOnlySelectedSpatial(), form.getMode(), editor.getCamera()
                 , editor.getInputManager().getCursorPosition(), planRotation);
-        startScale.set(selectObj.getSelectedSpatial().getLocalScale());
+        startScale.set(selectObj.getReadOnlySelectedSpatial().getLocalScale());
     }
     
     /**
@@ -216,7 +217,7 @@ public class ScaleTool extends EditTool implements SimpleEditFormListener{
     private void endScale() {
         if (transforming) {
             picker.endPick();
-            form.addUndoRedo(new ScaleUndoRedo(selectObj.getSelectedSpatial(), startScale, afterScale));
+            form.addUndoRedo(new ScaleUndoRedo(selectObj, startScale, afterScale));
         }
         transforming = false;
         freeScale = false;
@@ -231,7 +232,7 @@ public class ScaleTool extends EditTool implements SimpleEditFormListener{
     private void cancelScale() {
         if (transforming) {
             picker.endPick();
-            selectObj.getSelectedSpatial().setLocalScale(startScale);
+            selectObj.setLocalScale(startScale);
             transforming = false;
             // 更新一次位置,因为操作取消了
             updateMarkerState();
@@ -260,7 +261,7 @@ public class ScaleTool extends EditTool implements SimpleEditFormListener{
             Vector3f constraintAxis = picker.getStartOffset(tv.vect1).normalizeLocal();
             float diff = picker.getLocalTranslation(constraintAxis).dot(constraintAxis) * 0.1f + 1f; // * 0.1减少一些缩放强度
             Vector3f scale = startScale.mult(diff, tv.vect2);
-            selectObj.getSelectedSpatial().setLocalScale(scale);
+            selectObj.setLocalScale(scale);
             afterScale.set(scale);
             tv.release();
             
@@ -271,17 +272,14 @@ public class ScaleTool extends EditTool implements SimpleEditFormListener{
             Vector3f newScale = tv.vect2.set(startScale);
             Vector3f diff = tv.vect3;
             Vector3f pickTranslation = picker.getTranslation(axis);
-            Quaternion worldRotInverse = tv.quat1.set(selectObj.getSelectedSpatial().getWorldRotation()).inverse();
+            Quaternion worldRotInverse = tv.quat1.set(selectObj.getReadOnlySelectedSpatial().getWorldRotation()).inverse();
             worldRotInverse.mult(pickTranslation, diff);
             diff.multLocal(0.5f);
             newScale.addLocal(diff);
-            selectObj.getSelectedSpatial().setLocalScale(newScale);
+            selectObj.setLocalScale(newScale);
             afterScale.set(newScale);
             tv.release();
             
-//            LOG.log(Level.INFO, "Axis={0}, pickTranslation={1}, startScale={2}, diffScale={3}, finalScale={4}, worldRot={5}, worldRotInverse={6}"
-//                    , new Object[]{axis, pickTranslation, startScale, diff, newScale, selectObj.getSelectedSpatial().getWorldRotation(), worldRotInverse});
-
         }
     }
     
@@ -302,14 +300,14 @@ public class ScaleTool extends EditTool implements SimpleEditFormListener{
             return;
         }
         controlObj.setVisible(true);
-        controlObj.setLocalTranslation(form.getSelected().getSelectedSpatial().getWorldTranslation());
+        controlObj.setLocalTranslation(form.getSelected().getReadOnlySelectedSpatial().getWorldTranslation());
         Mode mode = form.getMode();
         switch (form.getMode()) {
             case GLOBAL:
                 controlObj.setLocalRotation(new Quaternion());
                 break;
             case LOCAL:
-                controlObj.setLocalRotation(form.getSelected().getSelectedSpatial().getWorldRotation());
+                controlObj.setLocalRotation(form.getSelected().getReadOnlySelectedSpatial().getWorldRotation());
                 break;
             case CAMERA:
                 controlObj.setLocalRotation(editor.getCamera().getRotation());
@@ -320,12 +318,12 @@ public class ScaleTool extends EditTool implements SimpleEditFormListener{
     }
     
     private class ScaleUndoRedo implements UndoRedo {
-        private final Spatial spatial;
+        private final SelectObj spatial;
         private final Vector3f beforeScale = new Vector3f();
         private final Vector3f afterScale = new Vector3f();
         
-        public ScaleUndoRedo(Spatial spatial, Vector3f before, Vector3f after) {
-            this.spatial = spatial;
+        public ScaleUndoRedo(SelectObj selectObj, Vector3f before, Vector3f after) {
+            this.spatial = selectObj;
             beforeScale.set(before);
             afterScale.set(after);
         }

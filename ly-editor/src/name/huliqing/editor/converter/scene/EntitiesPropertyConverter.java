@@ -10,7 +10,6 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
 import javafx.util.Callback;
 import name.huliqing.editor.converter.AbstractPropertyConverter;
 import name.huliqing.editor.converter.DataConverter;
@@ -24,11 +23,17 @@ import name.huliqing.luoying.data.SceneData;
  */
 public class EntitiesPropertyConverter extends AbstractPropertyConverter<SceneData> {
 
+    private SceneConverter sceneConverter;
     private final ListView<EntityData> listView = new ListView();
     
     @Override
     public void initialize(DataConverter<SceneData> parent, String property) {
         super.initialize(parent, property);
+        if (! (parent instanceof SceneConverter)) {
+            throw new UnsupportedOperationException("Unsupported DataConverter"
+                    + ", EntitiesPropertyConverter only support SceneConverter, found dataConverter=" + parent.getClass());
+        }
+        sceneConverter = (SceneConverter) parent;
         
         List<EntityData> eds = parent.getData().getEntityDatas();
         if (eds != null) {
@@ -50,7 +55,7 @@ public class EntitiesPropertyConverter extends AbstractPropertyConverter<SceneDa
         EntityData ed = listView.getSelectionModel().getSelectedItem();
         if (ed != null) {
             DataConverter cd = ConverterManager.createConverter(ed, this);
-            ((Pane)parent.getNode().getParent()).getChildren().add(cd.getNode());
+            parent.getLayout().getChildren().add(cd.getLayout());
         }
     }
     

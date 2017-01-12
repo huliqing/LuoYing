@@ -154,9 +154,9 @@ public class MoveTool extends EditTool implements SimpleEditFormListener{
     private void startFreeMove() {
         freeMove = true;
         transforming = true;
-        picker.startPick(selectObj.getSelectedSpatial(), Mode.CAMERA
+        picker.startPick(selectObj.getReadOnlySelectedSpatial(), Mode.CAMERA
                 , editor.getCamera(), editor.getInputManager().getCursorPosition(), Picker.PLANE_XY);
-        startSpatialLoc.set(selectObj.getSelectedSpatial().getLocalTranslation());
+        startSpatialLoc.set(selectObj.getReadOnlySelectedSpatial().getLocalTranslation());
         controlObj.setAxisVisible(false);
         controlObj.setAxisLineVisible(false);
     }
@@ -180,9 +180,9 @@ public class MoveTool extends EditTool implements SimpleEditFormListener{
             default:
                 throw new UnsupportedOperationException();
         }
-        picker.startPick(selectObj.getSelectedSpatial(), form.getMode()
+        picker.startPick(selectObj.getReadOnlySelectedSpatial(), form.getMode()
                 , editor.getCamera(), editor.getInputManager().getCursorPosition(), planRotation);
-        startSpatialLoc.set(selectObj.getSelectedSpatial().getLocalTranslation());
+        startSpatialLoc.set(selectObj.getReadOnlySelectedSpatial().getLocalTranslation());
         controlObj.setAxisVisible(false);
         controlObj.setAxisLineVisible(false);
         moveAxis.setAxisLineVisible(true);
@@ -192,7 +192,7 @@ public class MoveTool extends EditTool implements SimpleEditFormListener{
         if (transforming) {
             picker.endPick();
             // undo redo
-            MoveUndo undoRedo = new MoveUndo(selectObj.getSelectedSpatial(), startSpatialLoc, lastSpatialLoc);
+            MoveUndo undoRedo = new MoveUndo(selectObj, startSpatialLoc, lastSpatialLoc);
             form.addUndoRedo(undoRedo);
         }
         transforming = false;
@@ -206,7 +206,7 @@ public class MoveTool extends EditTool implements SimpleEditFormListener{
     private void cancelMove() {
         if (transforming) {
             picker.endPick();
-            selectObj.getSelectedSpatial().setLocalTranslation(startSpatialLoc);
+            selectObj.setLocalTranslation(startSpatialLoc);
             transforming = false;
             // 更新一次位置,因为操作取消了
             updateMarkerState();
@@ -237,15 +237,15 @@ public class MoveTool extends EditTool implements SimpleEditFormListener{
             diff = picker.getTranslation(moveAxis.getDirection(tv.vect2));
         }
         
-        Spatial parent = selectObj.getSelectedSpatial().getParent();
+        Spatial parent = selectObj.getReadOnlySelectedSpatial().getParent();
         if (parent != null) {
             tv.quat1.set(parent.getWorldRotation()).inverseLocal().mult(diff, diff);
             diff.divideLocal(parent.getWorldScale());
         } 
         
         Vector3f finalLocalPos = tv.vect1.set(startSpatialLoc).addLocal(diff);
-        selectObj.getSelectedSpatial().setLocalTranslation(finalLocalPos);
-        controlObj.setLocalTranslation(selectObj.getSelectedSpatial().getWorldTranslation());
+        selectObj.setLocalTranslation(finalLocalPos);
+        controlObj.setLocalTranslation(selectObj.getReadOnlySelectedSpatial().getWorldTranslation());
         lastSpatialLoc.set(finalLocalPos);
         tv.release();
     }
@@ -267,14 +267,14 @@ public class MoveTool extends EditTool implements SimpleEditFormListener{
             return;
         }
         controlObj.setVisible(true);
-        controlObj.setLocalTranslation(form.getSelected().getSelectedSpatial().getWorldTranslation());
+        controlObj.setLocalTranslation(form.getSelected().getReadOnlySelectedSpatial().getWorldTranslation());
         Mode mode = form.getMode();
         switch (form.getMode()) {
             case GLOBAL:
                 controlObj.setLocalRotation(new Quaternion());
                 break;
             case LOCAL:
-                controlObj.setLocalRotation(form.getSelected().getSelectedSpatial().getWorldRotation());
+                controlObj.setLocalRotation(form.getSelected().getReadOnlySelectedSpatial().getWorldRotation());
                 break;
             case CAMERA:
                 controlObj.setLocalRotation(editor.getCamera().getRotation());
@@ -286,41 +286,25 @@ public class MoveTool extends EditTool implements SimpleEditFormListener{
 
     private class MoveUndo implements UndoRedo {
 
-        private final Spatial spatial;
+        private final SelectObj selectObj;
         private final Vector3f before = new Vector3f();
         private final Vector3f after = new Vector3f();
         
-        public MoveUndo(Spatial spatial, Vector3f startPosition, Vector3f lastPosition) {
-            this.spatial = spatial;
+        public MoveUndo(SelectObj selectObj, Vector3f startPosition, Vector3f lastPosition) {
+            this.selectObj = selectObj;
             this.before.set(startPosition);
             this.after.set(lastPosition);
         }
         
         @Override
         public void undo() {
-            spatial.setLocalTranslation(before);
-            RigidBodyControl control = spatial.getControl(RigidBodyControl.class);
-            if (control != null) {
-                control.setPhysicsLocation(spatial.getWorldTranslation());
-            }
-            CharacterControl character = spatial.getControl(CharacterControl.class);
-            if (character != null) {
-                character.setPhysicsLocation(spatial.getWorldTranslation());
-            }
+            selectObj.setLocalTranslation(before);
             updateMarkerState();
         }
 
         @Override
         public void redo() {
-            spatial.setLocalTranslation(after);
-            RigidBodyControl control = spatial.getControl(RigidBodyControl.class);
-            if (control != null) {
-                control.setPhysicsLocation(spatial.getWorldTranslation());
-            }
-            CharacterControl character = spatial.getControl(CharacterControl.class);
-            if (character != null) {
-                character.setPhysicsLocation(spatial.getWorldTranslation());
-            }
+            selectObj.setLocalTranslation(after);
             updateMarkerState();
         }
         

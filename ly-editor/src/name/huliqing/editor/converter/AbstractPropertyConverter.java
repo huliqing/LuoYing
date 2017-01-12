@@ -26,7 +26,7 @@ public abstract class AbstractPropertyConverter<T extends ObjectData> implements
     protected boolean initialized;
 
     @Override
-    public Node getNode() {
+    public Node getLayout() {
         return root;
     }
     

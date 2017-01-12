@@ -19,6 +19,7 @@
  */
 package name.huliqing.luoying.manager;
 
+import com.jme3.bounding.BoundingVolume;
 import com.jme3.collision.CollisionResults;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
@@ -33,6 +34,63 @@ import name.huliqing.luoying.utils.TempPick;
  * @author huliqing
  */
 public class PickManager {
+    
+    /**
+     * 选择最近的物体
+     * @param ray
+     * @param pickRoot
+     * @return 
+     */
+    public final static Spatial pick(Ray ray, Spatial pickRoot) {
+        TempPick tp = TempPick.get();
+        CollisionResults cr = tp.results;
+        cr.clear();
+        pick(ray, pickRoot, cr);
+        Spatial result = null;
+        if (cr.size() > 0) {
+            result = cr.getClosestCollision().getGeometry();
+        }
+        tp.release();
+        return result;
+    }
+    
+    /**
+     * 通过射线方式获取所有相交的物体
+     * @param ray
+     * @param pickRoot
+     * @param store
+     * @return 
+     */
+    public final static CollisionResults pick(Ray ray, Spatial pickRoot, CollisionResults store) {
+        if (store == null) {
+            store = new CollisionResults();
+        }
+        pickRoot.collideWith(ray, store);
+        return store;
+    }
+    
+    /**
+     * 获取射线与指定Spatial的碰撞的最近点，如果不存在碰撞则返回null.
+     * @param ray
+     * @param spatial
+     * @return 
+     */
+    public final static Float distanceOfPick(Ray ray, Spatial spatial) {
+        BoundingVolume bv = spatial.getWorldBound();
+        if (bv == null || !bv.intersects(ray))
+            return null;
+        
+        TempPick tp = TempPick.get();
+        CollisionResults cr = tp.results;
+        cr.clear();
+        PickManager.pick(ray, spatial, cr);
+        Float result = null;
+        if (cr.size() > 0) {
+            result = cr.getClosestCollision().getDistance();
+        }
+        tp.release();
+        return result;
+    }
     
     /**
      * 获取鼠标点击到物体的世界位置点, 如果没有点击到指定的物体，则返回null.
@@ -63,6 +121,9 @@ public class PickManager {
      * @return 
      */
     public static CollisionResults pick(Camera camera, Vector2f screenLoc, Spatial pickRoot, CollisionResults store) {
+        if (store == null) {
+            store = new CollisionResults();
+        }
         TempPick tp = TempPick.get();
         Ray ray = getPickRay(camera, screenLoc, tp.ray);
         pickRoot.collideWith(ray, store);

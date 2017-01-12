@@ -32,9 +32,10 @@ public class Editor extends SimpleApplication{
             stateManager.detach(stats);
         }
         stateManager.attach(new EditorStatsAppState());
-        flyCam.setEnabled(false);
         inputManager.setCursorVisible(true);
         viewPort.setBackgroundColor(ColorRGBA.DarkGray);
+        flyCam.setEnabled(false);
+        cam.setFrustumFar(10000);
         
         // 初始化
         Manager.initialize(this);

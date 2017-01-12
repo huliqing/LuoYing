@@ -87,6 +87,14 @@ public class SceneData extends ObjectData {
         return getAsString("progress");
     }
     
+    /**
+     * 设置场景载入时的进度指示器
+     * @param progress 
+     */
+    public void setProgress(String progress) {
+        setAttribute("progress", progress);
+    }
+    
     @Override
     public SceneData clone() {
         SceneData clone = (SceneData) super.clone(); 

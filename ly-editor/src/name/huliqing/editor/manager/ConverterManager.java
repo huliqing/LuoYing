@@ -15,6 +15,7 @@ import name.huliqing.editor.converter.PropertyConverter;
 import name.huliqing.editor.converter.SimpleDataConverter;
 import name.huliqing.editor.converter.TextFieldConverter;
 import name.huliqing.editor.converter.scene.EntitiesPropertyConverter;
+import name.huliqing.editor.converter.scene.SceneConverter;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
@@ -36,7 +37,7 @@ public class ConverterManager {
 //        base.addPropertyConverter("dataProcessorClass", TextFieldConverter.class);
         
         // ---- Scene converter 
-        ConverterDefine scene = new ConverterDefine("scene", SimpleDataConverter.class);
+        ConverterDefine scene = new ConverterDefine("scene", SceneConverter.class);
         scene.extendsFrom(base); 
         scene.addPropertyConverter("entities", EntitiesPropertyConverter.class);
         scene.addPropertyConverter("progress", TextFieldConverter.class);

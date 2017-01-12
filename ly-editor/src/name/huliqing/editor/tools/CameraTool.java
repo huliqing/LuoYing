@@ -88,6 +88,7 @@ public class CameraTool extends EditTool implements EditorListener {
         updateViewText();
         editor.getGuiNode().attachChild(viewText);
         editor.addListener(this);
+        
     }
 
     @Override
@@ -213,7 +214,7 @@ public class CameraTool extends EditTool implements EditorListener {
      */
     public void doChaseSelected() {
         if (form.getSelected() != null) {
-            doChase(form.getSelected().getSelectedSpatial().getWorldTranslation());
+            doChase(form.getSelected().getReadOnlySelectedSpatial().getWorldTranslation());
         }
     }
     

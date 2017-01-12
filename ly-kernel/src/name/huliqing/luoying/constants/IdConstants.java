@@ -85,7 +85,7 @@ public class IdConstants {
     public final static String SYS_SCENE_TEST = "sysSceneTest";
     
     // =============================================================================
-    // Scene Loader
+    // Scene Progress
     // =============================================================================
 
     /** 简单的场景载入器 */

@@ -73,18 +73,21 @@ public class EditToolbar extends AbstractToolbar<SimpleEditForm> implements Even
         
         moveTool.bindMoveEvent().bindButton(MouseInput.BUTTON_LEFT, true);
         moveTool.bindFreeMoveStartEvent().bindKey(KeyInput.KEY_G, false);
-        moveTool.bindFreeMoveApplyEvent().bindButton(MouseInput.BUTTON_LEFT, false);
-        moveTool.bindFreeMoveCancelEvent().bindButton(MouseInput.BUTTON_RIGHT, false);
+        // bindFreeMoveApplyEvent和bindMoveEvent按键重叠，所以不再需要
+//        moveTool.bindFreeMoveApplyEvent().bindButton(MouseInput.BUTTON_LEFT, true);
+         // 注：move,scale,rotation的取消操作使用右键必须使usePressed=true,否则会和pickTool的选择操作冲突，会导致
+         // 当按右键取消的时候变成选择操作，导致消取操作时的回退历史记录的目标对象错误。
+        moveTool.bindFreeMoveCancelEvent().bindButton(MouseInput.BUTTON_RIGHT, true);
         
         scaleTool.bindScaleEvent().bindButton(MouseInput.BUTTON_LEFT, true);
         scaleTool.bindFreeScaleStartEvent().bindKey(KeyInput.KEY_S, false);
-        scaleTool.bindFreeScaleApplyEvent().bindButton(MouseInput.BUTTON_LEFT, false);
-        scaleTool.bindFreeScaleCancelEvent().bindButton(MouseInput.BUTTON_RIGHT, false);
+//        scaleTool.bindFreeScaleApplyEvent().bindButton(MouseInput.BUTTON_LEFT, true);
+        scaleTool.bindFreeScaleCancelEvent().bindButton(MouseInput.BUTTON_RIGHT, true);
         
         rotationTool.bindRotationEvent().bindButton(MouseInput.BUTTON_LEFT, true);
         rotationTool.bindFreeRotationStartEvent().bindKey(KeyInput.KEY_R, false);
-        rotationTool.bindFreeRotationApplyEvent().bindButton(MouseInput.BUTTON_LEFT, false);
-        rotationTool.bindFreeRotationCancelEvent().bindButton(MouseInput.BUTTON_RIGHT, false);
+//        rotationTool.bindFreeRotationApplyEvent().bindButton(MouseInput.BUTTON_LEFT, true);
+        rotationTool.bindFreeRotationCancelEvent().bindButton(MouseInput.BUTTON_RIGHT, true);
         
         add(undoRedoTool);
         add(cameraTool);

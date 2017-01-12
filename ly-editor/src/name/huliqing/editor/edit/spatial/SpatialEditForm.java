@@ -7,6 +7,7 @@ package name.huliqing.editor.edit.spatial;
 
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
+import com.jme3.math.Ray;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import java.util.logging.Level;
@@ -14,7 +15,10 @@ import java.util.logging.Logger;
 import name.huliqing.editor.Editor;
 import name.huliqing.editor.edit.SimpleEditForm;
 import name.huliqing.editor.manager.Manager;
+import name.huliqing.editor.select.SelectObj;
+import name.huliqing.editor.select.SpatialSelectObj;
 import name.huliqing.editor.toolbar.EditToolbar;
+import name.huliqing.luoying.manager.PickManager;
 
 /**
  * 编辑单个Spatial的编辑器
@@ -74,6 +78,14 @@ public class SpatialEditForm extends SimpleEditForm {
         } catch (Exception e) {
             LOG.log(Level.SEVERE, "Could not load mode, filePath={0}", fileInAssets);
         }
+    }
+
+    @Override
+    public SelectObj doPick(Ray ray) {
+        Spatial spaital = PickManager.pick(ray, editRoot);
+        if (spatial == null) 
+            return null;
+        return new SpatialSelectObj(spaital);
     }
     
 }

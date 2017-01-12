@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import name.huliqing.editor.constants.AssetConstants;
 import name.huliqing.editor.constants.ResConstants;
 import name.huliqing.editor.manager.Manager;
 import name.huliqing.editor.toolbar.Toolbar;
@@ -28,33 +29,32 @@ public class ToolViewFactory {
 
     private static final Logger LOG = Logger.getLogger(ToolViewFactory.class.getName());
     
-    private final static Map<Class<? extends Tool>, ResourceMapping> tvMapping // ToolViewMapping 
-            = new HashMap<>();
+    private final static Map<Class<? extends Tool>, ResourceMapping> TOOL_MAPPING = new HashMap();
     
     static {
-        tvMapping.put(ModeTool.class, new ResourceMapping(ModeToolView.class
+        TOOL_MAPPING.put(ModeTool.class, new ResourceMapping(ModeToolView.class
                 , ResConstants.TOOL_MODE, ResConstants.TOOL_MODE_TIP, null));
         
-        tvMapping.put(CameraTool.class, new ResourceMapping(CameraToolView.class
+        TOOL_MAPPING.put(CameraTool.class, new ResourceMapping(CameraToolView.class
                 , ResConstants.TOOL_CAMERA, ResConstants.TOOL_CAMERA_TIP, null));
         
-        tvMapping.put(GridTool.class, new ResourceMapping(ToggleToolView.class
-                , ResConstants.TOOL_GRID, ResConstants.TOOL_GRID_TIP, "/name/huliqing/editor/ui/icon/grid.png"));
+        TOOL_MAPPING.put(GridTool.class, new ResourceMapping(ToggleToolView.class
+                , ResConstants.TOOL_GRID, ResConstants.TOOL_GRID_TIP, "/" + AssetConstants.INTERFACE_TOOL_GRID));
         
-        tvMapping.put(MoveTool.class, new ResourceMapping(ToggleToolView.class
-                , ResConstants.TOOL_MOVE, ResConstants.TOOL_MOVE_TIP, "/name/huliqing/editor/ui/icon/move.png"));
+        TOOL_MAPPING.put(MoveTool.class, new ResourceMapping(ToggleToolView.class
+                , ResConstants.TOOL_MOVE, ResConstants.TOOL_MOVE_TIP, "/" + AssetConstants.INTERFACE_TOOL_MOVE));
         
-        tvMapping.put(RotationTool.class, new ResourceMapping(ToggleToolView.class
-                , ResConstants.TOOL_ROTATION, ResConstants.TOOL_ROTATION_TIP, "/name/huliqing/editor/ui/icon/rotation.png"));
+        TOOL_MAPPING.put(RotationTool.class, new ResourceMapping(ToggleToolView.class
+                , ResConstants.TOOL_ROTATION, ResConstants.TOOL_ROTATION_TIP, "/" + AssetConstants.INTERFACE_TOOL_ROTATION));
         
-        tvMapping.put(ScaleTool.class, new ResourceMapping(ToggleToolView.class
-                , ResConstants.TOOL_SCALE, ResConstants.TOOL_SCALE_TIP, "/name/huliqing/editor/ui/icon/scale.png"));
+        TOOL_MAPPING.put(ScaleTool.class, new ResourceMapping(ToggleToolView.class
+                , ResConstants.TOOL_SCALE, ResConstants.TOOL_SCALE_TIP, "/" + AssetConstants.INTERFACE_TOOL_SCALE));
         
     }
     
     public final static ToolView createToolView(Tool tool, Toolbar toolbar) {
         try {
-            ResourceMapping rm = tvMapping.get(tool.getClass());
+            ResourceMapping rm = TOOL_MAPPING.get(tool.getClass());
             if (rm != null) {
                 ToolView tv = rm.clazz.newInstance();
                 tv.initialize(tool, toolbar, rm.getName(), rm.getToolTip(), rm.getIcon());
@@ -71,9 +71,9 @@ public class ToolViewFactory {
     
     private static class ResourceMapping {
         private Class<? extends ToolView> clazz;
-        private String nameKey;
-        private String tipKey;
-        private String icon;
+        private final String nameKey;
+        private final String tipKey;
+        private final String icon;
         
         public ResourceMapping(Class<? extends ToolView>clazz, String nameKey, String tipKey, String icon) {
             this.clazz = clazz;

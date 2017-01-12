@@ -21,8 +21,11 @@ import name.huliqing.editor.manager.ConverterManager;
 import name.huliqing.editor.converter.DataConverter;
 import name.huliqing.editor.ui.layout.SceneEditLayout;
 import name.huliqing.fxswing.Jfx;
+import name.huliqing.luoying.constants.IdConstants;
+import name.huliqing.luoying.data.SceneData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.scene.Scene;
 
 /**
  *
@@ -42,6 +45,8 @@ public class JfxSceneEditView extends JfxEditView<SceneEditForm>{
     
     // editPanel不能完全透明，完全透明则响应不了事件，在响应事件时还需要设置为visible=true
     private final static String STYLE_EDIT_PANEL = "-fx-background-color:rgba(0,0,0,0.01)";
+    
+    private String sceneId;
     
     public JfxSceneEditView(Pane root) {
         this.root = root;
@@ -64,7 +69,6 @@ public class JfxSceneEditView extends JfxEditView<SceneEditForm>{
         
         layout.prefWidthProperty().bind(root.widthProperty());
         layout.prefHeightProperty().bind(root.heightProperty());
-        
         
         editPanel.setVisible(false);
         editPanel.setStyle(STYLE_EDIT_PANEL);
@@ -91,11 +95,12 @@ public class JfxSceneEditView extends JfxEditView<SceneEditForm>{
         EntityComponents ec = new EntityComponents();
         components.getChildren().add(ec.getNode());
         
-        DataConverter dc = ConverterManager.createConverter(form.getScene().getData(), null);
-        propertyPanel.getChildren().add(dc.getNode());
-        
         Jfx.jfxForceUpdate();
         Jfx.jfxCanvasBind(editPanel);
+        
+        if (sceneId != null) {
+            loadScene(sceneId);
+        }
     }
     
     @Override
@@ -104,9 +109,24 @@ public class JfxSceneEditView extends JfxEditView<SceneEditForm>{
     }
     
     public void setScene(String sceneId) {
+        this.sceneId = sceneId;
+        if (jfxInitialized) {
+            loadScene(sceneId);
+        }
+    }
+    
+    private void loadScene(String sceneId) {
         Jfx.runOnJme(() -> {
             try {
-                form.setScene(sceneId);
+                SceneData sd = Loader.loadData(sceneId);
+                Scene scene = Loader.load(sd);
+                form.setScene(scene);
+                
+                Jfx.runOnJfx(() -> {
+                    DataConverter dc = ConverterManager.createConverter(scene.getData(), null);
+                    propertyPanel.getChildren().add(dc.getLayout());
+                });
+                
             } catch (Exception e) {
                 LOG.log(Level.WARNING, "Could not load scene! sceneId={0}", sceneId);
             }

@@ -5,6 +5,7 @@
  */
 package name.huliqing.editor.edit;
 
+import com.jme3.math.Ray;
 import com.jme3.scene.Node;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ import name.huliqing.editor.undoredo.UndoRedoManager;
  * 3D模型编辑器窗口
  * @author huliqing 
  */
-public class SimpleEditForm extends AbstractForm {
+public abstract class SimpleEditForm extends AbstractForm {
     
     protected final UndoRedoManager undoRedoManager = new UndoRedoManager();
     
@@ -98,4 +99,11 @@ public class SimpleEditForm extends AbstractForm {
     public void addUndoRedo(UndoRedo undoRedo) {
         undoRedoManager.add(undoRedo);
     }
+    
+    /**
+     * 通过射线方式从场景中选择一个可选择的物体，如果存在这样一个物体则返回，否则返回null.
+     * @param ray
+     * @return 
+     */
+    public abstract SelectObj doPick(Ray ray);
 }

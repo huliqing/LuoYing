@@ -37,6 +37,12 @@ public class BestEditCamera implements ActionListener, AnalogListener {
     
     private View view = View.user;
     
+    private final float orthoNear = -10000;
+    private final float orthoFar = 10000;
+    
+    private final float perspNear = 1;
+    private final float perspFar = 10000;
+    
     public BestEditCamera(Camera cam, InputManager inputManager) {
         this.cam = cam;
         registerWithInput(inputManager);
@@ -168,7 +174,7 @@ public class BestEditCamera implements ActionListener, AnalogListener {
             float aspect = (float) cam.getWidth() / cam.getHeight();
             float h = FastMath.tan(45f * FastMath.DEG_TO_RAD * .5f) * dist;
             float w = h * aspect;
-            cam.setFrustum(-1000, 1000, -w, w, h, -h);
+            cam.setFrustum(orthoNear, orthoFar, -w, w, h, -h);
         }
 //        LOG.log(Level.INFO, "doZoomCamera, Camera location={0}", cam.getLocation());
     }
@@ -216,11 +222,11 @@ public class BestEditCamera implements ActionListener, AnalogListener {
             float fovY = FastMath.atan(h) / (FastMath.DEG_TO_RAD * .5f);
             h = FastMath.tan(fovY * FastMath.DEG_TO_RAD * .5f) * dist;
             w = h * aspect;
-            cam.setFrustum(-1000, 1000, -w, w, h, -h);
+            cam.setFrustum(orthoNear, orthoFar, -w, w, h, -h);
             return true;
         } else {
             cam.setParallelProjection(false);
-            cam.setFrustumPerspective(45f, aspect, 1, 1000);
+            cam.setFrustumPerspective(45f, aspect, perspNear, perspFar);
             return false;
         }
     }
@@ -235,14 +241,14 @@ public class BestEditCamera implements ActionListener, AnalogListener {
             float fovY = FastMath.atan(h) / (FastMath.DEG_TO_RAD * .5f);
             h = FastMath.tan(fovY * FastMath.DEG_TO_RAD * .5f) * dist;
             w = h * aspect;
-            cam.setFrustum(-1000, 1000, -w, w, h, -h);
+            cam.setFrustum(orthoNear, orthoFar, -w, w, h, -h);
         }
     }
     
     public void doPerspMode() {
         float aspect = (float) cam.getWidth() / cam.getHeight();
         cam.setParallelProjection(false);
-        cam.setFrustumPerspective(45f, aspect, 1, 1000);
+        cam.setFrustumPerspective(45f, aspect, perspNear, perspFar);
     }
 
     public Vector3f getFocus() {

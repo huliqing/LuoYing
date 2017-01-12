@@ -20,7 +20,7 @@ public abstract class AbstractForm implements EditForm {
     protected Toolbar toolbar;
     protected List<EditFormListener> listeners;
     protected Editor editor;
-
+    
     @Override
     public void initialize(Editor editor) {
         if (initialized) {

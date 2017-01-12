@@ -5,6 +5,10 @@
  */
 package name.huliqing.editor.select;
 
+import com.jme3.bullet.control.CharacterControl;
+import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.math.Quaternion;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 
 /**
@@ -32,8 +36,32 @@ public class SpatialSelectObj implements SelectObj<Spatial> {
     }
 
     @Override
-    public Spatial getSelectedSpatial() {
+    public void setLocalTranslation(Vector3f location) {
+        spatial.setLocalTranslation(location);
+        RigidBodyControl control = spatial.getControl(RigidBodyControl.class);
+        if (control != null) {
+            control.setPhysicsLocation(spatial.getWorldTranslation());
+        }
+        CharacterControl character = spatial.getControl(CharacterControl.class);
+        if (character != null) {
+            character.setPhysicsLocation(spatial.getWorldTranslation());
+        }
+    }
+
+    @Override
+    public void setLocalRotation(Quaternion rotation) {
+        spatial.setLocalRotation(rotation);
+    }
+
+    @Override
+    public void setLocalScale(Vector3f scale) {
+        spatial.setLocalScale(scale);
+    }
+
+    @Override
+    public Spatial getReadOnlySelectedSpatial() {
         return spatial;
     }
+
     
 }
