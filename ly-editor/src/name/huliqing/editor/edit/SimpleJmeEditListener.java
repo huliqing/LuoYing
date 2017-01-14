@@ -10,8 +10,9 @@ import name.huliqing.editor.select.SelectObj;
 /**
  *
  * @author huliqing
+ * @param <T>
  */
-public interface SimpleEditFormListener {
+public interface SimpleJmeEditListener<T extends SelectObj> {
     
     /**
      * 当编辑模式变化时该方法被调用
@@ -23,5 +24,5 @@ public interface SimpleEditFormListener {
      * 当选择的物体发生变化时该方法被调用。
      * @param selectObj 
      */
-    void onSelectChanged(SelectObj selectObj);
+    void onSelectChanged(T selectObj);
 }

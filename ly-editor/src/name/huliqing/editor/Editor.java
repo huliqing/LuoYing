@@ -11,9 +11,9 @@ import com.jme3.app.StatsAppState;
 import com.jme3.math.ColorRGBA;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.editor.edit.EditView;
 import name.huliqing.editor.events.JmeEvent;
 import name.huliqing.luoying.LuoYing;
+import name.huliqing.editor.edit.JfxEdit;
 
 /**
  *
@@ -22,7 +22,7 @@ import name.huliqing.luoying.LuoYing;
 public class Editor extends SimpleApplication{
     
     private List<EditorListener> listeners;
-    private EditView editView;
+    private JfxEdit editView;
     private boolean initialized;
     
     @Override
@@ -62,11 +62,11 @@ public class Editor extends SimpleApplication{
         }
     }
     
-    public EditView getFormView() {
+    public JfxEdit getFormView() {
         return editView;
     }
 
-    public void setFormView(EditView newEditView) {
+    public void setFormView(JfxEdit newEditView) {
         if (editView != null) {
             editView.cleanup();
         }

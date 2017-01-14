@@ -6,15 +6,15 @@
 package name.huliqing.editor.toolbar;
 
 import java.util.List;
-import name.huliqing.editor.edit.EditForm;
 import name.huliqing.editor.tools.Tool;
+import name.huliqing.editor.edit.JmeEdit;
 
 /**
  * 编辑工具接口
  * @author huliqing
  * @param <F> Form类型
  */
-public interface Toolbar<F extends EditForm> {
+public interface Toolbar<F extends JmeEdit> {
     
     /**
      * 初始化工具栏

@@ -10,7 +10,7 @@ import com.jme3.input.MouseInput;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
-import name.huliqing.editor.edit.SimpleEditForm;
+import name.huliqing.editor.edit.SimpleJmeEdit;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.EventListener;
 import name.huliqing.editor.events.JmeEvent;
@@ -27,7 +27,7 @@ import name.huliqing.editor.tools.UndoRedoTool;
 /**
  * @author huliqing
  */
-public class EditToolbar extends AbstractToolbar<SimpleEditForm> implements EventListener {
+public class EditToolbar extends AbstractToolbar<SimpleJmeEdit> implements EventListener {
 
     private static final Logger LOG = Logger.getLogger(EditToolbar.class.getName());
     private final Map<Tool, ToggleMappingEvent> toggleMapping = new HashMap<Tool, ToggleMappingEvent>();
@@ -43,7 +43,7 @@ public class EditToolbar extends AbstractToolbar<SimpleEditForm> implements Even
     private ScaleTool scaleTool;
     
     @Override
-    public void initialize(SimpleEditForm formView) {
+    public void initialize(SimpleJmeEdit formView) {
         super.initialize(formView);
         
         undoRedoTool = new UndoRedoTool("undoRedoTool");

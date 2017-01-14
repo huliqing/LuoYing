@@ -13,4 +13,5 @@ ok.按g直接移动
 
 .asset资源重命名功能
 .初始界面功能
-
+.entityPlant要加一个参数，moveOnTerrain作为开关,不然在移动的时候会冲突
+.历史记录和jfx的change绑定有冲突

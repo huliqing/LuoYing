@@ -17,19 +17,20 @@ import name.huliqing.editor.undoredo.UndoRedoManager;
 /**
  * 3D模型编辑器窗口
  * @author huliqing 
+ * @param <T> 
  */
-public abstract class SimpleEditForm extends AbstractForm {
+public abstract class SimpleJmeEdit<T extends SelectObj> extends JmeAbstractEdit {
     
     protected final UndoRedoManager undoRedoManager = new UndoRedoManager();
     
     // 侦听器
-    protected final List<SimpleEditFormListener> editFormListeners = new ArrayList<SimpleEditFormListener>();
+    protected final List<SimpleJmeEditListener> editFormListeners = new ArrayList<SimpleJmeEditListener>();
     
     // 变换模式
     protected Mode mode = Mode.GLOBAL;
     
     // 当前选择的物体
-    protected SelectObj selectObj;
+    protected T selectObj;
     
     // 编辑场景的根节点
     protected final Node editRoot = new Node();
@@ -58,7 +59,7 @@ public abstract class SimpleEditForm extends AbstractForm {
         }
     }
     
-    public SelectObj getSelected() {
+    public T getSelected() {
         return selectObj;
     }
     
@@ -66,7 +67,7 @@ public abstract class SimpleEditForm extends AbstractForm {
      * 把一个物体设置为当前的选择的主物体
      * @param selectObj 
      */
-    public void setSelected(SelectObj selectObj) {
+    public void setSelected(T selectObj) {
         boolean changed = this.selectObj != selectObj;
         this.selectObj = selectObj;
         if (changed) {
@@ -82,13 +83,13 @@ public abstract class SimpleEditForm extends AbstractForm {
         return editRoot;
     }
     
-    public void addEditFormListener(SimpleEditFormListener listener) {
+    public void addSimpleEditListener(SimpleJmeEditListener listener) {
         if (!editFormListeners.contains(listener)) {
             editFormListeners.add(listener);
         }
     }
     
-    public boolean removeEditFormListener(SimpleEditFormListener listener) {
+    public boolean removeEditFormListener(SimpleJmeEditListener listener) {
         return editFormListeners.remove(listener);
     }
 
@@ -105,5 +106,5 @@ public abstract class SimpleEditForm extends AbstractForm {
      * @param ray
      * @return 
      */
-    public abstract SelectObj doPick(Ray ray);
+    public abstract T doPick(Ray ray);
 }

@@ -5,10 +5,7 @@
  */
 package name.huliqing.editor.edit.select;
 
-import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
-import com.jme3.math.Vector3f;
-import name.huliqing.editor.edit.scene.SceneEditForm;
 import name.huliqing.luoying.manager.PickManager;
 import name.huliqing.luoying.object.entity.Entity;
 
@@ -23,31 +20,6 @@ public class SimpleModelEntitySelectObj extends EntitySelectObj {
     
     public SimpleModelEntitySelectObj(Entity entity) {
         super(entity);
-    }
-    
-    @Override
-    public void initialize(SceneEditForm form) {
-        // 由子类覆盖
-    }
-
-    @Override
-    public void cleanup() {
-        // 由子类覆盖
-    }
-    
-    @Override
-    public void setLocalTranslation(Vector3f location) {
-        entity.getSpatial().setLocalTranslation(location);
-    }
-
-    @Override
-    public void setLocalRotation(Quaternion rotation) {
-        entity.getSpatial().setLocalRotation(rotation);
-    }
-
-    @Override
-    public void setLocalScale(Vector3f scale) {
-        entity.getSpatial().setLocalScale(scale);
     }
     
     @Override

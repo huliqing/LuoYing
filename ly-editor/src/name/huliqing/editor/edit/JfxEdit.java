@@ -12,7 +12,7 @@ import name.huliqing.editor.Editor;
  * @author huliqing
  * @param <T>
  */
-public interface EditView<T extends EditForm> {
+public interface JfxEdit<T extends JmeEdit> {
     
     void initialize(Editor editor);
     
@@ -21,7 +21,5 @@ public interface EditView<T extends EditForm> {
     void cleanup();
     
     Editor getEditor();
-    
-    T getEditForm();
     
 }

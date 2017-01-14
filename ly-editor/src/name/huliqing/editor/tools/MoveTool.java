@@ -5,8 +5,6 @@
  */
 package name.huliqing.editor.tools;
 
-import com.jme3.bullet.control.CharacterControl;
-import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.input.KeyInput;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
@@ -22,13 +20,13 @@ import name.huliqing.editor.tiles.AxisNode;
 import name.huliqing.editor.tiles.LocationControlObj;
 import name.huliqing.editor.undoredo.UndoRedo;
 import name.huliqing.luoying.manager.PickManager;
-import name.huliqing.editor.edit.SimpleEditFormListener;
+import name.huliqing.editor.edit.SimpleJmeEditListener;
 
 /**
  * 移动编辑工具
  * @author huliqing
  */
-public class MoveTool extends EditTool implements SimpleEditFormListener{
+public class MoveTool extends EditTool implements SimpleJmeEditListener{
 //    private static final Logger LOG = Logger.getLogger(MoveTool.class.getName());
     
     private final static String EVENT_MOVE = "moveEvent";
@@ -70,13 +68,13 @@ public class MoveTool extends EditTool implements SimpleEditFormListener{
     public void initialize() {
         super.initialize();
         form.getEditRoot().getParent().attachChild(controlObj);
-        form.addEditFormListener(this);
+        form.addSimpleEditListener(this);
         updateMarkerState();
     }
     
     @Override
     public void cleanup() {
-        form.addEditFormListener(this);
+        form.addSimpleEditListener(this);
         controlObj.removeFromParent();
         super.cleanup();
     }
@@ -241,7 +239,7 @@ public class MoveTool extends EditTool implements SimpleEditFormListener{
         if (parent != null) {
             tv.quat1.set(parent.getWorldRotation()).inverseLocal().mult(diff, diff);
             diff.divideLocal(parent.getWorldScale());
-        } 
+        }
         
         Vector3f finalLocalPos = tv.vect1.set(startSpatialLoc).addLocal(diff);
         selectObj.setLocalTranslation(finalLocalPos);

@@ -14,11 +14,11 @@ import name.huliqing.editor.toolbar.Toolbar;
  *
  * @author huliqing
  */
-public abstract class AbstractForm implements EditForm {
+public abstract class JmeAbstractEdit implements JmeEdit {
 
     protected boolean initialized;
     protected Toolbar toolbar;
-    protected List<EditFormListener> listeners;
+    protected List<JmeEditListener> listeners;
     protected Editor editor;
     
     @Override
@@ -73,9 +73,9 @@ public abstract class AbstractForm implements EditForm {
     }
 
     @Override
-    public void addListener(EditFormListener listener) {
+    public void addListener(JmeEditListener listener) {
         if (listeners == null) {
-            listeners = new ArrayList<EditFormListener>();
+            listeners = new ArrayList<JmeEditListener>();
         }
         if (!listeners.contains(listener)) {
             listeners.add(listener);
@@ -83,7 +83,7 @@ public abstract class AbstractForm implements EditForm {
     }
 
     @Override
-    public boolean removeListener(EditFormListener listener) {
+    public boolean removeListener(JmeEditListener listener) {
         return listeners != null && listeners.remove(listener);
     }
 

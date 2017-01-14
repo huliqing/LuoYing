@@ -13,7 +13,7 @@ import com.jme3.scene.Spatial;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.editor.Editor;
-import name.huliqing.editor.edit.SimpleEditForm;
+import name.huliqing.editor.edit.SimpleJmeEdit;
 import name.huliqing.editor.manager.Manager;
 import name.huliqing.editor.select.SelectObj;
 import name.huliqing.editor.select.SpatialSelectObj;
@@ -24,7 +24,7 @@ import name.huliqing.luoying.manager.PickManager;
  * 编辑单个Spatial的编辑器
  * @author huliqing
  */ 
-public class SpatialEditForm extends SimpleEditForm {
+public class SpatialEditForm extends SimpleJmeEdit {
 
     private static final Logger LOG = Logger.getLogger(SpatialEditForm.class.getName());
     private final Node root = new Node();

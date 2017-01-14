@@ -7,12 +7,12 @@ package name.huliqing.editor.manager;
 
 import javafx.scene.layout.Pane;
 import name.huliqing.editor.Editor;
-import name.huliqing.editor.edit.EditView;
-import name.huliqing.editor.edit.JfxEditView;
-import name.huliqing.editor.edit.scene.JfxSceneEditView;
+import name.huliqing.editor.edit.JfxAbstractEdit;
+import name.huliqing.editor.edit.scene.JfxSceneEdit;
 import name.huliqing.editor.edit.spatial.JfxSpatialEditView;
 import name.huliqing.fxswing.Jfx;
 import name.huliqing.luoying.constants.IdConstants;
+import name.huliqing.editor.edit.JfxEdit;
 
 /**
  *
@@ -35,32 +35,32 @@ public class EditManager {
     
     public static void openSpatialEditor(String fileAbsolutePath) {
         Editor editor = (Editor) Jfx.getJmeApp();
-        EditView ev = editor.getFormView();
+        JfxEdit ev = editor.getFormView();
         if (ev instanceof JfxSpatialEditView) {
-            ((JfxSpatialEditView) ev).getEditForm().setFilePath(fileAbsolutePath);
+            ((JfxSpatialEditView) ev).setFilePath(fileAbsolutePath);
         } else {
             JfxSpatialEditView newEv = new JfxSpatialEditView(jfxEditZone);
-            newEv.getEditForm().setFilePath(fileAbsolutePath);
+            newEv.setFilePath(fileAbsolutePath);
             editor.setFormView(newEv);
         }
     }
     
     public static void openSceneEditor(String sceneId) {
         Editor editor = (Editor) Jfx.getJmeApp();
-        JfxSceneEditView newEv = new JfxSceneEditView(jfxEditZone);
+        JfxSceneEdit newEv = new JfxSceneEdit(jfxEditZone);
         newEv.setScene(sceneId);
         editor.setFormView(newEv);
     }
 
     public static void notifyDragStarted() {
         Editor editor = (Editor) Jfx.getJmeApp();
-        JfxEditView sev = (JfxEditView) editor.getFormView();
+        JfxAbstractEdit sev = (JfxAbstractEdit) editor.getFormView();
         sev.jfxOnDragStarted();
     }
     
     public static void notifyDragEnded() {
         Editor editor = (Editor) Jfx.getJmeApp();
-        JfxEditView sev = (JfxEditView) editor.getFormView();
+        JfxAbstractEdit sev = (JfxAbstractEdit) editor.getFormView();
         sev.jfxOnDragEnded();
     }
     

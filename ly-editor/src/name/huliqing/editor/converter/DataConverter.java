@@ -6,15 +6,16 @@
 package name.huliqing.editor.converter;
 
 import java.util.List;
-import javafx.scene.layout.Pane;
+import javafx.scene.Node;
+import name.huliqing.editor.edit.JfxAbstractEdit;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
- *
  * @author huliqing
- * @param <T>
+ * @param <E>
+ * @param <T> DataConverter所要转换的数据类型
  */
-public interface DataConverter<T extends ObjectData> {
+public interface DataConverter<E extends JfxAbstractEdit, T extends ObjectData> {
     
     /**
      * 获取数据
@@ -22,10 +23,28 @@ public interface DataConverter<T extends ObjectData> {
      */
     T getData();
     
-    Pane getLayout();
+    Node getLayout();
     
-    void initialize(T data, List<PropertyConverterDefine> propertyConverterDefines, PropertyConverter parent);
+    /**
+     * 初始化转换器
+     * @param editView
+     * @param data
+     * @param propertyConverterDefines
+     * @param parent 
+     */
+    void initialize(E editView, T data, List<PropertyConverterDefine> propertyConverterDefines, PropertyConverter parent);
 
+    /**
+     * 判断是否已经初始化
+     * @return 
+     */
+    boolean isInitialized();
+    
+    /**
+     * 清理释放资源
+     */
+    void cleanup();
+    
     /**
      * 通知父组件，当前Data转换器的值发生了变化
      */

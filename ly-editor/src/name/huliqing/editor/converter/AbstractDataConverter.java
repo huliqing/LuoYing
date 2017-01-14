@@ -5,31 +5,32 @@
  */
 package name.huliqing.editor.converter;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TitledPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import name.huliqing.editor.constants.StyleConstants;
+import name.huliqing.editor.edit.JfxAbstractEdit;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
- *
  * @author huliqing
+ * @param <E>
  * @param <T>
  */
-public abstract class AbstractDataConverter<T extends ObjectData> implements DataConverter<T> {
+public abstract class AbstractDataConverter<E extends JfxAbstractEdit, T extends ObjectData> implements DataConverter<E, T> {
 
     private static final Logger LOG = Logger.getLogger(AbstractDataConverter.class.getName());
 
+    protected E editView;
     protected T data;
     protected PropertyConverter parent;
+    protected final Map<String, PropertyConverter> propertyConverters = new LinkedHashMap();
     
-    protected final HBox layout = new HBox();
-    protected final TitledPane dataPanel = new TitledPane();
     protected final ScrollPane dataScroll = new ScrollPane();
     protected final VBox propertyPanel = new VBox();
     
@@ -43,40 +44,54 @@ public abstract class AbstractDataConverter<T extends ObjectData> implements Dat
     }
 
     @Override
-    public Pane getLayout() {
-        return layout; 
+    public Node getLayout() {
+        return dataScroll; 
     }
 
     @Override
-    public void initialize(T data, List<PropertyConverterDefine> propertyConvertDefines, PropertyConverter parent) {
+    public void initialize(E editView, T data, List<PropertyConverterDefine> propertyConvertDefines, PropertyConverter parent) {
         if (initialized) {
             throw new IllegalStateException();
         }
         initialized = true;
+        this.editView = editView;
         this.data = data;
         this.parent = parent;
         
-        layout.getChildren().add(dataPanel);
-        
-        dataPanel.setId(StyleConstants.ID_PROPERTY_PANEL);
-        dataPanel.setText(data.getId());
-        dataPanel.setContent(dataScroll);
-        
+        dataScroll.setId(StyleConstants.ID_PROPERTY_PANEL);
         dataScroll.setContent(propertyPanel);
         dataScroll.setFitToWidth(true);
         
         if (propertyConvertDefines != null && !propertyConvertDefines.isEmpty()) {
             propertyConvertDefines.forEach(t -> {
-                PropertyConverter pc = createPropertyConverter(t);
+                PropertyConverter pc = onCreatePropertyConverter(t);
                 propertyPanel.getChildren().add(pc.getLayout());
+                propertyConverters.put(t.propertyName, pc);
             });
         }
+        
+    }
+
+    @Override
+    public boolean isInitialized() {
+        return initialized;
+    }
+
+    @Override
+    public void cleanup() {
+        propertyConverters.values().stream().filter(t -> t.isInitialized()).forEach(
+            t -> {t.cleanup();}
+        );
+        propertyConverters.clear();
+        propertyPanel.getChildren().clear();
+        dataScroll.setContent(null);
+        initialized = false;
     }
     
-    protected PropertyConverter createPropertyConverter(PropertyConverterDefine pcd) {
+    protected PropertyConverter onCreatePropertyConverter(PropertyConverterDefine pcd) {
         try {
             PropertyConverter pc = pcd.propertyConverter.newInstance();
-            pc.initialize(this, pcd.propertyName);
+            pc.initialize(editView, this, pcd.propertyName);
             return pc;
         } catch (InstantiationException | IllegalAccessException ex) {
             LOG.log(Level.SEVERE, "Could not create PropertyConverter", ex);

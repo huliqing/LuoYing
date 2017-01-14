@@ -6,7 +6,6 @@
 package name.huliqing.editor.edit.select;
 
 import com.jme3.math.Ray;
-import name.huliqing.editor.edit.scene.SceneEditForm;
 import name.huliqing.luoying.object.entity.Entity;
 
 /**
@@ -20,13 +19,4 @@ public class EmptyEntitySelectObj <T extends Entity> extends EntitySelectObj<T> 
     public Float distanceOfPick(Ray ray) {
         return null;
     }
-
-    @Override
-    public void initialize(SceneEditForm form) {
-    }
-
-    @Override
-    public void cleanup() {
-    }
-    
 }

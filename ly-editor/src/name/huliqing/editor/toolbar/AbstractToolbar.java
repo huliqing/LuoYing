@@ -9,15 +9,15 @@ import com.jme3.util.SafeArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import name.huliqing.editor.edit.EditForm;
 import name.huliqing.editor.tools.Tool;
+import name.huliqing.editor.edit.JmeEdit;
 
 /**
  *
  * @author huliqing
  * @param <F> Form类型
  */
-public abstract class AbstractToolbar<F extends EditForm> implements Toolbar<F> {
+public abstract class AbstractToolbar<F extends JmeEdit> implements Toolbar<F> {
 
     private static final Logger LOG = Logger.getLogger(AbstractToolbar.class.getName());
 

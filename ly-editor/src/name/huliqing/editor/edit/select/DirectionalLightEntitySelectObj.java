@@ -19,7 +19,7 @@ import com.jme3.scene.control.BillboardControl;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Line;
 import name.huliqing.editor.constants.AssetConstants;
-import name.huliqing.editor.edit.scene.SceneEditForm;
+import name.huliqing.editor.edit.scene.SceneEdit;
 import name.huliqing.editor.tiles.AutoScaleControl;
 import name.huliqing.fxswing.Jfx;
 import name.huliqing.luoying.manager.PickManager;
@@ -52,7 +52,8 @@ public class DirectionalLightEntitySelectObj extends EntitySelectObj<Directional
     }
     
     @Override
-    public void initialize(SceneEditForm form) {
+    public void initialize(SceneEdit form) {
+        super.initialize(form);
         form.getEditRoot().attachChild(controlObj);
         controlObj.setLocalScale(10);
         
@@ -64,27 +65,22 @@ public class DirectionalLightEntitySelectObj extends EntitySelectObj<Directional
     @Override
     public void cleanup() {
         controlObj.removeFromParent();
-    }
-
-    @Override
-    public void setLocalScale(Vector3f scale) {
-        super.setLocalScale(scale); 
+        super.cleanup();
     }
 
     @Override
     public void setLocalRotation(Quaternion rotation) {
-        super.setLocalRotation(rotation); 
-
         Vector3f dir = this.entity.getDirection().set(Vector3f.UNIT_Z);
         rotation.mult(dir, dir);
         this.entity.setDirection(dir);
         line.setLocalRotation(rotation);
+        super.setLocalRotation(rotation); 
     }
 
     @Override
     public void setLocalTranslation(Vector3f location) {
-        super.setLocalTranslation(location); 
         controlObj.setLocalTranslation(location);
+        super.setLocalTranslation(location); 
     }
     
     @Override

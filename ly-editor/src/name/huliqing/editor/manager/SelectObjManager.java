@@ -3,12 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.edit.select;
+package name.huliqing.editor.manager;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import name.huliqing.editor.edit.select.AdvanceWaterEntitySelectObj;
+import name.huliqing.editor.edit.select.DirectionalLightEntitySelectObj;
+import name.huliqing.editor.edit.select.EmptyEntitySelectObj;
+import name.huliqing.editor.edit.select.SimpleModelEntitySelectObj;
 import name.huliqing.editor.select.SelectObj;
 
 /**

@@ -14,7 +14,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Quad;
-import name.huliqing.editor.edit.scene.SceneEditForm;
+import name.huliqing.editor.edit.scene.SceneEdit;
 import name.huliqing.luoying.manager.PickManager;
 import name.huliqing.luoying.object.entity.impl.AdvanceWaterEntity;
 import name.huliqing.luoying.utils.MaterialUtils;
@@ -31,7 +31,8 @@ public class AdvanceWaterEntitySelectObj extends EntitySelectObj<AdvanceWaterEnt
     public AdvanceWaterEntitySelectObj() {}
     
     @Override
-    public void initialize(SceneEditForm form) {
+    public void initialize(SceneEdit form) {
+        super.initialize(form);
         form.getEditRoot().attachChild(controlObj);
         if (entity.getCenter() != null) {
             setLocalTranslation(entity.getCenter());
@@ -47,6 +48,7 @@ public class AdvanceWaterEntitySelectObj extends EntitySelectObj<AdvanceWaterEnt
     @Override
     public void cleanup() {
         controlObj.removeFromParent();
+        super.cleanup();
     }
 
     @Override

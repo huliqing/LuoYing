@@ -10,13 +10,13 @@ import com.jme3.util.SafeArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.editor.Editor;
-import name.huliqing.editor.edit.SimpleEditForm;
+import name.huliqing.editor.edit.SimpleJmeEdit;
 import name.huliqing.editor.edit.select.EntitySelectObj;
-import name.huliqing.editor.edit.select.SelectObjManager;
-import name.huliqing.editor.select.SelectObj;
+import name.huliqing.editor.manager.SelectObjManager;
 import name.huliqing.editor.toolbar.EditToolbar;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.constants.IdConstants;
+import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
@@ -28,16 +28,16 @@ import name.huliqing.luoying.object.scene.SceneListener;
  *
  * @author huliqing
  */
-public class SceneEditForm extends SimpleEditForm implements SceneListener {
+public class SceneEdit extends SimpleJmeEdit<EntitySelectObj> implements SceneListener {
 
-    private static final Logger LOG = Logger.getLogger(SceneEditForm.class.getName());
+    private static final Logger LOG = Logger.getLogger(SceneEdit.class.getName());
     private final PlayService playService = Factory.get(PlayService.class);
 
     private Game game;
     private Scene scene;
     private final SafeArrayList<EntitySelectObj> entityObjs = new SafeArrayList<EntitySelectObj>(EntitySelectObj.class);
     
-    public SceneEditForm() {}
+    public SceneEdit() {}
     
     @Override
     public void initialize(Editor editor) {
@@ -83,7 +83,7 @@ public class SceneEditForm extends SimpleEditForm implements SceneListener {
     }
 
     @Override
-    public SelectObj doPick(Ray ray) {
+    public EntitySelectObj doPick(Ray ray) {
         if (scene == null)
             return null;
         
@@ -120,6 +120,36 @@ public class SceneEditForm extends SimpleEditForm implements SceneListener {
             if (seo.getObject().getData() == entityRemoved.getData()) {
                 entityObjs.remove(seo);
                 seo.cleanup();
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void setSelected(EntitySelectObj selectObj) {
+        super.setSelected(selectObj);
+    }
+    
+    public void setSelected(EntityData entityData) {
+        for (EntitySelectObj eso : entityObjs.getArray()) {
+            if (eso.getObject().getData() == entityData) {
+                setSelected(eso);
+                break;
+            }
+        }
+    }
+    
+    /**
+     * 重装载入指定的Entity
+     * @param entityData 
+     */
+    public void reloadEntity(EntityData entityData) {
+        for (EntitySelectObj eso : entityObjs.getArray()) {
+            if (eso.getObject().getData() == entityData) {
+                eso.getObject().cleanup();
+                eso.getObject().setData(entityData);
+                eso.getObject().initialize();
+                eso.getObject().onInitScene(scene);
                 break;
             }
         }

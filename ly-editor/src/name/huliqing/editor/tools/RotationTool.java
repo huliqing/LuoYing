@@ -17,13 +17,13 @@ import name.huliqing.editor.tiles.AxisNode;
 import name.huliqing.editor.tiles.RotationControlObj;
 import name.huliqing.editor.undoredo.UndoRedo;
 import name.huliqing.luoying.manager.PickManager;
-import name.huliqing.editor.edit.SimpleEditFormListener;
+import name.huliqing.editor.edit.SimpleJmeEditListener;
 
 /**
  * 旋转编辑工具
  * @author huliqing
  */
-public class RotationTool extends EditTool implements SimpleEditFormListener{
+public class RotationTool extends EditTool implements SimpleJmeEditListener{
 //    private static final Logger LOG = Logger.getLogger(RotationTool.class.getName());
     
     private final static String EVENT_ROTATION = "rotationEvent";
@@ -68,7 +68,7 @@ public class RotationTool extends EditTool implements SimpleEditFormListener{
     public void initialize() {
         super.initialize();
         form.getEditRoot().getParent().attachChild(controlObj);
-        form.addEditFormListener(this);
+        form.addSimpleEditListener(this);
         updateMarkerState();
     }
 

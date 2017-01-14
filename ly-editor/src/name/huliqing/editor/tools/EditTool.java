@@ -11,7 +11,7 @@ import name.huliqing.editor.Editor;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.EventListener;
 import name.huliqing.editor.events.JmeEvent;
-import name.huliqing.editor.edit.SimpleEditForm;
+import name.huliqing.editor.edit.SimpleJmeEdit;
 
 /**
  *
@@ -21,7 +21,7 @@ public abstract class EditTool implements Tool<EditToolbar> {
 
     private static final Logger LOG = Logger.getLogger(EditTool.class.getName());
 
-    protected SimpleEditForm form;
+    protected SimpleJmeEdit form;
     protected EditToolbar toolbar;
     protected Editor editor;
     protected EventHelper eventHelper;

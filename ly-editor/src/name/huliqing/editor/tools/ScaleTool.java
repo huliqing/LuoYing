@@ -19,13 +19,13 @@ import name.huliqing.editor.tiles.AxisNode;
 import name.huliqing.editor.tiles.ScaleControlObj;
 import name.huliqing.editor.undoredo.UndoRedo;
 import name.huliqing.luoying.manager.PickManager;
-import name.huliqing.editor.edit.SimpleEditFormListener;
+import name.huliqing.editor.edit.SimpleJmeEditListener;
 
 /**
  * 缩放编辑工具
  * @author huliqing
  */
-public class ScaleTool extends EditTool implements SimpleEditFormListener{
+public class ScaleTool extends EditTool implements SimpleJmeEditListener{
 
 //    private static final Logger LOG = Logger.getLogger(ScaleTool.class.getName());
     
@@ -68,7 +68,7 @@ public class ScaleTool extends EditTool implements SimpleEditFormListener{
     public void initialize() {
         super.initialize(); 
         form.getEditRoot().getParent().attachChild(controlObj);
-        form.addEditFormListener(this);
+        form.addSimpleEditListener(this);
         updateMarkerState();
         
         

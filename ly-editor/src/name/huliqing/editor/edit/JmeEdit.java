@@ -12,7 +12,7 @@ import name.huliqing.editor.toolbar.Toolbar;
  * 编辑器的3D编辑器接口,这个界面主要作为3D环境来编辑3D物体
  * @author huliqing
  */
-public interface EditForm {
+public interface JmeEdit {
     
     void initialize(Editor editor);
     
@@ -34,9 +34,9 @@ public interface EditForm {
      */
     Toolbar getToolbar();
         
-    void addListener(EditFormListener listener);
+    void addListener(JmeEditListener listener);
     
-    boolean removeListener(EditFormListener listener);
+    boolean removeListener(JmeEditListener listener);
     
     Editor getEditor();
 }

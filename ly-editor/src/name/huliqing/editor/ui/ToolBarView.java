@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.control.ToolBar;
-import name.huliqing.editor.edit.EditForm;
 import name.huliqing.editor.toolbar.EditToolbar;
 import name.huliqing.editor.toolbar.Toolbar;
 import name.huliqing.editor.toolbar.ToolbarListener;
@@ -19,22 +18,23 @@ import name.huliqing.editor.tools.Tool;
 import name.huliqing.editor.ui.toolview.ToolView;
 import name.huliqing.editor.ui.toolview.ToolViewFactory;
 import name.huliqing.fxswing.Jfx;
-import name.huliqing.editor.edit.EditFormListener;
+import name.huliqing.editor.edit.JmeEdit;
+import name.huliqing.editor.edit.JmeEditListener;
 
 /**
  *
  * @author huliqing
  */
-public class ToolBarView extends ToolBar implements EditFormListener, ToolbarListener{
+public class ToolBarView extends ToolBar implements JmeEditListener, ToolbarListener{
 
     private static final Logger LOG = Logger.getLogger(ToolBarView.class.getName());
     
-    private final EditForm form;
+    private final JmeEdit form;
     private EditToolbar  toolbar;
     
     private final Map<Tool, ToolView> toolViewMap = new HashMap<Tool, ToolView>();
     
-    public ToolBarView(EditForm formView) {
+    public ToolBarView(JmeEdit formView) {
         this.form = formView;
         resetToolbar();
     }
@@ -112,7 +112,7 @@ public class ToolBarView extends ToolBar implements EditFormListener, ToolbarLis
     }
     
     @Override
-    public void onToolbarChanged(EditForm form, Toolbar newToolbar) {
+    public void onToolbarChanged(JmeEdit form, Toolbar newToolbar) {
 //        Jfx.runOnJfx(() -> {resetToolbar();});
     }
     

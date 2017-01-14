@@ -6,13 +6,17 @@
 package name.huliqing.editor.converter.scene;
 
 import java.util.List;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.control.TitledPane;
 import javafx.util.Callback;
 import name.huliqing.editor.converter.AbstractPropertyConverter;
 import name.huliqing.editor.converter.DataConverter;
+import name.huliqing.editor.edit.Mode;
+import name.huliqing.editor.edit.scene.JfxSceneEdit;
+import name.huliqing.editor.edit.scene.JfxSceneEditListener;
+import name.huliqing.editor.edit.select.EntitySelectObj;
 import name.huliqing.editor.manager.ConverterManager;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.data.SceneData;
@@ -21,44 +25,100 @@ import name.huliqing.luoying.data.SceneData;
  *
  * @author huliqing
  */
-public class EntitiesPropertyConverter extends AbstractPropertyConverter<SceneData> {
+public class EntitiesPropertyConverter extends AbstractPropertyConverter<JfxSceneEdit, SceneData> implements JfxSceneEditListener {
 
-    private SceneConverter sceneConverter;
     private final ListView<EntityData> listView = new ListView();
     
+    private boolean ignoreSelectEvent;
+    
+    // 当前被选中的物体的converter
+    private DataConverter<JfxSceneEdit, EntityData> entityDataConverter;
+    private final TitledPane entityPanel = new TitledPane();
+    
+    public EntitiesPropertyConverter() {
+        listView.setCellFactory(new CellInner());
+        listView.getSelectionModel().selectedItemProperty().addListener(this::onJfxSelectChanged);
+        root.setContent(listView);
+        entityPanel.setVisible(false);
+    }
+    
     @Override
-    public void initialize(DataConverter<SceneData> parent, String property) {
-        super.initialize(parent, property);
-        if (! (parent instanceof SceneConverter)) {
-            throw new UnsupportedOperationException("Unsupported DataConverter"
-                    + ", EntitiesPropertyConverter only support SceneConverter, found dataConverter=" + parent.getClass());
-        }
-        sceneConverter = (SceneConverter) parent;
+    public void initialize(JfxSceneEdit editView, DataConverter<JfxSceneEdit, SceneData> parent, String property) {
+        super.initialize(editView, parent, property);
         
         List<EntityData> eds = parent.getData().getEntityDatas();
         if (eds != null) {
+            listView.getItems().clear();
             eds.forEach(t -> {
                 listView.getItems().add(t);
             });
         }
-        listView.autosize();
-        listView.setCellFactory(new CellInner());
-        root.setContent(listView);
         
-        listView.setOnMouseClicked(this::onMouseClicked);
+        this.jfxEdit.getPropertyPanel().getChildren().add(entityPanel);
+        
+        // 用于监听3D场景中选择物体的变化
+        this.jfxEdit.addListener(this);
     }
 
-    private void onMouseClicked(MouseEvent e) {
-        if (e.getButton() != MouseButton.PRIMARY) {
+    @Override
+    public void cleanup() {
+        jfxEdit.getPropertyPanel().getChildren().remove(entityPanel);
+        jfxEdit.removeListener(this);
+        super.cleanup(); 
+    }
+
+    private void onJfxSelectChanged(ObservableValue observable, EntityData oldValue, EntityData newValue) {
+        if (ignoreSelectEvent) {
             return;
         }
-        EntityData ed = listView.getSelectionModel().getSelectedItem();
-        if (ed != null) {
-            DataConverter cd = ConverterManager.createConverter(ed, this);
-            parent.getLayout().getChildren().add(cd.getLayout());
+        if (newValue != null) {
+            // 注：重新设置选择的时候会触发事件，回调到onSelectChanged(EntitySelectObj)
+            // 要注意避免在该方法中导致死循环重复。
+            jfxEdit.setSelected(newValue);
+            doUpdateEntityView(newValue);
         }
     }
+
+    @Override
+    public void onModeChanged(Mode mode) {
+        // 不管
+    }
+
+    @Override
+    public void onSelectChanged(EntitySelectObj selectObj) {
+        if (selectObj == null) {
+            ignoreSelectEvent = true;
+            listView.getSelectionModel().clearSelection();
+            doUpdateEntityView(null);
+            ignoreSelectEvent = false;
+            return;
+        }
+        ignoreSelectEvent = true;
+        EntityData ed = selectObj.getObject().getData();
+        listView.getSelectionModel().select(ed);
+        doUpdateEntityView(ed);
+        ignoreSelectEvent = false;
+    }
     
+    private void doUpdateEntityView(EntityData entityData) {
+        if (entityDataConverter != null) {
+            entityDataConverter.cleanup(); // 必须清理
+            entityDataConverter = null;
+            entityPanel.setContent(null);
+        }
+        if (entityData != null) {
+            entityDataConverter = ConverterManager.createConverter(jfxEdit, entityData, this);
+            entityPanel.setText(entityData.getId());
+            entityPanel.setContent(entityDataConverter.getLayout());
+            entityPanel.setVisible(true);
+        }
+    }
+
+    @Override
+    public void updateView(Object propertyValue) {
+        // ignore
+    }
+
     private class CellInner implements Callback<ListView<EntityData>, ListCell<EntityData>> {
 
         @Override

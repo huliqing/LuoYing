@@ -9,17 +9,21 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.Node;
 import javafx.scene.control.TitledPane;
+import name.huliqing.editor.edit.JfxAbstractEdit;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
  * @author huliqing
+ * @param <E>
  * @param <T>
  */
-public abstract class AbstractPropertyConverter<T extends ObjectData> implements PropertyConverter<T>{
+public abstract class AbstractPropertyConverter<E extends JfxAbstractEdit, T extends ObjectData> 
+        implements PropertyConverter<E, T>{
 
     private static final Logger LOG = Logger.getLogger(AbstractPropertyConverter.class.getName());
-
-    protected DataConverter<T> parent;
+    
+    protected E jfxEdit;
+    protected DataConverter<E, T> parent;
     protected String property; 
     
     protected final TitledPane root = new TitledPane();
@@ -31,17 +35,28 @@ public abstract class AbstractPropertyConverter<T extends ObjectData> implements
     }
     
     @Override
-    public void initialize(DataConverter<T> parent, String property) {
+    public void initialize(E editView, DataConverter<E, T> parent, String property) {
         if (initialized) {
             throw new IllegalStateException();
         }
         initialized = true;
+        this.jfxEdit = editView;
         this.parent = parent;
         this.property = property;
         root.setText(property);
         root.setAnimated(false);
         
-        // children
+        // Child logics
+    }
+
+    @Override
+    public boolean isInitialized() {
+        return initialized;
+    }
+
+    @Override
+    public void cleanup() {
+        initialized = false;
     }
 
     @Override

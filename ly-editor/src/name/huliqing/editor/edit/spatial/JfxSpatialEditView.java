@@ -11,7 +11,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import name.huliqing.editor.edit.JfxEditView;
+import name.huliqing.editor.edit.JfxAbstractEdit;
 import name.huliqing.editor.manager.EditManager;
 import name.huliqing.editor.ui.ToolBarView;
 import name.huliqing.fxswing.Jfx;
@@ -20,7 +20,7 @@ import name.huliqing.fxswing.Jfx;
  * Spatial编辑UI界面
  * @author huliqing
  */
-public class JfxSpatialEditView extends JfxEditView<SpatialEditForm> {
+public class JfxSpatialEditView extends JfxAbstractEdit<SpatialEditForm> {
 
     private static final Logger LOG = Logger.getLogger(JfxSpatialEditView.class.getName());
 
@@ -86,5 +86,9 @@ public class JfxSpatialEditView extends JfxEditView<SpatialEditForm> {
         editPanel.setVisible(false);
     }
 
-    
+    public void setFilePath(String abstractFilePath) {
+        Jfx.runOnJme(() -> {
+            form.setFilePath(abstractFilePath);
+        });
+    }
 }

@@ -14,9 +14,9 @@ import name.huliqing.fxswing.Jfx;
  * @author huliqing
  * @param <T>
  */
-public abstract class JfxEditView<T extends EditForm> implements EditView<T> {
+public abstract class JfxAbstractEdit<T extends JmeEdit> implements JfxEdit<T> {
 
-    private static final Logger LOG = Logger.getLogger(JfxEditView.class.getName());
+    private static final Logger LOG = Logger.getLogger(JfxAbstractEdit.class.getName());
 
     protected Editor editor;
     protected T form;
@@ -70,11 +70,6 @@ public abstract class JfxEditView<T extends EditForm> implements EditView<T> {
     @Override
     public Editor getEditor() {
         return editor;
-    }
-
-    @Override
-    public T getEditForm() {
-        return form;
     }
     
     public void jfxOnDragStarted() {
