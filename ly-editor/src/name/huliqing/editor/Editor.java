@@ -14,6 +14,7 @@ import java.util.List;
 import name.huliqing.editor.events.JmeEvent;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.editor.edit.JfxEdit;
+import name.huliqing.editor.events.JmeEventAppState;
 
 /**
  *
@@ -39,8 +40,10 @@ public class Editor extends SimpleApplication{
         
         // 初始化
         Manager.initialize(this);
-        // 注册InputManager
-        JmeEvent.registerInputManager(inputManager);
+        // 注册事件
+        JmeEventAppState jeas = JmeEvent.getJmeEventAppState();
+        jeas.setInputManager(inputManager);
+        stateManager.attach(jeas);
         
         LuoYing.initialize(this);
         

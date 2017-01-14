@@ -35,7 +35,6 @@ public class MoveTool extends EditTool implements SimpleJmeEditListener{
     private final static String EVENT_MOVE_Z = "moveZEvent";
     
     private final static String EVENT_FREE_MOVE_START = "freeMoveStartEvent";
-    private final static String EVENT_FREE_MOVE_APPLY = "freeMoveApplyEvent";
     private final static String EVENT_FREE_MOVE_CANCEL = "freeMoveCancelEvent";
     
     private final Ray ray = new Ray();
@@ -90,9 +89,6 @@ public class MoveTool extends EditTool implements SimpleJmeEditListener{
     public JmeEvent bindFreeMoveStartEvent() {
         return bindEvent(EVENT_FREE_MOVE_START);
     }
-    public JmeEvent bindFreeMoveApplyEvent() {
-        return bindEvent(EVENT_FREE_MOVE_APPLY);
-    }
     public JmeEvent bindFreeMoveCancelEvent() {
         return bindEvent(EVENT_FREE_MOVE_CANCEL);
     }
@@ -122,15 +118,11 @@ public class MoveTool extends EditTool implements SimpleJmeEditListener{
             if (e.isMatch()) {
                 startFreeMove();
             }
-            // 应用自由操作
-        } else if (EVENT_FREE_MOVE_APPLY.equals(e.getName())) {
-            if (e.isMatch() && freeMove) {
-                endMove();
-            }
-            // 取消操作
-        } else if (EVENT_FREE_MOVE_CANCEL.equals(e.getName())) { 
+        // 取消操作
+        } else if (transforming && EVENT_FREE_MOVE_CANCEL.equals(e.getName())) { 
             if (e.isMatch()) {
                 cancelMove();
+                e.setConsumed(true);
             }
         }
         

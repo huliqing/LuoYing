@@ -32,7 +32,6 @@ public class RotationTool extends EditTool implements SimpleJmeEditListener{
     private final static String EVENT_ROTATION_Z = "rotationZEvent";
     
     private final static String EVENT_FREE_ROTATION_START = "freeRotationStartEvent";
-    private final static String EVENT_FREE_ROTATION_APPLY = "freeRotationApplyEvent";
     private final static String EVENT_FREE_ROTATION_CANCEL = "freeRotationCancelEvent";
     
     private final Ray ray = new Ray();
@@ -94,9 +93,6 @@ public class RotationTool extends EditTool implements SimpleJmeEditListener{
     public JmeEvent bindFreeRotationStartEvent() {
         return bindEvent(EVENT_FREE_ROTATION_START);
     }
-    public JmeEvent bindFreeRotationApplyEvent() {
-        return bindEvent(EVENT_FREE_ROTATION_APPLY);
-    }
     public JmeEvent bindFreeRotationCancelEvent() {
         return bindEvent(EVENT_FREE_ROTATION_CANCEL);
     }
@@ -126,15 +122,13 @@ public class RotationTool extends EditTool implements SimpleJmeEditListener{
             if (e.isMatch()) {
                 startFreeRotation();
             }
-            // 应用旋转
-        } else if (EVENT_FREE_ROTATION_APPLY.equals(e.getName())) {
-            if (e.isMatch() && freeRotation) {
-                endRotation();
-            }
-            // 取消旋转
-        } else if (EVENT_FREE_ROTATION_CANCEL.equals(e.getName())) { 
+        } 
+        // 取消旋转
+        else if (transforming && EVENT_FREE_ROTATION_CANCEL.equals(e.getName())) { 
             if (e.isMatch()) {
                 cancelRotation();
+                // 销毁后续事件，注意确保不要误销毁其它正常事件
+                e.setConsumed(true);
             }
         }
         

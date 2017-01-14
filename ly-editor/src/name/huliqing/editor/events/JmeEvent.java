@@ -5,28 +5,46 @@
  */
 package name.huliqing.editor.events;
 
-import com.jme3.input.InputManager;
+import com.jme3.input.KeyInput;
+import com.jme3.input.MouseInput;
 
 /**
  * JME事件
  * @author huliqing
  */
-public class JmeEvent extends AbstractEvent {
+public class JmeEvent extends AbstractEvent implements Comparable<JmeEvent>{
     
-    private static InputManager inputManager;
-    
-    /**
-     * 注册InputManager.
-     * @param inputManager 
-     */
-    public final static void registerInputManager(InputManager inputManager) {
-        JmeEvent.inputManager = inputManager;
-    }
+    // 事件的优先级, 同时发生的事件可能存在多个（比如相同的按键），各个事件可以拥有不同的优先级。
+    // 这个优先级只是一个设置标记。具体作用和实现由外部调用处理。
+    protected int prior;
     
     public JmeEvent(String name) {
         super(name);
     }
     
+    public final static JmeEventAppState getJmeEventAppState() {
+        return JmeEventAppState.getInstance();
+    }
+    
+    /**
+     * 获取事件的优先级
+     * @return 
+     */
+    public int getPrior() {
+        return prior;
+    }
+
+    /**
+     * 设置事件的优先级
+     * @param <E>
+     * @param prior 
+     * @return  
+     */
+    public <E extends JmeEvent> E setPrior(int prior) {
+        this.prior = prior;
+        return (E) this;
+    }
+
     /**
      * 绑定键盘按键事件
      * @param <E>
@@ -36,7 +54,7 @@ public class JmeEvent extends AbstractEvent {
      */
     public <E extends JmeEvent> E bindKey(int keyCode, boolean usePressed) {
         checkInputManager();
-        JmeKeyMapping em = new JmeKeyMapping(inputManager);
+        JmeKeyMapping em = new JmeKeyMapping(JmeEventAppState.getInstance().getInputManager());
         em.bindKey(keyCode).setUsePressed(usePressed);
         addKeyMapping(em);
         return (E) this;
@@ -51,7 +69,7 @@ public class JmeEvent extends AbstractEvent {
      */
     public <E extends JmeEvent> E bindButton(int mouseButton, boolean usePressed) {
         checkInputManager();
-        JmeKeyMapping em = new JmeKeyMapping(inputManager);
+        JmeKeyMapping em = new JmeKeyMapping(JmeEventAppState.getInstance().getInputManager());
         em.bindButton(mouseButton).setUsePressed(usePressed);
         addKeyMapping(em);
         return (E)this;
@@ -67,17 +85,33 @@ public class JmeEvent extends AbstractEvent {
      */
     public <E extends JmeEvent> E bindAxis(int mouseAxis, boolean negative, boolean usePressed) {
         checkInputManager();
-        JmeKeyMapping em = new JmeKeyMapping(inputManager);
+        JmeKeyMapping em = new JmeKeyMapping(JmeEventAppState.getInstance().getInputManager());
         em.bindAxis(mouseAxis, negative).setUsePressed(usePressed);
         addKeyMapping(em);
         return (E) this;
     }
  
     private void checkInputManager() {
-        if (inputManager == null) {
-            throw new NullPointerException("InputManager not found! "
-                    + "use JmeEvent.registerInputManager(InputManager) to register inputManager.");
+        if (JmeEventAppState.getInstance().getInputManager() == null) {
+            throw new NullPointerException("InputManager not found! ");
         }
     }
 
+    @Override
+    public void onKeyMapping(KeyMapping em) {
+        super.onKeyMapping(em);
+        JmeEventAppState.getInstance().addEventQueue(this);
+    }
+    
+    @Override
+    public int compareTo(JmeEvent o) {
+        return Integer.compare(o.getPrior(), prior); // 高优先级的放在前面
+    }
+
+    @Override
+    public String toString() {
+        return super.toString(); 
+    }
+    
+    
 }

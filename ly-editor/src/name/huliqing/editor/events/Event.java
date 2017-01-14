@@ -74,4 +74,19 @@ public interface Event {
      * @return 
      */
     boolean removeListener(EventListener listener);
+    
+    /**
+     * 调用该方法来销毁后续事件,调用该方法之后，后续匹配的事件将不会执行。当存在多个相同按键的匹配事件同时响应时
+     * 可以使用该方法来阻止事件的继续响应。
+     * @param <E>
+     * @param consume 
+     * @return  返回当前实例
+     */
+    <E extends Event> E setConsumed(boolean consume);
+    
+    /**
+     * 判断是否事件销毁。
+     * @return 
+     */
+    boolean isConsumed();
 }

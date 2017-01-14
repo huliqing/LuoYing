@@ -7,7 +7,6 @@ package name.huliqing.editor.events;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -29,6 +28,14 @@ public abstract class AbstractEvent implements Event, KeyMappingListener{
      * 事件的匹配结果,只有在所有keyMapping都匹配时该值才会为true.
      */
     protected boolean match;
+    
+    /**
+     * 判断事件是否已经响应完毕,
+     */
+    protected boolean eventFired;
+    
+    // 判断是否销毁后续事件
+    protected boolean consumed;
     
     public AbstractEvent(String name) {
         this.name = name;
@@ -67,7 +74,18 @@ public abstract class AbstractEvent implements Event, KeyMappingListener{
     public boolean isMatch() {
         return match;
     }
+    
+    @Override
+    public boolean isConsumed() {
+        return consumed;
+    }
 
+    @Override
+    public <E extends Event> E setConsumed(boolean consumed) {
+        this.consumed = consumed;
+        return (E) this;
+    }
+    
     @Override
     public void addListener(EventListener listener) {
         if (listener == null)
@@ -111,6 +129,7 @@ public abstract class AbstractEvent implements Event, KeyMappingListener{
     
     @Override
     public void onKeyMapping(KeyMapping em) {
+        eventFired = false;
         // 只要有一个KeyMapping不匹配，则视为不匹配
         boolean tempResult = true;
         for (KeyMapping km : keyMappings) {
@@ -120,16 +139,19 @@ public abstract class AbstractEvent implements Event, KeyMappingListener{
             }
         }
         match = tempResult; // 匹配结果
-//        if (LOG.isLoggable(Level.INFO)) {
-//            for (KeyMapping km : keyMappings) {
-//                LOG.log(Level.INFO, "KeyMapping name={0}, mappingResult={1}"
-//                        , new Object[] {km.getMappingName(), km.isMatch()});
-//            }
-//            LOG.log(Level.INFO, "====Event trigger, name={0}, result={1}", new Object[]{name, match});
-//        }
+    }
+    
+    /**
+     * 触发事件响应
+     */
+    void fireEventListeners() {
+        if (eventFired) {
+            return;
+        }
         for (EventListener l : listeners) {
             l.onEvent(this);
         }
+        eventFired = true;
     }
 
     @Override

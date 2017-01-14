@@ -68,26 +68,20 @@ public class EditToolbar extends AbstractToolbar<SimpleJmeEdit> implements Event
         cameraTool.bindViewTopEvent().bindKey(KeyInput.KEY_NUMPAD7, true);
         cameraTool.bindViewOrthoPerspEvent().bindKey(KeyInput.KEY_NUMPAD5, true);
 
-        modeTool.bindModeEvent().bindKey(KeyInput.KEY_TAB, false);
+        modeTool.bindModeEvent().bindKey(KeyInput.KEY_TAB, true);
         pickTool.bindPickEvent().bindButton(MouseInput.BUTTON_RIGHT, true);
         
         moveTool.bindMoveEvent().bindButton(MouseInput.BUTTON_LEFT, true);
         moveTool.bindFreeMoveStartEvent().bindKey(KeyInput.KEY_G, false);
-        // bindFreeMoveApplyEvent和bindMoveEvent按键重叠，所以不再需要
-//        moveTool.bindFreeMoveApplyEvent().bindButton(MouseInput.BUTTON_LEFT, true);
-         // 注：move,scale,rotation的取消操作使用右键必须使usePressed=true,否则会和pickTool的选择操作冲突，会导致
-         // 当按右键取消的时候变成选择操作，导致消取操作时的回退历史记录的目标对象错误。
-        moveTool.bindFreeMoveCancelEvent().bindButton(MouseInput.BUTTON_RIGHT, true);
+        moveTool.bindFreeMoveCancelEvent().setPrior(1).bindButton(MouseInput.BUTTON_RIGHT, true);
         
         scaleTool.bindScaleEvent().bindButton(MouseInput.BUTTON_LEFT, true);
         scaleTool.bindFreeScaleStartEvent().bindKey(KeyInput.KEY_S, false);
-//        scaleTool.bindFreeScaleApplyEvent().bindButton(MouseInput.BUTTON_LEFT, true);
-        scaleTool.bindFreeScaleCancelEvent().bindButton(MouseInput.BUTTON_RIGHT, true);
+        scaleTool.bindFreeScaleCancelEvent().setPrior(1).bindButton(MouseInput.BUTTON_RIGHT, true);
         
         rotationTool.bindRotationEvent().bindButton(MouseInput.BUTTON_LEFT, true);
         rotationTool.bindFreeRotationStartEvent().bindKey(KeyInput.KEY_R, false);
-//        rotationTool.bindFreeRotationApplyEvent().bindButton(MouseInput.BUTTON_LEFT, true);
-        rotationTool.bindFreeRotationCancelEvent().bindButton(MouseInput.BUTTON_RIGHT, true);
+        rotationTool.bindFreeRotationCancelEvent().setPrior(1).bindButton(MouseInput.BUTTON_RIGHT, true); 
         
         add(undoRedoTool);
         add(cameraTool);
@@ -112,6 +106,7 @@ public class EditToolbar extends AbstractToolbar<SimpleJmeEdit> implements Event
         
         setEnabled(rotationTool, true);
         setEnabled(scaleTool, true);
+        
     }
     
     @Override
@@ -124,6 +119,7 @@ public class EditToolbar extends AbstractToolbar<SimpleJmeEdit> implements Event
     private void addToggleMapping(int keyInput, ToggleMappingEvent tme) {
         tme.bindKey(keyInput, true);
         tme.addListener(this);
+        tme.setPrior(2); // 优先级高一点，可以在按下按键后的同时激活某些工具功能。
         tme.initialize();
         toggleMapping.put(tme.tool, tme);
     }

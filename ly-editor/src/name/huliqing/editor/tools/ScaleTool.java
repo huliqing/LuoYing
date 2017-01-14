@@ -36,7 +36,6 @@ public class ScaleTool extends EditTool implements SimpleJmeEditListener{
     private final static String EVENT_SCALE_Z = "scaleZEvent";
     // 点击按键进行全缩放
     private final static String EVENT_FREE_SCALE_START = "fullScaleStartEvent";
-    private final static String EVENT_FREE_SCALE_APPLY = "fullScaleApplyEvent";
     private final static String EVENT_FREE_SCALE_CANCEL = "fullScaleCancelEvent";
     
     private final Ray ray = new Ray();
@@ -70,8 +69,6 @@ public class ScaleTool extends EditTool implements SimpleJmeEditListener{
         form.getEditRoot().getParent().attachChild(controlObj);
         form.addSimpleEditListener(this);
         updateMarkerState();
-        
-        
     }
 
     @Override
@@ -95,14 +92,6 @@ public class ScaleTool extends EditTool implements SimpleJmeEditListener{
      */
     public JmeEvent bindFreeScaleStartEvent() {
         return bindEvent(EVENT_FREE_SCALE_START);
-    }
-    
-    /**
-     * 绑定一个应用全局缩放的按键事件
-     * @return 
-     */
-    public JmeEvent bindFreeScaleApplyEvent() {
-        return bindEvent(EVENT_FREE_SCALE_APPLY);
     }
     
     /**
@@ -143,18 +132,11 @@ public class ScaleTool extends EditTool implements SimpleJmeEditListener{
                 startFullScale();
             }
         }
-        
-        // 整体缩放应用
-        else if (EVENT_FREE_SCALE_APPLY.equals(e.getName())) {
-            if (e.isMatch() && freeScale) {
-                endScale();
-            }
-        }
-        
-        // 整体缩放取消
-        else if (EVENT_FREE_SCALE_CANCEL.equals(e.getName())) {
+         // 整体缩放取消
+        else if (transforming && EVENT_FREE_SCALE_CANCEL.equals(e.getName())) {
             if (e.isMatch()) {
                 cancelScale();
+                e.setConsumed(true);
             }
         }
         
