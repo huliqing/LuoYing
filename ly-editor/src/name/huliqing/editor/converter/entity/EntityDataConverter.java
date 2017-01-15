@@ -65,6 +65,16 @@ public class EntityDataConverter extends AbstractDataConverter<JfxSceneEdit, Ent
     }
 
     @Override
+    public void onEntityAdded(EntityData entity) {
+        // ignore
+    }
+
+    @Override
+    public void onEntityRemoved(EntityData ed) {
+        // ignore
+    }
+
+    @Override
     public void onPropertyChanged(EntityData data, String property, Object value) {
         if (this.data != data) {
             return;

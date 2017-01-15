@@ -137,7 +137,7 @@ public abstract class AbstractToolbar<F extends JmeEdit> implements Toolbar<F> {
             for (ToolbarListener tl : listeners.getArray()) {
                 tl.onToolActivated(t);
             }
-            LOG.log(Level.INFO, "toolActivated, tool={0}", t.getName());
+//            LOG.log(Level.INFO, "toolActivated, tool={0}", t.getName());
         }
     }
     
@@ -149,7 +149,7 @@ public abstract class AbstractToolbar<F extends JmeEdit> implements Toolbar<F> {
             for (ToolbarListener tl : listeners.getArray()) {
                 tl.onToolDeactivated(t);
             }
-            LOG.log(Level.INFO, "toolDeactivated, tool={0}", t.getName());
+//            LOG.log(Level.INFO, "toolDeactivated, tool={0}", t.getName());
         }
     }
     
@@ -161,7 +161,7 @@ public abstract class AbstractToolbar<F extends JmeEdit> implements Toolbar<F> {
         for (ToolbarListener l : listeners.getArray()) {
             l.onToolEnabled(t);
         }
-        LOG.log(Level.INFO, "toolEnabled, tool={0}", t.getName());
+//        LOG.log(Level.INFO, "toolEnabled, tool={0}", t.getName());
     }
     
     private void toolDisabled(Tool t) {
@@ -169,7 +169,7 @@ public abstract class AbstractToolbar<F extends JmeEdit> implements Toolbar<F> {
             for (ToolbarListener l : listeners.getArray()) {
                 l.onToolDisabled(t);
             }
-            LOG.log(Level.INFO, "toolDisabled, tool={0}", t.getName());
+//            LOG.log(Level.INFO, "toolDisabled, tool={0}", t.getName());
         }
     }
 

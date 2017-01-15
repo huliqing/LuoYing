@@ -7,6 +7,7 @@ package name.huliqing.editor.edit.scene;
 
 import name.huliqing.editor.edit.Mode;
 import name.huliqing.editor.edit.select.EntitySelectObj;
+import name.huliqing.luoying.data.EntityData;
 
 /**
  *
@@ -27,4 +28,7 @@ public interface JfxSceneEditListener<T extends EntitySelectObj> {
      */
     void onSelectChanged(T selectObj);
     
+    void onEntityAdded(EntityData ed);
+    
+    void onEntityRemoved(EntityData ed);
 }

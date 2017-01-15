@@ -7,6 +7,12 @@
 .list-view .list-cell:selected {-fx-background-color: lightgray;}
 */
 
+.v-box {
+    -fx-background-radius:0;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}
+
 .text-field {
     -fx-background-radius: 7;
     -fx-border-width: 0;
@@ -38,12 +44,13 @@
 /* list-view */
 .list-view {
     -fx-border-width: 0;
+    -fx-background-color:lightgray;
 }
 .list-view .list-cell {
-    -fx-background-radius: 10;   
+    -fx-background-radius: 10;
 }
 
-#propertyPanel {
+/*#propertyPanel {*/
     /*-fx-background-color: lightgray;*/
     /* -fx-background-radius: 5; */
-}
+/*}*/

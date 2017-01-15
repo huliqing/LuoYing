@@ -38,7 +38,7 @@ public class Picker {
     private Vector3f endPickLoc;
     
     public Picker() {
-        float size = 1000;
+        float size = Integer.MAX_VALUE;
         Geometry g = new Geometry("plane", new Quad(size, size));
         g.setLocalTranslation(-size / 2, -size / 2, 0);
         plane.attachChild(g);

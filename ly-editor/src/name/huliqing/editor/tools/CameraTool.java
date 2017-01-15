@@ -314,8 +314,9 @@ public class CameraTool extends EditTool implements EditorListener {
         ResManager resManager = Manager.getResManager();
         String viewTextStr = resManager.get(textKey) + " " + resManager.get(orthoKey);
         viewText.setText(viewTextStr);
+        float x = editorCam.getCamera().getWidth() - viewText.getLineWidth() - 10;
         float y = editorCam.getCamera().getHeight() - 10;
-        viewText.setLocalTranslation(10, y, 0);
+        viewText.setLocalTranslation(x, y, 0);
     }
 
     @Override

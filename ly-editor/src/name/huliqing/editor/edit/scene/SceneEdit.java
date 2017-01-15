@@ -6,7 +6,11 @@
 package name.huliqing.editor.edit.scene;
 
 import com.jme3.math.Ray;
-import com.jme3.util.SafeArrayList;
+import com.jme3.math.Vector2f;
+import com.jme3.math.Vector3f;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.editor.Editor;
@@ -14,10 +18,12 @@ import name.huliqing.editor.edit.SimpleJmeEdit;
 import name.huliqing.editor.edit.select.EntitySelectObj;
 import name.huliqing.editor.manager.SelectObjManager;
 import name.huliqing.editor.toolbar.EditToolbar;
+import name.huliqing.editor.undoredo.UndoRedo;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.constants.IdConstants;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.layer.service.PlayService;
+import name.huliqing.luoying.manager.PickManager;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.game.Game;
@@ -35,7 +41,9 @@ public class SceneEdit extends SimpleJmeEdit<EntitySelectObj> implements SceneLi
 
     private Game game;
     private Scene scene;
-    private final SafeArrayList<EntitySelectObj> entityObjs = new SafeArrayList<EntitySelectObj>(EntitySelectObj.class);
+    private boolean sceneLoaded;
+    
+    private final Map<EntityData, EntitySelectObj> objMap = new LinkedHashMap<EntityData, EntitySelectObj>();
     
     public SceneEdit() {}
     
@@ -51,6 +59,7 @@ public class SceneEdit extends SimpleJmeEdit<EntitySelectObj> implements SceneLi
             game.cleanup();
             game = null;
         }
+        sceneLoaded = false;
         getEditRoot().detachAllChildren();
         super.cleanup(); 
     }
@@ -63,8 +72,9 @@ public class SceneEdit extends SimpleJmeEdit<EntitySelectObj> implements SceneLi
         if (game != null) {
             game.cleanup();
             game = null;
-            entityObjs.clear();
+            objMap.clear();
         }
+        sceneLoaded = false;
         scene = newScene;
         scene.addSceneListener(this);
         
@@ -76,12 +86,6 @@ public class SceneEdit extends SimpleJmeEdit<EntitySelectObj> implements SceneLi
         getEditRoot().attachChild(game.getScene().getRoot());
     }
 
-    public void addEntity(Entity entity) {
-        if (scene != null) {
-            scene.addEntity(entity);
-        }
-    }
-
     @Override
     public EntitySelectObj doPick(Ray ray) {
         if (scene == null)
@@ -90,7 +94,7 @@ public class SceneEdit extends SimpleJmeEdit<EntitySelectObj> implements SceneLi
         EntitySelectObj result = null;
         float minDistance = Float.MAX_VALUE;
         Float temp;
-        for (EntitySelectObj seo : entityObjs.getArray()) {
+        for (EntitySelectObj seo : objMap.values()) {
             temp = seo.distanceOfPick(ray);
             if (temp != null && temp < minDistance) {
                 minDistance = temp;
@@ -104,38 +108,30 @@ public class SceneEdit extends SimpleJmeEdit<EntitySelectObj> implements SceneLi
     }
 
     @Override
-    public void onSceneLoaded(Scene scene) {} // ignore
+    public void onSceneLoaded(Scene scene) {
+        // 先预生成SelectObjs
+        List<Entity> entities = scene.getEntities();
+        if (entities != null) {
+            entities.stream().filter(t -> t != null).forEach(t -> {
+                EntitySelectObj eso = SelectObjManager.createSelectObj(t.getData().getTagName());
+                objMap.put(t.getData(), eso);
+                eso.setObject(t);
+                eso.initialize(this);
+            });
+        }
+        sceneLoaded = true;
+    }
 
     @Override
-    public void onSceneEntityAdded(Scene scene, Entity entityAdded) {
-        EntitySelectObj eso = SelectObjManager.createSelectObj(entityAdded.getData().getTagName());
-        eso.setObject(entityAdded);
-        entityObjs.add(eso);
-        eso.initialize(this);
-    }
+    public void onSceneEntityAdded(Scene scene, Entity entityAdded) {}
     
     @Override
-    public void onSceneEntityRemoved(Scene scene, Entity entityRemoved) {
-        for (EntitySelectObj seo : entityObjs.getArray()) {
-            if (seo.getObject().getData() == entityRemoved.getData()) {
-                entityObjs.remove(seo);
-                seo.cleanup();
-                break;
-            }
-        }
-    }
-
-    @Override
-    public void setSelected(EntitySelectObj selectObj) {
-        super.setSelected(selectObj);
-    }
+    public void onSceneEntityRemoved(Scene scene, Entity entityRemoved) {}
     
     public void setSelected(EntityData entityData) {
-        for (EntitySelectObj eso : entityObjs.getArray()) {
-            if (eso.getObject().getData() == entityData) {
-                setSelected(eso);
-                break;
-            }
+        EntitySelectObj eso = objMap.get(entityData);
+        if (eso != null) {
+            setSelected(eso);
         }
     }
     
@@ -144,14 +140,119 @@ public class SceneEdit extends SimpleJmeEdit<EntitySelectObj> implements SceneLi
      * @param entityData 
      */
     public void reloadEntity(EntityData entityData) {
-        for (EntitySelectObj eso : entityObjs.getArray()) {
-            if (eso.getObject().getData() == entityData) {
-                eso.getObject().cleanup();
-                eso.getObject().setData(entityData);
-                eso.getObject().initialize();
-                eso.getObject().onInitScene(scene);
-                break;
-            }
+        if (!sceneLoaded)
+            return;
+        EntitySelectObj eso = objMap.get(entityData);
+        if (eso != null) {
+            eso.getObject().cleanup();
+            eso.getObject().setData(entityData);
+            eso.getObject().initialize();
+            eso.getObject().onInitScene(scene);
         }
+    }  
+    
+    public void addEntity(EntityData ed) {
+        if (!sceneLoaded)
+            return;
+        if (objMap.containsKey(ed)) {
+            return;
+        }
+        Entity entity = Loader.load(ed);
+        scene.addEntity(entity);
+        EntitySelectObj eso = SelectObjManager.createSelectObj(ed.getTagName());
+        objMap.put(ed, eso);
+        eso.setObject(entity);
+        eso.initialize(this);
+        addUndoRedo(new EntityAddedUndoRedo(eso));
+    }
+    
+    public void addEntityOnCursor(EntityData ed, Vector2f cursorPos) {
+        if (!sceneLoaded)
+            return;
+        if (objMap.containsKey(ed)) {
+            return;
+        }
+        Vector3f loc = PickManager.pick(editor.getCamera(), cursorPos, editRoot);
+        if (loc != null) {
+            ed.setLocation(loc);
+        }
+        Entity entity = Loader.load(ed);
+        scene.addEntity(entity);
+        EntitySelectObj eso = SelectObjManager.createSelectObj(ed.getTagName());
+        objMap.put(ed, eso);
+        eso.setObject(entity);
+        eso.initialize(this);
+        addUndoRedo(new EntityAddedUndoRedo(eso));
+    }
+    
+    public boolean removeEntity(EntityData ed) {
+        if (!sceneLoaded) 
+            return false;
+        EntitySelectObj eso = objMap.get(ed);
+        if (eso == null) {
+            return false;
+        }
+        eso.getObject().updateDatas();
+        if (eso.isInitialized()) {
+            eso.cleanup();
+        }
+        scene.removeEntity(eso.getObject());
+        objMap.remove(ed);
+        addUndoRedo(new EntityRemovedUndoRedo(eso));
+        return true;
+    }
+    
+    private class EntityAddedUndoRedo implements UndoRedo {
+        private final EntitySelectObj eso;
+        public EntityAddedUndoRedo(EntitySelectObj eso) {
+            this.eso = eso;
+        }
+        
+        @Override
+        public void undo() {
+            eso.getObject().updateDatas();
+            if (eso.isInitialized()) {
+                eso.cleanup();
+            }
+            objMap.remove(eso.getObject().getData());
+            scene.removeEntity(eso.getObject());
+        }
+
+        @Override
+        public void redo() {
+            eso.getObject().setData(eso.getObject().getData()); // 重新更新一次数据，优先
+            scene.addEntity(eso.getObject());
+            eso.initialize(SceneEdit.this);
+            objMap.put(eso.getObject().getData(), eso);
+        }
+        
+    }
+    
+    private class EntityRemovedUndoRedo implements UndoRedo {
+
+        private final EntitySelectObj eso;
+        
+        public EntityRemovedUndoRedo(EntitySelectObj eso) {
+            this.eso = eso;
+        }
+        
+        @Override
+        public void undo() {
+            eso.getObject().setData(eso.getObject().getData()); // 重新更新一次数据，优先
+            scene.addEntity(eso.getObject());
+            eso.initialize(SceneEdit.this);
+            objMap.put(eso.getObject().getData(), eso);
+        }
+
+        @Override
+        public void redo() {
+            eso.getObject().updateDatas();
+            if (eso.isInitialized()) {
+                eso.cleanup();
+            }
+            objMap.remove(eso.getObject().getData());
+            scene.removeEntity(eso.getObject());
+        }
+        
     }
 }

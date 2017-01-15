@@ -5,10 +5,12 @@
  */
 package name.huliqing.editor.edit.scene;
 
+import com.jme3.math.Vector2f;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.geometry.Bounds;
 import javafx.scene.control.TitledPane;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
@@ -28,16 +30,18 @@ import name.huliqing.fxswing.Jfx;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.data.SceneData;
 import name.huliqing.luoying.object.Loader;
-import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.editor.edit.SimpleJmeEditListener;
 import name.huliqing.editor.edit.select.EntitySelectObj;
+import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.scene.SceneListener;
 
 /**
  *
  * @author huliqing
  */
-public class JfxSceneEdit extends JfxAbstractEdit<SceneEdit> implements SimpleJmeEditListener<EntitySelectObj> {
+public class JfxSceneEdit extends JfxAbstractEdit<SceneEdit> 
+        implements SimpleJmeEditListener<EntitySelectObj>, SceneListener {
 
     private static final Logger LOG = Logger.getLogger(JfxSceneEdit.class.getName());
 
@@ -99,10 +103,10 @@ public class JfxSceneEdit extends JfxAbstractEdit<SceneEdit> implements SimpleJm
             if (db.hasContent(DataFormatConstants.COMPONENT_ENTITY)) {
                 Component c = (Component) db.getContent(DataFormatConstants.COMPONENT_ENTITY);
                 e.setDropCompleted(true);
-                Jfx.runOnJme(() -> {
-                    Entity entity = Loader.load(c.id);
-                    form.addEntity(entity);
-                });
+                // 当拖动物体到3D场景的时候必须把JFX中的鼠标坐标转到到JME中的坐标.
+                // 不能直接用jme场景中获取鼠标坐标的方式，因为JME是放在awt canvas上的，这时还未获得焦点，直接用
+                // JME中的方式获取鼠标坐标会错位。
+                addEntity(Loader.loadData(c.id), e.getX(), editPanel.getHeight() - e.getY());
             }
             e.consume();
         });
@@ -135,6 +139,7 @@ public class JfxSceneEdit extends JfxAbstractEdit<SceneEdit> implements SimpleJm
             try {
                 SceneData sd = Loader.loadData(sceneId);
                 Scene scene = Loader.load(sd);
+                scene.addSceneListener(this);
                 form.setScene(scene);
                 
                 Jfx.runOnJfx(() -> {
@@ -196,23 +201,57 @@ public class JfxSceneEdit extends JfxAbstractEdit<SceneEdit> implements SimpleJm
         });
     }
     
+    public Pane getPropertyPanel() {
+        return propertyPanel;
+    }
+    
     public EntitySelectObj getSelected() {
         return form.getSelected();
     }
     
-    public void setSelected(EntityData entityData) {
+    public void setSelected(EntityData ed) {
         Jfx.runOnJme(() -> {
-            form.setSelected(entityData);
+            form.setSelected(ed);
         });
     }
     
-    public void reloadEntity(EntityData entityData) {
+    public void reloadEntity(EntityData ed) {
         Jfx.runOnJme(() -> {
-            form.reloadEntity(entityData);
+            form.reloadEntity(ed);
         });
     }
     
-    public Pane getPropertyPanel() {
-        return propertyPanel;
+    private void addEntity(EntityData ed, double x, double y) {
+        Jfx.runOnJme(() -> {
+            form.addEntityOnCursor(ed, new Vector2f((float)x, (float)y));
+        });
+    }
+    
+    public void removeEntity(EntityData ed) {
+        Jfx.runOnJme(() -> {
+            form.removeEntity(ed);
+        });
+    }
+
+    @Override
+    public void onSceneLoaded(Scene scene) {
+    }
+
+    @Override
+    public void onSceneEntityAdded(Scene scene, Entity entityAdded) {
+        Jfx.runOnJfx(() -> {
+            listeners.forEach(t -> {
+                t.onEntityAdded(entityAdded.getData());
+            });
+        });
+    }
+
+    @Override
+    public void onSceneEntityRemoved(Scene scene, Entity entityRemoved) {
+        Jfx.runOnJfx(() -> {
+            listeners.forEach(t -> {
+                t.onEntityRemoved(entityRemoved.getData());
+            });
+        });
     }
 }

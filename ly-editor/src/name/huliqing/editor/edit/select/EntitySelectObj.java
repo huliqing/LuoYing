@@ -27,6 +27,8 @@ public abstract class EntitySelectObj<T extends Entity> implements SelectObj<T> 
     protected T entity;
     
     protected final List<EntitySelectObjListener> listeners = new ArrayList<EntitySelectObjListener>();
+    protected boolean initialized;
+    
     
     public EntitySelectObj() {}
     
@@ -108,11 +110,18 @@ public abstract class EntitySelectObj<T extends Entity> implements SelectObj<T> 
     }
     
     public void initialize(SceneEdit  form) {
-        // for child
+        if (initialized) {
+            throw new IllegalStateException();
+        }
+        initialized = true;
+    }
+    
+    public boolean isInitialized() {
+        return initialized;
     }
     
     public void cleanup() {
-        // for child
+        initialized = false;
     }
     
     public abstract Float distanceOfPick(Ray ray);

@@ -5,11 +5,13 @@
  */
 package name.huliqing.editor.converter.scene;
 
-import java.util.List;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TitledPane;
+import javafx.scene.control.ToolBar;
+import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import name.huliqing.editor.converter.AbstractPropertyConverter;
 import name.huliqing.editor.converter.DataConverter;
@@ -27,8 +29,9 @@ import name.huliqing.luoying.data.SceneData;
  */
 public class EntitiesPropertyConverter extends AbstractPropertyConverter<JfxSceneEdit, SceneData> implements JfxSceneEditListener {
 
+    private final VBox layout = new VBox();
+    private final ToolBar toolBar = new ToolBar();
     private final ListView<EntityData> listView = new ListView();
-    
     private boolean ignoreSelectEvent;
     
     // 当前被选中的物体的converter
@@ -36,23 +39,41 @@ public class EntitiesPropertyConverter extends AbstractPropertyConverter<JfxScen
     private final TitledPane entityPanel = new TitledPane();
     
     public EntitiesPropertyConverter() {
+        // 工具栏
+        Button remove = new Button("-");
+        toolBar.getItems().addAll(remove);
+        toolBar.setStyle("-fx-background-color:lightgray;");
+        remove.setOnAction(e -> {
+            EntityData ed = listView.getSelectionModel().getSelectedItem();
+            if (ed != null) {
+                jfxEdit.removeEntity(ed);
+                listView.getItems().remove(ed);
+            }
+        });
+        
+        // 列表
         listView.setCellFactory(new CellInner());
         listView.getSelectionModel().selectedItemProperty().addListener(this::onJfxSelectChanged);
-        root.setContent(listView);
+        layout.getChildren().addAll(toolBar, listView);
+        layout.setStyle("-fx-padding:0;-fx-border-width:0;");
+        
+        root.setContent(layout);
         entityPanel.setVisible(false);
+        
     }
     
     @Override
     public void initialize(JfxSceneEdit editView, DataConverter<JfxSceneEdit, SceneData> parent, String property) {
         super.initialize(editView, parent, property);
         
-        List<EntityData> eds = parent.getData().getEntityDatas();
-        if (eds != null) {
-            listView.getItems().clear();
-            eds.forEach(t -> {
-                listView.getItems().add(t);
-            });
-        }
+        // remove20170116不再需要
+//        List<EntityData> eds = parent.getData().getEntityDatas();
+//        if (eds != null) {
+//            listView.getItems().clear();
+//            eds.forEach(t -> {
+//                listView.getItems().add(t);
+//            });
+//        }
         
         this.jfxEdit.getPropertyPanel().getChildren().add(entityPanel);
         
@@ -82,6 +103,16 @@ public class EntitiesPropertyConverter extends AbstractPropertyConverter<JfxScen
     @Override
     public void onModeChanged(Mode mode) {
         // 不管
+    }
+
+    @Override
+    public void onEntityAdded(EntityData entityData) {
+        listView.getItems().add(entityData);
+    }
+
+    @Override
+    public void onEntityRemoved(EntityData ed) {
+        listView.getItems().remove(ed);
     }
 
     @Override
@@ -129,7 +160,10 @@ public class EntitiesPropertyConverter extends AbstractPropertyConverter<JfxScen
                     super.updateItem(item, empty);
                     if (!empty && item != null) {
                         setText(item.getId() + "(" + item.getUniqueId() + ")");
+                    } else {
+                        setText(null); // 必须设置为null,否则会有重复数据可能(在动态添加item的时候)
                     }
+                    setGraphic(null);
                 }
             };
             return lc;

@@ -60,7 +60,6 @@ public abstract class AbstractDataConverter<E extends JfxAbstractEdit, T extends
         
         dataScroll.setId(StyleConstants.ID_PROPERTY_PANEL);
         dataScroll.setContent(propertyPanel);
-        dataScroll.setFitToWidth(true);
         
         if (propertyConvertDefines != null && !propertyConvertDefines.isEmpty()) {
             propertyConvertDefines.forEach(t -> {
@@ -70,6 +69,7 @@ public abstract class AbstractDataConverter<E extends JfxAbstractEdit, T extends
             });
         }
         
+        dataScroll.setFitToWidth(true);
     }
 
     @Override
