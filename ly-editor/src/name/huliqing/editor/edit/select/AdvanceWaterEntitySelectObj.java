@@ -5,6 +5,7 @@
  */
 package name.huliqing.editor.edit.select;
 
+import com.jme3.collision.CollisionResults;
 import com.jme3.material.Material;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
@@ -81,8 +82,21 @@ public class AdvanceWaterEntitySelectObj extends EntitySelectObj<AdvanceWaterEnt
     
     @Override
     public Float distanceOfPick(Ray ray) {
-        Float dist = PickManager.distanceOfPick(ray, controlObj);
+        Float dist = null;
+        CollisionResults cr = PickManager.pick(ray, controlObj, null);
+        if (cr != null && cr.size() > 0) {
+            dist = cr.getClosestCollision().getDistance();
+            // 优化：对于无界限水体，当操作时把controlObj位置移动到点击点处，这样方便操作
+            if (entity.getCenter() == null) {
+                controlObj.setLocalTranslation(cr.getClosestCollision().getContactPoint());
+            }
+        }
         return dist;
+    }
+
+    @Override
+    public Spatial getReadOnlySelectedSpatial() {
+        return controlObj;
     }
     
     private Spatial createControlObj() {

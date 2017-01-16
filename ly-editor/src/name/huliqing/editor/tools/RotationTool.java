@@ -236,7 +236,7 @@ public class RotationTool extends EditTool implements SimpleJmeEditListener{
     }
 
     @Override
-    public void onSelectChanged(SelectObj selectObj) {
+    public void onSelect(SelectObj selectObj) {
         updateMarkerState();
     }
 

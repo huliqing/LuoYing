@@ -34,6 +34,33 @@ import java.util.List;
  */
 class Converter {
     
+    /**
+     * 将目标对象转换为字符串形式
+     * @param value
+     * @return 
+     */
+    public final static String getAsString(Object value) {
+         if (value instanceof String) {
+            return (String) value;
+        } else if (value instanceof Vector2f) {
+            Vector2f v2 = (Vector2f) value;
+            return v2.x + "," + v2.y;
+        } else if (value instanceof Vector3f) {
+            Vector3f v3 = (Vector3f) value;
+            return v3.x + "," + v3.y + "," + v3.z;
+        } else if (value instanceof Vector4f) {
+            Vector4f v4 = (Vector4f) value;
+            return v4.x + "," + v4.y + "," + v4.z + "," + v4.w;
+        } else if (value instanceof Quaternion) {
+            Quaternion q4 = (Quaternion) value;
+            return q4.getX() + "," + q4.getY() + "," + q4.getZ() + "," + q4.getW();
+        } else if (value instanceof ColorRGBA) {
+            ColorRGBA c4 = (ColorRGBA) value;
+            return c4.r + "," + c4.g + "," + c4.b + "," + c4.a;
+        }
+        return value.toString();
+    }
+    
     public final static String[] getAsArray(Object value) {
         if (value instanceof String) {
             String[] result = ((String)value).split(",");

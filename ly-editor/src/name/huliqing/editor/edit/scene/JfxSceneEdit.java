@@ -189,7 +189,7 @@ public class JfxSceneEdit extends JfxAbstractEdit<SceneEdit>
     }
 
     @Override
-    public void onSelectChanged(EntitySelectObj selectObj) {
+    public void onSelect(EntitySelectObj selectObj) {
         if (selectObj == this.entitySelectObj) {
             return;
         }

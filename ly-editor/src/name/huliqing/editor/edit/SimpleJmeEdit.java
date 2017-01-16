@@ -68,11 +68,8 @@ public abstract class SimpleJmeEdit<T extends SelectObj> extends JmeAbstractEdit
      * @param selectObj 
      */
     public void setSelected(T selectObj) {
-        boolean changed = this.selectObj != selectObj;
         this.selectObj = selectObj;
-        if (changed) {
-            editFormListeners.forEach(l -> {l.onSelectChanged(selectObj);});
-        }
+        editFormListeners.forEach(l -> {l.onSelect(selectObj);});
     }
     
     /**

@@ -7,6 +7,7 @@ package name.huliqing.editor.converter;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.TitledPane;
 import name.huliqing.editor.edit.JfxAbstractEdit;
@@ -45,7 +46,7 @@ public abstract class AbstractPropertyConverter<E extends JfxAbstractEdit, T ext
         this.property = property;
         root.setText(property);
         root.setAnimated(false);
-        
+        root.setAlignment(Pos.CENTER_LEFT);
         // Child logics
     }
 

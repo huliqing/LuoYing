@@ -7,6 +7,8 @@ package name.huliqing.editor.converter.tiles;
 
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import name.huliqing.editor.converter.AbstractPropertyConverter;
 import name.huliqing.editor.converter.DataConverter;
 import name.huliqing.editor.edit.JfxAbstractEdit;
@@ -18,10 +20,25 @@ public class TextFieldConverter extends AbstractPropertyConverter {
 
     private final TextField content = new TextField("");
     private boolean ignoreChangedEvent;
+    private String lastText = "";
 
     public TextFieldConverter() {
         root.setContent(content);
-        content.textProperty().addListener(this::change);
+        // 失去焦点时更新
+        content.focusedProperty().addListener((ObservableValue<? extends Boolean> observable
+                , Boolean oldValue, Boolean newValue) -> {
+            // 如果是获得焦点则不理睬。
+            if (newValue) {
+                return;
+            }
+            updateChanged();
+        });
+        // 按下Enter时更新
+        content.setOnKeyPressed((KeyEvent event) -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                updateChanged();
+            }
+        });
     }
     
     @Override
@@ -30,12 +47,16 @@ public class TextFieldConverter extends AbstractPropertyConverter {
         updateView(parent.getData().getAsString(property));
     }
     
-    private void change(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+    private void updateChanged() {
         if (ignoreChangedEvent) {
             return;
         }
-        this.parent.getData().setAttribute(property, newValue);
-        notifyChangedToParent();
+        // 失去焦点时才检测变化
+        if (!content.getText().equals(lastText)) {
+            lastText = content.getText();
+            this.parent.getData().setAttribute(property, lastText);
+            notifyChangedToParent();
+        }
     }
     
     @Override
@@ -46,6 +67,7 @@ public class TextFieldConverter extends AbstractPropertyConverter {
         } else {
             content.setText("");
         }
+        lastText = content.getText();
         ignoreChangedEvent = false;
     }
     

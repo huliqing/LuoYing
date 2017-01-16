@@ -11,6 +11,8 @@ package name.huliqing.editor.constants;
  */
 public class StyleConstants {
  
+    public final static String CLASS_HVBOX = "hv-box";
+    
     /**
      * 属性面板的ID
      */

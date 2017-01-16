@@ -25,6 +25,8 @@ import com.jme3.texture.Texture2D;
 import com.jme3.water.WaterFilter;
 import com.jme3.water.WaterFilter.AreaShape;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.object.entity.Entity;
@@ -39,6 +41,8 @@ import name.huliqing.luoying.object.entity.WaterEntity;
  * @author huliqing
  */
 public class AdvanceWaterEntity extends NonModelEntity implements WaterEntity, SceneListener {
+
+    private static final Logger LOG = Logger.getLogger(AdvanceWaterEntity.class.getName());
 
 //    // 是否使用场景中的直射光源，打开这个选项后Water会从场景中找到第一个可用的直射光源作为水体渲染时使用的光源。
 //    // 否则使用Water默认设置的光源。默认true
@@ -133,6 +137,8 @@ public class AdvanceWaterEntity extends NonModelEntity implements WaterEntity, S
         if (normalTexture != null) {
             water.setNormalTexture((Texture2D) LuoYing.getApp().getAssetManager().loadTexture(normalTexture));
         }
+        
+        LOG.log(Level.INFO, "---->waterColor={0}", water.getWaterColor());
     }
 
     @Override
@@ -149,9 +155,11 @@ public class AdvanceWaterEntity extends NonModelEntity implements WaterEntity, S
 
     @Override
     public void cleanup() {
-        scene.removeSceneListener(this);
-        // 清理Filter,注意：清理后尽量把Filter设置为null,避免让FrameBuffer存在于内存中。
-        scene.removeFilter(water);
+        if (scene != null) {
+            scene.removeSceneListener(this);
+            // 清理Filter,注意：清理后尽量把Filter设置为null,避免让FrameBuffer存在于内存中。
+            scene.removeFilter(water);
+        }
         water = null;
         super.cleanup();
     }

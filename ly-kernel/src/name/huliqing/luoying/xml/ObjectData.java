@@ -194,7 +194,7 @@ public class ObjectData implements Savable, Cloneable {
     public final String getAsString(String key, String defValue) {
         Object value = getAttributeFromLocal(key);
         if (value != null) {
-            return value.toString();
+            return Converter.getAsString(value);
         }
         return getProto().getAsString(key, defValue);
     }

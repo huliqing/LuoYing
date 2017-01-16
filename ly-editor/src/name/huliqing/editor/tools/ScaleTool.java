@@ -271,7 +271,7 @@ public class ScaleTool extends EditTool implements SimpleJmeEditListener{
     }
 
     @Override
-    public void onSelectChanged(SelectObj selectObj) {
+    public void onSelect(SelectObj selectObj) {
         cancelScale(); // 如果选择的物体发生变化，则取消当前缩放
         updateMarkerState();
     }

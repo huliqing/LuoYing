@@ -1,4 +1,5 @@
-
+/*https://docs.oracle.com/javase/8/javafx/api/javafx/scene/doc-files/cssref.html*/
+/** 注：pseudo选择器中的":"号之间不能留空格 */
 /*
 .list-view .list-cell:empty {-fx-background-color: lightgray;}
 .list-view .list-cell:filled {-fx-background-color: lightgray;}
@@ -7,9 +8,8 @@
 .list-view .list-cell:selected {-fx-background-color: lightgray;}
 */
 
-.v-box {
-    -fx-background-radius:0;
-    -fx-border-width: 0;
+/** for all common HBox and VBox */
+.hv-box {
     -fx-padding: 0;
 }
 
@@ -18,10 +18,10 @@
     -fx-border-width: 0;
 }
 
-/* titled-pane */
 .titled-pane {
     -fx-animated: false;
     -fx-collapsible: true;
+    -fx-padding:0;
 }
 .titled-pane > .title {
     -fx-background-color: lightgray;
@@ -39,6 +39,7 @@
     -fx-background-color: lightgray;
     -fx-border-width:0;
     -fx-padding: 5;
+    -fx-alignment: CENTER_LEFT;
 }
 
 /* list-view */
@@ -50,7 +51,20 @@
     -fx-background-radius: 10;
 }
 
-/*#propertyPanel {*/
-    /*-fx-background-color: lightgray;*/
-    /* -fx-background-radius: 5; */
-/*}*/
+.color-picker {
+    -fx-background-radius: 7;
+}
+.color-palette .hyperlink {
+    visibility: visible;
+}
+
+/*.toggle-button {
+    -fx-background-radius: 7;
+    -fx-border-width:1;
+    -fx-border-color:lightgray;
+}*/
+/*.toggle-button:selected {
+    -fx-background-color: lightgray;
+}*/
+
+

@@ -10,8 +10,11 @@ ok.建一个panel来同步canvas位置和大小
 ok.在左上角显示当前视角：user/front ortho/...
 ok.按r直接旋转
 ok.按g直接移动
+ok.历史记录和jfx的change绑定有冲突
 
 .asset资源重命名功能
 .初始界面功能
 .entityPlant要加一个参数，moveOnTerrain作为开关,不然在移动的时候会冲突
-.历史记录和jfx的change绑定有冲突
+.海水在有限和无限切换的时候有BUG
+.JFX在面板上的编辑功能要整合undo\redo功能
+.为PropertyConverter增加Validator功能

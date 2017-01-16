@@ -17,12 +17,16 @@ import name.huliqing.editor.converter.entity.EntityDataConverter;
 import name.huliqing.editor.converter.scene.EntitiesPropertyConverter;
 import name.huliqing.editor.converter.scene.SceneConverter;
 import name.huliqing.editor.converter.tiles.QuaternionConverter;
+import name.huliqing.editor.converter.tiles.ColorFieldConverter;
+import name.huliqing.editor.converter.tiles.CullHintChoiceFieldConverter;
+import name.huliqing.editor.converter.tiles.FileFieldConverter;
+import name.huliqing.editor.converter.tiles.QueueBucketChoiceFieldConverter;
+import name.huliqing.editor.converter.tiles.ShadowModeChoiceFieldConverter;
 import name.huliqing.editor.converter.tiles.Vector3fConverter;
 import name.huliqing.editor.edit.JfxAbstractEdit;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
- *
  * @author huliqing
  */
 public class ConverterManager {
@@ -56,26 +60,74 @@ public class ConverterManager {
         entityBase.addPropertyConverter("modules", TextFieldConverter.class);
         entityBase.addPropertyConverter("objectDatas", TextFieldConverter.class);
         
+        ConverterDefine entityModelBase = new ConverterDefine("entityModelBase", null);
+        entityModelBase.extendsFrom(entityBase);
+        entityModelBase.addPropertyConverter("shadowMode", ShadowModeChoiceFieldConverter.class);
+        entityModelBase.addPropertyConverter("cullHint", CullHintChoiceFieldConverter.class);
+        entityModelBase.addPropertyConverter("queueBucket", QueueBucketChoiceFieldConverter.class);
+        entityModelBase.addPropertyConverter("preferUnshaded", TextFieldConverter.class);
+        
         ConverterDefine entitySkyBox = new ConverterDefine("entitySkyBox", EntityDataConverter.class);
-        entitySkyBox.extendsFrom(entityBase);
+        entitySkyBox.extendsFrom(entityModelBase);
         
         ConverterDefine entitySimpleTerrain = new ConverterDefine("entitySimpleTerrain", EntityDataConverter.class);
-        entitySimpleTerrain.extendsFrom(entityBase);
+        entitySimpleTerrain.extendsFrom(entityModelBase);
         
         ConverterDefine entityTree = new ConverterDefine("entityTree", EntityDataConverter.class);
-        entityTree.extendsFrom(entityBase);
+        entityTree.extendsFrom(entityModelBase);
+        entityTree.addPropertyConverter("file", FileFieldConverter.class);
+        entityTree.addPropertyConverter("randomScale", TextFieldConverter.class);
+        entityTree.addPropertyConverter("minScale", TextFieldConverter.class);
+        entityTree.addPropertyConverter("maxScale", TextFieldConverter.class);
         
         ConverterDefine entityGrass = new ConverterDefine("entityGrass", EntityDataConverter.class);
-        entityGrass.extendsFrom(entityBase);
+        entityGrass.extendsFrom(entityModelBase);
         
         ConverterDefine entitySimpleWater = new ConverterDefine("entitySimpleWater", EntityDataConverter.class);
-        entitySimpleWater.extendsFrom(entityBase);
+        entitySimpleWater.extendsFrom(entityModelBase);
         
         ConverterDefine entityAdvanceWater = new ConverterDefine("entityAdvanceWater", EntityDataConverter.class);
         entityAdvanceWater.extendsFrom(entityBase);
+        entityAdvanceWater.addPropertyConverter("causticsTexture", TextFieldConverter.class);
+        entityAdvanceWater.addPropertyConverter("center", TextFieldConverter.class);
+        entityAdvanceWater.addPropertyConverter("colorExtinction", TextFieldConverter.class);
+        entityAdvanceWater.addPropertyConverter("deepWaterColor", TextFieldConverter.class);
+        entityAdvanceWater.addPropertyConverter("foamExistence", TextFieldConverter.class);
+        entityAdvanceWater.addPropertyConverter("foamHardness", TextFieldConverter.class);
+        entityAdvanceWater.addPropertyConverter("foamIntensity", TextFieldConverter.class);
+        entityAdvanceWater.addPropertyConverter("foamTexture", TextFieldConverter.class);
+        entityAdvanceWater.addPropertyConverter("heightTexture", TextFieldConverter.class);
+        entityAdvanceWater.addPropertyConverter("lightColor", TextFieldConverter.class);
+        entityAdvanceWater.addPropertyConverter("lightDirection", TextFieldConverter.class);
+        entityAdvanceWater.addPropertyConverter("maxAmplitude", TextFieldConverter.class);
+        entityAdvanceWater.addPropertyConverter("normalScale", TextFieldConverter.class);
+        entityAdvanceWater.addPropertyConverter("normalTexture", TextFieldConverter.class);
+        entityAdvanceWater.addPropertyConverter("radius", TextFieldConverter.class);
+        entityAdvanceWater.addPropertyConverter("reflectionDisplace", TextFieldConverter.class);
+        entityAdvanceWater.addPropertyConverter("reflectionMapSize", TextFieldConverter.class);
+        entityAdvanceWater.addPropertyConverter("refractionConstant", TextFieldConverter.class);
+        entityAdvanceWater.addPropertyConverter("refractionStrength", TextFieldConverter.class);
+        entityAdvanceWater.addPropertyConverter("shapeType", TextFieldConverter.class);
+        entityAdvanceWater.addPropertyConverter("shininess", TextFieldConverter.class);
+        entityAdvanceWater.addPropertyConverter("shoreHardness", TextFieldConverter.class);
+        entityAdvanceWater.addPropertyConverter("speed", TextFieldConverter.class);
+        entityAdvanceWater.addPropertyConverter("sunScale", TextFieldConverter.class);
+        entityAdvanceWater.addPropertyConverter("underWaterFogDistance", TextFieldConverter.class);
+        entityAdvanceWater.addPropertyConverter("useCaustics", TextFieldConverter.class);
+        entityAdvanceWater.addPropertyConverter("useFoam", TextFieldConverter.class);
+        entityAdvanceWater.addPropertyConverter("useHQShoreline", TextFieldConverter.class);
+        entityAdvanceWater.addPropertyConverter("useRefraction", TextFieldConverter.class);
+        entityAdvanceWater.addPropertyConverter("useRipples", TextFieldConverter.class);
+        entityAdvanceWater.addPropertyConverter("useSpecular", TextFieldConverter.class);
+        entityAdvanceWater.addPropertyConverter("waterColor", ColorFieldConverter.class);
+        entityAdvanceWater.addPropertyConverter("waterHeight", TextFieldConverter.class);
+        entityAdvanceWater.addPropertyConverter("waterTransparency", TextFieldConverter.class);
+        entityAdvanceWater.addPropertyConverter("waveScale", TextFieldConverter.class);
+        entityAdvanceWater.addPropertyConverter("windDirection", TextFieldConverter.class);
+        entityAdvanceWater.addPropertyConverter("useSceneLight", TextFieldConverter.class);
         
         ConverterDefine entitySimpleModel = new ConverterDefine("entitySimpleModel", EntityDataConverter.class);
-        entitySimpleModel.extendsFrom(entityBase);
+        entitySimpleModel.extendsFrom(entityModelBase);
         
         ConverterDefine entityPhysics = new ConverterDefine("entityPhysics", EntityDataConverter.class);
         entityPhysics.extendsFrom(entityBase);

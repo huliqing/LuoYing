@@ -21,8 +21,8 @@ public interface SimpleJmeEditListener<T extends SelectObj> {
     void onModeChanged(Mode mode);
     
     /**
-     * 当选择的物体发生变化时该方法被调用。
-     * @param selectObj 
+     * 当选择物体时该方法被调用，只要有发生“选择物体”的操作时，该方法将被调用，不管选择的物体是否发生变化。
+     * @param selectObj 被选择到的物体
      */
-    void onSelectChanged(T selectObj);
+    void onSelect(T selectObj);
 }

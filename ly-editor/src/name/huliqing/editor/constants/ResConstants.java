@@ -11,6 +11,9 @@ package name.huliqing.editor.constants;
  */
 public class ResConstants {
     
+    public final static String COMMON_CHOOSER_FILE = "common.chooser.file";
+    
+    
     /** menu.file */
     public final static String MENU_FILE = "menu.file";
     /** menu.file.assets */
