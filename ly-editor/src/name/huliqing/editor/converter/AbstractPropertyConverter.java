@@ -5,12 +5,16 @@
  */
 package name.huliqing.editor.converter;
 
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.TitledPane;
 import name.huliqing.editor.edit.JfxAbstractEdit;
+import name.huliqing.editor.manager.ConverterManager;
+import name.huliqing.editor.undoredo.UndoRedo;
+import name.huliqing.fxswing.Jfx;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
@@ -29,25 +33,55 @@ public abstract class AbstractPropertyConverter<E extends JfxAbstractEdit, T ext
     
     protected final TitledPane root = new TitledPane();
     protected boolean initialized;
+    
+    protected FeatureHelper featureHelper;
+    protected boolean ignoreChangedEvent;
+
+    @Override
+    public String getProperty() {
+        return property;
+    }
+
+    @Override
+    public void setProperty(String property) {
+        this.property = property;
+    }
+
+    @Override
+    public void setFeatures(Map<String, Object> features) {
+        this.featureHelper = new FeatureHelper(features);
+    }
+
+    @Override
+    public void setEdit(E edit) {
+        this.jfxEdit = edit;
+    }
 
     @Override
     public Node getLayout() {
         return root;
     }
-    
+
     @Override
-    public void initialize(E editView, DataConverter<E, T> parent, String property) {
+    public void initialize(DataConverter<E, T> parent) {
         if (initialized) {
             throw new IllegalStateException();
         }
         initialized = true;
-        this.jfxEdit = editView;
         this.parent = parent;
-        this.property = property;
         root.setText(property);
         root.setAnimated(false);
         root.setAlignment(Pos.CENTER_LEFT);
-        // Child logics
+        
+        // features
+        boolean disabled = featureHelper.getAsBoolean(ConverterManager.FEATURE_FIELD_DISABLED);
+        boolean collapsed = featureHelper.getAsBoolean(ConverterManager.FEATURE_FIELD_COLLAPSED);
+        
+        // Layout and features
+        Node layout = createLayout();
+        layout.setDisable(disabled);
+        root.setExpanded(!collapsed);
+        root.setContent(layout);
     }
 
     @Override
@@ -59,7 +93,7 @@ public abstract class AbstractPropertyConverter<E extends JfxAbstractEdit, T ext
     public void cleanup() {
         initialized = false;
     }
-
+    
     @Override
     public void notifyChangedToParent() {
         LOG.log(Level.INFO, "PropertyConverter notify changed, PropertyConverter={0}, property={1}"
@@ -68,5 +102,38 @@ public abstract class AbstractPropertyConverter<E extends JfxAbstractEdit, T ext
             parent.notifyChangedToParent();
         }
     }
+    
+    @Override
+    public void updateAttribute(Object propertyValue) {
+        if (ignoreChangedEvent) {
+            return;
+        }
+        parent.getData().setAttribute(property, propertyValue);
+        notifyChangedToParent();
+    }
+    
+    @Override
+    public void updateView(Object propertyValue) {
+        // ignoreChangedEvent确保在更新UI的时候不会再回调到3D编辑场景中
+        ignoreChangedEvent = true;
+        updateUI(propertyValue);
+        ignoreChangedEvent = false;
+    }
+    
+    protected void addUndoRedo(Object beforeValue, Object afterValue) {
+        parent.addUndoRedo(property, beforeValue, afterValue);
+    }
+    
+    /**
+     * 创建Layout布局并返回
+     * @return 
+     */
+    protected abstract Node createLayout();
+    
+    /**
+     * 更新UI
+     * @param propertyValue 属性值
+     */
+    protected abstract void updateUI(Object propertyValue);
     
 }

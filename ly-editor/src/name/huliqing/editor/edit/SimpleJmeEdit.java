@@ -21,8 +21,6 @@ import name.huliqing.editor.undoredo.UndoRedoManager;
  */
 public abstract class SimpleJmeEdit<T extends SelectObj> extends JmeAbstractEdit {
     
-    protected final UndoRedoManager undoRedoManager = new UndoRedoManager();
-    
     // 侦听器
     protected final List<SimpleJmeEditListener> editFormListeners = new ArrayList<SimpleJmeEditListener>();
     
@@ -88,14 +86,6 @@ public abstract class SimpleJmeEdit<T extends SelectObj> extends JmeAbstractEdit
     
     public boolean removeEditFormListener(SimpleJmeEditListener listener) {
         return editFormListeners.remove(listener);
-    }
-
-    public UndoRedoManager getUndoRedoManager() {
-        return undoRedoManager;
-    }
-    
-    public void addUndoRedo(UndoRedo undoRedo) {
-        undoRedoManager.add(undoRedo);
     }
     
     /**

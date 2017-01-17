@@ -38,7 +38,7 @@ public class Picker {
     private Vector3f endPickLoc;
     
     public Picker() {
-        float size = Integer.MAX_VALUE;
+        float size = 10000;
         Geometry g = new Geometry("plane", new Quad(size, size));
         g.setLocalTranslation(-size / 2, -size / 2, 0);
         plane.attachChild(g);
@@ -53,7 +53,6 @@ public class Picker {
         plane.setLocalTranslation(startSpatialLocation);
         
         startPickLoc = PickManager.pick(cam, mouseLoc, plane);
-        
     }
     
     public void setTransformation(Quaternion planeRotation, Camera camera) {

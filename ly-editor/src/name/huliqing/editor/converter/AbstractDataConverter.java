@@ -15,6 +15,9 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import name.huliqing.editor.constants.StyleConstants;
 import name.huliqing.editor.edit.JfxAbstractEdit;
+import name.huliqing.editor.manager.ConverterManager;
+import name.huliqing.editor.undoredo.UndoRedo;
+import name.huliqing.fxswing.Jfx;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
@@ -23,18 +26,21 @@ import name.huliqing.luoying.xml.ObjectData;
  * @param <T>
  */
 public abstract class AbstractDataConverter<E extends JfxAbstractEdit, T extends ObjectData> implements DataConverter<E, T> {
-
     private static final Logger LOG = Logger.getLogger(AbstractDataConverter.class.getName());
-
-    protected E editView;
+    
+    /**
+     * 字段转换器定义
+     */
+    protected Map<String, PropertyConverterDefine> propertyConvertDefines;
+    protected FeatureHelper featureHelper;
+    
+    protected E jfxEdit;
     protected T data;
     protected PropertyConverter parent;
     protected final Map<String, PropertyConverter> propertyConverters = new LinkedHashMap();
-    
+    protected boolean initialized;
     protected final ScrollPane dataScroll = new ScrollPane();
     protected final VBox propertyPanel = new VBox();
-    
-    protected boolean initialized;
     
     public AbstractDataConverter() {}
     
@@ -44,28 +50,56 @@ public abstract class AbstractDataConverter<E extends JfxAbstractEdit, T extends
     }
 
     @Override
-    public Node getLayout() {
-        return dataScroll; 
+    public void setData(T data) {
+        this.data = data;
     }
 
     @Override
-    public void initialize(E editView, T data, List<PropertyConverterDefine> propertyConvertDefines, PropertyConverter parent) {
+    public void setPropertyConverterDefines(Map<String, PropertyConverterDefine> propertyConverterDefines) {
+        this.propertyConvertDefines = propertyConverterDefines;
+    }
+    
+    @Override
+    public void setFeatures(Map<String, Object> features) {
+        featureHelper = new FeatureHelper(features);
+    }
+    
+    @Override
+    public void setEdit(E edit) {
+        this.jfxEdit = edit;
+    }
+    
+    @Override
+    public void initialize(PropertyConverter parent) {
         if (initialized) {
             throw new IllegalStateException();
         }
-        initialized = true;
-        this.editView = editView;
-        this.data = data;
+        this.initialized = true;
         this.parent = parent;
         
         dataScroll.setId(StyleConstants.ID_PROPERTY_PANEL);
         dataScroll.setContent(propertyPanel);
         
         if (propertyConvertDefines != null && !propertyConvertDefines.isEmpty()) {
-            propertyConvertDefines.forEach(t -> {
-                PropertyConverter pc = onCreatePropertyConverter(t);
+            propertyConvertDefines.values().forEach(t -> {
+                PropertyConverter pc = ConverterManager.createPropertyConverter(jfxEdit, t);
+                pc.initialize(this);
+                pc.updateView(data.getAttribute(pc.getProperty()));
                 propertyPanel.getChildren().add(pc.getLayout());
-                propertyConverters.put(t.propertyName, pc);
+                propertyConverters.put(t.getPropertyName(), pc);
+            });
+        }
+        
+        // 隐藏指定的字段
+        List<String> hideFields = featureHelper.getAsList(ConverterManager.FEATURE_HIDE_FIELDS);
+        if (hideFields != null) {
+            hideFields.forEach(t -> {
+                PropertyConverter pc = propertyConverters.get(t);
+                if (pc != null) {
+                    // 隐藏的时候要同时把managed设置为false才不会占位
+                    pc.getLayout().managedProperty().bind(pc.getLayout().visibleProperty());
+                    pc.getLayout().setVisible(false);
+                }
             });
         }
         
@@ -88,17 +122,6 @@ public abstract class AbstractDataConverter<E extends JfxAbstractEdit, T extends
         initialized = false;
     }
     
-    protected PropertyConverter onCreatePropertyConverter(PropertyConverterDefine pcd) {
-        try {
-            PropertyConverter pc = pcd.propertyConverter.newInstance();
-            pc.initialize(editView, this, pcd.propertyName);
-            return pc;
-        } catch (InstantiationException | IllegalAccessException ex) {
-            LOG.log(Level.SEVERE, "Could not create PropertyConverter", ex);
-        }
-        return null;
-    }
-
     @Override
     public void notifyChangedToParent() {
         LOG.log(Level.INFO, "DataConverter notify changed, DataConverter={0}, data={1}"
@@ -107,5 +130,52 @@ public abstract class AbstractDataConverter<E extends JfxAbstractEdit, T extends
             parent.notifyChangedToParent();
         }
     }
+
+    @Override
+    public Node getLayout() {
+        return dataScroll; 
+    }
     
+    @Override
+    public void addUndoRedo(String property, Object beforeValue, Object afterValue) {
+         jfxEdit.addUndoRedo(new JfxEditUndoRedo(property, beforeValue, afterValue));
+    }
+    
+    private class JfxEditUndoRedo implements UndoRedo {
+
+        private final String property;
+        private final Object before;
+        private final Object after;
+        
+        public JfxEditUndoRedo(String property, Object before, Object after) {
+            this.property = property;
+            this.before = before;
+            this.after = after;
+        }
+        
+        @Override
+        public void undo() {
+            data.setAttribute(property, before);
+            Jfx.runOnJfx(() -> {
+                notifyChangedToParent();
+                PropertyConverter pc  = propertyConverters.get(property);
+                if (pc != null) {
+                    pc.updateView(before);
+                }
+            });
+        }
+        
+        @Override
+        public void redo() {
+            data.setAttribute(property, after);
+            Jfx.runOnJfx(() -> {
+                notifyChangedToParent();
+                PropertyConverter pc  = propertyConverters.get(property);
+                if (pc != null) {
+                    pc.updateView(after);
+                }
+            });
+        }
+        
+    }
 }

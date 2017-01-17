@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.editor.Editor;
 import name.huliqing.editor.toolbar.Toolbar;
+import name.huliqing.editor.undoredo.UndoRedo;
+import name.huliqing.editor.undoredo.UndoRedoManager;
 
 /**
  *
@@ -16,6 +18,8 @@ import name.huliqing.editor.toolbar.Toolbar;
  */
 public abstract class JmeAbstractEdit implements JmeEdit {
 
+    protected final UndoRedoManager undoRedoManager = new UndoRedoManager();
+    
     protected boolean initialized;
     protected Toolbar toolbar;
     protected List<JmeEditListener> listeners;
@@ -91,6 +95,13 @@ public abstract class JmeAbstractEdit implements JmeEdit {
     public Editor getEditor() {
         return editor;
     }
-
     
+    @Override
+    public UndoRedoManager getUndoRedoManager() {
+        return undoRedoManager;
+    }
+    
+    public void addUndoRedo(UndoRedo undoRedo) {
+        undoRedoManager.add(undoRedo);
+    }
 }

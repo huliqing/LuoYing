@@ -287,5 +287,4 @@ public class BestEditCamera implements ActionListener, AnalogListener {
         return view;
     }
     
-    
 }

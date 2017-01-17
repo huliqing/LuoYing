@@ -322,6 +322,9 @@ public class CameraTool extends EditTool implements EditorListener {
     @Override
     public void onReshape(int w, int h) {
         updateViewText();
+        // 窗口大小变化的时候要更新相机视图，否则画面长宽比会发生变化。
+        editorCam.doToggleOrthoPerspMode();
+        editorCam.doToggleOrthoPerspMode();
     }
     
 }

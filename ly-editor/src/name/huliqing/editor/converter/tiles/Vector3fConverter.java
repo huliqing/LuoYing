@@ -10,6 +10,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -18,8 +19,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import name.huliqing.editor.constants.StyleConstants;
 import name.huliqing.editor.converter.AbstractPropertyConverter;
-import name.huliqing.editor.converter.DataConverter;
-import name.huliqing.editor.edit.JfxAbstractEdit;
+import name.huliqing.luoying.xml.Converter;
 
 /**
  *
@@ -27,7 +27,6 @@ import name.huliqing.editor.edit.JfxAbstractEdit;
  */
 public class Vector3fConverter extends AbstractPropertyConverter{
     
-    private final Vector3f vec = new Vector3f();
     
     private final VBox layout = new VBox();
     
@@ -46,8 +45,8 @@ public class Vector3fConverter extends AbstractPropertyConverter{
     private String lastX = "";
     private String lastY = "";
     private String lastZ = "";
+    private Vector3f lastValue;
     
-    private boolean ignoreChangedEvent;
     private final ChangeListener<Boolean> focusedListener = (ObservableValue<? extends Boolean> observable
             , Boolean oldValue, Boolean newValue) -> {
         if (newValue) {
@@ -85,20 +84,14 @@ public class Vector3fConverter extends AbstractPropertyConverter{
         xField.setOnKeyPressed(keyHandler);
         yField.setOnKeyPressed(keyHandler);
         zField.setOnKeyPressed(keyHandler);
-        
-        root.setContent(layout);
     }
 
     @Override
-    public void initialize(JfxAbstractEdit editView, DataConverter parent, String property) {
-        super.initialize(editView, parent, property);
-        updateView(parent.getData().getAsVector3f(property));
+    protected Node createLayout() {
+        return layout;
     }
     
     private void updateChanged() {
-        if (ignoreChangedEvent) {
-            return;
-        }
         boolean changed = false;
         if (!xField.getText().equals(lastX)) {
             lastX = xField.getText();
@@ -114,12 +107,10 @@ public class Vector3fConverter extends AbstractPropertyConverter{
         }
         if (changed) {
             try {
-                vec.x = Float.parseFloat(lastX);
-                vec.y = Float.parseFloat(lastY);
-                vec.z = Float.parseFloat(lastZ);
-            
-                parent.getData().setAttribute(property, vec);
-                notifyChangedToParent();
+                Vector3f newVec = new Vector3f(Float.parseFloat(lastX), Float.parseFloat(lastY),Float.parseFloat(lastZ));
+                updateAttribute(newVec);
+                addUndoRedo(lastValue, newVec);
+                lastValue = newVec;
             } catch (NumberFormatException e) {
                 // ignore
             }
@@ -127,14 +118,12 @@ public class Vector3fConverter extends AbstractPropertyConverter{
     }
 
     @Override
-    public void updateView(Object propertyValue) {
-        ignoreChangedEvent = true;
-        Vector3f value = (Vector3f) propertyValue;
-        if (value != null) {
-            vec.set(value);
-            xField.setText(vec.x + "");
-            yField.setText(vec.y + "");
-            zField.setText(vec.z + "");
+    public void updateUI(Object propertyValue) {
+        lastValue = Converter.getAsVector3f(propertyValue);
+        if (lastValue != null) {
+            xField.setText(lastValue.x + "");
+            yField.setText(lastValue.y + "");
+            zField.setText(lastValue.z + "");
         } else {
             xField.setText("");
             yField.setText("");
@@ -143,7 +132,6 @@ public class Vector3fConverter extends AbstractPropertyConverter{
         lastX = xField.getText();
         lastY = yField.getText();
         lastZ = zField.getText();
-        ignoreChangedEvent = false;
     }
     
     

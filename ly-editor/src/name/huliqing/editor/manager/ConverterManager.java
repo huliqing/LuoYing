@@ -5,93 +5,138 @@
  */
 package name.huliqing.editor.manager;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.editor.converter.ConverterDefine;
 import name.huliqing.editor.converter.DataConverter;
-import name.huliqing.editor.converter.PropertyConverter;
+import name.huliqing.editor.converter.PropertyConverterDefine;
+import name.huliqing.editor.converter.SimpleDataConverter;
 import name.huliqing.editor.converter.tiles.TextFieldConverter;
 import name.huliqing.editor.converter.entity.EntityDataConverter;
-import name.huliqing.editor.converter.scene.EntitiesPropertyConverter;
-import name.huliqing.editor.converter.scene.SceneConverter;
+import name.huliqing.editor.converter.tiles.EntitiesPropertyConverter;
 import name.huliqing.editor.converter.tiles.QuaternionConverter;
 import name.huliqing.editor.converter.tiles.ColorFieldConverter;
-import name.huliqing.editor.converter.tiles.CullHintChoiceFieldConverter;
 import name.huliqing.editor.converter.tiles.FileFieldConverter;
-import name.huliqing.editor.converter.tiles.QueueBucketChoiceFieldConverter;
-import name.huliqing.editor.converter.tiles.ShadowModeChoiceFieldConverter;
 import name.huliqing.editor.converter.tiles.Vector3fConverter;
 import name.huliqing.editor.edit.JfxAbstractEdit;
 import name.huliqing.luoying.xml.ObjectData;
+import name.huliqing.editor.converter.PropertyConverter;
+import name.huliqing.editor.converter.tiles.ChoiceFieldConverter;
 
 /**
  * @author huliqing
  */
 public class ConverterManager {
+
+    private static final Logger LOG = Logger.getLogger(ConverterManager.class.getName());
     
-    private final static Map<String, ConverterDefine> MAPPING = new HashMap();
+    private final static Map<String, ConverterDefine> MAPPING = new LinkedHashMap();
+    
+    /** 指定要隐藏的字段, 格式:"field1,field2,..." */
+    public final static String FEATURE_HIDE_FIELDS = "hideFields";
+    
+    /** 指定要DISABLED的字段，格式:"field1,field2,..." */
+    public final static String FEATURE_FIELD_DISABLED = "disabled";
+    /** 让字段折叠 */
+    public final static String FEATURE_FIELD_COLLAPSED = "collapsed";
     
     public static void initialize() {
 
-        // ---- Base converter
+        // ==== Base converter
         ConverterDefine base = new ConverterDefine("base", null);
-        base.addPropertyConverter("id", TextFieldConverter.class);
-        base.addPropertyConverter("extends", TextFieldConverter.class);
+        ConverterDefine scene = new ConverterDefine("scene", SimpleDataConverter.class);
+        ConverterDefine entityBase = new ConverterDefine("entityBase", null);
+        ConverterDefine entityModelBase = new ConverterDefine("entityModelBase", null);
+        ConverterDefine entityAdvanceWater = new ConverterDefine("entityAdvanceWater", EntityDataConverter.class);
+        ConverterDefine entityAmbientLight = new ConverterDefine("entityAmbientLight", EntityDataConverter.class);
+        ConverterDefine entityChaseCamera = new ConverterDefine("entityChaseCamera", EntityDataConverter.class);
+        ConverterDefine entityDirectionalLightFilterShadow = new ConverterDefine("entityDirectionalLightFilterShadow", EntityDataConverter.class);
+        ConverterDefine entityDirectionalLight = new ConverterDefine("entityDirectionalLight", EntityDataConverter.class);
+        ConverterDefine entityGrass = new ConverterDefine("entityGrass", EntityDataConverter.class);
+        ConverterDefine entityPhysics = new ConverterDefine("entityPhysics", EntityDataConverter.class);
+        ConverterDefine entitySimpleModel = new ConverterDefine("entitySimpleModel", EntityDataConverter.class);
+        ConverterDefine entitySimpleTerrain = new ConverterDefine("entitySimpleTerrain", EntityDataConverter.class);
+        ConverterDefine entitySimpleWater = new ConverterDefine("entitySimpleWater", EntityDataConverter.class);
+        ConverterDefine entitySkyBox = new ConverterDefine("entitySkyBox", EntityDataConverter.class);
+        ConverterDefine entityTree = new ConverterDefine("entityTree", EntityDataConverter.class);
+        
+        addConverter(base);
+        addConverter(scene);
+        addConverter(entityBase);
+        addConverter(entityModelBase);
+        addConverter(entityAdvanceWater);
+        addConverter(entityAmbientLight);
+        addConverter(entityChaseCamera);
+        addConverter(entityDirectionalLight);
+        addConverter(entityDirectionalLightFilterShadow);
+        addConverter(entityGrass);
+        addConverter(entityPhysics);
+        addConverter(entitySimpleModel);
+        addConverter(entitySimpleTerrain);
+        addConverter(entitySimpleWater);
+        addConverter(entitySkyBox);
+        addConverter(entityTree);
+                
+        // ==== Extends
+        entityBase.extendsFrom(base.getTagName());
+        scene.extendsFrom(base.getTagName()); 
+        entityModelBase.extendsFrom(entityBase.getTagName());
+        entityAdvanceWater.extendsFrom(entityBase.getTagName());
+        entityAmbientLight.extendsFrom(entityBase.getTagName());
+        entityChaseCamera.extendsFrom(entityBase.getTagName());
+        entityDirectionalLight.extendsFrom(entityBase.getTagName());
+        entityDirectionalLightFilterShadow.extendsFrom(entityBase.getTagName());
+        entityGrass.extendsFrom(entityModelBase.getTagName());
+        entityPhysics.extendsFrom(entityBase.getTagName());
+        entitySimpleModel.extendsFrom(entityModelBase.getTagName());
+        entitySimpleTerrain.extendsFrom(entityModelBase.getTagName());
+        entitySimpleWater.extendsFrom(entityModelBase.getTagName());
+        entitySkyBox.extendsFrom(entityModelBase.getTagName());
+        entityTree.extendsFrom(entityModelBase.getTagName());
+        
+        // ==== Features
+        entityAdvanceWater.addFeature(FEATURE_HIDE_FIELDS, "rotation");
+        
+        // ==== Property Converter
+        
+        // -- base
+        base.addPropertyConverter("id", TextFieldConverter.class)
+                .addFeature(FEATURE_FIELD_DISABLED, "true")
+                .addFeature(FEATURE_FIELD_COLLAPSED, "true");
+        base.addPropertyConverter("extends", TextFieldConverter.class)
+                .addFeature(FEATURE_FIELD_DISABLED, "true")
+                .addFeature(FEATURE_FIELD_COLLAPSED, "true");
 //        base.addPropertyConverter("dataClass", TextFieldConverter.class);
 //        base.addPropertyConverter("dataLoaderClass", TextFieldConverter.class);
 //        base.addPropertyConverter("dataProcessorClass", TextFieldConverter.class);
         
         // ---- Scene converter 
-        ConverterDefine scene = new ConverterDefine("scene", SceneConverter.class);
-        scene.extendsFrom(base); 
         scene.addPropertyConverter("entities", EntitiesPropertyConverter.class);
         scene.addPropertyConverter("progress", TextFieldConverter.class);
         
         // ---- Entity converter
-        ConverterDefine entityBase = new ConverterDefine("entityBase", null);
-        entityBase.extendsFrom(base);
-        entityBase.addPropertyConverter("name", TextFieldConverter.class);
+        entityBase.addPropertyConverter("name", TextFieldConverter.class).addFeature(FEATURE_FIELD_COLLAPSED, "true");
         entityBase.addPropertyConverter("location", Vector3fConverter.class);
         entityBase.addPropertyConverter("rotation", QuaternionConverter.class);
         entityBase.addPropertyConverter("scale", Vector3fConverter.class);
-        entityBase.addPropertyConverter("mat", TextFieldConverter.class);
-        entityBase.addPropertyConverter("modules", TextFieldConverter.class);
-        entityBase.addPropertyConverter("objectDatas", TextFieldConverter.class);
+        entityBase.addPropertyConverter("mat", TextFieldConverter.class).addFeature(FEATURE_FIELD_COLLAPSED, "true");;
+        entityBase.addPropertyConverter("modules", TextFieldConverter.class).addFeature(FEATURE_FIELD_COLLAPSED, "true");;
+        entityBase.addPropertyConverter("objectDatas", TextFieldConverter.class).addFeature(FEATURE_FIELD_COLLAPSED, "true");
         
-        ConverterDefine entityModelBase = new ConverterDefine("entityModelBase", null);
-        entityModelBase.extendsFrom(entityBase);
-        entityModelBase.addPropertyConverter("shadowMode", ShadowModeChoiceFieldConverter.class);
-        entityModelBase.addPropertyConverter("cullHint", CullHintChoiceFieldConverter.class);
-        entityModelBase.addPropertyConverter("queueBucket", QueueBucketChoiceFieldConverter.class);
+        entityModelBase.addPropertyConverter("shadowMode", ChoiceFieldConverter.class)
+                .addFeature(ChoiceFieldConverter.FEATURE_ITEMS, "Off,Cast,Receive,CastAndReceive,Inherit");
+        entityModelBase.addPropertyConverter("cullHint", ChoiceFieldConverter.class)
+                .addFeature(ChoiceFieldConverter.FEATURE_ITEMS, "Inherit,Dynamic,Always,Never");
+        entityModelBase.addPropertyConverter("queueBucket", ChoiceFieldConverter.class)
+                .addFeature(ChoiceFieldConverter.FEATURE_ITEMS, "Opaque,Transparent,Sky,Translucent,Gui,Inherit");
         entityModelBase.addPropertyConverter("preferUnshaded", TextFieldConverter.class);
         
-        ConverterDefine entitySkyBox = new ConverterDefine("entitySkyBox", EntityDataConverter.class);
-        entitySkyBox.extendsFrom(entityModelBase);
-        
-        ConverterDefine entitySimpleTerrain = new ConverterDefine("entitySimpleTerrain", EntityDataConverter.class);
-        entitySimpleTerrain.extendsFrom(entityModelBase);
-        
-        ConverterDefine entityTree = new ConverterDefine("entityTree", EntityDataConverter.class);
-        entityTree.extendsFrom(entityModelBase);
-        entityTree.addPropertyConverter("file", FileFieldConverter.class);
-        entityTree.addPropertyConverter("randomScale", TextFieldConverter.class);
-        entityTree.addPropertyConverter("minScale", TextFieldConverter.class);
-        entityTree.addPropertyConverter("maxScale", TextFieldConverter.class);
-        
-        ConverterDefine entityGrass = new ConverterDefine("entityGrass", EntityDataConverter.class);
-        entityGrass.extendsFrom(entityModelBase);
-        
-        ConverterDefine entitySimpleWater = new ConverterDefine("entitySimpleWater", EntityDataConverter.class);
-        entitySimpleWater.extendsFrom(entityModelBase);
-        
-        ConverterDefine entityAdvanceWater = new ConverterDefine("entityAdvanceWater", EntityDataConverter.class);
-        entityAdvanceWater.extendsFrom(entityBase);
         entityAdvanceWater.addPropertyConverter("causticsTexture", TextFieldConverter.class);
         entityAdvanceWater.addPropertyConverter("center", TextFieldConverter.class);
         entityAdvanceWater.addPropertyConverter("colorExtinction", TextFieldConverter.class);
-        entityAdvanceWater.addPropertyConverter("deepWaterColor", TextFieldConverter.class);
+        entityAdvanceWater.addPropertyConverter("deepWaterColor", ColorFieldConverter.class);
         entityAdvanceWater.addPropertyConverter("foamExistence", TextFieldConverter.class);
         entityAdvanceWater.addPropertyConverter("foamHardness", TextFieldConverter.class);
         entityAdvanceWater.addPropertyConverter("foamIntensity", TextFieldConverter.class);
@@ -126,56 +171,50 @@ public class ConverterManager {
         entityAdvanceWater.addPropertyConverter("windDirection", TextFieldConverter.class);
         entityAdvanceWater.addPropertyConverter("useSceneLight", TextFieldConverter.class);
         
-        ConverterDefine entitySimpleModel = new ConverterDefine("entitySimpleModel", EntityDataConverter.class);
-        entitySimpleModel.extendsFrom(entityModelBase);
-        
-        ConverterDefine entityPhysics = new ConverterDefine("entityPhysics", EntityDataConverter.class);
-        entityPhysics.extendsFrom(entityBase);
-        
-        ConverterDefine entityDirectionalLight = new ConverterDefine("entityDirectionalLight", EntityDataConverter.class);
-        entityDirectionalLight.extendsFrom(entityBase);
-        
-        ConverterDefine entityAmbientLight = new ConverterDefine("entityAmbientLight", EntityDataConverter.class);
-        entityAmbientLight.extendsFrom(entityBase);
-        
-        ConverterDefine entityDirectionalLightFilterShadow = new ConverterDefine("entityDirectionalLightFilterShadow", EntityDataConverter.class);
-        entityDirectionalLightFilterShadow.extendsFrom(entityBase);
-        
-        ConverterDefine entityChaseCamera = new ConverterDefine("entityChaseCamera", EntityDataConverter.class);
-        entityChaseCamera.extendsFrom(entityBase);
-        
-        addConverter(scene);
-        addConverter(entitySkyBox);
-        addConverter(entitySimpleTerrain);
-        addConverter(entityTree);
-        addConverter(entityGrass);
-        addConverter(entitySimpleWater);
-        addConverter(entityAdvanceWater);
-        addConverter(entitySimpleModel);
-        addConverter(entityPhysics);
-        addConverter(entityDirectionalLight);
-        addConverter(entityAmbientLight);
-        addConverter(entityDirectionalLightFilterShadow);
-        addConverter(entityChaseCamera);
+        entityTree.addPropertyConverter("file", FileFieldConverter.class);
+        entityTree.addPropertyConverter("randomScale", TextFieldConverter.class);
+        entityTree.addPropertyConverter("minScale", TextFieldConverter.class);
+        entityTree.addPropertyConverter("maxScale", TextFieldConverter.class);
+     
+
     }
     
     private static void addConverter(ConverterDefine cd) {
-        MAPPING.put(cd.tagName, cd);
+        MAPPING.put(cd.getTagName(), cd);
     }
     
-    public final static DataConverter createConverter(JfxAbstractEdit editView, ObjectData data, PropertyConverter parent)  {
+    public final static ConverterDefine getConverterDefine(String tagName) {
+        return MAPPING.get(tagName);
+    }
+    
+    public final static DataConverter createConverter(JfxAbstractEdit edit, ObjectData data)  {
         ConverterDefine cd = MAPPING.get(data.getTagName());
         if (cd == null)
             throw new NullPointerException("ConverterDefine not found, tagName=" + data.getTagName());
-        DataConverter c;
+        DataConverter dc;
         try {
-            c = cd.converter.newInstance();
-            c.initialize(editView, data, cd.propertyConverters, parent);
-            return c;
+            dc = cd.getConverter().newInstance();
+            dc.setData(data);
+            dc.setEdit(edit);
+            dc.setPropertyConverterDefines(cd.getPropertyConverters());
+            dc.setFeatures(cd.getFeatures());
+            return dc;
         } catch (InstantiationException | IllegalAccessException ex) {
-            Logger.getLogger(ConverterManager.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, null, ex);
         }
         return null;
     }
     
+    public final static PropertyConverter createPropertyConverter(JfxAbstractEdit edit, PropertyConverterDefine pcd) {
+        try {
+            PropertyConverter pc = pcd.getPropertyConverter().newInstance();
+            pc.setProperty(pcd.getPropertyName());
+            pc.setFeatures(pcd.getUnmodifiableFeatures());
+            pc.setEdit(edit);
+            return pc;
+        } catch (InstantiationException | IllegalAccessException ex) {
+            LOG.log(Level.SEVERE, "Could not create PropertyConverter", ex);
+        }
+        return null;
+    }
 }

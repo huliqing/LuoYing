@@ -3,16 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.converter.tiles;
+package name.huliqing.editor.converter;
 
 /**
  *
  * @author huliqing
  */
-public class CullHintChoiceFieldConverter extends ChoiceFieldConverter {
-
-    public CullHintChoiceFieldConverter() {
-        super("Inherit", "Dynamic", "Always", "Never");
-    }
+public class SimpleDataConverter extends AbstractDataConverter{
     
 }

@@ -32,7 +32,7 @@ import java.util.List;
  *
  * @author huliqing
  */
-class Converter {
+public class Converter {
     
     /**
      * 将目标对象转换为字符串形式
@@ -40,6 +40,9 @@ class Converter {
      * @return 
      */
     public final static String getAsString(Object value) {
+        if (value == null) 
+            return null;
+        
          if (value instanceof String) {
             return (String) value;
         } else if (value instanceof Vector2f) {
@@ -98,6 +101,9 @@ class Converter {
     }
     
     public final static int[] getAsIntegerArray(Object value) {
+        if (value == null) 
+            return null;
+        
         if (value instanceof String) {
             String[] strArr = getAsArray(value);
             return toIntegerArray(strArr);
@@ -121,6 +127,9 @@ class Converter {
     }
     
     public final static long[] getAsLongArray(Object value) {
+        if (value == null) 
+            return null;
+        
         if (value instanceof String) {
             String[] strArr = getAsArray(value);
             return toLongArray(strArr);
@@ -144,6 +153,9 @@ class Converter {
     }
     
     public final static float[] getAsFloatArray(Object value) {
+        if (value == null) 
+            return null;
+        
         if (value instanceof String) {
             String[] tempArr = value.toString().split(",");
             float[] resultArr = new float[tempArr.length];
@@ -183,7 +195,7 @@ class Converter {
     
     /**
      * 格式, "x|y|z,x|y|z,...", 如果没有指定参数则返回null.
-     * @param key
+     * @param value
      * @return 
      */
     public final static Vector3f[] getAsVector3fArray(Object value) {
@@ -203,8 +215,7 @@ class Converter {
     
     /**
      * 获取参数值，并以Vector4f形式返回，如果不存在指定参数则返回defValue
-     * @param key
-     * @param defValue
+     * @param value
      * @return 
      */
     public final static Vector4f getAsVector4f(Object value) {
@@ -221,7 +232,7 @@ class Converter {
     /**
      * 获取参数值，并以Quaternion形式返回，原始格式必须如： "x,y,z"<br>
      * x,y,z分别表示在各个轴上的旋转<STRONG>弧度</STRONG>数.如果参数长度不对，将返回null.
-     * @param key
+     * @param value
      * @return 
      */
     public final static Quaternion getAsQuaternion(Object value) {

@@ -5,7 +5,7 @@
  */
 package name.huliqing.editor.converter;
 
-import java.util.List;
+import java.util.Map;
 import javafx.scene.Node;
 import name.huliqing.editor.edit.JfxAbstractEdit;
 import name.huliqing.luoying.xml.ObjectData;
@@ -23,17 +23,20 @@ public interface DataConverter<E extends JfxAbstractEdit, T extends ObjectData> 
      */
     T getData();
     
-    Node getLayout();
+    void setData(T data);
+    
+    void setPropertyConverterDefines(Map<String, PropertyConverterDefine> propertyConvertDefines);
+    
+    void setFeatures(Map<String, Object> features);
+    
+    void setEdit(E edit);
     
     /**
      * 初始化转换器
-     * @param editView
-     * @param data
-     * @param propertyConverterDefines
      * @param parent 
      */
-    void initialize(E editView, T data, List<PropertyConverterDefine> propertyConverterDefines, PropertyConverter parent);
-
+    void initialize(PropertyConverter parent);
+    
     /**
      * 判断是否已经初始化
      * @return 
@@ -45,8 +48,12 @@ public interface DataConverter<E extends JfxAbstractEdit, T extends ObjectData> 
      */
     void cleanup();
     
+    Node getLayout();
+    
     /**
      * 通知父组件，当前Data转换器的值发生了变化
      */
     void notifyChangedToParent();
+    
+    void addUndoRedo(String property, Object beforeValue, Object afterValue);
 }

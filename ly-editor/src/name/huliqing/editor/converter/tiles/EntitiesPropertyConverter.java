@@ -3,9 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.converter.scene;
+package name.huliqing.editor.converter.tiles;
 
+import java.util.HashMap;
+import java.util.Map;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -24,7 +27,7 @@ import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.data.SceneData;
 
 /**
- *
+ * 场景的"entities"字段的转换器, 将entities转换为列表
  * @author huliqing
  */
 public class EntitiesPropertyConverter extends AbstractPropertyConverter<JfxSceneEdit, SceneData> implements JfxSceneEditListener {
@@ -34,9 +37,10 @@ public class EntitiesPropertyConverter extends AbstractPropertyConverter<JfxScen
     private final ListView<EntityData> listView = new ListView();
     private boolean ignoreSelectEvent;
     
-    // 当前被选中的物体的converter
-    private DataConverter<JfxSceneEdit, EntityData> entityDataConverter;
     private final TitledPane entityPanel = new TitledPane();
+    private final Map<EntityData, DataConverter> entityConverterMaps = new HashMap<EntityData, DataConverter>();
+    // 当前正在显示的EntityConverter
+    private DataConverter currentDisplayConverter;
     
     public EntitiesPropertyConverter() {
         // 工具栏
@@ -57,14 +61,17 @@ public class EntitiesPropertyConverter extends AbstractPropertyConverter<JfxScen
         layout.getChildren().addAll(toolBar, listView);
         layout.setStyle("-fx-padding:0;-fx-border-width:0;");
         
-        root.setContent(layout);
         entityPanel.setVisible(false);
+    }
         
+    @Override
+    protected Node createLayout() {
+        return layout;
     }
     
     @Override
-    public void initialize(JfxSceneEdit editView, DataConverter<JfxSceneEdit, SceneData> parent, String property) {
-        super.initialize(editView, parent, property);
+    public void initialize(DataConverter<JfxSceneEdit, SceneData> parent) {
+        super.initialize(parent);
         
         // remove20170116不再需要
 //        List<EntityData> eds = parent.getData().getEntityDatas();
@@ -75,12 +82,12 @@ public class EntitiesPropertyConverter extends AbstractPropertyConverter<JfxScen
 //            });
 //        }
         
-        this.jfxEdit.getPropertyPanel().getChildren().add(entityPanel);
+        jfxEdit.getPropertyPanel().getChildren().add(entityPanel);
         
         // 用于监听3D场景中选择物体的变化
-        this.jfxEdit.addListener(this);
+        jfxEdit.addListener(this);
     }
-
+    
     @Override
     public void cleanup() {
         jfxEdit.getPropertyPanel().getChildren().remove(entityPanel);
@@ -113,6 +120,7 @@ public class EntitiesPropertyConverter extends AbstractPropertyConverter<JfxScen
     @Override
     public void onEntityRemoved(EntityData ed) {
         listView.getItems().remove(ed);
+        entityConverterMaps.remove(ed);
     }
 
     @Override
@@ -132,21 +140,27 @@ public class EntitiesPropertyConverter extends AbstractPropertyConverter<JfxScen
     }
     
     private void doUpdateEntityView(EntityData entityData) {
-        if (entityDataConverter != null) {
-            entityDataConverter.cleanup(); // 必须清理
-            entityDataConverter = null;
-            entityPanel.setContent(null);
+        if (entityData == null) {
+            return;
         }
-        if (entityData != null) {
-            entityDataConverter = ConverterManager.createConverter(jfxEdit, entityData, this);
-            entityPanel.setText(entityData.getId());
-            entityPanel.setContent(entityDataConverter.getLayout());
-            entityPanel.setVisible(true);
+        
+        DataConverter dc = entityConverterMaps.get(entityData);
+        if (dc == null) {
+            dc = ConverterManager.createConverter(jfxEdit, entityData);
+            entityConverterMaps.put(entityData, dc);
         }
+        if (currentDisplayConverter != null) {
+            currentDisplayConverter.cleanup();
+        }
+        currentDisplayConverter = dc;
+        currentDisplayConverter.initialize(this);
+        entityPanel.setText(entityData.getId());
+        entityPanel.setContent(currentDisplayConverter.getLayout());
+        entityPanel.setVisible(true);
     }
 
     @Override
-    public void updateView(Object propertyValue) {
+    public void updateUI(Object propertyValue) {
         // ignore
     }
 

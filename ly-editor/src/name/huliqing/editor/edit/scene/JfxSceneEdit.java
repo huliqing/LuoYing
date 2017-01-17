@@ -146,7 +146,8 @@ public class JfxSceneEdit extends JfxAbstractEdit<SceneEdit>
                     if (sceneDataConverter != null && sceneDataConverter.isInitialized()) {
                         sceneDataConverter.cleanup();
                     }
-                    sceneDataConverter = ConverterManager.createConverter(this, scene.getData(), null);
+                    sceneDataConverter = ConverterManager.createConverter(this, scene.getData());
+                    sceneDataConverter.initialize(null);
                     scenePropertyPanel.setText(scene.getData().getId());
                     scenePropertyPanel.setContent(sceneDataConverter.getLayout());
                 });

@@ -96,7 +96,6 @@ public class DirectionalLightEntitySelectObj extends EntitySelectObj<Directional
         
         Geometry flagObj = new Geometry("DirectionalLightEntitySelectObj", new QuadXYC(1, 1));
         flagObj.setMaterial(mat);
-//        flagObj.setLocalTranslation(-0.5f, -0.5f, 0);
         flagObj.setQueueBucket(RenderQueue.Bucket.Translucent);
         
         // 让flag始终朝向镜头

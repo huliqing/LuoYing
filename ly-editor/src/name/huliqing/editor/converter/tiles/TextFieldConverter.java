@@ -6,12 +6,12 @@
 package name.huliqing.editor.converter.tiles;
 
 import javafx.beans.value.ObservableValue;
+import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import name.huliqing.editor.converter.AbstractPropertyConverter;
-import name.huliqing.editor.converter.DataConverter;
-import name.huliqing.editor.edit.JfxAbstractEdit;
+import name.huliqing.luoying.xml.Converter;
 
 /**
  * @author huliqing
@@ -19,11 +19,9 @@ import name.huliqing.editor.edit.JfxAbstractEdit;
 public class TextFieldConverter extends AbstractPropertyConverter {
 
     private final TextField content = new TextField("");
-    private boolean ignoreChangedEvent;
     private String lastText = "";
 
     public TextFieldConverter() {
-        root.setContent(content);
         // 失去焦点时更新
         content.focusedProperty().addListener((ObservableValue<? extends Boolean> observable
                 , Boolean oldValue, Boolean newValue) -> {
@@ -42,33 +40,26 @@ public class TextFieldConverter extends AbstractPropertyConverter {
     }
     
     @Override
-    public void initialize(JfxAbstractEdit editView, DataConverter parent, String property) {
-        super.initialize(editView, parent, property);
-        updateView(parent.getData().getAsString(property));
+    protected Node createLayout() {
+        return content;
     }
     
     private void updateChanged() {
-        if (ignoreChangedEvent) {
-            return;
-        }
-        // 失去焦点时才检测变化
         if (!content.getText().equals(lastText)) {
             lastText = content.getText();
-            this.parent.getData().setAttribute(property, lastText);
-            notifyChangedToParent();
+            updateAttribute(lastText);
         }
     }
     
     @Override
-    public void updateView(Object propertyValue) {
-        ignoreChangedEvent = true;
+    public void updateUI(Object propertyValue) {
+        String value = Converter.getAsString(propertyValue);
         if (propertyValue != null) {
-            content.setText(propertyValue.toString());
+            content.setText(value);
         } else {
             content.setText("");
         }
         lastText = content.getText();
-        ignoreChangedEvent = false;
     }
     
 }

@@ -18,3 +18,6 @@ ok.历史记录和jfx的change绑定有冲突
 .海水在有限和无限切换的时候有BUG
 .JFX在面板上的编辑功能要整合undo\redo功能
 .为PropertyConverter增加Validator功能
+.jfx to jme undo\redo
+.删除Entity功能及复制Entity操作
+.验证器Validator

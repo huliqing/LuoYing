@@ -7,6 +7,8 @@ package name.huliqing.editor.edit;
 
 import java.util.logging.Logger;
 import name.huliqing.editor.Editor;
+import name.huliqing.editor.undoredo.UndoRedo;
+import name.huliqing.editor.undoredo.UndoRedoManager;
 import name.huliqing.fxswing.Jfx;
 
 /**
@@ -70,6 +72,21 @@ public abstract class JfxAbstractEdit<T extends JmeEdit> implements JfxEdit<T> {
     @Override
     public Editor getEditor() {
         return editor;
+    }
+
+    @Override
+    public UndoRedoManager getUndoRedoManager() {
+        if (form != null) {
+            return form.getUndoRedoManager();
+        }
+        return null;
+    }
+
+    @Override
+    public void addUndoRedo(UndoRedo ur) {
+        if (form != null) {
+            form.getUndoRedoManager().add(ur);
+        }
     }
     
     public void jfxOnDragStarted() {

@@ -10,6 +10,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -18,8 +19,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import name.huliqing.editor.constants.StyleConstants;
 import name.huliqing.editor.converter.AbstractPropertyConverter;
-import name.huliqing.editor.converter.DataConverter;
-import name.huliqing.editor.edit.JfxAbstractEdit;
+import name.huliqing.luoying.xml.Converter;
 
 /**
  *
@@ -48,7 +48,6 @@ public class QuaternionConverter extends AbstractPropertyConverter{
     private String lastY = "";
     private String lastZ = "";
     
-    private boolean ignoreChangedEvent;
     private final ChangeListener<Boolean> focusedListener = (ObservableValue<? extends Boolean> observable
             , Boolean oldValue, Boolean newValue) -> {
         if (newValue) {
@@ -88,19 +87,14 @@ public class QuaternionConverter extends AbstractPropertyConverter{
         yField.setOnKeyPressed(keyHandler);
         zField.setOnKeyPressed(keyHandler);
         
-        root.setContent(layout);
     }
 
     @Override
-    public void initialize(JfxAbstractEdit editView, DataConverter parent, String property) {
-        super.initialize(editView, parent, property);
-        updateView(parent.getData().getAsQuaternion(property));
+    protected Node createLayout() {
+        return layout;
     }
     
     private void updateChanged() {
-        if (ignoreChangedEvent) {
-            return;
-        }
         boolean changed = false;
         if (!xField.getText().equals(lastX)) {
             lastX = xField.getText();
@@ -120,8 +114,7 @@ public class QuaternionConverter extends AbstractPropertyConverter{
                 temp[1] = Float.parseFloat(lastY);
                 temp[2] = Float.parseFloat(lastZ);
                 qua.fromAngles(temp);
-                parent.getData().setAttribute(property, qua);
-                notifyChangedToParent();
+                updateAttribute(qua);
             } catch (NumberFormatException e) {
                 // ignore
             }
@@ -129,9 +122,8 @@ public class QuaternionConverter extends AbstractPropertyConverter{
     }
 
     @Override
-    public void updateView(Object propertyValue) {
-        ignoreChangedEvent = true;
-        Quaternion value = (Quaternion) propertyValue;
+    public void updateUI(Object propertyValue) {
+        Quaternion value = Converter.getAsQuaternion(propertyValue);
         if (value != null) {
             qua.set(value);
             qua.toAngles(temp);
@@ -146,7 +138,6 @@ public class QuaternionConverter extends AbstractPropertyConverter{
         lastX = xField.getText();
         lastY = yField.getText();
         lastZ = zField.getText();
-        ignoreChangedEvent = false;
     }
     
 }
