@@ -11,13 +11,16 @@ ok.在左上角显示当前视角：user/front ortho/...
 ok.按r直接旋转
 ok.按g直接移动
 ok.历史记录和jfx的change绑定有冲突
+ok.asset资源重命名功能
+ok.旋转操作controlObj的线条太粗
 
-.asset资源重命名功能
-.初始界面功能
-.entityPlant要加一个参数，moveOnTerrain作为开关,不然在移动的时候会冲突
-.海水在有限和无限切换的时候有BUG
-.JFX在面板上的编辑功能要整合undo\redo功能
 .为PropertyConverter增加Validator功能
-.jfx to jme undo\redo
 .删除Entity功能及复制Entity操作
-.验证器Validator
+.file字段在打开文件夹的时候要增加Filter来过滤显示的文件
+.初始界面功能
+.海水在有限和无限切换的时候有BUG
+.JFX在面板上的各编辑功能的undo\redo要完善
+.3d编辑中，"自由操作"中的Move,Rotation,Scale存在历史记录丢失的BUG。
+.Undo,Redo事件要从JFX转换到JME中
+.public void jfxOnDragStarted, jfxOnDragEnded(), 要使用JFX全局监听的方式才安全。see Starter
+

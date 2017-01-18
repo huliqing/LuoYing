@@ -10,7 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.geometry.Bounds;
+import javafx.geometry.Side;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TitledPane;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
@@ -22,6 +24,7 @@ import name.huliqing.editor.edit.JfxAbstractEdit;
 import name.huliqing.editor.manager.ComponentManager.Component;
 import name.huliqing.editor.ui.ToolBarView;
 import name.huliqing.editor.components.EntityComponents;
+import name.huliqing.editor.constants.ResConstants;
 import name.huliqing.editor.manager.ConverterManager;
 import name.huliqing.editor.converter.DataConverter;
 import name.huliqing.editor.edit.Mode;
@@ -33,6 +36,7 @@ import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.editor.edit.SimpleJmeEditListener;
 import name.huliqing.editor.edit.select.EntitySelectObj;
+import name.huliqing.editor.manager.Manager;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.scene.SceneListener;
 
@@ -65,10 +69,25 @@ public class JfxSceneEdit extends JfxAbstractEdit<SceneEdit>
     // 当前选择中的物体
     private EntitySelectObj entitySelectObj;
     
+    // 用于显示删除按钮
+    private final ContextMenu delPop = new ContextMenu();
+    private final MenuItem delBtn = new MenuItem(Manager.getRes(ResConstants.POPUP_DELETE));
+    private EntitySelectObj delTarget;
+    
     public JfxSceneEdit(Pane root) {
         this.root = root;
-        this.form = new SceneEdit();
+        this.form = new SceneEdit(this);
         this.form.addSimpleEditListener(this);
+        
+        delPop.getItems().addAll(delBtn);
+        delBtn.setOnAction(e -> {
+            if (delTarget != null) {
+                removeEntity(delTarget.getObject().getData());
+                delTarget = null;
+                // 删除后重新将焦点定位到canvas上
+                Jfx.requestFocusCanvas();
+            }
+        });
     }
     
     @Override
@@ -241,18 +260,24 @@ public class JfxSceneEdit extends JfxAbstractEdit<SceneEdit>
     @Override
     public void onSceneEntityAdded(Scene scene, Entity entityAdded) {
         Jfx.runOnJfx(() -> {
-            listeners.forEach(t -> {
-                t.onEntityAdded(entityAdded.getData());
-            });
+            for (int i = 0; i < listeners.size(); i++) {
+                listeners.get(i).onEntityAdded(entityAdded.getData());
+            }
         });
     }
 
     @Override
     public void onSceneEntityRemoved(Scene scene, Entity entityRemoved) {
         Jfx.runOnJfx(() -> {
-            listeners.forEach(t -> {
-                t.onEntityRemoved(entityRemoved.getData());
-            });
+            for (int i = 0; i < listeners.size(); i++) {
+                listeners.get(i).onEntityRemoved(entityRemoved.getData());
+            }
         });
+    }
+    
+    public void showDeleteConfirm(float x, float y, EntitySelectObj entityObj) {
+        delTarget = entityObj;
+        delPop.show(editPanel, Side.TOP, x - delPop.getWidth() * 0.25, y + delPop.getHeight() * 0.25);
+        Jfx.requestFocus(delPop);
     }
 }

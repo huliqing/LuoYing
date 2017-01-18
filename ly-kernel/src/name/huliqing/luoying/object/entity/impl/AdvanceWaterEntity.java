@@ -138,7 +138,7 @@ public class AdvanceWaterEntity extends NonModelEntity implements WaterEntity, S
             water.setNormalTexture((Texture2D) LuoYing.getApp().getAssetManager().loadTexture(normalTexture));
         }
         
-        LOG.log(Level.INFO, "---->waterColor={0}", water.getWaterColor());
+//        LOG.log(Level.INFO, "---->waterColor={0}", water.getWaterColor());
     }
 
     @Override

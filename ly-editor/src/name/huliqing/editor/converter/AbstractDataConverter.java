@@ -124,8 +124,8 @@ public abstract class AbstractDataConverter<E extends JfxAbstractEdit, T extends
     
     @Override
     public void notifyChangedToParent() {
-        LOG.log(Level.INFO, "DataConverter notify changed, DataConverter={0}, data={1}"
-                , new Object[] {getClass(), data.getId()});
+//        LOG.log(Level.INFO, "DataConverter notify changed, DataConverter={0}, data={1}"
+//                , new Object[] {getClass(), data.getId()});
         if (parent != null) {
             parent.notifyChangedToParent();
         }

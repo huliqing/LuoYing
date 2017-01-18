@@ -73,6 +73,7 @@ public class ScaleTool extends EditTool implements SimpleJmeEditListener{
 
     @Override
     public void cleanup() {
+        endScale();
         controlObj.removeFromParent();
         form.removeEditFormListener(this);
         super.cleanup(); 
@@ -106,6 +107,7 @@ public class ScaleTool extends EditTool implements SimpleJmeEditListener{
     protected void onToolEvent(Event e) {
         selectObj = form.getSelected();
         if (selectObj == null) {
+            endScale();
             return;
         }
         
@@ -261,7 +263,6 @@ public class ScaleTool extends EditTool implements SimpleJmeEditListener{
             selectObj.setLocalScale(newScale);
             afterScale.set(newScale);
             tv.release();
-            
         }
     }
     

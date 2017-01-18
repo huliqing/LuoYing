@@ -62,8 +62,12 @@ public class CameraTool extends EditTool implements EditorListener {
     // 最近一次记录光标的位置
     private final Vector2f lastCursorPos = new Vector2f();
     private final float panMoveSpeed = 0.001f;
+    
+    // remove20170118:
+    // -defFocusDistance会导致镜头拉近或拉远，因物体大小不一，这有可能会导致拉到物体内部。所以不再去拉近距离
+    // -只要定位镜头位置就可以。
     // 默认相机定位时的最近距离
-    private final float defFocusDistance = 2f;
+//    private final float defFocusDistance = 2f;
     
     // 视角及提示
     private final BitmapText viewText = new BitmapText(Manager.getFont());
@@ -243,7 +247,11 @@ public class CameraTool extends EditTool implements EditorListener {
     
     private void doChase(Vector3f position) {
         Camera camera = editorCam.getCamera();
-        Vector3f camEndLoc = new Vector3f().set(position).subtractLocal(camera.getDirection().mult(defFocusDistance));
+        
+        // defFocusDistance会导致镜头拉近或拉远，因物体大小不一，这有可能会导致拉到物体内部。所以不再去拉近距离
+        // 只要定位镜头位置就可以。
+//        Vector3f camEndLoc = new Vector3f().set(position).subtractLocal(camera.getDirection().mult(defFocusDistance));
+        Vector3f camEndLoc = new Vector3f().set(position).subtractLocal(camera.getDirection().mult(editorCam.getFocus().distance(camera.getLocation())));
         
         CameraNode cameraNode = new CameraNode("", editorCam.getCamera());
         cameraNode.setLocalRotation(editorCam.getCamera().getRotation());

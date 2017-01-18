@@ -5,7 +5,6 @@
  */
 package name.huliqing.editor.tools;
 
-import com.jme3.collision.CollisionResults;
 import com.jme3.math.Ray;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.JmeEvent;
@@ -19,7 +18,7 @@ import name.huliqing.luoying.manager.PickManager;
  */
 public class PickTool extends EditTool {
     
-    private final CollisionResults pickResults = new CollisionResults();
+    private SelectObj lastSelectObj;
     
     public PickTool(String name) {
         super(name);
@@ -37,23 +36,21 @@ public class PickTool extends EditTool {
     }
 
     private void doPick() {
-        // remove20170111
-//        Node editRoot = form.getEditRoot();
-//        pickResults.clear();
-//        PickManager.pick(editor.getCamera(), editor.getInputManager().getCursorPosition(), editRoot, pickResults);
-//        if (pickResults.size() > 0) {
-//            Spatial picked = pickResults.getClosestCollision().getGeometry();
-//            SelectObj before = form.getSelected();
-//            SelectObj after = new SpatialSelectObj(picked);
-//            form.setSelected(after);
-//            form.addUndoRedo(new PickUndoRedo(before, after));
-//        }
-
         Ray pickRay = PickManager.getPickRay(editor.getCamera(), editor.getInputManager().getCursorPosition(), null);
         SelectObj newSelectObj = form.doPick(pickRay);
+        
+        // 不需要增加历史记录
+        if (newSelectObj != null && newSelectObj == lastSelectObj) {
+            form.setSelected(newSelectObj);
+            lastSelectObj = newSelectObj;
+            return;
+        }
+        
+        // 需要增加历史记录
         if (newSelectObj != null) {
             SelectObj before = form.getSelected();
             form.setSelected(newSelectObj);
+            lastSelectObj = newSelectObj;
             form.addUndoRedo(new PickUndoRedo(before, newSelectObj));
         }
     }

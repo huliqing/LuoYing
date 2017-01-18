@@ -73,6 +73,7 @@ public class MoveTool extends EditTool implements SimpleJmeEditListener{
     
     @Override
     public void cleanup() {
+        endMove();
         form.addSimpleEditListener(this);
         controlObj.removeFromParent();
         super.cleanup();
@@ -141,12 +142,16 @@ public class MoveTool extends EditTool implements SimpleJmeEditListener{
         }
     }
     
-    private void startFreeMove() {
+    /**
+     * 自由移动操作
+     */
+    public void startFreeMove() {
         freeMove = true;
         transforming = true;
         picker.startPick(selectObj.getReadOnlySelectedSpatial(), Mode.CAMERA
                 , editor.getCamera(), editor.getInputManager().getCursorPosition(), Picker.PLANE_XY);
         startSpatialLoc.set(selectObj.getReadOnlySelectedSpatial().getLocalTranslation());
+        lastSpatialLoc.set(startSpatialLoc);
         controlObj.setAxisVisible(false);
         controlObj.setAxisLineVisible(false);
     }
@@ -173,6 +178,7 @@ public class MoveTool extends EditTool implements SimpleJmeEditListener{
         picker.startPick(selectObj.getReadOnlySelectedSpatial(), form.getMode()
                 , editor.getCamera(), editor.getInputManager().getCursorPosition(), planRotation);
         startSpatialLoc.set(selectObj.getReadOnlySelectedSpatial().getLocalTranslation());
+        lastSpatialLoc.set(startSpatialLoc);
         controlObj.setAxisVisible(false);
         controlObj.setAxisLineVisible(false);
         moveAxis.setAxisLineVisible(true);
@@ -181,7 +187,6 @@ public class MoveTool extends EditTool implements SimpleJmeEditListener{
     private void endMove() {
         if (transforming) {
             picker.endPick();
-            // undo redo
             MoveUndo undoRedo = new MoveUndo(selectObj, startSpatialLoc, lastSpatialLoc);
             form.addUndoRedo(undoRedo);
         }
@@ -296,6 +301,11 @@ public class MoveTool extends EditTool implements SimpleJmeEditListener{
         public void redo() {
             selectObj.setLocalTranslation(after);
             updateMarkerState();
+        }
+
+        @Override
+        public String toString() {
+            return "MoveUndo:" + selectObj + ", before=" + before + ", after=" + after;
         }
         
     }

@@ -6,15 +6,12 @@
 package name.huliqing.editor.converter;
 
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.TitledPane;
 import name.huliqing.editor.edit.JfxAbstractEdit;
 import name.huliqing.editor.manager.ConverterManager;
-import name.huliqing.editor.undoredo.UndoRedo;
-import name.huliqing.fxswing.Jfx;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
@@ -36,7 +33,7 @@ public abstract class AbstractPropertyConverter<E extends JfxAbstractEdit, T ext
     
     protected FeatureHelper featureHelper;
     protected boolean ignoreChangedEvent;
-
+    
     @Override
     public String getProperty() {
         return property;
@@ -91,13 +88,14 @@ public abstract class AbstractPropertyConverter<E extends JfxAbstractEdit, T ext
 
     @Override
     public void cleanup() {
+        root.setContent(null);
         initialized = false;
     }
     
     @Override
     public void notifyChangedToParent() {
-        LOG.log(Level.INFO, "PropertyConverter notify changed, PropertyConverter={0}, property={1}"
-                , new Object[] {getClass(), property});
+//        LOG.log(Level.INFO, "PropertyConverter notify changed, PropertyConverter={0}, property={1}"
+//                , new Object[] {getClass(), property});
         if (parent != null) {
             parent.notifyChangedToParent();
         }

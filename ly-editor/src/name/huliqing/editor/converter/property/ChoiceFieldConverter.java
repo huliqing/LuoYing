@@ -3,10 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.converter.tiles;
+package name.huliqing.editor.converter.property;
 
 import java.util.List;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
 import javafx.scene.control.ChoiceBox;
@@ -14,7 +13,6 @@ import name.huliqing.editor.converter.AbstractPropertyConverter;
 import name.huliqing.editor.converter.DataConverter;
 
 /**
- *
  * @author huliqing
  */
 public class ChoiceFieldConverter extends AbstractPropertyConverter {
@@ -24,14 +22,20 @@ public class ChoiceFieldConverter extends AbstractPropertyConverter {
 
     private final ChoiceBox<String> choice = new ChoiceBox();
     
+    private String lastValueSaved;
+    
     public ChoiceFieldConverter() {
-//        choice.prefWidthProperty().bind(root.widthProperty()); // BUG，会让界面越来越宽
-        choice.valueProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                updateAttribute(choice.getValue());
-            }
+        // BUG，会让界面越来越宽
+//        choice.prefWidthProperty().bind(root.widthProperty()); 
+
+        choice.valueProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            updateChangedAndSave();
         });
+    }
+    
+    @Override
+    protected Node createLayout() {
+        return choice;
     }
 
     @Override
@@ -45,13 +49,21 @@ public class ChoiceFieldConverter extends AbstractPropertyConverter {
     }
     
     @Override
-    protected Node createLayout() {
-        return choice;
-    }
-    
-    @Override
     public void updateUI(Object propertyValue) {
-        choice.setValue(propertyValue != null ? propertyValue.toString() : null);
+        lastValueSaved = propertyValue != null ? propertyValue.toString() : null;
+        choice.setValue(lastValueSaved);
     }
     
+    // 保存和记录历史
+    private void updateChangedAndSave() {
+        String newValue = choice.getValue();
+        if (lastValueSaved == null && newValue == null)
+            return;
+        // 这里要避免回调循环
+        if (lastValueSaved != null && lastValueSaved.equals(newValue)) 
+            return;
+        updateAttribute(newValue);
+        addUndoRedo(lastValueSaved, newValue);
+        lastValueSaved = newValue;
+    }
 }

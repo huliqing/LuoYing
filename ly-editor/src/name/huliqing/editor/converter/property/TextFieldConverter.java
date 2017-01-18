@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.converter.tiles;
+package name.huliqing.editor.converter.property;
 
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
@@ -19,7 +19,7 @@ import name.huliqing.luoying.xml.Converter;
 public class TextFieldConverter extends AbstractPropertyConverter {
 
     private final TextField content = new TextField("");
-    private String lastText = "";
+    private String lastValueSaved;
 
     public TextFieldConverter() {
         // 失去焦点时更新
@@ -29,12 +29,12 @@ public class TextFieldConverter extends AbstractPropertyConverter {
             if (newValue) {
                 return;
             }
-            updateChanged();
+            updateChangedAndSave();
         });
         // 按下Enter时更新
         content.setOnKeyPressed((KeyEvent event) -> {
             if (event.getCode() == KeyCode.ENTER) {
-                updateChanged();
+                updateChangedAndSave();
             }
         });
     }
@@ -44,22 +44,24 @@ public class TextFieldConverter extends AbstractPropertyConverter {
         return content;
     }
     
-    private void updateChanged() {
-        if (!content.getText().equals(lastText)) {
-            lastText = content.getText();
-            updateAttribute(lastText);
+    private void updateChangedAndSave() {
+        String newValue = content.getText();
+        if (newValue != null && newValue.equals(lastValueSaved)) {
+            return;
         }
+        updateAttribute(newValue);
+        addUndoRedo(lastValueSaved, newValue);
+        lastValueSaved = newValue;
     }
     
     @Override
     public void updateUI(Object propertyValue) {
-        String value = Converter.getAsString(propertyValue);
-        if (propertyValue != null) {
-            content.setText(value);
+        lastValueSaved = Converter.getAsString(propertyValue);
+        if (lastValueSaved != null) {
+            content.setText(lastValueSaved);
         } else {
             content.setText("");
         }
-        lastText = content.getText();
     }
     
 }

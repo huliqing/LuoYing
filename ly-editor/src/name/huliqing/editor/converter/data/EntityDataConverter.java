@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.converter.entity;
+package name.huliqing.editor.converter.data;
 
 import name.huliqing.editor.converter.AbstractDataConverter;
 import name.huliqing.editor.edit.Mode;

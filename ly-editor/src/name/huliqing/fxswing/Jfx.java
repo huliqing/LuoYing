@@ -18,11 +18,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Window;
 import javax.swing.JFrame;
 import javax.swing.JWindow;
 import javax.swing.SwingUtilities;
@@ -308,5 +310,48 @@ public class Jfx {
     
     public static void jfxCanvasBind(Region target) {
         bindingController.jfxCanvasBind(target);
+    }
+    
+    /**
+     * 把焦点定位到指定的JFX节点上，使用这个方法是因为如果当前焦点是在swing组件上，
+     * 可能无法直接在JFX线程中请求将焦点定位到JFX节点上。
+     * @param win 
+     */
+    public static void requestFocus(Window win) {
+        if (Platform.isFxApplicationThread()) {
+            jfxPanel.requestFocus();
+            win.requestFocus();
+        } else {
+            Jfx.runOnJfx(() -> {
+                jfxPanel.requestFocus();
+                win.requestFocus();
+            });
+        }
+    }
+    
+    /**
+     * 把焦点定位到指定的JFX节点上，使用这个方法是因为如果当前焦点是在swing组件上，
+     * 可能无法直接在JFX线程中请求将焦点定位到JFX节点上。
+     * @param node 
+     */
+    public static void requestFocus(Node node) {
+         if (Platform.isFxApplicationThread()) {
+            jfxPanel.requestFocus();
+            node.requestFocus();
+        } else {
+            Jfx.runOnJfx(() -> {
+                jfxPanel.requestFocus();
+                node.requestFocus();
+            });
+        }
+    }
+    
+    /**
+     * 将焦点定位到编辑器中（jmeCanvas）
+     */
+    public static void requestFocusCanvas() {
+        runOnSwing(() -> {
+            jmeCanvas.requestFocus();
+        });
     }
 }

@@ -45,10 +45,10 @@ public class RotationTool extends EditTool implements SimpleJmeEditListener{
     private SelectObj selectObj;
     
     // 开始变换时物体的位置(local)
-    private final Quaternion startRotate = new Quaternion();
-    private final Quaternion startWorldRotate = new Quaternion();
+    private Quaternion startRotate;
+    private Quaternion startWorldRotate;
     // 经过旋转操作后的LocaleRotationl
-    private final Quaternion afterRotate = new Quaternion();
+    private Quaternion afterRotate;
     
     // 是否正在变换操作中
     private boolean transforming;
@@ -73,6 +73,7 @@ public class RotationTool extends EditTool implements SimpleJmeEditListener{
 
     @Override
     public void cleanup() {
+        endRotation();
         controlObj.removeFromParent();
         form.removeEditFormListener(this);
         super.cleanup(); 
@@ -152,8 +153,8 @@ public class RotationTool extends EditTool implements SimpleJmeEditListener{
         transforming = true;
         picker.startPick(selectObj.getReadOnlySelectedSpatial(), Mode.CAMERA
                 , editor.getCamera(), editor.getInputManager().getCursorPosition(), Picker.PLANE_XY);
-        startRotate.set(selectObj.getReadOnlySelectedSpatial().getLocalRotation());
-        startWorldRotate.set(selectObj.getReadOnlySelectedSpatial().getWorldRotation());
+        startRotate = selectObj.getReadOnlySelectedSpatial().getLocalRotation().clone();
+        startWorldRotate = selectObj.getReadOnlySelectedSpatial().getWorldRotation().clone();
         controlObj.setAxisVisible(false);
         controlObj.setAxisLineVisible(false);
     }
@@ -179,8 +180,8 @@ public class RotationTool extends EditTool implements SimpleJmeEditListener{
         picker.startPick(selectObj.getReadOnlySelectedSpatial(), form.getMode()
                 , editor.getCamera(), editor.getInputManager().getCursorPosition()
                 ,planRotation);
-        startRotate.set(selectObj.getReadOnlySelectedSpatial().getLocalRotation());
-        startWorldRotate.set(selectObj.getReadOnlySelectedSpatial().getWorldRotation());
+        startRotate = selectObj.getReadOnlySelectedSpatial().getLocalRotation().clone();
+        startWorldRotate = selectObj.getReadOnlySelectedSpatial().getWorldRotation().clone();
         controlObj.setAxisVisible(false);
         controlObj.setAxisLineVisible(false);
         rotationAxis.setAxisLineVisible(true);
@@ -226,7 +227,7 @@ public class RotationTool extends EditTool implements SimpleJmeEditListener{
 
         Quaternion rotation = startRotate.mult(picker.getRotation(startWorldRotate.inverse()));
         selectObj.setLocalRotation(rotation);
-        afterRotate.set(rotation);
+        afterRotate = rotation;
         
     }
     
@@ -285,5 +286,9 @@ public class RotationTool extends EditTool implements SimpleJmeEditListener{
             updateMarkerState();
         }
         
+        @Override
+        public String toString() {
+            return "RotationUndoRedo:" + selectObj + ", before=" + before + ", after=" + after;
+        }
     }
 }

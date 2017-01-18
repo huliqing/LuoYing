@@ -11,8 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.editor.Editor;
 import name.huliqing.editor.select.SelectObj;
-import name.huliqing.editor.undoredo.UndoRedo;
-import name.huliqing.editor.undoredo.UndoRedoManager;
 
 /**
  * 3D模型编辑器窗口

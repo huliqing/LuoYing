@@ -6,7 +6,12 @@
 package name.huliqing.editor;
 
 import com.jme3.system.AppSettings;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -38,15 +43,23 @@ public class Starter {
         Jfx.getMainFrame().setLocationRelativeTo(null);
         Jfx.getMainFrame().setVisible(true);
         Jfx.runOnJfx(() -> {
+            
+            // 加载样式文件
             Jfx.getJfxRoot().getStylesheets().add("resources/style/style.css");
             
             // 创建Jfx主场景
             Pane jfxEditZone = initMainSceneInJfx(Jfx.getJfxRoot());
+            
+            // 将JFX中的UndoRedo按键转换到JME场景中
+            JfxUndoRedoKeyEventToJme();
+            
             // 初始化FormView
             Jfx.runOnJme(() -> {
                 initFormViewInJme(jfxEditZone);
             });
         });
+        
+
         
     }
     
@@ -69,4 +82,36 @@ public class Starter {
         EditManager.openTestFormView();
     }
  
+    // 将JFX中的UndoRedo按键转换到JME场景中
+    private void JfxUndoRedoKeyEventToJme() {
+        Jfx.getJfxRoot().addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            final KeyCombination undo = new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN);
+            final KeyCombination redo = new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN);
+            @Override
+            public void handle(KeyEvent ke) {
+                if (undo.match(ke)) {
+                    // xxx 将undo事件转换到jme
+                    // 测试代码
+                    System.out.println("Jfx key handler match:" + undo);
+//                    Editor ed = (Editor) Jfx.getJmeApp();
+//                    JfxSceneEdit je = (JfxSceneEdit) ed.getFormView();
+//                    UndoRedoManager urm = je.getUndoRedoManager();
+//                    Jfx.runOnJme(() -> {
+//                        urm.undo();
+//                    });
+                }
+                if(redo.match(ke)) {
+                    // xxx 将redo事件转换到jme
+                    System.out.println("Jfx key handler match:" + redo);
+                    // 测试代码
+//                    Editor ed = (Editor) Jfx.getJmeApp();
+//                    JfxSceneEdit je = (JfxSceneEdit) ed.getFormView();
+//                    UndoRedoManager urm = je.getUndoRedoManager();
+//                    Jfx.runOnJme(() -> {
+//                        urm.redo();
+//                    });
+                }
+            }
+        });
+    }
 }

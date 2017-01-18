@@ -3,12 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.converter.tiles;
+package name.huliqing.editor.converter.property;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -16,6 +19,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import name.huliqing.editor.constants.ResConstants;
 import name.huliqing.editor.constants.StyleConstants;
 import name.huliqing.editor.converter.AbstractPropertyConverter;
@@ -27,20 +31,27 @@ import name.huliqing.luoying.xml.Converter;
  * @author huliqing
  */
 public class FileFieldConverter extends AbstractPropertyConverter {
+    
+    /**
+     * 打开文件夹窗口时文件显示的过滤格式, 格式："des|filter1|filter2, des|filter2|filter3|..."
+     * 示例："Model File|*.j3o|*.obj|*.mesh.xml,All Files|*.*"
+     */
+    public final static String FEATURE_FILTERS = FileFieldConverter.class.getName() + ":filters";
 
     private final HBox layout = new HBox();
     private final TextField fileTextField = new TextField();
     private final Button btn = new Button("...");
     
+    private String lastValueSaved;
+    
+    private FileChooser fileChooser;
+    
     public FileFieldConverter() {
         layout.getStyleClass().add(StyleConstants.CLASS_HVBOX);
         layout.getChildren().addAll(fileTextField, btn);
         
-        btn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                openAssetsChooser();
-            }
+        btn.setOnAction((ActionEvent event) -> {
+            openAssetsChooser();
         });
         
         // 失去焦点时更新
@@ -50,12 +61,12 @@ public class FileFieldConverter extends AbstractPropertyConverter {
             if (newValue) {
                 return;
             }
-            updateToJme();
+            updateChangedAndSave();
         });
         // 按下Enter时更新
         fileTextField.setOnKeyPressed((KeyEvent event) -> {
             if (event.getCode() == KeyCode.ENTER) {
-                updateToJme();
+                updateChangedAndSave();
             }
         });
         
@@ -66,24 +77,37 @@ public class FileFieldConverter extends AbstractPropertyConverter {
         return layout;
     }
     
-    private void updateToJme() {
-        updateAttribute(fileTextField.getText());
+    private void updateChangedAndSave() {
+        String newValue = fileTextField.getText();
+        if (newValue == null) {
+            if (lastValueSaved == null) {
+                return;
+            }
+        } else if (newValue.equals(lastValueSaved)) {
+            return;
+        }
+        updateAttribute(newValue);
+        addUndoRedo(lastValueSaved, newValue);
+        lastValueSaved = newValue;
     }
     
     @Override
     public void updateUI(Object propertyValue) {
-        String value = Converter.getAsString(propertyValue);
-        if (value != null) {
-            fileTextField.setText(value);
+        lastValueSaved = Converter.getAsString(propertyValue);
+        if (lastValueSaved != null) {
+            fileTextField.setText(lastValueSaved);
         } else {
             fileTextField.setText("");
         }
     }
     
     private void openAssetsChooser() {
+        if (fileChooser == null) {
+            fileChooser = new FileChooser();
+            fileChooser.setTitle(Manager.getRes(ResConstants.COMMON_CHOOSER_FILE));
+            fileChooser.getExtensionFilters().addAll(getFilters());
+        }
         String assetsDir = Manager.getConfigManager().getMainAssetDir();
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle(Manager.getRes(ResConstants.COMMON_CHOOSER_FILE));
         fileChooser.setInitialDirectory(new File(assetsDir));
         File file = fileChooser.showOpenDialog(null);
         if (file != null && file.exists() && file.isFile()) {
@@ -93,7 +117,25 @@ public class FileFieldConverter extends AbstractPropertyConverter {
                 fileInAssets = fileInAssets.substring(1);
             }
             fileTextField.setText(fileInAssets);
-            updateToJme();
+            updateChangedAndSave();
         }
+    }
+    
+    private List<ExtensionFilter> getFilters() {
+        // 示例："Model File|*.j3o|*.obj|*.mesh.xml,All Files|*.*"
+        String[] filters = this.featureHelper.getAsArray(FEATURE_FILTERS);
+        if (filters != null && filters.length > 0) {
+            List<ExtensionFilter> efs = new ArrayList(filters.length);
+            for (String f : filters) {
+                if (f == null || f.trim().equals("")) {
+                    continue;
+                }
+                List<String> itemList = new ArrayList(Arrays.asList(f.split("\\|")));
+                String des = itemList.remove(0);
+                efs.add(new ExtensionFilter(des, itemList));
+            }
+            return efs;
+        }
+        return Collections.EMPTY_LIST;
     }
 }

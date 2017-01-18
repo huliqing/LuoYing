@@ -62,6 +62,14 @@ public interface Toolbar<F extends JmeEdit> {
     Tool getTool(String tool);
     
     /**
+     * 找到指定的工具
+     * @param <T>
+     * @param clazz
+     * @return 
+     */
+    <T extends Tool> T getTool(Class<? extends Tool> clazz);
+    
+    /**
      * 获取所有工具栏
      * @return 
      */

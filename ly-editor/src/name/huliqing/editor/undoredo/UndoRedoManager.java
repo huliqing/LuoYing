@@ -31,6 +31,7 @@ public class UndoRedoManager {
         if (undoList.size() > limit) {
             undoList.remove(0);
         }
+//        LOG.log(Level.INFO, "====UndoRedo, add={0}, size={1}", new Object[]{undoRedo, undoList.size()});
     }
     
     public synchronized void undo() {
@@ -40,6 +41,7 @@ public class UndoRedoManager {
         try {
             ur = undoList.pop();
             ur.undo();
+//            LOG.log(Level.INFO, "<<<<UndoRedo, add={0}, after size={1}", new Object[]{ur, undoList.size()});
             redoList.add(ur);
         } catch (Exception e) {
             LOG.log(Level.SEVERE, "Could not undo, ur=" + ur, e);

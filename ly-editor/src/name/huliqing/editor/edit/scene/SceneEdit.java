@@ -5,20 +5,24 @@
  */
 package name.huliqing.editor.edit.scene;
 
+import com.jme3.input.KeyInput;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.editor.Editor;
 import name.huliqing.editor.edit.SimpleJmeEdit;
 import name.huliqing.editor.edit.select.EntitySelectObj;
+import name.huliqing.editor.events.Event;
+import name.huliqing.editor.events.JmeEvent;
 import name.huliqing.editor.manager.SelectObjManager;
 import name.huliqing.editor.toolbar.EditToolbar;
+import name.huliqing.editor.tools.MoveTool;
 import name.huliqing.editor.undoredo.UndoRedo;
+import name.huliqing.fxswing.Jfx;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.constants.IdConstants;
 import name.huliqing.luoying.data.EntityData;
@@ -29,6 +33,7 @@ import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.game.Game;
 import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.object.scene.SceneListener;
+import name.huliqing.luoying.xml.DataFactory;
 
 /**
  *
@@ -38,6 +43,7 @@ public class SceneEdit extends SimpleJmeEdit<EntitySelectObj> implements SceneLi
 
     private static final Logger LOG = Logger.getLogger(SceneEdit.class.getName());
     private final PlayService playService = Factory.get(PlayService.class);
+    private final JfxSceneEdit jfxEdit;
 
     private Game game;
     private Scene scene;
@@ -45,16 +51,54 @@ public class SceneEdit extends SimpleJmeEdit<EntitySelectObj> implements SceneLi
     
     private final Map<EntityData, EntitySelectObj> objMap = new LinkedHashMap<EntityData, EntitySelectObj>();
     
-    public SceneEdit() {}
+    private final EditToolbar editToolbar = new EditToolbar();
+    private final JmeEvent delEvent = new JmeEvent("delete");
+    private final JmeEvent duplicateEvent = new JmeEvent("duplicate");
+    
+    public SceneEdit(JfxSceneEdit jfxEdit) {
+        this.jfxEdit = jfxEdit;
+    }
     
     @Override
     public void initialize(Editor editor) {
         super.initialize(editor);
-        setToolbar(new EditToolbar());
+        setToolbar(editToolbar);
+        
+        // 删除操作事件
+        delEvent.bindKey(KeyInput.KEY_X, true);
+        delEvent.addListener((Event e) -> {
+            if (e.isMatch() && selectObj != null) {
+                Vector2f cursorPos = editor.getInputManager().getCursorPosition();
+                Jfx.runOnJfx(() -> {
+                    jfxEdit.showDeleteConfirm(cursorPos.x, editor.getCamera().getHeight() - cursorPos.y, selectObj);
+                });
+            }
+        });
+        
+        // 复制操作
+        duplicateEvent.bindKey(KeyInput.KEY_D, true).bindKey(KeyInput.KEY_LSHIFT, true);
+        duplicateEvent.addListener((Event e) -> {
+            if (e.isMatch() && selectObj != null) {
+                selectObj.getObject().updateDatas();
+                EntityData ed = selectObj.getObject().getData().clone();
+                ed.setUniqueId(DataFactory.generateUniqueId()); // 需要生成一个新的唯一ID
+                addEntity(ed);
+                setSelected(ed);
+                // 转到移动工具激活并进行自由移动
+                MoveTool moveTool = editToolbar.getTool(MoveTool.class);
+                editToolbar.setActivated(moveTool, true);
+                moveTool.startFreeMove();
+            }
+        });
+        
+        delEvent.initialize();
+        duplicateEvent.initialize();
     }
     
     @Override
     public void cleanup() {
+        delEvent.cleanup();
+        duplicateEvent.cleanup();
         if (game != null && game.isInitialized()) {
             game.cleanup();
             game = null;
@@ -101,9 +145,9 @@ public class SceneEdit extends SimpleJmeEdit<EntitySelectObj> implements SceneLi
                 result = seo;
             }
         }
-        if (result != null) {
-            LOG.log(Level.INFO, "doPick, selectObj={0}", result.getObject().getData().getId());
-        }
+//        if (result != null) {
+//            LOG.log(Level.INFO, "doPick, selectObj={0}", result.getObject().getData().getId());
+//        }
         return result;
     }
 

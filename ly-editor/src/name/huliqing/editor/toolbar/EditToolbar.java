@@ -119,7 +119,6 @@ public class EditToolbar extends AbstractToolbar<SimpleJmeEdit> implements Event
     private void addToggleMapping(int keyInput, ToggleMappingEvent tme) {
         tme.bindKey(keyInput, true);
         tme.addListener(this);
-        tme.setPrior(2); // 优先级高一点，可以在按下按键后的同时激活某些工具功能。
         tme.initialize();
         toggleMapping.put(tme.tool, tme);
     }

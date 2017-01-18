@@ -29,6 +29,8 @@ public class AdvanceWaterEntitySelectObj extends EntitySelectObj<AdvanceWaterEnt
     private final Spatial controlObj = createControlObj();
     private final float MAX_RADIUS = Integer.MAX_VALUE;
     
+    private float controlObjScale;
+    
     public AdvanceWaterEntitySelectObj() {}
     
     @Override
@@ -36,13 +38,15 @@ public class AdvanceWaterEntitySelectObj extends EntitySelectObj<AdvanceWaterEnt
         super.initialize(form);
         form.getEditRoot().attachChild(controlObj);
         if (entity.getCenter() != null) {
-            setLocalTranslation(entity.getCenter());
+            setLocalTranslation(entity.getCenter().setY(entity.getWaterHeight()));
             setLocalScale(new Vector3f(entity.getRadius(),entity.getRadius(),entity.getRadius()));
+            controlObjScale = entity.getRadius();
         } else {
             Vector3f loc = entity.getSpatial().getLocalTranslation();
             loc.setY(entity.getWaterHeight());
             setLocalTranslation(loc);
             setLocalScale(new Vector3f(MAX_RADIUS, MAX_RADIUS, MAX_RADIUS));
+            controlObjScale = MAX_RADIUS;
         }
     }
 
@@ -54,14 +58,19 @@ public class AdvanceWaterEntitySelectObj extends EntitySelectObj<AdvanceWaterEnt
 
     @Override
     public void setLocalScale(Vector3f scale) {
-        super.setLocalScale(scale);
+//        super.setLocalScale(scale); // 不用父类的
         if (entity.getCenter() != null) {
-            controlObj.setLocalScale(scale.getX());
-            entity.setRadius(scale.getX());
+            controlObjScale = scale.x;
+            controlObj.setLocalScale(scale);
+            entity.setRadius(controlObjScale);
+            entity.getSpatial().setLocalScale(scale);
         } else {
+            // controlObj需要用于点击获取海水对象，所以必须设置和海水一样大小
             controlObj.setLocalScale(MAX_RADIUS);
-            entity.setRadius(0); // 0 表示无限大
+            entity.getSpatial().setLocalScale(MAX_RADIUS);
         }
+        entity.updateDatas();
+        notifyPropertyChanged("scale", entity.getSpatial().getLocalScale());
     }
 
     @Override
@@ -72,12 +81,15 @@ public class AdvanceWaterEntitySelectObj extends EntitySelectObj<AdvanceWaterEnt
 
     @Override
     public void setLocalTranslation(Vector3f location) {
-        super.setLocalTranslation(location);
         controlObj.setLocalTranslation(location);
         entity.setWaterHeight(location.y);
         if (entity.getCenter() != null) {
             entity.setCenter(location.clone());
         }
+        super.setLocalTranslation(location);
+        // 不能改自动改变这个参数，这会让海水变成有限的，而用户可能不一定要通过移动海水来改变类型。
+//        notifyPropertyChanged("center", entity.getCenter());
+        notifyPropertyChanged("waterHeight", location.y);
     }
     
     @Override

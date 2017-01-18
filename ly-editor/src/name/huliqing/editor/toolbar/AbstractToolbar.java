@@ -7,7 +7,6 @@ package name.huliqing.editor.toolbar;
 
 import com.jme3.util.SafeArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.editor.tools.Tool;
 import name.huliqing.editor.edit.JmeEdit;
@@ -100,6 +99,16 @@ public abstract class AbstractToolbar<F extends JmeEdit> implements Toolbar<F> {
         for (Tool t : tools.getArray()) {
             if (tool.equals(t.getName())) {
                return t;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public <T extends Tool> T getTool(Class<? extends Tool> clazz) {
+        for (Tool t : tools.getArray()) {
+            if (clazz.isAssignableFrom(t.getClass())) {
+               return (T) t;
             }
         }
         return null;

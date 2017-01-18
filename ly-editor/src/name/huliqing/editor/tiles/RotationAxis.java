@@ -58,7 +58,7 @@ public class RotationAxis extends Node implements AxisObj {
         Material mat = MaterialUtils.createUnshaded(color);
         mat.getAdditionalRenderState().setFaceCullMode(RenderState.FaceCullMode.Off);
         mat.getAdditionalRenderState().setDepthTest(false);
-        Geometry torusInner = new Geometry(name + "tours", new Torus(60, 4, 0.015f, 1.0f));
+        Geometry torusInner = new Geometry(name + "tours", new Torus(80, 6, 0.004f, 1.0f));
         torusInner.setMaterial(mat);
         
         // 用于优化点选

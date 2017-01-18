@@ -71,7 +71,9 @@ public class JmeKeyMapping extends AbstractKeyMapping {
      */
     @Override
     public void cleanup() {
-        inputManager.deleteMapping(mappingName);
+        if (inputManager.hasMapping(mappingName)) {
+            inputManager.deleteMapping(mappingName);
+        }
         mappingName = null;
         mappingResult = false;
         super.cleanup();

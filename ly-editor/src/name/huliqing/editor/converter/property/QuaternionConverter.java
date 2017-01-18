@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.converter.tiles;
+package name.huliqing.editor.converter.property;
 
 import com.jme3.math.Quaternion;
 import javafx.beans.value.ChangeListener;
@@ -28,7 +28,6 @@ import name.huliqing.luoying.xml.Converter;
 public class QuaternionConverter extends AbstractPropertyConverter{
     
     private final float[] temp = new float[3];
-    private final Quaternion qua = new Quaternion();
     
     private final VBox layout = new VBox();
     
@@ -47,6 +46,7 @@ public class QuaternionConverter extends AbstractPropertyConverter{
     private String lastX = "";
     private String lastY = "";
     private String lastZ = "";
+    private Quaternion lastValueSaved;
     
     private final ChangeListener<Boolean> focusedListener = (ObservableValue<? extends Boolean> observable
             , Boolean oldValue, Boolean newValue) -> {
@@ -113,8 +113,11 @@ public class QuaternionConverter extends AbstractPropertyConverter{
                 temp[0] = Float.parseFloat(lastX);
                 temp[1] = Float.parseFloat(lastY);
                 temp[2] = Float.parseFloat(lastZ);
+                Quaternion qua = new Quaternion();
                 qua.fromAngles(temp);
                 updateAttribute(qua);
+                addUndoRedo(lastValueSaved, new Quaternion(qua));
+                lastValueSaved = new Quaternion(qua);
             } catch (NumberFormatException e) {
                 // ignore
             }
@@ -123,10 +126,9 @@ public class QuaternionConverter extends AbstractPropertyConverter{
 
     @Override
     public void updateUI(Object propertyValue) {
-        Quaternion value = Converter.getAsQuaternion(propertyValue);
-        if (value != null) {
-            qua.set(value);
-            qua.toAngles(temp);
+        lastValueSaved = Converter.getAsQuaternion(propertyValue);
+        if (lastValueSaved != null) {
+            lastValueSaved.toAngles(temp);
             xField.setText(temp[0] + "");
             yField.setText(temp[1] + "");
             zField.setText(temp[2] + "");
