@@ -91,7 +91,7 @@ public abstract class AbstractDataConverter<E extends JfxAbstractEdit, T extends
         }
         
         // 隐藏指定的字段
-        List<String> hideFields = featureHelper.getAsList(ConverterManager.FEATURE_HIDE_FIELDS);
+        List<String> hideFields = featureHelper.getAsList(DataConverter.FEATURE_HIDE_FIELDS);
         if (hideFields != null) {
             hideFields.forEach(t -> {
                 PropertyConverter pc = propertyConverters.get(t);

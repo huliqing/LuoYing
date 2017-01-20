@@ -296,7 +296,6 @@ xs:time
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="entityBase">
-                    <xs:attribute ref="debug" />
                     <xs:attribute name="direction" type="xs:string" use="optional">
                         <xs:annotation>
                             <xs:documentation>直射光方向,默认: "0,-1,0"</xs:documentation>
@@ -318,7 +317,7 @@ xs:time
         </xs:annotation>
         <xs:complexType>
             <xs:complexContent>
-                <xs:extension base="entityModelBase">
+                <xs:extension base="entityBase">
                     <xs:attribute ref="debug" />
                     <xs:attribute name="sound" type="xs:string" use="required">
                         <xs:annotation><xs:documentation>关联到一个sound(sound.xml).</xs:documentation></xs:annotation>
@@ -475,9 +474,6 @@ xs:time
                             <xs:documentation>指定一个模型，通常使用一个水平平面，格式：“Models/effect/water.mesh.j3o”</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute ref="location" />
-                    <xs:attribute ref="rotation" />
-                    <xs:attribute ref="scale" />
                     <xs:attribute name="waterColor" type="xs:string" use="optional">
                         <xs:annotation><xs:documentation>e.g. "r,g,b,a"</xs:documentation></xs:annotation>
                     </xs:attribute>

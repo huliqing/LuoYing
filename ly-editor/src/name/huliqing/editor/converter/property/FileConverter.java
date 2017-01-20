@@ -30,13 +30,13 @@ import name.huliqing.luoying.xml.Converter;
  *
  * @author huliqing
  */
-public class FileFieldConverter extends AbstractPropertyConverter {
+public class FileConverter extends AbstractPropertyConverter {
     
     /**
      * 打开文件夹窗口时文件显示的过滤格式, 格式："des|filter1|filter2, des|filter2|filter3|..."
      * 示例："Model File|*.j3o|*.obj|*.mesh.xml,All Files|*.*"
      */
-    public final static String FEATURE_FILTERS = FileFieldConverter.class.getName() + ":filters";
+    public final static String FEATURE_FILTERS = FileConverter.class.getName() + ":filters";
 
     private final HBox layout = new HBox();
     private final TextField fileTextField = new TextField();
@@ -46,7 +46,7 @@ public class FileFieldConverter extends AbstractPropertyConverter {
     
     private FileChooser fileChooser;
     
-    public FileFieldConverter() {
+    public FileConverter() {
         layout.getStyleClass().add(StyleConstants.CLASS_HVBOX);
         layout.getChildren().addAll(fileTextField, btn);
         
@@ -98,6 +98,7 @@ public class FileFieldConverter extends AbstractPropertyConverter {
             fileTextField.setText(lastValueSaved);
         } else {
             fileTextField.setText("");
+            lastValueSaved = "";
         }
     }
     

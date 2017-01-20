@@ -118,6 +118,7 @@ public class PhysicsEntity extends NonModelEntity implements SceneListener {
     @Override
     public void cleanup() {
         scene.removeSceneListener(this);
+        bulletAppState.getPhysicsSpace().removeAll(scene.getRoot());
         LuoYing.getApp().getStateManager().detach(bulletAppState);
         super.cleanup();
     }

@@ -151,7 +151,7 @@ public class ObjectData implements Savable, Cloneable {
      * @param value 
      */
     public void setAttribute(String key, Object value) {
-        if (value == null) {
+        if (value == null || value.equals("")) {
             if (localData != null) {
                 localData.remove(key);
                 if (localData.isEmpty()) {

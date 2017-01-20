@@ -9,6 +9,7 @@ import com.jme3.math.ColorRGBA;
 import java.util.logging.Logger;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.paint.Color;
@@ -20,15 +21,16 @@ import name.huliqing.luoying.xml.Converter;
  *
  * @author huliqing
  */
-public class ColorFieldConverter extends AbstractPropertyConverter {
+public class ColorConverter extends AbstractPropertyConverter {
 
-    private static final Logger LOG = Logger.getLogger(ColorFieldConverter.class.getName());
+    private static final Logger LOG = Logger.getLogger(ColorConverter.class.getName());
 
     private final ColorPicker layout = new ColorPicker();
     private Color lastColorSaved;
     
-    public ColorFieldConverter() {
-        layout.prefWidthProperty().bind(root.widthProperty());
+    public ColorConverter() {
+        // 宽度要减少一些，不然会导致宽度BUG。
+        layout.prefWidthProperty().bind(root.widthProperty().subtract(10));
         
         // 颜色改变时持续更新，但不保存，只有在明确点击后(OnAction)的时候才保存
         // 这可避免用户在颜色面板上滑动改变颜色的时候产生很多历史记录存档。

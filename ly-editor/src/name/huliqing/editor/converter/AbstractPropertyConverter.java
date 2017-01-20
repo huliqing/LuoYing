@@ -11,7 +11,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.TitledPane;
 import name.huliqing.editor.edit.JfxAbstractEdit;
-import name.huliqing.editor.manager.ConverterManager;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
@@ -71,8 +70,8 @@ public abstract class AbstractPropertyConverter<E extends JfxAbstractEdit, T ext
         root.setAlignment(Pos.CENTER_LEFT);
         
         // features
-        boolean disabled = featureHelper.getAsBoolean(ConverterManager.FEATURE_FIELD_DISABLED);
-        boolean collapsed = featureHelper.getAsBoolean(ConverterManager.FEATURE_FIELD_COLLAPSED);
+        boolean disabled = featureHelper.getAsBoolean(PropertyConverter.FEATURE_DISABLED);
+        boolean collapsed = featureHelper.getAsBoolean(PropertyConverter.FEATURE_COLLAPSED);
         
         // Layout and features
         Node layout = createLayout();

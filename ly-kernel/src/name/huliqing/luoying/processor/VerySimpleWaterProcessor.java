@@ -216,12 +216,16 @@ public class VerySimpleWaterProcessor implements SceneProcessor {
     @Override
     public void cleanup() {
         // 注意：这里必须释放framebuffer,否则该framebuffer会一直常驻内存无法释放。
-        rm.removePreView(reflectionView);
-        reflectionView.setOutputFrameBuffer(null);
-        reflectionView.clearScenes();
-        reflectionView.clearProcessors();
-        reflectionView = null;
-        reflectionBuffer = null;
+        if (rm != null) {
+            rm.removePreView(reflectionView);
+        }
+        if (reflectionView != null) {
+            reflectionView.setOutputFrameBuffer(null);
+            reflectionView.clearScenes();
+            reflectionView.clearProcessors();
+            reflectionView = null;
+            reflectionBuffer = null;
+        }
     }
 
     protected void loadTextures(AssetManager manager) {

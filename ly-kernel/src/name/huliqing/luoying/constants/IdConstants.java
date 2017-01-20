@@ -117,6 +117,8 @@ public class IdConstants {
     public final static String SYS_ENTITY_ADVANCE_WATER = "sysEntityAdvanceWater";
     /** sysEntityBoundary */
     public final static String SYS_ENTITY_BOUNDARY = "sysEntityBoundary";
+    /** sysEntityAudio */
+    public final static String SYS_ENTITY_AUDIO = "sysEntityAudio";
     
     // =============================================================================
     // El

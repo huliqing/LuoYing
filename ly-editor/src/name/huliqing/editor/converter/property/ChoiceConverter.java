@@ -15,16 +15,16 @@ import name.huliqing.editor.converter.DataConverter;
 /**
  * @author huliqing
  */
-public class ChoiceFieldConverter extends AbstractPropertyConverter {
+public class ChoiceConverter extends AbstractPropertyConverter {
     
     /** 指定可选的项目列表，格式: "item1,item2,item3"*/
-    public final static String FEATURE_ITEMS = ChoiceFieldConverter.class.getName() + ":items";
+    public final static String FEATURE_ITEMS = ChoiceConverter.class.getName() + ":items";
 
     private final ChoiceBox<String> choice = new ChoiceBox();
     
     private String lastValueSaved;
     
-    public ChoiceFieldConverter() {
+    public ChoiceConverter() {
         // BUG，会让界面越来越宽
 //        choice.prefWidthProperty().bind(root.widthProperty()); 
 

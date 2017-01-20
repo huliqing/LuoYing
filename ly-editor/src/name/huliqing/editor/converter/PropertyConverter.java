@@ -17,6 +17,12 @@ import name.huliqing.luoying.xml.ObjectData;
  */
 public interface PropertyConverter<E extends JfxAbstractEdit, T extends ObjectData> {
     
+    /** 指定要DISABLED的字段，格式:"field1,field2,..." */
+    public final static String FEATURE_DISABLED = "disabled";
+    
+    /** 让字段折叠 */
+    public final static String FEATURE_COLLAPSED = "collapsed";
+    
     /**
      * 设置要处理的属性名称
      * @param property 

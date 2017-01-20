@@ -17,6 +17,9 @@ import name.huliqing.luoying.xml.ObjectData;
  */
 public interface DataConverter<E extends JfxAbstractEdit, T extends ObjectData> {
     
+    /** 指定要隐藏的字段, 格式:"field1,field2,..." */
+    public final static String FEATURE_HIDE_FIELDS = "hideFields";
+    
     /**
      * 获取数据
      * @return 

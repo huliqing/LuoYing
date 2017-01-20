@@ -16,12 +16,12 @@ import name.huliqing.luoying.xml.Converter;
 /**
  * @author huliqing
  */
-public class TextFieldConverter extends AbstractPropertyConverter {
+public class TextConverter extends AbstractPropertyConverter {
 
     private final TextField content = new TextField("");
     private String lastValueSaved;
 
-    public TextFieldConverter() {
+    public TextConverter() {
         // 失去焦点时更新
         content.focusedProperty().addListener((ObservableValue<? extends Boolean> observable
                 , Boolean oldValue, Boolean newValue) -> {

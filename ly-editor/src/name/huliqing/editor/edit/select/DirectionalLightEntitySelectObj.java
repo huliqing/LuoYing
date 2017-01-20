@@ -74,7 +74,8 @@ public class DirectionalLightEntitySelectObj extends EntitySelectObj<Directional
         rotation.mult(dir, dir);
         this.entity.setDirection(dir);
         line.setLocalRotation(rotation);
-        super.setLocalRotation(rotation); 
+        super.setLocalRotation(rotation);
+        notifyPropertyChanged("direction", dir);
     }
 
     @Override

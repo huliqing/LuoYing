@@ -10,8 +10,10 @@
     <!-- ========================================================================= -->
     
     <!--基本天空-->
-    <entitySkyBox id="sysEntitySkyBase" baseDir="LuoYing/Assets/Textures/Sky/" 
-            west="west.jpg" east="east.jpg" north="north.jpg" south="south.jpg" up="up.jpg" down="down.jpg" />
+    <entitySkyBox id="sysEntitySkyBase" 
+            west="LuoYing/Assets/Textures/Sky/west.jpg" east="LuoYing/Assets/Textures/Sky/east.jpg" 
+                  north="LuoYing/Assets/Textures/Sky/north.jpg" south="LuoYing/Assets/Textures/Sky/south.jpg" 
+                  up="LuoYing/Assets/Textures/Sky/up.jpg" down="LuoYing/Assets/Textures/Sky/down.jpg" />
     
     <!--地形基本配置：需要接收投影，需要静态物理-->
     <entitySimpleTerrain id="sysEntityTerrainBase" file="LuoYing/Assets/Models/unitBox.j3o" scale="100,1,100"  shadowMode="Receive" modules="sysModuleTerrainPhysics" />
@@ -89,6 +91,9 @@
     
     <!--内置包围盒-->
     <entitySimpleModel id="sysEntityBoundary" extends="sysEntityBoundaryBase" />
+    
+    <!-- 内置声音 -->
+    <entityAudio id="sysEntityAudio" sound="" />
     
     <!-- ========================================================================= -->
     <!-- 一些额外的参考配置，不能直接使用，根据应用和资源环境的不同实际情况，配置参数会有所不同 -->
