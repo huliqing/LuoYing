@@ -22,9 +22,12 @@ public interface JfxEdit<T extends JmeEdit> {
     
     void cleanup();
     
-    Editor getEditor();
+    void undo();
     
-    UndoRedoManager getUndoRedoManager();
+    void redo();
     
     void addUndoRedo(UndoRedo ur);
+    
+    Editor getEditor();
+    
 }

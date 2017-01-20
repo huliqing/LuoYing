@@ -15,6 +15,7 @@ import name.huliqing.editor.events.JmeEvent;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.editor.edit.JfxEdit;
 import name.huliqing.editor.events.JmeEventAppState;
+import name.huliqing.editor.undoredo.UndoRedo;
 
 /**
  *
@@ -23,7 +24,7 @@ import name.huliqing.editor.events.JmeEventAppState;
 public class Editor extends SimpleApplication{
     
     private List<EditorListener> listeners;
-    private JfxEdit editView;
+    private JfxEdit jfxEdit;
     private boolean initialized;
     
     @Override
@@ -52,8 +53,8 @@ public class Editor extends SimpleApplication{
     
     @Override
     public void simpleUpdate(float tpf) {
-        if (editView != null) {
-            editView.update(tpf);
+        if (jfxEdit != null) {
+            jfxEdit.update(tpf);
         }
     }
     
@@ -65,17 +66,35 @@ public class Editor extends SimpleApplication{
         }
     }
     
-    public JfxEdit getFormView() {
-        return editView;
+    public JfxEdit getJfxEdit() {
+        return jfxEdit;
     }
 
-    public void setFormView(JfxEdit newEditView) {
-        if (editView != null) {
-            editView.cleanup();
+    public void setJfxEdit(JfxEdit newJfxEdit) {
+        if (jfxEdit != null) {
+            jfxEdit.cleanup();
         }
-        editView = newEditView;
+        jfxEdit = newJfxEdit;
         if (initialized) {
-            editView.initialize(this);
+            jfxEdit.initialize(this);
+        }
+    }
+    
+    public void undo() {
+        if (jfxEdit != null) {
+            jfxEdit.undo();
+        }
+    }
+    
+    public void redo() {
+        if (jfxEdit != null) {
+            jfxEdit.redo();
+        }
+    }
+    
+    public void addUndoRedo(UndoRedo ur) {
+        if (jfxEdit != null) {
+            jfxEdit.addUndoRedo(ur);
         }
     }
     

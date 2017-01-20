@@ -7,7 +7,7 @@ package name.huliqing.editor.edit;
 
 import name.huliqing.editor.Editor;
 import name.huliqing.editor.toolbar.Toolbar;
-import name.huliqing.editor.undoredo.UndoRedoManager;
+import name.huliqing.editor.undoredo.UndoRedo;
 
 /**
  * 编辑器的3D编辑器接口,这个界面主要作为3D环境来编辑3D物体
@@ -22,6 +22,12 @@ public interface JmeEdit {
     void update(float tpf);
     
     void cleanup();
+    
+    void undo();
+    
+    void redo();
+    
+    void addUndoRedo(UndoRedo ur);
     
     /**
      * 设置工具栏
@@ -41,5 +47,4 @@ public interface JmeEdit {
     
     Editor getEditor();
     
-    UndoRedoManager getUndoRedoManager();
 }

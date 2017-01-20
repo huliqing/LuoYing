@@ -6,9 +6,12 @@
 package name.huliqing.editor.edit;
 
 import java.util.logging.Logger;
+import javafx.scene.input.DragEvent;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import name.huliqing.editor.Editor;
+import name.huliqing.editor.manager.EditManager;
 import name.huliqing.editor.undoredo.UndoRedo;
-import name.huliqing.editor.undoredo.UndoRedoManager;
 import name.huliqing.fxswing.Jfx;
 
 /**
@@ -24,6 +27,21 @@ public abstract class JfxAbstractEdit<T extends JmeEdit> implements JfxEdit<T> {
     protected T form;
     protected boolean formInitialized;
     protected boolean jfxInitialized;
+    
+    // 全局JFX编辑器根节点root
+    private Pane jfxEditZone; 
+    // 当前JFX编辑器的根节点
+    protected final Pane editRoot = new VBox();
+    
+    public JfxAbstractEdit() {
+        editRoot.addEventFilter(DragEvent.DRAG_ENTERED, (DragEvent event) -> {
+            jfxOnDragStarted();
+        });
+        editRoot.addEventFilter(DragEvent.DRAG_DONE, (DragEvent event) -> {
+            jfxOnDragEnded();
+        });
+        editRoot.setStyle("-fx-padding:0;");
+    }
 
     @Override
     public final void initialize(Editor editor) {
@@ -36,12 +54,16 @@ public abstract class JfxAbstractEdit<T extends JmeEdit> implements JfxEdit<T> {
             if (form != null) {
                 form.initialize(editor);
                 formInitialized = true;
-                LOG.info(">>>>JmeFormInitialized");
+                LOG.info("<<<<JmeEditInitialized");
             }
             Jfx.runOnJfx(() -> {
+                jfxEditZone = EditManager.getJfxEditZone();
+                jfxEditZone.getChildren().add(editRoot);
+                editRoot.prefWidthProperty().bind(jfxEditZone.widthProperty());
+                editRoot.prefHeightProperty().bind(jfxEditZone.heightProperty());
                 jfxInitialize();
                 jfxInitialized = true;
-                LOG.info(">>>>JFXInitialized");
+                LOG.info("<<<<JFXEditInitialized");
             });
         });
     }
@@ -58,14 +80,44 @@ public abstract class JfxAbstractEdit<T extends JmeEdit> implements JfxEdit<T> {
         // 先清理jfx
         if (jfxInitialized) {
             jfxCleanup();
-            LOG.info(">>>>----JFXCleanup");
+            editRoot.prefWidthProperty().unbind();
+            editRoot.prefHeightProperty().unbind();
+            jfxEditZone.getChildren().remove(editRoot);
+            LOG.info(">>>>----JFXEditCleanup");
         }
         // 再清理3d编辑器
         if (formInitialized) {
             Jfx.runOnJme(() -> {
                 form.cleanup();
-                LOG.info(">>>>----JmeFormCleanup");
+                LOG.info(">>>>----JmeEditCleanup");
             });            
+        }
+    }
+
+    @Override
+    public void undo() {
+        if (form != null) {
+            Jfx.runOnJme(() -> {
+                form.undo();
+            });
+        }
+    }
+
+    @Override
+    public void redo() {
+        if (form != null) {
+            Jfx.runOnJme(() -> {
+                form.redo();
+            });
+        }
+    }
+    
+    @Override
+    public void addUndoRedo(UndoRedo ur) {
+        if (form != null) {
+            Jfx.runOnJme(() -> {
+                form.addUndoRedo(ur);
+            });
         }
     }
     
@@ -73,30 +125,23 @@ public abstract class JfxAbstractEdit<T extends JmeEdit> implements JfxEdit<T> {
     public Editor getEditor() {
         return editor;
     }
-
-    @Override
-    public UndoRedoManager getUndoRedoManager() {
-        if (form != null) {
-            return form.getUndoRedoManager();
-        }
-        return null;
-    }
-
-    @Override
-    public void addUndoRedo(UndoRedo ur) {
-        if (form != null) {
-            form.getUndoRedoManager().add(ur);
-        }
-    }
     
-    public void jfxOnDragStarted() {
+    /**
+     * 当监听到有鼠标拖放事件时该方法被调用
+     */
+    protected void jfxOnDragStarted() {
+//        System.out.println("jfxOnDragStarted");
         // 由子类实现
     }
     
-    public void jfxOnDragEnded() {
+    /**
+     * 当监听到鼠标拖放事件结束时该方法被调用。
+     */
+    protected void jfxOnDragEnded() {
         // 由子类实现
+//        System.out.println("jfxOnDragEnded");
     }
-
+    
     /**
      * 初始化JFX界面
      */

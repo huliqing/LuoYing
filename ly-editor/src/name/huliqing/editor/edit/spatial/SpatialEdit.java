@@ -24,9 +24,9 @@ import name.huliqing.luoying.manager.PickManager;
  * 编辑单个Spatial的编辑器
  * @author huliqing
  */ 
-public class SpatialEditForm extends SimpleJmeEdit {
+public class SpatialEdit extends SimpleJmeEdit {
 
-    private static final Logger LOG = Logger.getLogger(SpatialEditForm.class.getName());
+    private static final Logger LOG = Logger.getLogger(SpatialEdit.class.getName());
     private final Node root = new Node();
 
     // Spatia文件绝对路径

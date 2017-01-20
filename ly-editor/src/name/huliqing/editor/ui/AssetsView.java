@@ -219,12 +219,10 @@ public class AssetsView extends ScrollPane implements ConfigChangedListener {
         clipboardContent.put(DataFormat.FILES, files);
         db.setContent(clipboardContent);
         e.consume();
-        EditManager.notifyDragStarted();
     }
     
     private void doDragDone(DragEvent e) {
         e.consume();
-        EditManager.notifyDragEnded();
         LOG.log(Level.INFO, "doDragDone.");
     }
 

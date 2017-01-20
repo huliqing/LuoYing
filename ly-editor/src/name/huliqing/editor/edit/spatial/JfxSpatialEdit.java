@@ -8,7 +8,6 @@ package name.huliqing.editor.edit.spatial;
 import java.util.logging.Logger;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import name.huliqing.editor.edit.JfxAbstractEdit;
@@ -20,31 +19,28 @@ import name.huliqing.fxswing.Jfx;
  * Spatial编辑UI界面
  * @author huliqing
  */
-public class JfxSpatialEditView extends JfxAbstractEdit<SpatialEditForm> {
+public class JfxSpatialEdit extends JfxAbstractEdit<SpatialEdit> {
 
-    private static final Logger LOG = Logger.getLogger(JfxSpatialEditView.class.getName());
+    private static final Logger LOG = Logger.getLogger(JfxSpatialEdit.class.getName());
 
-    private final Pane root;
     private Region editPanel;
     private Region toolbarView;
     
     // editPanel不能完全透明，完全透明则响应不了事件，在响应事件时还需要设置为visible=true
     private final static String STYLE_EDIT_PANEL = "-fx-background-color:rgba(0,0,0,0.01)";
     
-    public JfxSpatialEditView(Pane root) {
-        this.root = root;
-        this.form = new SpatialEditForm();
+    public JfxSpatialEdit() {
+        this.form = new SpatialEdit();
     }
 
     @Override
     protected void jfxInitialize() {
         editPanel = new VBox();
         toolbarView = new ToolBarView(form);
-        root.getChildren().addAll(editPanel, toolbarView);
+        editRoot.getChildren().addAll(editPanel, toolbarView);
         
-        // editPanel放在splitPane中，不能绑定min宽度，否则拉大后无法缩小，让其自动大小就可以
-//        editPanel.minWidthProperty().bind(root.widthProperty()); 
-        editPanel.prefHeightProperty().bind(root.heightProperty().subtract(toolbarView.heightProperty()));
+        editPanel.prefWidthProperty().bind(editRoot.widthProperty());
+        editPanel.prefHeightProperty().bind(editRoot.heightProperty().subtract(toolbarView.heightProperty()));
         editPanel.setVisible(false);
         editPanel.setStyle(STYLE_EDIT_PANEL);
         editPanel.setOnDragOver(e -> {
@@ -63,6 +59,8 @@ public class JfxSpatialEditView extends JfxAbstractEdit<SpatialEditForm> {
             e.consume();
         });
         
+        toolbarView.prefWidthProperty().bind((editRoot.widthProperty()));
+        
         // 强制刷新一下UI，必须的，否则界面无法实时刷新(JFX嵌入Swing的一个BUG)
         Jfx.jfxForceUpdate();
         Jfx.jfxCanvasBind(editPanel);
@@ -70,8 +68,10 @@ public class JfxSpatialEditView extends JfxAbstractEdit<SpatialEditForm> {
 
     @Override
     protected void jfxCleanup() {
-        root.getChildren().remove(editPanel);
-        root.getChildren().remove(toolbarView);
+        toolbarView.prefWidthProperty().unbind();
+        editPanel.prefWidthProperty().unbind();
+        editPanel.prefHeightProperty().unbind();
+        editRoot.getChildren().removeAll(editPanel, toolbarView);
     }
 
     @Override

@@ -58,6 +58,21 @@ public abstract class JmeAbstractEdit implements JmeEdit {
     }
 
     @Override
+    public void undo() {
+        undoRedoManager.undo();
+    }
+
+    @Override
+    public void redo() {
+        undoRedoManager.redo();
+    }
+    
+    @Override
+    public void addUndoRedo(UndoRedo undoRedo) {
+        undoRedoManager.add(undoRedo);
+    }
+    
+    @Override
     public void setToolbar(Toolbar newToolbar) {
         if (toolbar != null && toolbar.isInitialized()) {
             toolbar.cleanup();
@@ -95,13 +110,5 @@ public abstract class JmeAbstractEdit implements JmeEdit {
     public Editor getEditor() {
         return editor;
     }
-    
-    @Override
-    public UndoRedoManager getUndoRedoManager() {
-        return undoRedoManager;
-    }
-    
-    public void addUndoRedo(UndoRedo undoRedo) {
-        undoRedoManager.add(undoRedo);
-    }
+
 }

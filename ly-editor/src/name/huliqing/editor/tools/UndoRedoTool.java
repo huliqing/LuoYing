@@ -53,9 +53,9 @@ public class UndoRedoTool extends EditTool {
         // 优先redo,后再undo,因为按键存在冲突
         if (e.isMatch() && EVENT_UNDO_REDO.equals(e.getName())) {
             if (ctrPressed && shiftPressed) {
-                form.getUndoRedoManager().redo();
+                form.redo();
             } else if (ctrPressed) {
-                form.getUndoRedoManager().undo();
+                form.undo();
             }
         }
     }

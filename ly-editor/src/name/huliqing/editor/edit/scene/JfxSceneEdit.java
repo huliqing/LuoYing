@@ -49,7 +49,6 @@ public class JfxSceneEdit extends JfxAbstractEdit<SceneEdit>
 
     private static final Logger LOG = Logger.getLogger(JfxSceneEdit.class.getName());
 
-    private final Pane root;
     private final SceneEditLayout layout = new SceneEditLayout();
     
     private HBox propertyPanel;
@@ -74,8 +73,7 @@ public class JfxSceneEdit extends JfxAbstractEdit<SceneEdit>
     private final MenuItem delBtn = new MenuItem(Manager.getRes(ResConstants.POPUP_DELETE));
     private EntitySelectObj delTarget;
     
-    public JfxSceneEdit(Pane root) {
-        this.root = root;
+    public JfxSceneEdit() {
         this.form = new SceneEdit(this);
         this.form.addSimpleEditListener(this);
         
@@ -92,7 +90,7 @@ public class JfxSceneEdit extends JfxAbstractEdit<SceneEdit>
     
     @Override
     protected void jfxInitialize() {
-        root.getChildren().add(layout);
+        editRoot.getChildren().add(layout);
         propertyPanel = new HBox();
         editPanel = new VBox();
         components = new VBox();
@@ -105,8 +103,8 @@ public class JfxSceneEdit extends JfxAbstractEdit<SceneEdit>
         layout.setZoneToolbar(toolbarView);
         layout.buildLayout();
         
-        layout.prefWidthProperty().bind(root.widthProperty());
-        layout.prefHeightProperty().bind(root.heightProperty());
+        layout.prefWidthProperty().bind(editRoot.widthProperty());
+        layout.prefHeightProperty().bind(editRoot.heightProperty());
         
         editPanel.setVisible(false);
         editPanel.setStyle(STYLE_EDIT_PANEL);
@@ -143,7 +141,9 @@ public class JfxSceneEdit extends JfxAbstractEdit<SceneEdit>
     
     @Override
     protected void jfxCleanup() {
-        root.getChildren().remove(layout);
+        layout.prefWidthProperty().unbind();
+        layout.prefHeightProperty().unbind();
+        editRoot.getChildren().remove(layout);
     }
     
     public void setScene(String sceneId) {

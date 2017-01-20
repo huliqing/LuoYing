@@ -6,7 +6,6 @@
 package name.huliqing.editor.components;
 
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -76,19 +75,17 @@ public class EntityComponents extends AbstractComponents {
     }
 
     private void doDragDetected(MouseEvent e) {
-        LOG.log(Level.INFO, "EntityComponents: doDragDetected.");
+//        LOG.log(Level.INFO, "EntityComponents: doDragDetected.");
         Component selected = getMainSelectItem();
         Dragboard db = listView.startDragAndDrop(TransferMode.ANY);
         ClipboardContent clipboardContent = new ClipboardContent();
         clipboardContent.put(DataFormatConstants.COMPONENT_ENTITY, selected);
         db.setContent(clipboardContent);
         e.consume();
-        EditManager.notifyDragStarted();
     }
 
     private void doDragDone(DragEvent e) {
-        e.consume();
-        EditManager.notifyDragEnded();
-        LOG.log(Level.INFO, "EntityComponents: doDragDone.");
+        e.consume(); // 不要直接取消事件传递
+//        LOG.log(Level.INFO, "EntityComponents: doDragDone.");
     }
 }

@@ -8,6 +8,7 @@ package name.huliqing.editor;
 import com.jme3.system.AppSettings;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.input.DragEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -15,6 +16,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import name.huliqing.editor.edit.JfxEdit;
 import name.huliqing.editor.manager.EditManager;
 import name.huliqing.editor.ui.MenuView;
 import name.huliqing.editor.ui.ResourceView;
@@ -89,29 +91,27 @@ public class Starter {
             final KeyCombination redo = new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN);
             @Override
             public void handle(KeyEvent ke) {
-                if (undo.match(ke)) {
-                    // xxx 将undo事件转换到jme
-                    // 测试代码
-                    System.out.println("Jfx key handler match:" + undo);
-//                    Editor ed = (Editor) Jfx.getJmeApp();
-//                    JfxSceneEdit je = (JfxSceneEdit) ed.getFormView();
-//                    UndoRedoManager urm = je.getUndoRedoManager();
-//                    Jfx.runOnJme(() -> {
-//                        urm.undo();
-//                    });
-                }
                 if(redo.match(ke)) {
-                    // xxx 将redo事件转换到jme
-                    System.out.println("Jfx key handler match:" + redo);
-                    // 测试代码
-//                    Editor ed = (Editor) Jfx.getJmeApp();
-//                    JfxSceneEdit je = (JfxSceneEdit) ed.getFormView();
-//                    UndoRedoManager urm = je.getUndoRedoManager();
-//                    Jfx.runOnJme(() -> {
-//                        urm.redo();
-//                    });
+                    ((Editor) Jfx.getJmeApp()).redo();
+                } else if (undo.match(ke)) {
+                    ((Editor) Jfx.getJmeApp()).undo();
                 }
             }
         });
+        
+//        Jfx.getJfxRoot().addEventFilter(DragEvent.DRAG_ENTERED, new EventHandler<DragEvent>() {
+//            @Override
+//            public void handle(DragEvent event) {
+//                System.out.println("on drag entered");
+//                 JfxEdit je = ((Editor) Jfx.getJmeApp()).getJfxEdit();
+//                 
+//            }
+//        });
+//        Jfx.getJfxRoot().addEventFilter(DragEvent.DRAG_DONE, new EventHandler<DragEvent>() {
+//            @Override
+//            public void handle(DragEvent event) {
+//                System.out.println("on drag done.");
+//            }
+//        });
     }
 }

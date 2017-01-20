@@ -23,4 +23,4 @@ ok.旋转操作controlObj的线条太粗
 .3d编辑中，"自由操作"中的Move,Rotation,Scale存在历史记录丢失的BUG。
 .Undo,Redo事件要从JFX转换到JME中
 .public void jfxOnDragStarted, jfxOnDragEnded(), 要使用JFX全局监听的方式才安全。see Starter
-
+.ObjectData在设置参数的时候要限制空格,以避免Entity在初始化的时候的BUG产生

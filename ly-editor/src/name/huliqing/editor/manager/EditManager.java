@@ -9,7 +9,7 @@ import javafx.scene.layout.Pane;
 import name.huliqing.editor.Editor;
 import name.huliqing.editor.edit.JfxAbstractEdit;
 import name.huliqing.editor.edit.scene.JfxSceneEdit;
-import name.huliqing.editor.edit.spatial.JfxSpatialEditView;
+import name.huliqing.editor.edit.spatial.JfxSpatialEdit;
 import name.huliqing.fxswing.Jfx;
 import name.huliqing.luoying.constants.IdConstants;
 import name.huliqing.editor.edit.JfxEdit;
@@ -26,6 +26,10 @@ public class EditManager {
         EditManager.jfxEditZone = jfxEditZone;
     }
     
+    public final static Pane getJfxEditZone() {
+        return jfxEditZone;
+    }
+    
     public static void openTestFormView() {
 //        Editor editor = (Editor) Jfx.getJmeApp();
 //        JfxSceneEditView ev = new JfxSceneEditView(jfxEditZone);
@@ -35,34 +39,34 @@ public class EditManager {
     
     public static void openSpatialEditor(String fileAbsolutePath) {
         Editor editor = (Editor) Jfx.getJmeApp();
-        JfxEdit ev = editor.getFormView();
-        if (ev instanceof JfxSpatialEditView) {
-            ((JfxSpatialEditView) ev).setFilePath(fileAbsolutePath);
+        JfxEdit ev = editor.getJfxEdit();
+        if (ev instanceof JfxSpatialEdit) {
+            ((JfxSpatialEdit) ev).setFilePath(fileAbsolutePath);
         } else {
-            JfxSpatialEditView newEv = new JfxSpatialEditView(jfxEditZone);
+            JfxSpatialEdit newEv = new JfxSpatialEdit();
             newEv.setFilePath(fileAbsolutePath);
-            editor.setFormView(newEv);
+            editor.setJfxEdit(newEv);
         }
     }
     
     public static void openSceneEditor(String sceneId) {
         Editor editor = (Editor) Jfx.getJmeApp();
-        JfxSceneEdit newEv = new JfxSceneEdit(jfxEditZone);
+        JfxSceneEdit newEv = new JfxSceneEdit();
         newEv.setScene(sceneId);
-        editor.setFormView(newEv);
+        editor.setJfxEdit(newEv);
     }
 
-    public static void notifyDragStarted() {
-        Editor editor = (Editor) Jfx.getJmeApp();
-        JfxAbstractEdit sev = (JfxAbstractEdit) editor.getFormView();
-        sev.jfxOnDragStarted();
-    }
-    
-    public static void notifyDragEnded() {
-        Editor editor = (Editor) Jfx.getJmeApp();
-        JfxAbstractEdit sev = (JfxAbstractEdit) editor.getFormView();
-        sev.jfxOnDragEnded();
-    }
+//    public static void notifyDragStarted() {
+//        Editor editor = (Editor) Jfx.getJmeApp();
+//        JfxAbstractEdit sev = (JfxAbstractEdit) editor.getJfxEdit();
+//        sev.jfxOnDragStarted();
+//    }
+//    
+//    public static void notifyDragEnded() {
+//        Editor editor = (Editor) Jfx.getJmeApp();
+//        JfxAbstractEdit sev = (JfxAbstractEdit) editor.getJfxEdit();
+//        sev.jfxOnDragEnded();
+//    }
     
     
 }
