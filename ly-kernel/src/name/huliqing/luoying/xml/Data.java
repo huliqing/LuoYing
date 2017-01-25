@@ -451,7 +451,12 @@ public class Data implements Savable {
      * @return 
      */
     public final <T extends Savable> T getAsSavable(String key) {
-        Object value = data.get(key);
+        Object value = getAttribute(key);
+        return (T) value;
+    }
+    
+    public final <T extends ObjectData> T getAsObjectData(String key) {
+        Object value = getAttribute(key);
         return (T) value;
     }
     

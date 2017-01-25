@@ -32,9 +32,10 @@ public class ComponentManager {
         sceneEntities.add(new Component(IdConstants.SYS_ENTITY_SIMPLE_WATER, "Simple Water"));
         sceneEntities.add(new Component(IdConstants.SYS_ENTITY_ADVANCE_WATER, "Advance Water"));
         sceneEntities.add(new Component(IdConstants.SYS_ENTITY_SKY, "Sky"));
-        sceneEntities.add(new Component(IdConstants.SYS_ENTITY_TERRAIN, "Terrain"));
+        sceneEntities.add(new Component(IdConstants.SYS_ENTITY_TERRAIN, "SimpleTerrain"));
         sceneEntities.add(new Component(IdConstants.SYS_ENTITY_TREE, "Tree"));
         sceneEntities.add(new Component(IdConstants.SYS_ENTITY_AUDIO, "Audio"));
+        sceneEntities.add(new Component("AdvanceTerrain", "AdvanceTerrain"));
         
         COMPONENTS.put("SceneEntity", sceneEntities);
     }

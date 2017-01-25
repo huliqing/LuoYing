@@ -1,0 +1,84 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package name.huliqing.editor.edit.terrain;
+
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
+import name.huliqing.editor.constants.ResConstants;
+import name.huliqing.editor.manager.Manager;
+
+/**
+ *
+ * @author huliqing
+ */
+public class JfxTerrainCreateForm extends VBox {
+    private final GridPane grid = new GridPane();
+    private final Label totalSizeLabel = new Label("Total Size: ");
+    private final Label patchSizeLabel = new Label("Patch Size: ");
+    // The size of one side of the texture, eg. 512. This will be used to blend several textures together into one texture for
+    // the terrain. The larger the size, the more detailed the image. But it will use more memory and possibly slow 
+    // down the editor. You cannot change this value after it is set!
+    private final Label alphaTextureSizeLabel = new Label("Alpha Texture Size: ");
+    
+    private final TextField totalSizeField = new TextField();
+    private final TextField patchSizeField = new TextField();
+    private final TextField alphaTextureSizeField = new TextField();
+    
+    private final AnchorPane btnPane = new AnchorPane();
+    private final Button ok = new Button(Manager.getRes(ResConstants.COMMON_OK));
+    private final Button cancel = new Button(Manager.getRes(ResConstants.COMMON_CANCEL));
+    
+    public JfxTerrainCreateForm() {
+        getChildren().addAll(grid, btnPane);
+        
+        grid.addRow(0, totalSizeLabel, totalSizeField);
+        grid.addRow(1, patchSizeLabel, patchSizeField);
+        grid.addRow(2, alphaTextureSizeLabel, alphaTextureSizeField);
+        
+        GridPane.setHgrow(totalSizeField, Priority.ALWAYS);
+        GridPane.setHgrow(patchSizeField, Priority.ALWAYS);
+        
+        btnPane.getChildren().addAll(ok, cancel);
+        AnchorPane.setTopAnchor(ok, 10.0);
+        AnchorPane.setLeftAnchor(ok, 50.0);
+        
+        AnchorPane.setTopAnchor(cancel, 10.0);
+        AnchorPane.setRightAnchor(cancel, 50.0);
+        btnPane.prefHeight(50);
+        
+        totalSizeField.setPromptText("Must be power of 2.");
+        patchSizeField.setPromptText("Must be power of 2 and less than Total Size.");
+        alphaTextureSizeField.setPromptText("The size of one side of the texture, eg. 512.");
+        
+        grid.setVgap(10);
+        GridPane.setHalignment(totalSizeLabel, HPos.RIGHT);
+        GridPane.setHalignment(patchSizeLabel, HPos.RIGHT);
+        GridPane.setHalignment(alphaTextureSizeLabel, HPos.RIGHT);
+        setPadding(new Insets(10));
+        setMinWidth(400);
+        
+        // for debug
+//        setStyle("-fx-border: solid inside;-fx-border-width:1;-fx-border-color:red;");
+    }
+    
+    public void setOnOk(EventHandler<ActionEvent> e) {
+        ok.setOnAction(e);
+    }
+    
+    public void setOnCancel(EventHandler<ActionEvent> e) {
+        cancel.setOnAction(e);
+    }
+}

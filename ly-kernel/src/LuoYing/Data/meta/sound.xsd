@@ -52,7 +52,17 @@ xs:time
                         <xs:documentation>default: "0"</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
+                <xs:attribute name="positional" type="bool" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>default: "1"</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
                 <xs:attribute name="innerAngle" type="xs:decimal" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>[0,360], default: "360" </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="outerAngle" type="xs:decimal" use="optional">
                     <xs:annotation>
                         <xs:documentation>[0,360], default: "360" </xs:documentation>
                     </xs:annotation>
@@ -67,19 +77,9 @@ xs:time
                         <xs:documentation>default: "200"</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:attribute name="outerAngle" type="xs:decimal" use="optional">
-                    <xs:annotation>
-                        <xs:documentation>[0,360], default: "360" </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
                 <xs:attribute name="pitch" type="xs:decimal" use="optional">
                     <xs:annotation>
                         <xs:documentation>default: "1.0"</xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="positional" type="bool" use="optional">
-                    <xs:annotation>
-                        <xs:documentation>default: "1"</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
                 <xs:attribute name="refDistance" type="xs:decimal" use="optional">

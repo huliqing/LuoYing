@@ -8,6 +8,7 @@ package name.huliqing.editor.edit.spatial;
 import java.util.logging.Logger;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import name.huliqing.editor.edit.JfxAbstractEdit;
@@ -23,20 +24,20 @@ public class JfxSpatialEdit extends JfxAbstractEdit<SpatialEdit> {
 
     private static final Logger LOG = Logger.getLogger(JfxSpatialEdit.class.getName());
 
-    private Region editPanel;
+    private Pane editPanel;
     private Region toolbarView;
     
     // editPanel不能完全透明，完全透明则响应不了事件，在响应事件时还需要设置为visible=true
     private final static String STYLE_EDIT_PANEL = "-fx-background-color:rgba(0,0,0,0.01)";
     
     public JfxSpatialEdit() {
-        this.form = new SpatialEdit();
+        this.jmeEdit = new SpatialEdit();
     }
 
     @Override
     protected void jfxInitialize() {
         editPanel = new VBox();
-        toolbarView = new ToolBarView(form);
+        toolbarView = new ToolBarView(jmeEdit);
         editRoot.getChildren().addAll(editPanel, toolbarView);
         
         editPanel.prefWidthProperty().bind(editRoot.widthProperty());
@@ -88,7 +89,13 @@ public class JfxSpatialEdit extends JfxAbstractEdit<SpatialEdit> {
 
     public void setFilePath(String abstractFilePath) {
         Jfx.runOnJme(() -> {
-            form.setFilePath(abstractFilePath);
+            jmeEdit.setFilePath(abstractFilePath);
         });
     }
+
+    @Override
+    public Pane getPropertyPanel() {
+        return editPanel;
+    }
+    
 }

@@ -15,7 +15,7 @@ import name.huliqing.editor.events.JmeEvent;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.editor.edit.JfxEdit;
 import name.huliqing.editor.events.JmeEventAppState;
-import name.huliqing.editor.undoredo.UndoRedo;
+import name.huliqing.editor.edit.UndoRedo;
 
 /**
  *

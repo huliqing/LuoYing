@@ -21,7 +21,7 @@ import name.huliqing.editor.events.JmeEvent;
 import name.huliqing.editor.manager.SelectObjManager;
 import name.huliqing.editor.toolbar.EditToolbar;
 import name.huliqing.editor.tools.MoveTool;
-import name.huliqing.editor.undoredo.UndoRedo;
+import name.huliqing.editor.edit.UndoRedo;
 import name.huliqing.fxswing.Jfx;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.constants.IdConstants;

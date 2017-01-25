@@ -169,6 +169,7 @@ import name.huliqing.luoying.object.entity.impl.ChaseCameraEntity;
 import name.huliqing.luoying.object.entity.impl.AmbientLightEntity;
 import name.huliqing.luoying.object.entity.impl.DirectionalLightEntity;
 import name.huliqing.luoying.loader.ActorDataLoader;
+import name.huliqing.luoying.loader.AudioEntityDataLoader;
 import name.huliqing.luoying.loader.DefineDataLoader;
 import name.huliqing.luoying.loader.EffectDataLoader;
 import name.huliqing.luoying.loader.EntityDataLoader;
@@ -509,10 +510,10 @@ public class LuoYing {
         // Emitter
         DataFactory.register("emitter",  EmitterData.class, EmitterDataLoader.class, Emitter.class);
         
-        // Env
+        // Entity
         DataFactory.register("entityAdvanceWater", EntityData.class, EntityDataLoader.class, AdvanceWaterEntity.class);
         DataFactory.register("entityAmbientLight", EntityData.class, EntityDataLoader.class, AmbientLightEntity.class);
-        DataFactory.register("entityAudio", ModelEntityData.class, EntityDataLoader.class, AudioEntity.class);
+        DataFactory.register("entityAudio", ModelEntityData.class, AudioEntityDataLoader.class, AudioEntity.class);
         DataFactory.register("entityChaseCamera", EntityData.class, EntityDataLoader.class, ChaseCameraEntity.class);
         DataFactory.register("entityDirectionalLight", EntityData.class, EntityDataLoader.class, DirectionalLightEntity.class);
         DataFactory.register("entityDirectionalLightFilterShadow", EntityData.class, EntityDataLoader.class, DirectionalLightFilterShadowEntity.class);
@@ -656,6 +657,7 @@ public class LuoYing {
         loadData("/LuoYing/Data/scene.xml");
         loadData("/LuoYing/Data/progress.xml");
         loadData("/LuoYing/Data/anim.xml");
+        loadData("/LuoYing/Data/sound.xml");
         
 //        loadData("/LuoYing/Data/config.xml");
 //        loadData("/LuoYing/Data/actor.xml");
@@ -687,7 +689,6 @@ public class LuoYing {
 //        // 武器槽位配置
 //        loadData("/LuoYing/Data/slot.xml");
 //
-//        loadData("/LuoYing/Data/sound.xml");
 //        loadData("/LuoYing/Data/state.xml");
 //        loadData("/LuoYing/Data/talent.xml");
 //        loadData("/LuoYing/Data/task.xml");

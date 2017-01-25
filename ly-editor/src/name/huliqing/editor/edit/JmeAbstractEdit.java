@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.editor.Editor;
 import name.huliqing.editor.toolbar.Toolbar;
-import name.huliqing.editor.undoredo.UndoRedo;
-import name.huliqing.editor.undoredo.UndoRedoManager;
 
 /**
  *

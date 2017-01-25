@@ -173,7 +173,8 @@ public class EntitiesPropertyConverter extends AbstractPropertyConverter<JfxScen
                 protected void updateItem(EntityData item, boolean empty) {
                     super.updateItem(item, empty);
                     if (!empty && item != null) {
-                        setText(item.getId() + "(" + item.getUniqueId() + ")");
+//                        setText(item.getId() + "(" + item.getUniqueId() + ")");
+                        setText(item.getId());
                     } else {
                         setText(null); // 必须设置为null,否则会有重复数据可能(在动态添加item的时候)
                     }

@@ -17,4 +17,6 @@ public class AssetConstants {
     public final static String INTERFACE_TOOL_SCALE = "Interface/tools/scale.png";
     
     public final static String INTERFACE_ICON_SUN = "Interface/icon/sun.png";
+    
+    public final static String MATERIAL_TERRAIN_LIGHTING = "Common/MatDefs/Terrain/TerrainLighting.j3md";
 }

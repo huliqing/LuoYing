@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.undoredo;
+package name.huliqing.editor.edit;
 
 import java.util.Stack;
 import java.util.logging.Level;

@@ -58,6 +58,11 @@
     visibility: visible;
 }
 
+/*.scroll-pane .scroll-bar:vertical {
+    -fx-unit-increment: 30 ;
+    -fx-block-increment: 30 ;
+}*/
+
 /*.toggle-button {
     -fx-background-radius: 7;
     -fx-border-width:1;

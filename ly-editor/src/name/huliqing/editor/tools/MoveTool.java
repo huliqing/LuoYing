@@ -18,7 +18,7 @@ import name.huliqing.editor.edit.Mode;
 import name.huliqing.editor.select.SelectObj;
 import name.huliqing.editor.tiles.AxisNode;
 import name.huliqing.editor.tiles.LocationControlObj;
-import name.huliqing.editor.undoredo.UndoRedo;
+import name.huliqing.editor.edit.UndoRedo;
 import name.huliqing.luoying.manager.PickManager;
 import name.huliqing.editor.edit.SimpleJmeEditListener;
 

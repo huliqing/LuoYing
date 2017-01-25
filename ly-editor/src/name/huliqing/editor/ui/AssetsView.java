@@ -35,7 +35,6 @@ import name.huliqing.editor.manager.Manager;
 import name.huliqing.editor.manager.ConfigManager;
 import name.huliqing.editor.manager.ConfigManager.ConfigChangedListener;
 import name.huliqing.editor.manager.EditManager;
-import name.huliqing.editor.ui.tiles.FileTree;
 import name.huliqing.fxswing.Jfx;
 
 /**

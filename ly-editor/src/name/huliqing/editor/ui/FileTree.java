@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.ui.tiles;
+package name.huliqing.editor.ui;
 
 import java.io.File;
 import javafx.collections.FXCollections;

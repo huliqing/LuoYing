@@ -8,7 +8,6 @@ package name.huliqing.editor.converter;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
@@ -16,7 +15,7 @@ import javafx.scene.layout.VBox;
 import name.huliqing.editor.constants.StyleConstants;
 import name.huliqing.editor.edit.JfxAbstractEdit;
 import name.huliqing.editor.manager.ConverterManager;
-import name.huliqing.editor.undoredo.UndoRedo;
+import name.huliqing.editor.edit.UndoRedo;
 import name.huliqing.fxswing.Jfx;
 import name.huliqing.luoying.xml.ObjectData;
 
@@ -42,7 +41,10 @@ public abstract class AbstractDataConverter<E extends JfxAbstractEdit, T extends
     protected final ScrollPane dataScroll = new ScrollPane();
     protected final VBox propertyPanel = new VBox();
     
-    public AbstractDataConverter() {}
+    public AbstractDataConverter() {
+        dataScroll.setId(StyleConstants.ID_PROPERTY_PANEL);
+        dataScroll.setContent(propertyPanel);
+    }
     
     @Override
     public T getData() {
@@ -77,9 +79,6 @@ public abstract class AbstractDataConverter<E extends JfxAbstractEdit, T extends
         this.initialized = true;
         this.parent = parent;
         
-        dataScroll.setId(StyleConstants.ID_PROPERTY_PANEL);
-        dataScroll.setContent(propertyPanel);
-        
         if (propertyConvertDefines != null && !propertyConvertDefines.isEmpty()) {
             propertyConvertDefines.values().forEach(t -> {
                 PropertyConverter pc = ConverterManager.createPropertyConverter(jfxEdit, t);
@@ -102,10 +101,9 @@ public abstract class AbstractDataConverter<E extends JfxAbstractEdit, T extends
                 }
             });
         }
-        
         dataScroll.setFitToWidth(true);
     }
-
+    
     @Override
     public boolean isInitialized() {
         return initialized;
@@ -118,7 +116,6 @@ public abstract class AbstractDataConverter<E extends JfxAbstractEdit, T extends
         );
         propertyConverters.clear();
         propertyPanel.getChildren().clear();
-        dataScroll.setContent(null);
         initialized = false;
     }
     

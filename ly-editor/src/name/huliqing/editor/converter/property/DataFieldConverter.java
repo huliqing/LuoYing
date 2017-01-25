@@ -1,0 +1,77 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package name.huliqing.editor.converter.property;
+
+import javafx.scene.Node;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TitledPane;
+import javafx.scene.input.MouseEvent;
+import name.huliqing.editor.converter.AbstractPropertyConverter;
+import name.huliqing.editor.converter.DataConverter;
+import name.huliqing.editor.manager.ConverterManager;
+import name.huliqing.luoying.xml.ObjectData;
+
+/**
+ *
+ * @author huliqing
+ */
+public class DataFieldConverter extends AbstractPropertyConverter{
+
+    private final TextField content = new TextField("");
+    private ObjectData lastObjectData;
+    
+    private DataConverter dc;
+    private boolean displayed;
+    
+    private final TitledPane bodyPanel = new TitledPane();
+    
+    public DataFieldConverter() {
+        content.setOnMouseClicked((MouseEvent event) -> {
+            if (displayed) {
+                return;
+            }
+            dc.getLayout().setVisible(true);
+            jfxEdit.getPropertyPanel().getChildren().add(bodyPanel);
+            displayed = true;
+        });
+    }
+    
+    @Override
+    protected Node createLayout() {
+        return content;
+    }
+    
+    @Override
+    public void initialize(DataConverter parent) {
+        super.initialize(parent);
+    }
+
+    @Override
+    public void cleanup() {
+        jfxEdit.getPropertyPanel().getChildren().remove(bodyPanel);
+        dc.cleanup();
+        dc = null;
+        displayed = false;
+        super.cleanup(); 
+    }
+
+    @Override
+    protected void updateUI(Object propertyValue) {
+        ObjectData temp = (ObjectData) propertyValue;
+        if (temp != lastObjectData) {
+            lastObjectData = temp;
+            if (dc != null) {
+                dc.cleanup();
+            }
+            dc = ConverterManager.createConverter(jfxEdit, lastObjectData);
+            dc.initialize(this);
+            bodyPanel.setText(lastObjectData.getId());
+            bodyPanel.setContent(dc.getLayout());
+        }
+        content.setText(lastObjectData.getId());
+    }
+    
+}

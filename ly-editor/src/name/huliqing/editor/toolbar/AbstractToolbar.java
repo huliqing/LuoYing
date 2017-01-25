@@ -41,12 +41,12 @@ public abstract class AbstractToolbar<F extends JmeEdit> implements Toolbar<F> {
     protected boolean initialized;
 
     @Override
-    public void initialize(F editForm) {
+    public void initialize(F jmeEdit) {
         if (initialized) {
             throw new IllegalStateException();
         }
         initialized = true;
-        this.editForm = editForm;
+        this.editForm = jmeEdit;
     }
 
     @Override

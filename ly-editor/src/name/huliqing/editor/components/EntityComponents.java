@@ -77,6 +77,10 @@ public class EntityComponents extends AbstractComponents {
     private void doDragDetected(MouseEvent e) {
 //        LOG.log(Level.INFO, "EntityComponents: doDragDetected.");
         Component selected = getMainSelectItem();
+        if (selected == null) {
+            e.consume();
+            return;
+        }
         Dragboard db = listView.startDragAndDrop(TransferMode.ANY);
         ClipboardContent clipboardContent = new ClipboardContent();
         clipboardContent.put(DataFormatConstants.COMPONENT_ENTITY, selected);

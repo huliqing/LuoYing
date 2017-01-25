@@ -129,7 +129,10 @@ public class ObjectData implements Savable, Cloneable {
             return null;
         }
         
-        Savable s = localData.get(key);
+        Object s = localData.get(key);
+        if (s == null || s.equals("")) {
+            return null;
+        }
         
         if (s instanceof UserData) {
             return ((UserData) s).getValue();
@@ -509,6 +512,14 @@ public class ObjectData implements Savable, Cloneable {
             return (T) value;
         }
         return getProto().getAsSavable(key);
+    }
+    
+    public final <T extends ObjectData> T getAsObjectData(String key) {
+        Object value = getAttributeFromLocal(key);
+        if (value != null) {
+            return (T) value;
+        }
+        return getProto().getAsObjectData(key);
     }
     
     /**

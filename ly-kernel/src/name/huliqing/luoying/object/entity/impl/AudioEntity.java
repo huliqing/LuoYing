@@ -28,6 +28,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Sphere;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.data.ModelEntityData;
+import name.huliqing.luoying.data.SoundData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.ModelEntity;
 import name.huliqing.luoying.object.sound.Sound;
@@ -39,7 +40,7 @@ import name.huliqing.luoying.object.sound.SoundManager;
 public class AudioEntity extends ModelEntity {
 
     private boolean debug;
-    private String soundId;
+    private SoundData soundData;
     
     // ---- inner
     private Sound sound;
@@ -50,7 +51,7 @@ public class AudioEntity extends ModelEntity {
     public void setData(ModelEntityData data) {
         super.setData(data);
         debug = data.getAsBoolean("debug", false);
-        soundId = data.getAsString("sound");
+        soundData = data.getAsObjectData("sound");
     }
     
     @Override
@@ -63,8 +64,8 @@ public class AudioEntity extends ModelEntity {
     
     @Override
     protected Spatial loadModel() {
-        if (soundId != null) {
-            sound = Loader.load(soundId);
+        if (soundData != null) {
+            sound = Loader.load(soundData);
             return sound;
         } else {
             return new Node();

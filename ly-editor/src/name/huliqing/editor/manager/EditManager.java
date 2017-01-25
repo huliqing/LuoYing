@@ -13,6 +13,7 @@ import name.huliqing.editor.edit.spatial.JfxSpatialEdit;
 import name.huliqing.fxswing.Jfx;
 import name.huliqing.luoying.constants.IdConstants;
 import name.huliqing.editor.edit.JfxEdit;
+import name.huliqing.editor.edit.terrain.JfxTerrainEdit;
 
 /**
  *
@@ -35,6 +36,12 @@ public class EditManager {
 //        JfxSceneEditView ev = new JfxSceneEditView(jfxEditZone);
 //        editor.setFormView(ev);
         openSceneEditor(IdConstants.SYS_SCENE_TEST);
+    }
+    
+    public static void openTerrainEdit() {
+        Editor editor = (Editor) Jfx.getJmeApp();
+        JfxTerrainEdit ev = new JfxTerrainEdit();
+        editor.setJfxEdit(ev);
     }
     
     public static void openSpatialEditor(String fileAbsolutePath) {

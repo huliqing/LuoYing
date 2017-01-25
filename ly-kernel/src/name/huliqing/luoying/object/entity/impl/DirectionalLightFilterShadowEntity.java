@@ -23,6 +23,7 @@ import com.jme3.light.DirectionalLight;
 import com.jme3.shadow.CompareMode;
 import com.jme3.shadow.DirectionalLightShadowFilter;
 import com.jme3.shadow.EdgeFilteringMode;
+import com.jme3.texture.Texture.ShadowCompareMode;
 import java.util.List;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.data.EntityData;
@@ -38,11 +39,18 @@ import name.huliqing.luoying.utils.MathUtils;
  * @author huliqing
  */
 public class DirectionalLightFilterShadowEntity extends ShadowEntity {
-//    private final ConfigService configService = Factory.get(ConfigService.class);
 
-    private float shadowIntensity = 0.7f;
     private int shadowMapSize = 1024;
     private int shadowMaps = 1;
+    private EdgeFilteringMode edgeFilteringMode = EdgeFilteringMode.Bilinear;
+    private int edgesThickness = 1;
+    private boolean enabledStabilization = true;
+    private float lambda = 0.65f;
+    private boolean renderBackFacesShadows;
+    private CompareMode shadowCompareMode = CompareMode.Hardware;
+    private float shadowIntensity = 0.7f;
+    private float shadowZExtend;
+    private float shadowZFadeLength;
     
     // ---- inner
     private DirectionalLightShadowFilter filter;
@@ -59,25 +67,59 @@ public class DirectionalLightFilterShadowEntity extends ShadowEntity {
     @Override
     public void setData(EntityData data) {
         super.setData(data);
-        shadowIntensity = data.getAsFloat("shadowIntensity", shadowIntensity);
         shadowMapSize = data.getAsInteger("shadowMapSize", shadowMapSize);
         shadowMaps = data.getAsInteger("shadowMaps", shadowMaps);
+        
+        String tempEdgeFilteringMode = data.getAsString("edgeFilteringMode");
+        if (tempEdgeFilteringMode != null) {
+            for (EdgeFilteringMode efm : EdgeFilteringMode.values()) {
+                if (efm.name().equals(tempEdgeFilteringMode)) {
+                    edgeFilteringMode = efm;
+                    break;
+                }
+            }
+        }
+        
+        edgesThickness = data.getAsInteger("edgesThickness", edgesThickness);
+        enabledStabilization = data.getAsBoolean("enabledStabilization", enabledStabilization);
+        lambda = data.getAsFloat("lambda", lambda);
+        renderBackFacesShadows = data.getAsBoolean("renderBackFacesShadows", renderBackFacesShadows);
+        
+        String tempShadowCompareMode = data.getAsString("shadowCompareMode");
+        if (tempShadowCompareMode != null) {
+            for (CompareMode cm : CompareMode.values()) {
+                if (cm.name().equals(tempShadowCompareMode)) {
+                    shadowCompareMode = cm;
+                    break;
+                }
+            }
+        }
+        
+        shadowIntensity = data.getAsFloat("shadowIntensity", shadowIntensity);
+        shadowZExtend = data.getAsFloat("shadowZExtend", shadowZExtend);
+        shadowZFadeLength = data.getAsFloat("shadowZFadeLength", shadowZFadeLength);
     }
     
     @Override
     public void updateDatas() {
         super.updateDatas();
-        data.setAttribute("shadowIntensity", filter.getShadowIntensity());
+        if (initialized) {
+            data.setAttribute("shadowIntensity", filter.getShadowIntensity());
+        }
     }
     
     @Override
     public void initEntity() {
         filter = new DirectionalLightShadowFilter(LuoYing.getApp().getAssetManager(), shadowMapSize, shadowMaps);
-        filter.setLambda(0.55f);
+        filter.setEdgeFilteringMode(edgeFilteringMode);
+        filter.setEdgesThickness(edgesThickness);
+        filter.setEnabledStabilization(enabledStabilization);
+        filter.setLambda(lambda);
+        filter.setRenderBackFacesShadows(renderBackFacesShadows);
+        filter.setShadowCompareMode(shadowCompareMode);
         filter.setShadowIntensity(shadowIntensity);
-        filter.setShadowCompareMode(CompareMode.Hardware);
-        filter.setEdgeFilteringMode(EdgeFilteringMode.PCF4);
-//        filter.setShadowZExtend(500);
+        filter.setShadowZExtend(shadowZExtend);
+        filter.setShadowZFadeLength(shadowZFadeLength);
     }
     
     @Override

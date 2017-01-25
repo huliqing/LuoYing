@@ -43,8 +43,8 @@ public class EditToolbar extends AbstractToolbar<SimpleJmeEdit> implements Event
     private ScaleTool scaleTool;
     
     @Override
-    public void initialize(SimpleJmeEdit formView) {
-        super.initialize(formView);
+    public void initialize(SimpleJmeEdit jmeEdit) {
+        super.initialize(jmeEdit);
         
         undoRedoTool = new UndoRedoTool("undoRedoTool");
         modeTool = new ModeTool("modeTool");

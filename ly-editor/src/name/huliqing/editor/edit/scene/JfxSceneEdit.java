@@ -12,13 +12,19 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.geometry.Side;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.PopupControl;
 import javafx.scene.control.TitledPane;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Popup;
 import name.huliqing.editor.constants.DataFormatConstants;
 import name.huliqing.editor.edit.JfxAbstractEdit;
 import name.huliqing.editor.manager.ComponentManager.Component;
@@ -28,7 +34,6 @@ import name.huliqing.editor.constants.ResConstants;
 import name.huliqing.editor.manager.ConverterManager;
 import name.huliqing.editor.converter.DataConverter;
 import name.huliqing.editor.edit.Mode;
-import name.huliqing.editor.ui.layout.SceneEditLayout;
 import name.huliqing.fxswing.Jfx;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.data.SceneData;
@@ -36,7 +41,9 @@ import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.editor.edit.SimpleJmeEditListener;
 import name.huliqing.editor.edit.select.EntitySelectObj;
+import name.huliqing.editor.edit.terrain.JfxTerrainCreateForm;
 import name.huliqing.editor.manager.Manager;
+import name.huliqing.editor.ui.CustomDialog;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.scene.SceneListener;
 
@@ -49,7 +56,7 @@ public class JfxSceneEdit extends JfxAbstractEdit<SceneEdit>
 
     private static final Logger LOG = Logger.getLogger(JfxSceneEdit.class.getName());
 
-    private final SceneEditLayout layout = new SceneEditLayout();
+    private final JfxSceneEditLayout layout = new JfxSceneEditLayout();
     
     private HBox propertyPanel;
     private VBox editPanel;
@@ -74,8 +81,8 @@ public class JfxSceneEdit extends JfxAbstractEdit<SceneEdit>
     private EntitySelectObj delTarget;
     
     public JfxSceneEdit() {
-        this.form = new SceneEdit(this);
-        this.form.addSimpleEditListener(this);
+        this.jmeEdit = new SceneEdit(this);
+        this.jmeEdit.addSimpleEditListener(this);
         
         delPop.getItems().addAll(delBtn);
         delBtn.setOnAction(e -> {
@@ -94,7 +101,7 @@ public class JfxSceneEdit extends JfxAbstractEdit<SceneEdit>
         propertyPanel = new HBox();
         editPanel = new VBox();
         components = new VBox();
-        toolbarView = new ToolBarView(form);
+        toolbarView = new ToolBarView(jmeEdit);
         propertyPanel.getChildren().add(scenePropertyPanel);
         
         layout.setZoneComponents(components);
@@ -120,12 +127,39 @@ public class JfxSceneEdit extends JfxAbstractEdit<SceneEdit>
             if (db.hasContent(DataFormatConstants.COMPONENT_ENTITY)) {
                 Component c = (Component) db.getContent(DataFormatConstants.COMPONENT_ENTITY);
                 e.setDropCompleted(true);
-                // 当拖动物体到3D场景的时候必须把JFX中的鼠标坐标转到到JME中的坐标.
-                // 不能直接用jme场景中获取鼠标坐标的方式，因为JME是放在awt canvas上的，这时还未获得焦点，直接用
-                // JME中的方式获取鼠标坐标会错位。
-                addEntity(Loader.loadData(c.id), e.getX(), editPanel.getHeight() - e.getY());
+                e.consume();
+                if (c.id.equals("AdvanceTerrain")) {
+                   
+                    // 必须隔一帧，即等拖放操作完成执行后再弹窗.
+                    // 这里不能直接执行CustomDialog,因为当CustomDialog为模态时会锁住窗口，这会导致当第二次拖放操作时发生:
+                    // Exception in thread "JavaFX Application Thread" java.lang.IllegalArgumentException: 
+                    // Key already associated with a running event loop: com.sun.javafx.tk.quantum.EmbeddedSceneDnD@4535965c
+                    Jfx.runOnJfx(() -> {
+                        CustomDialog dialog = new CustomDialog(editRoot.getScene().getWindow());
+                        JfxTerrainCreateForm form = new JfxTerrainCreateForm();
+                        HBox.setHgrow(form, Priority.ALWAYS);
+                        dialog.getChildren().add(form);
+                        dialog.setTitle("Create Terrain");
+                        dialog.show();
+                        
+                        form.setOnOk(t -> {
+                            System.out.println("create terrain");
+                            dialog.hide();
+                        });
+                        form.setOnCancel(t -> {
+                            System.out.println("cancel");
+                            dialog.hide();
+                        });
+                    });
+                    
+                } else {
+                    // 当拖动物体到3D场景的时候必须把JFX中的鼠标坐标转到到JME中的坐标.
+                    // 不能直接用jme场景中获取鼠标坐标的方式，因为JME是放在awt canvas上的，这时还未获得焦点，直接用
+                    // JME中的方式获取鼠标坐标会错位。
+                    addEntity(Loader.loadData(c.id), e.getX(), editPanel.getHeight() - e.getY());
+                }
+                
             }
-            e.consume();
         });
         
         EntityComponents ec = new EntityComponents();
@@ -159,7 +193,7 @@ public class JfxSceneEdit extends JfxAbstractEdit<SceneEdit>
                 SceneData sd = Loader.loadData(sceneId);
                 Scene scene = Loader.load(sd);
                 scene.addSceneListener(this);
-                form.setScene(scene);
+                jmeEdit.setScene(scene);
                 
                 Jfx.runOnJfx(() -> {
                     if (sceneDataConverter != null && sceneDataConverter.isInitialized()) {
@@ -221,35 +255,36 @@ public class JfxSceneEdit extends JfxAbstractEdit<SceneEdit>
         });
     }
     
+    @Override
     public Pane getPropertyPanel() {
         return propertyPanel;
     }
     
     public EntitySelectObj getSelected() {
-        return form.getSelected();
+        return jmeEdit.getSelected();
     }
     
     public void setSelected(EntityData ed) {
         Jfx.runOnJme(() -> {
-            form.setSelected(ed);
+            jmeEdit.setSelected(ed);
         });
     }
     
     public void reloadEntity(EntityData ed) {
         Jfx.runOnJme(() -> {
-            form.reloadEntity(ed);
+            jmeEdit.reloadEntity(ed);
         });
     }
     
     private void addEntity(EntityData ed, double x, double y) {
         Jfx.runOnJme(() -> {
-            form.addEntityOnCursor(ed, new Vector2f((float)x, (float)y));
+            jmeEdit.addEntityOnCursor(ed, new Vector2f((float)x, (float)y));
         });
     }
     
     public void removeEntity(EntityData ed) {
         Jfx.runOnJme(() -> {
-            form.removeEntity(ed);
+            jmeEdit.removeEntity(ed);
         });
     }
 

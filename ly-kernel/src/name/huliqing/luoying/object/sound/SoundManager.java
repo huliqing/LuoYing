@@ -73,7 +73,7 @@ public class SoundManager {
             return;
         }
         sounds.add(sound);
-        sound.setVolume(volume);
+        sound.setVolume(volume * sound.getData().getVolume());
         sound.play();
     }
     
@@ -130,7 +130,7 @@ public class SoundManager {
     }
 
     /**
-     * 设置音量，0.0~1.0
+     * 获取音量，0.0~1.0
      * @return 
      */
     public float getVolume() {
@@ -138,7 +138,7 @@ public class SoundManager {
     }
 
     /**
-     * 获取音量，0.0~1.0
+     * 设置音量，0.0~1.0
      * @param volume 
      */
     public void setVolume(float volume) {
@@ -182,8 +182,10 @@ public class SoundManager {
      */
     private void updateSoundsVolume() {
         Iterator<Sound> it = sounds.iterator();
+        Sound s;
         while (it.hasNext()) {
-            it.next().setVolume(volume);
+            s = it.next();
+            s.setVolume(volume * s.getData().getVolume());
         }
     }
 

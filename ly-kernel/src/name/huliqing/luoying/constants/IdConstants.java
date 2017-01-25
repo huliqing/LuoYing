@@ -153,4 +153,10 @@ public class IdConstants {
     /** 插值旋转动画：sysAnimInterpolateRotation */
     public final static String SYS_ANIM_INTERPOLATE_ROTATION = "sysAnimInterpolateRotation";
     
+    // =============================================================================
+    // Sound
+    // =============================================================================
+    /** 声音 */
+    public final static String SYS_SOUND = "sysSound";
+    
 }

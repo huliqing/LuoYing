@@ -25,6 +25,7 @@ import com.jme3.audio.AudioNode;
 import com.jme3.scene.Node;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.data.SoundData;
+import name.huliqing.luoying.utils.MathUtils;
 import name.huliqing.luoying.xml.DataProcessor;
 
 /**
@@ -58,8 +59,8 @@ public class Sound<T extends SoundData> extends Node implements DataProcessor<T>
      * 初始化声音
      */
     public void initialize() {
-        if (audio == null) {
-            audio = loadAudio();
+        audio = loadAudio();
+        if (audio != null) {
             attachChild(audio);
         }
         initialized = true;
@@ -88,6 +89,10 @@ public class Sound<T extends SoundData> extends Node implements DataProcessor<T>
      * 播放声音文件
      */
     public void play() {
+        if (audio == null) {
+            return;
+        }
+        
         // 声音文件在播放的时候需要在渲染线程,不然会报错。
         //    Caused by: java.lang.IllegalStateException: No audio renderer available, make sure call is being performed on render thread.
         //	at com.jme3.audio.AudioNode.getRenderer(AudioNode.java:207)
@@ -105,7 +110,7 @@ public class Sound<T extends SoundData> extends Node implements DataProcessor<T>
     }
     
     public void pause() {
-        if (AudioContext.getAudioRenderer() == null) {
+        if (audio == null || AudioContext.getAudioRenderer() == null) {
             return;
         }
         audio.pause();
@@ -115,13 +120,15 @@ public class Sound<T extends SoundData> extends Node implements DataProcessor<T>
      * 停止声音
      */
     public void stop() {
-        if (AudioContext.getAudioRenderer() == null) {
+        if (audio == null || AudioContext.getAudioRenderer() == null) {
             return;
         }
         audio.stop();
     }
     
     public boolean isLoop() {
+        if (audio == null)
+            return false;
         return audio.isLooping();
     }
     
@@ -130,20 +137,24 @@ public class Sound<T extends SoundData> extends Node implements DataProcessor<T>
      * @param loop
      */
     public void setLoop(boolean loop) {
-        if (AudioContext.getAudioRenderer() == null) {
+        if (audio == null || AudioContext.getAudioRenderer() == null) {
             return;
         }
         audio.setLooping(loop);
     }
     
     public void setVolume(float volume) {
-        if (AudioContext.getAudioRenderer() == null) {
+        if (audio == null || AudioContext.getAudioRenderer() == null) {
             return;
         }
-        audio.setVolume(volume);
+        audio.setVolume(MathUtils.clamp(volume, 0f, 1.0f));
     }
     
     private AudioNode loadAudio() {
+        if (data.getSoundFile() == null) {
+            return null;
+        }
+        
         AudioNode an = new AudioNode(LuoYing.getAssetManager(), data.getSoundFile(), AudioData.DataType.Buffer);
         an.setVolume(data.getVolume());
         an.setTimeOffset(data.getTimeOffset());

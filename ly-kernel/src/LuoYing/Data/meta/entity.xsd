@@ -231,16 +231,99 @@ xs:time
                             <xs:documentation>在指定的平台上关闭阴影功能，格式: "platform1,platform2,...", 如: "iOS_X86,iOS_ARM,Android_ARM5,Android_ARM6,Android_ARM7,Android_ARM8,Android_X86,Android_Other,..."</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="shadowIntensity" type="xs:decimal" use="optional" >
-                        <xs:annotation>
-                            <xs:documentation>阴影强度，取值[0.0,1.0], 默认: "0.7"</xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
                     <xs:attribute name="shadowMapSize" type="xs:decimal" use="optional" >
                         <xs:annotation><xs:documentation>The size of the rendered shadow maps (512,1024,2048, etc...). 默认: "1024"</xs:documentation></xs:annotation>
                     </xs:attribute>
                     <xs:attribute name="shadowMaps" type="xs:integer" use="optional" >
                         <xs:annotation><xs:documentation>The number of shadow maps rendered (the more shadow maps the more quality, the fewer fps).默认: "1"</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="edgeFilteringMode" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>Sets the filtering mode for shadow edges see {@link EdgeFilteringMode} for more info</xs:documentation>
+                        </xs:annotation>
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="Nearest" />
+                                <xs:enumeration value="Bilinear" />
+                                <xs:enumeration value="Dither" />
+                                <xs:enumeration value="PCF4" />
+                                <xs:enumeration value="PCFPOISSON" />
+                                <xs:enumeration value="PCF8" />
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:attribute>
+                    <xs:attribute name="edgesThickness" type="xs:integer" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>Sets the shadow edges thickness. default is 1, setting it to lower valuescan help to reduce the jagged effect of the shadow edges</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="enabledStabilization" type="bool" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                Enables the stabilization of the shadows's edges. (default is true) This prevents shadows' edges to flicker when the camera movesHowever it can lead to some shadow quality loss in some particular scenes.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="lambda" type="xs:decimal" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                Adjust the repartition of the different shadow maps in the shadow extend usualy goes from 0.0 to 1.0 a low value give a more linear repartition resulting in a constant quality in the shadow over the extends, but near
+                                shadows could look very jagged a high value give a more logarithmic
+                                repartition resulting in a high quality for near shadows, but the quality
+                                quickly decrease over the extend. the default value is set to 0.65f (theoric optimal value).
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="renderBackFacesShadows" type="bool" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                     * !! WARNING !! this parameter is defaulted to true for the ShadowFilter.
+     * Setting it to true, may produce edges artifacts on shadows.     *
+     *
+     * Set to true if you want back faces shadows on geometries.
+     * Note that back faces shadows will be blended over dark lighten areas and may produce overly dark lighting.
+     *
+     * Setting this parameter will override this parameter for ALL materials in the scene.
+     * This also will automatically adjust the faceCullMode and the PolyOffset of the pre shadow pass.
+     * You can modify them by using {@link #getPreShadowForcedRenderState()}
+     *
+     * If you want to set it differently for each material in the scene you have to use the ShadowRenderer instead
+     * of the shadow filter.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="shadowCompareMode" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                sets the shadow compare mode see {@link CompareMode} for more info
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="Software" />
+                                <xs:enumeration value="Hardware" />
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:attribute>
+                    <xs:attribute name="shadowIntensity" type="xs:decimal" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>阴影强度，取值[0.0,1.0], 默认: "0.7"</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="shadowZExtend" type="xs:decimal" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>Set the distance from the eye where the shadows will be rendered default
+     * value is dynamicaly computed to the shadow casters/receivers union bound
+     * zFar, capped to view frustum far value.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="shadowZFadeLength" type="xs:decimal" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                Define the length over which the shadow will fade out when using a shadowZextend
+                            </xs:documentation>
+                        </xs:annotation>
                     </xs:attribute>
                 </xs:extension>
             </xs:complexContent>

@@ -78,7 +78,11 @@
     <entityPhysics id="sysEntityPhysics" extends="sysEntityPhysicsBase" />
     
     <!--内置阴影环境-->
-    <entityDirectionalLightFilterShadow id="sysEntityShadow" extends="sysEntityShadowBase" />
+    <entityDirectionalLightFilterShadow id="sysEntityShadow" extends="sysEntityShadowBase" 
+                                        shadowMapSize="2048" shadowMaps="1"
+                                        edgeFilteringMode="Bilinear" edgesThickness="1" enabledStabilization="1" lambda="0.65" 
+                                        renderBackFacesShadows="1" shadowCompareMode="Hardware" 
+                                        shadowIntensity="0.7" shadowZExtend="1000" shadowZFadeLength="1000" />
 
     <!--内置物理跟随相机-->
     <entityChaseCamera id="sysEntityChaseCamera" extends="sysEntityChaseCameraBase" />
@@ -93,7 +97,7 @@
     <entitySimpleModel id="sysEntityBoundary" extends="sysEntityBoundaryBase" />
     
     <!-- 内置声音 -->
-    <entityAudio id="sysEntityAudio" sound="" />
+    <entityAudio id="sysEntityAudio" sound="sysSound" />
     
     <!-- ========================================================================= -->
     <!-- 一些额外的参考配置，不能直接使用，根据应用和资源环境的不同实际情况，配置参数会有所不同 -->

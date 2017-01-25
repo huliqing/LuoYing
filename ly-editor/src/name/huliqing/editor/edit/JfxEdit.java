@@ -6,8 +6,6 @@
 package name.huliqing.editor.edit;
 
 import name.huliqing.editor.Editor;
-import name.huliqing.editor.undoredo.UndoRedo;
-import name.huliqing.editor.undoredo.UndoRedoManager;
 
 /**
  * 编辑器的UI界面接口, 主要作为编辑器的UI编辑界面，包含各种编辑工具等。

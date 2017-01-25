@@ -42,7 +42,7 @@ public class SoundPlayer {
             return;
         }
         sound.setLocalTranslation(position);
-        sound.setVolume(volume);
+        sound.setVolume(volume * sound.getData().getVolume());
         sound.play();
     }
     

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.ui.layout;
+package name.huliqing.editor.edit.scene;
 
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.Background;
@@ -16,7 +16,7 @@ import name.huliqing.fxswing.Jfx;
  *
  * @author huliqing
  */
-public class SceneEditLayout extends VBox {
+public class JfxSceneEditLayout extends VBox {
     
     private final SplitPane topZone = new SplitPane();
     private final StackPane zoneMain = new StackPane();
@@ -26,7 +26,7 @@ public class SceneEditLayout extends VBox {
     private Region zoneComponents;
     private Region zoneToolbar;
     
-    public SceneEditLayout() {
+    public JfxSceneEditLayout() {
     }
     
     public void setZoneEdit(Region zoneEdit) {
@@ -55,11 +55,14 @@ public class SceneEditLayout extends VBox {
         
         topZone.setBackground(Background.EMPTY);
         zoneMain.setBackground(Background.EMPTY);
-        zoneToolbar.setPrefHeight(30);
+//        zoneToolbar.setPrefHeight(30);
         topZone.prefHeightProperty().bind(heightProperty().subtract(zoneToolbar.heightProperty()));
         zoneMain.prefWidthProperty().bind(topZone.widthProperty().subtract(zoneComponents.widthProperty()));
         zoneComponents.setMinWidth(200);
         zoneComponents.setMaxWidth(200);
+        
+        zoneProperty.prefHeightProperty().bind(zoneMain.heightProperty());
+        
         Jfx.runOnJfx(() -> {
             zoneComponents.setMinWidth(0);
             zoneComponents.setMaxWidth(99999);

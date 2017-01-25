@@ -25,6 +25,7 @@ import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.editor.converter.PropertyConverter;
 import name.huliqing.editor.converter.property.CheckBoxConverter;
 import name.huliqing.editor.converter.property.ChoiceConverter;
+import name.huliqing.editor.converter.property.DataFieldConverter;
 import static name.huliqing.editor.converter.property.FileConverter.FEATURE_FILTERS;
 import name.huliqing.editor.converter.property.Vector2fConverter;
 
@@ -41,7 +42,28 @@ public class ConverterManager {
 
         // ==== Base converter
         ConverterDefine base = new ConverterDefine("base", null);
+        
+        ConverterDefine sound = new ConverterDefine("sound", SimpleDataConverter.class);
+        sound.extendsFrom(base.getTagName());
+        sound.addPropertyConverter("file", FileConverter.class);
+        sound.addPropertyConverter("type", ChoiceConverter.class).addFeature(ChoiceConverter.FEATURE_ITEMS, "Buffer,Stream");
+        sound.addPropertyConverter("direction", Vector3fConverter.class);
+        sound.addPropertyConverter("directional", CheckBoxConverter.class);
+        sound.addPropertyConverter("positional", CheckBoxConverter.class);
+        sound.addPropertyConverter("innerAngle", TextConverter.class);
+        sound.addPropertyConverter("outerAngle", TextConverter.class);
+        sound.addPropertyConverter("looping", CheckBoxConverter.class);
+        sound.addPropertyConverter("maxDistance", TextConverter.class);
+        sound.addPropertyConverter("pitch", TextConverter.class);
+        sound.addPropertyConverter("refDistance", TextConverter.class);
+        sound.addPropertyConverter("reverbEnabled", CheckBoxConverter.class);
+        sound.addPropertyConverter("timeOffset", TextConverter.class);
+        sound.addPropertyConverter("velocity", Vector3fConverter.class);
+        sound.addPropertyConverter("velocityFromTranslation", CheckBoxConverter.class);
+        sound.addPropertyConverter("volume", TextConverter.class);
+        
         ConverterDefine scene = new ConverterDefine("scene", SimpleDataConverter.class);
+        
         ConverterDefine entityBase = new ConverterDefine("entityBase", null);
         ConverterDefine entityModelBase = new ConverterDefine("entityModelBase", null);
         ConverterDefine entityPlantBase = new ConverterDefine("entityPlantBase", null);
@@ -60,7 +82,11 @@ public class ConverterManager {
         ConverterDefine entityTree = new ConverterDefine("entityTree", EntityDataConverter.class);
         
         addConverter(base);
+        
+        addConverter(sound);
+        
         addConverter(scene);
+        
         addConverter(entityBase);
         addConverter(entityModelBase);
         addConverter(entityPlantBase);
@@ -77,7 +103,7 @@ public class ConverterManager {
         addConverter(entitySimpleWater);
         addConverter(entitySkyBox);
         addConverter(entityTree);
-                
+        
         // ==== Extends
         entityBase.extendsFrom(base.getTagName());
         scene.extendsFrom(base.getTagName()); 
@@ -175,7 +201,7 @@ public class ConverterManager {
         
         entityAudio.addFeature(DataConverter.FEATURE_HIDE_FIELDS, "rotation,scale,mat");
         entityAudio.addPropertyConverter("debug", CheckBoxConverter.class);
-        entityAudio.addPropertyConverter("sound", TextConverter.class);
+        entityAudio.addPropertyConverter("sound", DataFieldConverter.class);
         
         entityChaseCamera.addFeature(DataConverter.FEATURE_HIDE_FIELDS, "scale,mat");
         entityChaseCamera.addPropertyConverter("debug", CheckBoxConverter.class);
@@ -200,9 +226,19 @@ public class ConverterManager {
         
         entityDirectionalLightFilterShadow.addFeature(DataConverter.FEATURE_HIDE_FIELDS, "location,rotation,scale,mat");
         entityDirectionalLightFilterShadow.addPropertyConverter("disabledOnPlatforms", TextConverter.class);
-        entityDirectionalLightFilterShadow.addPropertyConverter("shadowIntensity", TextConverter.class);
         entityDirectionalLightFilterShadow.addPropertyConverter("shadowMapSize", TextConverter.class);
         entityDirectionalLightFilterShadow.addPropertyConverter("shadowMaps", TextConverter.class);
+        entityDirectionalLightFilterShadow.addPropertyConverter("edgeFilteringMode", ChoiceConverter.class)
+                .addFeature(ChoiceConverter.FEATURE_ITEMS, "Nearest,Bilinear,Dither,PCF4,PCFPOISSON,PCF8");
+        entityDirectionalLightFilterShadow.addPropertyConverter("edgesThickness", TextConverter.class);
+        entityDirectionalLightFilterShadow.addPropertyConverter("enabledStabilization", CheckBoxConverter.class);
+        entityDirectionalLightFilterShadow.addPropertyConverter("lambda", TextConverter.class);
+        entityDirectionalLightFilterShadow.addPropertyConverter("renderBackFacesShadows", CheckBoxConverter.class);
+        entityDirectionalLightFilterShadow.addPropertyConverter("shadowCompareMode", ChoiceConverter.class)
+                .addFeature(ChoiceConverter.FEATURE_ITEMS, "Software,Hardware");
+        entityDirectionalLightFilterShadow.addPropertyConverter("shadowIntensity", TextConverter.class);
+        entityDirectionalLightFilterShadow.addPropertyConverter("shadowZExtend", TextConverter.class);
+        entityDirectionalLightFilterShadow.addPropertyConverter("shadowZFadeLength", TextConverter.class);
         
         entityPlantBase.addPropertyConverter("file", FileConverter.class).addFeature(FEATURE_FILTERS, "Model Files|*.j3o|*.obj|*.mesh.xml,All Files|*.*");
         entityPlantBase.addPropertyConverter("randomScale", CheckBoxConverter.class);
