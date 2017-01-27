@@ -6,10 +6,13 @@
 package name.huliqing.editor.edit;
 
 import java.util.logging.Logger;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.scene.input.DragEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import name.huliqing.editor.Editor;
+import name.huliqing.editor.constants.StyleConstants;
 import name.huliqing.editor.manager.EditManager;
 import name.huliqing.fxswing.Jfx;
 
@@ -18,7 +21,7 @@ import name.huliqing.fxswing.Jfx;
  * @author huliqing
  * @param <T>
  */
-public abstract class JfxAbstractEdit<T extends JmeEdit> implements JfxEdit<T> {
+public abstract class JfxAbstractEdit<T extends JmeEdit> implements JfxEdit<T>, EventHandler{
 
     private static final Logger LOG = Logger.getLogger(JfxAbstractEdit.class.getName());
 
@@ -27,19 +30,19 @@ public abstract class JfxAbstractEdit<T extends JmeEdit> implements JfxEdit<T> {
     protected boolean editInitialized;
     protected boolean jfxInitialized;
     
-    // 全局JFX编辑器根节点root
+    // JFX的全局根节点
+    private Pane jfxRoot;
+    
+    // JFX编辑器根节点，不包含资源窗口
     private Pane jfxEditZone; 
-    // 当前JFX编辑器的根节点
+    
+    /**
+     * 当前JFX编辑器的本地根节点
+     */
     protected final Pane editRoot = new VBox();
     
     public JfxAbstractEdit() {
-        editRoot.addEventFilter(DragEvent.DRAG_ENTERED, (DragEvent event) -> {
-            jfxOnDragStarted();
-        });
-        editRoot.addEventFilter(DragEvent.DRAG_DONE, (DragEvent event) -> {
-            jfxOnDragEnded();
-        });
-        editRoot.setStyle("-fx-padding:0;");
+        editRoot.getStyleClass().add(StyleConstants.CLASS_HVBOX);
     }
 
     @Override
@@ -48,6 +51,7 @@ public abstract class JfxAbstractEdit<T extends JmeEdit> implements JfxEdit<T> {
             throw new IllegalArgumentException();
         }
         this.editor = editor;
+        
         // 先初始化3D编辑器,再初始化UI
         Jfx.runOnJme(() -> {
             if (jmeEdit != null) {
@@ -56,10 +60,16 @@ public abstract class JfxAbstractEdit<T extends JmeEdit> implements JfxEdit<T> {
                 LOG.info("<<<<JmeEditInitialized");
             }
             Jfx.runOnJfx(() -> {
+                jfxRoot = Jfx.getJfxRoot();
+                jfxRoot.addEventFilter(DragEvent.DRAG_ENTERED, this);
+                jfxRoot.addEventFilter(DragEvent.DRAG_DONE, this);
+
                 jfxEditZone = EditManager.getJfxEditZone();
                 jfxEditZone.getChildren().add(editRoot);
+                
                 editRoot.prefWidthProperty().bind(jfxEditZone.widthProperty());
                 editRoot.prefHeightProperty().bind(jfxEditZone.heightProperty());
+//                editRoot.setStyle("-fx-border: solid inside;-fx-border-width:1;-fx-border-color:black;");
                 jfxInitialize();
                 jfxInitialized = true;
                 LOG.info("<<<<JFXEditInitialized");
@@ -82,6 +92,8 @@ public abstract class JfxAbstractEdit<T extends JmeEdit> implements JfxEdit<T> {
             editRoot.prefWidthProperty().unbind();
             editRoot.prefHeightProperty().unbind();
             jfxEditZone.getChildren().remove(editRoot);
+            jfxRoot.removeEventFilter(DragEvent.DRAG_ENTERED, this);
+            jfxRoot.removeEventFilter(DragEvent.DRAG_DONE, this);
             LOG.info(">>>>----JFXEditCleanup");
         }
         // 再清理3d编辑器
@@ -90,6 +102,15 @@ public abstract class JfxAbstractEdit<T extends JmeEdit> implements JfxEdit<T> {
                 jmeEdit.cleanup();
                 LOG.info(">>>>----JmeEditCleanup");
             });            
+        }
+    }
+
+    @Override
+    public final void handle(Event event) {
+        if (event.getEventType() == DragEvent.DRAG_ENTERED) {
+            jfxOnDragStarted();
+        } else if (event.getEventType() == DragEvent.DRAG_DONE) {
+            jfxOnDragEnded();
         }
     }
 
@@ -123,13 +144,12 @@ public abstract class JfxAbstractEdit<T extends JmeEdit> implements JfxEdit<T> {
     @Override
     public Editor getEditor() {
         return editor;
-    }    
-    
-    /**
-     * 获取属性面板
-     * @return 
-     */
-    public abstract Pane getPropertyPanel();
+    }
+
+    @Override
+    public Pane getEditRoot() {
+        return editRoot;
+    }
     
     /**
      * 当监听到有鼠标拖放事件时该方法被调用

@@ -97,7 +97,7 @@ public class MoveTool extends EditTool implements SimpleJmeEditListener{
     @Override
     protected void onToolEvent(Event e) {
         selectObj = form.getSelected();
-        if (selectObj == null) {
+        if (selectObj == null || selectObj.getReadOnlySelectedSpatial() == null) {
             endMove();
             return;
         }
@@ -257,12 +257,12 @@ public class MoveTool extends EditTool implements SimpleJmeEditListener{
     
     private void updateMarkerState() {
         selectObj = form.getSelected();
-        if (selectObj == null) {
+        if (selectObj == null || selectObj.getReadOnlySelectedSpatial() == null) {
             controlObj.setVisible(false);
             return;
         }
         controlObj.setVisible(true);
-        controlObj.setLocalTranslation(form.getSelected().getReadOnlySelectedSpatial().getWorldTranslation());
+        controlObj.setLocalTranslation(selectObj.getReadOnlySelectedSpatial().getWorldTranslation());
         Mode mode = form.getMode();
         switch (form.getMode()) {
             case GLOBAL:

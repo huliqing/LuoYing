@@ -26,12 +26,8 @@ public class YingConfigView extends ScrollPane {
             EditManager.openTestFormView();
         });
         
-        Button te = new Button("TerrainEdit");
-        te.setOnAction(e -> {
-            EditManager.openTerrainEdit();
-        });
         
-        layout.getChildren().addAll(btn, te);
+        layout.getChildren().addAll(btn);
         
     }
 }

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.ui.toolview;
+package name.huliqing.editor.ui.tool;
 
 import javafx.scene.Node;
 import name.huliqing.editor.toolbar.Toolbar;
@@ -13,7 +13,7 @@ import name.huliqing.editor.tools.Tool;
  *
  * @author huliqing
  */
-public interface ToolView {
+public interface JfxTool {
     
     Tool getTool();
     

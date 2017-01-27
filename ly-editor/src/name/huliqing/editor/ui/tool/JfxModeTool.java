@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.ui.toolview;
+package name.huliqing.editor.ui.tool;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -20,12 +20,12 @@ import name.huliqing.fxswing.Jfx;
  *
  * @author huliqing
  */
-public class ModeToolView extends AbstractToolView implements ModeTool.ModeChangedListener {
+public class JfxModeTool extends JfxAbstractTool implements ModeTool.ModeChangedListener {
     
     private final ChoiceBox<Mode> view = new ChoiceBox<Mode>();
     private ModeTool modeTool;
     
-    public ModeToolView() {
+    public JfxModeTool() {
     }
 
     @Override

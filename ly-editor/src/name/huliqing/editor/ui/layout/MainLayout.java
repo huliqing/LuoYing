@@ -58,7 +58,7 @@ public class MainLayout extends VBox {
         getChildren().clear();
         getChildren().addAll(menuBar, contentZone);
         contentZone.getItems().clear();
-        contentZone.getItems().addAll(resourceZone, editZone);
+        contentZone.getItems().addAll(editZone, resourceZone);
         
         // -- zone size
         prefHeightProperty().bind(root.heightProperty());

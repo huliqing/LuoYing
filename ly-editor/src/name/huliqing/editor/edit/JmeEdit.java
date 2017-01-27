@@ -36,9 +36,10 @@ public interface JmeEdit {
     
     /**
      * 获取工具栏
+     * @param <T>
      * @return 
      */
-    Toolbar getToolbar();
+    <T extends Toolbar> T getToolbar();
         
     void addListener(JmeEditListener listener);
     

@@ -106,7 +106,7 @@ public class ScaleTool extends EditTool implements SimpleJmeEditListener{
     @Override
     protected void onToolEvent(Event e) {
         selectObj = form.getSelected();
-        if (selectObj == null) {
+        if (selectObj == null || selectObj.getReadOnlySelectedSpatial() == null) {
             endScale();
             return;
         }

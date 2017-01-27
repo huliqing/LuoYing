@@ -22,6 +22,7 @@ import name.huliqing.editor.manager.SelectObjManager;
 import name.huliqing.editor.toolbar.EditToolbar;
 import name.huliqing.editor.tools.MoveTool;
 import name.huliqing.editor.edit.UndoRedo;
+import name.huliqing.editor.toolbar.SimpleEditToolbar;
 import name.huliqing.fxswing.Jfx;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.constants.IdConstants;
@@ -51,7 +52,7 @@ public class SceneEdit extends SimpleJmeEdit<EntitySelectObj> implements SceneLi
     
     private final Map<EntityData, EntitySelectObj> objMap = new LinkedHashMap<EntityData, EntitySelectObj>();
     
-    private final EditToolbar editToolbar = new EditToolbar();
+    private final EditToolbar editToolbar = new SimpleEditToolbar();
     private final JmeEvent delEvent = new JmeEvent("delete");
     private final JmeEvent duplicateEvent = new JmeEvent("duplicate");
     
@@ -210,6 +211,13 @@ public class SceneEdit extends SimpleJmeEdit<EntitySelectObj> implements SceneLi
         addUndoRedo(new EntityAddedUndoRedo(eso));
     }
     
+    /**
+     * 添加物体到场景，cursorPos指定了GUI上的屏幕位置，这个位置会自动转换到3D场景中的位置，
+     * 物体即添加到这个3D位置中。转换方式是通过使用射线与场景物体的最近的交叉点计算的，
+     * 如果射线不与场景中任何物体产生交叉，则将物体放置在原点处。
+     * @param ed
+     * @param cursorPos 
+     */
     public void addEntityOnCursor(EntityData ed, Vector2f cursorPos) {
         if (!sceneLoaded)
             return;

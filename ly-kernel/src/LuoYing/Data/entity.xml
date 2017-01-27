@@ -9,6 +9,9 @@
     <!--基本配置：这些作为内置配置，统一定义不同类型环境物体的基本属性，外部应用可以直接继承后使用，也可以自己另起配置 -->
     <!-- ========================================================================= -->
     
+    <!--普通模型的基类-->
+    <entitySimpleModel id="sysEntityModelBase" cullHint="Never" queueBucket="Opaque" shadowMode="Cast" />
+    
     <!--基本天空-->
     <entitySkyBox id="sysEntitySkyBase" 
             west="LuoYing/Assets/Textures/Sky/west.jpg" east="LuoYing/Assets/Textures/Sky/east.jpg" 
@@ -16,10 +19,10 @@
                   up="LuoYing/Assets/Textures/Sky/up.jpg" down="LuoYing/Assets/Textures/Sky/down.jpg" />
     
     <!--地形基本配置：需要接收投影，需要静态物理-->
-    <entitySimpleTerrain id="sysEntityTerrainBase" file="LuoYing/Assets/Models/unitBox.j3o" scale="100,1,100"  shadowMode="Receive" modules="sysModuleTerrainPhysics" />
+    <entitySimpleTerrain id="sysEntityTerrainBase" shadowMode="Receive" modules="sysModuleTerrainPhysics" />
 
     <!--树木基本配置： 需要投影，需要静态物理-->
-    <entityTree id="sysEntityTreeBase" file="LuoYing/Assets/Models/Tree/tree431.obj" scale="10,10,10" shadowMode="Cast" modules="sysModuleTreePhysics"  />
+    <entityTree id="sysEntityTreeBase" shadowMode="Cast" modules="sysModuleTreePhysics"  />
     
     <!--花草植被的基本配置: 不需要投影，不需要物理-->
     <entityGrass id="sysEntityGrassBase" shadowMode="Off" />
@@ -38,7 +41,7 @@
                      refractionStrength="0.2" waterHeight="-2.5" sunScale="3" />
     
     <!--简单的方形物理边界基本配置：需要静态物理，始终隐藏-->
-    <entitySimpleModel id="sysEntityBoundaryBase" file="LuoYing/Assets/Models/unitBoundaryBox.j3o" scale="100,20,100" cullHint="Always" modules="sysModuleBoundaryPhysics" />
+    <entitySimpleModel id="sysEntityBoundaryBase" cullHint="Always" modules="sysModuleBoundaryPhysics" />
     
     <!--基本物理环境-->
     <entityPhysics id="sysEntityPhysicsBase" gravity="0,-9.81,0" threadingType="SEQUENTIAL" />
@@ -68,11 +71,11 @@
     <!--内置环境光-->
     <entityAmbientLight id="sysEntityAmbientLight" extends="sysEntityAmbientLightBase" />
     
-    <!--内置测试用地形-->
-    <entitySimpleTerrain id="sysEntityTerrain" extends="sysEntityTerrainBase" />
+    <!--内置简单地形，一个简单的box作为地形-->
+    <entitySimpleTerrain id="sysEntityTerrain" extends="sysEntityTerrainBase" file="LuoYing/Assets/Models/unitBox.j3o" scale="100,1,100"  />
     
     <!--内置测试用的树模型-->
-    <entityTree id="sysEntityTree" extends="sysEntityTreeBase"  />
+    <entityTree id="sysEntityTree" extends="sysEntityTreeBase" file="LuoYing/Assets/Models/Tree/tree431.obj" scale="10,10,10" />
     
     <!--内置物理环境-->
     <entityPhysics id="sysEntityPhysics" extends="sysEntityPhysicsBase" />
@@ -93,11 +96,14 @@
     <!--内置高级水体, 海水环境，不支持移动设备-->
     <entityAdvanceWater id="sysEntityAdvanceWater" extends="sysEntityAdvanceWaterBase" />
     
-    <!--内置包围盒-->
-    <entitySimpleModel id="sysEntityBoundary" extends="sysEntityBoundaryBase" />
-    
     <!-- 内置声音 -->
     <entityAudio id="sysEntityAudio" sound="sysSound" />
+    
+    <!--内置包围盒-->
+    <entitySimpleModel id="sysEntityBoundary" extends="sysEntityBoundaryBase" file="LuoYing/Assets/Models/unitBoundaryBox.j3o" scale="100,20,100" />
+    
+    <!--内置模型:一个单位立方体-->
+    <entitySimpleModel id="sysEntityModel" extends="sysEntityModelBase" file="LuoYing/Assets/Models/unitBox.j3o" scale="1,1,1" />
     
     <!-- ========================================================================= -->
     <!-- 一些额外的参考配置，不能直接使用，根据应用和资源环境的不同实际情况，配置参数会有所不同 -->

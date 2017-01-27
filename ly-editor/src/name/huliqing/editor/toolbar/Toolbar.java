@@ -108,5 +108,5 @@ public interface Toolbar<F extends JmeEdit> {
      */
     boolean removeListener(ToolbarListener listener);
     
-    F getEditForm();
+    F getEdit();
 }

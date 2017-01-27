@@ -37,7 +37,7 @@ public abstract class AbstractToolbar<F extends JmeEdit> implements Toolbar<F> {
      */
     protected final SafeArrayList<Tool> toolsActivated = new SafeArrayList<Tool>(Tool.class);
     
-    protected F editForm;
+    protected F edit;
     protected boolean initialized;
 
     @Override
@@ -46,7 +46,7 @@ public abstract class AbstractToolbar<F extends JmeEdit> implements Toolbar<F> {
             throw new IllegalStateException();
         }
         initialized = true;
-        this.editForm = jmeEdit;
+        this.edit = jmeEdit;
     }
 
     @Override
@@ -216,8 +216,8 @@ public abstract class AbstractToolbar<F extends JmeEdit> implements Toolbar<F> {
     }
 
     @Override
-    public F getEditForm() {
-        return editForm;
+    public F getEdit() {
+        return edit;
     }
 
     

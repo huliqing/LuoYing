@@ -14,7 +14,6 @@ import javafx.scene.control.PopupControl;
 import javafx.scene.control.Skin;
 import javafx.scene.control.Skinnable;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;

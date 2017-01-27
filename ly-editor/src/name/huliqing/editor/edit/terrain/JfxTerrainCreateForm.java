@@ -5,11 +5,12 @@
  */
 package name.huliqing.editor.edit.terrain;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -26,6 +27,7 @@ import name.huliqing.editor.manager.Manager;
  */
 public class JfxTerrainCreateForm extends VBox {
     private final GridPane grid = new GridPane();
+    private final Label nameLabel = new Label("Terrain Name: ");
     private final Label totalSizeLabel = new Label("Total Size: ");
     private final Label patchSizeLabel = new Label("Patch Size: ");
     // The size of one side of the texture, eg. 512. This will be used to blend several textures together into one texture for
@@ -33,9 +35,10 @@ public class JfxTerrainCreateForm extends VBox {
     // down the editor. You cannot change this value after it is set!
     private final Label alphaTextureSizeLabel = new Label("Alpha Texture Size: ");
     
-    private final TextField totalSizeField = new TextField();
-    private final TextField patchSizeField = new TextField();
-    private final TextField alphaTextureSizeField = new TextField();
+    public final TextField nameField = new TextField();
+    public final TextField totalSizeField = new TextField("256");
+    public final TextField patchSizeField = new TextField("64");
+    public final TextField alphaTextureSizeField = new TextField("256");
     
     private final AnchorPane btnPane = new AnchorPane();
     private final Button ok = new Button(Manager.getRes(ResConstants.COMMON_OK));
@@ -44,9 +47,10 @@ public class JfxTerrainCreateForm extends VBox {
     public JfxTerrainCreateForm() {
         getChildren().addAll(grid, btnPane);
         
-        grid.addRow(0, totalSizeLabel, totalSizeField);
-        grid.addRow(1, patchSizeLabel, patchSizeField);
-        grid.addRow(2, alphaTextureSizeLabel, alphaTextureSizeField);
+        grid.addRow(0, nameLabel, nameField);
+        grid.addRow(1, totalSizeLabel, totalSizeField);
+        grid.addRow(2, patchSizeLabel, patchSizeField);
+        grid.addRow(3, alphaTextureSizeLabel, alphaTextureSizeField);
         
         GridPane.setHgrow(totalSizeField, Priority.ALWAYS);
         GridPane.setHgrow(patchSizeField, Priority.ALWAYS);
@@ -59,16 +63,21 @@ public class JfxTerrainCreateForm extends VBox {
         AnchorPane.setRightAnchor(cancel, 50.0);
         btnPane.prefHeight(50);
         
+        nameField.setPromptText("Enter a unique terrain name.");
         totalSizeField.setPromptText("Must be power of 2.");
         patchSizeField.setPromptText("Must be power of 2 and less than Total Size.");
         alphaTextureSizeField.setPromptText("The size of one side of the texture, eg. 512.");
         
         grid.setVgap(10);
+        GridPane.setHalignment(nameLabel, HPos.RIGHT);
         GridPane.setHalignment(totalSizeLabel, HPos.RIGHT);
         GridPane.setHalignment(patchSizeLabel, HPos.RIGHT);
         GridPane.setHalignment(alphaTextureSizeLabel, HPos.RIGHT);
         setPadding(new Insets(10));
         setMinWidth(400);
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmss");
+        nameField.setText("terrain" + sdf.format(new Date()));
         
         // for debug
 //        setStyle("-fx-border: solid inside;-fx-border-width:1;-fx-border-color:red;");

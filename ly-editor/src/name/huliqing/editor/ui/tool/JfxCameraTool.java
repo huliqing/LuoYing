@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.ui.toolview;
+package name.huliqing.editor.ui.tool;
 
 import javafx.scene.Node;
 import javafx.scene.control.MenuButton;
@@ -20,7 +20,7 @@ import name.huliqing.editor.utils.BestEditCamera;
  *
  * @author huliqing
  */
-public class CameraToolView extends AbstractToolView {
+public class JfxCameraTool extends JfxAbstractTool {
     
     private final MenuButton view = new MenuButton();
     private CameraTool cameraTool;

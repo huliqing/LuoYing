@@ -6,29 +6,23 @@
 package name.huliqing.editor.edit.spatial;
 
 import java.util.logging.Logger;
+import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
-import name.huliqing.editor.edit.JfxAbstractEdit;
+import name.huliqing.editor.edit.JfxSimpleEdit;
 import name.huliqing.editor.manager.EditManager;
-import name.huliqing.editor.ui.ToolBarView;
+import name.huliqing.editor.toolbar.EditToolbar;
+import name.huliqing.editor.toolbar.JfxToolbar;
 import name.huliqing.fxswing.Jfx;
 
 /**
- * Spatial编辑UI界面
+ * Spatial编辑器
  * @author huliqing
  */
-public class JfxSpatialEdit extends JfxAbstractEdit<SpatialEdit> {
+public class JfxSpatialEdit extends JfxSimpleEdit<SpatialEdit> {
+//    private static final Logger LOG = Logger.getLogger(JfxSpatialEdit.class.getName());
 
-    private static final Logger LOG = Logger.getLogger(JfxSpatialEdit.class.getName());
-
-    private Pane editPanel;
-    private Region toolbarView;
-    
-    // editPanel不能完全透明，完全透明则响应不了事件，在响应事件时还需要设置为visible=true
-    private final static String STYLE_EDIT_PANEL = "-fx-background-color:rgba(0,0,0,0.01)";
+    private JfxToolbar jfxToolbar;
     
     public JfxSpatialEdit() {
         this.jmeEdit = new SpatialEdit();
@@ -36,55 +30,37 @@ public class JfxSpatialEdit extends JfxAbstractEdit<SpatialEdit> {
 
     @Override
     protected void jfxInitialize() {
-        editPanel = new VBox();
-        toolbarView = new ToolBarView(jmeEdit);
-        editRoot.getChildren().addAll(editPanel, toolbarView);
-        
-        editPanel.prefWidthProperty().bind(editRoot.widthProperty());
-        editPanel.prefHeightProperty().bind(editRoot.heightProperty().subtract(toolbarView.heightProperty()));
-        editPanel.setVisible(false);
-        editPanel.setStyle(STYLE_EDIT_PANEL);
-        editPanel.setOnDragOver(e -> {
-            Dragboard db = e.getDragboard();
-            if (db.hasFiles()) {
-                e.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-            }
-            e.consume();
-        });
-        editPanel.setOnDragDropped(e -> {
-            Dragboard db = e.getDragboard();
-            if (db.hasFiles()) {
-                EditManager.openSpatialEditor(db.getFiles().get(0).getAbsolutePath());
-                e.setDropCompleted(true);
-            }
-            e.consume();
-        });
-        
-        toolbarView.prefWidthProperty().bind((editRoot.widthProperty()));
-        
-        // 强制刷新一下UI，必须的，否则界面无法实时刷新(JFX嵌入Swing的一个BUG)
-        Jfx.jfxForceUpdate();
-        Jfx.jfxCanvasBind(editPanel);
+        super.jfxInitialize();
+        jfxToolbar = new JfxToolbar((EditToolbar)jmeEdit.getToolbar());
+        jfxToolbar.initialize();
+        setToolbar(jfxToolbar);
     }
 
     @Override
     protected void jfxCleanup() {
-        toolbarView.prefWidthProperty().unbind();
-        editPanel.prefWidthProperty().unbind();
-        editPanel.prefHeightProperty().unbind();
-        editRoot.getChildren().removeAll(editPanel, toolbarView);
+        setToolbar(null);
+        jfxToolbar.cleanup();
+        jfxToolbar = null;
+        super.jfxCleanup();
     }
 
     @Override
-    public void jfxOnDragStarted() {
-        super.jfxOnDragStarted();
-        editPanel.setVisible(true);
+    protected void onDragOver(DragEvent e) {
+        Dragboard db = e.getDragboard();
+        if (db.hasFiles()) {
+            e.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+        }
+        e.consume();
     }
 
     @Override
-    public void jfxOnDragEnded() {
-        super.jfxOnDragEnded();
-        editPanel.setVisible(false);
+    protected void onDragDropped(DragEvent e) {
+        Dragboard db = e.getDragboard();
+        if (db.hasFiles()) {
+            EditManager.openSpatialEditor(db.getFiles().get(0).getAbsolutePath());
+            e.setDropCompleted(true);
+        }
+        e.consume();
     }
 
     public void setFilePath(String abstractFilePath) {
@@ -93,9 +69,5 @@ public class JfxSpatialEdit extends JfxAbstractEdit<SpatialEdit> {
         });
     }
 
-    @Override
-    public Pane getPropertyPanel() {
-        return editPanel;
-    }
     
 }

@@ -101,7 +101,7 @@ public class IdConstants {
     public final static String SYS_ENTITY_DIRECTIONAL_LIGHT = "sysEntityDirectionalLight";
     /** 内置环境光物体: sysEntityAmbientLight */
     public final static String SYS_ENTITY_AMBIENT_LIGHT = "sysEntityAmbientLight";
-    /** sysEntityTerrain */
+    /** 普通地形只有一个Box：sysEntityTerrain */
     public final static String SYS_ENTITY_TERRAIN = "sysEntityTerrain";
     /** sysEntityTree */
     public final static String SYS_ENTITY_TREE = "sysEntityTree";
@@ -119,6 +119,8 @@ public class IdConstants {
     public final static String SYS_ENTITY_BOUNDARY = "sysEntityBoundary";
     /** sysEntityAudio */
     public final static String SYS_ENTITY_AUDIO = "sysEntityAudio";
+    /** sysEntityModel */
+    public final static String SYS_ENTITY_MODEL = "sysEntityModel";
     
     // =============================================================================
     // El

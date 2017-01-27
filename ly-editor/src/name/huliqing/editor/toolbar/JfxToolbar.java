@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.ui;
+package name.huliqing.editor.toolbar;
 
 import java.util.HashMap;
 import java.util.List;
@@ -11,56 +11,59 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.control.ToolBar;
-import name.huliqing.editor.toolbar.EditToolbar;
-import name.huliqing.editor.toolbar.Toolbar;
-import name.huliqing.editor.toolbar.ToolbarListener;
 import name.huliqing.editor.tools.Tool;
-import name.huliqing.editor.ui.toolview.ToolView;
-import name.huliqing.editor.ui.toolview.ToolViewFactory;
+import name.huliqing.editor.ui.tool.JfxToolFactory;
 import name.huliqing.fxswing.Jfx;
-import name.huliqing.editor.edit.JmeEdit;
-import name.huliqing.editor.edit.JmeEditListener;
+import name.huliqing.editor.ui.tool.JfxTool;
 
 /**
  *
  * @author huliqing
  */
-public class ToolBarView extends ToolBar implements JmeEditListener, ToolbarListener{
+public class JfxToolbar extends ToolBar implements ToolbarListener{
 
-    private static final Logger LOG = Logger.getLogger(ToolBarView.class.getName());
+    private static final Logger LOG = Logger.getLogger(JfxToolbar.class.getName());
     
-    private final JmeEdit form;
+    private final Map<Tool, JfxTool> toolViewMap = new HashMap<Tool, JfxTool>();
+    
     private EditToolbar  toolbar;
+    private boolean initialized;
     
-    private final Map<Tool, ToolView> toolViewMap = new HashMap<Tool, ToolView>();
-    
-    public ToolBarView(JmeEdit formView) {
-        this.form = formView;
-        resetToolbar();
+    public JfxToolbar(EditToolbar toolbar) {
+        this.toolbar = toolbar;
     }
+    
+    public void initialize() {
+        if (initialized) {
+            throw new IllegalStateException();
+        }
+        initialized = true;
 
-    private void resetToolbar() {
         getItems().clear();
-        toolViewMap.clear();
-        if (toolbar != null) {
-           toolbar.removeListener(this);
-        }
-
-        toolbar = (EditToolbar) form.getToolbar();
-        if (toolbar == null) {
-            LOG.log(Level.WARNING, "Toolbar not found from EditForm! editForm={0}", form);
-            return;
-        }
         toolbar.addListener(this);
         List<Tool> enableList =  toolbar.getToolsEnabled();
         List<Tool> activateList = toolbar.getToolsActivated();
         for (Tool tool : enableList) {
-            ToolView toolView = createToolView(tool, activateList != null && activateList.contains(tool));
+            JfxTool toolView = createToolView(tool, activateList != null && activateList.contains(tool));
             if (toolView != null) {
                 toolViewMap.put(tool, toolView);
                 getItems().add(toolView.getView());
             }
         }
+    }
+    
+    public boolean isInitialized() {
+        return initialized;
+    }
+    
+    public void cleanup() {
+        if (toolbar != null) {
+            toolbar.removeListener(this);
+            toolbar = null;
+        }
+        toolViewMap.clear();
+        getItems().clear();
+        initialized = false;
     }
 
     @Override
@@ -74,7 +77,7 @@ public class ToolBarView extends ToolBar implements JmeEditListener, ToolbarList
     @Override
     public void onToolActivated(Tool tool) {
         Jfx.runOnJfx(() -> {
-            ToolView tv = toolViewMap.get(tool);
+            JfxTool tv = toolViewMap.get(tool);
             if (tv != null) {
                 tv.setActivated(true);
             }
@@ -84,7 +87,7 @@ public class ToolBarView extends ToolBar implements JmeEditListener, ToolbarList
     @Override
     public void onToolDeactivated(Tool tool) {
         Jfx.runOnJfx(() -> {
-            ToolView tv = toolViewMap.get(tool);
+            JfxTool tv = toolViewMap.get(tool);
             if (tv != null) {
                 tv.setActivated(false);
             }
@@ -99,21 +102,16 @@ public class ToolBarView extends ToolBar implements JmeEditListener, ToolbarList
     public void onToolDisabled(Tool tool) {
     }
     
-    private ToolView createToolView(Tool tool, boolean activated) {
-        ToolView tv = ToolViewFactory.createToolView(tool, toolbar);
+    private JfxTool createToolView(Tool tool, boolean activated) {
+        JfxTool tv = JfxToolFactory.createToolView(tool, toolbar);
         if (tv != null) {
-            tv.setActivated(activated); 
-            return tv; 
+            tv.setActivated(activated);
+            return tv;
         }  else {
             LOG.log(Level.WARNING, "Unsupported tool, toolName={0}, tool={1}"
                     , new Object[] {tool.getName(), tool.getClass().getName()});
             return null;
         }
-    }
-    
-    @Override
-    public void onToolbarChanged(JmeEdit form, Toolbar newToolbar) {
-//        Jfx.runOnJfx(() -> {resetToolbar();});
     }
     
 }

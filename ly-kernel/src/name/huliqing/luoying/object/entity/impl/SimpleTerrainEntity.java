@@ -22,6 +22,7 @@ package name.huliqing.luoying.object.entity.impl;
 import com.jme3.collision.CollisionResults;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.object.entity.ModelEntity;
@@ -41,13 +42,14 @@ public class SimpleTerrainEntity extends ModelEntity implements TerrainEntity {
     
     @Override
     public Spatial loadModel() {
-        terrain = LuoYing.getAssetManager().loadModel(data.getAsString("file"));
+        String file = data.getAsString("file");
+        terrain = LuoYing.getAssetManager().loadModel(file);
         return terrain;
     }
 
     @Override
     public Vector3f getHeight(float x, float z) {
-        float maxHeight = GeometryUtils.getModelHeight(spatial);
+        float maxHeight = GeometryUtils.getModelHeight(terrain);
         ray.origin.set(x, maxHeight + 1, z);
         ray.direction.set(0,-1,0);
         results.clear();

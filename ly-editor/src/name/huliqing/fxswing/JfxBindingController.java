@@ -14,6 +14,8 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.awt.event.WindowListener;
 import java.awt.event.WindowStateListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JWindow;
 import javax.swing.SwingUtilities;
@@ -24,7 +26,7 @@ import javax.swing.SwingUtilities;
  * @author huliqing
  */
 public class JfxBindingController implements WindowListener, WindowStateListener, WindowFocusListener, ComponentListener {
-//    private static final Logger LOG = Logger.getLogger(JfxBindingController.class.getName());
+    private static final Logger LOG = Logger.getLogger(JfxBindingController.class.getName());
 
     private JWindow win;
     private JFrame frame;
@@ -76,12 +78,12 @@ public class JfxBindingController implements WindowListener, WindowStateListener
     @Override
     public void windowIconified(WindowEvent e) {
         win.setBackground(java.awt.Color.WHITE);
-//        LOG.info(e.getWindow().getName() + "=windowIconified");
+//        LOG.log(Level.INFO, "{0}=windowIconified", e.getWindow().getName());
     }
 
     @Override
     public void windowDeiconified(WindowEvent e) {
-//        LOG.info(e.getWindow().getName() + "=windowDeiconified");
+//        LOG.log(Level.INFO, "{0}=windowDeiconified", e.getWindow().getName());
     }
 
     /**
@@ -96,27 +98,27 @@ public class JfxBindingController implements WindowListener, WindowStateListener
         win.setBackground(TRANSPARENT);
         updateLocation(win, e.getWindow());
         updateSize(win, e.getWindow());
-//        LOG.info(e.getWindow().getName() + "=windowActivated");
+//        LOG.log(Level.INFO, "{0}=windowActivated", e.getWindow().getName());
     }
 
     @Override
     public void windowDeactivated(WindowEvent e) {
-//        LOG.info(e.getWindow().getName() + "=windowDeactivated");
+//        LOG.log(Level.INFO, "{0}=windowDeactivated", e.getWindow().getName());
     }
 
     @Override
     public void windowStateChanged(WindowEvent e) {
-//        LOG.info(e.getWindow().getName() + "=windowStateChanged:" + e.getOldState() + "->" + e.getNewState());
+//        LOG.log(Level.INFO, "{0}=windowStateChanged:{1}->{2}", new Object[]{e.getWindow().getName(), e.getOldState(), e.getNewState()});
     }
 
     @Override
     public void windowGainedFocus(WindowEvent e) {
-//        LOG.info(e.getWindow().getName() + "=windowGainedFocus");
+//        LOG.log(Level.INFO, "{0}=windowGainedFocus", e.getWindow().getName());
     }
 
     @Override
     public void windowLostFocus(WindowEvent e) {
-//        LOG.info(e.getWindow().getName() + "=windowLostFocus");
+//        LOG.log(Level.INFO, "{0}=windowLostFocus", e.getWindow().getName());
     }
 
     @Override

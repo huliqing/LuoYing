@@ -44,7 +44,7 @@ public abstract class EditTool implements Tool<EditToolbar> {
             throw new IllegalStateException("Tool already initialized, name=" + name + ", class=" + getClass().getName());
         }
         initialized = true;
-        form = toolbar.getEditForm();
+        form = toolbar.getEdit();
         this.editor = form.getEditor();
         if (eventHelper != null) {
             eventHelper.initialize();

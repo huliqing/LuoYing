@@ -5,7 +5,6 @@
  */
 package name.huliqing.fxswing;
 
-import com.jme3.renderer.RenderManager;
 import java.awt.Canvas;
 import java.awt.Container;
 import javafx.beans.value.ChangeListener;

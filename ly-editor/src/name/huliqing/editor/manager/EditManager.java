@@ -7,13 +7,11 @@ package name.huliqing.editor.manager;
 
 import javafx.scene.layout.Pane;
 import name.huliqing.editor.Editor;
-import name.huliqing.editor.edit.JfxAbstractEdit;
 import name.huliqing.editor.edit.scene.JfxSceneEdit;
 import name.huliqing.editor.edit.spatial.JfxSpatialEdit;
 import name.huliqing.fxswing.Jfx;
 import name.huliqing.luoying.constants.IdConstants;
 import name.huliqing.editor.edit.JfxEdit;
-import name.huliqing.editor.edit.terrain.JfxTerrainEdit;
 
 /**
  *
@@ -32,16 +30,7 @@ public class EditManager {
     }
     
     public static void openTestFormView() {
-//        Editor editor = (Editor) Jfx.getJmeApp();
-//        JfxSceneEditView ev = new JfxSceneEditView(jfxEditZone);
-//        editor.setFormView(ev);
         openSceneEditor(IdConstants.SYS_SCENE_TEST);
-    }
-    
-    public static void openTerrainEdit() {
-        Editor editor = (Editor) Jfx.getJmeApp();
-        JfxTerrainEdit ev = new JfxTerrainEdit();
-        editor.setJfxEdit(ev);
     }
     
     public static void openSpatialEditor(String fileAbsolutePath) {
@@ -62,18 +51,5 @@ public class EditManager {
         newEv.setScene(sceneId);
         editor.setJfxEdit(newEv);
     }
-
-//    public static void notifyDragStarted() {
-//        Editor editor = (Editor) Jfx.getJmeApp();
-//        JfxAbstractEdit sev = (JfxAbstractEdit) editor.getJfxEdit();
-//        sev.jfxOnDragStarted();
-//    }
-//    
-//    public static void notifyDragEnded() {
-//        Editor editor = (Editor) Jfx.getJmeApp();
-//        JfxAbstractEdit sev = (JfxAbstractEdit) editor.getJfxEdit();
-//        sev.jfxOnDragEnded();
-//    }
-    
     
 }

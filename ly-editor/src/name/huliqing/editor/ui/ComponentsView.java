@@ -3,44 +3,36 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.components;
+package name.huliqing.editor.ui;
 
 import java.util.List;
-import java.util.logging.Logger;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TitledPane;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
+import name.huliqing.editor.components.Component;
 import name.huliqing.editor.constants.DataFormatConstants;
-import name.huliqing.editor.manager.ComponentManager;
-import name.huliqing.editor.manager.ComponentManager.Component;
-import name.huliqing.editor.manager.EditManager;
+import name.huliqing.editor.constants.StyleConstants;
 
 /**
  *
  * @author huliqing
  */
-public class EntityComponents extends AbstractComponents {
-
-    private static final Logger LOG = Logger.getLogger(EntityComponents.class.getName());
-
-    private List<Component> COMPONENTS;
+public class ComponentsView extends TitledPane {
+//    private static final Logger LOG = Logger.getLogger(ComponentsView.class.getName());
+    
     private final ListView<Component> listView = new ListView();
 
-    public EntityComponents() {
-        super("Entity Components");
-    }
-
-    @Override
-    public Node buildLayout() {
-        COMPONENTS = ComponentManager.getComponents("SceneEntity");
+    public ComponentsView(String title, List<Component> components) {
+        
         listView.getItems().clear();
-        listView.getItems().addAll(COMPONENTS);
+        listView.getItems().addAll(components);
 
         listView.setCellFactory((ListView<Component> param) -> new ListCell<Component>() {
             @Override
@@ -49,7 +41,7 @@ public class EntityComponents extends AbstractComponents {
                 String name = null;
                 Node icon = null;
                 if (item != null && !empty) {
-                    name = item.name;
+                    name = item.getName();
                 }
                 setText(name);
                 setGraphic(icon);
@@ -58,7 +50,10 @@ public class EntityComponents extends AbstractComponents {
 
         listView.setOnDragDetected(this::doDragDetected);
         listView.setOnDragDone(this::doDragDone);
-        return listView;
+        
+        setId(StyleConstants.ID_COMPONENTS);
+        setText(title);
+        setContent(listView);
     }
 
     private Component getMainSelectItem() {

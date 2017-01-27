@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.ui.toolview;
+package name.huliqing.editor.ui.tool;
 
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.value.ObservableValue;
@@ -19,7 +19,7 @@ import name.huliqing.editor.tools.Tool;
  *
  * @author huliqing
  */
-public class ToggleToolView extends AbstractToolView {
+public class JfxToggleTool extends JfxAbstractTool {
 
     private final ToggleButton view = new ToggleButton();
     

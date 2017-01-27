@@ -9,6 +9,7 @@ import com.jme3.app.Application;
 import com.jme3.app.LegacyApplication;
 import com.jme3.system.AppSettings;
 import com.jme3.system.JmeCanvasContext;
+import com.sun.javafx.stage.EmbeddedWindow;
 import java.awt.Canvas;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -24,7 +25,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.stage.Popup;
 import javafx.stage.Window;
 import javax.swing.JFrame;
 import javax.swing.JWindow;
@@ -45,7 +45,7 @@ public class Jfx {
     /**
      * JWindow,包含JFX根节点JFXPanel
      */
-    private static JWindow jfxWindow;
+    private static JWindow jWindow;
     
     /**
      * JME app
@@ -58,7 +58,6 @@ public class Jfx {
      * JFX根节点，包含于JFXPanel下面。
      */
     private static Pane jfxRoot;
-    
     
     /**
      * 主编辑3d Canvas界面，位于mainFrame中
@@ -76,12 +75,12 @@ public class Jfx {
     }
     
     /**
-     * 获取JFX UI JWindow窗器，这个容器包含JFX根节点，层次关系是这样的: 
-     * MainFrame -> JfxWindow -> JFXPanel -> JfxRoot
+     * 获取JWindow窗器，这个容器包含JFX根节点，层次关系是这样的: 
+     * MainFrame -> JWindow -> JFXPanel -> JfxRoot
      * @return 
      */
-    public static JWindow getJfxWindow() {
-        return jfxWindow;
+    public static JWindow getJWindow() {
+        return jWindow;
     }
 
     /**
@@ -98,6 +97,14 @@ public class Jfx {
      */
     public static Canvas getJmeCanvas() {
         return jmeCanvas;
+    }
+    
+    public static JFXPanel getJfxPanel() {
+        return jfxPanel;
+    }
+    
+    public static EmbeddedWindow getJfxWindow() {
+        return (EmbeddedWindow) jfxPanel.getScene().getWindow();
     }
 
     /**
@@ -165,9 +172,9 @@ public class Jfx {
         jmeCanvas.setSize(settings.getWidth(), settings.getHeight());
         
         // 创建Jfx界面，这个界面会包含JFX组件，作为UI界面，该界面始终覆盖在mainFrame上面
-        jfxWindow = createJfxWindow(mainFrame, jfxRoot);
-        jfxWindow.setName("JFXWindow");
-        jfxWindow.setSize(mainFrame.getSize());
+        jWindow = createJWindow(mainFrame, jfxRoot);
+        jWindow.setName("JFXWindow");
+        jWindow.setSize(mainFrame.getSize());
         
         mainFrame.add(jmeCanvas);
         mainFrame.addWindowListener(new WindowAdapter() {
@@ -182,7 +189,7 @@ public class Jfx {
         
         // 绑定Jfx窗口，使Jfx窗口始终与mainFrame的位置和大小一致。
         bindingController = new CanvasJfxBindingController();
-        bindingController.bind(jfxWindow, mainFrame);
+        bindingController.bind(jWindow, mainFrame);
     }
 
     /**
@@ -207,20 +214,20 @@ public class Jfx {
      * @param jfxRoot
      * @return 
      */
-    private static JWindow createJfxWindow(JFrame parent, final Pane jfxRoot) {
-        JWindow jWindow = new JWindow(parent);
-        jWindow.setLocationRelativeTo(null);
-        jWindow.setVisible(true);
+    private static JWindow createJWindow(JFrame parent, final Pane jfxRoot) {
+        JWindow jwin = new JWindow(parent);
+        jwin.setLocationRelativeTo(null);
+        jwin.setVisible(true);
         
         jfxPanel = new JFXPanel();
-        jWindow.getContentPane().add(jfxPanel);
+        jwin.getContentPane().add(jfxPanel);
 
         Platform.runLater(() -> {
             // 设置JFX主场景，并让JFX主界面变得透明，这样不会覆盖整个Canvas.
             jfxRoot.setBackground(javafx.scene.layout.Background.EMPTY);
             jfxPanel.setScene(new Scene(jfxRoot, Color.TRANSPARENT));
         });
-        return jWindow;
+        return jwin;
     }
 
     /**
@@ -299,12 +306,12 @@ public class Jfx {
         // 一些情况下，如在程序中动态添加JFX UI时发现无法实时刷新界面。即使调用requestLayout都没有用。
         // 只有在手动调整一下界面大小的时候才会刷新，这可能是一个BUG。
         // 这里使用一种比较特殊的方式处理：稍微改变一下swing组件的高度大小，然后再改回来。
-        int width = jfxWindow.getWidth();
-        int height = jfxWindow.getHeight();
+        int width = jWindow.getWidth();
+        int height = jWindow.getHeight();
         Jfx.runOnSwing(() -> {
-            jfxWindow.setSize(width, height + 1); 
+            jWindow.setSize(width, height + 1); 
             Jfx.runOnSwing(() -> {
-                jfxWindow.setSize(width, height);
+                jWindow.setSize(width, height);
             });
         });
     }
