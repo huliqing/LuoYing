@@ -15,13 +15,14 @@ import com.jme3.renderer.Camera;
 import com.jme3.scene.CameraNode;
 import com.jme3.scene.control.CameraControl;
 import java.util.Arrays;
-import java.util.logging.Logger;
 import name.huliqing.editor.EditorListener;
 import name.huliqing.editor.constants.ResConstants;
+import name.huliqing.editor.edit.SimpleJmeEdit;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.JmeEvent;
 import name.huliqing.editor.manager.Manager;
 import name.huliqing.editor.manager.ResManager;
+import name.huliqing.editor.toolbar.EditToolbar;
 import name.huliqing.editor.utils.BestEditCamera;
 import name.huliqing.editor.utils.BestEditCamera.View;
 import name.huliqing.luoying.object.anim.Anim;
@@ -34,7 +35,7 @@ import name.huliqing.luoying.object.anim.CurveMoveAnim;
  */
 public class CameraTool extends EditTool implements EditorListener {
     
-    private static final Logger LOG = Logger.getLogger(CameraTool.class.getName());
+//    private static final Logger LOG = Logger.getLogger(CameraTool.class.getName());
     
     private final String EVENT_DRAG = "cameraDragEvent";
     private final String EVENT_ROTATE = "cameraRotateEvent";
@@ -85,8 +86,8 @@ public class CameraTool extends EditTool implements EditorListener {
     }
 
     @Override
-    public void initialize() {
-        super.initialize();
+    public void initialize(SimpleJmeEdit jmeEdit, EditToolbar toolbar) {
+        super.initialize(jmeEdit, toolbar);
         editorCam = new BestEditCamera(editor.getCamera(), editor.getInputManager());
         view = editorCam.getView();
         updateViewText();
@@ -217,8 +218,8 @@ public class CameraTool extends EditTool implements EditorListener {
      * 把镜头移动场景中选择的物体
      */
     public void doChaseSelected() {
-        if (form.getSelected() != null) {
-            doChase(form.getSelected().getReadOnlySelectedSpatial().getWorldTranslation());
+        if (edit.getSelected() != null) {
+            doChase(edit.getSelected().getReadOnlySelectedSpatial().getWorldTranslation());
         }
     }
     
@@ -268,7 +269,7 @@ public class CameraTool extends EditTool implements EditorListener {
         locAnim.start();
         AnimNode locAnimNode = new AnimNode(locAnim, true);
         locAnimNode.attachChild(cameraNode);
-        form.getEditRoot().attachChild(locAnimNode);
+        edit.getEditRoot().attachChild(locAnimNode);
     }
 
     @Override

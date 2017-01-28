@@ -7,18 +7,16 @@ package name.huliqing.editor.toolbar;
 
 import com.jme3.util.SafeArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 import name.huliqing.editor.tools.Tool;
 import name.huliqing.editor.edit.JmeEdit;
 
 /**
  *
  * @author huliqing
- * @param <F> Form类型
+ * @param <E> Form类型
  */
-public abstract class AbstractToolbar<F extends JmeEdit> implements Toolbar<F> {
-
-    private static final Logger LOG = Logger.getLogger(AbstractToolbar.class.getName());
+public abstract class AbstractToolbar<E extends JmeEdit> implements Toolbar<E> {
+//    private static final Logger LOG = Logger.getLogger(AbstractToolbar.class.getName());
 
     protected final SafeArrayList<ToolbarListener> listeners = new SafeArrayList<ToolbarListener>(ToolbarListener.class);
     
@@ -37,16 +35,20 @@ public abstract class AbstractToolbar<F extends JmeEdit> implements Toolbar<F> {
      */
     protected final SafeArrayList<Tool> toolsActivated = new SafeArrayList<Tool>(Tool.class);
     
-    protected F edit;
+    protected E edit;
     protected boolean initialized;
+    protected boolean enabled = true;
+    
+    public AbstractToolbar(E edit) {
+        this.edit = edit;
+    }
 
     @Override
-    public void initialize(F jmeEdit) {
+    public void initialize() {
         if (initialized) {
             throw new IllegalStateException();
         }
         initialized = true;
-        this.edit = jmeEdit;
     }
 
     @Override
@@ -59,6 +61,22 @@ public abstract class AbstractToolbar<F extends JmeEdit> implements Toolbar<F> {
         for (Tool t : toolsActivated.getArray()) {
             t.update(tpf);
         }
+    }
+    
+    @Override
+    public void setEnabled(boolean enabled) {
+        boolean changed = this.enabled != enabled;
+        this.enabled = enabled;
+        if (changed) {
+            for (ToolbarListener tl : listeners.getArray()) {
+                tl.onStateChanged(enabled);
+            }
+        }
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
     }
     
     @Override
@@ -92,6 +110,21 @@ public abstract class AbstractToolbar<F extends JmeEdit> implements Toolbar<F> {
             }
         }
         return result;
+    }
+    
+    /**
+     * 清理掉工具栏中的所有工具,这个方法由子类调用，方便在cleanup的时候一次性清理和移除，而不需要一个一个清理的移除.
+     * 这个方法不会触发侦听器，只用于在清理，销毁工具栏的时候方便调用。
+     */
+    protected void removeAll() {
+        for (Tool t : tools.getArray()) {
+            if (t.isInitialized()) {
+                t.cleanup();
+            }
+        }
+        tools.clear();
+        toolsEnabled.clear();
+        toolsActivated.clear();
     }
 
     @Override
@@ -140,8 +173,7 @@ public abstract class AbstractToolbar<F extends JmeEdit> implements Toolbar<F> {
         if (!toolsActivated.contains(t)) {
             toolsActivated.add(t);
             if (!t.isInitialized()) {
-                t.setToolbar(this);
-                t.initialize();
+                t.initialize(edit, this);
             }
             for (ToolbarListener tl : listeners.getArray()) {
                 tl.onToolActivated(t);
@@ -203,6 +235,7 @@ public abstract class AbstractToolbar<F extends JmeEdit> implements Toolbar<F> {
      * 获取所有可用的工具
      * @return 
      */
+    @Override
     public SafeArrayList<Tool> getToolsEnabled() {
         return toolsEnabled;
     }
@@ -211,12 +244,13 @@ public abstract class AbstractToolbar<F extends JmeEdit> implements Toolbar<F> {
      * 获取所有激活中的工具
      * @return 
      */
+    @Override
     public SafeArrayList<Tool> getToolsActivated() {
         return toolsActivated;
     }
 
     @Override
-    public F getEdit() {
+    public E getEdit() {
         return edit;
     }
 

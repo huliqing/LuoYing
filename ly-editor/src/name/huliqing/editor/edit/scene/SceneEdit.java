@@ -9,20 +9,20 @@ import com.jme3.input.KeyInput;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 import name.huliqing.editor.Editor;
 import name.huliqing.editor.edit.SimpleJmeEdit;
 import name.huliqing.editor.edit.select.EntitySelectObj;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.JmeEvent;
 import name.huliqing.editor.manager.SelectObjManager;
-import name.huliqing.editor.toolbar.EditToolbar;
 import name.huliqing.editor.tools.MoveTool;
 import name.huliqing.editor.edit.UndoRedo;
-import name.huliqing.editor.toolbar.SimpleEditToolbar;
+import name.huliqing.editor.toolbar.TerrainToolbar;
+import name.huliqing.editor.toolbar.Toolbar;
 import name.huliqing.fxswing.Jfx;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.constants.IdConstants;
@@ -42,9 +42,11 @@ import name.huliqing.luoying.xml.DataFactory;
  */
 public class SceneEdit extends SimpleJmeEdit<EntitySelectObj> implements SceneListener {
 
-    private static final Logger LOG = Logger.getLogger(SceneEdit.class.getName());
+//    private static final Logger LOG = Logger.getLogger(SceneEdit.class.getName());
     private final PlayService playService = Factory.get(PlayService.class);
     private final JfxSceneEdit jfxEdit;
+    
+    private final Toolbar extTerrainTools = new TerrainToolbar(this);
 
     private Game game;
     private Scene scene;
@@ -52,18 +54,23 @@ public class SceneEdit extends SimpleJmeEdit<EntitySelectObj> implements SceneLi
     
     private final Map<EntityData, EntitySelectObj> objMap = new LinkedHashMap<EntityData, EntitySelectObj>();
     
-    private final EditToolbar editToolbar = new SimpleEditToolbar();
     private final JmeEvent delEvent = new JmeEvent("delete");
     private final JmeEvent duplicateEvent = new JmeEvent("duplicate");
     
     public SceneEdit(JfxSceneEdit jfxEdit) {
         this.jfxEdit = jfxEdit;
     }
+
+    @Override
+    protected List<Toolbar> createExtToolbars() {
+        List<Toolbar> tbs = new ArrayList();
+        tbs.add(extTerrainTools);
+        return tbs;
+    }
     
     @Override
     public void initialize(Editor editor) {
         super.initialize(editor);
-        setToolbar(editToolbar);
         
         // 删除操作事件
         delEvent.bindKey(KeyInput.KEY_X, true);
@@ -86,8 +93,8 @@ public class SceneEdit extends SimpleJmeEdit<EntitySelectObj> implements SceneLi
                 addEntity(ed);
                 setSelected(ed);
                 // 转到移动工具激活并进行自由移动
-                MoveTool moveTool = editToolbar.getTool(MoveTool.class);
-                editToolbar.setActivated(moveTool, true);
+                MoveTool moveTool = (MoveTool) toolbar.getTool(MoveTool.class);
+                toolbar.setActivated(moveTool, true);
                 moveTool.startFreeMove();
             }
         });
@@ -105,7 +112,6 @@ public class SceneEdit extends SimpleJmeEdit<EntitySelectObj> implements SceneLi
             game = null;
         }
         sceneLoaded = false;
-        getEditRoot().detachAllChildren();
         super.cleanup(); 
     }
     
@@ -194,7 +200,7 @@ public class SceneEdit extends SimpleJmeEdit<EntitySelectObj> implements SceneLi
             eso.getObject().initialize();
             eso.getObject().onInitScene(scene);
         }
-    }  
+    }
     
     public void addEntity(EntityData ed) {
         if (!sceneLoaded)
@@ -253,7 +259,7 @@ public class SceneEdit extends SimpleJmeEdit<EntitySelectObj> implements SceneLi
         addUndoRedo(new EntityRemovedUndoRedo(eso));
         return true;
     }
-    
+
     private class EntityAddedUndoRedo implements UndoRedo {
         private final EntitySelectObj eso;
         public EntityAddedUndoRedo(EntitySelectObj eso) {

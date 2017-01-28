@@ -15,12 +15,14 @@ import name.huliqing.editor.action.Picker;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.JmeEvent;
 import name.huliqing.editor.edit.Mode;
+import name.huliqing.editor.edit.SimpleJmeEdit;
 import name.huliqing.editor.select.SelectObj;
 import name.huliqing.editor.tiles.AxisNode;
 import name.huliqing.editor.tiles.LocationControlObj;
 import name.huliqing.editor.edit.UndoRedo;
 import name.huliqing.luoying.manager.PickManager;
 import name.huliqing.editor.edit.SimpleJmeEditListener;
+import name.huliqing.editor.toolbar.EditToolbar;
 
 /**
  * 移动编辑工具
@@ -64,17 +66,17 @@ public class MoveTool extends EditTool implements SimpleJmeEditListener{
     }
     
     @Override
-    public void initialize() {
-        super.initialize();
-        form.getEditRoot().getParent().attachChild(controlObj);
-        form.addSimpleEditListener(this);
+    public void initialize(SimpleJmeEdit jmeEdit, EditToolbar toolbar) {
+        super.initialize(jmeEdit, toolbar);
+        edit.getEditRoot().getParent().attachChild(controlObj);
+        edit.addSimpleEditListener(this);
         updateMarkerState();
     }
     
     @Override
     public void cleanup() {
         endMove();
-        form.addSimpleEditListener(this);
+        edit.addSimpleEditListener(this);
         controlObj.removeFromParent();
         super.cleanup();
     }
@@ -96,7 +98,7 @@ public class MoveTool extends EditTool implements SimpleJmeEditListener{
     
     @Override
     protected void onToolEvent(Event e) {
-        selectObj = form.getSelected();
+        selectObj = edit.getSelected();
         if (selectObj == null || selectObj.getReadOnlySelectedSpatial() == null) {
             endMove();
             return;
@@ -175,7 +177,7 @@ public class MoveTool extends EditTool implements SimpleJmeEditListener{
             default:
                 throw new UnsupportedOperationException();
         }
-        picker.startPick(selectObj.getReadOnlySelectedSpatial(), form.getMode()
+        picker.startPick(selectObj.getReadOnlySelectedSpatial(), edit.getMode()
                 , editor.getCamera(), editor.getInputManager().getCursorPosition(), planRotation);
         startSpatialLoc.set(selectObj.getReadOnlySelectedSpatial().getLocalTranslation());
         lastSpatialLoc.set(startSpatialLoc);
@@ -188,7 +190,7 @@ public class MoveTool extends EditTool implements SimpleJmeEditListener{
         if (transforming) {
             picker.endPick();
             MoveUndo undoRedo = new MoveUndo(selectObj, startSpatialLoc, lastSpatialLoc);
-            form.addUndoRedo(undoRedo);
+            edit.addUndoRedo(undoRedo);
         }
         transforming = false;
         freeMove = false;
@@ -212,7 +214,7 @@ public class MoveTool extends EditTool implements SimpleJmeEditListener{
     @Override
     public void update(float tpf) {
         // 对于相机视角，Marker必须实时随着相机的移动旋转而更新
-        if (form.getMode() == Mode.CAMERA) {
+        if (edit.getMode() == Mode.CAMERA) {
             updateMarkerState();
         }
         
@@ -256,20 +258,20 @@ public class MoveTool extends EditTool implements SimpleJmeEditListener{
     }
     
     private void updateMarkerState() {
-        selectObj = form.getSelected();
+        selectObj = edit.getSelected();
         if (selectObj == null || selectObj.getReadOnlySelectedSpatial() == null) {
             controlObj.setVisible(false);
             return;
         }
         controlObj.setVisible(true);
         controlObj.setLocalTranslation(selectObj.getReadOnlySelectedSpatial().getWorldTranslation());
-        Mode mode = form.getMode();
-        switch (form.getMode()) {
+        Mode mode = edit.getMode();
+        switch (edit.getMode()) {
             case GLOBAL:
                 controlObj.setLocalRotation(new Quaternion());
                 break;
             case LOCAL:
-                controlObj.setLocalRotation(form.getSelected().getReadOnlySelectedSpatial().getWorldRotation());
+                controlObj.setLocalRotation(edit.getSelected().getReadOnlySelectedSpatial().getWorldRotation());
                 break;
             case CAMERA:
                 controlObj.setLocalRotation(editor.getCamera().getRotation());

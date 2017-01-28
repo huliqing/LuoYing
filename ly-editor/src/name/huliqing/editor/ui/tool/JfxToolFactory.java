@@ -20,6 +20,8 @@ import name.huliqing.editor.tools.MoveTool;
 import name.huliqing.editor.tools.RotationTool;
 import name.huliqing.editor.tools.ScaleTool;
 import name.huliqing.editor.tools.Tool;
+import name.huliqing.editor.tools.terrain.LowerTool;
+import name.huliqing.editor.tools.terrain.RaiseTool;
 
 /**
  *
@@ -32,28 +34,43 @@ public class JfxToolFactory {
     private final static Map<Class<? extends Tool>, ResourceMapping> TOOL_MAPPING = new HashMap();
     
     static {
-        // 基本工具
+        // ---- 基本工具
+        // 模式切换工具
         TOOL_MAPPING.put(ModeTool.class, new ResourceMapping(JfxModeTool.class
                 , ResConstants.TOOL_MODE, ResConstants.TOOL_MODE_TIP, null));
         
+        // 相机工具
         TOOL_MAPPING.put(CameraTool.class, new ResourceMapping(JfxCameraTool.class
                 , ResConstants.TOOL_CAMERA, ResConstants.TOOL_CAMERA_TIP, null));
         
+        // 网格显示工具
         TOOL_MAPPING.put(GridTool.class, new ResourceMapping(JfxToggleTool.class
                 , ResConstants.TOOL_GRID, ResConstants.TOOL_GRID_TIP, "/" + AssetConstants.INTERFACE_TOOL_GRID));
         
+        // 移动工具
         TOOL_MAPPING.put(MoveTool.class, new ResourceMapping(JfxToggleTool.class
                 , ResConstants.TOOL_MOVE, ResConstants.TOOL_MOVE_TIP, "/" + AssetConstants.INTERFACE_TOOL_MOVE));
         
+        // 旋转工具
         TOOL_MAPPING.put(RotationTool.class, new ResourceMapping(JfxToggleTool.class
                 , ResConstants.TOOL_ROTATION, ResConstants.TOOL_ROTATION_TIP, "/" + AssetConstants.INTERFACE_TOOL_ROTATION));
         
+        // 缩放放工具
         TOOL_MAPPING.put(ScaleTool.class, new ResourceMapping(JfxToggleTool.class
                 , ResConstants.TOOL_SCALE, ResConstants.TOOL_SCALE_TIP, "/" + AssetConstants.INTERFACE_TOOL_SCALE));
         
+        // ----地形工具
+        
+        // 地形上升工具
+        TOOL_MAPPING.put(RaiseTool.class, new ResourceMapping(JfxToggleTool.class
+                , ResConstants.TOOL_TERRAIN_RAISE, ResConstants.TOOL_TERRAIN_RAISE_TIP, "/" + AssetConstants.INTERFACE_TOOL_TERRAIN_RAISE));
+        
+        // 地形降低工具
+        TOOL_MAPPING.put(LowerTool.class, new ResourceMapping(JfxToggleTool.class
+                , ResConstants.TOOL_TERRAIN_LOWER, ResConstants.TOOL_TERRAIN_LOWER_TIP, "/" + AssetConstants.INTERFACE_TOOL_TERRAIN_LOWER));        
     }
     
-    public final static JfxTool createToolView(Tool tool, Toolbar toolbar) {
+    public final static JfxTool createJfxTool(Tool tool, Toolbar toolbar) {
         try {
             ResourceMapping rm = TOOL_MAPPING.get(tool.getClass());
             if (rm != null) {

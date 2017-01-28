@@ -59,7 +59,7 @@ public class EventHelper {
      * @param name
      * @return 
      */
-    public JmeEvent getEvent(String name) {
+    public JmeEvent getOrCreateEvent(String name) {
         JmeEvent event = events.get(name);
         if (event == null) {
             event = new JmeEvent(name);

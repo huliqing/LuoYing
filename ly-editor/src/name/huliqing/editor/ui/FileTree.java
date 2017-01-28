@@ -25,10 +25,6 @@ public class FileTree extends TreeView<File> {
     
     public FileTree() {}
     
-    public FileTree(File rootDir) {
-        setRootDir(rootDir);
-    }
-    
     public void setRootDir(File rootDir) {
         setCellFactory(cellCallback);
         TreeItem<File> root = createNode(rootDir);

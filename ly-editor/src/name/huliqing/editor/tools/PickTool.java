@@ -37,21 +37,21 @@ public class PickTool extends EditTool {
 
     private void doPick() {
         Ray pickRay = PickManager.getPickRay(editor.getCamera(), editor.getInputManager().getCursorPosition(), null);
-        SelectObj newSelectObj = form.doPick(pickRay);
+        SelectObj newSelectObj = edit.doPick(pickRay);
         
         // 不需要增加历史记录
         if (newSelectObj != null && newSelectObj == lastSelectObj) {
-            form.setSelected(newSelectObj);
+            edit.setSelected(newSelectObj);
             lastSelectObj = newSelectObj;
             return;
         }
         
         // 需要增加历史记录
         if (newSelectObj != null) {
-            SelectObj before = form.getSelected();
-            form.setSelected(newSelectObj);
+            SelectObj before = edit.getSelected();
+            edit.setSelected(newSelectObj);
             lastSelectObj = newSelectObj;
-            form.addUndoRedo(new PickUndoRedo(before, newSelectObj));
+            edit.addUndoRedo(new PickUndoRedo(before, newSelectObj));
         }
     }
     
@@ -67,14 +67,14 @@ public class PickTool extends EditTool {
         @Override
         public void undo() {
             if (before != null) {
-                form.setSelected(before);
+                edit.setSelected(before);
             }
         }
 
         @Override
         public void redo() {
             if (after != null) {
-                form.setSelected(after);
+                edit.setSelected(after);
             }
         }
     

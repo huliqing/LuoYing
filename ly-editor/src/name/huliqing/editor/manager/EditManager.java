@@ -47,9 +47,9 @@ public class EditManager {
     
     public static void openSceneEditor(String sceneId) {
         Editor editor = (Editor) Jfx.getJmeApp();
-        JfxSceneEdit newEv = new JfxSceneEdit();
-        newEv.setScene(sceneId);
-        editor.setJfxEdit(newEv);
+        JfxSceneEdit jfxEdit = new JfxSceneEdit();
+        jfxEdit.setScene(sceneId);
+        editor.setJfxEdit(jfxEdit);
     }
     
 }

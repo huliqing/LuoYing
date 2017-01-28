@@ -19,10 +19,10 @@ import name.huliqing.editor.tools.Tool;
 import name.huliqing.editor.tools.UndoRedoTool;
 
 /**
- *
+ * 最基本的3D编辑工具栏
  * @author huliqing
  */
-public class SimpleEditToolbar extends EditToolbar {
+public class BaseEditToolbar extends EditToolbar<SimpleJmeEdit> {
     
     private UndoRedoTool undoRedoTool;
     private CameraTool cameraTool;
@@ -34,9 +34,18 @@ public class SimpleEditToolbar extends EditToolbar {
     private RotationTool rotationTool;
     private ScaleTool scaleTool;
     
+    public BaseEditToolbar(SimpleJmeEdit edit) {
+        super(edit);
+    }
+
     @Override
-    public void initialize(SimpleJmeEdit jmeEdit) {
-        super.initialize(jmeEdit);
+    public String getName() {
+        return "Base Edit";
+    }
+    
+    @Override
+    public void initialize() {
+        super.initialize();
         
         undoRedoTool = new UndoRedoTool("undoRedoTool");
         modeTool = new ModeTool("modeTool");
@@ -85,9 +94,9 @@ public class SimpleEditToolbar extends EditToolbar {
         add(scaleTool);
         
         Tool[] conflicts = new Tool[]{moveTool, scaleTool, rotationTool};
-        addToggleMapping(KeyInput.KEY_G, new ToggleMappingEvent(moveTool, conflicts));
-        addToggleMapping(KeyInput.KEY_S, new ToggleMappingEvent(scaleTool, conflicts));
-        addToggleMapping(KeyInput.KEY_R, new ToggleMappingEvent(rotationTool, conflicts));
+        addToggleMapping(new ToggleMappingEvent(KeyInput.KEY_G, moveTool, conflicts));
+        addToggleMapping(new ToggleMappingEvent(KeyInput.KEY_S, scaleTool, conflicts));
+        addToggleMapping(new ToggleMappingEvent(KeyInput.KEY_R, rotationTool, conflicts));
         
         setActivated(undoRedoTool, true);
         setActivated(cameraTool, true);
@@ -98,23 +107,12 @@ public class SimpleEditToolbar extends EditToolbar {
         
         setEnabled(rotationTool, true);
         setEnabled(scaleTool, true);
-        
     }
 
     @Override
     public void cleanup() {
-        remove(undoRedoTool);
-        remove(cameraTool);
-        remove(modeTool);
-        remove(gridTool);
-        remove(pickTool);
-        remove(moveTool);
-        remove(rotationTool);
-        remove(scaleTool);
-        
-        removeToggleMapping(moveTool);
-        removeToggleMapping(scaleTool);
-        removeToggleMapping(rotationTool);
+        clearToggleMappings();
+        removeAll();
         super.cleanup(); 
     }
     

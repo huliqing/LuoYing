@@ -5,26 +5,25 @@
  */
 package name.huliqing.editor.tools;
 
+import name.huliqing.editor.edit.JmeEdit;
 import name.huliqing.editor.toolbar.Toolbar;
 
 /**
  * 编辑工具
  * @author huliqing
+ * @param <E>
  * @param <T>
  */
-public interface Tool<T extends Toolbar> {
+public interface Tool<E extends JmeEdit, T extends Toolbar> {
     
     String getName();
     
-    void initialize();
+    void initialize(E jmeEdit, T toolbar);
     
     boolean isInitialized();
     
     void update(float tpf);
 
     void cleanup();
-    
-    void setToolbar(T toolbar);
-    
 
 }

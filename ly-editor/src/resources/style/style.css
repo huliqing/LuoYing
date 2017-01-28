@@ -1,12 +1,5 @@
 /*https://docs.oracle.com/javase/8/javafx/api/javafx/scene/doc-files/cssref.html*/
 /** 注：pseudo选择器中的":"号之间不能留空格 */
-/*
-.list-view .list-cell:empty {-fx-background-color: lightgray;}
-.list-view .list-cell:filled {-fx-background-color: lightgray;}
-.list-view .list-cell:even {-fx-background-color: tan;}
-.list-view .list-cell:odd {-fx-background-color: lightgray;}
-.list-view .list-cell:selected {-fx-background-color: lightgray;}
-*/
 
 /** for all common HBox and VBox */
 .hv-box {
@@ -47,20 +40,25 @@
     -fx-border-width: 0;
     -fx-background-color:lightgray;
 }
+
 .list-view .list-cell {
     -fx-background-radius: 10;
 }
 
+/* color-picker */
 .color-picker {
     -fx-background-radius: 7;
 }
-.color-palette .hyperlink {
-    visibility: visible;
+
+/** tree-view */
+.tree-view {
+    /*让tree-view背景透明，这可以让它在放到tab中的时候，不会在标题处产生一个明显的阻隔的线条*/
+    -fx-background-color: transparent;
 }
 
-/*.scroll-pane .scroll-bar:vertical {
-    -fx-unit-increment: 30 ;
-    -fx-block-increment: 30 ;
+/** ---- test---- */
+/*.color-palette .hyperlink {
+    visibility: visible;
 }*/
 
 /*.toggle-button {

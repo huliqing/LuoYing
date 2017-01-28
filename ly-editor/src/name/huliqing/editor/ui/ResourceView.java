@@ -7,6 +7,7 @@ package name.huliqing.editor.ui;
 
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import name.huliqing.editor.manager.ComponentManager;
 
 /**
  *
@@ -16,6 +17,7 @@ public class ResourceView extends TabPane {
     
     private final Tab assetsTab = new Tab();
     private final Tab luoYingTab = new Tab();
+    private final Tab components = new Tab();
     
     public ResourceView() {
         super();
@@ -23,10 +25,19 @@ public class ResourceView extends TabPane {
         assetsTab.setContent(new AssetsView());
         assetsTab.setClosable(false);
         assetsTab.setText("Assets");
+        
+        ComponentsView cv = new ComponentsView("Entities", ComponentManager.getComponents("Entity"));
+        components.setContent(cv);
+        components.setClosable(false);
+        components.setText("Components");
+        
         luoYingTab.setContent(new YingConfigView());
         luoYingTab.setClosable(false);
         luoYingTab.setText("Config");
-        getTabs().addAll(assetsTab, luoYingTab);
+        
+        getTabs().add(assetsTab);
+        getTabs().add(components);
+        getTabs().add(luoYingTab);
         
     }
     

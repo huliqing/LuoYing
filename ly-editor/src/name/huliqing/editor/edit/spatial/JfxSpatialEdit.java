@@ -5,14 +5,11 @@
  */
 package name.huliqing.editor.edit.spatial;
 
-import java.util.logging.Logger;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import name.huliqing.editor.edit.JfxSimpleEdit;
 import name.huliqing.editor.manager.EditManager;
-import name.huliqing.editor.toolbar.EditToolbar;
-import name.huliqing.editor.toolbar.JfxToolbar;
 import name.huliqing.fxswing.Jfx;
 
 /**
@@ -21,27 +18,9 @@ import name.huliqing.fxswing.Jfx;
  */
 public class JfxSpatialEdit extends JfxSimpleEdit<SpatialEdit> {
 //    private static final Logger LOG = Logger.getLogger(JfxSpatialEdit.class.getName());
-
-    private JfxToolbar jfxToolbar;
     
     public JfxSpatialEdit() {
         this.jmeEdit = new SpatialEdit();
-    }
-
-    @Override
-    protected void jfxInitialize() {
-        super.jfxInitialize();
-        jfxToolbar = new JfxToolbar((EditToolbar)jmeEdit.getToolbar());
-        jfxToolbar.initialize();
-        setToolbar(jfxToolbar);
-    }
-
-    @Override
-    protected void jfxCleanup() {
-        setToolbar(null);
-        jfxToolbar.cleanup();
-        jfxToolbar = null;
-        super.jfxCleanup();
     }
 
     @Override

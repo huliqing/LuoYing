@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.ui.layout;
+package name.huliqing.editor.ui;
 
 import javafx.beans.binding.DoubleBinding;
 import javafx.scene.control.ScrollPane;

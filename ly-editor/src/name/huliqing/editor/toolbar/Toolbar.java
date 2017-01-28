@@ -18,9 +18,8 @@ public interface Toolbar<F extends JmeEdit> {
     
     /**
      * 初始化工具栏
-     * @param edit
      */
-    void initialize(F edit);
+    void initialize();
     
     /**
      * 判断工具栏是否已经初始化
@@ -33,6 +32,18 @@ public interface Toolbar<F extends JmeEdit> {
      * @param tpf 
      */
     void update(float tpf);
+    
+    /**
+     * 设置是否激活工具栏,只有工具栏处于激活状态时，工具才应该响应事件。
+     * @param enabled 
+     */
+    void setEnabled(boolean enabled);
+    
+    /**
+     * 判断是否工具栏已经激活
+     * @return 
+     */
+    boolean isEnabled();
     
     /**
      * 清理工具栏
@@ -96,6 +107,18 @@ public interface Toolbar<F extends JmeEdit> {
     <T extends Toolbar> T setEnabled(Tool tool, boolean enabled);
     
     /**
+     * 获取所有激活中的工具
+     * @return 
+     */
+    List<Tool> getToolsActivated();
+    
+    /**
+     * 获取所有可用的工具
+     * @return 
+     */
+    List<Tool> getToolsEnabled();
+    
+    /**
      * 添加一个侦听器，用于侦听工具的添加、移除、关闭、激活等操作
      * @param listener 
      */
@@ -107,6 +130,12 @@ public interface Toolbar<F extends JmeEdit> {
      * @return 
      */
     boolean removeListener(ToolbarListener listener);
+    
+    /**
+     * 获取工具栏名称
+     * @return 
+     */
+    String getName();
     
     F getEdit();
 }

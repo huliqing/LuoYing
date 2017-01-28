@@ -7,8 +7,6 @@ package name.huliqing.editor;
 
 import com.jme3.system.AppSettings;
 import javafx.event.EventHandler;
-import javafx.scene.Scene;
-import javafx.scene.input.DragEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -16,11 +14,10 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import name.huliqing.editor.edit.JfxEdit;
 import name.huliqing.editor.manager.EditManager;
 import name.huliqing.editor.ui.MenuView;
 import name.huliqing.editor.ui.ResourceView;
-import name.huliqing.editor.ui.layout.MainLayout;
+import name.huliqing.editor.ui.MainLayout;
 import name.huliqing.fxswing.Jfx;
 
 /**
@@ -29,7 +26,6 @@ import name.huliqing.fxswing.Jfx;
  */
 public class Starter {
     
-    private Scene scene;
     
     public static void main(String[] args) {
         new Starter().start();
@@ -44,25 +40,29 @@ public class Starter {
         Jfx.create(Editor.class.getName(), settings);
         Jfx.getMainFrame().setLocationRelativeTo(null);
         Jfx.getMainFrame().setVisible(true);
-        Jfx.runOnJfx(() -> {
-            
-            // 加载样式文件
-            Jfx.getJfxRoot().getStylesheets().add("resources/style/style.css");
-            
-            // 创建Jfx主场景
-            Pane jfxEditZone = initMainSceneInJfx(Jfx.getJfxRoot());
-            
-            // 将JFX中的UndoRedo按键转换到JME场景中
-            JfxUndoRedoKeyEventToJme();
-            
-            // 初始化FormView
-            Jfx.runOnJme(() -> {
-                initFormViewInJme(jfxEditZone);
+        // 这里要等待JmeApp执行完simpleInit方法之后再开始执行Jfx UI,因为UI要依赖于JME的初始化
+        Jfx.runOnJme(() -> {
+            Jfx.runOnJfx(() -> {
+                startJfx();
             });
         });
         
+    }
+    
+    private void startJfx() {
+        // 加载样式文件
+        Jfx.getJfxRoot().getStylesheets().add("resources/style/style.css");
 
-        
+        // 创建Jfx主场景
+        Pane jfxEditZone = initMainSceneInJfx(Jfx.getJfxRoot());
+
+        // 将JFX中的UndoRedo按键转换到JME场景中
+        JfxUndoRedoKeyEventToJme();
+
+        // 初始化FormView
+        Jfx.runOnJme(() -> {
+            initJfxEditToJme(jfxEditZone);
+        });
     }
     
     private Pane initMainSceneInJfx(Pane root) {
@@ -79,7 +79,7 @@ public class Starter {
         return jfxEditZone;
     }
     
-    private void initFormViewInJme(Pane jfxEditZone) {
+    private void initJfxEditToJme(Pane jfxEditZone) {
         EditManager.registerEditZone(jfxEditZone);
         EditManager.openTestFormView();
     }
@@ -98,20 +98,5 @@ public class Starter {
                 }
             }
         });
-        
-//        Jfx.getJfxRoot().addEventFilter(DragEvent.DRAG_ENTERED, new EventHandler<DragEvent>() {
-//            @Override
-//            public void handle(DragEvent event) {
-//                System.out.println("on drag entered");
-//                 JfxEdit je = ((Editor) Jfx.getJmeApp()).getJfxEdit();
-//                 
-//            }
-//        });
-//        Jfx.getJfxRoot().addEventFilter(DragEvent.DRAG_DONE, new EventHandler<DragEvent>() {
-//            @Override
-//            public void handle(DragEvent event) {
-//                System.out.println("on drag done.");
-//            }
-//        });
     }
 }

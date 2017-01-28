@@ -15,44 +15,56 @@ import name.huliqing.editor.tools.Tool;
 
 /**
  * @author huliqing
+ * @param <E>
  */
-public abstract class EditToolbar extends AbstractToolbar<SimpleJmeEdit> implements EventListener {
+public abstract class EditToolbar<E extends SimpleJmeEdit> extends AbstractToolbar<E> implements EventListener {
 //    private static final Logger LOG = Logger.getLogger(EditToolbar.class.getName());
     protected final Map<Tool, ToggleMappingEvent> toggleMapping = new HashMap<Tool, ToggleMappingEvent>();
     
-    @Override
-    public void initialize(SimpleJmeEdit jmeEdit) {
-        super.initialize(jmeEdit);
+    public EditToolbar(E edit) {
+        super(edit);
     }
     
-    @Override
-    public void cleanup() {
-        super.cleanup(); 
-    }
-    
-    protected void addToggleMapping(int keyInput, ToggleMappingEvent tme) {
-        tme.bindKey(keyInput, true);
+    protected void addToggleMapping(ToggleMappingEvent tme) {
+        tme.bindKey(tme.toggleKey, true);
         tme.addListener(this);
         tme.initialize();
         toggleMapping.put(tme.tool, tme);
     }
     
-    protected boolean removeToggleMapping(Tool tool) {
-        ToggleMappingEvent tme = toggleMapping.remove(tool);
-        if (tme != null) {
-            tme.removeListener(this);
-            if (tme.isInitialized()) {
-                tme.cleanup();
+    protected boolean removeToggleMapping(ToggleMappingEvent tme) {
+        ToggleMappingEvent tmeRemoved = toggleMapping.remove(tme.tool);
+        if (tmeRemoved != null) {
+            tmeRemoved.removeListener(this);
+            if (tmeRemoved.isInitialized()) {
+                tmeRemoved.cleanup();
             }
             return true;
         }
         return false;
     }
     
+    protected void clearToggleMappings() {
+        toggleMapping.values().forEach(t -> {
+            t.removeListener(this);
+            if (t.isInitialized()) {
+                t.cleanup();
+            }
+        });
+        toggleMapping.clear();
+    }
+    
     @Override
     public void onEvent(Event e) {
+        // 当工具栏没有激活时则不应该响应任何事件，这很重要，因为工具栏可能很多，并且快捷快重覆或重叠的情况可能存在，
+        // 所以这里应该尽量避免不同的工具栏之间的快捷快产生冲突。
+        if (!isEnabled())
+            return;
+        
+        // 快捷键不匹配的时候也不应该执行
         if (!e.isMatch()) 
             return;
+        
         ToggleMappingEvent te = (ToggleMappingEvent) e;
         setActivated(te.tool, true);
     }
@@ -74,12 +86,16 @@ public abstract class EditToolbar extends AbstractToolbar<SimpleJmeEdit> impleme
     }
     
     public class ToggleMappingEvent extends JmeEvent {
+        // 激活工具的快捷键
+        public int toggleKey;
+        // 绑定的工具
         public final Tool tool;
-        // 冲突工具列表，当tool打开时，这些工具要关闭
+        // 冲突工具列表，当工具激活时，这些工具要关闭
         public Tool[] conflicts;
         
-        public ToggleMappingEvent(Tool tool, Tool[] conflicts) {
+        public ToggleMappingEvent(int toggleKey, Tool tool, Tool[] conflicts) {
             super("toggleEvent" + tool.getName());
+            this.toggleKey = toggleKey;
             this.tool = tool;
             this.conflicts = conflicts;
         }

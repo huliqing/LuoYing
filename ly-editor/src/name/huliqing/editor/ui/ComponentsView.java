@@ -24,17 +24,14 @@ import name.huliqing.editor.constants.StyleConstants;
  *
  * @author huliqing
  */
-public class ComponentsView extends TitledPane {
+public class ComponentsView extends ListView<Component> {
 //    private static final Logger LOG = Logger.getLogger(ComponentsView.class.getName());
     
-    private final ListView<Component> listView = new ListView();
-
     public ComponentsView(String title, List<Component> components) {
         
-        listView.getItems().clear();
-        listView.getItems().addAll(components);
+        getItems().addAll(components);
 
-        listView.setCellFactory((ListView<Component> param) -> new ListCell<Component>() {
+        setCellFactory((ListView<Component> param) -> new ListCell<Component>() {
             @Override
             protected void updateItem(Component item, boolean empty) {
                 super.updateItem(item, empty);
@@ -48,16 +45,14 @@ public class ComponentsView extends TitledPane {
             }
         });
 
-        listView.setOnDragDetected(this::doDragDetected);
-        listView.setOnDragDone(this::doDragDone);
+        setOnDragDetected(this::doDragDetected);
+        setOnDragDone(this::doDragDone);
         
         setId(StyleConstants.ID_COMPONENTS);
-        setText(title);
-        setContent(listView);
     }
 
     private Component getMainSelectItem() {
-        ObservableList<Component> items = listView.getSelectionModel().getSelectedItems();
+        ObservableList<Component> items = getSelectionModel().getSelectedItems();
         if (items.isEmpty()) {
             return null;
         }
@@ -76,7 +71,7 @@ public class ComponentsView extends TitledPane {
             e.consume();
             return;
         }
-        Dragboard db = listView.startDragAndDrop(TransferMode.ANY);
+        Dragboard db = startDragAndDrop(TransferMode.ANY);
         ClipboardContent clipboardContent = new ClipboardContent();
         clipboardContent.put(DataFormatConstants.COMPONENT_ENTITY, selected);
         db.setContent(clipboardContent);

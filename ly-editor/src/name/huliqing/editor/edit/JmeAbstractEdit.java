@@ -5,23 +5,40 @@
  */
 package name.huliqing.editor.edit;
 
-import java.util.ArrayList;
+import com.jme3.scene.Node;
+import com.jme3.util.SafeArrayList;
 import java.util.List;
 import name.huliqing.editor.Editor;
 import name.huliqing.editor.toolbar.Toolbar;
 
 /**
- *
  * @author huliqing
  */
 public abstract class JmeAbstractEdit implements JmeEdit {
 
     protected final UndoRedoManager undoRedoManager = new UndoRedoManager();
     
-    protected boolean initialized;
-    protected Toolbar toolbar;
-    protected List<JmeEditListener> listeners;
+    /**
+     * 主编辑器APP
+     */
     protected Editor editor;
+    
+    /**
+     * 主工具栏
+     */
+    protected Toolbar toolbar;
+    
+    /**
+     * 扩展工具栏列表
+     */
+    protected final SafeArrayList<Toolbar> extToolbars = new SafeArrayList<Toolbar>(Toolbar.class);
+    
+    /**
+     * 编辑场景的根节点
+     */
+    protected Node editRoot;
+    
+    protected boolean initialized;
     
     @Override
     public void initialize(Editor editor) {
@@ -30,8 +47,21 @@ public abstract class JmeAbstractEdit implements JmeEdit {
         }
         initialized = true; 
         this.editor = editor;
+        this.editRoot = new Node();
+        this.editor.getRootNode().attachChild(editRoot);
+        this.toolbar = createToolbar();
         if (toolbar != null && !toolbar.isInitialized()) {
-            toolbar.initialize(this);
+            toolbar.initialize();
+        }
+        
+        List<Toolbar> tempExtToolbars = createExtToolbars();
+        if (tempExtToolbars != null && !tempExtToolbars.isEmpty()) {
+            extToolbars.addAll(tempExtToolbars);
+            for (Toolbar t : extToolbars.getArray()) {
+                if (!t.isInitialized()) {
+                    t.initialize();
+                }
+            }
         }
     }
 
@@ -42,16 +72,35 @@ public abstract class JmeAbstractEdit implements JmeEdit {
 
     @Override
     public void update(float tpf) {
-        if (toolbar != null) {
+        if (toolbar != null && toolbar.isEnabled()) {
             toolbar.update(tpf);
+        }
+        for (Toolbar t : extToolbars.getArray()) {
+            if (t.isEnabled()) {
+                t.update(tpf);
+            }
         }
     }
 
     @Override
     public void cleanup() {
+        for (Toolbar t : extToolbars.getArray()) {
+            if (t.isInitialized()) {
+                t.cleanup();
+            }
+        }
+        extToolbars.clear();
+        
         if (toolbar != null && toolbar.isInitialized()) {
             toolbar.cleanup();
+            toolbar = null;
         }
+        
+        if (editRoot != null) {
+            editRoot.removeFromParent();
+            editRoot = null;
+        }
+        
         initialized = false;
     }
 
@@ -69,20 +118,6 @@ public abstract class JmeAbstractEdit implements JmeEdit {
     public void addUndoRedo(UndoRedo undoRedo) {
         undoRedoManager.add(undoRedo);
     }
-    
-    @Override
-    public void setToolbar(Toolbar newToolbar) {
-        if (toolbar != null && toolbar.isInitialized()) {
-            toolbar.cleanup();
-        }
-        toolbar = newToolbar;
-        if (isInitialized() && !toolbar.isInitialized()) {
-            toolbar.initialize(this);
-        }
-        if (listeners != null) {
-            listeners.forEach(t -> {t.onToolbarChanged(this, newToolbar);});
-        }
-    }
 
     @Override
     public Toolbar getToolbar() {
@@ -90,23 +125,24 @@ public abstract class JmeAbstractEdit implements JmeEdit {
     }
 
     @Override
-    public void addListener(JmeEditListener listener) {
-        if (listeners == null) {
-            listeners = new ArrayList<JmeEditListener>();
-        }
-        if (!listeners.contains(listener)) {
-            listeners.add(listener);
-        }
-    }
-
-    @Override
-    public boolean removeListener(JmeEditListener listener) {
-        return listeners != null && listeners.remove(listener);
+    public List<Toolbar> getExtToolbars() {
+        return extToolbars;
     }
 
     @Override
     public Editor getEditor() {
         return editor;
     }
-
+    
+    /**
+     * 创建主工具栏,如果没有主工具栏，则返回null即可
+     * @return 
+     */
+    protected abstract Toolbar createToolbar();
+    
+    /**
+     * 创建扩展工具栏,如果没有扩展工具栏，则可以返回null或者空列表
+     * @return 
+     */
+    protected abstract List<Toolbar> createExtToolbars();
 }

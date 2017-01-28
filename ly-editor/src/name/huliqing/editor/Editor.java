@@ -41,6 +41,7 @@ public class Editor extends SimpleApplication{
         
         // 初始化
         Manager.initialize(this);
+        
         // 注册事件
         JmeEventAppState jeas = JmeEvent.getJmeEventAppState();
         jeas.setInputManager(inputManager);

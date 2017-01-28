@@ -17,7 +17,6 @@ import name.huliqing.editor.edit.SimpleJmeEdit;
 import name.huliqing.editor.manager.Manager;
 import name.huliqing.editor.select.SelectObj;
 import name.huliqing.editor.select.SpatialSelectObj;
-import name.huliqing.editor.toolbar.SimpleEditToolbar;
 import name.huliqing.luoying.manager.PickManager;
 
 /**
@@ -45,7 +44,6 @@ public class SpatialEdit extends SimpleJmeEdit {
         if (fileInAssets != null) {
             load();
         }
-        setToolbar(new SimpleEditToolbar());
     }
 
     @Override
@@ -87,5 +85,6 @@ public class SpatialEdit extends SimpleJmeEdit {
             return null;
         return new SpatialSelectObj(spaital);
     }
+
     
 }

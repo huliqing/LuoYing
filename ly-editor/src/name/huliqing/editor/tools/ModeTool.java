@@ -28,11 +28,11 @@ public class ModeTool extends EditTool {
     }
     
     public Mode getMode() {
-        return form.getMode();
+        return edit.getMode();
     }
     
     public void setMode(Mode mode) {
-        form.setMode(mode);
+        edit.setMode(mode);
     }
     
     /**
@@ -47,14 +47,14 @@ public class ModeTool extends EditTool {
     protected void onToolEvent(Event e) {
         if (e.isMatch()) {
             Mode[] ms = Mode.values();
-            int idx = form.getMode().ordinal();
+            int idx = edit.getMode().ordinal();
             Mode mode;
             if (idx >= ms.length - 1) {
                 mode = ms[0];
             } else {
                 mode = ms[++idx];
             }
-            form.setMode(mode);
+            edit.setMode(mode);
             if (listeners != null) {
                 listeners.forEach(t -> {t.onModeChanged(mode);});
             }

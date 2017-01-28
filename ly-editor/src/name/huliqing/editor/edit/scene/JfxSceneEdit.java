@@ -19,7 +19,6 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import name.huliqing.editor.components.Component;
 import name.huliqing.editor.constants.DataFormatConstants;
-import name.huliqing.editor.toolbar.JfxToolbar;
 import name.huliqing.editor.constants.ResConstants;
 import name.huliqing.editor.manager.ConverterManager;
 import name.huliqing.editor.converter.DataConverter;
@@ -35,9 +34,13 @@ import name.huliqing.editor.edit.select.EntitySelectObj;
 import name.huliqing.editor.manager.ComponentManager;
 import name.huliqing.editor.manager.Manager;
 import name.huliqing.editor.toolbar.EditToolbar;
+import name.huliqing.editor.toolbar.Toolbar;
+import name.huliqing.editor.ui.toolbar.JfxSimpleToolbar;
 import name.huliqing.editor.ui.ComponentsView;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.scene.SceneListener;
+import name.huliqing.editor.ui.toolbar.JfxToolbar;
+import name.huliqing.editor.ui.toolbar.JfxToolbarFactory;
 
 /**
  * 场景编辑器
@@ -48,9 +51,6 @@ public class JfxSceneEdit extends JfxSimpleEdit<SceneEdit>
 
     private static final Logger LOG = Logger.getLogger(JfxSceneEdit.class.getName());
 
-    // 工具栏
-    private JfxToolbar jfxToolbar;
-    
     // 场景属性面板的容器
     private final TitledPane scenePropertyPanel = new TitledPane();
     private DataConverter sceneDataConverter;
@@ -87,14 +87,7 @@ public class JfxSceneEdit extends JfxSimpleEdit<SceneEdit>
     @Override
     protected void jfxInitialize() {
         super.jfxInitialize();
-        jfxToolbar = new JfxToolbar((EditToolbar) jmeEdit.getToolbar());
-        jfxToolbar.initialize();
-        setToolbar(jfxToolbar);
-        
         propertyPanel.getChildren().add(scenePropertyPanel);
-        
-        ComponentsView ec = new ComponentsView("Entities", ComponentManager.getComponents("Entity"));
-        addToolPanel("Entities", ec);
         
         if (sceneId != null) {
             loadScene(sceneId);
@@ -104,12 +97,9 @@ public class JfxSceneEdit extends JfxSimpleEdit<SceneEdit>
     @Override
     protected void jfxCleanup() {
         propertyPanel.getChildren().remove(scenePropertyPanel);
-        setToolbar(null);
-        jfxToolbar.cleanup();
-        jfxToolbar = null;
         super.jfxCleanup();
     }
-
+    
     @Override
     protected void onDragOver(DragEvent e) {
         Dragboard db = e.getDragboard();

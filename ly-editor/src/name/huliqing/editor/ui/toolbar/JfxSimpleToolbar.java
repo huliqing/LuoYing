@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.toolbar;
+package name.huliqing.editor.ui.toolbar;
 
 import java.util.HashMap;
 import java.util.List;
@@ -11,35 +11,43 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.control.ToolBar;
+import javafx.scene.layout.Region;
+import name.huliqing.editor.toolbar.Toolbar;
+import name.huliqing.editor.toolbar.ToolbarListener;
 import name.huliqing.editor.tools.Tool;
-import name.huliqing.editor.ui.tool.JfxToolFactory;
 import name.huliqing.fxswing.Jfx;
 import name.huliqing.editor.ui.tool.JfxTool;
+import name.huliqing.editor.ui.tool.JfxToolFactory;
 
 /**
- *
+ * JFX 普通的工具栏渲染器，将jme工具栏渲染为JFX的默认ToolBar样式
  * @author huliqing
  */
-public class JfxToolbar extends ToolBar implements ToolbarListener{
+public class JfxSimpleToolbar extends ToolBar implements JfxToolbar, ToolbarListener {
 
-    private static final Logger LOG = Logger.getLogger(JfxToolbar.class.getName());
+    private static final Logger LOG = Logger.getLogger(JfxSimpleToolbar.class.getName());
     
     private final Map<Tool, JfxTool> toolViewMap = new HashMap<Tool, JfxTool>();
     
-    private EditToolbar  toolbar;
+    private Toolbar  toolbar;
     private boolean initialized;
-    
-    public JfxToolbar(EditToolbar toolbar) {
+
+    @Override
+    public void setToolbar(Toolbar toolbar) {
         this.toolbar = toolbar;
     }
+
+    @Override
+    public String getName() {
+        return toolbar.getName();
+    }
     
+    @Override
     public void initialize() {
         if (initialized) {
             throw new IllegalStateException();
         }
         initialized = true;
-
-        getItems().clear();
         toolbar.addListener(this);
         List<Tool> enableList =  toolbar.getToolsEnabled();
         List<Tool> activateList = toolbar.getToolsActivated();
@@ -52,17 +60,16 @@ public class JfxToolbar extends ToolBar implements ToolbarListener{
         }
     }
     
+    @Override
     public boolean isInitialized() {
         return initialized;
     }
     
+    @Override
     public void cleanup() {
-        if (toolbar != null) {
-            toolbar.removeListener(this);
-            toolbar = null;
-        }
-        toolViewMap.clear();
         getItems().clear();
+        toolViewMap.clear();
+        toolbar.removeListener(this);
         initialized = false;
     }
 
@@ -103,7 +110,7 @@ public class JfxToolbar extends ToolBar implements ToolbarListener{
     }
     
     private JfxTool createToolView(Tool tool, boolean activated) {
-        JfxTool tv = JfxToolFactory.createToolView(tool, toolbar);
+        JfxTool tv = JfxToolFactory.createJfxTool(tool, toolbar);
         if (tv != null) {
             tv.setActivated(activated);
             return tv;
@@ -112,6 +119,16 @@ public class JfxToolbar extends ToolBar implements ToolbarListener{
                     , new Object[] {tool.getName(), tool.getClass().getName()});
             return null;
         }
+    }
+
+    @Override
+    public void onStateChanged(boolean enabled) {
+        this.setDisable(!enabled);
+    }
+
+    @Override
+    public Region getView() {
+        return this;
     }
     
 }

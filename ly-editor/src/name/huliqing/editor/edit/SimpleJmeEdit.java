@@ -9,8 +9,9 @@ import com.jme3.math.Ray;
 import com.jme3.scene.Node;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.editor.Editor;
 import name.huliqing.editor.select.SelectObj;
+import name.huliqing.editor.toolbar.BaseEditToolbar;
+import name.huliqing.editor.toolbar.Toolbar;
 
 /**
  * 3D模型编辑器窗口
@@ -27,20 +28,19 @@ public abstract class SimpleJmeEdit<T extends SelectObj> extends JmeAbstractEdit
     
     // 当前选择的物体
     protected T selectObj;
-    
-    // 编辑场景的根节点
-    protected final Node editRoot = new Node();
-    
-    @Override
-    public void initialize(Editor editor) {
-        super.initialize(editor);
-        editor.getRootNode().attachChild(editRoot);
-    }
 
     @Override
-    public void cleanup() {
-        editRoot.removeFromParent();
-        super.cleanup();
+    protected Toolbar createToolbar() {
+        return new BaseEditToolbar(this);
+    }
+
+    /**
+     * 默认情况下SimpleJmeEdit不会创建扩展工具栏，子类可以根据实际情况来创建并返回一个扩展工具栏列表
+     * @return 
+     */
+    @Override
+    protected List<Toolbar> createExtToolbars() {
+        return null;
     }
     
     public Mode getMode() {

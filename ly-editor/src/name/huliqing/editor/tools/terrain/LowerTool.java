@@ -9,12 +9,12 @@ import name.huliqing.editor.events.Event;
 import name.huliqing.editor.tools.EditTool;
 
 /**
- * 地形上升工具
+ * 地形降低工具
  * @author huliqing
  */
-public class RaiseTool extends EditTool {
+public class LowerTool extends EditTool {
 
-    public RaiseTool(String name) {
+    public LowerTool(String name) {
         super(name);
     }
 

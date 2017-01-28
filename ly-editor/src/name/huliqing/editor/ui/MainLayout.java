@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.ui.layout;
+package name.huliqing.editor.ui;
 
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.Background;
@@ -74,8 +74,10 @@ public class MainLayout extends VBox {
         // 特殊方式限制resourceZone在初始化的时候为200的宽度,
         // 并在延迟一帧后去除resourceZone限制并取消自动宽度, 这样resourceZone不会随着父窗口的放大而拉大。
         resourceZone.setMinWidth(250);
+        resourceZone.setMaxWidth(250);
         Jfx.runOnJfx(() -> {
             resourceZone.setMinWidth(0);
+            resourceZone.setMaxWidth(Integer.MAX_VALUE);
             SplitPane.setResizableWithParent(resourceZone, Boolean.FALSE);
         });
     }

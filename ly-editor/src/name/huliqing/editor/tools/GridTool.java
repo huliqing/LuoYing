@@ -5,8 +5,10 @@
  */
 package name.huliqing.editor.tools;
 
+import name.huliqing.editor.edit.SimpleJmeEdit;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.tiles.Grid;
+import name.huliqing.editor.toolbar.EditToolbar;
 
 /**
  * 在场景中产生一个在原点处的网格(xz平面上)
@@ -22,9 +24,9 @@ public class GridTool extends EditTool {
     }
 
     @Override
-    public void initialize() {
-        super.initialize(); 
-        form.getEditRoot().getParent().attachChild(grid); // 放在editRoot的父节点，这样不会被场景选择到。
+    public void initialize(SimpleJmeEdit jmeEdit, EditToolbar toolbar) {
+        super.initialize(jmeEdit, toolbar);
+        edit.getEditRoot().getParent().attachChild(grid); // 放在editRoot的父节点，这样不会被场景选择到。
     }
 
     @Override

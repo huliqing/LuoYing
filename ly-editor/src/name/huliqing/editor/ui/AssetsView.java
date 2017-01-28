@@ -82,6 +82,7 @@ public class AssetsView extends ScrollPane implements ConfigChangedListener {
         rename.setOnAction(e -> doRename());
         refresh.setOnAction(e -> doRefresh());
         delete.setOnAction(e -> doDelete());
+        
     }
     
     @Override

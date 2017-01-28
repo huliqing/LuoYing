@@ -5,6 +5,7 @@
  */
 package name.huliqing.editor.edit;
 
+import java.util.List;
 import name.huliqing.editor.Editor;
 import name.huliqing.editor.toolbar.Toolbar;
 
@@ -29,21 +30,17 @@ public interface JmeEdit {
     void addUndoRedo(UndoRedo ur);
     
     /**
-     * 设置工具栏
-     * @param toolbar 
-     */
-    void setToolbar(Toolbar toolbar);
-    
-    /**
-     * 获取工具栏
+     * 获取主工具栏
      * @param <T>
      * @return 
      */
     <T extends Toolbar> T getToolbar();
-        
-    void addListener(JmeEditListener listener);
     
-    boolean removeListener(JmeEditListener listener);
+    /**
+     * 获取编辑器的扩展工具栏列表,如果没有则返回null.
+     * @return 
+     */
+    List<Toolbar> getExtToolbars();
     
     Editor getEditor();
     

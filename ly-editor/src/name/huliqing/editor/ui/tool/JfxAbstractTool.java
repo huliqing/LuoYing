@@ -33,9 +33,7 @@ public abstract class JfxAbstractTool implements JfxTool {
         this.activated = activated;
         if (changed) {
             setViewActivated(activated);
-            Jfx.runOnJme(() -> {
-                toolbar.setActivated(tool, activated);
-            });
+            Jfx.runOnJme(() -> toolbar.setActivated(tool, activated));
         }
     }
 
@@ -45,7 +43,7 @@ public abstract class JfxAbstractTool implements JfxTool {
         this.enabled = enabled;
         if (changed) {
             setViewEnabled(enabled);
-            Jfx.runOnJme(() -> {toolbar.setEnabled(tool, enabled);});
+            Jfx.runOnJme(() -> toolbar.setEnabled(tool, enabled));
         }
     }
 
