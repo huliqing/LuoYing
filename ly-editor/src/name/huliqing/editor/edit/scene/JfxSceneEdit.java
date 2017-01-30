@@ -31,16 +31,9 @@ import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.editor.edit.SimpleJmeEditListener;
 import name.huliqing.editor.edit.select.EntitySelectObj;
-import name.huliqing.editor.manager.ComponentManager;
 import name.huliqing.editor.manager.Manager;
-import name.huliqing.editor.toolbar.EditToolbar;
-import name.huliqing.editor.toolbar.Toolbar;
-import name.huliqing.editor.ui.toolbar.JfxSimpleToolbar;
-import name.huliqing.editor.ui.ComponentsView;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.scene.SceneListener;
-import name.huliqing.editor.ui.toolbar.JfxToolbar;
-import name.huliqing.editor.ui.toolbar.JfxToolbarFactory;
 
 /**
  * 场景编辑器

@@ -11,9 +11,7 @@ import javafx.scene.Node;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Tooltip;
 import name.huliqing.editor.edit.Mode;
-import name.huliqing.editor.toolbar.Toolbar;
-import name.huliqing.editor.tools.ModeTool;
-import name.huliqing.editor.tools.Tool;
+import name.huliqing.editor.tools.base.ModeTool;
 import name.huliqing.fxswing.Jfx;
 
 /**
@@ -53,8 +51,7 @@ public class JfxModeTool extends JfxAbstractTool implements ModeTool.ModeChanged
     }
 
     @Override
-    public void initialize(Tool tool, Toolbar toolbar, String name, String tooltip, String icon) {
-        super.initialize(tool, toolbar, name, tooltip, icon);
+    public void initialize() {
         modeTool = (ModeTool) tool;
         modeTool.addListener(this);
         view.getItems().clear();
@@ -70,8 +67,8 @@ public class JfxModeTool extends JfxAbstractTool implements ModeTool.ModeChanged
         });
         
         // tooltip
-        if (tooltip != null && !tooltip.isEmpty()) {
-            view.setTooltip(new Tooltip(tooltip));
+        if (tool.getTips() != null) {
+            view.setTooltip(new Tooltip(tool.getTips()));
         }
     }
     

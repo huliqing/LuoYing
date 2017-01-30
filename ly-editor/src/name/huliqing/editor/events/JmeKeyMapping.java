@@ -234,7 +234,9 @@ public class JmeKeyMapping extends AbstractKeyMapping {
     
     private void bindListener() {
         // delete old
-        inputManager.deleteMapping(mappingName);
+        if (inputManager.hasMapping(mappingName)) {
+            inputManager.deleteMapping(mappingName);
+        }
         
         // bind new
         switch (type) {

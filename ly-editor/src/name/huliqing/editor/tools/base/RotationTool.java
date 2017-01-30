@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.tools;
+package name.huliqing.editor.tools.base;
 
 import com.jme3.input.KeyInput;
 import com.jme3.math.Quaternion;
@@ -20,6 +20,7 @@ import name.huliqing.editor.edit.UndoRedo;
 import name.huliqing.luoying.manager.PickManager;
 import name.huliqing.editor.edit.SimpleJmeEditListener;
 import name.huliqing.editor.toolbar.EditToolbar;
+import name.huliqing.editor.tools.EditTool;
 
 /**
  * 旋转编辑工具
@@ -56,9 +57,11 @@ public class RotationTool extends EditTool implements SimpleJmeEditListener{
     private boolean transforming;
     // 自由旋转，相机视角
     private boolean freeRotation;
+    // 按轴旋转
+    private boolean axisRotation;
 
-    public RotationTool(String name) {
-        super(name);
+    public RotationTool(String name, String tips, String icon) {
+        super(name, tips, icon);
         // 绑定三个按键：x,y,z用于在自由旋转的时候转化到按轴旋转
         bindEvent(EVENT_ROTATION_X).bindKey(KeyInput.KEY_X, false);
         bindEvent(EVENT_ROTATION_Y).bindKey(KeyInput.KEY_Y, false);
@@ -110,10 +113,18 @@ public class RotationTool extends EditTool implements SimpleJmeEditListener{
         
         if (e.getName().equals(EVENT_ROTATION)) {
             if (e.isMatch()) {
+                
+                // 重要优化：如果当前正在自由操作，则直接结束操作，不要启动新的按轴操作。
+                // 因为这个操作可能是要结束自由操作，而不是希望启动按轴操作, 如果是这样则会多出一个多余的历史记录。
+                if (freeRotation) {
+                    endRotation();
+                    return;
+                }
+                
                 PickManager.getPickRay(editor.getCamera(), editor.getInputManager().getCursorPosition(), ray);
                 AxisNode pickAxis = controlObj.getPickAxis(ray);
                 if (pickAxis != null) {
-                    startRotation(pickAxis);
+                    startAxisRotation(pickAxis);
                 }
             } else {
                 endRotation();
@@ -138,21 +149,25 @@ public class RotationTool extends EditTool implements SimpleJmeEditListener{
         // 从自由旋转转换到按轴旋转
         else if (transforming && e.isMatch() && EVENT_ROTATION_X.equals(e.getName())) {
             cancelRotation();
-            startRotation(controlObj.getAxisX());
+            startAxisRotation(controlObj.getAxisX());
         }
         else if (transforming && e.isMatch() && EVENT_ROTATION_Y.equals(e.getName())) {
             cancelRotation();
-            startRotation(controlObj.getAxisY());
+            startAxisRotation(controlObj.getAxisY());
         }
         else if (transforming && e.isMatch() && EVENT_ROTATION_Z.equals(e.getName())) {
             cancelRotation();
-            startRotation(controlObj.getAxisZ());
+            startAxisRotation(controlObj.getAxisZ());
         }
     }
     
     private void startFreeRotation() {
-        freeRotation = true;
+        if (axisRotation) {
+            endRotation();
+        }
         transforming = true;
+        freeRotation = true;
+        axisRotation = false;
         picker.startPick(selectObj.getReadOnlySelectedSpatial(), Mode.CAMERA
                 , editor.getCamera(), editor.getInputManager().getCursorPosition(), Picker.PLANE_XY);
         startRotate = selectObj.getReadOnlySelectedSpatial().getLocalRotation().clone();
@@ -161,12 +176,21 @@ public class RotationTool extends EditTool implements SimpleJmeEditListener{
         controlObj.setAxisLineVisible(false);
     }
 
-    private void startRotation(AxisNode rotationAxis) {
-        this.rotationAxis = rotationAxis;
-        freeRotation = false;
+    private void startAxisRotation(AxisNode axis) {
+        // 重要：这要避免自由操作和按轴操作时的冲突,因为自由操作按键可能和按轴操作按键冲突。
+        // 比如：当自由操作通过按下“左键”来应用操作的时候，而这个按键又和按轴操作冲突，
+        // 这时自由操作会直接变成按轴操作，而自由操作又来不及保存历史记录，
+        // 这时候就导致“自由操作”丢失历史记录，而按轴操作又没有启动. 所以这里要FIX这个BUG。
+        // 在按轴操作启动时要确保如果自由操作正在进行则需要保存历史记录再退出。
+        if (freeRotation) {
+            endRotation();
+        }
         transforming = true;
+        freeRotation = false;
+        axisRotation = true;
+        rotationAxis = axis;
         Quaternion planRotation = Picker.PLANE_XY;
-        switch (rotationAxis.getType()) {
+        switch (axis.getType()) {
             case x:
                 planRotation = Picker.PLANE_YZ;
                 break;
@@ -186,7 +210,7 @@ public class RotationTool extends EditTool implements SimpleJmeEditListener{
         startWorldRotate = selectObj.getReadOnlySelectedSpatial().getWorldRotation().clone();
         controlObj.setAxisVisible(false);
         controlObj.setAxisLineVisible(false);
-        rotationAxis.setAxisLineVisible(true);
+        axis.setAxisLineVisible(true);
 //            LOG.log(Level.INFO, "StartSpatialLoc={0}", startSpatialLoc);
     }
 
@@ -197,6 +221,7 @@ public class RotationTool extends EditTool implements SimpleJmeEditListener{
         }
         transforming = false;
         freeRotation = false;
+        axisRotation = false;
         rotationAxis = null;
         controlObj.setAxisVisible(true);
         controlObj.setAxisLineVisible(false);

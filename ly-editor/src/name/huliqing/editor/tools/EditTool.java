@@ -26,18 +26,32 @@ public abstract class EditTool<E extends SimpleJmeEdit, T extends EditToolbar> i
     protected E edit;
     protected T toolbar;
     
-    protected final String name; // 编工具名称
+    protected String name; // 编工具名称
+    protected String tips;
+    protected String icon;
     protected boolean initialized;
     protected final EventListener eventListener = new ToolEventListener();
     protected final EventHelper eventHelper = new EventHelper(eventListener);
     
-    public EditTool(String name) {
+    public EditTool(String name, String tips, String icon) {
         this.name = name; 
+        this.tips = tips;
+        this.icon = icon;
     }
     
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public String getTips() {
+        return tips;
+    }
+
+    @Override
+    public String getIcon() {
+        return icon;
     }
 
     @Override

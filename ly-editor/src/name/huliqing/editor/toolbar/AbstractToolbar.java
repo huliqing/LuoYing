@@ -7,6 +7,7 @@ package name.huliqing.editor.toolbar;
 
 import com.jme3.util.SafeArrayList;
 import java.util.List;
+import name.huliqing.editor.Editor;
 import name.huliqing.editor.tools.Tool;
 import name.huliqing.editor.edit.JmeEdit;
 
@@ -35,12 +36,14 @@ public abstract class AbstractToolbar<E extends JmeEdit> implements Toolbar<E> {
      */
     protected final SafeArrayList<Tool> toolsActivated = new SafeArrayList<Tool>(Tool.class);
     
+    protected Editor editor;
     protected E edit;
     protected boolean initialized;
     protected boolean enabled = true;
     
     public AbstractToolbar(E edit) {
         this.edit = edit;
+        
     }
 
     @Override
@@ -49,6 +52,7 @@ public abstract class AbstractToolbar<E extends JmeEdit> implements Toolbar<E> {
             throw new IllegalStateException();
         }
         initialized = true;
+        this.editor = edit.getEditor();
     }
 
     @Override

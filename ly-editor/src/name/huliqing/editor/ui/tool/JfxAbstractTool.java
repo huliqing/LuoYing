@@ -12,19 +12,25 @@ import name.huliqing.fxswing.Jfx;
 /**
  *
  * @author huliqing
+ * @param <T>
  */
-public abstract class JfxAbstractTool implements JfxTool {
+public abstract class JfxAbstractTool<T extends Tool> implements JfxTool<T> {
 
     protected Toolbar toolbar;
-    protected Tool tool;
+    protected T tool;
     protected boolean activated;
     protected boolean enabled;
     
     public JfxAbstractTool() {}
-    
+
     @Override
-    public Tool getTool() {
-        return tool;
+    public void setToolbar(Toolbar toolbar) {
+        this.toolbar = toolbar;
+    }
+
+    @Override
+    public void setTool(T tool) {
+        this.tool = tool;
     }
     
     @Override
@@ -45,12 +51,6 @@ public abstract class JfxAbstractTool implements JfxTool {
             setViewEnabled(enabled);
             Jfx.runOnJme(() -> toolbar.setEnabled(tool, enabled));
         }
-    }
-
-    @Override
-    public void initialize(Tool tool, Toolbar toolbar, String name, String tooltip, String icon) {
-        this.tool = tool;
-        this.toolbar = toolbar;
     }
 
     /**

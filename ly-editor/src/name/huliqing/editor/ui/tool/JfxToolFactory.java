@@ -9,16 +9,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import name.huliqing.editor.constants.AssetConstants;
-import name.huliqing.editor.constants.ResConstants;
-import name.huliqing.editor.manager.Manager;
 import name.huliqing.editor.toolbar.Toolbar;
-import name.huliqing.editor.tools.CameraTool;
-import name.huliqing.editor.tools.GridTool;
-import name.huliqing.editor.tools.ModeTool;
-import name.huliqing.editor.tools.MoveTool;
-import name.huliqing.editor.tools.RotationTool;
-import name.huliqing.editor.tools.ScaleTool;
+import name.huliqing.editor.tools.NumberValueTool;
+import name.huliqing.editor.tools.base.CameraTool;
+import name.huliqing.editor.tools.base.GridTool;
+import name.huliqing.editor.tools.base.ModeTool;
+import name.huliqing.editor.tools.base.MoveTool;
+import name.huliqing.editor.tools.base.RotationTool;
+import name.huliqing.editor.tools.base.ScaleTool;
 import name.huliqing.editor.tools.Tool;
 import name.huliqing.editor.tools.terrain.LowerTool;
 import name.huliqing.editor.tools.terrain.RaiseTool;
@@ -31,53 +29,56 @@ public class JfxToolFactory {
 
     private static final Logger LOG = Logger.getLogger(JfxToolFactory.class.getName());
     
-    private final static Map<Class<? extends Tool>, ResourceMapping> TOOL_MAPPING = new HashMap();
+    private final static Map<Class<? extends Tool>, Class<? extends JfxTool>> TOOL_MAPPING = new HashMap();
     
     static {
+        // 通用形
+        TOOL_MAPPING.put(NumberValueTool.class, JfxNumberValueTool.class);
+        
         // ---- 基本工具
         // 模式切换工具
-        TOOL_MAPPING.put(ModeTool.class, new ResourceMapping(JfxModeTool.class
-                , ResConstants.TOOL_MODE, ResConstants.TOOL_MODE_TIP, null));
-        
+        TOOL_MAPPING.put(ModeTool.class, JfxModeTool.class);
         // 相机工具
-        TOOL_MAPPING.put(CameraTool.class, new ResourceMapping(JfxCameraTool.class
-                , ResConstants.TOOL_CAMERA, ResConstants.TOOL_CAMERA_TIP, null));
-        
+        TOOL_MAPPING.put(CameraTool.class, JfxCameraTool.class);
         // 网格显示工具
-        TOOL_MAPPING.put(GridTool.class, new ResourceMapping(JfxToggleTool.class
-                , ResConstants.TOOL_GRID, ResConstants.TOOL_GRID_TIP, "/" + AssetConstants.INTERFACE_TOOL_GRID));
-        
+        TOOL_MAPPING.put(GridTool.class, JfxToggleTool.class);
         // 移动工具
-        TOOL_MAPPING.put(MoveTool.class, new ResourceMapping(JfxToggleTool.class
-                , ResConstants.TOOL_MOVE, ResConstants.TOOL_MOVE_TIP, "/" + AssetConstants.INTERFACE_TOOL_MOVE));
-        
+        TOOL_MAPPING.put(MoveTool.class, JfxToggleTool.class);
         // 旋转工具
-        TOOL_MAPPING.put(RotationTool.class, new ResourceMapping(JfxToggleTool.class
-                , ResConstants.TOOL_ROTATION, ResConstants.TOOL_ROTATION_TIP, "/" + AssetConstants.INTERFACE_TOOL_ROTATION));
-        
+        TOOL_MAPPING.put(RotationTool.class, JfxToggleTool.class);
         // 缩放放工具
-        TOOL_MAPPING.put(ScaleTool.class, new ResourceMapping(JfxToggleTool.class
-                , ResConstants.TOOL_SCALE, ResConstants.TOOL_SCALE_TIP, "/" + AssetConstants.INTERFACE_TOOL_SCALE));
+        TOOL_MAPPING.put(ScaleTool.class, JfxToggleTool.class);
         
         // ----地形工具
         
         // 地形上升工具
-        TOOL_MAPPING.put(RaiseTool.class, new ResourceMapping(JfxToggleTool.class
-                , ResConstants.TOOL_TERRAIN_RAISE, ResConstants.TOOL_TERRAIN_RAISE_TIP, "/" + AssetConstants.INTERFACE_TOOL_TERRAIN_RAISE));
+        TOOL_MAPPING.put(RaiseTool.class, JfxToggleTool.class);
         
         // 地形降低工具
-        TOOL_MAPPING.put(LowerTool.class, new ResourceMapping(JfxToggleTool.class
-                , ResConstants.TOOL_TERRAIN_LOWER, ResConstants.TOOL_TERRAIN_LOWER_TIP, "/" + AssetConstants.INTERFACE_TOOL_TERRAIN_LOWER));        
+        TOOL_MAPPING.put(LowerTool.class, JfxToggleTool.class);
     }
     
     public final static JfxTool createJfxTool(Tool tool, Toolbar toolbar) {
         try {
-            ResourceMapping rm = TOOL_MAPPING.get(tool.getClass());
-            if (rm != null) {
-                JfxTool tv = rm.clazz.newInstance();
-                tv.initialize(tool, toolbar, rm.getName(), rm.getToolTip(), rm.getIcon());
+            // 优先通过完全匹配来查找渲染类
+            Class<? extends JfxTool> jtCls = TOOL_MAPPING.get(tool.getClass());
+            if (jtCls == null) {
+                // 通过通用类型匹配来查找渲染类
+                for (Class c : TOOL_MAPPING.values()) {
+                    if (c.isAssignableFrom(tool.getClass())) {
+                        jtCls = c;
+                        break;
+                    }
+                }
+            } 
+            
+            if (jtCls != null) {
+                JfxTool tv = jtCls.newInstance();
+                tv.setToolbar(toolbar);
+                tv.setTool(tool);
+                tv.initialize();
                 return tv;
-            } else {
+            }else {
                 LOG.log(Level.WARNING, "Mapping not found for toolName={0}, toolClass={1}, skipped."
                         , new Object[] {tool.getName(), tool.getClass().getName()});
             }
@@ -87,28 +88,28 @@ public class JfxToolFactory {
         return null;
     }
     
-    private static class ResourceMapping {
-        private Class<? extends JfxTool> clazz;
-        private final String nameKey;
-        private final String tipKey;
-        private final String icon;
-        
-        public ResourceMapping(Class<? extends JfxTool>clazz, String nameKey, String tipKey, String icon) {
-            this.clazz = clazz;
-            this.nameKey = nameKey;
-            this.tipKey = tipKey;
-            this.icon = icon;
-        }
-        
-        public String getName() {
-            return Manager.getResManager().get(nameKey);
-        }
-        public String getToolTip() {
-            return Manager.getResManager().get(tipKey);
-        }
-        public String getIcon() {
-            return icon;
-        }
-    }
+//    private static class ResourceMapping {
+//        private Class<? extends JfxTool> clazz;
+//        private final String nameKey;
+//        private final String tipKey;
+//        private final String icon;
+//        
+//        public ResourceMapping(Class<? extends JfxTool>clazz, String nameKey, String tipKey, String icon) {
+//            this.clazz = clazz;
+//            this.nameKey = nameKey;
+//            this.tipKey = tipKey;
+//            this.icon = icon;
+//        }
+//        
+//        public String getName() {
+//            return Manager.getResManager().get(nameKey);
+//        }
+//        public String getToolTip() {
+//            return Manager.getResManager().get(tipKey);
+//        }
+//        public String getIcon() {
+//            return icon;
+//        }
+//    }
     
 }

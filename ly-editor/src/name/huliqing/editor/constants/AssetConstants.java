@@ -30,4 +30,7 @@ public class AssetConstants {
     
     /** 材质：TerrainLighting.j3md */
     public final static String MATERIAL_TERRAIN_LIGHTING = "Common/MatDefs/Terrain/TerrainLighting.j3md";
+    
+    /** 材质：Unshaded.j3md */
+    public final static String MATERIAL_UNSHADED = "Common/MatDefs/Misc/Unshaded.j3md";
 }

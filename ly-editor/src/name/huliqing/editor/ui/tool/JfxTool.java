@@ -10,12 +10,14 @@ import name.huliqing.editor.toolbar.Toolbar;
 import name.huliqing.editor.tools.Tool;
 
 /**
- *
  * @author huliqing
+ * @param <T>
  */
-public interface JfxTool {
+public interface JfxTool<T extends Tool> {
     
-    Tool getTool();
+    void setToolbar(Toolbar toolbar);
+    
+    void setTool(T tool);
     
     /**
      * 获取编辑工具的渲染UI
@@ -37,11 +39,6 @@ public interface JfxTool {
     
     /**
      * 初始化toolview
-     * @param tool 工具
-     * @param toolbar 工具栏
-     * @param name 工具显示名称
-     * @param tooltip 提示
-     * @param icon 图标
      */
-    void initialize(Tool tool, Toolbar toolbar, String name, String tooltip, String icon);
+    void initialize();
 }

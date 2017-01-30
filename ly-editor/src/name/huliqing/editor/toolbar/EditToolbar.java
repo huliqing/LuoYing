@@ -26,7 +26,9 @@ public abstract class EditToolbar<E extends SimpleJmeEdit> extends AbstractToolb
     }
     
     protected void addToggleMapping(ToggleMappingEvent tme) {
-        tme.bindKey(tme.toggleKey, true);
+        if (tme.toggleKey >= 0) {
+            tme.bindKey(tme.toggleKey, true);
+        }
         tme.addListener(this);
         tme.initialize();
         toggleMapping.put(tme.tool, tme);

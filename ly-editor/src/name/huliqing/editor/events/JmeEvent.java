@@ -35,7 +35,8 @@ public class JmeEvent extends AbstractEvent implements Comparable<JmeEvent>{
     }
 
     /**
-     * 设置事件的优先级
+     * 设置事件的优先级,当相同的按键事件同时响应时，优先级较高的事件会先获得响应执行，如果事件在执行之后
+     * 调用{@link #setConsumed(boolean) }方法，则后续事件将不再响应，这可以用于避免相同按键事件的冲突。
      * @param <E>
      * @param prior 
      * @return  

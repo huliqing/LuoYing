@@ -10,8 +10,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.control.Separator;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
 import name.huliqing.editor.toolbar.Toolbar;
 import name.huliqing.editor.toolbar.ToolbarListener;
 import name.huliqing.editor.tools.Tool;
@@ -27,7 +28,7 @@ public class JfxEditToolbar implements JfxToolbar, ToolbarListener{
 
     private static final Logger LOG = Logger.getLogger(JfxEditToolbar.class.getName());
     
-    private final VBox layout = new VBox();
+    private final GridPane layout = new GridPane();
     private final Map<Tool, JfxTool> toolViewMap = new HashMap<Tool, JfxTool>();
     
     private Toolbar  toolbar;
@@ -53,13 +54,19 @@ public class JfxEditToolbar implements JfxToolbar, ToolbarListener{
         toolbar.addListener(this);
         List<Tool> enableList =  toolbar.getToolsEnabled();
         List<Tool> activateList = toolbar.getToolsActivated();
+        int rowIndex = 0;
         for (Tool tool : enableList) {
             JfxTool toolView = createToolView(tool, activateList != null && activateList.contains(tool));
             if (toolView != null) {
                 toolViewMap.put(tool, toolView);
-                layout.getChildren().add(toolView.getView());
+                layout.addRow(rowIndex++, toolView.getView());
+                
+//                Separator separator = new Separator();
+//                layout.addRow(rowIndex++, separator);
             }
         }
+        
+        layout.setVgap(5);
     }
     
     @Override

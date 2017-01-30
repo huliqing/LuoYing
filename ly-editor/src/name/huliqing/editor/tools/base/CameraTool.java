@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.tools;
+package name.huliqing.editor.tools.base;
 
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
@@ -23,6 +23,7 @@ import name.huliqing.editor.events.JmeEvent;
 import name.huliqing.editor.manager.Manager;
 import name.huliqing.editor.manager.ResManager;
 import name.huliqing.editor.toolbar.EditToolbar;
+import name.huliqing.editor.tools.EditTool;
 import name.huliqing.editor.utils.BestEditCamera;
 import name.huliqing.editor.utils.BestEditCamera.View;
 import name.huliqing.luoying.object.anim.Anim;
@@ -74,9 +75,9 @@ public class CameraTool extends EditTool implements EditorListener {
     private final BitmapText viewText = new BitmapText(Manager.getFont());
     private View view;
     private boolean ortho;
-    
-    public CameraTool(String name) {
-        super(name);
+
+    public CameraTool(String name, String tips, String icon) {
+        super(name, tips, icon);
         LCtrEvent = bindEvent("LCtrPressedEvent").bindKey(KeyInput.KEY_LCONTROL, true);
         RCtrEvent = bindEvent("RCtrPressedEvent").bindKey(KeyInput.KEY_RCONTROL, true);
         viewText.setSize(Manager.FONT_SIZE);

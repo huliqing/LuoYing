@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.tools;
+package name.huliqing.editor.tools.base;
 
 import com.jme3.input.KeyInput;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.JmeEvent;
+import name.huliqing.editor.tools.EditTool;
 
 /**
  * Undo Redo工具
@@ -25,8 +26,8 @@ public class UndoRedoTool extends EditTool {
     private final JmeEvent RShiftEvent;
     private boolean shiftPressed;
 
-    public UndoRedoTool(String name) {
-        super(name);
+    public UndoRedoTool(String name, String tips, String icon) {
+        super(name, tips, icon);
         LCtrEvent = bindEvent("LCtrEvent").bindKey(KeyInput.KEY_LCONTROL, true);
         RCtrEvent = bindEvent("RCtrEvent").bindKey(KeyInput.KEY_RCONTROL, true);
         LShiftEvent = bindEvent("LShiftEvent").bindKey(KeyInput.KEY_LSHIFT, true);

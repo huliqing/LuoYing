@@ -32,69 +32,92 @@
 
 package com.jme3.gde.terraineditor.tools;
 
+import com.jme3.math.Vector2f;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.terrain.Terrain;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Helps find the terrain in the scene
  * @author Brent Owens
  */
 public abstract class AbstractTerrainToolAction {
+     
+    protected void modifyHeight(Terrain terrain, Vector3f worldLoc, float radius, float heightDir) {
 
-    private Terrain terrain;
-    private Node terrainNode;
-
-    protected Terrain getTerrain(Spatial root) {
-
-        if (terrain != null)
-            return terrain;
+        Spatial terrainSpatial = (Spatial) terrain;
+        // 消除地形的位置和旋转导致的偏移,但是不消除缩放,这们允许地形在缩放、旋转和移动后进行编辑。
+        // 否则地形不能旋转和移动
+        Vector3f location = worldLoc.subtract(terrainSpatial.getWorldTranslation());
+        terrainSpatial.getWorldRotation().inverse().mult(location, location);
         
-        // is this the terrain?
-        if (root instanceof Terrain && root instanceof Node) {
-            terrain = (Terrain)root;
-            terrainNode = (Node)root;
-            return terrain;
-        }
+        int radiusStepsX = (int) (radius / ((Node)terrain).getWorldScale().x);
+        int radiusStepsZ = (int) (radius / ((Node)terrain).getWorldScale().z);
 
-        if (root instanceof Node) {
-            Node n = (Node) root;
-            for (Spatial c : n.getChildren()) {
-                if (c instanceof Node){
-                    Terrain res = getTerrain(c);
-                    if (res != null)
-                        return res;
+        float xStepAmount = ((Node)terrain).getWorldScale().x;
+        float zStepAmount = ((Node)terrain).getWorldScale().z;
+
+        List<Vector2f> locs = new ArrayList<Vector2f>();
+        List<Float> heights = new ArrayList<Float>();
+        
+        for (int z=-radiusStepsZ; z<radiusStepsZ; z++) {
+            for (int x=-radiusStepsX; x<radiusStepsX; x++) {
+
+                float locX = location.x + (x*xStepAmount);
+                float locZ = location.z + (z*zStepAmount);
+
+                // see if it is in the radius of the tool
+                if (ToolUtils.isInRadius(locX-location.x,locZ-location.z,radius)) {
+                    // adjust height based on radius of the tool
+                    float h = ToolUtils.calculateHeight(radius, heightDir, locX-location.x, locZ-location.z);
+                    // increase the height
+                    locs.add(new Vector2f(locX, locZ));
+                    heights.add(h);
                 }
             }
         }
 
-        return null;
+        // do the actual height adjustment
+        terrain.adjustHeight(locs, heights);
+
+        ((Node)terrain).updateModelBound(); // or else we won't collide with it where we just edited
     }
     
-    protected Node getTerrainNode(Spatial root) {
-
-        if (terrainNode != null)
-            return terrainNode;
-        
-        // is this the terrain?
-        if (root instanceof Terrain && root instanceof Node) {
-            terrainNode = (Node)root;
-            terrain = (Terrain)root;
-            return terrainNode;
-        }
-
-        if (root instanceof Node) {
-            Node n = (Node) root;
-            for (Spatial c : n.getChildren()) {
-                if (c instanceof Node){
-                    Node res = getTerrainNode(c);
-                    if (res != null)
-                        return res;
-                }
-            }
-        }
-
-        return null;
-    }
-     
+    
+//    protected void modifyHeight(Terrain terrain, Vector3f worldLoc, float radius, float heightDir) {
+//
+//        int radiusStepsX = (int) (radius / ((Node)terrain).getWorldScale().x);
+//        int radiusStepsZ = (int) (radius / ((Node)terrain).getWorldScale().z);
+//
+//        float xStepAmount = ((Node)terrain).getWorldScale().x;
+//        float zStepAmount = ((Node)terrain).getWorldScale().z;
+//
+//        List<Vector2f> locs = new ArrayList<Vector2f>();
+//        List<Float> heights = new ArrayList<Float>();
+//        
+//        for (int z=-radiusStepsZ; z<radiusStepsZ; z++) {
+//            for (int x=-radiusStepsX; x<radiusStepsX; x++) {
+//
+//                float locX = worldLoc.x + (x*xStepAmount);
+//                float locZ = worldLoc.z + (z*zStepAmount);
+//
+//                // see if it is in the radius of the tool
+//                if (ToolUtils.isInRadius(locX-worldLoc.x,locZ-worldLoc.z,radius)) {
+//                    // adjust height based on radius of the tool
+//                    float h = ToolUtils.calculateHeight(radius, heightDir, locX-worldLoc.x, locZ-worldLoc.z);
+//                    // increase the height
+//                    locs.add(new Vector2f(locX, locZ));
+//                    heights.add(h);
+//                }
+//            }
+//        }
+//
+//        // do the actual height adjustment
+//        terrain.adjustHeight(locs, heights);
+//
+//        ((Node)terrain).updateModelBound(); // or else we won't collide with it where we just edited
+//    }
 }

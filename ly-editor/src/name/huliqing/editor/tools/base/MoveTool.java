@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.tools;
+package name.huliqing.editor.tools.base;
 
 import com.jme3.input.KeyInput;
 import com.jme3.math.Quaternion;
@@ -23,6 +23,7 @@ import name.huliqing.editor.edit.UndoRedo;
 import name.huliqing.luoying.manager.PickManager;
 import name.huliqing.editor.edit.SimpleJmeEditListener;
 import name.huliqing.editor.toolbar.EditToolbar;
+import name.huliqing.editor.tools.EditTool;
 
 /**
  * 移动编辑工具
@@ -56,13 +57,14 @@ public class MoveTool extends EditTool implements SimpleJmeEditListener{
     // 自由移动
     private boolean transforming;
     private boolean freeMove;
+    private boolean axisMove;
     
-    public MoveTool(String name) {
-        super(name);
-        // 绑定三个按键：x,y,z用于在自由旋转的时候转化到按轴旋转
-        bindEvent(EVENT_MOVE_X).bindKey(KeyInput.KEY_X, false);
-        bindEvent(EVENT_MOVE_Y).bindKey(KeyInput.KEY_Y, false);
-        bindEvent(EVENT_MOVE_Z).bindKey(KeyInput.KEY_Z, false);
+    public MoveTool(String name, String tips, String icon) {
+        super(name, tips, icon);
+        // 绑定三个按键：x,y,z用于在自由旋转的时候转化到按轴旋转,优先级高一些，避免和按x,y,z的按键冲突，例如：“删除”快捷键X
+        bindEvent(EVENT_MOVE_X).bindKey(KeyInput.KEY_X, true).setPrior(1);
+        bindEvent(EVENT_MOVE_Y).bindKey(KeyInput.KEY_Y, true).setPrior(1);
+        bindEvent(EVENT_MOVE_Z).bindKey(KeyInput.KEY_Z, true).setPrior(1);
     }
     
     @Override
@@ -106,10 +108,17 @@ public class MoveTool extends EditTool implements SimpleJmeEditListener{
         
         if (e.getName().equals(EVENT_MOVE)) {
             if (e.isMatch()) {
+                // 重要优化：如果当前正在自由操作，则直接结束操作，不要启动新的按轴操作。
+                // 因为这个操作可能是要结束自由操作，而不是希望启动按轴操作, 如果是这样则会多出一个多余的历史记录。
+                if (freeMove) {
+                    endMove();
+                    return;
+                }
+                
                 PickManager.getPickRay(editor.getCamera(), editor.getInputManager().getCursorPosition(), ray);
                 AxisNode axis = controlObj.getPickAxis(ray);
                 if (axis != null) {
-                    startMove(axis);
+                    startAxisMove(axis);
                 }
             } else {
                 endMove();
@@ -132,15 +141,18 @@ public class MoveTool extends EditTool implements SimpleJmeEditListener{
         // 从自由操作转到约束操作
         else if (transforming && e.isMatch() && EVENT_MOVE_X.equals(e.getName())) {
             cancelMove();
-            startMove(controlObj.getAxisX());
+            startAxisMove(controlObj.getAxisX());
+            e.setConsumed(true);
         }
         else if (transforming && e.isMatch() && EVENT_MOVE_Y.equals(e.getName())) {
             cancelMove();
-            startMove(controlObj.getAxisY());
+            startAxisMove(controlObj.getAxisY());
+            e.setConsumed(true);
         }
         else if (transforming && e.isMatch() && EVENT_MOVE_Z.equals(e.getName())) {
             cancelMove();
-            startMove(controlObj.getAxisZ());
+            startAxisMove(controlObj.getAxisZ());
+            e.setConsumed(true);
         }
     }
     
@@ -148,7 +160,16 @@ public class MoveTool extends EditTool implements SimpleJmeEditListener{
      * 自由移动操作
      */
     public void startFreeMove() {
+        // 重要：这要避免自由操作和按轴操作时的冲突,因为自由操作按键可能和按轴操作按键冲突。
+        // 比如：当自由操作通过按下“左键”来应用操作的时候，而这个按键又和按轴操作冲突，
+        // 这时自由操作会直接变成按轴操作，而自由操作又来不及保存历史记录，
+        // 这时候就导致“自由操作”丢失历史记录，而按轴操作又没有启动. 所以这里要FIX这个BUG。
+        // 在按轴操作启动时要确保如果自由操作正在进行则需要保存历史记录再退出。
+        if (axisMove) {
+            endMove();
+        }
         freeMove = true;
+        axisMove = false;
         transforming = true;
         picker.startPick(selectObj.getReadOnlySelectedSpatial(), Mode.CAMERA
                 , editor.getCamera(), editor.getInputManager().getCursorPosition(), Picker.PLANE_XY);
@@ -158,10 +179,19 @@ public class MoveTool extends EditTool implements SimpleJmeEditListener{
         controlObj.setAxisLineVisible(false);
     }
 
-    private void startMove(AxisNode axis) {
+    private void startAxisMove(AxisNode axis) {
+        // 重要：这要避免自由操作和按轴操作时的冲突,因为自由操作按键可能和按轴操作按键冲突。
+        // 比如：当自由操作通过按下“左键”来应用操作的时候，而这个按键又和按轴操作冲突，
+        // 这时自由操作会直接变成按轴操作，而自由操作又来不及保存历史记录，
+        // 这时候就导致“自由操作”丢失历史记录，而按轴操作又没有启动. 所以这里要FIX这个BUG。
+        // 在按轴操作启动时要确保如果自由操作正在进行则需要保存历史记录再退出。
+        if (freeMove) {
+            endMove();
+        }
+        axisMove = true;
+        freeMove = false;
         moveAxis = axis;
         transforming = true;
-        freeMove = false;
         Quaternion planRotation = Picker.PLANE_XY;
         switch (moveAxis.getType()) {
             case x:
@@ -194,6 +224,7 @@ public class MoveTool extends EditTool implements SimpleJmeEditListener{
         }
         transforming = false;
         freeMove = false;
+        axisMove = false;
         moveAxis = null;
         controlObj.setAxisVisible(true);
         controlObj.setAxisLineVisible(false);

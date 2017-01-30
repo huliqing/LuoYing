@@ -16,7 +16,23 @@ import name.huliqing.editor.toolbar.Toolbar;
  */
 public interface Tool<E extends JmeEdit, T extends Toolbar> {
     
+    /**
+     * 获取工具的名称
+     * @return 
+     */
     String getName();
+    
+    /**
+     * 获取工具的描述或文字说明
+     * @return 
+     */
+    String getTips();
+    
+    /**
+     * 获取工具图标
+     * @return 
+     */
+    String getIcon();
     
     void initialize(E jmeEdit, T toolbar);
     

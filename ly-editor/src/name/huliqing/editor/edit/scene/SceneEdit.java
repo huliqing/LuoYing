@@ -19,7 +19,7 @@ import name.huliqing.editor.edit.select.EntitySelectObj;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.JmeEvent;
 import name.huliqing.editor.manager.SelectObjManager;
-import name.huliqing.editor.tools.MoveTool;
+import name.huliqing.editor.tools.base.MoveTool;
 import name.huliqing.editor.edit.UndoRedo;
 import name.huliqing.editor.toolbar.TerrainToolbar;
 import name.huliqing.editor.toolbar.Toolbar;

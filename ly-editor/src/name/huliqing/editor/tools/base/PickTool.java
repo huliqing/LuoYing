@@ -3,13 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.tools;
+package name.huliqing.editor.tools.base;
 
 import com.jme3.math.Ray;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.JmeEvent;
 import name.huliqing.editor.select.SelectObj;
 import name.huliqing.editor.edit.UndoRedo;
+import name.huliqing.editor.tools.EditTool;
 import name.huliqing.luoying.manager.PickManager;
 
 /**
@@ -19,9 +20,9 @@ import name.huliqing.luoying.manager.PickManager;
 public class PickTool extends EditTool {
     
     private SelectObj lastSelectObj;
-    
-    public PickTool(String name) {
-        super(name);
+
+    public PickTool(String name, String tips, String icon) {
+        super(name, tips, icon);
     }
     
     public JmeEvent bindPickEvent() {

@@ -3,13 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.tools;
+package name.huliqing.editor.tools.base;
 
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.JmeEvent;
 import name.huliqing.editor.edit.Mode;
+import name.huliqing.editor.tools.EditTool;
 
 /**
  *
@@ -22,9 +23,9 @@ public class ModeTool extends EditTool {
     }
     
     private List<ModeChangedListener> listeners;
-    
-    public ModeTool(String name) {
-        super(name);
+
+    public ModeTool(String name, String tips, String icon) {
+        super(name, tips, icon);
     }
     
     public Mode getMode() {

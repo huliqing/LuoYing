@@ -12,8 +12,6 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import name.huliqing.editor.toolbar.Toolbar;
-import name.huliqing.editor.tools.Tool;
 
 /**
  *
@@ -39,9 +37,8 @@ public class JfxToggleTool extends JfxAbstractTool {
     }
 
     @Override
-    public void initialize(Tool tool, Toolbar toolbar, String name, String tooltip, String icon) {
-        super.initialize(tool, toolbar, name, tooltip, icon);
-        view.setText(name);
+    public void initialize() {
+        view.setText(tool.getName());
         view.selectedProperty().addListener((ObservableValue<? extends Boolean> observable
                     , Boolean oldValue, Boolean newValue) -> {
             setActivated(newValue);
@@ -52,13 +49,13 @@ public class JfxToggleTool extends JfxAbstractTool {
         };
         
         // tooltip
-        if (tooltip != null && !tooltip.isEmpty()) {
-            view.setTooltip(new Tooltip(tooltip));
+        if (tool.getTips() != null) {
+            view.setTooltip(new Tooltip(tool.getTips()));
         }
         
         // icon
-        if (icon != null && !icon.equals("")) {
-            Image image = new Image(getClass().getResourceAsStream(icon));
+        if (tool.getIcon() != null) {
+            Image image = new Image(getClass().getResourceAsStream("/" + tool.getIcon()));
             ImageView imageView = new ImageView(image);
             imageView.fitHeightProperty().bind(size);
             imageView.fitWidthProperty().bind(size);

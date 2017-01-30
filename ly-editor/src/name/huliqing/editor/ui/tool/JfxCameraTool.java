@@ -11,19 +11,16 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tooltip;
 import name.huliqing.editor.constants.ResConstants;
 import name.huliqing.editor.manager.Manager;
-import name.huliqing.editor.toolbar.Toolbar;
-import name.huliqing.editor.tools.CameraTool;
-import name.huliqing.editor.tools.Tool;
+import name.huliqing.editor.tools.base.CameraTool;
 import name.huliqing.editor.utils.BestEditCamera;
 
 /**
  *
  * @author huliqing
  */
-public class JfxCameraTool extends JfxAbstractTool {
+public class JfxCameraTool extends JfxAbstractTool<CameraTool> {
     
     private final MenuButton view = new MenuButton();
-    private CameraTool cameraTool;
 
     @Override
     protected void setViewActivated(boolean activated) {
@@ -41,15 +38,13 @@ public class JfxCameraTool extends JfxAbstractTool {
     }
 
     @Override
-    public void initialize(Tool tool, Toolbar toolbar, String name, String tooltip, String icon) {
-        super.initialize(tool, toolbar, name, tooltip, icon);
-        cameraTool = (CameraTool) tool;
-        view.setText(name);
+    public void initialize() {
+        view.setText(tool.getName());
         
-        if (tooltip != null && !tooltip.isEmpty()) {
-            view.setTooltip(new Tooltip(tooltip));
+        if (tool.getTips() != null) {
+            view.setTooltip(new Tooltip(tool.getTips()));
         }
-
+        
         MenuItem focusOrigin = new MenuItem(Manager.getRes(ResConstants.VIEW_FOCUS_ORIGIN));
         MenuItem focusTarget = new MenuItem(Manager.getRes(ResConstants.VIEW_FOCUS_TARGET));
         MenuItem viewBack = new MenuItem(Manager.getRes(ResConstants.VIEW_BACK));
@@ -61,16 +56,16 @@ public class JfxCameraTool extends JfxAbstractTool {
         MenuItem viewOrtho = new MenuItem(Manager.getRes(ResConstants.VIEW_ORTHO));
         MenuItem viewPersp = new MenuItem(Manager.getRes(ResConstants.VIEW_PERSP));
         
-        focusOrigin.setOnAction(t -> cameraTool.doChaseOrigin());
-        focusTarget.setOnAction(t -> cameraTool.doChaseSelected());
-        viewBack.setOnAction(t -> cameraTool.doSwitchView(BestEditCamera.View.back));
-        viewBottom.setOnAction(t -> cameraTool.doSwitchView(BestEditCamera.View.bottom));
-        viewFront.setOnAction(t -> cameraTool.doSwitchView(BestEditCamera.View.front));
-        viewLeft.setOnAction(t -> cameraTool.doSwitchView(BestEditCamera.View.left));
-        viewRight.setOnAction(t -> cameraTool.doSwitchView(BestEditCamera.View.right));
-        viewTop.setOnAction(t -> cameraTool.doSwitchView(BestEditCamera.View.top));
-        viewOrtho.setOnAction(t -> cameraTool.doOrthoView());
-        viewPersp.setOnAction(t -> cameraTool.doPerspView());
+        focusOrigin.setOnAction(t -> tool.doChaseOrigin());
+        focusTarget.setOnAction(t -> tool.doChaseSelected());
+        viewBack.setOnAction(t -> tool.doSwitchView(BestEditCamera.View.back));
+        viewBottom.setOnAction(t -> tool.doSwitchView(BestEditCamera.View.bottom));
+        viewFront.setOnAction(t -> tool.doSwitchView(BestEditCamera.View.front));
+        viewLeft.setOnAction(t -> tool.doSwitchView(BestEditCamera.View.left));
+        viewRight.setOnAction(t -> tool.doSwitchView(BestEditCamera.View.right));
+        viewTop.setOnAction(t -> tool.doSwitchView(BestEditCamera.View.top));
+        viewOrtho.setOnAction(t -> tool.doOrthoView());
+        viewPersp.setOnAction(t -> tool.doPerspView());
         
         view.getItems().addAll(focusOrigin, focusTarget
                 , viewBack, viewBottom, viewFront, viewLeft, viewRight, viewTop, viewOrtho, viewPersp);

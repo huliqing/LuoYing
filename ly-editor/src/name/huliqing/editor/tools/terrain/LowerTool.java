@@ -6,16 +6,15 @@
 package name.huliqing.editor.tools.terrain;
 
 import name.huliqing.editor.events.Event;
-import name.huliqing.editor.tools.EditTool;
 
 /**
  * 地形降低工具
  * @author huliqing
  */
-public class LowerTool extends EditTool {
+public class LowerTool extends AbstractTerrainTool {
 
-    public LowerTool(String name) {
-        super(name);
+    public LowerTool(String name, String tips, String icon) {
+        super(name, tips, icon);
     }
 
     @Override

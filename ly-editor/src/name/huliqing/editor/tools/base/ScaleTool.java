@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.tools;
+package name.huliqing.editor.tools.base;
 
 import com.jme3.input.KeyInput;
 import com.jme3.math.Quaternion;
@@ -22,6 +22,7 @@ import name.huliqing.editor.edit.UndoRedo;
 import name.huliqing.luoying.manager.PickManager;
 import name.huliqing.editor.edit.SimpleJmeEditListener;
 import name.huliqing.editor.toolbar.EditToolbar;
+import name.huliqing.editor.tools.EditTool;
 
 /**
  * 缩放编辑工具
@@ -54,11 +55,14 @@ public class ScaleTool extends EditTool implements SimpleJmeEditListener{
     private boolean transforming;
     // 自由操作，整体缩放
     private boolean freeScale;
+    // 按轴缩放
+    private boolean axisScale;
+    
     // 当前操作的轴向
     private AxisNode controlAxis;
 
-    public ScaleTool(String name) {
-        super(name);
+    public ScaleTool(String name, String tips, String icon) {
+        super(name, tips, icon);
         // 绑定三个按键：x,y,z用于在fullScale时转化为按指定轴缩放
         bindEvent(EVENT_SCALE_X).bindKey(KeyInput.KEY_X, true);
         bindEvent(EVENT_SCALE_Y).bindKey(KeyInput.KEY_Y, true);
@@ -116,14 +120,21 @@ public class ScaleTool extends EditTool implements SimpleJmeEditListener{
         // 普通按轴缩放(一般为鼠标按着沿轴向缩放)
         if (EVENT_SCALE.equals(e.getName())) {
             if (e.isMatch()) {
+                // 重要优化：如果当前正在自由操作，则直接结束操作，不要启动新的按轴操作。
+                // 因为这个操作可能是要结束自由操作，而不是希望启动按轴操作, 如果是这样则会多出一个多余的历史记录。
+                if (freeScale) {
+                    endScale();
+                    return;
+                }
+                
                 PickManager.getPickRay(editor.getCamera(), editor.getInputManager().getCursorPosition(), ray);
                 if (controlObj.isPickCenter(ray)) {
-                    startFullScale();
+                    startFreeScale();
                     return;
                 }
                 AxisNode scaleAxis = controlObj.getPickAxis(ray);
                 if (scaleAxis != null) {
-                    startScale(scaleAxis);
+                    startAxisScale(scaleAxis);
                 }
             } else {
                 endScale();
@@ -133,7 +144,7 @@ public class ScaleTool extends EditTool implements SimpleJmeEditListener{
         // 整体缩放开始
         else if (EVENT_FREE_SCALE_START.equals(e.getName())) {
             if (e.isMatch()) {
-                startFullScale();
+                startFreeScale();
             }
         }
          // 整体缩放取消
@@ -147,21 +158,30 @@ public class ScaleTool extends EditTool implements SimpleJmeEditListener{
         // 全局缩放时按X来转到X轴缩放
         else if (transforming && e.isMatch() && EVENT_SCALE_X.equals(e.getName())) {
             cancelScale();
-            startScale(controlObj.getAxisX());
+            startAxisScale(controlObj.getAxisX());
         }
         else if (transforming && e.isMatch() && EVENT_SCALE_Y.equals(e.getName())) {
             cancelScale();
-            startScale(controlObj.getAxisY());
+            startAxisScale(controlObj.getAxisY());
         }
         else if (transforming && e.isMatch() && EVENT_SCALE_Z.equals(e.getName())) {
             cancelScale();
-            startScale(controlObj.getAxisZ());
+            startAxisScale(controlObj.getAxisZ());
         }
     }
     
-    private void startFullScale() {
-        freeScale = true;
+    private void startFreeScale() {
+        // 重要：这要避免自由操作和按轴操作时的冲突,因为自由操作按键可能和按轴操作按键冲突。
+        // 比如：当自由操作通过按下“左键”来应用操作的时候，而这个按键又和按轴操作冲突，
+        // 这时自由操作会直接变成按轴操作，而自由操作又来不及保存历史记录，
+        // 这时候就导致“自由操作”丢失历史记录，而按轴操作又没有启动. 所以这里要FIX这个BUG。
+        // 在按轴操作启动时要确保如果自由操作正在进行则需要保存历史记录再退出。
+        if (axisScale) {
+            endScale();
+        }
         transforming = true;
+        freeScale = true;
+        axisScale = false;
         controlAxis = null;
         controlObj.setAxisVisible(false);
         controlObj.setAxisLineVisible(false);
@@ -171,9 +191,18 @@ public class ScaleTool extends EditTool implements SimpleJmeEditListener{
     }
     
     // 普通的按轴缩放
-    private void startScale(AxisNode scaleAxis) {
-        freeScale = false;
+    private void startAxisScale(AxisNode scaleAxis) {
+        // 重要：这要避免自由操作和按轴操作时的冲突,因为自由操作按键可能和按轴操作按键冲突。
+        // 比如：当自由操作通过按下“左键”来应用操作的时候，而这个按键又和按轴操作冲突，
+        // 这时自由操作会直接变成按轴操作，而自由操作又来不及保存历史记录，
+        // 这时候就导致“自由操作”丢失历史记录，而按轴操作又没有启动. 所以这里要FIX这个BUG。
+        // 在按轴操作启动时要确保如果自由操作正在进行则需要保存历史记录再退出。
+        if (freeScale) {
+            endScale();
+        }
         transforming = true;
+        freeScale = false;
+        axisScale = true;
         controlAxis = scaleAxis;
         controlObj.setAxisVisible(false);
         controlObj.setAxisLineVisible(false);
@@ -207,6 +236,7 @@ public class ScaleTool extends EditTool implements SimpleJmeEditListener{
         }
         transforming = false;
         freeScale = false;
+        axisScale = false;
         controlAxis = null;
         controlObj.setAxisVisible(true);
         controlObj.setAxisLineVisible(false);
