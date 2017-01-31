@@ -14,6 +14,10 @@ ok.历史记录和jfx的change绑定有冲突
 ok.asset资源重命名功能
 ok.旋转操作controlObj的线条太粗
 
+.工具的参数设置
+.工具的Action类要统一
+.地形刷功能
+
 .为PropertyConverter增加Validator功能
 .删除Entity功能及复制Entity操作
 .file字段在打开文件夹的时候要增加Filter来过滤显示的文件

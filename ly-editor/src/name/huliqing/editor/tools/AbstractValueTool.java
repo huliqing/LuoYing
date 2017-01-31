@@ -22,11 +22,11 @@ public abstract class AbstractValueTool<V> extends EditTool implements ValueTool
     public AbstractValueTool(String name, String tips, String icon) {
         super(name, tips, icon);
     }
-    
+
     @Override
-    public void setValue(V newValue) {
+    public <T extends ValueTool> T setValue(V newValue) {
         if (value == null && newValue == null) 
-            return;
+            return (T) this;
         boolean changed = false;
         if (newValue != null && !newValue.equals(value)) {
             changed = true;
@@ -40,6 +40,7 @@ public abstract class AbstractValueTool<V> extends EditTool implements ValueTool
                 t.onValueChanged(this, old, value);
             });
         }
+        return (T) this;
     }
 
     @Override

@@ -32,43 +32,89 @@
 
 package com.jme3.gde.terraineditor.tools;
 
-//import com.jme3.gde.core.sceneexplorer.nodes.AbstractSceneExplorerNode;
-//import com.jme3.gde.terraineditor.tools.TerrainTool.Meshes;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import com.jme3.terrain.Terrain;
+import java.util.ArrayList;
+import java.util.List;
 import name.huliqing.editor.edit.UndoRedo;
+import name.huliqing.editor.edit.select.EntitySelectObj;
 
 /**
- * Raise/lower the terrain, executed from the OpenGL thread.
- * 
- * @author Brent Owens
+ * 升高地形
  */
 public class RaiseTerrainToolAction extends AbstractTerrainToolAction implements UndoRedo {
 
-    private final Terrain terrain;
+    // 注：undo和redo的对象必须始终是EntitySelectObj，因为EntitySelectObj中Object等参数是可能发生变化的,
+    // 也就是其中的TerrainEntity中的Terrain对象可能是发生变化的.
+    private final EntitySelectObj selectObj;
     private final Vector3f worldLoc;
     private final float radius;
     private final float height;
 
-    public RaiseTerrainToolAction(Terrain terrain, Vector3f markerLocation, float radius, float height) {
-        this.terrain = terrain;
+    public RaiseTerrainToolAction(EntitySelectObj terrain, Vector3f markerLocation, float radius, float height) {
+        this.selectObj = terrain;
         this.worldLoc = markerLocation.clone();
         this.radius = radius;
         this.height = height;
     }
     
     public void doRaise() {
-        this.modifyHeight(terrain, worldLoc, radius, height);
+        this.modifyHeight(selectObj, worldLoc, radius, height);
     }
 
     @Override
     public void undo() {
-        this.modifyHeight(terrain, worldLoc, radius, -height);
+        this.modifyHeight(selectObj, worldLoc, radius, -height);
     }
 
     @Override
     public void redo() {
-        this.modifyHeight(terrain, worldLoc, radius, height);
+        this.modifyHeight(selectObj, worldLoc, radius, height);
     }
 
+    private void modifyHeight(EntitySelectObj eso, Vector3f worldLoc, float radius, float heightDir) {
+        Spatial terrainSpatial = eso.getObject().getSpatial();
+        if (!(terrainSpatial instanceof Terrain)) {
+            throw new IllegalStateException("terrainSpatial must be a Terrain object! eso=" + eso);
+        }
+        Terrain terrain = (Terrain) terrainSpatial;
+        // 消除地形的位置和旋转导致的偏移,但是不消除缩放,这们允许地形在缩放、旋转和移动后进行编辑。
+        // 否则地形不能旋转和移动
+        Vector3f location = worldLoc.subtract(terrainSpatial.getWorldTranslation());
+        terrainSpatial.getWorldRotation().inverse().mult(location, location);
+        
+        int radiusStepsX = (int) (radius / ((Node)terrain).getWorldScale().x);
+        int radiusStepsZ = (int) (radius / ((Node)terrain).getWorldScale().z);
+
+        float xStepAmount = ((Node)terrain).getWorldScale().x;
+        float zStepAmount = ((Node)terrain).getWorldScale().z;
+
+        List<Vector2f> locs = new ArrayList<Vector2f>();
+        List<Float> heights = new ArrayList<Float>();
+        
+        for (int z=-radiusStepsZ; z<radiusStepsZ; z++) {
+            for (int x=-radiusStepsX; x<radiusStepsX; x++) {
+
+                float locX = location.x + (x*xStepAmount);
+                float locZ = location.z + (z*zStepAmount);
+
+                // see if it is in the radius of the tool
+                if (ToolUtils.isInRadius(locX-location.x,locZ-location.z,radius)) {
+                    // adjust height based on radius of the tool
+                    float h = ToolUtils.calculateHeight(radius, heightDir, locX-location.x, locZ-location.z);
+                    // increase the height
+                    locs.add(new Vector2f(locX, locZ));
+                    heights.add(h);
+                }
+            }
+        }
+
+        // do the actual height adjustment
+        terrain.adjustHeight(locs, heights);
+
+        ((Node)terrain).updateModelBound(); // or else we won't collide with it where we just edited
+    }
 }

@@ -37,7 +37,7 @@ public class Editor extends SimpleApplication{
         inputManager.setCursorVisible(true);
         viewPort.setBackgroundColor(ColorRGBA.DarkGray);
         flyCam.setEnabled(false);
-        cam.setFrustumFar(10000);
+        cam.setFrustumFar(100000);
         
         // 初始化
         Manager.initialize(this);

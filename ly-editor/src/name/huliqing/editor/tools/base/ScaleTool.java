@@ -130,11 +130,13 @@ public class ScaleTool extends EditTool implements SimpleJmeEditListener{
                 PickManager.getPickRay(editor.getCamera(), editor.getInputManager().getCursorPosition(), ray);
                 if (controlObj.isPickCenter(ray)) {
                     startFreeScale();
+                    e.setConsumed(true);
                     return;
                 }
                 AxisNode scaleAxis = controlObj.getPickAxis(ray);
                 if (scaleAxis != null) {
                     startAxisScale(scaleAxis);
+                    e.setConsumed(true);
                 }
             } else {
                 endScale();
@@ -145,6 +147,7 @@ public class ScaleTool extends EditTool implements SimpleJmeEditListener{
         else if (EVENT_FREE_SCALE_START.equals(e.getName())) {
             if (e.isMatch()) {
                 startFreeScale();
+                e.setConsumed(true);
             }
         }
          // 整体缩放取消
@@ -159,14 +162,17 @@ public class ScaleTool extends EditTool implements SimpleJmeEditListener{
         else if (transforming && e.isMatch() && EVENT_SCALE_X.equals(e.getName())) {
             cancelScale();
             startAxisScale(controlObj.getAxisX());
+            e.setConsumed(true);
         }
         else if (transforming && e.isMatch() && EVENT_SCALE_Y.equals(e.getName())) {
             cancelScale();
             startAxisScale(controlObj.getAxisY());
+            e.setConsumed(true);
         }
         else if (transforming && e.isMatch() && EVENT_SCALE_Z.equals(e.getName())) {
             cancelScale();
             startAxisScale(controlObj.getAxisZ());
+            e.setConsumed(true);
         }
     }
     

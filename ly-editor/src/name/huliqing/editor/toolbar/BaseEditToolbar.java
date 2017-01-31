@@ -72,20 +72,19 @@ public class BaseEditToolbar extends EditToolbar<SimpleJmeEdit> {
         cameraTool.bindViewTopEvent().bindKey(KeyInput.KEY_NUMPAD7, true);
         cameraTool.bindViewOrthoPerspEvent().bindKey(KeyInput.KEY_NUMPAD5, true);
 
-        modeTool.bindModeEvent().bindKey(KeyInput.KEY_TAB, true);
         pickTool.bindPickEvent().bindButton(MouseInput.BUTTON_RIGHT, true);
         
-        moveTool.bindMoveEvent().bindButton(MouseInput.BUTTON_LEFT, true);
+        moveTool.bindMoveEvent().setPrior(2).bindButton(MouseInput.BUTTON_LEFT, true);
         moveTool.bindFreeMoveStartEvent().bindKey(KeyInput.KEY_G, false);
-        moveTool.bindFreeMoveCancelEvent().setPrior(1).bindButton(MouseInput.BUTTON_RIGHT, true);
+        moveTool.bindFreeMoveCancelEvent().setPrior(2).bindButton(MouseInput.BUTTON_RIGHT, true);
         
-        scaleTool.bindScaleEvent().bindButton(MouseInput.BUTTON_LEFT, true);
+        scaleTool.bindScaleEvent().setPrior(2).bindButton(MouseInput.BUTTON_LEFT, true);
         scaleTool.bindFreeScaleStartEvent().bindKey(KeyInput.KEY_S, false);
-        scaleTool.bindFreeScaleCancelEvent().setPrior(1).bindButton(MouseInput.BUTTON_RIGHT, true);
+        scaleTool.bindFreeScaleCancelEvent().setPrior(2).bindButton(MouseInput.BUTTON_RIGHT, true);
         
-        rotationTool.bindRotationEvent().bindButton(MouseInput.BUTTON_LEFT, true);
+        rotationTool.bindRotationEvent().setPrior(2).bindButton(MouseInput.BUTTON_LEFT, true);
         rotationTool.bindFreeRotationStartEvent().bindKey(KeyInput.KEY_R, false);
-        rotationTool.bindFreeRotationCancelEvent().setPrior(1).bindButton(MouseInput.BUTTON_RIGHT, true); 
+        rotationTool.bindFreeRotationCancelEvent().setPrior(2).bindButton(MouseInput.BUTTON_RIGHT, true); 
         
         Tool[] conflicts = new Tool[]{moveTool, scaleTool, rotationTool};
         addToggleMapping(new ToggleMappingEvent(KeyInput.KEY_G, moveTool, conflicts));

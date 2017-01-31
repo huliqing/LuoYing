@@ -5,20 +5,43 @@
  */
 package name.huliqing.editor.tools.terrain;
 
-import name.huliqing.editor.events.Event;
+import com.jme3.gde.terraineditor.tools.RaiseTerrainToolAction;
+import com.jme3.math.ColorRGBA;
+import com.jme3.scene.Geometry;
+import name.huliqing.editor.edit.select.EntitySelectObj;
 
 /**
  * 地形降低工具
  * @author huliqing
  */
-public class LowerTool extends AbstractTerrainTool {
+public class LowerTool extends RaiseTool {
 
     public LowerTool(String name, String tips, String icon) {
         super(name, tips, icon);
     }
 
     @Override
-    protected void onToolEvent(Event e) {
+    protected void doRaise() {
+        float radius = radiusTool.getValue().floatValue();
+        float weight = weightTool.getValue().floatValue();
+        if (radius <= 0 || weight == 0) 
+            return;
+        
+        EntitySelectObj terrain = getTerrainEntity();
+        if (terrain == null) 
+            return;
+        
+        RaiseTerrainToolAction action = new RaiseTerrainToolAction(terrain, controlObj.getWorldTranslation(), radius, -weight);
+        action.doRaise();
+        actions.add(action);
     }
+
+    @Override
+    protected Geometry createMesh() {
+        Geometry geo = super.createMesh(); 
+        geo.getMaterial().setColor("Color", ColorRGBA.Red);
+        return geo;
+    }
+
     
 }

@@ -125,6 +125,7 @@ public class RotationTool extends EditTool implements SimpleJmeEditListener{
                 AxisNode pickAxis = controlObj.getPickAxis(ray);
                 if (pickAxis != null) {
                     startAxisRotation(pickAxis);
+                    e.setConsumed(true);
                 }
             } else {
                 endRotation();
@@ -135,6 +136,7 @@ public class RotationTool extends EditTool implements SimpleJmeEditListener{
         else if (EVENT_FREE_ROTATION_START.equals(e.getName())) {
             if (e.isMatch()) {
                 startFreeRotation();
+                e.setConsumed(true);
             }
         } 
         // 取消旋转
@@ -150,14 +152,17 @@ public class RotationTool extends EditTool implements SimpleJmeEditListener{
         else if (transforming && e.isMatch() && EVENT_ROTATION_X.equals(e.getName())) {
             cancelRotation();
             startAxisRotation(controlObj.getAxisX());
+            e.setConsumed(true);
         }
         else if (transforming && e.isMatch() && EVENT_ROTATION_Y.equals(e.getName())) {
             cancelRotation();
             startAxisRotation(controlObj.getAxisY());
+            e.setConsumed(true);
         }
         else if (transforming && e.isMatch() && EVENT_ROTATION_Z.equals(e.getName())) {
             cancelRotation();
             startAxisRotation(controlObj.getAxisZ());
+            e.setConsumed(true);
         }
     }
     

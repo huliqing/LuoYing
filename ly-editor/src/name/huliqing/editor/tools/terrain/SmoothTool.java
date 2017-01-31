@@ -6,6 +6,7 @@
 package name.huliqing.editor.tools.terrain;
 
 import com.jme3.gde.terraineditor.tools.RaiseTerrainToolAction;
+import com.jme3.gde.terraineditor.tools.SmoothTerrainToolAction;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
@@ -24,25 +25,25 @@ import name.huliqing.editor.tools.NumberValueTool;
 import name.huliqing.editor.tools.ToggleTool;
 
 /**
- * 地形上升工具
+ * 地形平滑工具
  * @author huliqing
  */
-public class RaiseTool extends AbstractTerrainTool implements ToggleTool {
+public class SmoothTool extends AbstractTerrainTool implements ToggleTool {
     
-    private final static String EVENT_RAISE = "raiseEvent";
+    private final static String EVENT_SMOOTH = "smoothEvent";
     
     protected Geometry controlObj;
     protected NumberValueTool radiusTool;
     protected NumberValueTool weightTool;
     
-    protected final List<RaiseTerrainToolAction> actions = new ArrayList<RaiseTerrainToolAction>();
+    protected final List<SmoothTerrainToolAction> actions = new ArrayList<SmoothTerrainToolAction>();
     
     private boolean modifying;
     private float lastRadiusUsed = 1.0f;
     private final float toolModifyRate = 0.05f; // how frequently (in seconds) it should update to throttle down the tool effect
     private float lastModifyTime; // last time the tool executed
 
-    public RaiseTool(String name, String tips, String icon) {
+    public SmoothTool(String name, String tips, String icon) {
         super(name, tips, icon);
     }
 
@@ -61,7 +62,7 @@ public class RaiseTool extends AbstractTerrainTool implements ToggleTool {
     @Override
     public void cleanup() {
         if (modifying) {
-            endRaise();
+            endSmooth();
         }
         if (controlObj != null) {
             controlObj.removeFromParent();
@@ -69,21 +70,21 @@ public class RaiseTool extends AbstractTerrainTool implements ToggleTool {
         super.cleanup(); 
     }
     
-    public JmeEvent bindRaiseEvent() {
-        return this.bindEvent(EVENT_RAISE);
+    public JmeEvent bindSmoothEvent() {
+        return this.bindEvent(EVENT_SMOOTH);
     }
     
     @Override
     protected void onToolEvent(Event e) {
-        if (e.getName().equals(EVENT_RAISE)) {
+        if (e.getName().equals(EVENT_SMOOTH)) {
             if (e.isMatch()) {
                 modifying = true;
                 lastModifyTime = 0;
-                doRaise();
+                doSmooth();
                 e.setConsumed(true);
             } else {
                 modifying = false;
-                endRaise();
+                endSmooth();
             }
         }
     }
@@ -104,12 +105,12 @@ public class RaiseTool extends AbstractTerrainTool implements ToggleTool {
             lastModifyTime += tpf;
             if (lastModifyTime >= toolModifyRate) {
                 lastModifyTime = 0;
-                doRaise();
+                doSmooth();
             }
         }
     }
     
-    protected void doRaise() {
+    protected void doSmooth() {
         float radius = radiusTool.getValue().floatValue();
         float weight = weightTool.getValue().floatValue();
         if (radius <= 0 || weight == 0) 
@@ -119,18 +120,18 @@ public class RaiseTool extends AbstractTerrainTool implements ToggleTool {
         if (terrain == null) 
             return;
         
-        RaiseTerrainToolAction action = new RaiseTerrainToolAction(terrain, controlObj.getWorldTranslation(), radius, weight);
-        action.doRaise();
+        SmoothTerrainToolAction action = new SmoothTerrainToolAction(terrain, controlObj.getWorldTranslation(), radius, weight);
+        action.doAction();
         actions.add(action);
     }
     
-    private void endRaise() {
+    private void endSmooth() {
         if (actions.isEmpty()) {
             return;
         }
         // record undo action
-        List<RaiseTerrainToolAction> actionList = new ArrayList<RaiseTerrainToolAction>(actions);
-        edit.addUndoRedo(new RaiseUndoRedo(actionList));
+        List<SmoothTerrainToolAction> actionList = new ArrayList<SmoothTerrainToolAction>(actions);
+        edit.addUndoRedo(new SmoothUndoRedo(actionList));
         actions.clear();
     }
     
@@ -145,18 +146,18 @@ public class RaiseTool extends AbstractTerrainTool implements ToggleTool {
         return marker;
     }
 
-    private class RaiseUndoRedo implements UndoRedo {
+    private class SmoothUndoRedo implements UndoRedo {
         
-        private final List<RaiseTerrainToolAction> actionList;
+        private final List<SmoothTerrainToolAction> actionList;
         
-        public RaiseUndoRedo(List<RaiseTerrainToolAction> actionList) {
+        public SmoothUndoRedo(List<SmoothTerrainToolAction> actionList) {
             this.actionList = actionList;
         }
         
         @Override
         public void undo() {
             for (int i = actionList.size() - 1; i >= 0; i--) {
-                RaiseTerrainToolAction action = actionList.get(i);
+                SmoothTerrainToolAction action = actionList.get(i);
                 action.undo();
             }
         }
@@ -164,7 +165,7 @@ public class RaiseTool extends AbstractTerrainTool implements ToggleTool {
         @Override
         public void redo() {
             for (int i = 0; i < actionList.size(); i++) {
-                RaiseTerrainToolAction action = actionList.get(i);
+                SmoothTerrainToolAction action = actionList.get(i);
                 action.redo();
             }
         }

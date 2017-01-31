@@ -36,6 +36,7 @@ package com.jme3.gde.terraineditor.tools;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import com.jme3.terrain.Terrain;
 import com.jme3.terrain.noise.Basis;
 import com.jme3.terrain.noise.ShaderUtils;
@@ -49,52 +50,56 @@ import com.jme3.terrain.noise.modulator.NoiseModulator;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import name.huliqing.editor.edit.UndoRedo;
+import name.huliqing.editor.edit.select.EntitySelectObj;
 
-/**
- *
- * @author sploreg
- */
-public class RoughTerrainToolAction extends AbstractTerrainToolAction {
+
+public class RoughTerrainToolAction extends AbstractTerrainToolAction implements UndoRedo {
     
-    private Vector3f worldLoc;
-    private float radius;
-    private float weight;
-    private RoughExtraToolParams params;
+    private final EntitySelectObj selectObj;
+    private final Vector3f worldLoc;
+    private final float radius;
+    private final float weight;
+    private final RoughExtraToolParams params;
     
     List<Vector2f> undoLocs;
     List<Float> undoHeights;
 
-    public RoughTerrainToolAction(Vector3f markerLocation, float radius, float weight) {
+    public RoughTerrainToolAction(EntitySelectObj selectObj, 
+            Vector3f markerLocation, float radius, float weight, RoughExtraToolParams params) {
+        this.selectObj = selectObj;
         this.worldLoc = markerLocation.clone();
         this.radius = radius;
         this.weight = weight;
-//        this.params = (RoughExtraToolParams)params;
-//        name = "Rough terrain";
+        this.params = params;
+    }
+    
+    public void doAction() {
+        redo();
+    }
+    
+    @Override
+    public void undo() {
+        Terrain terrain = getTerrain(selectObj);
+        if (undoLocs == null || undoHeights == null)
+            return;
+        resetHeight(terrain, undoLocs, undoHeights);
     }
 
-//    @Override
-//    protected Object doApplyTool(AbstractSceneExplorerNode rootNode) {
-//        Terrain terrain = getTerrain(rootNode.getLookup().lookup(Node.class));
-//        if (terrain == null)
-//            return null;
-//        Node terrainNode = getTerrainNode(rootNode.getLookup().lookup(Node.class));
-//        worldLoc.subtractLocal(terrainNode.getWorldTranslation());
-//        roughen(terrain, radius, weight, params);
-//        return terrain;
-//    }
-//    
-//    @Override
-//    protected void doUndoTool(AbstractSceneExplorerNode rootNode, Object undoObject) {
-//        if (undoObject == null)
-//            return;
-//        if (undoLocs == null || undoHeights == null)
-//            return;
-//        resetHeight((Terrain)undoObject, undoLocs, undoHeights);
-//    }
+    @Override
+    public void redo() {
+        Terrain terrain = getTerrain(selectObj);
+        roughen(terrain, worldLoc, radius, weight, params);
+    }
     
-    private void roughen(Terrain terrain, float radius, float weight, RoughExtraToolParams params) {
-        Basis fractalFilter = createFractalGenerator(params, weight);
+    private void roughen(Terrain terrain, Vector3f worldLoc, float radius, float weight, RoughExtraToolParams params) {
+        // 消除地形的位置和旋转导致的偏移,但是不消除缩放,这们允许地形在缩放、旋转和移动后进行编辑。
+        // 否则地形不能旋转和移动
+        Spatial terrainSpaitla = (Spatial) terrain;
+        Vector3f location = worldLoc.subtract(terrainSpaitla.getWorldTranslation());
+        terrainSpaitla.getWorldRotation().inverse().mult(location, location);
         
+        Basis fractalFilter = createFractalGenerator(params, weight);
         List<Vector2f> locs = new ArrayList<Vector2f>();
         List<Float> heights = new ArrayList<Float>();
         
@@ -105,22 +110,20 @@ public class RoughTerrainToolAction extends AbstractTerrainToolAction {
         float zStepAmount = ((Node)terrain).getLocalScale().z;
         
         int r2 = (int) (radius*2);
-        FloatBuffer fb = fractalFilter.getBuffer(worldLoc.x, worldLoc.z, 0, r2);
+        FloatBuffer fb = fractalFilter.getBuffer(location.x, location.z, 0, r2);
         
-        //for (int y=0; y<r2; y++) {
-        //    for (int x=0; x<r2; x++) {
-        int xfb=0,yfb=0;
+        int xfb = 0, yfb = 0;
         for (int z = -radiusStepsZ; z < radiusStepsZ; z++) {
             for (int x = -radiusStepsX; x < radiusStepsX; x++) {
                 
-                float locX = worldLoc.x + (x * xStepAmount);
-                float locZ = worldLoc.z + (z * zStepAmount);
+                float locX = location.x + (x * xStepAmount);
+                float locZ = location.z + (z * zStepAmount);
                 
                 float height = fb.get(yfb*r2 + xfb);
                 
-                if (isInRadius(locX - worldLoc.x, locZ - worldLoc.z, radius)) {
+                if (isInRadius(locX - location.x, locZ - location.z, radius)) {
                     // see if it is in the radius of the tool
-                    float h = calculateHeight(radius, height, locX - worldLoc.x, locZ - worldLoc.z);
+                    float h = calculateHeight(radius, height, locX - location.x, locZ - location.z);
                     locs.add(new Vector2f(locX, locZ));
                     heights.add(h);
                 }

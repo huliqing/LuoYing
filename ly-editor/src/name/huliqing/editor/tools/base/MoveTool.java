@@ -119,6 +119,7 @@ public class MoveTool extends EditTool implements SimpleJmeEditListener{
                 AxisNode axis = controlObj.getPickAxis(ray);
                 if (axis != null) {
                     startAxisMove(axis);
+                    e.setConsumed(true);
                 }
             } else {
                 endMove();
@@ -129,6 +130,7 @@ public class MoveTool extends EditTool implements SimpleJmeEditListener{
         else if (EVENT_FREE_MOVE_START.equals(e.getName())) {
             if (e.isMatch()) {
                 startFreeMove();
+                e.setConsumed(true);
             }
         // 取消操作
         } else if (transforming && EVENT_FREE_MOVE_CANCEL.equals(e.getName())) { 

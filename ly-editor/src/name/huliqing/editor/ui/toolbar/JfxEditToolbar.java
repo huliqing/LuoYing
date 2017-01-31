@@ -67,6 +67,7 @@ public class JfxEditToolbar implements JfxToolbar, ToolbarListener{
         }
         
         layout.setVgap(5);
+        layout.setDisable(true);
     }
     
     @Override
@@ -144,7 +145,9 @@ public class JfxEditToolbar implements JfxToolbar, ToolbarListener{
 
     @Override
     public void onStateChanged(boolean enabled) {
-        layout.setDisable(!enabled);
+        Jfx.runOnJfx(() -> {
+            layout.setDisable(!enabled);
+        });
     }
 
     @Override

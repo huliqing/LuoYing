@@ -6,14 +6,13 @@
 package name.huliqing.editor.tools.terrain;
 
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Spatial;
 import com.jme3.terrain.Terrain;
 import name.huliqing.editor.edit.SimpleJmeEdit;
+import name.huliqing.editor.edit.select.EntitySelectObj;
 import name.huliqing.editor.select.SelectObj;
 import name.huliqing.editor.toolbar.TerrainToolbar;
 import name.huliqing.editor.tools.EditTool;
 import name.huliqing.luoying.manager.PickManager;
-import name.huliqing.luoying.object.entity.TerrainEntity;
 
 /**
  * 地形工具的基类
@@ -31,24 +30,28 @@ public abstract class AbstractTerrainTool extends EditTool<SimpleJmeEdit, Terrai
      * @return 
      */
     protected Vector3f getTerrainCollisionPoint() {
-        Spatial terrain = (Spatial) getTerrain();
-        if (terrain == null)
+        EntitySelectObj eso = getTerrainEntity();
+        if (eso == null)
             return null;
         
-        Vector3f result = PickManager.pick(editor.getCamera(), editor.getInputManager().getCursorPosition(), terrain);
+        Vector3f result = PickManager.pick(editor.getCamera(), editor.getInputManager().getCursorPosition(), eso.getObject().getSpatial());
         return result;
     }
     
-    protected final Terrain getTerrain() {
+    /**
+     * 获取当前编辑场景中的被选择的地形物体，如果当前未选择任何物体或者这个物体不是Terrain物体，则将返回null.
+     * @return 
+     */
+    protected final EntitySelectObj getTerrainEntity() {
         SelectObj so = edit.getSelected();
-        if (so == null || !(so.getObject() instanceof TerrainEntity)) {
+        if (!(so instanceof EntitySelectObj)) {
             return null;
         }
-        TerrainEntity te = (TerrainEntity) so.getObject();
-        Spatial spatial = te.getSpatial();
-        if (!(spatial instanceof Terrain)) {
+        EntitySelectObj eso = (EntitySelectObj) so;
+        if (eso.getObject().getSpatial() instanceof Terrain) {
+            return eso;
+        } else {
             return null;
         }
-        return (Terrain) spatial;
     }
 }

@@ -12,7 +12,7 @@ package name.huliqing.editor.tools;
  */
 public interface ValueTool<V> extends Tool {
     
-    void setValue(V value);
+    <T extends ValueTool> T setValue(V value);
     
     V getValue();
     

@@ -32,61 +32,22 @@
 
 package com.jme3.gde.terraineditor.tools;
 
-import com.jme3.math.Vector2f;
-import com.jme3.math.Vector3f;
-import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.terrain.Terrain;
-import java.util.ArrayList;
-import java.util.List;
+import name.huliqing.editor.edit.select.EntitySelectObj;
 
-/**
- * Helps find the terrain in the scene
- * @author Brent Owens
- */
 public abstract class AbstractTerrainToolAction {
-     
-    protected void modifyHeight(Terrain terrain, Vector3f worldLoc, float radius, float heightDir) {
-
-        Spatial terrainSpatial = (Spatial) terrain;
-        // 消除地形的位置和旋转导致的偏移,但是不消除缩放,这们允许地形在缩放、旋转和移动后进行编辑。
-        // 否则地形不能旋转和移动
-        Vector3f location = worldLoc.subtract(terrainSpatial.getWorldTranslation());
-        terrainSpatial.getWorldRotation().inverse().mult(location, location);
-        
-        int radiusStepsX = (int) (radius / ((Node)terrain).getWorldScale().x);
-        int radiusStepsZ = (int) (radius / ((Node)terrain).getWorldScale().z);
-
-        float xStepAmount = ((Node)terrain).getWorldScale().x;
-        float zStepAmount = ((Node)terrain).getWorldScale().z;
-
-        List<Vector2f> locs = new ArrayList<Vector2f>();
-        List<Float> heights = new ArrayList<Float>();
-        
-        for (int z=-radiusStepsZ; z<radiusStepsZ; z++) {
-            for (int x=-radiusStepsX; x<radiusStepsX; x++) {
-
-                float locX = location.x + (x*xStepAmount);
-                float locZ = location.z + (z*zStepAmount);
-
-                // see if it is in the radius of the tool
-                if (ToolUtils.isInRadius(locX-location.x,locZ-location.z,radius)) {
-                    // adjust height based on radius of the tool
-                    float h = ToolUtils.calculateHeight(radius, heightDir, locX-location.x, locZ-location.z);
-                    // increase the height
-                    locs.add(new Vector2f(locX, locZ));
-                    heights.add(h);
-                }
-            }
+    
+    protected Terrain getTerrain(EntitySelectObj eso) {
+        Spatial terrainSpatial = eso.getObject().getSpatial();
+        if (!(terrainSpatial instanceof Terrain)) {
+            throw new IllegalStateException("terrainSpatial must be a Terrain object! eso=" + eso);
         }
-
-        // do the actual height adjustment
-        terrain.adjustHeight(locs, heights);
-
-        ((Node)terrain).updateModelBound(); // or else we won't collide with it where we just edited
+        Terrain terrain = (Terrain) terrainSpatial;
+        return terrain;
     }
     
-    
+    // remove20170131
 //    protected void modifyHeight(Terrain terrain, Vector3f worldLoc, float radius, float heightDir) {
 //
 //        int radiusStepsX = (int) (radius / ((Node)terrain).getWorldScale().x);

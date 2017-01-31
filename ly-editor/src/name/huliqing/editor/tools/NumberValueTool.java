@@ -18,10 +18,41 @@ public class NumberValueTool extends AbstractValueTool<Number> {
     private final static String EVENT_DECREASE = "decreaseEvent";
     
     private Number stepAmount = 1;
+    private Number minValue;
+    private Number maxValue;
 
     public NumberValueTool(String name, String tips, String icon) {
         super(name, tips, icon);
         setValue(0.0);
+    }
+
+    @Override
+    public <T extends ValueTool> T setValue(Number newValue) {
+        if (minValue != null && newValue.doubleValue() < minValue.doubleValue()) {
+            newValue = minValue.doubleValue();
+        }
+        if (maxValue != null && newValue.doubleValue() > maxValue.doubleValue()) {
+            newValue = maxValue.doubleValue();
+        }
+        return super.setValue(newValue);
+    }
+
+    public Number getMinValue() {
+        return minValue;
+    }
+    
+    public <T extends NumberValueTool> T setMinValue(Number minValue) {
+        this.minValue = minValue;
+        return (T) this;
+    }
+
+    public Number getMaxValue() {
+        return maxValue;
+    }
+
+    public <T extends NumberValueTool> T setMaxValue(Number maxValue) {
+        this.maxValue = maxValue;
+        return (T) this;
     }
     
     /**

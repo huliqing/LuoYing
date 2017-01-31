@@ -36,9 +36,12 @@ package com.jme3.gde.terraineditor.tools;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import com.jme3.terrain.Terrain;
 import java.util.ArrayList;
 import java.util.List;
+import name.huliqing.editor.edit.UndoRedo;
+import name.huliqing.editor.edit.select.EntitySelectObj;
 
 /**
  * Level the terrain to a desired height, executed from the OpenGL thread.
@@ -48,48 +51,59 @@ import java.util.List;
  * 
  * @author Brent Owens
  */
-public class LevelTerrainToolAction extends AbstractTerrainToolAction {
+public class LevelTerrainToolAction extends AbstractTerrainToolAction implements UndoRedo {
     
+    // 注：undo和redo的对象必须始终是EntitySelectObj，因为EntitySelectObj中Object等参数是可能发生变化的,
+    // 也就是其中的TerrainEntity中的Terrain对象可能是发生变化的.
+    private final EntitySelectObj selectObj;
     private final Vector3f worldLoc;
     private final float radius;
     private final float height;
     private final Vector3f levelTerrainLocation;
     private final boolean precision;
-//    private final Meshes mesh;
     
     private List<Vector2f> undoLocs;
     private List<Float> undoHeights;
 
-    public LevelTerrainToolAction(Vector3f markerLocation, float radius, float height, Vector3f levelTerrainLocation, boolean precision) {
+    public LevelTerrainToolAction(EntitySelectObj terrain, Vector3f markerLocation
+            , float radius, float height, Vector3f levelTerrainLocation, boolean precision) {
+        this.selectObj = terrain;
         this.worldLoc = markerLocation.clone();
         this.radius = radius;
         this.height = height;
         this.levelTerrainLocation = levelTerrainLocation.clone();
         this.precision = precision;
-//        this.mesh = mesh;
-//        name = "Level terrain";
-    }
-
-    protected Object doApplyTool() {
-        Terrain terrain = null;
-        if (terrain == null)
-            return null;
-        Node terrainNode = (Node) terrain;
-        worldLoc.subtractLocal(terrainNode.getWorldTranslation());
-        levelTerrainLocation.subtractLocal(terrainNode.getWorldTranslation());
-        modifyHeight(terrain, levelTerrainLocation, worldLoc, radius, height, precision);
-        return terrain;
     }
     
-    protected void doUndoTool(Object undoObject) {
-        if (undoObject == null)
-            return;
-        if (undoLocs == null || undoHeights == null)
-            return;
-        resetHeight((Terrain)undoObject, undoLocs, undoHeights, precision);
+    public void doAction() {
+        redo();
     }
 
-    private void modifyHeight(Terrain terrain, Vector3f level, Vector3f worldLoc, float radius, float height, boolean precision) {
+    @Override
+    public void undo() {
+        if (undoLocs == null || undoHeights == null)
+            return;
+        Terrain terrain = getTerrain(selectObj);
+        resetHeight(terrain, undoLocs, undoHeights, precision);
+    }
+
+    @Override
+    public void redo() {
+        modifyHeight(selectObj, levelTerrainLocation, worldLoc, radius, height, precision);
+    }
+
+    private void modifyHeight(EntitySelectObj eso, Vector3f level, Vector3f worldLoc, float radius, float height, boolean precision) {
+        Spatial terrainSpatial = eso.getObject().getSpatial();
+        if (!(terrainSpatial instanceof Terrain)) {
+            throw new IllegalStateException("terrainSpatial must be a Terrain object! eso=" + eso);
+        }
+        Terrain terrain = (Terrain) terrainSpatial;        
+        // 消除地形的位置和旋转导致的偏移,但是不消除缩放,这们允许地形在缩放、旋转和移动后进行编辑。
+        // 否则地形不能旋转和移动
+        Vector3f location = worldLoc.subtract(terrainSpatial.getWorldTranslation());
+        terrainSpatial.getWorldRotation().inverse().mult(location, location);
+        
+        
         if (level == null)
             return;
 
@@ -105,18 +119,18 @@ public class LevelTerrainToolAction extends AbstractTerrainToolAction {
         List<Float> heights = new ArrayList<Float>();
         undoHeights = new ArrayList<Float>();
 
-        for (int z=-radiusStepsZ; z<radiusStepsZ; z++) {
-            for (int x=-radiusStepsX; x<radiusStepsX; x++) {
+        for (int z = -radiusStepsZ; z < radiusStepsZ; z++) {
+            for (int x = -radiusStepsX; x < radiusStepsX; x++) {
 
-                float locX = worldLoc.x + (x*xStepAmount);
-                float locZ = worldLoc.z + (z*zStepAmount);
+                float locX = location.x + (x * xStepAmount);
+                float locZ = location.z + (z * zStepAmount);
                 
                 // see if it is in the radius of the tool
-                if (ToolUtils.isInRadius(locX-worldLoc.x,locZ-worldLoc.z,radius)) {
+                if (ToolUtils.isInRadius(locX - location.x, locZ - location.z, radius)) {
 
                     Vector2f terrainLoc = new Vector2f(locX, locZ);
                     // adjust height based on radius of the tool
-                    float terrainHeightAtLoc = terrain.getHeightmapHeight(terrainLoc)*((Node)terrain).getWorldScale().y;
+                    float terrainHeightAtLoc = terrain.getHeightmapHeight(terrainLoc) * ((Node)terrain).getWorldScale().y;
                     if (precision) {
                         locs.add(terrainLoc);
                         heights.add(desiredHeight / ((Node) terrain).getLocalScale().y);
@@ -132,7 +146,7 @@ public class LevelTerrainToolAction extends AbstractTerrainToolAction {
                         
                         adj *= height;
                         
-                        adj *= ToolUtils.calculateRadiusPercent(radius, locX-worldLoc.x, locZ-worldLoc.z);
+                        adj *= ToolUtils.calculateRadiusPercent(radius, locX - location.x, locZ - location.z);
 
                         // test if adjusting too far and then cap it
                         if (adj > 0 && ToolUtils.floatGreaterThan((terrainHeightAtLoc + adj), desiredHeight, epsilon))

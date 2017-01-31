@@ -7,10 +7,12 @@ package name.huliqing.editor.ui.tool;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.editor.toolbar.Toolbar;
 import name.huliqing.editor.tools.NumberValueTool;
+import name.huliqing.editor.tools.ToggleTool;
 import name.huliqing.editor.tools.base.CameraTool;
 import name.huliqing.editor.tools.base.GridTool;
 import name.huliqing.editor.tools.base.ModeTool;
@@ -29,11 +31,13 @@ public class JfxToolFactory {
 
     private static final Logger LOG = Logger.getLogger(JfxToolFactory.class.getName());
     
-    private final static Map<Class<? extends Tool>, Class<? extends JfxTool>> TOOL_MAPPING = new HashMap();
+    private final static Map<Class<?>, Class<? extends JfxTool>> TOOL_MAPPING = new HashMap();
     
     static {
-        // 通用形
+        // 通用设置，如无特别指定，则所有NumberValueTool类型的工具都渲染为JfxNumberValueTool
         TOOL_MAPPING.put(NumberValueTool.class, JfxNumberValueTool.class);
+        // 通用设置，如无特别指定，则所有ToggleTool类型的工具都渲染为JfxToggleTool
+        TOOL_MAPPING.put(ToggleTool.class, JfxToggleTool.class);
         
         // ---- 基本工具
         // 模式切换工具
@@ -64,9 +68,9 @@ public class JfxToolFactory {
             Class<? extends JfxTool> jtCls = TOOL_MAPPING.get(tool.getClass());
             if (jtCls == null) {
                 // 通过通用类型匹配来查找渲染类
-                for (Class c : TOOL_MAPPING.values()) {
-                    if (c.isAssignableFrom(tool.getClass())) {
-                        jtCls = c;
+                for (Entry<Class<?>, Class<? extends JfxTool>> et : TOOL_MAPPING.entrySet()) {
+                    if (et.getKey().isAssignableFrom(tool.getClass())) {
+                        jtCls = et.getValue();
                         break;
                     }
                 }
@@ -87,29 +91,5 @@ public class JfxToolFactory {
         }
         return null;
     }
-    
-//    private static class ResourceMapping {
-//        private Class<? extends JfxTool> clazz;
-//        private final String nameKey;
-//        private final String tipKey;
-//        private final String icon;
-//        
-//        public ResourceMapping(Class<? extends JfxTool>clazz, String nameKey, String tipKey, String icon) {
-//            this.clazz = clazz;
-//            this.nameKey = nameKey;
-//            this.tipKey = tipKey;
-//            this.icon = icon;
-//        }
-//        
-//        public String getName() {
-//            return Manager.getResManager().get(nameKey);
-//        }
-//        public String getToolTip() {
-//            return Manager.getResManager().get(tipKey);
-//        }
-//        public String getIcon() {
-//            return icon;
-//        }
-//    }
     
 }

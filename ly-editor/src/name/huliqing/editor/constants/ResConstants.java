@@ -65,13 +65,19 @@ public class ResConstants {
     public final static String TOOL_SCALE = "tool.scale";
     public final static String TOOL_SCALE_TIP = "tool.scale.tip";
     
-    public final static String TOOL_TERRAIN_RAISE = "tool.terrain.raise";
-    public final static String TOOL_TERRAIN_RAISE_TIP = "tool.terrain.raise.tip";
-    public final static String TOOL_TERRAIN_LOWER = "tool.terrain.lower";
-    public final static String TOOL_TERRAIN_LOWER_TIP = "tool.terrain.lower.tip";
     public final static String TOOL_TERRAIN_RADIUS = "tool.terrain.radius";
     public final static String TOOL_TERRAIN_RADIUS_TIP = "tool.terrain.radius.tip";
     public final static String TOOL_TERRAIN_WEIGHT = "tool.terrain.weight";
     public final static String TOOL_TERRAIN_WEIGHT_TIP = "tool.terrain.weight.tip";
+    public final static String TOOL_TERRAIN_RAISE = "tool.terrain.raise";
+    public final static String TOOL_TERRAIN_RAISE_TIP = "tool.terrain.raise.tip";
+    public final static String TOOL_TERRAIN_LOWER = "tool.terrain.lower";
+    public final static String TOOL_TERRAIN_LOWER_TIP = "tool.terrain.lower.tip";
+    public final static String TOOL_TERRAIN_ROUGH = "tool.terrain.rough";
+    public final static String TOOL_TERRAIN_ROUGH_TIP = "tool.terrain.rough.tip";
+    public final static String TOOL_TERRAIN_SMOOTH = "tool.terrain.smooth";
+    public final static String TOOL_TERRAIN_SMOOTH_TIP = "tool.terrain.smooth.tip";
+    public final static String TOOL_TERRAIN_LEVEL = "tool.terrain.level";
+    public final static String TOOL_TERRAIN_LEVEL_TIP = "tool.terrain.level.tip";
     
 }

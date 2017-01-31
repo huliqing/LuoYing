@@ -37,11 +37,11 @@ public class BestEditCamera implements ActionListener, AnalogListener {
     
     private View view = View.user;
     
-    private final float orthoNear = -10000;
-    private final float orthoFar = 10000;
+    private final float orthoNear = -100000;
+    private final float orthoFar = 100000;
     
     private final float perspNear = 1;
-    private final float perspFar = 10000;
+    private final float perspFar = 100000;
     
     public BestEditCamera(Camera cam, InputManager inputManager) {
         this.cam = cam;

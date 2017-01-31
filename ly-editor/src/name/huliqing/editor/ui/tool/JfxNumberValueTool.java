@@ -87,6 +87,8 @@ public class JfxNumberValueTool extends JfxAbstractTool<NumberValueTool>
             Jfx.runOnJme(() -> {
                 ignoreUpdateView = true;
                 tool.setValue(v);
+                // 重新获取值，因为NumberValueTool可能会有大小值限制，那么一切以NumberValueTool的值为准
+                value.setText(tool.getValue().toString());
                 ignoreUpdateView = false;
             });
         } catch (NumberFormatException nfe) {

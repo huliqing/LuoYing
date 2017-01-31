@@ -5,7 +5,8 @@
  */
 package name.huliqing.editor.tools.terrain;
 
-import com.jme3.gde.terraineditor.tools.RaiseTerrainToolAction;
+import com.jme3.gde.terraineditor.tools.LevelExtraToolParams;
+import com.jme3.gde.terraineditor.tools.LevelTerrainToolAction;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
@@ -24,25 +25,26 @@ import name.huliqing.editor.tools.NumberValueTool;
 import name.huliqing.editor.tools.ToggleTool;
 
 /**
- * 地形上升工具
  * @author huliqing
  */
-public class RaiseTool extends AbstractTerrainTool implements ToggleTool {
+public class LevelTool extends AbstractTerrainTool implements ToggleTool {
     
-    private final static String EVENT_RAISE = "raiseEvent";
+    private final static String EVENT_LEVEL = "levelEvent";
     
     protected Geometry controlObj;
     protected NumberValueTool radiusTool;
     protected NumberValueTool weightTool;
     
-    protected final List<RaiseTerrainToolAction> actions = new ArrayList<RaiseTerrainToolAction>();
+    protected final List<LevelTerrainToolAction> actions = new ArrayList<LevelTerrainToolAction>();
     
     private boolean modifying;
     private float lastRadiusUsed = 1.0f;
     private final float toolModifyRate = 0.05f; // how frequently (in seconds) it should update to throttle down the tool effect
     private float lastModifyTime; // last time the tool executed
+    
+    private Vector3f desiredHeight;
 
-    public RaiseTool(String name, String tips, String icon) {
+    public LevelTool(String name, String tips, String icon) {
         super(name, tips, icon);
     }
 
@@ -61,7 +63,7 @@ public class RaiseTool extends AbstractTerrainTool implements ToggleTool {
     @Override
     public void cleanup() {
         if (modifying) {
-            endRaise();
+            endLevel();
         }
         if (controlObj != null) {
             controlObj.removeFromParent();
@@ -69,21 +71,21 @@ public class RaiseTool extends AbstractTerrainTool implements ToggleTool {
         super.cleanup(); 
     }
     
-    public JmeEvent bindRaiseEvent() {
-        return this.bindEvent(EVENT_RAISE);
+    public JmeEvent bindLevelEvent() {
+        return this.bindEvent(EVENT_LEVEL);
     }
     
     @Override
     protected void onToolEvent(Event e) {
-        if (e.getName().equals(EVENT_RAISE)) {
+        if (e.getName().equals(EVENT_LEVEL)) {
             if (e.isMatch()) {
                 modifying = true;
                 lastModifyTime = 0;
-                doRaise();
+                doLevel();
                 e.setConsumed(true);
             } else {
                 modifying = false;
-                endRaise();
+                endLevel();
             }
         }
     }
@@ -104,12 +106,12 @@ public class RaiseTool extends AbstractTerrainTool implements ToggleTool {
             lastModifyTime += tpf;
             if (lastModifyTime >= toolModifyRate) {
                 lastModifyTime = 0;
-                doRaise();
+                doLevel();
             }
         }
     }
     
-    protected void doRaise() {
+    private void doLevel() {
         float radius = radiusTool.getValue().floatValue();
         float weight = weightTool.getValue().floatValue();
         if (radius <= 0 || weight == 0) 
@@ -119,18 +121,30 @@ public class RaiseTool extends AbstractTerrainTool implements ToggleTool {
         if (terrain == null) 
             return;
         
-        RaiseTerrainToolAction action = new RaiseTerrainToolAction(terrain, controlObj.getWorldTranslation(), radius, weight);
-        action.doRaise();
+        LevelExtraToolParams params = new LevelExtraToolParams();
+        params.absolute = false;
+        params.precision = false;
+        params.height = 0;
+        
+        if (desiredHeight == null)
+            desiredHeight = controlObj.getWorldTranslation().clone();
+        else
+            desiredHeight.y = controlObj.getWorldTranslation().y;
+        if (params.absolute)
+            desiredHeight.y = params.height;
+        
+        LevelTerrainToolAction action = new LevelTerrainToolAction(terrain, controlObj.getWorldTranslation()
+                , radius, weight, desiredHeight, params.precision);
+        action.doAction();
         actions.add(action);
     }
     
-    private void endRaise() {
+    private void endLevel() {
         if (actions.isEmpty()) {
             return;
         }
-        // record undo action
-        List<RaiseTerrainToolAction> actionList = new ArrayList<RaiseTerrainToolAction>(actions);
-        edit.addUndoRedo(new RaiseUndoRedo(actionList));
+        List<LevelTerrainToolAction> actionList = new ArrayList<LevelTerrainToolAction>(actions);
+        edit.addUndoRedo(new LevelUndoRedo(actionList));
         actions.clear();
     }
     
@@ -145,18 +159,18 @@ public class RaiseTool extends AbstractTerrainTool implements ToggleTool {
         return marker;
     }
 
-    private class RaiseUndoRedo implements UndoRedo {
+    private class LevelUndoRedo implements UndoRedo {
         
-        private final List<RaiseTerrainToolAction> actionList;
+        private final List<LevelTerrainToolAction> actionList;
         
-        public RaiseUndoRedo(List<RaiseTerrainToolAction> actionList) {
+        public LevelUndoRedo(List<LevelTerrainToolAction> actionList) {
             this.actionList = actionList;
         }
         
         @Override
         public void undo() {
             for (int i = actionList.size() - 1; i >= 0; i--) {
-                RaiseTerrainToolAction action = actionList.get(i);
+                LevelTerrainToolAction action = actionList.get(i);
                 action.undo();
             }
         }
@@ -164,7 +178,7 @@ public class RaiseTool extends AbstractTerrainTool implements ToggleTool {
         @Override
         public void redo() {
             for (int i = 0; i < actionList.size(); i++) {
-                RaiseTerrainToolAction action = actionList.get(i);
+                LevelTerrainToolAction action = actionList.get(i);
                 action.redo();
             }
         }

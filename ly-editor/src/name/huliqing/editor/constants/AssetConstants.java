@@ -24,6 +24,12 @@ public class AssetConstants {
     public final static String INTERFACE_TOOL_TERRAIN_RAISE = "Interface/tools/terrain/icon_terrain-up.png";
     /** 地形下降 */
     public final static String INTERFACE_TOOL_TERRAIN_LOWER = "Interface/tools/terrain/icon_terrain-down.png";
+    /** 地形粗糙 */
+    public final static String INTERFACE_TOOL_TERRAIN_ROUGH = "Interface/tools/terrain/icon_terrain-rough.png";
+    /** 地形平滑 */
+    public final static String INTERFACE_TOOL_TERRAIN_SMOOTH = "Interface/tools/terrain/icon_terrain-smooth.png";
+    /** 地形LEVEL工具 */
+    public final static String INTERFACE_TOOL_TERRAIN_LEVEL = "Interface/tools/terrain/icon_terrain-level.png";
     
     /** 太阳、灯光 */
     public final static String INTERFACE_ICON_SUN = "Interface/icon/sun.png";
