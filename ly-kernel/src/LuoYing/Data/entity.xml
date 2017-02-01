@@ -72,7 +72,7 @@
     <entityAmbientLight id="sysEntityAmbientLight" extends="sysEntityAmbientLightBase" />
     
     <!--内置简单地形，一个简单的box作为地形-->
-    <entitySimpleTerrain id="sysEntityTerrain" extends="sysEntityTerrainBase" file="LuoYing/Assets/Models/unitBox.j3o" scale="100,1,100"  />
+    <entitySimpleTerrain id="sysEntityTerrain" extends="sysEntityTerrainBase" file="LuoYing/Assets/Models/unitBox.j3o" scale="1,1,1"  />
     
     <!--内置测试用的树模型-->
     <entityTree id="sysEntityTree" extends="sysEntityTreeBase" file="LuoYing/Assets/Models/Tree/tree431.obj" scale="10,10,10" />

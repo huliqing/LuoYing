@@ -17,6 +17,9 @@ ok.旋转操作controlObj的线条太粗
 .工具的参数设置
 .工具的Action类要统一
 .地形刷功能
+.setWardIsoEnabled参数要增加
+.JmeEvent要支持Analog类型的事件
+
 
 .为PropertyConverter增加Validator功能
 .删除Entity功能及复制Entity操作

@@ -41,12 +41,7 @@ import java.util.List;
 import name.huliqing.editor.edit.UndoRedo;
 import name.huliqing.editor.edit.select.EntitySelectObj;
 
-/**
- * Smooth bumps in the terrain by averaging the height in the tool radius.
- * The smoothAmount affects how many neighbour points are averaged, The smaller
- * the value, then only the smaller bumps will disappear. A large value will
- * smooth larger hills.
- */
+
 public class SmoothTerrainToolAction extends AbstractTerrainToolAction implements UndoRedo {
     
     private final EntitySelectObj selectObj;
@@ -81,26 +76,6 @@ public class SmoothTerrainToolAction extends AbstractTerrainToolAction implement
         Terrain terrain = getTerrain(selectObj);
         modifyHeight(terrain, worldLoc, radius, weight);
     }
-
-//    @Override
-//    protected Object doApplyTool(AbstractSceneExplorerNode rootNode) {
-//        Terrain terrain = getTerrain(rootNode.getLookup().lookup(Node.class));
-//        if (terrain == null)
-//            return null;
-//        Node terrainNode = getTerrainNode(rootNode.getLookup().lookup(Node.class));
-//        worldLoc.subtractLocal(terrainNode.getWorldTranslation());
-//        modifyHeight(terrain, worldLoc, radius, height, mesh);
-//        return terrain;
-//    }
-//    
-//    @Override
-//    protected void doUndoTool(AbstractSceneExplorerNode rootNode, Object undoObject) {
-//        if (undoObject == null)
-//            return;
-//        if (undoLocs == null || undoHeights == null)
-//            return;
-//        resetHeight((Terrain)undoObject, undoLocs, undoHeights);
-//    }
     
     private void modifyHeight(Terrain terrain, Vector3f worldLoc, float radius, float height) {
         // 消除地形的位置和旋转导致的偏移,但是不消除缩放,这们允许地形在缩放、旋转和移动后进行编辑。

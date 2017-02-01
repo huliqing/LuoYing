@@ -31,22 +31,24 @@
  */
 package com.jme3.gde.terraineditor.tools;
 
-//import com.jme3.gde.core.sceneexplorer.nodes.AbstractSceneExplorerNode;
-//import com.jme3.gde.terraineditor.tools.TerrainTool.Meshes;
 import com.jme3.math.Plane;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import com.jme3.terrain.Terrain;
 import java.util.ArrayList;
 import java.util.List;
+import name.huliqing.editor.edit.UndoRedo;
+import name.huliqing.editor.edit.select.EntitySelectObj;
 
 /**
  *
  * @author Shirkit
  */
-public class SlopeTerrainToolAction extends AbstractTerrainToolAction {
+public class SlopeTerrainToolAction extends AbstractTerrainToolAction implements UndoRedo {
 
+    private final EntitySelectObj selectObj;
     private final Vector3f current;
     private final Vector3f point1;
     private final Vector3f point2;
@@ -56,9 +58,10 @@ public class SlopeTerrainToolAction extends AbstractTerrainToolAction {
     private List<Float> undoHeights;
     private final boolean precise;
     private final boolean lock;
-//    private final Meshes mesh;
 
-    public SlopeTerrainToolAction(Vector3f current, Vector3f point1, Vector3f point2, float radius, float weight, boolean precise, boolean lock) {
+    public SlopeTerrainToolAction(EntitySelectObj selectObj, Vector3f current, Vector3f point1, Vector3f point2
+            , float radius, float weight, boolean precise, boolean lock) {
+        this.selectObj = selectObj;
         this.current = current.clone();
         this.point1 = point1.clone();
         this.point2 = point2.clone();
@@ -66,8 +69,6 @@ public class SlopeTerrainToolAction extends AbstractTerrainToolAction {
         this.weight = weight;
         this.precise = precise;
         this.lock = lock;
-//        this.mesh = mesh;
-//        name = "Slope terrain";
     }
 
 //    @Override
@@ -94,6 +95,37 @@ public class SlopeTerrainToolAction extends AbstractTerrainToolAction {
 //
 //        resetHeight((Terrain) undoObject, undoLocs, undoHeights, precise);
 //    }
+    
+    public void doAction() {
+        redo();
+    }
+    
+    @Override
+    public void undo() {
+        if (undoLocs == null || undoHeights == null)
+            return;
+        Terrain terrain = getTerrain(selectObj);
+        resetHeight(terrain, undoLocs, undoHeights, precise);
+    }
+
+    @Override
+    public void redo() {
+        // 消除地形的位置和旋转导致的偏移,但是不消除缩放,这们允许地形在缩放、旋转和移动后进行编辑。
+        // 否则地形不能旋转和移动
+        Terrain terrain = getTerrain(selectObj);
+        Spatial terrainSpaitla = (Spatial) terrain;
+
+        Vector3f truePoint1 = point1.subtract(terrainSpaitla.getWorldTranslation());
+        terrainSpaitla.getWorldRotation().inverse().mult(truePoint1, truePoint1);
+        
+        Vector3f truePoint2 = point2.subtract(terrainSpaitla.getWorldTranslation());
+        terrainSpaitla.getWorldRotation().inverse().mult(truePoint2, truePoint2);
+        
+        Vector3f trueCurrent = current.subtract(terrainSpaitla.getWorldTranslation());
+        terrainSpaitla.getWorldRotation().inverse().mult(trueCurrent, trueCurrent);
+        
+        modifyHeight(terrain, truePoint1, truePoint2, trueCurrent, radius, weight, precise, lock);
+    }
 
     private void modifyHeight(Terrain terrain, Vector3f point1, Vector3f point2, Vector3f current, float radius, float weight, boolean precise, boolean lock) {
         // Make sure we go for the right direction, or we could be creating a slope to the oposite side
@@ -163,8 +195,6 @@ public class SlopeTerrainToolAction extends AbstractTerrainToolAction {
                             heights.add(desiredHeight / ((Node) terrain).getLocalScale().y);
                             undoHeights.add(terrainHeightAtLoc / ((Node) terrain).getLocalScale().y);
                         }
-
-
                 }
             }
         undoLocs = locs;
@@ -192,4 +222,6 @@ public class SlopeTerrainToolAction extends AbstractTerrainToolAction {
         }
         ((Node) terrain).updateModelBound();
     }
+
+
 }
