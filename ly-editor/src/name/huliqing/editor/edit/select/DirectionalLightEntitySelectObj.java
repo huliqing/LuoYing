@@ -9,7 +9,6 @@ import com.jme3.material.Material;
 import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
-import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Geometry;
@@ -19,10 +18,8 @@ import com.jme3.scene.control.BillboardControl;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Line;
 import name.huliqing.editor.constants.AssetConstants;
-import name.huliqing.editor.edit.scene.SceneEdit;
 import name.huliqing.editor.tiles.AutoScaleControl;
 import name.huliqing.fxswing.Jfx;
-import name.huliqing.luoying.manager.PickManager;
 import name.huliqing.luoying.object.entity.impl.DirectionalLightEntity;
 import name.huliqing.luoying.shape.QuadXYC;
 import name.huliqing.luoying.utils.MaterialUtils;
@@ -33,64 +30,65 @@ import name.huliqing.luoying.utils.MaterialUtils;
  */
 public class DirectionalLightEntitySelectObj extends EntitySelectObj<DirectionalLightEntity> {
 
-    private final Node controlObj = new Node();
+    private final Node controlSpatial = new Node();
     private final Spatial flag;
     private final Spatial line;
     
     public DirectionalLightEntitySelectObj() {
-        flag = createFlag(AssetConstants.INTERFACE_ICON_SUN);
-        controlObj.attachChild(flag);
+        flag = createSunFlag(AssetConstants.INTERFACE_ICON_SUN);
+        controlSpatial.attachChild(flag);
         
         line = createLine();
-        controlObj.attachChild(line);
+        controlSpatial.attachChild(line);
         
         // 添加一个box，这样更容易被选中
-        controlObj.attachChild(createBox()); 
+        controlSpatial.attachChild(createBox()); 
         
         AutoScaleControl asc = new AutoScaleControl(0.05f);
-        controlObj.addControl(asc);
+        controlSpatial.addControl(asc);
     }
     
     @Override
-    public void initialize(SceneEdit form) {
+    public void initialize(Node form) {
         super.initialize(form);
-        form.getEditRoot().attachChild(controlObj);
-        controlObj.setLocalScale(10);
+        form.attachChild(controlSpatial);
+        controlSpatial.setLocalScale(10);
         
-        Quaternion rot = line.getLocalRotation();
-        rot.lookAt(entity.getDirection(), Vector3f.UNIT_Y);
+        Quaternion rot = controlSpatial.getLocalRotation();
+        rot.lookAt(target.getDirection(), Vector3f.UNIT_Y);
         setLocalRotation(rot);
     }
 
     @Override
     public void cleanup() {
-        controlObj.removeFromParent();
+        controlSpatial.removeFromParent();
         super.cleanup();
     }
 
     @Override
-    public void setLocalRotation(Quaternion rotation) {
-        Vector3f dir = this.entity.getDirection().set(Vector3f.UNIT_Z);
+    protected void onLocationUpdated(Vector3f location) {
+        target.getSpatial().setLocalTranslation(location);
+    }
+
+    @Override
+    protected void onRotationUpdated(Quaternion rotation) {
+        Vector3f dir = target.getDirection().set(Vector3f.UNIT_Z);
         rotation.mult(dir, dir);
-        this.entity.setDirection(dir);
-        line.setLocalRotation(rotation);
-        super.setLocalRotation(rotation);
+        this.target.setDirection(dir);
         notifyPropertyChanged("direction", dir);
     }
 
     @Override
-    public void setLocalTranslation(Vector3f location) {
-        controlObj.setLocalTranslation(location);
-        super.setLocalTranslation(location); 
+    protected void onScaleUpdated(Vector3f scale) {
+        // ignore
     }
-    
+
     @Override
-    public Float distanceOfPick(Ray ray) {
-        Float dist = PickManager.distanceOfPick(ray, controlObj);
-        return dist;
+    public Spatial getControlSpatial() {
+        return controlSpatial;
     }
     
-    private Spatial createFlag(String icon) {
+    private Spatial createSunFlag(String icon) {
         Material mat = MaterialUtils.createUnshaded();
         mat.setTexture("ColorMap", Jfx.getJmeApp().getAssetManager().loadTexture(icon));
         mat.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Alpha);
@@ -122,4 +120,5 @@ public class DirectionalLightEntitySelectObj extends EntitySelectObj<Directional
         geo.setLocalScale(1000);
         return geo;
     }
+
 }

@@ -9,11 +9,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import name.huliqing.editor.edit.controls.ControlTile;
 import name.huliqing.editor.edit.select.AdvanceWaterEntitySelectObj;
 import name.huliqing.editor.edit.select.DirectionalLightEntitySelectObj;
 import name.huliqing.editor.edit.select.EmptyEntitySelectObj;
+import name.huliqing.editor.edit.select.EntitySelectObj;
 import name.huliqing.editor.edit.select.SimpleModelEntitySelectObj;
-import name.huliqing.editor.select.SelectObj;
 
 /**
  *
@@ -23,7 +24,7 @@ public class SelectObjManager {
 
     private static final Logger LOG = Logger.getLogger(SelectObjManager.class.getName());
     
-    private final static Map<String, Class<? extends SelectObj>> MAPPING = new HashMap();
+    private final static Map<String, Class<? extends EntitySelectObj>> MAPPING = new HashMap();
     
     static {
         MAPPING.put("entitySimpleModel", SimpleModelEntitySelectObj.class);
@@ -41,14 +42,14 @@ public class SelectObjManager {
         MAPPING.put("entityPhysics", EmptyEntitySelectObj.class);
     }
     
-    public final static <T extends SelectObj> T createSelectObj(String tagName) {
-        Class<? extends SelectObj> clazz = MAPPING.get(tagName);
+    public final static <T extends EntitySelectObj> T createEntityControlTile(String tagName) {
+        Class<? extends ControlTile> clazz = MAPPING.get(tagName);
         if (clazz == null) {
             LOG.log(Level.WARNING, "Could not create select obj, unknow tagName={0}", tagName);
             return (T) new EmptyEntitySelectObj();
         }
-        
-        SelectObj obj;
+         
+        ControlTile obj;
         try {
             obj = clazz.newInstance();
         } catch (InstantiationException | IllegalAccessException ex) {

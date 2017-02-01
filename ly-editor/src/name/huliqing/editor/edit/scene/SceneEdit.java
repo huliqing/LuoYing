@@ -6,7 +6,6 @@
 package name.huliqing.editor.edit.scene;
 
 import com.jme3.input.KeyInput;
-import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
@@ -40,7 +39,7 @@ import name.huliqing.luoying.xml.DataFactory;
  *
  * @author huliqing
  */
-public class SceneEdit extends SimpleJmeEdit<EntitySelectObj> implements SceneListener {
+public class SceneEdit extends SimpleJmeEdit implements SceneListener {
 
 //    private static final Logger LOG = Logger.getLogger(SceneEdit.class.getName());
     private final PlayService playService = Factory.get(PlayService.class);
@@ -75,10 +74,10 @@ public class SceneEdit extends SimpleJmeEdit<EntitySelectObj> implements SceneLi
         // 删除操作事件
         delEvent.bindKey(KeyInput.KEY_X, true);
         delEvent.addListener((Event e) -> {
-            if (e.isMatch() && selectObj != null) {
+            if (e.isMatch() && (selectObj instanceof EntitySelectObj)) {
                 Vector2f cursorPos = editor.getInputManager().getCursorPosition();
                 Jfx.runOnJfx(() -> {
-                    jfxEdit.showDeleteConfirm(cursorPos.x, editor.getCamera().getHeight() - cursorPos.y, selectObj);
+                    jfxEdit.showDeleteConfirm(cursorPos.x, editor.getCamera().getHeight() - cursorPos.y, (EntitySelectObj) selectObj);
                 });
             }
         });
@@ -86,12 +85,13 @@ public class SceneEdit extends SimpleJmeEdit<EntitySelectObj> implements SceneLi
         // 复制操作
         duplicateEvent.bindKey(KeyInput.KEY_D, true).bindKey(KeyInput.KEY_LSHIFT, true);
         duplicateEvent.addListener((Event e) -> {
-            if (e.isMatch() && selectObj != null) {
-                selectObj.getObject().updateDatas();
-                EntityData ed = selectObj.getObject().getData().clone();
-                ed.setUniqueId(DataFactory.generateUniqueId()); // 需要生成一个新的唯一ID
-                addEntity(ed);
-                setSelected(ed);
+            if (e.isMatch() && (selectObj instanceof EntitySelectObj)) {
+                Entity entity = (Entity) selectObj.getTarget();
+                entity.updateDatas();
+                EntityData cloneData = entity.getData().clone();
+                cloneData.setUniqueId(DataFactory.generateUniqueId()); // 需要生成一个新的唯一ID
+                addEntity(cloneData);
+                setSelected(cloneData);
                 // 转到移动工具激活并进行自由移动
                 MoveTool moveTool = (MoveTool) toolbar.getTool(MoveTool.class);
                 toolbar.setActivated(moveTool, true);
@@ -137,26 +137,27 @@ public class SceneEdit extends SimpleJmeEdit<EntitySelectObj> implements SceneLi
         getEditRoot().attachChild(game.getScene().getRoot());
     }
 
-    @Override
-    public EntitySelectObj doPick(Ray ray) {
-        if (scene == null)
-            return null;
-        
-        EntitySelectObj result = null;
-        float minDistance = Float.MAX_VALUE;
-        Float temp;
-        for (EntitySelectObj seo : objMap.values()) {
-            temp = seo.distanceOfPick(ray);
-            if (temp != null && temp < minDistance) {
-                minDistance = temp;
-                result = seo;
-            }
-        }
-//        if (result != null) {
-//            LOG.log(Level.INFO, "doPick, selectObj={0}", result.getObject().getData().getId());
+    // remove20170202
+//    @Override
+//    public EntitySelectObj doPick(Ray ray) {
+//        if (scene == null)
+//            return null;
+//        
+//        EntitySelectObj result = null;
+//        float minDistance = Float.MAX_VALUE;
+//        Float temp;
+//        for (EntitySelectObj seo : objMap.values()) {
+//            temp = seo.distanceOfPick(ray);
+//            if (temp != null && temp < minDistance) {
+//                minDistance = temp;
+//                result = seo;
+//            }
 //        }
-        return result;
-    }
+////        if (result != null) {
+////            LOG.log(Level.INFO, "doPick, selectObj={0}", result.getObject().getData().getId());
+////        }
+//        return result;
+//    }
 
     @Override
     public void onSceneLoaded(Scene scene) {
@@ -164,10 +165,10 @@ public class SceneEdit extends SimpleJmeEdit<EntitySelectObj> implements SceneLi
         List<Entity> entities = scene.getEntities();
         if (entities != null) {
             entities.stream().filter(t -> t != null).forEach(t -> {
-                EntitySelectObj eso = SelectObjManager.createSelectObj(t.getData().getTagName());
+                EntitySelectObj eso = SelectObjManager.createEntityControlTile(t.getData().getTagName());
                 objMap.put(t.getData(), eso);
-                eso.setObject(t);
-                eso.initialize(this);
+                eso.setTarget(t);
+                addControlTile(eso);
             });
         }
         sceneLoaded = true;
@@ -193,12 +194,12 @@ public class SceneEdit extends SimpleJmeEdit<EntitySelectObj> implements SceneLi
     public void reloadEntity(EntityData entityData) {
         if (!sceneLoaded)
             return;
-        EntitySelectObj eso = objMap.get(entityData);
+        EntitySelectObj<Entity> eso = objMap.get(entityData);
         if (eso != null) {
-            eso.getObject().cleanup();
-            eso.getObject().setData(entityData);
-            eso.getObject().initialize();
-            eso.getObject().onInitScene(scene);
+            eso.getTarget().cleanup();
+            eso.getTarget().setData(entityData);
+            eso.getTarget().initialize();
+            eso.getTarget().onInitScene(scene);
         }
     }
     
@@ -210,10 +211,10 @@ public class SceneEdit extends SimpleJmeEdit<EntitySelectObj> implements SceneLi
         }
         Entity entity = Loader.load(ed);
         scene.addEntity(entity);
-        EntitySelectObj eso = SelectObjManager.createSelectObj(ed.getTagName());
+        EntitySelectObj<Entity> eso = SelectObjManager.createEntityControlTile(ed.getTagName());
         objMap.put(ed, eso);
-        eso.setObject(entity);
-        eso.initialize(this);
+        eso.setTarget(entity);
+        addControlTile(eso);
         addUndoRedo(new EntityAddedUndoRedo(eso));
     }
     
@@ -236,59 +237,55 @@ public class SceneEdit extends SimpleJmeEdit<EntitySelectObj> implements SceneLi
         }
         Entity entity = Loader.load(ed);
         scene.addEntity(entity);
-        EntitySelectObj eso = SelectObjManager.createSelectObj(ed.getTagName());
+        EntitySelectObj<Entity> eso = SelectObjManager.createEntityControlTile(ed.getTagName());
         objMap.put(ed, eso);
-        eso.setObject(entity);
-        eso.initialize(this);
+        eso.setTarget(entity);
+        addControlTile(eso);
         addUndoRedo(new EntityAddedUndoRedo(eso));
     }
     
     public boolean removeEntity(EntityData ed) {
         if (!sceneLoaded) 
             return false;
-        EntitySelectObj eso = objMap.get(ed);
+        EntitySelectObj<Entity> eso = objMap.get(ed);
         if (eso == null) {
             return false;
         }
-        eso.getObject().updateDatas();
-        if (eso.isInitialized()) {
-            eso.cleanup();
-        }
-        scene.removeEntity(eso.getObject());
+        eso.getTarget().updateDatas();
+        scene.removeEntity(eso.getTarget());
         objMap.remove(ed);
+        removeControlTile(eso);
         addUndoRedo(new EntityRemovedUndoRedo(eso));
         return true;
     }
 
     private class EntityAddedUndoRedo implements UndoRedo {
-        private final EntitySelectObj eso;
+        private final EntitySelectObj<Entity> eso;
         public EntityAddedUndoRedo(EntitySelectObj eso) {
             this.eso = eso;
         }
         
         @Override
         public void undo() {
-            eso.getObject().updateDatas();
-            if (eso.isInitialized()) {
-                eso.cleanup();
-            }
-            objMap.remove(eso.getObject().getData());
-            scene.removeEntity(eso.getObject());
+            eso.getTarget().updateDatas();
+            objMap.remove(eso.getTarget().getData());
+            scene.removeEntity(eso.getTarget());
+            removeControlTile(eso);
         }
 
         @Override
         public void redo() {
-            eso.getObject().setData(eso.getObject().getData()); // 重新更新一次数据，优先
-            scene.addEntity(eso.getObject());
-            eso.initialize(SceneEdit.this);
-            objMap.put(eso.getObject().getData(), eso);
+            eso.getTarget().setData(eso.getTarget().getData()); // 重新更新一次数据，优先
+            scene.addEntity(eso.getTarget());
+            objMap.put(eso.getTarget().getData(), eso);
+            addControlTile(eso);
         }
         
     }
     
     private class EntityRemovedUndoRedo implements UndoRedo {
 
-        private final EntitySelectObj eso;
+        private final EntitySelectObj<Entity> eso;
         
         public EntityRemovedUndoRedo(EntitySelectObj eso) {
             this.eso = eso;
@@ -296,20 +293,18 @@ public class SceneEdit extends SimpleJmeEdit<EntitySelectObj> implements SceneLi
         
         @Override
         public void undo() {
-            eso.getObject().setData(eso.getObject().getData()); // 重新更新一次数据，优先
-            scene.addEntity(eso.getObject());
-            eso.initialize(SceneEdit.this);
-            objMap.put(eso.getObject().getData(), eso);
+            eso.getTarget().setData(eso.getTarget().getData()); // 重新更新一次数据，优先
+            scene.addEntity(eso.getTarget());
+            addControlTile(eso);
+            objMap.put(eso.getTarget().getData(), eso);
         }
 
         @Override
         public void redo() {
-            eso.getObject().updateDatas();
-            if (eso.isInitialized()) {
-                eso.cleanup();
-            }
-            objMap.remove(eso.getObject().getData());
-            scene.removeEntity(eso.getObject());
+            eso.getTarget().updateDatas();
+            objMap.remove(eso.getTarget().getData());
+            scene.removeEntity(eso.getTarget());
+            removeControlTile(eso);
         }
         
     }

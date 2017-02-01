@@ -16,12 +16,12 @@ import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.JmeEvent;
 import name.huliqing.editor.edit.Mode;
 import name.huliqing.editor.edit.SimpleJmeEdit;
-import name.huliqing.editor.select.SelectObj;
 import name.huliqing.editor.tiles.AxisNode;
 import name.huliqing.editor.tiles.LocationControlObj;
 import name.huliqing.editor.edit.UndoRedo;
 import name.huliqing.luoying.manager.PickManager;
 import name.huliqing.editor.edit.SimpleJmeEditListener;
+import name.huliqing.editor.edit.controls.ControlTile;
 import name.huliqing.editor.toolbar.EditToolbar;
 import name.huliqing.editor.tools.EditTool;
 
@@ -48,11 +48,11 @@ public class MoveTool extends EditTool implements SimpleJmeEditListener{
     // 当前操作的轴向
     private AxisNode moveAxis;
     // 行为操作开始时编辑器中的被选择的物体，以及该物体的位置
-    private SelectObj selectObj;
+    private ControlTile selectObj;
     
     // 开始移动时和结束移动时物体的位置(local)
-    private final Vector3f startSpatialLoc = new Vector3f();
-    private final Vector3f lastSpatialLoc = new Vector3f();
+    private Vector3f startSpatialLoc;
+    private Vector3f lastSpatialLoc;
     
     // 自由移动
     private boolean transforming;
@@ -101,7 +101,7 @@ public class MoveTool extends EditTool implements SimpleJmeEditListener{
     @Override
     protected void onToolEvent(Event e) {
         selectObj = edit.getSelected();
-        if (selectObj == null || selectObj.getReadOnlySelectedSpatial() == null) {
+        if (selectObj == null || selectObj.getControlSpatial() == null) {
             endMove();
             return;
         }
@@ -173,10 +173,10 @@ public class MoveTool extends EditTool implements SimpleJmeEditListener{
         freeMove = true;
         axisMove = false;
         transforming = true;
-        picker.startPick(selectObj.getReadOnlySelectedSpatial(), Mode.CAMERA
+        picker.startPick(selectObj.getControlSpatial(), Mode.CAMERA
                 , editor.getCamera(), editor.getInputManager().getCursorPosition(), Picker.PLANE_XY);
-        startSpatialLoc.set(selectObj.getReadOnlySelectedSpatial().getLocalTranslation());
-        lastSpatialLoc.set(startSpatialLoc);
+        startSpatialLoc = selectObj.getControlSpatial().getLocalTranslation().clone();
+        lastSpatialLoc = new Vector3f(startSpatialLoc);
         controlObj.setAxisVisible(false);
         controlObj.setAxisLineVisible(false);
     }
@@ -209,10 +209,10 @@ public class MoveTool extends EditTool implements SimpleJmeEditListener{
             default:
                 throw new UnsupportedOperationException();
         }
-        picker.startPick(selectObj.getReadOnlySelectedSpatial(), edit.getMode()
+        picker.startPick(selectObj.getControlSpatial(), edit.getMode()
                 , editor.getCamera(), editor.getInputManager().getCursorPosition(), planRotation);
-        startSpatialLoc.set(selectObj.getReadOnlySelectedSpatial().getLocalTranslation());
-        lastSpatialLoc.set(startSpatialLoc);
+        startSpatialLoc = selectObj.getControlSpatial().getLocalTranslation().clone();
+        lastSpatialLoc = new Vector3f(startSpatialLoc);
         controlObj.setAxisVisible(false);
         controlObj.setAxisLineVisible(false);
         moveAxis.setAxisLineVisible(true);
@@ -224,13 +224,14 @@ public class MoveTool extends EditTool implements SimpleJmeEditListener{
             MoveUndo undoRedo = new MoveUndo(selectObj, startSpatialLoc, lastSpatialLoc);
             edit.addUndoRedo(undoRedo);
         }
+        startSpatialLoc = null;
+        lastSpatialLoc = null;
         transforming = false;
         freeMove = false;
         axisMove = false;
         moveAxis = null;
         controlObj.setAxisVisible(true);
         controlObj.setAxisLineVisible(false);
-        
     }
     
     private void cancelMove() {
@@ -259,7 +260,6 @@ public class MoveTool extends EditTool implements SimpleJmeEditListener{
         }
         
         TempVars tv = TempVars.get();
-        
         Vector3f diff;
         if (freeMove) {
             diff = picker.getTranslation();
@@ -267,17 +267,17 @@ public class MoveTool extends EditTool implements SimpleJmeEditListener{
             diff = picker.getTranslation(moveAxis.getDirection(tv.vect2));
         }
         
-        Spatial parent = selectObj.getReadOnlySelectedSpatial().getParent();
+        Spatial parent = selectObj.getControlSpatial().getParent();
         if (parent != null) {
             tv.quat1.set(parent.getWorldRotation()).inverseLocal().mult(diff, diff);
             diff.divideLocal(parent.getWorldScale());
         }
-        
-        Vector3f finalLocalPos = tv.vect1.set(startSpatialLoc).addLocal(diff);
-        selectObj.setLocalTranslation(finalLocalPos);
-        controlObj.setLocalTranslation(selectObj.getReadOnlySelectedSpatial().getWorldTranslation());
-        lastSpatialLoc.set(finalLocalPos);
         tv.release();
+        
+        Vector3f finalLocalPos = new Vector3f(startSpatialLoc).addLocal(diff);
+        selectObj.setLocalTranslation(finalLocalPos);
+        controlObj.setLocalTranslation(selectObj.getControlSpatial().getWorldTranslation());
+        lastSpatialLoc.set(finalLocalPos);
     }
 
     @Override
@@ -286,25 +286,25 @@ public class MoveTool extends EditTool implements SimpleJmeEditListener{
     }
 
     @Override
-    public void onSelect(SelectObj selectObj) {
+    public void onSelect(ControlTile selectObj) {
         updateMarkerState();
     }
     
     private void updateMarkerState() {
         selectObj = edit.getSelected();
-        if (selectObj == null || selectObj.getReadOnlySelectedSpatial() == null) {
+        if (selectObj == null || selectObj.getControlSpatial() == null) {
             controlObj.setVisible(false);
             return;
         }
         controlObj.setVisible(true);
-        controlObj.setLocalTranslation(selectObj.getReadOnlySelectedSpatial().getWorldTranslation());
+        controlObj.setLocalTranslation(selectObj.getControlSpatial().getWorldTranslation());
         Mode mode = edit.getMode();
         switch (edit.getMode()) {
             case GLOBAL:
                 controlObj.setLocalRotation(new Quaternion());
                 break;
             case LOCAL:
-                controlObj.setLocalRotation(edit.getSelected().getReadOnlySelectedSpatial().getWorldRotation());
+                controlObj.setLocalRotation(edit.getSelected().getControlSpatial().getWorldRotation());
                 break;
             case CAMERA:
                 controlObj.setLocalRotation(editor.getCamera().getRotation());
@@ -316,11 +316,11 @@ public class MoveTool extends EditTool implements SimpleJmeEditListener{
 
     private class MoveUndo implements UndoRedo {
 
-        private final SelectObj selectObj;
+        private final ControlTile selectObj;
         private final Vector3f before = new Vector3f();
         private final Vector3f after = new Vector3f();
         
-        public MoveUndo(SelectObj selectObj, Vector3f startPosition, Vector3f lastPosition) {
+        public MoveUndo(ControlTile selectObj, Vector3f startPosition, Vector3f lastPosition) {
             this.selectObj = selectObj;
             this.before.set(startPosition);
             this.after.set(lastPosition);

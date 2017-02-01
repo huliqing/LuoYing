@@ -6,10 +6,11 @@
 package name.huliqing.editor.tools.base;
 
 import com.jme3.math.Ray;
+import com.jme3.util.SafeArrayList;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.JmeEvent;
-import name.huliqing.editor.select.SelectObj;
 import name.huliqing.editor.edit.UndoRedo;
+import name.huliqing.editor.edit.controls.ControlTile;
 import name.huliqing.editor.tools.EditTool;
 import name.huliqing.luoying.manager.PickManager;
 
@@ -19,7 +20,7 @@ import name.huliqing.luoying.manager.PickManager;
  */
 public class PickTool extends EditTool {
     
-    private SelectObj lastSelectObj;
+    private ControlTile lastSelectedControlTile;
 
     public PickTool(String name, String tips, String icon) {
         super(name, tips, icon);
@@ -37,30 +38,45 @@ public class PickTool extends EditTool {
     }
 
     private void doPick() {
+        SafeArrayList<ControlTile> cts = edit.getControlTiles();
+        if (cts == null || cts.isEmpty())
+            return;
+        
         Ray pickRay = PickManager.getPickRay(editor.getCamera(), editor.getInputManager().getCursorPosition(), null);
-        SelectObj newSelectObj = edit.doPick(pickRay);
+        Float minDist = null;
+        Float temp;
+        ControlTile ctPicked = null;
+        for (ControlTile ct : cts.getArray()) {
+            temp = ct.pickCheck(pickRay);
+            if (temp == null)
+                continue;
+            if (minDist == null || temp.floatValue() < minDist) {
+                minDist = temp;
+                ctPicked = ct;
+            }
+        }
         
         // 不需要增加历史记录
-        if (newSelectObj != null && newSelectObj == lastSelectObj) {
-            edit.setSelected(newSelectObj);
-            lastSelectObj = newSelectObj;
+        if (ctPicked != null && ctPicked == lastSelectedControlTile) {
+            edit.setSelected(ctPicked);
+            lastSelectedControlTile = ctPicked;
             return;
         }
         
         // 需要增加历史记录
-        if (newSelectObj != null) {
-            SelectObj before = edit.getSelected();
-            edit.setSelected(newSelectObj);
-            lastSelectObj = newSelectObj;
-            edit.addUndoRedo(new PickUndoRedo(before, newSelectObj));
+        if (ctPicked != null) {
+            ControlTile before = edit.getSelected();
+            edit.setSelected(ctPicked);
+            lastSelectedControlTile = ctPicked;
+            edit.addUndoRedo(new PickUndoRedo(before, ctPicked));
         }
     }
     
     private class PickUndoRedo implements UndoRedo {
-        private final SelectObj before;
-        private final SelectObj after;
+        private final ControlTile before;
+        private final ControlTile after;
         
-        public PickUndoRedo(SelectObj before, SelectObj after) {
+        public PickUndoRedo(ControlTile before, ControlTile after) {
             this.before = before;
             this.after = after;
         }

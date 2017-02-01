@@ -6,6 +6,7 @@
 package name.huliqing.editor.edit.scene;
 
 import name.huliqing.editor.edit.Mode;
+import name.huliqing.editor.edit.controls.ControlTile;
 import name.huliqing.editor.edit.select.EntitySelectObj;
 import name.huliqing.luoying.data.EntityData;
 
@@ -14,7 +15,7 @@ import name.huliqing.luoying.data.EntityData;
  * @author huliqing
  * @param <T>
  */
-public interface JfxSceneEditListener<T extends EntitySelectObj> {
+public interface JfxSceneEditListener<T extends ControlTile> {
     
     /**
      * 当编辑模式发生变化时该方法被调用

@@ -5,6 +5,8 @@
  */
 package name.huliqing.editor.converter.data;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import name.huliqing.editor.converter.AbstractDataConverter;
 import name.huliqing.editor.edit.Mode;
 import name.huliqing.editor.edit.scene.JfxSceneEdit;
@@ -14,13 +16,16 @@ import name.huliqing.editor.edit.select.EntitySelectObjListener;
 import name.huliqing.fxswing.Jfx;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.editor.converter.PropertyConverter;
+import name.huliqing.editor.edit.controls.ControlTile;
 
 /**
  *
  * @author huliqing
  */
 public class EntityDataConverter extends AbstractDataConverter<JfxSceneEdit, EntityData> 
-        implements JfxSceneEditListener<EntitySelectObj>, EntitySelectObjListener{
+        implements JfxSceneEditListener<ControlTile>, EntitySelectObjListener{
+
+    private static final Logger LOG = Logger.getLogger(EntityDataConverter.class.getName());
 
     private EntitySelectObj selectObj;
     
@@ -51,14 +56,18 @@ public class EntityDataConverter extends AbstractDataConverter<JfxSceneEdit, Ent
     }
 
     @Override
-    public void onSelectChanged(EntitySelectObj newSelectObj) {
-        if (newSelectObj == null || newSelectObj.getObject().getData() != this.data) {
+    public void onSelectChanged(ControlTile newSelectObj) {
+        if (!(newSelectObj instanceof EntitySelectObj)) {
+            return;
+        }
+        EntitySelectObj newEso = (EntitySelectObj) newSelectObj;
+        if (newEso.getTarget().getData() != this.data) {
             return;
         }
         if (selectObj != null) {
             selectObj.removeListener(this);
         }
-        selectObj = newSelectObj;
+        selectObj = newEso;
         selectObj.addListener(this);
     }
 
@@ -81,6 +90,7 @@ public class EntityDataConverter extends AbstractDataConverter<JfxSceneEdit, Ent
             PropertyConverter pc = propertyConverters.get(property);
             if (pc != null) {
                 pc.updateView(value);
+                LOG.log(Level.INFO, "onPropertyChanged, data={0}, property={1}, value={2}", new Object[] {data.getId(), property, value});
             }
         });
     }

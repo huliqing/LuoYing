@@ -220,7 +220,7 @@ public class CameraTool extends EditTool implements EditorListener {
      */
     public void doChaseSelected() {
         if (edit.getSelected() != null) {
-            doChase(edit.getSelected().getReadOnlySelectedSpatial().getWorldTranslation());
+            doChase(edit.getSelected().getControlSpatial().getWorldTranslation());
         }
     }
     

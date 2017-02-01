@@ -19,6 +19,7 @@ import javafx.util.Callback;
 import name.huliqing.editor.converter.AbstractPropertyConverter;
 import name.huliqing.editor.converter.DataConverter;
 import name.huliqing.editor.edit.Mode;
+import name.huliqing.editor.edit.controls.ControlTile;
 import name.huliqing.editor.edit.scene.JfxSceneEdit;
 import name.huliqing.editor.edit.scene.JfxSceneEditListener;
 import name.huliqing.editor.edit.select.EntitySelectObj;
@@ -124,7 +125,7 @@ public class EntitiesPropertyConverter extends AbstractPropertyConverter<JfxScen
     }
 
     @Override
-    public void onSelectChanged(EntitySelectObj selectObj) {
+    public void onSelectChanged(ControlTile selectObj) {
         if (selectObj == null) {
             ignoreSelectEvent = true;
             listView.getSelectionModel().clearSelection();
@@ -132,8 +133,11 @@ public class EntitiesPropertyConverter extends AbstractPropertyConverter<JfxScen
             ignoreSelectEvent = false;
             return;
         }
+        if (!(selectObj instanceof EntitySelectObj))
+            return;
+        
         ignoreSelectEvent = true;
-        EntityData ed = selectObj.getObject().getData();
+        EntityData ed = ((EntitySelectObj)selectObj).getTarget().getData();
         listView.getSelectionModel().select(ed);
         doUpdateEntityView(ed);
         ignoreSelectEvent = false;

@@ -93,7 +93,7 @@ public class LevelTerrainToolAction extends AbstractTerrainToolAction implements
     }
 
     private void modifyHeight(EntitySelectObj eso, Vector3f level, Vector3f worldLoc, float radius, float height, boolean precision) {
-        Spatial terrainSpatial = eso.getObject().getSpatial();
+        Spatial terrainSpatial = eso.getTarget().getSpatial();
         if (!(terrainSpatial instanceof Terrain)) {
             throw new IllegalStateException("terrainSpatial must be a Terrain object! eso=" + eso);
         }

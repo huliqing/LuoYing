@@ -12,6 +12,7 @@ import name.huliqing.editor.constants.ResConstants;
 import name.huliqing.editor.edit.Mode;
 import name.huliqing.editor.edit.SimpleJmeEdit;
 import name.huliqing.editor.edit.SimpleJmeEditListener;
+import name.huliqing.editor.edit.controls.ControlTile;
 import name.huliqing.editor.edit.select.EntitySelectObj;
 import name.huliqing.editor.manager.Manager;
 import name.huliqing.editor.select.SelectObj;
@@ -161,9 +162,9 @@ public class TerrainToolbar extends EditToolbar<SimpleJmeEdit> implements Simple
     }
     
     @Override
-    public void onSelect(SelectObj selectObj) {
+    public void onSelect(ControlTile selectObj) {
         if (selectObj instanceof EntitySelectObj) {
-            if (((EntitySelectObj) selectObj).getObject().getSpatial() instanceof Terrain) {
+            if (((EntitySelectObj) selectObj).getTarget().getSpatial() instanceof Terrain) {
                 setEnabled(true);
                 return;
             }

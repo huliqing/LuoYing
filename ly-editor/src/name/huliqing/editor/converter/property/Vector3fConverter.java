@@ -27,7 +27,6 @@ import name.huliqing.luoying.xml.Converter;
  */
 public class Vector3fConverter extends AbstractPropertyConverter{
     
-    
     private final VBox layout = new VBox();
     
     private final HBox xLayout = new HBox();
@@ -106,13 +105,19 @@ public class Vector3fConverter extends AbstractPropertyConverter{
             changed = true;
         }
         if (changed) {
+            
             try {
                 Vector3f newVec = new Vector3f(Float.parseFloat(lastX), Float.parseFloat(lastY),Float.parseFloat(lastZ));
                 updateAttribute(newVec);
                 addUndoRedo(lastValue, new Vector3f(newVec));
                 lastValue = new Vector3f(newVec);
             } catch (NumberFormatException e) {
-                // ignore
+                // 如果全为空则清除该参数
+                if (lastX.equals("") && lastY.equals("") && lastZ.equals("")) {
+                    updateAttribute(null);
+                    addUndoRedo(lastValue, null);
+                    lastValue = null;
+                }
             }
         }
     }

@@ -3,38 +3,38 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.edit.select;
+package name.huliqing.editor.edit.controls;
 
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
-import name.huliqing.luoying.object.entity.Entity;
 
 /**
- * 空的操作物体，相关的Entity不能被直接操作，该类主要用于所有那些不能直接可视化操作的实体Entity
+ *
  * @author huliqing
- * @param <T>
  */
-public class EmptyEntitySelectObj <T extends Entity> extends EntitySelectObj<T> {
+public class SpatialControlTile extends ControlTile<Spatial> {
 
     @Override
     public Spatial getControlSpatial() {
-        return null;
+        return target;
     }
 
     @Override
-    protected void onLocationUpdated(Vector3f location) {
-        // ignore
+    protected void onLocationUpdated(Vector3f locaton) {
     }
 
     @Override
     protected void onRotationUpdated(Quaternion rotation) {
-        // ignore
     }
 
     @Override
     protected void onScaleUpdated(Vector3f scale) {
-        // ignore
     }
-    
+
+    @Override
+    protected void onChildUpdated(ControlTile childUpdated, Type type) {
+    }
+
+
 }

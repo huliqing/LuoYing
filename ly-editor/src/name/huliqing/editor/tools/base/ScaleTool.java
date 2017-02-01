@@ -15,12 +15,12 @@ import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.JmeEvent;
 import name.huliqing.editor.edit.Mode;
 import name.huliqing.editor.edit.SimpleJmeEdit;
-import name.huliqing.editor.select.SelectObj;
 import name.huliqing.editor.tiles.AxisNode;
 import name.huliqing.editor.tiles.ScaleControlObj;
 import name.huliqing.editor.edit.UndoRedo;
 import name.huliqing.luoying.manager.PickManager;
 import name.huliqing.editor.edit.SimpleJmeEditListener;
+import name.huliqing.editor.edit.controls.ControlTile;
 import name.huliqing.editor.toolbar.EditToolbar;
 import name.huliqing.editor.tools.EditTool;
 
@@ -45,11 +45,11 @@ public class ScaleTool extends EditTool implements SimpleJmeEditListener{
     
     // 变换控制物体
     private final ScaleControlObj controlObj = new ScaleControlObj();
-    private SelectObj selectObj;
+    private ControlTile selectObj;
     
     private final Picker picker = new Picker();
-    private final Vector3f startScale = new Vector3f();
-    private final Vector3f afterScale = new Vector3f();
+    private Vector3f startScale;
+    private Vector3f afterScale;
     
     // 是否当前正在缩放操作
     private boolean transforming;
@@ -112,7 +112,7 @@ public class ScaleTool extends EditTool implements SimpleJmeEditListener{
     @Override
     protected void onToolEvent(Event e) {
         selectObj = edit.getSelected();
-        if (selectObj == null || selectObj.getReadOnlySelectedSpatial() == null) {
+        if (selectObj == null || selectObj.getControlSpatial() == null) {
             endScale();
             return;
         }
@@ -191,9 +191,10 @@ public class ScaleTool extends EditTool implements SimpleJmeEditListener{
         controlAxis = null;
         controlObj.setAxisVisible(false);
         controlObj.setAxisLineVisible(false);
-        picker.startPick(selectObj.getReadOnlySelectedSpatial(), Mode.CAMERA, editor.getCamera()
+        picker.startPick(selectObj.getControlSpatial(), Mode.CAMERA, editor.getCamera()
                 , editor.getInputManager().getCursorPosition(), editor.getCamera().getRotation());
-        startScale.set(selectObj.getReadOnlySelectedSpatial().getLocalScale());
+        startScale = selectObj.getControlSpatial().getLocalScale().clone();
+        afterScale = new Vector3f(startScale);
     }
     
     // 普通的按轴缩放
@@ -227,9 +228,10 @@ public class ScaleTool extends EditTool implements SimpleJmeEditListener{
             default:
                 throw new UnsupportedOperationException();
         }
-        picker.startPick(selectObj.getReadOnlySelectedSpatial(), edit.getMode(), editor.getCamera()
+        picker.startPick(selectObj.getControlSpatial(), edit.getMode(), editor.getCamera()
                 , editor.getInputManager().getCursorPosition(), planRotation);
-        startScale.set(selectObj.getReadOnlySelectedSpatial().getLocalScale());
+        startScale = selectObj.getControlSpatial().getLocalScale().clone();
+        afterScale = new Vector3f(startScale);
     }
     
     /**
@@ -240,6 +242,8 @@ public class ScaleTool extends EditTool implements SimpleJmeEditListener{
             picker.endPick();
             edit.addUndoRedo(new ScaleUndoRedo(selectObj, startScale, afterScale));
         }
+        startScale = null;
+        afterScale = null;
         transforming = false;
         freeScale = false;
         axisScale = false;
@@ -294,11 +298,11 @@ public class ScaleTool extends EditTool implements SimpleJmeEditListener{
             Vector3f newScale = tv.vect2.set(startScale);
             Vector3f diff = tv.vect3;
             Vector3f pickTranslation = picker.getTranslation(axis);
-            Quaternion worldRotInverse = tv.quat1.set(selectObj.getReadOnlySelectedSpatial().getWorldRotation()).inverse();
+            Quaternion worldRotInverse = tv.quat1.set(selectObj.getControlSpatial().getWorldRotation()).inverse();
             worldRotInverse.mult(pickTranslation, diff);
             diff.multLocal(0.5f);
             newScale.addLocal(diff);
-            selectObj.setLocalScale(newScale);
+            selectObj.setLocalScale(new Vector3f(newScale));
             afterScale.set(newScale);
             tv.release();
         }
@@ -310,7 +314,7 @@ public class ScaleTool extends EditTool implements SimpleJmeEditListener{
     }
 
     @Override
-    public void onSelect(SelectObj selectObj) {
+    public void onSelect(ControlTile selectObj) {
         cancelScale(); // 如果选择的物体发生变化，则取消当前缩放
         updateMarkerState();
     }
@@ -321,14 +325,14 @@ public class ScaleTool extends EditTool implements SimpleJmeEditListener{
             return;
         }
         controlObj.setVisible(true);
-        controlObj.setLocalTranslation(edit.getSelected().getReadOnlySelectedSpatial().getWorldTranslation());
+        controlObj.setLocalTranslation(edit.getSelected().getControlSpatial().getWorldTranslation());
         Mode mode = edit.getMode();
         switch (edit.getMode()) {
             case GLOBAL:
                 controlObj.setLocalRotation(new Quaternion());
                 break;
             case LOCAL:
-                controlObj.setLocalRotation(edit.getSelected().getReadOnlySelectedSpatial().getWorldRotation());
+                controlObj.setLocalRotation(edit.getSelected().getControlSpatial().getWorldRotation());
                 break;
             case CAMERA:
                 controlObj.setLocalRotation(editor.getCamera().getRotation());
@@ -339,11 +343,11 @@ public class ScaleTool extends EditTool implements SimpleJmeEditListener{
     }
     
     private class ScaleUndoRedo implements UndoRedo {
-        private final SelectObj spatial;
+        private final ControlTile spatial;
         private final Vector3f beforeScale = new Vector3f();
         private final Vector3f afterScale = new Vector3f();
         
-        public ScaleUndoRedo(SelectObj selectObj, Vector3f before, Vector3f after) {
+        public ScaleUndoRedo(ControlTile selectObj, Vector3f before, Vector3f after) {
             this.spatial = selectObj;
             beforeScale.set(before);
             afterScale.set(after);

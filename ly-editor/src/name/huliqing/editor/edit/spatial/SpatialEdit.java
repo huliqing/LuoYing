@@ -7,17 +7,15 @@ package name.huliqing.editor.edit.spatial;
 
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
-import com.jme3.math.Ray;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.util.SafeArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.editor.Editor;
 import name.huliqing.editor.edit.SimpleJmeEdit;
+import name.huliqing.editor.edit.controls.SpatialControlTile;
 import name.huliqing.editor.manager.Manager;
-import name.huliqing.editor.select.SelectObj;
-import name.huliqing.editor.select.SpatialSelectObj;
-import name.huliqing.luoying.manager.PickManager;
 
 /**
  * 编辑单个Spatial的编辑器
@@ -61,6 +59,15 @@ public class SpatialEdit extends SimpleJmeEdit {
         fileInAssets = fileFullPath.replace(assetPath, "").replace("\\", "/");
         if (spatial != null) {
             spatial.removeFromParent();
+            
+            SafeArrayList<SpatialControlTile> list = getControlTiles();
+            for (SpatialControlTile sct : list.getArray()) {
+                if (sct.getControlSpatial() == spatial) {
+                    removeControlTile(sct);
+                    break;
+                }
+            }
+            
         }
         if (isInitialized()) {
             load();
@@ -73,18 +80,23 @@ public class SpatialEdit extends SimpleJmeEdit {
         try {
             spatial = editor.getAssetManager().loadModel(fileInAssets);
             root.attachChild(spatial);
+            
+            SpatialControlTile sct = new SpatialControlTile();
+            sct.setTarget(spatial);
+            addControlTile(sct);
+            
         } catch (Exception e) {
             LOG.log(Level.SEVERE, "Could not load mode, filePath={0}", fileInAssets);
         }
     }
 
-    @Override
-    public SelectObj doPick(Ray ray) {
-        Spatial spaital = PickManager.pick(ray, editRoot);
-        if (spatial == null) 
-            return null;
-        return new SpatialSelectObj(spaital);
-    }
+//    @Override
+//    public SelectObj doPick(Ray ray) {
+//        Spatial spaital = PickManager.pick(ray, editRoot);
+//        if (spatial == null) 
+//            return null;
+//        return new SpatialSelectObj(spaital);
+//    }
 
     
 }

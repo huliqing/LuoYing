@@ -8,6 +8,7 @@ package name.huliqing.editor.tools.terrain;
 import com.jme3.math.Vector3f;
 import com.jme3.terrain.Terrain;
 import name.huliqing.editor.edit.SimpleJmeEdit;
+import name.huliqing.editor.edit.controls.ControlTile;
 import name.huliqing.editor.edit.select.EntitySelectObj;
 import name.huliqing.editor.select.SelectObj;
 import name.huliqing.editor.toolbar.TerrainToolbar;
@@ -34,7 +35,7 @@ public abstract class AbstractTerrainTool extends EditTool<SimpleJmeEdit, Terrai
         if (eso == null)
             return null;
         
-        Vector3f result = PickManager.pick(editor.getCamera(), editor.getInputManager().getCursorPosition(), eso.getObject().getSpatial());
+        Vector3f result = PickManager.pick(editor.getCamera(), editor.getInputManager().getCursorPosition(), eso.getTarget().getSpatial());
         return result;
     }
     
@@ -43,12 +44,12 @@ public abstract class AbstractTerrainTool extends EditTool<SimpleJmeEdit, Terrai
      * @return 
      */
     protected final EntitySelectObj getTerrainEntity() {
-        SelectObj so = edit.getSelected();
+        ControlTile so = edit.getSelected();
         if (!(so instanceof EntitySelectObj)) {
             return null;
         }
         EntitySelectObj eso = (EntitySelectObj) so;
-        if (eso.getObject().getSpatial() instanceof Terrain) {
+        if (eso.getTarget().getSpatial() instanceof Terrain) {
             return eso;
         } else {
             return null;

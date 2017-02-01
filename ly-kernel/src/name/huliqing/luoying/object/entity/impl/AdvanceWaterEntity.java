@@ -20,6 +20,7 @@
 package name.huliqing.luoying.object.entity.impl;
 
 import com.jme3.light.DirectionalLight;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.texture.Texture2D;
 import com.jme3.water.WaterFilter;
@@ -187,6 +188,14 @@ public class AdvanceWaterEntity extends NonModelEntity implements WaterEntity, S
     public void setRadius(float radius) {
         water.setRadius(radius);
         radiusSquared = radius * radius;
+    }
+    
+    public Vector2f getWindDirection() {
+        return water.getWindDirection();
+    }
+    
+    public void setWindDirection(Vector2f windDirection) {
+        water.setWindDirection(windDirection);
     }
     
     @Override

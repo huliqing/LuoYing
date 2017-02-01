@@ -14,18 +14,18 @@ import name.huliqing.editor.manager.Manager;
 import name.huliqing.editor.tools.base.CameraTool;
 import name.huliqing.editor.tools.base.GridTool;
 import name.huliqing.editor.tools.base.ModeTool;
-import name.huliqing.editor.tools.base.MoveTool;
-import name.huliqing.editor.tools.base.PickTool;
 import name.huliqing.editor.tools.base.RotationTool;
 import name.huliqing.editor.tools.base.ScaleTool;
 import name.huliqing.editor.tools.Tool;
+import name.huliqing.editor.tools.base.MoveTool;
+import name.huliqing.editor.tools.base.PickTool;
 import name.huliqing.editor.tools.base.UndoRedoTool;
 
 /**
  * 最基本的3D编辑工具栏
  * @author huliqing
  */
-public class BaseEditToolbar extends EditToolbar<SimpleJmeEdit> {
+public class BaseEditToolbar extends EditToolbar<SimpleJmeEdit>{
     
     private UndoRedoTool undoRedoTool;
     private CameraTool cameraTool;

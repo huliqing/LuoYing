@@ -5,16 +5,9 @@
  */
 package name.huliqing.editor.edit.select;
 
-import com.jme3.bullet.control.BetterCharacterControl;
-import com.jme3.bullet.control.RigidBodyControl;
-import com.jme3.math.Quaternion;
-import com.jme3.math.Ray;
-import com.jme3.math.Vector3f;
-import com.jme3.scene.Spatial;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.editor.edit.scene.SceneEdit;
-import name.huliqing.editor.select.SelectObj;
+import name.huliqing.editor.edit.controls.ControlTile;
 import name.huliqing.luoying.object.entity.Entity;
 
 /**
@@ -22,72 +15,20 @@ import name.huliqing.luoying.object.entity.Entity;
  * @author huliqing
  * @param <T>
  */
-public abstract class EntitySelectObj<T extends Entity> implements SelectObj<T> {
+public abstract class EntitySelectObj<T extends Entity> extends ControlTile<T> {
      
-    protected T entity;
-    
     protected final List<EntitySelectObjListener> listeners = new ArrayList<EntitySelectObjListener>();
-    protected boolean initialized;
-    
-    
-    public EntitySelectObj() {}
-    
-    public EntitySelectObj(T entity) {
-        this.entity = entity;
-    }
     
     @Override
-    public void setObject(T entity) {
-        if (this.entity != null) {
-            throw new IllegalStateException("Entity already set, could not change!, EntitySelectObj=" 
-                    + this + ", entity=" + entity);
-        }
-        this.entity = entity;
+    public T getTarget() {
+        return target;
     }
 
     @Override
-    public T getObject() {
-        return entity;
+    public void setTarget(T target) {
+        super.setTarget(target); 
     }
 
-    @Override
-    public void setLocalTranslation(Vector3f location) {
-        entity.getSpatial().setLocalTranslation(location);
-        RigidBodyControl control = entity.getSpatial().getControl(RigidBodyControl.class);
-        if (control != null) {
-            control.setPhysicsLocation(location);
-        }
-        BetterCharacterControl character = entity.getSpatial().getControl(BetterCharacterControl.class);
-        if (character != null) {
-            character.warp(location);
-        }
-        entity.updateDatas();
-        notifyPropertyChanged("location", entity.getSpatial().getLocalTranslation());
-    }
-
-    @Override
-    public void setLocalRotation(Quaternion rotation) {
-        entity.getSpatial().setLocalRotation(rotation);
-        RigidBodyControl control = entity.getSpatial().getControl(RigidBodyControl.class);
-        if (control != null) {
-            control.setPhysicsRotation(entity.getSpatial().getWorldRotation());
-        }
-        entity.updateDatas();
-        notifyPropertyChanged("rotation", entity.getSpatial().getLocalRotation());
-    }
-
-    @Override
-    public void setLocalScale(Vector3f scale) {
-        entity.getSpatial().setLocalScale(scale);
-        entity.updateDatas();
-        notifyPropertyChanged("scale", entity.getSpatial().getLocalScale());
-    }
-
-    @Override
-    public Spatial getReadOnlySelectedSpatial() {
-        return entity.getSpatial();
-    }
-    
     public synchronized void addListener(EntitySelectObjListener listener) {
         if (!listeners.contains(listener)) {
             listeners.add(listener);
@@ -105,24 +46,13 @@ public abstract class EntitySelectObj<T extends Entity> implements SelectObj<T> 
      */
     protected void notifyPropertyChanged(String property, Object newValue) {
         listeners.forEach(t -> {
-            t.onPropertyChanged(entity.getData(), property, newValue);
+            t.onPropertyChanged(target.getData(), property, newValue);
         });
     }
-    
-    public void initialize(SceneEdit  form) {
-        if (initialized) {
-            throw new IllegalStateException();
-        }
-        initialized = true;
+
+    @Override
+    protected void onChildUpdated(ControlTile childUpdated, Type type) {
+        // ignore
     }
     
-    public boolean isInitialized() {
-        return initialized;
-    }
-    
-    public void cleanup() {
-        initialized = false;
-    }
-    
-    public abstract Float distanceOfPick(Ray ray);
 }

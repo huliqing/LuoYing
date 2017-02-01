@@ -30,6 +30,7 @@ import name.huliqing.luoying.data.SceneData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.editor.edit.SimpleJmeEditListener;
+import name.huliqing.editor.edit.controls.ControlTile;
 import name.huliqing.editor.edit.select.EntitySelectObj;
 import name.huliqing.editor.manager.Manager;
 import name.huliqing.luoying.object.entity.Entity;
@@ -40,7 +41,7 @@ import name.huliqing.luoying.object.scene.SceneListener;
  * @author huliqing
  */
 public class JfxSceneEdit extends JfxSimpleEdit<SceneEdit> 
-        implements SimpleJmeEditListener<EntitySelectObj>, SceneListener {
+        implements SimpleJmeEditListener<ControlTile>, SceneListener {
 
     private static final Logger LOG = Logger.getLogger(JfxSceneEdit.class.getName());
 
@@ -49,14 +50,14 @@ public class JfxSceneEdit extends JfxSimpleEdit<SceneEdit>
     private DataConverter sceneDataConverter;
     
     private String sceneId;
-    private final List<JfxSceneEditListener<EntitySelectObj>> listeners = new ArrayList();
+    private final List<JfxSceneEditListener<ControlTile>> listeners = new ArrayList();
     // 当前选择中的物体
-    private EntitySelectObj entitySelectObj;
+    private ControlTile entitySelectObj;
     
     // 用于显示删除按钮
     private final ContextMenu delPop = new ContextMenu();
     private final MenuItem delBtn = new MenuItem(Manager.getRes(ResConstants.POPUP_DELETE));
-    private EntitySelectObj delTarget;
+    private EntitySelectObj<Entity> delTarget;
     
     // 鼠标最近一次拖放到editPanel上的坐标位置
     private double lastDragXPos;
@@ -69,7 +70,7 @@ public class JfxSceneEdit extends JfxSimpleEdit<SceneEdit>
         delPop.getItems().addAll(delBtn);
         delBtn.setOnAction(e -> {
             if (delTarget != null) {
-                removeEntity(delTarget.getObject().getData());
+                removeEntity(delTarget.getTarget().getData());
                 delTarget = null;
                 // 删除后重新将焦点定位到canvas上
                 Jfx.requestFocusCanvas();
@@ -177,7 +178,7 @@ public class JfxSceneEdit extends JfxSimpleEdit<SceneEdit>
     }
 
     @Override
-    public void onSelect(EntitySelectObj selectObj) {
+    public void onSelect(ControlTile selectObj) {
         if (selectObj == this.entitySelectObj) {
             return;
         }

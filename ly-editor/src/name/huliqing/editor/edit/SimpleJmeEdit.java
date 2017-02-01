@@ -5,11 +5,11 @@
  */
 package name.huliqing.editor.edit;
 
-import com.jme3.math.Ray;
 import com.jme3.scene.Node;
+import com.jme3.util.SafeArrayList;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.editor.select.SelectObj;
+import name.huliqing.editor.edit.controls.ControlTile;
 import name.huliqing.editor.toolbar.BaseEditToolbar;
 import name.huliqing.editor.toolbar.Toolbar;
 
@@ -18,7 +18,7 @@ import name.huliqing.editor.toolbar.Toolbar;
  * @author huliqing 
  * @param <T> 
  */
-public abstract class SimpleJmeEdit<T extends SelectObj> extends JmeAbstractEdit {
+public abstract class SimpleJmeEdit<T extends ControlTile> extends JmeAbstractEdit {
     
     // 侦听器
     protected final List<SimpleJmeEditListener> editFormListeners = new ArrayList<SimpleJmeEditListener>();
@@ -27,6 +27,7 @@ public abstract class SimpleJmeEdit<T extends SelectObj> extends JmeAbstractEdit
     protected Mode mode = Mode.GLOBAL;
     
     // 当前选择的物体
+    protected final SafeArrayList<ControlTile> cts = new SafeArrayList<ControlTile>(ControlTile.class);
     protected T selectObj;
 
     @Override
@@ -86,10 +87,32 @@ public abstract class SimpleJmeEdit<T extends SelectObj> extends JmeAbstractEdit
         return editFormListeners.remove(listener);
     }
     
-    /**
-     * 通过射线方式从场景中选择一个可选择的物体，如果存在这样一个物体则返回，否则返回null.
-     * @param ray
-     * @return 
-     */
-    public abstract T doPick(Ray ray);
+//    /**
+//     * 通过射线方式从场景中选择一个可选择的物体，如果存在这样一个物体则返回，否则返回null.
+//     * @param ray
+//     * @return 
+//     */
+//    public abstract T doPick(Ray ray);
+    
+    // --------------------------------------------------------------------------------------------------------------------------------
+    
+    public void addControlTile(T ct) {
+        if (!cts.contains(ct)) {
+            cts.add(ct);
+        }
+        if (!ct.isInitialized()) {
+            ct.initialize(editRoot);
+        }
+    }
+    
+    public boolean removeControlTile(T ct) {
+        if (ct.isInitialized()) {
+            ct.cleanup();
+        }
+        return cts.remove(ct);
+    }
+    
+    public <T extends ControlTile> SafeArrayList<T> getControlTiles() {
+        return (SafeArrayList<T>) cts;
+    }
 }

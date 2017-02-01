@@ -41,14 +41,33 @@ public class PickManager {
      * @param pickRoot
      * @return 
      */
-    public final static Spatial pick(Ray ray, Spatial pickRoot) {
+    public final static Spatial pickSpatial(Ray ray, Spatial pickRoot) {
         TempPick tp = TempPick.get();
         CollisionResults cr = tp.results;
         cr.clear();
-        pick(ray, pickRoot, cr);
+        pickResults(ray, pickRoot, cr);
         Spatial result = null;
         if (cr.size() > 0) {
             result = cr.getClosestCollision().getGeometry();
+        }
+        tp.release();
+        return result;
+    }
+    
+    /**
+     * 获取最近的选择点,如果不存在则返回null.
+     * @param ray
+     * @param pickRoot
+     * @return 
+     */
+    public static Vector3f pickPoint(Ray ray, Spatial pickRoot) {
+        TempPick tp = TempPick.get();
+        CollisionResults cr = tp.results;
+        cr.clear();
+        pickResults(ray, pickRoot, cr);
+        Vector3f result = null;
+        if (cr.size() > 0) {
+            result = cr.getClosestCollision().getContactPoint();
         }
         tp.release();
         return result;
@@ -61,7 +80,7 @@ public class PickManager {
      * @param store
      * @return 
      */
-    public final static CollisionResults pick(Ray ray, Spatial pickRoot, CollisionResults store) {
+    public final static CollisionResults pickResults(Ray ray, Spatial pickRoot, CollisionResults store) {
         if (store == null) {
             store = new CollisionResults();
         }
@@ -83,7 +102,7 @@ public class PickManager {
         TempPick tp = TempPick.get();
         CollisionResults cr = tp.results;
         cr.clear();
-        PickManager.pick(ray, spatial, cr);
+        PickManager.pickResults(ray, spatial, cr);
         Float result = null;
         if (cr.size() > 0) {
             result = cr.getClosestCollision().getDistance();

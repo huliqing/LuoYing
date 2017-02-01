@@ -5,17 +5,18 @@
  */
 package name.huliqing.editor.edit.select;
 
-import com.jme3.collision.CollisionResults;
 import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Quad;
-import name.huliqing.editor.edit.scene.SceneEdit;
+import com.jme3.util.TempVars;
 import name.huliqing.luoying.manager.PickManager;
 import name.huliqing.luoying.object.entity.impl.AdvanceWaterEntity;
 import name.huliqing.luoying.utils.MaterialUtils;
@@ -26,97 +27,124 @@ import name.huliqing.luoying.utils.MaterialUtils;
  */
 public class AdvanceWaterEntitySelectObj extends EntitySelectObj<AdvanceWaterEntity>{
     
-    private final Spatial controlObj = createControlObj();
+    private final Spatial pickObj = createControlObj(ColorRGBA.Red);
+    private final Spatial controlObj = createControlObj(ColorRGBA.Blue);
     private final float MAX_RADIUS = Integer.MAX_VALUE;
     
-    private float controlObjScale;
-    
-    public AdvanceWaterEntitySelectObj() {}
+    private final float[] tempAngles  = new float[3];
     
     @Override
-    public void initialize(SceneEdit form) {
-        super.initialize(form);
-        form.getEditRoot().attachChild(controlObj);
-        if (entity.getCenter() != null) {
-            setLocalTranslation(entity.getCenter().setY(entity.getWaterHeight()));
-            setLocalScale(new Vector3f(entity.getRadius(),entity.getRadius(),entity.getRadius()));
-            controlObjScale = entity.getRadius();
+    public void initialize(Node parent) {
+        super.initialize(parent);
+        parent.attachChild(controlObj);
+        parent.attachChild(pickObj);
+        Vector3f location = new Vector3f(target.getSpatial().getLocalTranslation());
+        location.setY(target.getWaterHeight());
+        setLocalTranslation(location);
+        if (target.getCenter() != null) {
+            setLocalScale(new Vector3f(target.getRadius(), target.getRadius(), target.getRadius()));
         } else {
-            Vector3f loc = entity.getSpatial().getLocalTranslation();
-            loc.setY(entity.getWaterHeight());
-            setLocalTranslation(loc);
             setLocalScale(new Vector3f(MAX_RADIUS, MAX_RADIUS, MAX_RADIUS));
-            controlObjScale = MAX_RADIUS;
         }
+        Quaternion qua = new Quaternion();
+        Vector3f windDir = new Vector3f(target.getWindDirection().x, 0, target.getWindDirection().y).normalizeLocal();
+        qua.lookAt(windDir, Vector3f.UNIT_Y);
+        setLocalRotation(qua);
     }
-
+    
     @Override
     public void cleanup() {
         controlObj.removeFromParent();
+        pickObj.removeFromParent();
         super.cleanup();
     }
 
     @Override
-    public void setLocalScale(Vector3f scale) {
-//        super.setLocalScale(scale); // 不用父类的
-        if (entity.getCenter() != null) {
-            controlObjScale = scale.x;
-            controlObj.setLocalScale(scale);
-            entity.setRadius(controlObjScale);
-            entity.getSpatial().setLocalScale(scale);
+    public Float pickCheck(Ray ray) {
+        Vector3f point = PickManager.pickPoint(ray, pickObj);
+        if (point == null) {
+            return null;
+        }
+        // 点击的时候是用pickObj,但是控制的时候是用controlObj,所以这里需要把controlObj移动到点击处的位置。
+        if (target.getCenter() == null) {
+            controlObj.setLocalTranslation(point);
         } else {
-            // controlObj需要用于点击获取海水对象，所以必须设置和海水一样大小
-            controlObj.setLocalScale(MAX_RADIUS);
-            entity.getSpatial().setLocalScale(MAX_RADIUS);
+            controlObj.setLocalTranslation(pickObj.getLocalTranslation());
         }
-        entity.updateDatas();
-        notifyPropertyChanged("scale", entity.getSpatial().getLocalScale());
-    }
-
-    @Override
-    public void setLocalRotation(Quaternion rotation) {
-        super.setLocalRotation(rotation);
-        // ignore
-    }
-
-    @Override
-    public void setLocalTranslation(Vector3f location) {
-        controlObj.setLocalTranslation(location);
-        entity.setWaterHeight(location.y);
-        if (entity.getCenter() != null) {
-            entity.setCenter(location.clone());
-        }
-        super.setLocalTranslation(location);
-        // 不能改自动改变这个参数，这会让海水变成有限的，而用户可能不一定要通过移动海水来改变类型。
-//        notifyPropertyChanged("center", entity.getCenter());
-        notifyPropertyChanged("waterHeight", location.y);
+        Float dist = point.distance(ray.getOrigin());
+        return dist;
     }
     
     @Override
-    public Float distanceOfPick(Ray ray) {
-        Float dist = null;
-        CollisionResults cr = PickManager.pick(ray, controlObj, null);
-        if (cr != null && cr.size() > 0) {
-            dist = cr.getClosestCollision().getDistance();
-            // 优化：对于无界限水体，当操作时把controlObj位置移动到点击点处，这样方便操作
-            if (entity.getCenter() == null) {
-                controlObj.setLocalTranslation(cr.getClosestCollision().getContactPoint());
-            }
+    protected void onLocationUpdated(Vector3f location) {
+        pickObj.setLocalTranslation(location);
+        target.getSpatial().setLocalTranslation(location);
+        if (target.getCenter() != null) {
+            target.setWaterHeight(location.y);
+            target.setCenter(new Vector3f(location));
+            target.updateDatas();
+            notifyPropertyChanged("location", location);
+            notifyPropertyChanged("waterHeight", location.y);
+            notifyPropertyChanged("center", target.getCenter());
+        } else {
+            // 不能改自动改变这个参数，这会让海水变成有限的，而用户可能不一定要通过移动海水来改变类型。
+            target.setWaterHeight(location.y);
+            target.updateDatas();
+            notifyPropertyChanged("location", location);
+            notifyPropertyChanged("waterHeight", location.y);
         }
-        return dist;
+    }
+    
+    @Override
+    protected void onRotationUpdated(Quaternion rotation) {
+        rotation.toAngles(tempAngles);
+        // 去掉x和z轴的旋转
+        tempAngles[0] = 0;
+        tempAngles[2] = 0;
+        TempVars tv = TempVars.get();
+        Quaternion qua = tv.quat1;
+        qua.fromAngles(tempAngles);
+        target.getSpatial().setLocalRotation(qua);
+        
+        Vector3f windDir = tv.vect1.set(0,0,1);
+        qua.mult(windDir, windDir);
+        target.setWindDirection(new Vector2f(windDir.x, windDir.z).normalizeLocal());
+        tv.release();
+        
+        target.updateDatas();
+        notifyPropertyChanged("rotation", qua);
+        notifyPropertyChanged("windDirection", target.getWindDirection());
+    }
+    
+    @Override
+    protected void onScaleUpdated(Vector3f scale) {
+        if (target.getCenter() != null) {
+            controlObj.setLocalScale(scale); // controlObj不需要缩放
+            pickObj.setLocalScale(scale.x);
+            target.setRadius(scale.x);
+            target.updateDatas();
+            notifyPropertyChanged("radius", scale.x);
+        } else {
+            // pickObj需要用于点击获取海水对象，所以必须设置尽量和海水一样大小
+            controlObj.setLocalScale(1,1,1);
+            pickObj.setLocalScale(MAX_RADIUS);
+        }
     }
 
     @Override
-    public Spatial getReadOnlySelectedSpatial() {
+    public Spatial getControlSpatial() {
         return controlObj;
     }
     
-    private Spatial createControlObj() {
+    private Spatial createControlObj(ColorRGBA color) {
         Quad quad = new Quad(1,1);
         Geometry geo = new Geometry("", quad);
         geo.rotate(-FastMath.HALF_PI, 0, 0);
         geo.setLocalTranslation(-0.5f, 0, 0.5f);
         Material mat = MaterialUtils.createUnshaded();
+        if (color != null) {
+            mat.setColor("Color", color);
+        }
         geo.setMaterial(mat);
         geo.setCullHint(Spatial.CullHint.Always);
         
@@ -124,4 +152,5 @@ public class AdvanceWaterEntitySelectObj extends EntitySelectObj<AdvanceWaterEnt
         root.attachChild(geo);
         return root;
     }
+
 }

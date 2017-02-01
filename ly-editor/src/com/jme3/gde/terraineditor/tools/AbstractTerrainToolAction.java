@@ -39,7 +39,7 @@ import name.huliqing.editor.edit.select.EntitySelectObj;
 public abstract class AbstractTerrainToolAction {
     
     protected Terrain getTerrain(EntitySelectObj eso) {
-        Spatial terrainSpatial = eso.getObject().getSpatial();
+        Spatial terrainSpatial = eso.getTarget().getSpatial();
         if (!(terrainSpatial instanceof Terrain)) {
             throw new IllegalStateException("terrainSpatial must be a Terrain object! eso=" + eso);
         }

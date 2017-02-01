@@ -5,8 +5,11 @@
  */
 package name.huliqing.editor.edit.select;
 
-import com.jme3.math.Ray;
-import name.huliqing.luoying.manager.PickManager;
+import com.jme3.bullet.control.BetterCharacterControl;
+import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.math.Quaternion;
+import com.jme3.math.Vector3f;
+import com.jme3.scene.Spatial;
 import name.huliqing.luoying.object.entity.Entity;
 
 /**
@@ -14,16 +17,44 @@ import name.huliqing.luoying.object.entity.Entity;
  * 否则物体将无法通过鼠标来选择。
  * @author huliqing
  */
-public class SimpleModelEntitySelectObj extends EntitySelectObj {
+public class SimpleModelEntitySelectObj extends EntitySelectObj<Entity> {
 
-    public SimpleModelEntitySelectObj() {}
-    
-    public SimpleModelEntitySelectObj(Entity entity) {
-        super(entity);
-    }
-    
     @Override
-    public Float distanceOfPick(Ray ray) {
-        return PickManager.distanceOfPick(ray, entity.getSpatial());
+    public Spatial getControlSpatial() {
+        return target.getSpatial();
     }
+
+    @Override
+    protected void onLocationUpdated(Vector3f location) {
+        RigidBodyControl control = target.getSpatial().getControl(RigidBodyControl.class);
+        if (control != null) {
+            control.setPhysicsLocation(location);
+        }
+        BetterCharacterControl character = target.getSpatial().getControl(BetterCharacterControl.class);
+        if (character != null) {
+            character.warp(location);
+        }
+        target.getSpatial().setLocalTranslation(location);
+        target.updateDatas();
+        notifyPropertyChanged("location", location);
+    }
+
+    @Override
+    protected void onRotationUpdated(Quaternion rotation) {
+        RigidBodyControl control = target.getSpatial().getControl(RigidBodyControl.class);
+        if (control != null) {
+            control.setPhysicsRotation(rotation);
+        }
+        target.getSpatial().setLocalRotation(rotation);
+        target.updateDatas();
+        notifyPropertyChanged("rotation", rotation);
+    }
+
+    @Override
+    protected void onScaleUpdated(Vector3f scale) {
+        target.getSpatial().setLocalScale(scale);
+        target.updateDatas();
+        notifyPropertyChanged("scale", scale);
+    }
+    
 }
