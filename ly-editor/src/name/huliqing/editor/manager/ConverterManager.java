@@ -220,7 +220,7 @@ public class ConverterManager {
         entityChaseCamera.addPropertyConverter("upVector", Vector3fConverter.class);
         entityChaseCamera.addPropertyConverter("hideCursorOnRotate", CheckBoxConverter.class);
         
-        entityDirectionalLight.addFeature(DataConverter.FEATURE_HIDE_FIELDS, "location,rotation,scale,mat");
+        entityDirectionalLight.addFeature(DataConverter.FEATURE_HIDE_FIELDS, "rotation,scale,mat");
         entityDirectionalLight.addPropertyConverter("direction", Vector3fConverter.class);
         entityDirectionalLight.addPropertyConverter("color", ColorConverter.class);
         

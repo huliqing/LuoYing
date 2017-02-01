@@ -25,7 +25,7 @@ import name.huliqing.luoying.utils.MaterialUtils;
  * 高级水体的操作物体
  * @author huliqing
  */
-public class AdvanceWaterEntitySelectObj extends EntitySelectObj<AdvanceWaterEntity>{
+public class AdvanceWaterEntityControlTile extends EntityControlTile<AdvanceWaterEntity>{
     
     private final Spatial pickObj = createControlObj(ColorRGBA.Red);
     private final Spatial controlObj = createControlObj(ColorRGBA.Blue);
@@ -38,6 +38,12 @@ public class AdvanceWaterEntitySelectObj extends EntitySelectObj<AdvanceWaterEnt
         super.initialize(parent);
         parent.attachChild(controlObj);
         parent.attachChild(pickObj);
+        updateState();
+    }
+
+    @Override
+    public void updateState() {
+        super.updateState();
         Vector3f location = new Vector3f(target.getSpatial().getLocalTranslation());
         location.setY(target.getWaterHeight());
         setLocalTranslation(location);

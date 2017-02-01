@@ -8,7 +8,7 @@ package name.huliqing.editor.tools.terrain;
 import com.jme3.gde.terraineditor.tools.RaiseTerrainToolAction;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Geometry;
-import name.huliqing.editor.edit.select.EntitySelectObj;
+import name.huliqing.editor.edit.select.EntityControlTile;
 
 /**
  * 地形降低工具
@@ -27,7 +27,7 @@ public class LowerTool extends RaiseTool {
         if (radius <= 0 || weight == 0) 
             return;
         
-        EntitySelectObj terrain = getTerrainEntity();
+        EntityControlTile terrain = getTerrainEntity();
         if (terrain == null) 
             return;
         

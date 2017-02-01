@@ -41,7 +41,7 @@ import com.jme3.terrain.Terrain;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.editor.edit.UndoRedo;
-import name.huliqing.editor.edit.select.EntitySelectObj;
+import name.huliqing.editor.edit.select.EntityControlTile;
 
 /**
  * Level the terrain to a desired height, executed from the OpenGL thread.
@@ -55,7 +55,7 @@ public class LevelTerrainToolAction extends AbstractTerrainToolAction implements
     
     // 注：undo和redo的对象必须始终是EntitySelectObj，因为EntitySelectObj中Object等参数是可能发生变化的,
     // 也就是其中的TerrainEntity中的Terrain对象可能是发生变化的.
-    private final EntitySelectObj selectObj;
+    private final EntityControlTile selectObj;
     private final Vector3f worldLoc;
     private final float radius;
     private final float height;
@@ -65,7 +65,7 @@ public class LevelTerrainToolAction extends AbstractTerrainToolAction implements
     private List<Vector2f> undoLocs;
     private List<Float> undoHeights;
 
-    public LevelTerrainToolAction(EntitySelectObj terrain, Vector3f markerLocation
+    public LevelTerrainToolAction(EntityControlTile terrain, Vector3f markerLocation
             , float radius, float height, Vector3f levelTerrainLocation, boolean precision) {
         this.selectObj = terrain;
         this.worldLoc = markerLocation.clone();
@@ -92,7 +92,7 @@ public class LevelTerrainToolAction extends AbstractTerrainToolAction implements
         modifyHeight(selectObj, levelTerrainLocation, worldLoc, radius, height, precision);
     }
 
-    private void modifyHeight(EntitySelectObj eso, Vector3f level, Vector3f worldLoc, float radius, float height, boolean precision) {
+    private void modifyHeight(EntityControlTile eso, Vector3f level, Vector3f worldLoc, float radius, float height, boolean precision) {
         Spatial terrainSpatial = eso.getTarget().getSpatial();
         if (!(terrainSpatial instanceof Terrain)) {
             throw new IllegalStateException("terrainSpatial must be a Terrain object! eso=" + eso);

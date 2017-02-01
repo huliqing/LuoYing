@@ -115,6 +115,7 @@ public class MoveTool extends EditTool implements SimpleJmeEditListener{
                     return;
                 }
                 
+                updateMarkerState();
                 PickManager.getPickRay(editor.getCamera(), editor.getInputManager().getCursorPosition(), ray);
                 AxisNode axis = controlObj.getPickAxis(ray);
                 if (axis != null) {

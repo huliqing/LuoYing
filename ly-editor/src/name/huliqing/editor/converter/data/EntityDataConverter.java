@@ -11,23 +11,23 @@ import name.huliqing.editor.converter.AbstractDataConverter;
 import name.huliqing.editor.edit.Mode;
 import name.huliqing.editor.edit.scene.JfxSceneEdit;
 import name.huliqing.editor.edit.scene.JfxSceneEditListener;
-import name.huliqing.editor.edit.select.EntitySelectObj;
-import name.huliqing.editor.edit.select.EntitySelectObjListener;
+import name.huliqing.editor.edit.select.EntityControlTile;
 import name.huliqing.fxswing.Jfx;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.editor.converter.PropertyConverter;
 import name.huliqing.editor.edit.controls.ControlTile;
+import name.huliqing.editor.edit.select.EntityControlTileListener;
 
 /**
  *
  * @author huliqing
  */
 public class EntityDataConverter extends AbstractDataConverter<JfxSceneEdit, EntityData> 
-        implements JfxSceneEditListener<ControlTile>, EntitySelectObjListener{
+        implements JfxSceneEditListener<ControlTile>, EntityControlTileListener{
 
     private static final Logger LOG = Logger.getLogger(EntityDataConverter.class.getName());
 
-    private EntitySelectObj selectObj;
+    private EntityControlTile selectObj;
     
     @Override
     public void initialize(PropertyConverter parent) {
@@ -57,10 +57,10 @@ public class EntityDataConverter extends AbstractDataConverter<JfxSceneEdit, Ent
 
     @Override
     public void onSelectChanged(ControlTile newSelectObj) {
-        if (!(newSelectObj instanceof EntitySelectObj)) {
+        if (!(newSelectObj instanceof EntityControlTile)) {
             return;
         }
-        EntitySelectObj newEso = (EntitySelectObj) newSelectObj;
+        EntityControlTile newEso = (EntityControlTile) newSelectObj;
         if (newEso.getTarget().getData() != this.data) {
             return;
         }

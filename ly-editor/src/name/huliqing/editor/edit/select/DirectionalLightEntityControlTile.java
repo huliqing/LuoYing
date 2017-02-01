@@ -28,13 +28,13 @@ import name.huliqing.luoying.utils.MaterialUtils;
  * 直射光Entity的操作物体
  * @author huliqing
  */
-public class DirectionalLightEntitySelectObj extends EntitySelectObj<DirectionalLightEntity> {
+public class DirectionalLightEntityControlTile extends EntityControlTile<DirectionalLightEntity> {
 
     private final Node controlSpatial = new Node();
     private final Spatial flag;
     private final Spatial line;
     
-    public DirectionalLightEntitySelectObj() {
+    public DirectionalLightEntityControlTile() {
         flag = createSunFlag(AssetConstants.INTERFACE_ICON_SUN);
         controlSpatial.attachChild(flag);
         
@@ -52,6 +52,12 @@ public class DirectionalLightEntitySelectObj extends EntitySelectObj<Directional
     public void initialize(Node form) {
         super.initialize(form);
         form.attachChild(controlSpatial);
+    }
+    
+    @Override
+    public void updateState() {
+        super.updateState();
+        controlSpatial.setLocalTranslation(target.getSpatial().getLocalTranslation());
         controlSpatial.setLocalScale(10);
         
         Quaternion rot = controlSpatial.getLocalRotation();
@@ -68,13 +74,16 @@ public class DirectionalLightEntitySelectObj extends EntitySelectObj<Directional
     @Override
     protected void onLocationUpdated(Vector3f location) {
         target.getSpatial().setLocalTranslation(location);
+        target.updateDatas();
+        notifyPropertyChanged("location", target.getSpatial().getLocalTranslation());
     }
 
     @Override
     protected void onRotationUpdated(Quaternion rotation) {
         Vector3f dir = target.getDirection().set(Vector3f.UNIT_Z);
         rotation.mult(dir, dir);
-        this.target.setDirection(dir);
+        target.setDirection(dir);
+        target.updateDatas();
         notifyPropertyChanged("direction", dir);
     }
 

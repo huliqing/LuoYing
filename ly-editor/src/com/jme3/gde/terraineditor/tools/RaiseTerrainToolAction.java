@@ -40,7 +40,7 @@ import com.jme3.terrain.Terrain;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.editor.edit.UndoRedo;
-import name.huliqing.editor.edit.select.EntitySelectObj;
+import name.huliqing.editor.edit.select.EntityControlTile;
 
 /**
  * 升高地形
@@ -49,12 +49,12 @@ public class RaiseTerrainToolAction extends AbstractTerrainToolAction implements
 
     // 注：undo和redo的对象必须始终是EntitySelectObj，因为EntitySelectObj中Object等参数是可能发生变化的,
     // 也就是其中的TerrainEntity中的Terrain对象可能是发生变化的.
-    private final EntitySelectObj selectObj;
+    private final EntityControlTile selectObj;
     private final Vector3f worldLoc;
     private final float radius;
     private final float height;
 
-    public RaiseTerrainToolAction(EntitySelectObj terrain, Vector3f markerLocation, float radius, float height) {
+    public RaiseTerrainToolAction(EntityControlTile terrain, Vector3f markerLocation, float radius, float height) {
         this.selectObj = terrain;
         this.worldLoc = markerLocation.clone();
         this.radius = radius;
@@ -75,7 +75,7 @@ public class RaiseTerrainToolAction extends AbstractTerrainToolAction implements
         this.modifyHeight(selectObj, worldLoc, radius, height);
     }
 
-    private void modifyHeight(EntitySelectObj eso, Vector3f worldLoc, float radius, float heightDir) {
+    private void modifyHeight(EntityControlTile eso, Vector3f worldLoc, float radius, float heightDir) {
         Spatial terrainSpatial = eso.getTarget().getSpatial();
         if (!(terrainSpatial instanceof Terrain)) {
             throw new IllegalStateException("terrainSpatial must be a Terrain object! eso=" + eso);

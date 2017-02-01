@@ -22,7 +22,7 @@ import name.huliqing.editor.edit.Mode;
 import name.huliqing.editor.edit.controls.ControlTile;
 import name.huliqing.editor.edit.scene.JfxSceneEdit;
 import name.huliqing.editor.edit.scene.JfxSceneEditListener;
-import name.huliqing.editor.edit.select.EntitySelectObj;
+import name.huliqing.editor.edit.select.EntityControlTile;
 import name.huliqing.editor.manager.ConverterManager;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.data.SceneData;
@@ -133,11 +133,11 @@ public class EntitiesPropertyConverter extends AbstractPropertyConverter<JfxScen
             ignoreSelectEvent = false;
             return;
         }
-        if (!(selectObj instanceof EntitySelectObj))
+        if (!(selectObj instanceof EntityControlTile))
             return;
         
         ignoreSelectEvent = true;
-        EntityData ed = ((EntitySelectObj)selectObj).getTarget().getData();
+        EntityData ed = ((EntityControlTile)selectObj).getTarget().getData();
         listView.getSelectionModel().select(ed);
         doUpdateEntityView(ed);
         ignoreSelectEvent = false;

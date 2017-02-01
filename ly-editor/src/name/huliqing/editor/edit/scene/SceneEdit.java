@@ -14,10 +14,10 @@ import java.util.List;
 import java.util.Map;
 import name.huliqing.editor.Editor;
 import name.huliqing.editor.edit.SimpleJmeEdit;
-import name.huliqing.editor.edit.select.EntitySelectObj;
+import name.huliqing.editor.edit.select.EntityControlTile;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.JmeEvent;
-import name.huliqing.editor.manager.SelectObjManager;
+import name.huliqing.editor.manager.ControlTileManager;
 import name.huliqing.editor.tools.base.MoveTool;
 import name.huliqing.editor.edit.UndoRedo;
 import name.huliqing.editor.toolbar.TerrainToolbar;
@@ -51,7 +51,7 @@ public class SceneEdit extends SimpleJmeEdit implements SceneListener {
     private Scene scene;
     private boolean sceneLoaded;
     
-    private final Map<EntityData, EntitySelectObj> objMap = new LinkedHashMap<EntityData, EntitySelectObj>();
+    private final Map<EntityData, EntityControlTile> objMap = new LinkedHashMap<EntityData, EntityControlTile>();
     
     private final JmeEvent delEvent = new JmeEvent("delete");
     private final JmeEvent duplicateEvent = new JmeEvent("duplicate");
@@ -74,10 +74,10 @@ public class SceneEdit extends SimpleJmeEdit implements SceneListener {
         // 删除操作事件
         delEvent.bindKey(KeyInput.KEY_X, true);
         delEvent.addListener((Event e) -> {
-            if (e.isMatch() && (selectObj instanceof EntitySelectObj)) {
+            if (e.isMatch() && (selectObj instanceof EntityControlTile)) {
                 Vector2f cursorPos = editor.getInputManager().getCursorPosition();
                 Jfx.runOnJfx(() -> {
-                    jfxEdit.showDeleteConfirm(cursorPos.x, editor.getCamera().getHeight() - cursorPos.y, (EntitySelectObj) selectObj);
+                    jfxEdit.showDeleteConfirm(cursorPos.x, editor.getCamera().getHeight() - cursorPos.y, (EntityControlTile) selectObj);
                 });
             }
         });
@@ -85,7 +85,7 @@ public class SceneEdit extends SimpleJmeEdit implements SceneListener {
         // 复制操作
         duplicateEvent.bindKey(KeyInput.KEY_D, true).bindKey(KeyInput.KEY_LSHIFT, true);
         duplicateEvent.addListener((Event e) -> {
-            if (e.isMatch() && (selectObj instanceof EntitySelectObj)) {
+            if (e.isMatch() && (selectObj instanceof EntityControlTile)) {
                 Entity entity = (Entity) selectObj.getTarget();
                 entity.updateDatas();
                 EntityData cloneData = entity.getData().clone();
@@ -165,7 +165,7 @@ public class SceneEdit extends SimpleJmeEdit implements SceneListener {
         List<Entity> entities = scene.getEntities();
         if (entities != null) {
             entities.stream().filter(t -> t != null).forEach(t -> {
-                EntitySelectObj eso = SelectObjManager.createEntityControlTile(t.getData().getTagName());
+                EntityControlTile eso = ControlTileManager.createEntityControlTile(t.getData().getTagName());
                 objMap.put(t.getData(), eso);
                 eso.setTarget(t);
                 addControlTile(eso);
@@ -181,7 +181,7 @@ public class SceneEdit extends SimpleJmeEdit implements SceneListener {
     public void onSceneEntityRemoved(Scene scene, Entity entityRemoved) {}
     
     public void setSelected(EntityData entityData) {
-        EntitySelectObj eso = objMap.get(entityData);
+        EntityControlTile eso = objMap.get(entityData);
         if (eso != null) {
             setSelected(eso);
         }
@@ -194,12 +194,13 @@ public class SceneEdit extends SimpleJmeEdit implements SceneListener {
     public void reloadEntity(EntityData entityData) {
         if (!sceneLoaded)
             return;
-        EntitySelectObj<Entity> eso = objMap.get(entityData);
+        EntityControlTile<Entity> eso = objMap.get(entityData);
         if (eso != null) {
             eso.getTarget().cleanup();
             eso.getTarget().setData(entityData);
             eso.getTarget().initialize();
             eso.getTarget().onInitScene(scene);
+            eso.updateState();
         }
     }
     
@@ -211,7 +212,7 @@ public class SceneEdit extends SimpleJmeEdit implements SceneListener {
         }
         Entity entity = Loader.load(ed);
         scene.addEntity(entity);
-        EntitySelectObj<Entity> eso = SelectObjManager.createEntityControlTile(ed.getTagName());
+        EntityControlTile<Entity> eso = ControlTileManager.createEntityControlTile(ed.getTagName());
         objMap.put(ed, eso);
         eso.setTarget(entity);
         addControlTile(eso);
@@ -237,7 +238,7 @@ public class SceneEdit extends SimpleJmeEdit implements SceneListener {
         }
         Entity entity = Loader.load(ed);
         scene.addEntity(entity);
-        EntitySelectObj<Entity> eso = SelectObjManager.createEntityControlTile(ed.getTagName());
+        EntityControlTile<Entity> eso = ControlTileManager.createEntityControlTile(ed.getTagName());
         objMap.put(ed, eso);
         eso.setTarget(entity);
         addControlTile(eso);
@@ -247,7 +248,7 @@ public class SceneEdit extends SimpleJmeEdit implements SceneListener {
     public boolean removeEntity(EntityData ed) {
         if (!sceneLoaded) 
             return false;
-        EntitySelectObj<Entity> eso = objMap.get(ed);
+        EntityControlTile<Entity> eso = objMap.get(ed);
         if (eso == null) {
             return false;
         }
@@ -260,8 +261,8 @@ public class SceneEdit extends SimpleJmeEdit implements SceneListener {
     }
 
     private class EntityAddedUndoRedo implements UndoRedo {
-        private final EntitySelectObj<Entity> eso;
-        public EntityAddedUndoRedo(EntitySelectObj eso) {
+        private final EntityControlTile<Entity> eso;
+        public EntityAddedUndoRedo(EntityControlTile eso) {
             this.eso = eso;
         }
         
@@ -285,9 +286,9 @@ public class SceneEdit extends SimpleJmeEdit implements SceneListener {
     
     private class EntityRemovedUndoRedo implements UndoRedo {
 
-        private final EntitySelectObj<Entity> eso;
+        private final EntityControlTile<Entity> eso;
         
-        public EntityRemovedUndoRedo(EntitySelectObj eso) {
+        public EntityRemovedUndoRedo(EntityControlTile eso) {
             this.eso = eso;
         }
         

@@ -40,7 +40,7 @@ import com.jme3.terrain.Terrain;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.editor.edit.UndoRedo;
-import name.huliqing.editor.edit.select.EntitySelectObj;
+import name.huliqing.editor.edit.select.EntityControlTile;
 
 /**
  *
@@ -48,7 +48,7 @@ import name.huliqing.editor.edit.select.EntitySelectObj;
  */
 public class SlopeTerrainToolAction extends AbstractTerrainToolAction implements UndoRedo {
 
-    private final EntitySelectObj selectObj;
+    private final EntityControlTile selectObj;
     private final Vector3f current;
     private final Vector3f point1;
     private final Vector3f point2;
@@ -59,7 +59,7 @@ public class SlopeTerrainToolAction extends AbstractTerrainToolAction implements
     private final boolean precise;
     private final boolean lock;
 
-    public SlopeTerrainToolAction(EntitySelectObj selectObj, Vector3f current, Vector3f point1, Vector3f point2
+    public SlopeTerrainToolAction(EntityControlTile selectObj, Vector3f current, Vector3f point1, Vector3f point2
             , float radius, float weight, boolean precise, boolean lock) {
         this.selectObj = selectObj;
         this.current = current.clone();

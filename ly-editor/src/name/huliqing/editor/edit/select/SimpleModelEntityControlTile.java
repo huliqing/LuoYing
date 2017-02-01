@@ -17,7 +17,7 @@ import name.huliqing.luoying.object.entity.Entity;
  * 否则物体将无法通过鼠标来选择。
  * @author huliqing
  */
-public class SimpleModelEntitySelectObj extends EntitySelectObj<Entity> {
+public class SimpleModelEntityControlTile extends EntityControlTile<Entity> {
 
     @Override
     public Spatial getControlSpatial() {

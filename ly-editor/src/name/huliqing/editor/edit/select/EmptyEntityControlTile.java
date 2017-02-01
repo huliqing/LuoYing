@@ -15,7 +15,7 @@ import name.huliqing.luoying.object.entity.Entity;
  * @author huliqing
  * @param <T>
  */
-public class EmptyEntitySelectObj <T extends Entity> extends EntitySelectObj<T> {
+public class EmptyEntityControlTile <T extends Entity> extends EntityControlTile<T> {
 
     @Override
     public Spatial getControlSpatial() {

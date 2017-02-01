@@ -11,7 +11,7 @@ import name.huliqing.luoying.data.EntityData;
  *
  * @author huliqing
  */
-public interface EntitySelectObjListener {
+public interface EntityControlTileListener {
     
     /**
      * 当属性变化时该方法被调用 

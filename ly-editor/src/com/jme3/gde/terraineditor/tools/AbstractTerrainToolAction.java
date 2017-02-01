@@ -34,11 +34,11 @@ package com.jme3.gde.terraineditor.tools;
 
 import com.jme3.scene.Spatial;
 import com.jme3.terrain.Terrain;
-import name.huliqing.editor.edit.select.EntitySelectObj;
+import name.huliqing.editor.edit.select.EntityControlTile;
 
 public abstract class AbstractTerrainToolAction {
     
-    protected Terrain getTerrain(EntitySelectObj eso) {
+    protected Terrain getTerrain(EntityControlTile eso) {
         Spatial terrainSpatial = eso.getTarget().getSpatial();
         if (!(terrainSpatial instanceof Terrain)) {
             throw new IllegalStateException("terrainSpatial must be a Terrain object! eso=" + eso);

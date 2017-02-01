@@ -31,7 +31,7 @@ import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.editor.edit.SimpleJmeEditListener;
 import name.huliqing.editor.edit.controls.ControlTile;
-import name.huliqing.editor.edit.select.EntitySelectObj;
+import name.huliqing.editor.edit.select.EntityControlTile;
 import name.huliqing.editor.manager.Manager;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.scene.SceneListener;
@@ -57,7 +57,7 @@ public class JfxSceneEdit extends JfxSimpleEdit<SceneEdit>
     // 用于显示删除按钮
     private final ContextMenu delPop = new ContextMenu();
     private final MenuItem delBtn = new MenuItem(Manager.getRes(ResConstants.POPUP_DELETE));
-    private EntitySelectObj<Entity> delTarget;
+    private EntityControlTile<Entity> delTarget;
     
     // 鼠标最近一次拖放到editPanel上的坐标位置
     private double lastDragXPos;
@@ -190,7 +190,7 @@ public class JfxSceneEdit extends JfxSimpleEdit<SceneEdit>
         });
     }
     
-    public EntitySelectObj getSelected() {
+    public ControlTile getSelected() {
         return jmeEdit.getSelected();
     }
     
@@ -242,7 +242,7 @@ public class JfxSceneEdit extends JfxSimpleEdit<SceneEdit>
         });
     }
     
-    public void showDeleteConfirm(float x, float y, EntitySelectObj entityObj) {
+    public void showDeleteConfirm(float x, float y, EntityControlTile entityObj) {
         delTarget = entityObj;
         delPop.show(editPanel, Side.TOP, x - delPop.getWidth() * 0.25, y + delPop.getHeight() * 0.25);
         Jfx.requestFocus(delPop);

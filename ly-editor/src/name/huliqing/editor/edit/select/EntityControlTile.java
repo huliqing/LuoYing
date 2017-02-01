@@ -15,9 +15,9 @@ import name.huliqing.luoying.object.entity.Entity;
  * @author huliqing
  * @param <T>
  */
-public abstract class EntitySelectObj<T extends Entity> extends ControlTile<T> {
+public abstract class EntityControlTile<T extends Entity> extends ControlTile<T> {
      
-    protected final List<EntitySelectObjListener> listeners = new ArrayList<EntitySelectObjListener>();
+    protected final List<EntityControlTileListener> listeners = new ArrayList<EntityControlTileListener>();
     
     @Override
     public T getTarget() {
@@ -29,13 +29,13 @@ public abstract class EntitySelectObj<T extends Entity> extends ControlTile<T> {
         super.setTarget(target); 
     }
 
-    public synchronized void addListener(EntitySelectObjListener listener) {
+    public synchronized void addListener(EntityControlTileListener listener) {
         if (!listeners.contains(listener)) {
             listeners.add(listener);
         }
     }
     
-    public synchronized boolean removeListener(EntitySelectObjListener listener) {
+    public synchronized boolean removeListener(EntityControlTileListener listener) {
         return listeners.remove(listener);
     }
     

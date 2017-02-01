@@ -17,7 +17,7 @@ import java.util.List;
 import name.huliqing.editor.constants.AssetConstants;
 import name.huliqing.editor.edit.SimpleJmeEdit;
 import name.huliqing.editor.edit.UndoRedo;
-import name.huliqing.editor.edit.select.EntitySelectObj;
+import name.huliqing.editor.edit.select.EntityControlTile;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.JmeEvent;
 import name.huliqing.editor.toolbar.TerrainToolbar;
@@ -117,7 +117,7 @@ public class LevelTool extends AbstractTerrainTool implements ToggleTool {
         if (radius <= 0 || weight == 0) 
             return;
         
-        EntitySelectObj terrain = getTerrainEntity();
+        EntityControlTile terrain = getTerrainEntity();
         if (terrain == null) 
             return;
         

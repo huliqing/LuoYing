@@ -39,12 +39,12 @@ import com.jme3.terrain.Terrain;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.editor.edit.UndoRedo;
-import name.huliqing.editor.edit.select.EntitySelectObj;
+import name.huliqing.editor.edit.select.EntityControlTile;
 
 
 public class SmoothTerrainToolAction extends AbstractTerrainToolAction implements UndoRedo {
     
-    private final EntitySelectObj selectObj;
+    private final EntityControlTile selectObj;
     private final Vector3f worldLoc;
     private final float radius;
     private final float weight;
@@ -52,7 +52,7 @@ public class SmoothTerrainToolAction extends AbstractTerrainToolAction implement
     List<Vector2f> undoLocs;
     List<Float> undoHeights;
 
-    public SmoothTerrainToolAction(EntitySelectObj selectObj, Vector3f markerLocation, float radius, float weight) {
+    public SmoothTerrainToolAction(EntityControlTile selectObj, Vector3f markerLocation, float radius, float weight) {
         this.selectObj = selectObj;
         this.worldLoc = markerLocation.clone();
         this.radius = radius;

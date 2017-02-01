@@ -51,12 +51,12 @@ import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.editor.edit.UndoRedo;
-import name.huliqing.editor.edit.select.EntitySelectObj;
+import name.huliqing.editor.edit.select.EntityControlTile;
 
 
 public class RoughTerrainToolAction extends AbstractTerrainToolAction implements UndoRedo {
     
-    private final EntitySelectObj selectObj;
+    private final EntityControlTile selectObj;
     private final Vector3f worldLoc;
     private final float radius;
     private final float weight;
@@ -65,7 +65,7 @@ public class RoughTerrainToolAction extends AbstractTerrainToolAction implements
     List<Vector2f> undoLocs;
     List<Float> undoHeights;
 
-    public RoughTerrainToolAction(EntitySelectObj selectObj, 
+    public RoughTerrainToolAction(EntityControlTile selectObj, 
             Vector3f markerLocation, float radius, float weight, RoughExtraToolParams params) {
         this.selectObj = selectObj;
         this.worldLoc = markerLocation.clone();

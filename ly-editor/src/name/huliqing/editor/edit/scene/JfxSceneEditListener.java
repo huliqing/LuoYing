@@ -7,7 +7,7 @@ package name.huliqing.editor.edit.scene;
 
 import name.huliqing.editor.edit.Mode;
 import name.huliqing.editor.edit.controls.ControlTile;
-import name.huliqing.editor.edit.select.EntitySelectObj;
+import name.huliqing.editor.edit.select.EntityControlTile;
 import name.huliqing.luoying.data.EntityData;
 
 /**

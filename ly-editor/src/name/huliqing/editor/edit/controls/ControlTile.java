@@ -61,6 +61,13 @@ public abstract class ControlTile<T> {
         initialized = false;
     }
     
+    /**
+     * 当ControlTile的目标对象发生变化时调用这个方法来更新ControlTile的状态。
+     */
+    public void updateState() {
+        // 由子类覆盖调用，更新状态
+    }
+    
     public final void setLocalTranslation(Vector3f location) {
         getControlSpatial().setLocalTranslation(location);
         onLocationUpdated(location);
