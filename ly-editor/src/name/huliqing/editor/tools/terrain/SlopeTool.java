@@ -8,16 +8,11 @@ package name.huliqing.editor.tools.terrain;
 import com.jme3.font.BitmapText;
 import com.jme3.gde.terraineditor.tools.SlopeExtraToolParams;
 import com.jme3.gde.terraineditor.tools.SlopeTerrainToolAction;
-import com.jme3.input.KeyInput;
-import com.jme3.input.controls.ActionListener;
-import com.jme3.input.controls.AnalogListener;
-import com.jme3.input.controls.KeyTrigger;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
-import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.BillboardControl;
@@ -28,9 +23,11 @@ import java.util.List;
 import name.huliqing.editor.constants.AssetConstants;
 import name.huliqing.editor.edit.SimpleJmeEdit;
 import name.huliqing.editor.edit.UndoRedo;
-import name.huliqing.editor.edit.select.EntityControlTile;
+import name.huliqing.editor.edit.controls.SpatialControlTile;
+import name.huliqing.editor.edit.controls.entity.EntityControlTile;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.JmeEvent;
+import name.huliqing.editor.tiles.AutoScaleControl;
 import name.huliqing.editor.toolbar.TerrainToolbar;
 import name.huliqing.editor.tools.NumberValueTool;
 import name.huliqing.editor.tools.ToggleTool;
@@ -38,7 +35,7 @@ import name.huliqing.editor.tools.ToggleTool;
 /**
  * @author huliqing
  */
-public class SlopeTool extends AbstractTerrainTool implements ToggleTool, ActionListener, AnalogListener{
+public class SlopeTool extends AbstractTerrainTool implements ToggleTool {
     
     private final static String EVENT_SLOPE = "slopeEvent";
     
@@ -53,10 +50,10 @@ public class SlopeTool extends AbstractTerrainTool implements ToggleTool, Action
     private final float toolModifyRate = 0.05f; // how frequently (in seconds) it should update to throttle down the tool effect
     private float lastModifyTime; // last time the tool executed
     
-    private Vector3f point1, point2;
-    private Geometry markerSecondary, markerThird, line;
+    private PointControlTile p1;
+    private PointControlTile p2;
+    private Geometry line;
     private BitmapText angleText;
-    private boolean ctrPressed = false;
 
     public SlopeTool(String name, String tips, String icon) {
         super(name, tips, icon);
@@ -72,64 +69,39 @@ public class SlopeTool extends AbstractTerrainTool implements ToggleTool, Action
         
         radiusTool = toolbar.getRadiusTool();
         weightTool = toolbar.getWeightTool();
-        
-        addMarkerSecondary(edit.getEditRoot());
-        addMarkerThird(edit.getEditRoot());
-        addLineAndText();
-        
-        editor.getInputManager().addMapping("slopeUp", new KeyTrigger(KeyInput.KEY_UP));
-        editor.getInputManager().addMapping("slopeDown", new KeyTrigger(KeyInput.KEY_DOWN));
-        editor.getInputManager().addMapping("ctr", new KeyTrigger(KeyInput.KEY_LCONTROL));
-        editor.getInputManager().addMapping("ctr", new KeyTrigger(KeyInput.KEY_RCONTROL));
-        editor.getInputManager().addMapping("clean", new KeyTrigger(KeyInput.KEY_C));
-        editor.getInputManager().addListener(this, new String[] {"slopeUp", "slopeDown", "ctr", "clean"});
+
+        if (p1 == null) {
+            p1 = new PointControlTile(createPointMesh(ColorRGBA.Red, new Vector3f()));
+        }
+        if (p2 == null) {
+            p2 = new PointControlTile(createPointMesh(ColorRGBA.Blue, new Vector3f(5, 5, 0)));
+        }
+        if (line == null) {
+            line = createLine();
+        }
+        if (angleText == null) {
+            angleText = createAngleText();
+        }
+        edit.addControlTile(p1);
+        edit.addControlTile(p2);
+        edit.getEditRoot().attachChild(line);
+        edit.getEditRoot().attachChild(angleText);
+        updateAngle();
     }
     
     @Override
     public void cleanup() {
-        editor.getInputManager().deleteMapping("slopeUp");
-        editor.getInputManager().deleteMapping("slopeDown");
-        editor.getInputManager().deleteMapping("ctr");
-        editor.getInputManager().deleteMapping("clean");
         if (modifying) {
             endSlope();
         }
         if (initialized) {
-            markerThird.removeFromParent();
+            p1.cleanup();
+            p2.cleanup();
             line.removeFromParent();
             angleText.removeFromParent();
             controlObj.removeFromParent();
         }
         super.cleanup(); 
-    }
-    
-    @Override
-    public void onAction(String name, boolean isPressed, float tpf) {
-        if (name.equals("ctr")) {
-            ctrPressed = isPressed;
-        } else if (name.equals("clean")) {
-            if (!isPressed) {
-                point1 = null;
-                point2 = null;
-                markerSecondary.removeFromParent();
-                markerThird.removeFromParent();
-                line.removeFromParent();
-                angleText.removeFromParent();
-            }
-        }
-    }
-
-    @Override
-    public void onAnalog(String name, float value, float tpf) {
-        if (name.equals("slopeUp")) {
-            markerThird.move(0f, 0.1f, 0f);
-            point2.set(markerThird.getLocalTranslation());
-            updateAngle();
-        } else if (name.equals("slopeDown")) {
-            markerThird.move(0f, -0.1f, 0f);
-            point2.set(markerThird.getLocalTranslation());
-            updateAngle();
-        }
     }
     
     public JmeEvent bindSlopeEvent() {
@@ -182,6 +154,8 @@ public class SlopeTool extends AbstractTerrainTool implements ToggleTool, Action
         if (terrain == null) 
             return;
         
+        Vector3f point1 = p1.getControlSpatial().getWorldTranslation();
+        Vector3f point2 = p2.getControlSpatial().getWorldTranslation();
         if (point1 != null && point2 != null && point1.distance(point2) > 0.01f) { // Preventing unexpected behavior, like destroying the terrain
             SlopeExtraToolParams params = new SlopeExtraToolParams();
             params.precision = false; // Snap on terrain editor
@@ -191,7 +165,6 @@ public class SlopeTool extends AbstractTerrainTool implements ToggleTool, Action
             action.doAction();
             actions.add(action);
         }
-        
     }
     
     private void endSlope() {
@@ -205,7 +178,7 @@ public class SlopeTool extends AbstractTerrainTool implements ToggleTool, Action
     }
     
     protected Geometry createMesh() {
-        Geometry marker = new Geometry("edit marker primary");
+        Geometry marker = new Geometry();
         marker.setMesh(new Sphere(8, 8, 1));
         Material mat = new Material(editor.getAssetManager(), AssetConstants.MATERIAL_UNSHADED);
         mat.getAdditionalRenderState().setWireframe(true);
@@ -215,54 +188,10 @@ public class SlopeTool extends AbstractTerrainTool implements ToggleTool, Action
         return marker;
     }
     
-     /**
-     * Create the secondary marker mesh, placed
-     * with the right mouse button.
-     * @param parent it will attach to
-     */
-    public void addMarkerSecondary(Node parent) {
-        if (markerSecondary == null) {
-            markerSecondary = new Geometry("edit marker secondary");
-            Mesh m2 = new Sphere(8, 8, 0.5f);
-            markerSecondary.setMesh(m2);
-            Material mat2 = new Material(editor.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
-            mat2.getAdditionalRenderState().setWireframe(false);
-            markerSecondary.setMaterial(mat2);
-            markerSecondary.setLocalTranslation(0,0,0);
-            mat2.setColor("Color", ColorRGBA.Red);
-        }
-        parent.attachChild(markerSecondary);
-    }
-    
-    private void addMarkerThird(Node parent) {
-        if (markerThird == null) {
-            markerThird = new Geometry("edit marker secondary");
-            Mesh m2 = new Sphere(8, 8, 0.5f);
-            markerThird.setMesh(m2);
-            Material mat2 = new Material(editor.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
-            mat2.getAdditionalRenderState().setWireframe(false);
-            markerThird.setMaterial(mat2);
-            markerThird.setLocalTranslation(0, 0, 0);
-            mat2.setColor("Color", ColorRGBA.Blue);
-        }
-        parent.attachChild(markerThird);
-    }
-    
-    private void addLineAndText() {
-        line = new Geometry("line", new Line(Vector3f.ZERO, Vector3f.ZERO));
-        Material m = new Material(editor.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
-        m.setColor("Color", ColorRGBA.White);
-        line.setMaterial(m);
-
-        angleText = new BitmapText(editor.getAssetManager().loadFont("Interface/Fonts/Default.fnt"));
-        BillboardControl control = new BillboardControl();
-        angleText.addControl(control);
-        angleText.setSize(0.5f);
-        angleText.setCullHint(Spatial.CullHint.Never);
-    }
-    
     private void updateAngle() {
         Vector3f temp, higher, lower;
+        Vector3f point2 = p2.getTarget().getWorldTranslation();
+        Vector3f point1 = p1.getTarget().getWorldTranslation();
         if (point2.y > point1.y) {
             temp = point2;
             higher = point2;
@@ -275,8 +204,7 @@ public class SlopeTool extends AbstractTerrainTool implements ToggleTool, Action
         temp = temp.clone().setY(lower.y);
 
         float angle = ((FastMath.asin(temp.distance(higher) / lower.distance(higher))) * FastMath.RAD_TO_DEG);
-
-        angleText.setText(angle + " degrees");
+        angleText.setText(angle + "");
         angleText.setLocalTranslation(new Vector3f().interpolateLocal(point1, point2, 0.5f));
 
         if (line.getParent() == null) {
@@ -284,6 +212,65 @@ public class SlopeTool extends AbstractTerrainTool implements ToggleTool, Action
             edit.getEditRoot().attachChild(angleText);
         }
         ((Line) line.getMesh()).updatePoints(point1, point2);
+    }
+    
+    private Geometry createLine() {
+        Geometry lineGeo = new Geometry("line", new Line(Vector3f.ZERO, Vector3f.ZERO));
+        Material m = new Material(editor.getAssetManager(), AssetConstants.MATERIAL_UNSHADED);
+        m.setColor("Color", ColorRGBA.White);
+        lineGeo.setMaterial(m);
+        return lineGeo;
+    }
+    
+    private BitmapText createAngleText() {
+        BitmapText label = new BitmapText(editor.getAssetManager().loadFont(AssetConstants.INTERFACE_FONTS_DEFAULT));
+        BillboardControl control = new BillboardControl();
+        label.addControl(control);
+        label.setSize(0.5f);
+        label.setCullHint(Spatial.CullHint.Never);
+        AutoScaleControl asc = new AutoScaleControl(0.03f);
+        label.addControl(asc);
+        return label;
+    }
+    
+    private Spatial createPointMesh(ColorRGBA color, Vector3f initLocation) {
+        Material mat = new Material(editor.getAssetManager(), AssetConstants.MATERIAL_UNSHADED);
+        mat.getAdditionalRenderState().setWireframe(true);
+        mat.setColor("Color", color);
+        
+        Geometry marker = new Geometry("Point");
+        marker.setMesh(new Sphere(8, 8, 1));
+        marker.setMaterial(mat);
+        AutoScaleControl asc = new AutoScaleControl(0.02f);
+        marker.addControl(asc);
+        marker.setLocalTranslation(initLocation);
+        return marker;
+    }
+    
+    private class PointControlTile extends SpatialControlTile {
+
+        public PointControlTile(Spatial target) {
+            this.target = target;
+        }
+        
+        @Override
+        public void initialize(Node parent) {
+            super.initialize(parent);
+            parent.attachChild(target);
+        }
+
+        @Override
+        public void cleanup() {
+            target.removeFromParent();
+            super.cleanup(); 
+        }
+        
+        @Override
+        protected void onLocationUpdated(Vector3f locaton) {
+            super.onLocationUpdated(locaton);
+            updateAngle();
+        }
+        
     }
 
     private class SlopeUndoRedo implements UndoRedo {

@@ -22,7 +22,7 @@ import name.huliqing.editor.edit.Mode;
 import name.huliqing.editor.edit.controls.ControlTile;
 import name.huliqing.editor.edit.scene.JfxSceneEdit;
 import name.huliqing.editor.edit.scene.JfxSceneEditListener;
-import name.huliqing.editor.edit.select.EntityControlTile;
+import name.huliqing.editor.edit.controls.entity.EntityControlTile;
 import name.huliqing.editor.manager.ConverterManager;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.data.SceneData;

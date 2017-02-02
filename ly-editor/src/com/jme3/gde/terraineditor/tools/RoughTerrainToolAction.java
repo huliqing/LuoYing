@@ -51,7 +51,7 @@ import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.editor.edit.UndoRedo;
-import name.huliqing.editor.edit.select.EntityControlTile;
+import name.huliqing.editor.edit.controls.entity.EntityControlTile;
 
 
 public class RoughTerrainToolAction extends AbstractTerrainToolAction implements UndoRedo {

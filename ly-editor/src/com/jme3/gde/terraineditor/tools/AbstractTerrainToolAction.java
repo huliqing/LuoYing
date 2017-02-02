@@ -34,7 +34,7 @@ package com.jme3.gde.terraineditor.tools;
 
 import com.jme3.scene.Spatial;
 import com.jme3.terrain.Terrain;
-import name.huliqing.editor.edit.select.EntityControlTile;
+import name.huliqing.editor.edit.controls.entity.EntityControlTile;
 
 public abstract class AbstractTerrainToolAction {
     

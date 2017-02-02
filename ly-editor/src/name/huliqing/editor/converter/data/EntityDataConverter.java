@@ -5,18 +5,17 @@
  */
 package name.huliqing.editor.converter.data;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.editor.converter.AbstractDataConverter;
 import name.huliqing.editor.edit.Mode;
 import name.huliqing.editor.edit.scene.JfxSceneEdit;
 import name.huliqing.editor.edit.scene.JfxSceneEditListener;
-import name.huliqing.editor.edit.select.EntityControlTile;
+import name.huliqing.editor.edit.controls.entity.EntityControlTile;
 import name.huliqing.fxswing.Jfx;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.editor.converter.PropertyConverter;
 import name.huliqing.editor.edit.controls.ControlTile;
-import name.huliqing.editor.edit.select.EntityControlTileListener;
+import name.huliqing.editor.edit.controls.entity.EntityControlTileListener;
 
 /**
  *
@@ -24,8 +23,7 @@ import name.huliqing.editor.edit.select.EntityControlTileListener;
  */
 public class EntityDataConverter extends AbstractDataConverter<JfxSceneEdit, EntityData> 
         implements JfxSceneEditListener<ControlTile>, EntityControlTileListener{
-
-    private static final Logger LOG = Logger.getLogger(EntityDataConverter.class.getName());
+//    private static final Logger LOG = Logger.getLogger(EntityDataConverter.class.getName());
 
     private EntityControlTile selectObj;
     
@@ -90,7 +88,7 @@ public class EntityDataConverter extends AbstractDataConverter<JfxSceneEdit, Ent
             PropertyConverter pc = propertyConverters.get(property);
             if (pc != null) {
                 pc.updateView(value);
-                LOG.log(Level.INFO, "onPropertyChanged, data={0}, property={1}, value={2}", new Object[] {data.getId(), property, value});
+//                LOG.log(Level.INFO, "onPropertyChanged, data={0}, property={1}, value={2}", new Object[] {data.getId(), property, value});
             }
         });
     }

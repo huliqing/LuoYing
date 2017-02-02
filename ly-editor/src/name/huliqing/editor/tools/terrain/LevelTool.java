@@ -17,7 +17,7 @@ import java.util.List;
 import name.huliqing.editor.constants.AssetConstants;
 import name.huliqing.editor.edit.SimpleJmeEdit;
 import name.huliqing.editor.edit.UndoRedo;
-import name.huliqing.editor.edit.select.EntityControlTile;
+import name.huliqing.editor.edit.controls.entity.EntityControlTile;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.JmeEvent;
 import name.huliqing.editor.toolbar.TerrainToolbar;

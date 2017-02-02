@@ -19,6 +19,7 @@ ok.旋转操作controlObj的线条太粗
 .地形刷功能
 .setWardIsoEnabled参数要增加
 .JmeEvent要支持Analog类型的事件
+.地形的笔刷球要保持大小
 
 
 .为PropertyConverter增加Validator功能

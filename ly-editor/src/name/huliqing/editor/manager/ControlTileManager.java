@@ -10,11 +10,11 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.editor.edit.controls.ControlTile;
-import name.huliqing.editor.edit.select.AdvanceWaterEntityControlTile;
-import name.huliqing.editor.edit.select.DirectionalLightEntityControlTile;
-import name.huliqing.editor.edit.select.EmptyEntityControlTile;
-import name.huliqing.editor.edit.select.EntityControlTile;
-import name.huliqing.editor.edit.select.SimpleModelEntityControlTile;
+import name.huliqing.editor.edit.controls.entity.AdvanceWaterEntityControlTile;
+import name.huliqing.editor.edit.controls.entity.DirectionalLightEntityControlTile;
+import name.huliqing.editor.edit.controls.entity.EmptyEntityControlTile;
+import name.huliqing.editor.edit.controls.entity.EntityControlTile;
+import name.huliqing.editor.edit.controls.entity.SimpleModelEntityControlTile;
 
 /**
  *

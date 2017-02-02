@@ -8,7 +8,7 @@ package name.huliqing.editor.tools.terrain;
 import com.jme3.gde.terraineditor.tools.RaiseTerrainToolAction;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Geometry;
-import name.huliqing.editor.edit.select.EntityControlTile;
+import name.huliqing.editor.edit.controls.entity.EntityControlTile;
 
 /**
  * 地形降低工具

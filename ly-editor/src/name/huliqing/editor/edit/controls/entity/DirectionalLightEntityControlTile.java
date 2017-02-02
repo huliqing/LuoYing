@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.edit.select;
+package name.huliqing.editor.edit.controls.entity;
 
 import com.jme3.material.Material;
 import com.jme3.material.RenderState;

@@ -53,7 +53,7 @@ public class AutoScaleControl extends AbstractControl {
         if (scale > 0) {
             spatial.setLocalScale(scale);
         }
-        lastCamLoc.set(camloc);
+        lastCamLoc.set(camloc);        
     }
 
     @Override

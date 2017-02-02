@@ -9,7 +9,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.terrain.Terrain;
 import name.huliqing.editor.edit.SimpleJmeEdit;
 import name.huliqing.editor.edit.controls.ControlTile;
-import name.huliqing.editor.edit.select.EntityControlTile;
+import name.huliqing.editor.edit.controls.entity.EntityControlTile;
 import name.huliqing.editor.toolbar.TerrainToolbar;
 import name.huliqing.editor.tools.EditTool;
 import name.huliqing.luoying.manager.PickManager;
