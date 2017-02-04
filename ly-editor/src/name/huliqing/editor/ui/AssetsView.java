@@ -223,7 +223,7 @@ public class AssetsView extends ScrollPane implements ConfigChangedListener {
     
     private void doDragDone(DragEvent e) {
         e.consume();
-        LOG.log(Level.INFO, "doDragDone.");
+//        LOG.log(Level.INFO, "doDragDone.");
     }
 
 }

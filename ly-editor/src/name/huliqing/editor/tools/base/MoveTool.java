@@ -20,16 +20,16 @@ import name.huliqing.editor.tiles.AxisNode;
 import name.huliqing.editor.tiles.LocationControlObj;
 import name.huliqing.editor.edit.UndoRedo;
 import name.huliqing.luoying.manager.PickManager;
-import name.huliqing.editor.edit.SimpleJmeEditListener;
 import name.huliqing.editor.edit.controls.ControlTile;
 import name.huliqing.editor.toolbar.EditToolbar;
 import name.huliqing.editor.tools.EditTool;
+import name.huliqing.editor.edit.SimpleEditListener;
 
 /**
  * 移动编辑工具
  * @author huliqing
  */
-public class MoveTool extends EditTool implements SimpleJmeEditListener{
+public class MoveTool extends EditTool implements SimpleEditListener{
 //    private static final Logger LOG = Logger.getLogger(MoveTool.class.getName());
     
     private final static String EVENT_MOVE = "moveEvent";
@@ -71,14 +71,14 @@ public class MoveTool extends EditTool implements SimpleJmeEditListener{
     public void initialize(SimpleJmeEdit jmeEdit, EditToolbar toolbar) {
         super.initialize(jmeEdit, toolbar);
         edit.getEditRoot().getParent().attachChild(controlObj);
-        edit.addSimpleEditListener(this);
+        edit.addListener(this);
         updateMarkerState();
     }
     
     @Override
     public void cleanup() {
         endMove();
-        edit.addSimpleEditListener(this);
+        edit.addListener(this);
         controlObj.removeFromParent();
         super.cleanup();
     }
@@ -287,7 +287,7 @@ public class MoveTool extends EditTool implements SimpleJmeEditListener{
     }
 
     @Override
-    public void onSelect(ControlTile selectObj) {
+    public void onSelected(ControlTile selectObj) {
         updateMarkerState();
     }
     

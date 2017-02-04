@@ -22,12 +22,11 @@ import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.JmeEvent;
 import name.huliqing.editor.toolbar.TerrainToolbar;
 import name.huliqing.editor.tools.NumberValueTool;
-import name.huliqing.editor.tools.ToggleTool;
 
 /**
  * @author huliqing
  */
-public class LevelTool extends AbstractTerrainTool implements ToggleTool {
+public class LevelTool extends AbstractTerrainTool {
     
     private final static String EVENT_LEVEL = "levelEvent";
     
@@ -148,7 +147,7 @@ public class LevelTool extends AbstractTerrainTool implements ToggleTool {
         actions.clear();
     }
     
-    protected Geometry createMesh() {
+    private Geometry createMesh() {
         Geometry marker = new Geometry("edit marker primary");
         marker.setMesh(new Sphere(8, 8, 1));
         Material mat = new Material(editor.getAssetManager(), AssetConstants.MATERIAL_UNSHADED);

@@ -46,7 +46,7 @@ import name.huliqing.editor.edit.controls.entity.EntityControlTile;
  *
  * @author Shirkit
  */
-public class SlopeTerrainToolAction extends AbstractTerrainToolAction implements UndoRedo {
+public class SlopeTerrainToolAction extends AbstractTerrainToolAction {
 
     private final EntityControlTile selectObj;
     private final Vector3f current;
@@ -70,32 +70,8 @@ public class SlopeTerrainToolAction extends AbstractTerrainToolAction implements
         this.precise = precise;
         this.lock = lock;
     }
-
-//    @Override
-//    protected Object doApplyTool(AbstractSceneExplorerNode rootNode) {
-//        Terrain terrain = getTerrain(rootNode.getLookup().lookup(Node.class));
-//        if (terrain == null)
-//            return null;
-//        Node terrainNode = getTerrainNode(rootNode.getLookup().lookup(Node.class));
-//        point1.subtractLocal(terrainNode.getWorldTranslation());
-//        point2.subtractLocal(terrainNode.getWorldTranslation());
-//        current.subtractLocal(terrainNode.getWorldTranslation());
-//        modifyHeight(terrain, point1, point2, current, radius, weight, precise, lock, mesh);
-//
-//        return terrain;
-//    }
-//
-//    @Override
-//    protected void doUndoTool(AbstractSceneExplorerNode rootNode, Object undoObject) {
-//        if (undoObject == null)
-//            return;
-//
-//        if (undoLocs == null || undoHeights == null)
-//            return;
-//
-//        resetHeight((Terrain) undoObject, undoLocs, undoHeights, precise);
-//    }
     
+    @Override
     public void doAction() {
         redo();
     }

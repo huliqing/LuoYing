@@ -19,16 +19,16 @@ import name.huliqing.editor.tiles.AxisNode;
 import name.huliqing.editor.tiles.ScaleControlObj;
 import name.huliqing.editor.edit.UndoRedo;
 import name.huliqing.luoying.manager.PickManager;
-import name.huliqing.editor.edit.SimpleJmeEditListener;
 import name.huliqing.editor.edit.controls.ControlTile;
 import name.huliqing.editor.toolbar.EditToolbar;
 import name.huliqing.editor.tools.EditTool;
+import name.huliqing.editor.edit.SimpleEditListener;
 
 /**
  * 缩放编辑工具
  * @author huliqing
  */
-public class ScaleTool extends EditTool implements SimpleJmeEditListener{
+public class ScaleTool extends EditTool implements SimpleEditListener{
 
 //    private static final Logger LOG = Logger.getLogger(ScaleTool.class.getName());
     
@@ -73,7 +73,7 @@ public class ScaleTool extends EditTool implements SimpleJmeEditListener{
     public void initialize(SimpleJmeEdit jmeEdit, EditToolbar toolbar) {
         super.initialize(jmeEdit, toolbar);
         edit.getEditRoot().getParent().attachChild(controlObj);
-        edit.addSimpleEditListener(this);
+        edit.addListener(this);
         updateMarkerState();
     }
 
@@ -81,7 +81,7 @@ public class ScaleTool extends EditTool implements SimpleJmeEditListener{
     public void cleanup() {
         endScale();
         controlObj.removeFromParent();
-        edit.removeEditFormListener(this);
+        edit.removeListener(this);
         super.cleanup(); 
     }
     
@@ -314,7 +314,7 @@ public class ScaleTool extends EditTool implements SimpleJmeEditListener{
     }
 
     @Override
-    public void onSelect(ControlTile selectObj) {
+    public void onSelected(ControlTile selectObj) {
         cancelScale(); // 如果选择的物体发生变化，则取消当前缩放
         updateMarkerState();
     }
@@ -322,6 +322,9 @@ public class ScaleTool extends EditTool implements SimpleJmeEditListener{
     private void updateMarkerState() {
         if (edit.getSelected() == null) {
             controlObj.setVisible(false);
+            return;
+        }
+        if (edit.getSelected().getControlSpatial() == null) {
             return;
         }
         controlObj.setVisible(true);

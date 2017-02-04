@@ -38,11 +38,10 @@ import com.jme3.scene.Spatial;
 import com.jme3.terrain.Terrain;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.editor.edit.UndoRedo;
 import name.huliqing.editor.edit.controls.entity.EntityControlTile;
 
 
-public class SmoothTerrainToolAction extends AbstractTerrainToolAction implements UndoRedo {
+public class SmoothTerrainToolAction extends AbstractTerrainToolAction {
     
     private final EntityControlTile selectObj;
     private final Vector3f worldLoc;
@@ -59,6 +58,7 @@ public class SmoothTerrainToolAction extends AbstractTerrainToolAction implement
         this.weight = weight;
     }
     
+    @Override
     public void doAction() {
         redo();
     }

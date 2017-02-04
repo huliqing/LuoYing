@@ -81,5 +81,11 @@ public class ResConstants {
     public final static String TOOL_TERRAIN_LEVEL_TIP = "tool.terrain.level.tip";
     public final static String TOOL_TERRAIN_SLOPE = "tool.terrain.slope";
     public final static String TOOL_TERRAIN_SLOPE_TIP = "tool.terrain.slope.tip";
+    public final static String TOOL_TERRAIN_PAINT = "tool.terrain.paint";
+    public final static String TOOL_TERRAIN_PAINT_TIP = "tool.terrain.paint.tip";
+    public final static String TOOL_TERRAIN_ERASE = "tool.terrain.erase";
+    public final static String TOOL_TERRAIN_ERASE_TIP = "tool.terrain.erase.tip";
+    public final static String TOOL_TERRAIN_TEXLAYER = "tool.terrain.texLayer";
+    public final static String TOOL_TERRAIN_TEXLAYER_TIP = "tool.terrain.texLayer.tip";
     
 }

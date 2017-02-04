@@ -12,13 +12,14 @@ import name.huliqing.editor.edit.controls.ControlTile;
 import name.huliqing.editor.edit.controls.entity.EntityControlTile;
 import name.huliqing.editor.toolbar.TerrainToolbar;
 import name.huliqing.editor.tools.EditTool;
+import name.huliqing.editor.tools.ToggleTool;
 import name.huliqing.luoying.manager.PickManager;
 
 /**
  * 地形工具的基类
  * @author huliqing
  */
-public abstract class AbstractTerrainTool extends EditTool<SimpleJmeEdit, TerrainToolbar> {
+public abstract class AbstractTerrainTool extends EditTool<SimpleJmeEdit, TerrainToolbar> implements ToggleTool {
 //    private static final Logger LOG = Logger.getLogger(AbstractTerrainTool.class.getName());
 
     public AbstractTerrainTool(String name, String tips, String icon) {

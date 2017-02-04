@@ -5,7 +5,6 @@
  */
 package name.huliqing.editor.tools.terrain;
 
-import com.jme3.gde.terraineditor.tools.RaiseTerrainToolAction;
 import com.jme3.gde.terraineditor.tools.RoughExtraToolParams;
 import com.jme3.gde.terraineditor.tools.RoughTerrainToolAction;
 import com.jme3.material.Material;
@@ -22,13 +21,12 @@ import name.huliqing.editor.edit.controls.entity.EntityControlTile;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.JmeEvent;
 import name.huliqing.editor.toolbar.TerrainToolbar;
-import name.huliqing.editor.tools.ToggleTool;
 
 /**
  *
  * @author huliqing
  */
-public class RoughTool extends AbstractTerrainTool implements ToggleTool {
+public class RoughTool extends AbstractTerrainTool {
     private final static String EVENT_ROUGH = "roughEvent";
 
     private Geometry controlObj;
@@ -129,7 +127,7 @@ public class RoughTool extends AbstractTerrainTool implements ToggleTool {
         actions.clear();
     }
     
-    protected Geometry createMesh() {
+    private Geometry createMesh() {
         Geometry marker = new Geometry("edit marker primary");
         marker.setMesh(new Sphere(8, 8, 1));
         Material mat = new Material(editor.getAssetManager(), AssetConstants.MATERIAL_UNSHADED);

@@ -21,7 +21,7 @@ import name.huliqing.editor.toolbar.Toolbar;
 public abstract class SimpleJmeEdit<T extends ControlTile> extends JmeAbstractEdit {
     
     // 侦听器
-    protected final List<SimpleJmeEditListener> editFormListeners = new ArrayList<SimpleJmeEditListener>();
+    protected final List<SimpleEditListener> editFormListeners = new ArrayList<SimpleEditListener>();
     
     // 变换模式
     protected Mode mode = Mode.GLOBAL;
@@ -66,7 +66,7 @@ public abstract class SimpleJmeEdit<T extends ControlTile> extends JmeAbstractEd
      */
     public void setSelected(T selectObj) {
         this.selectObj = selectObj;
-        editFormListeners.forEach(l -> {l.onSelect(selectObj);});
+        editFormListeners.forEach(l -> {l.onSelected(selectObj);});
     }
     
     /**
@@ -77,13 +77,13 @@ public abstract class SimpleJmeEdit<T extends ControlTile> extends JmeAbstractEd
         return editRoot;
     }
     
-    public void addSimpleEditListener(SimpleJmeEditListener listener) {
+    public void addListener(SimpleEditListener listener) {
         if (!editFormListeners.contains(listener)) {
             editFormListeners.add(listener);
         }
     }
     
-    public boolean removeEditFormListener(SimpleJmeEditListener listener) {
+    public boolean removeListener(SimpleEditListener listener) {
         return editFormListeners.remove(listener);
     }
     

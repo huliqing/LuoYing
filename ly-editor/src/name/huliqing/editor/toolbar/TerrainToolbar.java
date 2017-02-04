@@ -11,7 +11,6 @@ import name.huliqing.editor.constants.AssetConstants;
 import name.huliqing.editor.constants.ResConstants;
 import name.huliqing.editor.edit.Mode;
 import name.huliqing.editor.edit.SimpleJmeEdit;
-import name.huliqing.editor.edit.SimpleJmeEditListener;
 import name.huliqing.editor.edit.controls.ControlTile;
 import name.huliqing.editor.edit.controls.entity.EntityControlTile;
 import name.huliqing.editor.manager.Manager;
@@ -19,16 +18,20 @@ import name.huliqing.editor.tools.NumberValueTool;
 import name.huliqing.editor.tools.Tool;
 import name.huliqing.editor.tools.terrain.LevelTool;
 import name.huliqing.editor.tools.terrain.LowerTool;
+import name.huliqing.editor.tools.terrain.PaintTool;
 import name.huliqing.editor.tools.terrain.RaiseTool;
 import name.huliqing.editor.tools.terrain.RoughTool;
 import name.huliqing.editor.tools.terrain.SlopeTool;
 import name.huliqing.editor.tools.terrain.SmoothTool;
+import name.huliqing.editor.tools.terrain.TexLayerTool;
+import name.huliqing.editor.edit.SimpleEditListener;
+import name.huliqing.editor.tools.terrain.EraseTool;
 
 /**
  * 地形编辑工具栏
  * @author huliqing
  */
-public class TerrainToolbar extends EditToolbar<SimpleJmeEdit> implements SimpleJmeEditListener {
+public class TerrainToolbar extends EditToolbar<SimpleJmeEdit> implements SimpleEditListener {
 
 //    private static final Logger LOG = Logger.getLogger(TerrainToolbar.class.getName());
     
@@ -40,6 +43,9 @@ public class TerrainToolbar extends EditToolbar<SimpleJmeEdit> implements Simple
     private SmoothTool smoothTool;
     private LevelTool levelTool;
     private SlopeTool slopeTool;
+    private PaintTool paintTool;
+    private EraseTool eraseTool;
+    private TexLayerTool texLayerTool;
     
     public TerrainToolbar(SimpleJmeEdit edit) {
         super(edit);
@@ -66,7 +72,12 @@ public class TerrainToolbar extends EditToolbar<SimpleJmeEdit> implements Simple
         levelTool = new LevelTool(Manager.getRes(ResConstants.TOOL_TERRAIN_LEVEL), Manager.getRes(ResConstants.TOOL_TERRAIN_LEVEL_TIP)
                 , AssetConstants.INTERFACE_TOOL_TERRAIN_LEVEL); 
         slopeTool = new SlopeTool(Manager.getRes(ResConstants.TOOL_TERRAIN_SLOPE), Manager.getRes(ResConstants.TOOL_TERRAIN_SLOPE_TIP)
-                , AssetConstants.INTERFACE_TOOL_TERRAIN_SLOPE); 
+                , AssetConstants.INTERFACE_TOOL_TERRAIN_SLOPE);
+        paintTool = new PaintTool(Manager.getRes(ResConstants.TOOL_TERRAIN_PAINT), Manager.getRes(ResConstants.TOOL_TERRAIN_PAINT_TIP)
+                , AssetConstants.INTERFACE_TOOL_TERRAIN_PAINT); 
+        eraseTool = new EraseTool(Manager.getRes(ResConstants.TOOL_TERRAIN_ERASE), Manager.getRes(ResConstants.TOOL_TERRAIN_ERASE_TIP)
+                , AssetConstants.INTERFACE_TOOL_TERRAIN_ERASE);
+        texLayerTool = new TexLayerTool(Manager.getRes(ResConstants.TOOL_TERRAIN_TEXLAYER), Manager.getRes(ResConstants.TOOL_TERRAIN_TEXLAYER_TIP), null); 
 
         radiusTool.setMinValue(-10).setValue(1);
         weightTool.setMinValue(-10).setValue(1);
@@ -76,14 +87,18 @@ public class TerrainToolbar extends EditToolbar<SimpleJmeEdit> implements Simple
         smoothTool.bindSmoothEvent().bindButton(MouseInput.BUTTON_LEFT, true);
         levelTool.bindLevelEvent().bindButton(MouseInput.BUTTON_LEFT, true);
         slopeTool.bindSlopeEvent().bindButton(MouseInput.BUTTON_LEFT, true);
+        paintTool.bindPaintEvent().bindButton(MouseInput.BUTTON_LEFT, true);
+        eraseTool.bindEraseEvent().bindButton(MouseInput.BUTTON_LEFT, true);
         
-        Tool[] conflicts = new Tool[]{raiseTool, lowerTool, roughTool, smoothTool, levelTool, slopeTool};
+        Tool[] conflicts = new Tool[]{raiseTool, lowerTool, roughTool, smoothTool, levelTool, slopeTool, paintTool, eraseTool};
         addToggleMapping(new ToggleMappingEvent(-1, raiseTool, conflicts));
         addToggleMapping(new ToggleMappingEvent(-1, lowerTool, conflicts));
         addToggleMapping(new ToggleMappingEvent(-1, roughTool, conflicts));
         addToggleMapping(new ToggleMappingEvent(-1, smoothTool, conflicts));
         addToggleMapping(new ToggleMappingEvent(-1, levelTool, conflicts));
         addToggleMapping(new ToggleMappingEvent(-1, slopeTool, conflicts));
+        addToggleMapping(new ToggleMappingEvent(-1, paintTool, conflicts));
+        addToggleMapping(new ToggleMappingEvent(-1, eraseTool, conflicts));
         
         add(radiusTool);
         add(weightTool);
@@ -93,6 +108,9 @@ public class TerrainToolbar extends EditToolbar<SimpleJmeEdit> implements Simple
         add(smoothTool);
         add(levelTool);
         add(slopeTool);
+        add(paintTool);
+        add(eraseTool);
+        add(texLayerTool);
         
         setEnabled(radiusTool, true);
         setEnabled(weightTool, true);
@@ -102,17 +120,21 @@ public class TerrainToolbar extends EditToolbar<SimpleJmeEdit> implements Simple
         setEnabled(smoothTool, true);
         setEnabled(levelTool, true);
         setEnabled(slopeTool, true);
+        setEnabled(paintTool, true);
+        setEnabled(eraseTool, true);
+        setEnabled(texLayerTool, true);
         
         setActivated(radiusTool, true);
         setActivated(weightTool, true);
+        setActivated(texLayerTool, true);
         
         setEnabled(false);
-        edit.addSimpleEditListener(this);
+        edit.addListener(this);
     }
 
     @Override
     public void cleanup() {
-        edit.removeEditFormListener(this);
+        edit.removeListener(this);
         removeAll();
         clearToggleMappings();
         super.cleanup(); 
@@ -134,32 +156,28 @@ public class TerrainToolbar extends EditToolbar<SimpleJmeEdit> implements Simple
         return weightTool;
     }
 
-    public void setWeightTool(NumberValueTool weightTool) {
-        this.weightTool = weightTool;
-    }
-
     public RoughTool getRoughTool() {
         return roughTool;
-    }
-
-    public void setRoughTool(RoughTool roughTool) {
-        this.roughTool = roughTool;
     }
 
     public SmoothTool getSmoothTool() {
         return smoothTool;
     }
 
-    public void setSmoothTool(SmoothTool smoothTool) {
-        this.smoothTool = smoothTool;
-    }
-
     public LevelTool getLevelTool() {
         return levelTool;
     }
 
-    public void setLevelTool(LevelTool levelTool) {
-        this.levelTool = levelTool;
+    public SlopeTool getSlopeTool() {
+        return slopeTool;
+    }
+    
+    public PaintTool getPaintTool() {
+        return paintTool;
+    }
+    
+    public TexLayerTool getTexLayerTool() {
+        return texLayerTool;
     }
 
     @Override
@@ -168,7 +186,7 @@ public class TerrainToolbar extends EditToolbar<SimpleJmeEdit> implements Simple
     }
     
     @Override
-    public void onSelect(ControlTile selectObj) {
+    public void onSelected(ControlTile selectObj) {
         if (selectObj instanceof EntityControlTile) {
             if (((EntityControlTile) selectObj).getTarget().getSpatial() instanceof Terrain) {
                 setEnabled(true);

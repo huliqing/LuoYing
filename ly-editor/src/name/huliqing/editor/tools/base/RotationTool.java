@@ -17,16 +17,16 @@ import name.huliqing.editor.tiles.AxisNode;
 import name.huliqing.editor.tiles.RotationControlObj;
 import name.huliqing.editor.edit.UndoRedo;
 import name.huliqing.luoying.manager.PickManager;
-import name.huliqing.editor.edit.SimpleJmeEditListener;
 import name.huliqing.editor.edit.controls.ControlTile;
 import name.huliqing.editor.toolbar.EditToolbar;
 import name.huliqing.editor.tools.EditTool;
+import name.huliqing.editor.edit.SimpleEditListener;
 
 /**
  * 旋转编辑工具
  * @author huliqing
  */
-public class RotationTool extends EditTool implements SimpleJmeEditListener{
+public class RotationTool extends EditTool implements SimpleEditListener{
 //    private static final Logger LOG = Logger.getLogger(RotationTool.class.getName());
     
     private final static String EVENT_ROTATION = "rotationEvent";
@@ -72,7 +72,7 @@ public class RotationTool extends EditTool implements SimpleJmeEditListener{
     public void initialize(SimpleJmeEdit jmeEdit, EditToolbar toolbar) {
         super.initialize(jmeEdit, toolbar);
         edit.getEditRoot().getParent().attachChild(controlObj);
-        edit.addSimpleEditListener(this);
+        edit.addListener(this);
         updateMarkerState();
     }
 
@@ -80,7 +80,7 @@ public class RotationTool extends EditTool implements SimpleJmeEditListener{
     public void cleanup() {
         endRotation();
         controlObj.removeFromParent();
-        edit.removeEditFormListener(this);
+        edit.removeListener(this);
         super.cleanup(); 
     }
 
@@ -269,7 +269,7 @@ public class RotationTool extends EditTool implements SimpleJmeEditListener{
     }
 
     @Override
-    public void onSelect(ControlTile selectObj) {
+    public void onSelected(ControlTile selectObj) {
         updateMarkerState();
     }
 

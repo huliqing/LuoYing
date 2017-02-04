@@ -35,6 +35,10 @@ public class AssetConstants {
     public final static String INTERFACE_TOOL_TERRAIN_LEVEL = "Interface/tools/terrain/icon_terrain-level.png";
     /** 斜波工具 */
     public final static String INTERFACE_TOOL_TERRAIN_SLOPE = "Interface/tools/terrain/icon_terrain-slope.png";
+    /** 笔刷工具 */
+    public final static String INTERFACE_TOOL_TERRAIN_PAINT = "Interface/tools/terrain/icon_terrain-paint-circle.png";
+    /** 笔刷擦工具 */
+    public final static String INTERFACE_TOOL_TERRAIN_ERASE = "Interface/tools/terrain/icon_terrain-erase-circle.png";
     
     /** 太阳、灯光 */
     public final static String INTERFACE_ICON_SUN = "Interface/icon/sun.png";
@@ -44,4 +48,9 @@ public class AssetConstants {
     
     /** 材质：Unshaded.j3md */
     public final static String MATERIAL_UNSHADED = "Common/MatDefs/Misc/Unshaded.j3md";
+    
+    /** miss.png */
+    public final static String TEXTURES_MISS = "Textures/miss.png";
+    
+    
 }

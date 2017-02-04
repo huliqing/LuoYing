@@ -12,7 +12,7 @@ import name.huliqing.editor.edit.controls.ControlTile;
  * @author huliqing
  * @param <T>
  */
-public interface SimpleJmeEditListener<T extends ControlTile> {
+public interface SimpleEditListener<T extends ControlTile> {
     
     /**
      * 当编辑模式变化时该方法被调用
@@ -22,7 +22,7 @@ public interface SimpleJmeEditListener<T extends ControlTile> {
     
     /**
      * 当选择物体时该方法被调用，只要有发生“选择物体”的操作时，该方法将被调用，不管选择的物体是否发生变化。
-     * @param controlTile 被选择到的物体
+     * @param selected 被选择到的物体
      */
-    void onSelect(T controlTile);
+    void onSelected(T selected);
 }

@@ -32,7 +32,7 @@ public class LowerTool extends RaiseTool {
             return;
         
         RaiseTerrainToolAction action = new RaiseTerrainToolAction(terrain, controlObj.getWorldTranslation(), radius, -weight);
-        action.doRaise();
+        action.doAction();
         actions.add(action);
     }
 

@@ -80,6 +80,9 @@ public class AssetConstants {
     // Textures
     /** =========================================================================== */
     
+     /** 默认的地形基本贴图 */
+    public final static String TEXTURES_TERRAIN_DIRT = "LuoYing/Assets/Textures/dirt.jpg";
+    
     /** LuoYing/Assets/MatDefs/SimpleWater/normalMap.jpg */
     public final static String TEXTURE_SIMPLE_WATER_NORMAL = "LuoYing/Assets/MatDefs/SimpleWater/normalMap.jpg";
     

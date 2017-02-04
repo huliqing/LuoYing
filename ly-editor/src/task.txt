@@ -20,6 +20,7 @@ ok.旋转操作controlObj的线条太粗
 .setWardIsoEnabled参数要增加
 .JmeEvent要支持Analog类型的事件
 .地形的笔刷球要保持大小
+.slopeTool的定位球初始位置要调整一下
 
 
 .为PropertyConverter增加Validator功能

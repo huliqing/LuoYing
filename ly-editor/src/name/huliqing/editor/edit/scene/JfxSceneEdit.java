@@ -29,19 +29,19 @@ import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.data.SceneData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.scene.Scene;
-import name.huliqing.editor.edit.SimpleJmeEditListener;
 import name.huliqing.editor.edit.controls.ControlTile;
 import name.huliqing.editor.edit.controls.entity.EntityControlTile;
 import name.huliqing.editor.manager.Manager;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.scene.SceneListener;
+import name.huliqing.editor.edit.SimpleEditListener;
 
 /**
  * 场景编辑器
  * @author huliqing
  */
 public class JfxSceneEdit extends JfxSimpleEdit<SceneEdit> 
-        implements SimpleJmeEditListener<ControlTile>, SceneListener {
+        implements SimpleEditListener<ControlTile>, SceneListener {
 
     private static final Logger LOG = Logger.getLogger(JfxSceneEdit.class.getName());
 
@@ -65,7 +65,7 @@ public class JfxSceneEdit extends JfxSimpleEdit<SceneEdit>
     
     public JfxSceneEdit() {
         this.jmeEdit = new SceneEdit(this);
-        this.jmeEdit.addSimpleEditListener(this);
+        this.jmeEdit.addListener(this);
         
         delPop.getItems().addAll(delBtn);
         delBtn.setOnAction(e -> {
@@ -178,7 +178,7 @@ public class JfxSceneEdit extends JfxSimpleEdit<SceneEdit>
     }
 
     @Override
-    public void onSelect(ControlTile selectObj) {
+    public void onSelected(ControlTile selectObj) {
         if (selectObj == this.entitySelectObj) {
             return;
         }

@@ -9,7 +9,9 @@ import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.terrain.Terrain;
 import name.huliqing.luoying.object.entity.Entity;
 
 /**
@@ -22,6 +24,23 @@ public class SimpleModelEntityControlTile extends EntityControlTile<Entity> {
     @Override
     public Spatial getControlSpatial() {
         return target.getSpatial();
+    }
+
+    @Override
+    public void initialize(Node parent) {
+        super.initialize(parent); 
+        updateState();
+    }
+
+    @Override
+    public void updateState() {
+        super.updateState(); 
+        // 当选择的是地形的时候，,注意：地形在载入的时候需要重新设置材质，使用地形中的所有分块指定同一个材质实例，
+        // 否则指定刷到特定的材质上。
+        if (target.getSpatial() instanceof Terrain) {
+            Terrain terrain = (Terrain) target.getSpatial();
+            target.getSpatial().setMaterial(terrain.getMaterial());
+        }
     }
 
     @Override

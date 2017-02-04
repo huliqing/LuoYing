@@ -31,8 +31,6 @@
  */
 package com.jme3.gde.terraineditor.tools;
 
-//import com.jme3.gde.core.sceneexplorer.nodes.AbstractSceneExplorerNode;
-//import com.jme3.gde.terraineditor.ExtraToolParams;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
@@ -54,7 +52,7 @@ import name.huliqing.editor.edit.UndoRedo;
 import name.huliqing.editor.edit.controls.entity.EntityControlTile;
 
 
-public class RoughTerrainToolAction extends AbstractTerrainToolAction implements UndoRedo {
+public class RoughTerrainToolAction extends AbstractTerrainToolAction {
     
     private final EntityControlTile selectObj;
     private final Vector3f worldLoc;
@@ -74,6 +72,7 @@ public class RoughTerrainToolAction extends AbstractTerrainToolAction implements
         this.params = params;
     }
     
+    @Override
     public void doAction() {
         redo();
     }

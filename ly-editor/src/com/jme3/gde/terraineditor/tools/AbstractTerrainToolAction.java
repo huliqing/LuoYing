@@ -34,10 +34,16 @@ package com.jme3.gde.terraineditor.tools;
 
 import com.jme3.scene.Spatial;
 import com.jme3.terrain.Terrain;
+import name.huliqing.editor.edit.UndoRedo;
 import name.huliqing.editor.edit.controls.entity.EntityControlTile;
 
-public abstract class AbstractTerrainToolAction {
+public abstract class AbstractTerrainToolAction implements UndoRedo {
     
+    /**
+     * 从EntityControlTile中获取Terrain，如果不是Terrain类型的Entity,则返回null.
+     * @param eso
+     * @return 
+     */
     protected Terrain getTerrain(EntityControlTile eso) {
         Spatial terrainSpatial = eso.getTarget().getSpatial();
         if (!(terrainSpatial instanceof Terrain)) {
@@ -47,38 +53,8 @@ public abstract class AbstractTerrainToolAction {
         return terrain;
     }
     
-    // remove20170131
-//    protected void modifyHeight(Terrain terrain, Vector3f worldLoc, float radius, float heightDir) {
-//
-//        int radiusStepsX = (int) (radius / ((Node)terrain).getWorldScale().x);
-//        int radiusStepsZ = (int) (radius / ((Node)terrain).getWorldScale().z);
-//
-//        float xStepAmount = ((Node)terrain).getWorldScale().x;
-//        float zStepAmount = ((Node)terrain).getWorldScale().z;
-//
-//        List<Vector2f> locs = new ArrayList<Vector2f>();
-//        List<Float> heights = new ArrayList<Float>();
-//        
-//        for (int z=-radiusStepsZ; z<radiusStepsZ; z++) {
-//            for (int x=-radiusStepsX; x<radiusStepsX; x++) {
-//
-//                float locX = worldLoc.x + (x*xStepAmount);
-//                float locZ = worldLoc.z + (z*zStepAmount);
-//
-//                // see if it is in the radius of the tool
-//                if (ToolUtils.isInRadius(locX-worldLoc.x,locZ-worldLoc.z,radius)) {
-//                    // adjust height based on radius of the tool
-//                    float h = ToolUtils.calculateHeight(radius, heightDir, locX-worldLoc.x, locZ-worldLoc.z);
-//                    // increase the height
-//                    locs.add(new Vector2f(locX, locZ));
-//                    heights.add(h);
-//                }
-//            }
-//        }
-//
-//        // do the actual height adjustment
-//        terrain.adjustHeight(locs, heights);
-//
-//        ((Node)terrain).updateModelBound(); // or else we won't collide with it where we just edited
-//    }
+    /**
+     * 执行工具行为
+     */
+    public abstract void doAction();
 }

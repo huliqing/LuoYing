@@ -22,6 +22,7 @@ import name.huliqing.editor.tools.base.ScaleTool;
 import name.huliqing.editor.tools.Tool;
 import name.huliqing.editor.tools.terrain.LowerTool;
 import name.huliqing.editor.tools.terrain.RaiseTool;
+import name.huliqing.editor.tools.terrain.TexLayerTool;
 
 /**
  *
@@ -55,11 +56,8 @@ public class JfxToolFactory {
         
         // ----地形工具
         
-        // 地形上升工具
-        TOOL_MAPPING.put(RaiseTool.class, JfxToggleTool.class);
-        
-        // 地形降低工具
-        TOOL_MAPPING.put(LowerTool.class, JfxToggleTool.class);
+        // 地形贴图图层工具
+        TOOL_MAPPING.put(TexLayerTool.class, JfxTerrainTexLayerTool.class);
     }
     
     public final static JfxTool createJfxTool(Tool tool, Toolbar toolbar) {

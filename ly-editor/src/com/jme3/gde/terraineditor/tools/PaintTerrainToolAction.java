@@ -36,10 +36,14 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import com.jme3.terrain.Terrain;
 import com.jme3.texture.Image;
 import com.jme3.texture.Texture;
 import java.nio.ByteBuffer;
+import java.util.logging.Logger;
+import name.huliqing.editor.edit.UndoRedo;
+import name.huliqing.editor.edit.controls.entity.EntityControlTile;
 
 /**
  * Paint or erase the texture at the specified location.
@@ -47,7 +51,12 @@ import java.nio.ByteBuffer;
  * @author Brent Owens
  */
 public class PaintTerrainToolAction extends AbstractTerrainToolAction {
+
+    private static final Logger LOG = Logger.getLogger(PaintTerrainToolAction.class.getName());
     
+    // 注：undo和redo的对象必须始终是EntitySelectObj，因为EntitySelectObj中Object等参数是可能发生变化的,
+    // 也就是其中的TerrainEntity中的Terrain对象可能是发生变化的.
+    private EntityControlTile selectObj;
     private Vector3f worldLoc;
     private float radius;
     private float weight;
@@ -55,29 +64,42 @@ public class PaintTerrainToolAction extends AbstractTerrainToolAction {
     
     public PaintTerrainToolAction() {}
     
-    public PaintTerrainToolAction(Vector3f markerLocation, float radius, float weight, int selectedTextureIndex) {
+    public PaintTerrainToolAction(EntityControlTile terrain, Vector3f markerLocation, float radius, float weight, int selectedTextureIndex) {
+        this.selectObj = terrain;
         this.worldLoc = markerLocation.clone();
         this.radius = radius;
         this.weight = weight;
         this.selectedTextureIndex = selectedTextureIndex;
     }
     
-//    protected Object doApplyTool(AbstractSceneExplorerNode rootNode) {
-//        Terrain terrain = getTerrain(rootNode.getLookup().lookup(Node.class));
-//        if (terrain == null)
-//            return null;
-//        Node terrainNode = getTerrainNode(rootNode.getLookup().lookup(Node.class));
-//        worldLoc.subtractLocal(terrainNode.getWorldTranslation());
-//        paintTexture(terrain, worldLoc, radius, weight, selectedTextureIndex);
-//        return terrain;
-//    }
-//    
-//    @Override
-//    protected void doUndoTool(AbstractSceneExplorerNode rootNode, Object undoObject) {
-//        if (undoObject == null)
-//            return;
-//        paintTexture((Terrain)undoObject, worldLoc, radius, -weight, selectedTextureIndex);
-//    }
+    @Override
+    public void doAction() {
+        redo();
+    }
+    
+    @Override
+    public void undo() {
+        // 消除地形的位置和旋转导致的偏移,但是不消除缩放,这们允许地形在缩放、旋转和移动后进行编辑。
+        // 否则地形不能旋转和移动
+        Terrain terrain = getTerrain(selectObj);
+        Spatial terrainSpaitla = (Spatial) terrain;
+        
+        Vector3f trueLocation = worldLoc.subtract(terrainSpaitla.getWorldTranslation());
+        terrainSpaitla.getWorldRotation().inverse().mult(trueLocation, trueLocation);
+        
+        paintTexture(terrain, trueLocation, radius, -weight, selectedTextureIndex);
+    }
+    
+    @Override
+    public void redo() {
+        Terrain terrain = getTerrain(selectObj);
+        Spatial terrainSpaitla = (Spatial) terrain;
+        
+        Vector3f trueLocation = worldLoc.subtract(terrainSpaitla.getWorldTranslation());
+        terrainSpaitla.getWorldRotation().inverse().mult(trueLocation, trueLocation);
+        
+        paintTexture(terrain, trueLocation, radius, weight, selectedTextureIndex);
+    }
     
     public void paintTexture(Terrain terrain, Vector3f markerLocation, float toolRadius, float toolWeight, int selectedTextureIndex) {
         if (selectedTextureIndex < 0 || markerLocation == null)
@@ -101,7 +123,7 @@ public class PaintTerrainToolAction extends AbstractTerrainToolAction {
         tex.getImage().setUpdateNeeded();
     }
     
-    public Vector2f getPointPercentagePosition(Terrain terrain, Vector3f worldLoc) {
+    private Vector2f getPointPercentagePosition(Terrain terrain, Vector3f worldLoc) {
         Vector2f uv = new Vector2f(worldLoc.x,-worldLoc.z);
         float scale = ((Node)terrain).getWorldScale().x;
 
@@ -151,7 +173,7 @@ public class PaintTerrainToolAction extends AbstractTerrainToolAction {
      * @param erase true if the tool should remove the paint instead of add it
      * @param fadeFalloff the percentage of the radius when the paint begins to start fading
      */
-    protected void doPaintAction(int texIndex, Image image, Vector2f uv, boolean dragged, float radius, boolean erase, float fadeFalloff){
+    private void doPaintAction(int texIndex, Image image, Vector2f uv, boolean dragged, float radius, boolean erase, float fadeFalloff){
         Vector2f texuv = new Vector2f();
         ColorRGBA color = ColorRGBA.Black;
         

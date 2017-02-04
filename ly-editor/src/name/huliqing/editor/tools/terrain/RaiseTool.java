@@ -21,13 +21,12 @@ import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.JmeEvent;
 import name.huliqing.editor.toolbar.TerrainToolbar;
 import name.huliqing.editor.tools.NumberValueTool;
-import name.huliqing.editor.tools.ToggleTool;
 
 /**
  * 地形上升工具
  * @author huliqing
  */
-public class RaiseTool extends AbstractTerrainTool implements ToggleTool {
+public class RaiseTool extends AbstractTerrainTool {
     
     private final static String EVENT_RAISE = "raiseEvent";
     
@@ -120,7 +119,7 @@ public class RaiseTool extends AbstractTerrainTool implements ToggleTool {
             return;
         
         RaiseTerrainToolAction action = new RaiseTerrainToolAction(terrain, controlObj.getWorldTranslation(), radius, weight);
-        action.doRaise();
+        action.doAction();
         actions.add(action);
     }
     

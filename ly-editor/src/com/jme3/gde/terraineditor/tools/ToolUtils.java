@@ -44,7 +44,7 @@ public class ToolUtils {
      * See if the X,Y coordinate is in the radius of the circle. It is assumed
      * that the "grid" being tested is located at 0,0 and its dimensions are 2*radius.
      * @param x
-     * @param z
+     * @param y
      * @param radius
      * @return
      */

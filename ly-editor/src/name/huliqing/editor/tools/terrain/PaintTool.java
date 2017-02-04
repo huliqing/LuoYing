@@ -5,7 +5,7 @@
  */
 package name.huliqing.editor.tools.terrain;
 
-import com.jme3.gde.terraineditor.tools.SmoothTerrainToolAction;
+import com.jme3.gde.terraineditor.tools.PaintTerrainToolAction;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
@@ -21,27 +21,38 @@ import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.JmeEvent;
 import name.huliqing.editor.toolbar.TerrainToolbar;
 import name.huliqing.editor.tools.NumberValueTool;
+import name.huliqing.editor.utils.TerrainUtils;
 
 /**
- * 地形平滑工具
+ * 刷图工具,注意：地形在载入的时候需要重新设置材质，使用地形中的所有分块指定同一个材质实例，否则指定刷到特定的材质上。
+ * 参考以下代码：
+ * <code>
+ * <pre>
+ * if (target.getSpatial() instanceof Terrain) {
+ *      Terrain terrain = (Terrain) target.getSpatial();
+ *      target.getSpatial().setMaterial(terrain.getMaterial());
+ * }
+ * </pre>
+ * </code>
  * @author huliqing
  */
-public class SmoothTool extends AbstractTerrainTool {
+public class PaintTool extends AbstractTerrainTool {
     
-    private final static String EVENT_SMOOTH = "smoothEvent";
+    private final static String EVENT_PAINT = "paintEvent";
     
     protected Geometry controlObj;
     protected NumberValueTool radiusTool;
     protected NumberValueTool weightTool;
+    protected TexLayerTool texLayerTool;
     
-    protected final List<SmoothTerrainToolAction> actions = new ArrayList<SmoothTerrainToolAction>();
+    protected final List<PaintTerrainToolAction> actions = new ArrayList<PaintTerrainToolAction>();
     
     private boolean modifying;
     private float lastRadiusUsed = 1.0f;
     private final float toolModifyRate = 0.05f; // how frequently (in seconds) it should update to throttle down the tool effect
     private float lastModifyTime; // last time the tool executed
 
-    public SmoothTool(String name, String tips, String icon) {
+    public PaintTool(String name, String tips, String icon) {
         super(name, tips, icon);
     }
 
@@ -55,12 +66,14 @@ public class SmoothTool extends AbstractTerrainTool {
         
         radiusTool = toolbar.getRadiusTool();
         weightTool = toolbar.getWeightTool();
+        texLayerTool = toolbar.getTexLayerTool();
+        
     }
     
     @Override
     public void cleanup() {
         if (modifying) {
-            endSmooth();
+            endPaint();
         }
         if (controlObj != null) {
             controlObj.removeFromParent();
@@ -68,21 +81,21 @@ public class SmoothTool extends AbstractTerrainTool {
         super.cleanup(); 
     }
     
-    public JmeEvent bindSmoothEvent() {
-        return this.bindEvent(EVENT_SMOOTH);
+    public JmeEvent bindPaintEvent() {
+        return this.bindEvent(EVENT_PAINT);
     }
     
     @Override
     protected void onToolEvent(Event e) {
-        if (e.getName().equals(EVENT_SMOOTH)) {
+        if (e.getName().equals(EVENT_PAINT)) {
             if (e.isMatch()) {
                 modifying = true;
                 lastModifyTime = 0;
-                doSmooth();
+                doPaint();
                 e.setConsumed(true);
             } else {
                 modifying = false;
-                endSmooth();
+                endPaint();
             }
         }
     }
@@ -103,33 +116,37 @@ public class SmoothTool extends AbstractTerrainTool {
             lastModifyTime += tpf;
             if (lastModifyTime >= toolModifyRate) {
                 lastModifyTime = 0;
-                doSmooth();
+                doPaint();
             }
         }
     }
     
-    private void doSmooth() {
+    private void doPaint() {
         float radius = radiusTool.getValue().floatValue();
         float weight = weightTool.getValue().floatValue();
-        if (radius <= 0 || weight == 0) 
+        int textureIndex = texLayerTool.getSelectLayerIndex();
+        if (radius <= 0 || weight == 0 || textureIndex < 0 || textureIndex >= TerrainUtils.MAX_TEXTURES)
             return;
         
         EntityControlTile terrain = getTerrainEntity();
         if (terrain == null) 
             return;
         
-        SmoothTerrainToolAction action = new SmoothTerrainToolAction(terrain, controlObj.getWorldTranslation(), radius, weight);
+        PaintTerrainToolAction action = new PaintTerrainToolAction(terrain, controlObj.getWorldTranslation()
+                , radius, weight, textureIndex);
         action.doAction();
         actions.add(action);
+        
+//        toolbar.getTexLayerTool().doSaveAlphaImages();
     }
     
-    private void endSmooth() {
+    private void endPaint() {
         if (actions.isEmpty()) {
             return;
         }
         // record undo action
-        List<SmoothTerrainToolAction> actionList = new ArrayList<SmoothTerrainToolAction>(actions);
-        edit.addUndoRedo(new SmoothUndoRedo(actionList));
+        List<PaintTerrainToolAction> actionList = new ArrayList<PaintTerrainToolAction>(actions);
+        edit.addUndoRedo(new PaintUndoRedo(actionList));
         actions.clear();
     }
     
@@ -144,18 +161,18 @@ public class SmoothTool extends AbstractTerrainTool {
         return marker;
     }
 
-    private class SmoothUndoRedo implements UndoRedo {
+    private class PaintUndoRedo implements UndoRedo {
         
-        private final List<SmoothTerrainToolAction> actionList;
+        private final List<PaintTerrainToolAction> actionList;
         
-        public SmoothUndoRedo(List<SmoothTerrainToolAction> actionList) {
+        public PaintUndoRedo(List<PaintTerrainToolAction> actionList) {
             this.actionList = actionList;
         }
         
         @Override
         public void undo() {
             for (int i = actionList.size() - 1; i >= 0; i--) {
-                SmoothTerrainToolAction action = actionList.get(i);
+                PaintTerrainToolAction action = actionList.get(i);
                 action.undo();
             }
         }
@@ -163,7 +180,7 @@ public class SmoothTool extends AbstractTerrainTool {
         @Override
         public void redo() {
             for (int i = 0; i < actionList.size(); i++) {
-                SmoothTerrainToolAction action = actionList.get(i);
+                PaintTerrainToolAction action = actionList.get(i);
                 action.redo();
             }
         }

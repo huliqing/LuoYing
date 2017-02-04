@@ -40,7 +40,6 @@ import com.jme3.scene.Spatial;
 import com.jme3.terrain.Terrain;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.editor.edit.UndoRedo;
 import name.huliqing.editor.edit.controls.entity.EntityControlTile;
 
 /**
@@ -51,7 +50,7 @@ import name.huliqing.editor.edit.controls.entity.EntityControlTile;
  * 
  * @author Brent Owens
  */
-public class LevelTerrainToolAction extends AbstractTerrainToolAction implements UndoRedo {
+public class LevelTerrainToolAction extends AbstractTerrainToolAction {
     
     // 注：undo和redo的对象必须始终是EntitySelectObj，因为EntitySelectObj中Object等参数是可能发生变化的,
     // 也就是其中的TerrainEntity中的Terrain对象可能是发生变化的.
@@ -75,6 +74,7 @@ public class LevelTerrainToolAction extends AbstractTerrainToolAction implements
         this.precision = precision;
     }
     
+    @Override
     public void doAction() {
         redo();
     }

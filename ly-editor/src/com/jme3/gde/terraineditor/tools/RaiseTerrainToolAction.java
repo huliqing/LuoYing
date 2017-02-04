@@ -45,7 +45,7 @@ import name.huliqing.editor.edit.controls.entity.EntityControlTile;
 /**
  * 升高地形
  */
-public class RaiseTerrainToolAction extends AbstractTerrainToolAction implements UndoRedo {
+public class RaiseTerrainToolAction extends AbstractTerrainToolAction {
 
     // 注：undo和redo的对象必须始终是EntitySelectObj，因为EntitySelectObj中Object等参数是可能发生变化的,
     // 也就是其中的TerrainEntity中的Terrain对象可能是发生变化的.
@@ -61,8 +61,9 @@ public class RaiseTerrainToolAction extends AbstractTerrainToolAction implements
         this.height = height;
     }
     
-    public void doRaise() {
-        this.modifyHeight(selectObj, worldLoc, radius, height);
+    @Override
+    public void doAction() {
+        redo();
     }
 
     @Override
