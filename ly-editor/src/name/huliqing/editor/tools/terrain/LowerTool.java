@@ -5,9 +5,9 @@
  */
 package name.huliqing.editor.tools.terrain;
 
+import com.jme3.gde.terraineditor.tools.AbstractTerrainToolAction;
 import com.jme3.gde.terraineditor.tools.RaiseTerrainToolAction;
-import com.jme3.math.ColorRGBA;
-import com.jme3.scene.Geometry;
+import com.jme3.math.Vector3f;
 import name.huliqing.editor.edit.controls.entity.EntityControlTile;
 
 /**
@@ -21,27 +21,33 @@ public class LowerTool extends RaiseTool {
     }
 
     @Override
-    protected void doRaise() {
-        float radius = radiusTool.getValue().floatValue();
-        float weight = weightTool.getValue().floatValue();
-        if (radius <= 0 || weight == 0) 
-            return;
-        
-        EntityControlTile terrain = getTerrainEntity();
-        if (terrain == null) 
-            return;
-        
-        RaiseTerrainToolAction action = new RaiseTerrainToolAction(terrain, controlObj.getWorldTranslation(), radius, -weight);
-        action.doAction();
-        actions.add(action);
+    protected AbstractTerrainToolAction createAction(float radius, float weight, Vector3f markerWorldLoc, EntityControlTile terrain) {
+         RaiseTerrainToolAction action = new RaiseTerrainToolAction(terrain, markerWorldLoc, radius, -weight);
+         return action;
     }
 
-    @Override
-    protected Geometry createMesh() {
-        Geometry geo = super.createMesh(); 
-        geo.getMaterial().setColor("Color", ColorRGBA.Red);
-        return geo;
-    }
+//    @Override
+//    protected void doRaise() {
+//        float radius = radiusTool.getValue().floatValue();
+//        float weight = weightTool.getValue().floatValue();
+//        if (radius <= 0 || weight == 0) 
+//            return;
+//        
+//        EntityControlTile terrain = getTerrainEntity();
+//        if (terrain == null) 
+//            return;
+//        
+//        RaiseTerrainToolAction action = new RaiseTerrainToolAction(terrain, controlObj.getWorldTranslation(), radius, -weight);
+//        action.doAction();
+//        actions.add(action);
+//    }
+
+//    @Override
+//    protected Geometry createMesh() {
+//        Geometry geo = super.createMesh(); 
+//        geo.getMaterial().setColor("Color", ColorRGBA.Red);
+//        return geo;
+//    }
 
     
 }

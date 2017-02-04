@@ -6,6 +6,7 @@
 package name.huliqing.editor.tools.terrain;
 
 import com.jme3.font.BitmapText;
+import com.jme3.gde.terraineditor.tools.AbstractTerrainToolAction;
 import com.jme3.gde.terraineditor.tools.SlopeExtraToolParams;
 import com.jme3.gde.terraineditor.tools.SlopeTerrainToolAction;
 import com.jme3.material.Material;
@@ -18,36 +19,17 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.control.BillboardControl;
 import com.jme3.scene.shape.Line;
 import com.jme3.scene.shape.Sphere;
-import java.util.ArrayList;
-import java.util.List;
 import name.huliqing.editor.constants.AssetConstants;
 import name.huliqing.editor.edit.SimpleJmeEdit;
-import name.huliqing.editor.edit.UndoRedo;
 import name.huliqing.editor.edit.controls.SpatialControlTile;
 import name.huliqing.editor.edit.controls.entity.EntityControlTile;
-import name.huliqing.editor.events.Event;
-import name.huliqing.editor.events.JmeEvent;
 import name.huliqing.editor.tiles.AutoScaleControl;
 import name.huliqing.editor.toolbar.TerrainToolbar;
-import name.huliqing.editor.tools.NumberValueTool;
 
 /**
  * @author huliqing
  */
 public class SlopeTool extends AbstractTerrainTool {
-    
-    private final static String EVENT_SLOPE = "slopeEvent";
-    
-    protected Geometry controlObj;
-    protected NumberValueTool radiusTool;
-    protected NumberValueTool weightTool;
-    
-    protected final List<SlopeTerrainToolAction> actions = new ArrayList<SlopeTerrainToolAction>();
-    
-    private boolean modifying;
-    private float lastRadiusUsed = 1.0f;
-    private final float toolModifyRate = 0.05f; // how frequently (in seconds) it should update to throttle down the tool effect
-    private float lastModifyTime; // last time the tool executed
     
     private PointControlTile p1;
     private PointControlTile p2;
@@ -61,14 +43,6 @@ public class SlopeTool extends AbstractTerrainTool {
     @Override
     public void initialize(SimpleJmeEdit edit, TerrainToolbar toolbar) {
         super.initialize(edit, toolbar); 
-        if (controlObj == null) {
-            controlObj = createMesh();
-        }
-        edit.getEditRoot().attachChild(controlObj);
-        
-        radiusTool = toolbar.getRadiusTool();
-        weightTool = toolbar.getWeightTool();
-
         if (p1 == null) {
             p1 = new PointControlTile(createPointMesh(ColorRGBA.Red, new Vector3f()));
         }
@@ -90,101 +64,28 @@ public class SlopeTool extends AbstractTerrainTool {
     
     @Override
     public void cleanup() {
-        if (modifying) {
-            endSlope();
-        }
         if (initialized) {
             p1.cleanup();
             p2.cleanup();
             line.removeFromParent();
             angleText.removeFromParent();
-            controlObj.removeFromParent();
         }
         super.cleanup(); 
     }
     
-    public JmeEvent bindSlopeEvent() {
-        return this.bindEvent(EVENT_SLOPE);
-    }
-    
     @Override
-    protected void onToolEvent(Event e) {
-        if (e.getName().equals(EVENT_SLOPE)) {
-            if (e.isMatch()) {
-                modifying = true;
-                lastModifyTime = 0;
-                doSlope();
-                e.setConsumed(true);
-            } else {
-                modifying = false;
-                endSlope();
-            }
-        }
-    }
-    
-    @Override
-    public void update(float tpf) {
-        super.update(tpf);
-        Vector3f pos = getTerrainCollisionPoint();
-        if (pos != null && controlObj != null) {
-            controlObj.setLocalTranslation(pos);
-        }
-        if (Float.compare(radiusTool.getValue().floatValue(), lastRadiusUsed) != 0) {
-            lastRadiusUsed = radiusTool.getValue().floatValue();
-            controlObj.setLocalScale(lastRadiusUsed);
-        }
-        
-        if (modifying) {
-            lastModifyTime += tpf;
-            if (lastModifyTime >= toolModifyRate) {
-                lastModifyTime = 0;
-                doSlope();
-            }
-        }
-    }
-    
-    private void doSlope() {
-        float radius = radiusTool.getValue().floatValue();
-        float weight = weightTool.getValue().floatValue();
-        if (radius <= 0 || weight == 0) 
-            return;
-        
-        EntityControlTile terrain = getTerrainEntity();
-        if (terrain == null) 
-            return;
-        
+    protected AbstractTerrainToolAction createAction(float radius, float weight, Vector3f markerWorldLoc, EntityControlTile terrain) {
         Vector3f point1 = p1.getControlSpatial().getWorldTranslation();
         Vector3f point2 = p2.getControlSpatial().getWorldTranslation();
         if (point1 != null && point2 != null && point1.distance(point2) > 0.01f) { // Preventing unexpected behavior, like destroying the terrain
             SlopeExtraToolParams params = new SlopeExtraToolParams();
             params.precision = false; // Snap on terrain editor
             params.lock = false; // Contain on terrain editor
-            SlopeTerrainToolAction action = new SlopeTerrainToolAction(terrain, controlObj.getWorldTranslation()
+            SlopeTerrainToolAction action = new SlopeTerrainToolAction(terrain, markerWorldLoc
                     , point1, point2, radius, weight, params.precision, params.lock);
-            action.doAction();
-            actions.add(action);
+            return action;
         }
-    }
-    
-    private void endSlope() {
-        if (actions.isEmpty()) {
-            return;
-        }
-        // record undo action
-        List<SlopeTerrainToolAction> actionList = new ArrayList<SlopeTerrainToolAction>(actions);
-        edit.addUndoRedo(new SlopeUndoRedo(actionList));
-        actions.clear();
-    }
-    
-    private Geometry createMesh() {
-        Geometry marker = new Geometry();
-        marker.setMesh(new Sphere(8, 8, 1));
-        Material mat = new Material(editor.getAssetManager(), AssetConstants.MATERIAL_UNSHADED);
-        mat.getAdditionalRenderState().setWireframe(true);
-        marker.setMaterial(mat);
-        marker.setLocalTranslation(0,0,0);
-        mat.setColor("Color", ColorRGBA.Green);
-        return marker;
+        return null;
     }
     
     private void updateAngle() {
@@ -271,30 +172,5 @@ public class SlopeTool extends AbstractTerrainTool {
         }
         
     }
-
-    private class SlopeUndoRedo implements UndoRedo {
-        
-        private final List<SlopeTerrainToolAction> actionList;
-        
-        public SlopeUndoRedo(List<SlopeTerrainToolAction> actionList) {
-            this.actionList = actionList;
-        }
-        
-        @Override
-        public void undo() {
-            for (int i = actionList.size() - 1; i >= 0; i--) {
-                SlopeTerrainToolAction action = actionList.get(i);
-                action.undo();
-            }
-        }
-
-        @Override
-        public void redo() {
-            for (int i = 0; i < actionList.size(); i++) {
-                SlopeTerrainToolAction action = actionList.get(i);
-                action.redo();
-            }
-        }
-        
-    }
+   
 }

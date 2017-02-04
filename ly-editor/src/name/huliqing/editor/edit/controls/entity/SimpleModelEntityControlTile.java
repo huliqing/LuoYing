@@ -73,7 +73,7 @@ public class SimpleModelEntityControlTile extends EntityControlTile<Entity> {
     protected void onScaleUpdated(Vector3f scale) {
         target.getSpatial().setLocalScale(scale);
         target.updateDatas();
-        notifyPropertyChanged("scale", scale);
+        notifyPropertyChanged("scale", target.getSpatial().getLocalScale());
     }
     
 }

@@ -81,14 +81,14 @@ public class TerrainToolbar extends EditToolbar<SimpleJmeEdit> implements Simple
 
         radiusTool.setMinValue(-10).setValue(1);
         weightTool.setMinValue(-10).setValue(1);
-        raiseTool.bindRaiseEvent().bindButton(MouseInput.BUTTON_LEFT, true);
-        lowerTool.bindRaiseEvent().bindButton(MouseInput.BUTTON_LEFT, true);
-        roughTool.bindRoughEvent().bindButton(MouseInput.BUTTON_LEFT, true);
-        smoothTool.bindSmoothEvent().bindButton(MouseInput.BUTTON_LEFT, true);
-        levelTool.bindLevelEvent().bindButton(MouseInput.BUTTON_LEFT, true);
-        slopeTool.bindSlopeEvent().bindButton(MouseInput.BUTTON_LEFT, true);
-        paintTool.bindPaintEvent().bindButton(MouseInput.BUTTON_LEFT, true);
-        eraseTool.bindEraseEvent().bindButton(MouseInput.BUTTON_LEFT, true);
+        raiseTool.bindActionEvent().bindButton(MouseInput.BUTTON_LEFT, true);
+        lowerTool.bindActionEvent().bindButton(MouseInput.BUTTON_LEFT, true);
+        roughTool.bindActionEvent().bindButton(MouseInput.BUTTON_LEFT, true);
+        smoothTool.bindActionEvent().bindButton(MouseInput.BUTTON_LEFT, true);
+        levelTool.bindActionEvent().bindButton(MouseInput.BUTTON_LEFT, true);
+        slopeTool.bindActionEvent().bindButton(MouseInput.BUTTON_LEFT, true);
+        paintTool.bindActionEvent().bindButton(MouseInput.BUTTON_LEFT, true);
+        eraseTool.bindActionEvent().bindButton(MouseInput.BUTTON_LEFT, true);
         
         Tool[] conflicts = new Tool[]{raiseTool, lowerTool, roughTool, smoothTool, levelTool, slopeTool, paintTool, eraseTool};
         addToggleMapping(new ToggleMappingEvent(-1, raiseTool, conflicts));
