@@ -5,8 +5,8 @@
  */
 package name.huliqing.editor.ui.tool;
 
-import javafx.beans.binding.DoubleBinding;
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
@@ -22,31 +22,23 @@ public class JfxToggleTool extends JfxAbstractTool {
     private final ToggleButton view = new ToggleButton();
     
     @Override
-    public Node getView() {
+    public Node createView() {
         return view;
-    }
-    
-    @Override
-    protected void setViewActivated(boolean activated) {
-        view.setSelected(activated);
     }
 
     @Override
     protected void setViewEnabled(boolean enabled) {
-        view.setDisable(!enabled);
+        view.setSelected(enabled);
     }
 
     @Override
     public void initialize() {
+        super.initialize();
         view.setText(tool.getName());
         view.selectedProperty().addListener((ObservableValue<? extends Boolean> observable
                     , Boolean oldValue, Boolean newValue) -> {
-            setActivated(newValue);
+            setEnabled(newValue);
         });
-        DoubleBinding size = new DoubleBinding() {
-            @Override
-            protected double computeValue() {return 14;}
-        };
         
         // tooltip
         if (tool.getTips() != null) {
@@ -57,8 +49,8 @@ public class JfxToggleTool extends JfxAbstractTool {
         if (tool.getIcon() != null) {
             Image image = new Image(getClass().getResourceAsStream("/" + tool.getIcon()));
             ImageView imageView = new ImageView(image);
-            imageView.fitHeightProperty().bind(size);
-            imageView.fitWidthProperty().bind(size);
+            imageView.setFitWidth(14);
+            imageView.setFitHeight(14);
             view.setGraphic(imageView);
         }
         

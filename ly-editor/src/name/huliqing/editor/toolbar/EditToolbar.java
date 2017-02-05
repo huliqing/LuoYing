@@ -68,23 +68,46 @@ public abstract class EditToolbar<E extends SimpleJmeEdit> extends AbstractToolb
             return;
         
         ToggleMappingEvent te = (ToggleMappingEvent) e;
-        setActivated(te.tool, true);
+        setEnabled(te.tool, true);
     }
     
     @Override
-    public <T extends Toolbar> T setActivated(Tool tool, boolean activated) {
-        // 取消冲突的工具
+    public <T extends Toolbar> T setEnabled(Tool tool, boolean enabled) {
         ToggleMappingEvent tme = toggleMapping.get(tool);
-        if (activated && tme != null && tme.conflicts != null) {
-            for (Tool conflict : tme.conflicts) {
-                if (conflict == tool) {
-                    continue; // 不能关闭自身, 很重要: 兼容JFX界面的时候避免递归错误
+        // 关闭的时候相关联的要一起关闭，但不去关闭冲突的
+        if (!enabled) {
+            // 会让工具位置变来变去，不友好
+//            if (tme != null && tme.relations != null) {
+//                for (Tool t : tme.relations) {
+//                    super.setEnabled(t, false);
+//                }
+//            }
+            super.setEnabled(tool, false);
+            return (T) this;
+        }
+        
+        if (enabled) {
+            if (tme != null) {
+                if (tme.conflicts != null) {
+                    for (Tool dt : tme.conflicts) {
+                        if (dt == tool) {
+                            continue; // 不能关闭自身, 很重要: 兼容JFX界面的时候避免递归错误
+                        }
+                        super.setEnabled(dt, false);
+                    }                
                 }
-                setActivated(conflict, false);
+                if (tme.relations != null) {
+                    for (Tool et : tme.relations) {
+                        if (et == tool) {
+                            continue;
+                        }
+                        super.setEnabled(et, true);
+                    }
+                }
             }
         }
-        super.setActivated(tool, activated);
-        return (T)this;
+        super.setEnabled(tool, true);
+        return (T) this;
     }
     
     public class ToggleMappingEvent extends JmeEvent {
@@ -94,12 +117,23 @@ public abstract class EditToolbar<E extends SimpleJmeEdit> extends AbstractToolb
         public final Tool tool;
         // 冲突工具列表，当工具激活时，这些工具要关闭
         public Tool[] conflicts;
+        // 相关联的工具列表，当工具激活时，这些工具要一起激活,或关闭
+        public Tool[] relations;
         
-        public ToggleMappingEvent(int toggleKey, Tool tool, Tool[] conflicts) {
+        public ToggleMappingEvent(int toggleKey, Tool tool) {
             super("toggleEvent" + tool.getName());
             this.toggleKey = toggleKey;
             this.tool = tool;
+        }
+        
+        public ToggleMappingEvent setConflicts(Tool... conflicts) {
             this.conflicts = conflicts;
+            return this;
+        }
+        
+        public ToggleMappingEvent setRelations(Tool... relations) {
+            this.relations = relations;
+            return this;
         }
     }
     

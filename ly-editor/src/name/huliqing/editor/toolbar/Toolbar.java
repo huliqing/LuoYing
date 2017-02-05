@@ -85,16 +85,6 @@ public interface Toolbar<F extends JmeEdit> {
      * @return 
      */
     List<Tool> getTools();
-
-    /**
-     * 激活或取消激活指定的工具, 当激活一个工具时，如果该工具处于disabled状态，则该工具会被自动设置为enabled状态.
-     * {@link #setEnabled(java.lang.String, boolean) }
-     * @param <T>
-     * @param tool
-     * @param activated 
-     * @return  
-     */
-    <T extends Toolbar> T setActivated(Tool tool, boolean activated);
     
     /**
      * 打开或关闭一个工具, 注：如果是关闭工具，如果工具当前处于激活状态，则该工具会被自动取消激活。
@@ -105,12 +95,6 @@ public interface Toolbar<F extends JmeEdit> {
      * @return  
      */
     <T extends Toolbar> T setEnabled(Tool tool, boolean enabled);
-    
-    /**
-     * 获取所有激活中的工具
-     * @return 
-     */
-    List<Tool> getToolsActivated();
     
     /**
      * 获取所有可用的工具

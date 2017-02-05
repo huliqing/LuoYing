@@ -9,13 +9,14 @@ import name.huliqing.editor.edit.SimpleJmeEdit;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.tiles.Grid;
 import name.huliqing.editor.toolbar.EditToolbar;
-import name.huliqing.editor.tools.EditTool;
+import name.huliqing.editor.tools.AbstractTool;
+import name.huliqing.editor.tools.ToggleTool;
 
 /**
  * 在场景中产生一个在原点处的网格(xz平面上)
  * @author huliqing
  */
-public class GridTool extends EditTool {
+public class GridTool extends AbstractTool implements ToggleTool {
     
     // 网格
     private final Grid grid = new Grid();

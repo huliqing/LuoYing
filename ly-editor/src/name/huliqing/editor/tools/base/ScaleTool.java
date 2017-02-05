@@ -21,14 +21,15 @@ import name.huliqing.editor.edit.UndoRedo;
 import name.huliqing.luoying.manager.PickManager;
 import name.huliqing.editor.edit.controls.ControlTile;
 import name.huliqing.editor.toolbar.EditToolbar;
-import name.huliqing.editor.tools.EditTool;
 import name.huliqing.editor.edit.SimpleEditListener;
+import name.huliqing.editor.tools.AbstractTool;
+import name.huliqing.editor.tools.ToggleTool;
 
 /**
  * 缩放编辑工具
  * @author huliqing
  */
-public class ScaleTool extends EditTool implements SimpleEditListener{
+public class ScaleTool extends AbstractTool implements SimpleEditListener, ToggleTool{
 
 //    private static final Logger LOG = Logger.getLogger(ScaleTool.class.getName());
     
@@ -268,6 +269,7 @@ public class ScaleTool extends EditTool implements SimpleEditListener{
 
     @Override
     public void update(float tpf) {
+        super.update(tpf);
         // 对于相机视角，Marker必须实时随着相机的移动旋转而更新
         if (edit.getMode() == Mode.CAMERA) {
             updateMarkerState();
@@ -320,7 +322,8 @@ public class ScaleTool extends EditTool implements SimpleEditListener{
     }
 
     private void updateMarkerState() {
-        if (edit.getSelected() == null) {
+        selectObj = edit.getSelected();
+        if (selectObj == null || selectObj.getControlSpatial() == null) {
             controlObj.setVisible(false);
             return;
         }

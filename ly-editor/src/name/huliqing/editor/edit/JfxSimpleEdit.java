@@ -56,7 +56,7 @@ public abstract class JfxSimpleEdit<T extends JmeEdit> extends JfxAbstractEdit<T
         mainLeft.prefWidthProperty().bind(mainPanel.widthProperty().subtract(extToolbarPanel.widthProperty()));
         mainLeft.prefHeightProperty().bind(mainPanel.heightProperty());
         
-        extToolbarPanel.prefWidth(200);
+        extToolbarPanel.prefWidth(180);
         extToolbarPanel.prefHeightProperty().bind(mainPanel.heightProperty());
         extToolbarPanel.setSide(Side.RIGHT);
         
@@ -166,7 +166,7 @@ public abstract class JfxSimpleEdit<T extends JmeEdit> extends JfxAbstractEdit<T
         
         // 使用一个Layout来统一设置padding,不能直接设置在TabPane或Tab上。
         HBox layout = new HBox();
-        layout.setPadding(new Insets(7));
+        layout.setPadding(new Insets(5));
         layout.getChildren().add(jfxToolbar.getView());
         tab.setContent(layout);
         

@@ -6,7 +6,6 @@
 package name.huliqing.editor.tools.terrain;
 
 import com.jme3.gde.terraineditor.tools.AbstractTerrainToolAction;
-import com.jme3.gde.terraineditor.tools.PaintTerrainToolAction;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
@@ -22,21 +21,27 @@ import name.huliqing.editor.edit.controls.ControlTile;
 import name.huliqing.editor.edit.controls.entity.EntityControlTile;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.JmeEvent;
+import name.huliqing.editor.tiles.AutoScaleControl;
 import name.huliqing.editor.toolbar.TerrainToolbar;
-import name.huliqing.editor.tools.EditTool;
+import name.huliqing.editor.tools.AbstractTool;
 import name.huliqing.editor.tools.NumberValueTool;
 import name.huliqing.editor.tools.ToggleTool;
+import name.huliqing.editor.tools.ValueChangedListener;
+import name.huliqing.editor.tools.ValueTool;
 import name.huliqing.luoying.manager.PickManager;
 
 /**
  * 地形工具的基类
  * @author huliqing
  */
-public abstract class AbstractTerrainTool extends EditTool<SimpleJmeEdit, TerrainToolbar> implements ToggleTool {
+public abstract class AbstractTerrainTool extends AbstractTool<SimpleJmeEdit, TerrainToolbar> 
+        implements ToggleTool<SimpleJmeEdit, TerrainToolbar>, ValueChangedListener<Number>{
 //    private static final Logger LOG = Logger.getLogger(AbstractTerrainTool.class.getName());
-
+    
+    // 工具的基本大小
+    private final float baseSize = 0.1f;
+    
     private boolean modifying;
-    private float lastRadiusUsed = 1.0f;
     // how frequently (in seconds) it should update to throttle down the tool effect
     private final float toolModifyRate = 0.05f; 
     // last time the tool executed
@@ -56,30 +61,37 @@ public abstract class AbstractTerrainTool extends EditTool<SimpleJmeEdit, Terrai
     @Override
     public void initialize(SimpleJmeEdit edit, TerrainToolbar toolbar) {
         super.initialize(edit, toolbar);
+        
+        radiusTool = toolbar.getSizeTool();
+        weightTool = toolbar.getWeightTool();
+        
         if (controlObj == null) {
             controlObj = createMesh();
+            controlObj.addControl(new AutoScaleControl());
         }
         edit.getEditRoot().attachChild(controlObj);
+        updateMarkerSize(radiusTool.getValue().floatValue());
         
-        radiusTool = toolbar.getRadiusTool();
-        weightTool = toolbar.getWeightTool();
+        radiusTool.addValueChangeListener(this);
     }
 
     @Override
     public void cleanup() {
+        if (!initialized) 
+            return;
+        
         if (modifying) {
             doEndAction();
         }
-        if (controlObj != null) {
-            controlObj.removeFromParent();
-        }
+        controlObj.removeFromParent();
+        radiusTool.removeValueChangeListener(this);
         super.cleanup(); 
     }
     
     public JmeEvent bindActionEvent() {
         return this.bindEvent(EVENT_ACTION);
     }
-    
+
     @Override
     protected void onToolEvent(Event e) {
         if (e.getName().equals(EVENT_ACTION)) {
@@ -102,10 +114,6 @@ public abstract class AbstractTerrainTool extends EditTool<SimpleJmeEdit, Terrai
         if (pos != null && controlObj != null) {
             controlObj.setLocalTranslation(pos);
         }
-        if (Float.compare(radiusTool.getValue().floatValue(), lastRadiusUsed) != 0) {
-            lastRadiusUsed = radiusTool.getValue().floatValue();
-            controlObj.setLocalScale(lastRadiusUsed);
-        }
         
         if (modifying) {
             lastModifyTime += tpf;
@@ -117,7 +125,7 @@ public abstract class AbstractTerrainTool extends EditTool<SimpleJmeEdit, Terrai
     }
     
     protected void doAction() {
-        float radius = radiusTool.getValue().floatValue();
+        float radius = controlObj.getWorldScale().x;
         float weight = weightTool.getValue().floatValue();
         if (radius <= 0 || weight == 0) {
             return;
@@ -156,6 +164,16 @@ public abstract class AbstractTerrainTool extends EditTool<SimpleJmeEdit, Terrai
         mat.setColor("Color", ColorRGBA.Green);
         return marker;
     }
+
+    private void updateMarkerSize(float size) {
+        AutoScaleControl asc = controlObj.getControl(AutoScaleControl.class);
+        asc.setSize(size * baseSize); // 0.15为基本大小
+    }
+    
+    @Override
+    public void onValueChanged(ValueTool<Number> vt, Number oldValue, Number newValue) {
+        updateMarkerSize(newValue.floatValue());
+    }
     
     /**
      * 获取鼠标在地形上的点击点，如果不存在这个点则返回null.
@@ -186,6 +204,7 @@ public abstract class AbstractTerrainTool extends EditTool<SimpleJmeEdit, Terrai
             return null;
         }
     }
+
     
     private class ToolActionUndoRedo implements UndoRedo {
         

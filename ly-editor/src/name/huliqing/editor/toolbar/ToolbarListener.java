@@ -31,27 +31,31 @@ public interface ToolbarListener {
      */
     void onToolRemoved(Tool toolRemoved);
     
-    /**
-     * 当指定工具被激活时该方法被调用。
-     * @param tool 
-     */
-    void onToolActivated(Tool tool);
+    void onToolEnabled(Tool toolEnabled);
     
-    /**
-     * 当工具被取消激活时该方法被调用，非激活状态表示的是工具可以用，但未激活。
-     * @param tool 
-     */
-    void onToolDeactivated(Tool tool);
+    void onToolDisabled(Tool toolDisabled);
     
-    /**
-     * 当指定工具从无效转变有有效时该方法被调用，这里的有效表示工具可以用，但不一定是激活状态。
-     * @param tool 
-     */
-    void onToolEnabled(Tool tool);
-    
-    /**
-     * 当工具由有效转变为无效时该方法被调用，这表示工具不可用。
-     * @param tool 
-     */
-    void onToolDisabled(Tool tool);
+//    /**
+//     * 当指定工具被激活时该方法被调用。
+//     * @param tool 
+//     */
+//    void onToolActivated(Tool tool);
+//    
+//    /**
+//     * 当工具被取消激活时该方法被调用，非激活状态表示的是工具可以用，但未激活。
+//     * @param tool 
+//     */
+//    void onToolDeactivated(Tool tool);
+//    
+//    /**
+//     * 当指定工具从无效转变有有效时该方法被调用，这里的有效表示工具可以用，但不一定是激活状态。
+//     * @param tool 
+//     */
+//    void onToolEnabled(Tool tool);
+//    
+//    /**
+//     * 当工具由有效转变为无效时该方法被调用，这表示工具不可用。
+//     * @param tool 
+//     */
+//    void onToolDisabled(Tool tool);
 }

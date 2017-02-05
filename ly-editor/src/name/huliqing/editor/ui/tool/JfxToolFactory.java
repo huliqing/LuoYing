@@ -11,7 +11,9 @@ import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.editor.toolbar.Toolbar;
+import name.huliqing.editor.tools.BooleanValueTool;
 import name.huliqing.editor.tools.NumberValueTool;
+import name.huliqing.editor.tools.ParamsTool;
 import name.huliqing.editor.tools.ToggleTool;
 import name.huliqing.editor.tools.base.CameraTool;
 import name.huliqing.editor.tools.base.GridTool;
@@ -20,8 +22,6 @@ import name.huliqing.editor.tools.base.MoveTool;
 import name.huliqing.editor.tools.base.RotationTool;
 import name.huliqing.editor.tools.base.ScaleTool;
 import name.huliqing.editor.tools.Tool;
-import name.huliqing.editor.tools.terrain.LowerTool;
-import name.huliqing.editor.tools.terrain.RaiseTool;
 import name.huliqing.editor.tools.terrain.TexLayerTool;
 
 /**
@@ -35,10 +35,12 @@ public class JfxToolFactory {
     private final static Map<Class<?>, Class<? extends JfxTool>> TOOL_MAPPING = new HashMap();
     
     static {
-        // 通用设置，如无特别指定，则所有NumberValueTool类型的工具都渲染为JfxNumberValueTool
-        TOOL_MAPPING.put(NumberValueTool.class, JfxNumberValueTool.class);
+        TOOL_MAPPING.put(ParamsTool.class, JfxParamsTool.class);
         // 通用设置，如无特别指定，则所有ToggleTool类型的工具都渲染为JfxToggleTool
         TOOL_MAPPING.put(ToggleTool.class, JfxToggleTool.class);
+        // 通用设置，如无特别指定，则所有NumberValueTool类型的工具都渲染为JfxNumberValueTool
+        TOOL_MAPPING.put(NumberValueTool.class, JfxNumberValueTool.class);
+        TOOL_MAPPING.put(BooleanValueTool.class, JfxBooleanValueTool.class);
         
         // ---- 基本工具
         // 模式切换工具
@@ -78,7 +80,6 @@ public class JfxToolFactory {
                 JfxTool tv = jtCls.newInstance();
                 tv.setToolbar(toolbar);
                 tv.setTool(tool);
-                tv.initialize();
                 return tv;
             }else {
                 LOG.log(Level.WARNING, "Mapping not found for toolName={0}, toolClass={1}, skipped."

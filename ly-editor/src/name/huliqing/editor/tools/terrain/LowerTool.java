@@ -15,7 +15,7 @@ import name.huliqing.editor.edit.controls.entity.EntityControlTile;
  * @author huliqing
  */
 public class LowerTool extends RaiseTool {
-
+ 
     public LowerTool(String name, String tips, String icon) {
         super(name, tips, icon);
     }
@@ -25,29 +25,5 @@ public class LowerTool extends RaiseTool {
          RaiseTerrainToolAction action = new RaiseTerrainToolAction(terrain, markerWorldLoc, radius, -weight);
          return action;
     }
-
-//    @Override
-//    protected void doRaise() {
-//        float radius = radiusTool.getValue().floatValue();
-//        float weight = weightTool.getValue().floatValue();
-//        if (radius <= 0 || weight == 0) 
-//            return;
-//        
-//        EntityControlTile terrain = getTerrainEntity();
-//        if (terrain == null) 
-//            return;
-//        
-//        RaiseTerrainToolAction action = new RaiseTerrainToolAction(terrain, controlObj.getWorldTranslation(), radius, -weight);
-//        action.doAction();
-//        actions.add(action);
-//    }
-
-//    @Override
-//    protected Geometry createMesh() {
-//        Geometry geo = super.createMesh(); 
-//        geo.getMaterial().setColor("Color", ColorRGBA.Red);
-//        return geo;
-//    }
-
     
 }

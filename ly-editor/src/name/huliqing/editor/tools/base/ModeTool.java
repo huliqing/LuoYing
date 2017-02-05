@@ -10,19 +10,19 @@ import java.util.List;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.JmeEvent;
 import name.huliqing.editor.edit.Mode;
-import name.huliqing.editor.tools.EditTool;
+import name.huliqing.editor.tools.AbstractTool;
 
 /**
  *
  * @author huliqing
  */
-public class ModeTool extends EditTool {
+public class ModeTool extends AbstractTool {
     
     public interface ModeChangedListener {
         void onModeChanged(Mode newMode);
     }
     
-    private List<ModeChangedListener> listeners;
+    private List<ModeChangedListener> modeChangeListeners;
 
     public ModeTool(String name, String tips, String icon) {
         super(name, tips, icon);
@@ -56,21 +56,23 @@ public class ModeTool extends EditTool {
                 mode = ms[++idx];
             }
             edit.setMode(mode);
-            if (listeners != null) {
-                listeners.forEach(t -> {t.onModeChanged(mode);});
+            if (modeChangeListeners != null) {
+                modeChangeListeners.forEach(t -> {t.onModeChanged(mode);});
             }
         }
     }
     
-    public void addListener(ModeChangedListener listener) {
-        if (listeners == null) {
-            listeners = new ArrayList<>();
+    public void addModeChangedListener(ModeChangedListener listener) {
+        if (modeChangeListeners == null) {
+            modeChangeListeners = new ArrayList<>();
         }
-        if (!listeners.contains(listener)) {
-            listeners.add(listener);
+        if (!modeChangeListeners.contains(listener)) {
+            modeChangeListeners.add(listener);
         }
     }
-    public boolean removeListener(ModeChangedListener listener) {
-        return listeners != null &&  listeners.remove(listener);
+    public boolean removeModeChangedListener(ModeChangedListener listener) {
+        return modeChangeListeners != null &&  modeChangeListeners.remove(listener);
     }
+    
+    
 }

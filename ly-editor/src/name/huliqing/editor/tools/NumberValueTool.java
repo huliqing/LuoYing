@@ -94,4 +94,9 @@ public class NumberValueTool extends AbstractValueTool<Number> {
         }
     }
 
+    @Override
+    public void update(float tpf) {
+        // ignore
+    }
+
 }

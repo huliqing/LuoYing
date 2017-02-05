@@ -5,7 +5,6 @@
  */
 package name.huliqing.editor.ui.tool;
 
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
 import javafx.scene.control.ChoiceBox;
@@ -22,22 +21,10 @@ public class JfxModeTool extends JfxAbstractTool implements ModeTool.ModeChanged
     
     private final ChoiceBox<Mode> view = new ChoiceBox<Mode>();
     private ModeTool modeTool;
+    private boolean ignoreEvent;
     
-    public JfxModeTool() {
-    }
-
     @Override
-    protected void setViewActivated(boolean activated) {
-        // ignore
-    }
-
-    @Override
-    protected void setViewEnabled(boolean enabled) {
-        view.setDisable(!enabled);
-    }
-
-    @Override
-    public Node getView() {
+    public Node createView() {
         return view;
     }
 
@@ -46,24 +33,26 @@ public class JfxModeTool extends JfxAbstractTool implements ModeTool.ModeChanged
         if (newMode == view.getValue())
             return;
         Jfx.runOnJfx(() -> {
+            ignoreEvent = true;
             view.setValue(newMode);
+            ignoreEvent = false;
         });
     }
 
     @Override
     public void initialize() {
+        super.initialize();
         modeTool = (ModeTool) tool;
-        modeTool.addListener(this);
+        modeTool.addModeChangedListener(this);
         view.getItems().clear();
         view.getItems().addAll(Mode.values());
         view.setValue(modeTool.getMode());
-        view.valueProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-                Jfx.runOnJme(() -> {
-                    modeTool.setMode(view.getValue());
-                });
-            }
+        view.valueProperty().addListener((ObservableValue<? extends Mode> observable, Mode oldValue, Mode newValue) -> {
+            if (ignoreEvent)
+                return;
+            Jfx.runOnJme(() -> {
+                modeTool.setMode(view.getValue());
+            });
         });
         
         // tooltip
@@ -71,6 +60,5 @@ public class JfxModeTool extends JfxAbstractTool implements ModeTool.ModeChanged
             view.setTooltip(new Tooltip(tool.getTips()));
         }
     }
-    
     
 }

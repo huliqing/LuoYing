@@ -16,7 +16,7 @@ import name.huliqing.editor.edit.controls.entity.EntityControlTile;
  */
 public class LevelTool extends AbstractTerrainTool {
     
-    private Vector3f desiredHeight;
+    private Vector3f desiredHeight; 
 
     public LevelTool(String name, String tips, String icon) {
         super(name, tips, icon);
@@ -24,22 +24,21 @@ public class LevelTool extends AbstractTerrainTool {
 
     @Override
     protected AbstractTerrainToolAction createAction(float radius, float weight, Vector3f markerWorldLoc, EntityControlTile terrain) {
-        LevelExtraToolParams params = new LevelExtraToolParams();
-        params.absolute = false;
-        params.precision = false;
-        params.height = 0;
+        boolean absolute = toolbar.getLevelParamTool().getAbsolute().getValue();
+        boolean precision = toolbar.getLevelParamTool().getPrecision().getValue();
+        float height = toolbar.getLevelParamTool().getHeight().getValue().floatValue();
         
         if (desiredHeight == null) {
             desiredHeight = markerWorldLoc.clone();
         } else {
             desiredHeight.y = markerWorldLoc.y;
         }
-        if (params.absolute) {
-            desiredHeight.y = params.height;
+        if (absolute) {
+            desiredHeight.y = height;
         }
         
         LevelTerrainToolAction action = new LevelTerrainToolAction(terrain, markerWorldLoc, radius, weight
-                , desiredHeight, params.precision);
+                , desiredHeight, precision);
         return action;
     }
 

@@ -23,7 +23,7 @@ import name.huliqing.editor.events.JmeEvent;
 import name.huliqing.editor.manager.Manager;
 import name.huliqing.editor.manager.ResManager;
 import name.huliqing.editor.toolbar.EditToolbar;
-import name.huliqing.editor.tools.EditTool;
+import name.huliqing.editor.tools.AbstractTool;
 import name.huliqing.editor.utils.BestEditCamera;
 import name.huliqing.editor.utils.BestEditCamera.View;
 import name.huliqing.luoying.object.anim.Anim;
@@ -34,7 +34,7 @@ import name.huliqing.luoying.object.anim.CurveMoveAnim;
  * 场景镜头工具
  * @author huliqing
  */
-public class CameraTool extends EditTool implements EditorListener {
+public class CameraTool extends AbstractTool implements EditorListener {
     
 //    private static final Logger LOG = Logger.getLogger(CameraTool.class.getName());
     
@@ -275,7 +275,7 @@ public class CameraTool extends EditTool implements EditorListener {
 
     @Override
     public void update(float tpf) {
-        super.update(tpf); 
+        super.update(tpf);
         if (dragEnabled) {
             Vector2f cp = editor.getInputManager().getCursorPosition();
             editorCam.doPanCamera(
@@ -336,5 +336,6 @@ public class CameraTool extends EditTool implements EditorListener {
         editorCam.doToggleOrthoPerspMode();
         editorCam.doToggleOrthoPerspMode();
     }
+
     
 }

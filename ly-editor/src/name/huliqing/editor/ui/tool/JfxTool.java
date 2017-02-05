@@ -15,7 +15,11 @@ import name.huliqing.editor.tools.Tool;
  */
 public interface JfxTool<T extends Tool> {
     
+    Toolbar getToolbar();
+    
     void setToolbar(Toolbar toolbar);
+    
+    Tool getTool();
     
     void setTool(T tool);
     
@@ -24,12 +28,6 @@ public interface JfxTool<T extends Tool> {
      * @return 
      */
     Node getView();
-    
-    /**
-     * 设置激活与否
-     * @param activated 
-     */
-    void setActivated(boolean activated);
     
     /**
      * 设置工具是否可用。
@@ -41,4 +39,8 @@ public interface JfxTool<T extends Tool> {
      * 初始化toolview
      */
     void initialize();
+    
+    boolean isInitialized();
+    
+    void cleanup();
 }

@@ -5,6 +5,9 @@
  */
 package name.huliqing.editor.ui.tool;
 
+import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.layout.VBox;
 import name.huliqing.editor.toolbar.Toolbar;
 import name.huliqing.editor.tools.Tool;
 import name.huliqing.fxswing.Jfx;
@@ -18,10 +21,20 @@ public abstract class JfxAbstractTool<T extends Tool> implements JfxTool<T> {
 
     protected Toolbar toolbar;
     protected T tool;
-    protected boolean activated;
-    protected boolean enabled;
+    protected boolean enabled = true;
+    protected boolean initialized;
     
-    public JfxAbstractTool() {}
+    protected final VBox root = new VBox();
+    
+    public JfxAbstractTool() {
+        root.setPadding(new Insets(5,0,5,0));
+        root.managedProperty().bind(root.visibleProperty());
+    }
+
+    @Override
+    public Toolbar getToolbar() {
+        return toolbar;
+    }
 
     @Override
     public void setToolbar(Toolbar toolbar) {
@@ -29,23 +42,43 @@ public abstract class JfxAbstractTool<T extends Tool> implements JfxTool<T> {
     }
 
     @Override
+    public Tool getTool() {
+        return tool;
+    }
+
+    @Override
     public void setTool(T tool) {
         this.tool = tool;
     }
-    
+
     @Override
-    public void setActivated(boolean activated) {
-        boolean changed = this.activated != activated;
-        this.activated = activated;
-        if (changed) {
-            setViewActivated(activated);
-            Jfx.runOnJme(() -> toolbar.setActivated(tool, activated));
+    public final Node getView() {
+        return root;
+    }
+
+    @Override
+    public void initialize() {
+        if (initialized) {
+            throw new IllegalStateException();
         }
+        root.getChildren().add(createView());
+        initialized = true;
+    }
+
+    @Override
+    public boolean isInitialized() {
+        return initialized;
+    }
+
+    @Override
+    public void cleanup() {
+        root.getChildren().clear();
+        initialized = false;
     }
 
     @Override
     public void setEnabled(boolean enabled) {
-        boolean changed = this.enabled = enabled;
+        boolean changed = this.enabled != enabled;
         this.enabled = enabled;
         if (changed) {
             setViewEnabled(enabled);
@@ -54,15 +87,16 @@ public abstract class JfxAbstractTool<T extends Tool> implements JfxTool<T> {
     }
 
     /**
-     * 激活/取消激活UI
-     * @param activated 
-     */
-    protected abstract void setViewActivated(boolean activated);
-
-    /**
-     * 打开UI、关闭UI
+     * 打开UI、关闭UI,子类根据实际情况可以使用view隐藏或者关闭。
      * @param enabled 
      */
-    protected abstract void setViewEnabled(boolean enabled);
+    protected void setViewEnabled(boolean enabled) {
+        root.setDisable(!enabled);
+    }
     
+    /**
+     * 创建工具的组件
+     * @return 
+     */
+    protected abstract Node createView();
 }

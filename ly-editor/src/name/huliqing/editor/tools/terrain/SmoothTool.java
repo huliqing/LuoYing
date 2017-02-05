@@ -8,9 +8,7 @@ package name.huliqing.editor.tools.terrain;
 import com.jme3.gde.terraineditor.tools.AbstractTerrainToolAction;
 import com.jme3.gde.terraineditor.tools.SmoothTerrainToolAction;
 import com.jme3.math.Vector3f;
-import name.huliqing.editor.edit.SimpleJmeEdit;
 import name.huliqing.editor.edit.controls.entity.EntityControlTile;
-import name.huliqing.editor.toolbar.TerrainToolbar;
 
 /**
  * 地形平滑工具
@@ -20,16 +18,6 @@ public class SmoothTool extends AbstractTerrainTool {
     
     public SmoothTool(String name, String tips, String icon) {
         super(name, tips, icon);
-    }
-
-    @Override
-    public void initialize(SimpleJmeEdit edit, TerrainToolbar toolbar) {
-        super.initialize(edit, toolbar); 
-    }
-    
-    @Override
-    public void cleanup() {
-        super.cleanup(); 
     }
 
     @Override

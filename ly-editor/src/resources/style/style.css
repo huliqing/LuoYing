@@ -56,6 +56,15 @@
     -fx-background-color: transparent;
 }
 
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+/** see StyleConstants */
+.toolbarButton {
+    -fx-padding: 2 2 2 2;
+}
+
 /** ---- test---- */
 /*.color-palette .hyperlink {
     visibility: visible;

@@ -23,22 +23,13 @@ public class JfxCameraTool extends JfxAbstractTool<CameraTool> {
     private final MenuButton view = new MenuButton();
 
     @Override
-    protected void setViewActivated(boolean activated) {
-        // ignore
-    }
-
-    @Override
-    protected void setViewEnabled(boolean enabled) {
-        // ignore
-    }
-
-    @Override
-    public Node getView() {
+    public Node createView() {
         return view;
     }
 
     @Override
     public void initialize() {
+        super.initialize();
         view.setText(tool.getName());
         
         if (tool.getTips() != null) {
@@ -71,4 +62,5 @@ public class JfxCameraTool extends JfxAbstractTool<CameraTool> {
                 , viewBack, viewBottom, viewFront, viewLeft, viewRight, viewTop, viewOrtho, viewPersp);
 
     }
+
 }

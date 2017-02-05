@@ -25,5 +25,5 @@ public class RaiseTool extends AbstractTerrainTool {
         RaiseTerrainToolAction action = new RaiseTerrainToolAction(terrain, markerWorldLoc, radius, weight);
         return action;
     }
- 
+  
 }

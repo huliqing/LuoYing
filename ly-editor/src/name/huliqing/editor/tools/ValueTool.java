@@ -12,11 +12,17 @@ package name.huliqing.editor.tools;
  */
 public interface ValueTool<V> extends Tool {
     
+    /**
+     * 设置值，并返回当前实例
+     * @param <T>
+     * @param value
+     * @return 
+     */
     <T extends ValueTool> T setValue(V value);
     
     V getValue();
     
-    void addListener(ValueChangedListener listener);
+    void addValueChangeListener(ValueChangedListener<V> listener);
     
-    boolean removeListener(ValueChangedListener listener);
+    boolean removeValueChangeListener(ValueChangedListener<V> listener);
 }

@@ -53,6 +53,6 @@ public class PaintTool extends AbstractTerrainTool {
         
         PaintTerrainToolAction action = new PaintTerrainToolAction(terrain, markerWorldLoc, radius, weight, textureIndex);
         return action;
-    }
+    } 
 
 }

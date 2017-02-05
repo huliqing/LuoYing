@@ -19,14 +19,15 @@ import name.huliqing.editor.edit.UndoRedo;
 import name.huliqing.luoying.manager.PickManager;
 import name.huliqing.editor.edit.controls.ControlTile;
 import name.huliqing.editor.toolbar.EditToolbar;
-import name.huliqing.editor.tools.EditTool;
 import name.huliqing.editor.edit.SimpleEditListener;
+import name.huliqing.editor.tools.AbstractTool;
+import name.huliqing.editor.tools.ToggleTool;
 
 /**
  * 旋转编辑工具
  * @author huliqing
  */
-public class RotationTool extends EditTool implements SimpleEditListener{
+public class RotationTool extends AbstractTool implements SimpleEditListener, ToggleTool{
 //    private static final Logger LOG = Logger.getLogger(RotationTool.class.getName());
     
     private final static String EVENT_ROTATION = "rotationEvent";
@@ -242,9 +243,10 @@ public class RotationTool extends EditTool implements SimpleEditListener{
         }
         endRotation();
     }
-    
+
     @Override
     public void update(float tpf) {
+        super.update(tpf);
         // 对于相机视角，Marker必须实时随着相机的移动旋转而更新
         if (edit.getMode() == Mode.CAMERA) {
             updateMarkerState();
@@ -274,7 +276,8 @@ public class RotationTool extends EditTool implements SimpleEditListener{
     }
 
     private void updateMarkerState() {
-        if (edit.getSelected() == null) {
+        selectObj = edit.getSelected();
+        if (selectObj == null || selectObj.getControlSpatial() == null) {
             controlObj.setVisible(false);
             return;
         }

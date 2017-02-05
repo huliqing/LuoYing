@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.Region;
+import name.huliqing.editor.constants.StyleConstants;
 import name.huliqing.editor.toolbar.Toolbar;
 import name.huliqing.editor.toolbar.ToolbarListener;
 import name.huliqing.editor.tools.Tool;
@@ -49,13 +50,15 @@ public class JfxSimpleToolbar extends ToolBar implements JfxToolbar, ToolbarList
         }
         initialized = true;
         toolbar.addListener(this);
-        List<Tool> enableList =  toolbar.getToolsEnabled();
-        List<Tool> activateList = toolbar.getToolsActivated();
-        for (Tool tool : enableList) {
-            JfxTool toolView = createToolView(tool, activateList != null && activateList.contains(tool));
-            if (toolView != null) {
-                toolViewMap.put(tool, toolView);
-                getItems().add(toolView.getView());
+        List<Tool> tools =  toolbar.getTools();
+        for (Tool tool : tools) {
+            JfxTool jfxTool = createToolView(tool);
+            if (jfxTool != null) {
+                jfxTool.initialize();
+                jfxTool.setEnabled(tool.isInitialized());
+                getItems().add(jfxTool.getView());
+                jfxTool.getView().getStyleClass().add(StyleConstants.CLASS_TOOLBAR_BUTTON);
+                toolViewMap.put(tool, jfxTool);
             }
         }
     }
@@ -81,38 +84,49 @@ public class JfxSimpleToolbar extends ToolBar implements JfxToolbar, ToolbarList
     public void onToolRemoved(Tool toolRemoved) {
     }
 
-    @Override
-    public void onToolActivated(Tool tool) {
-        Jfx.runOnJfx(() -> {
-            JfxTool tv = toolViewMap.get(tool);
-            if (tv != null) {
-                tv.setActivated(true);
-            }
-        });
-    }
-
-    @Override
-    public void onToolDeactivated(Tool tool) {
-        Jfx.runOnJfx(() -> {
-            JfxTool tv = toolViewMap.get(tool);
-            if (tv != null) {
-                tv.setActivated(false);
-            }
-        });
-    }
+//    @Override
+//    public void onToolActivated(Tool tool) {
+//        Jfx.runOnJfx(() -> {
+//            JfxTool tv = toolViewMap.get(tool);
+//            if (tv != null) {
+//                tv.setActivated(true);
+//            }
+//        });
+//    }
+//
+//    @Override
+//    public void onToolDeactivated(Tool tool) {
+//        Jfx.runOnJfx(() -> {
+//            JfxTool tv = toolViewMap.get(tool);
+//            if (tv != null) {
+//                tv.setActivated(false);
+//            }
+//        });
+//    }
 
     @Override
     public void onToolEnabled(Tool tool) {
+        Jfx.runOnJfx(() -> {
+            JfxTool tv = toolViewMap.get(tool);
+            if (tv != null) {
+                tv.setEnabled(true);
+            }
+        });
     }
     
     @Override
     public void onToolDisabled(Tool tool) {
+        Jfx.runOnJfx(() -> {
+            JfxTool tv = toolViewMap.get(tool);
+            if (tv != null) {
+                tv.setEnabled(false);
+            }
+        });
     }
     
-    private JfxTool createToolView(Tool tool, boolean activated) {
+    private JfxTool createToolView(Tool tool) {
         JfxTool tv = JfxToolFactory.createJfxTool(tool, toolbar);
         if (tv != null) {
-            tv.setActivated(activated);
             return tv;
         }  else {
             LOG.log(Level.WARNING, "Unsupported tool, toolName={0}, tool={1}"

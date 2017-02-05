@@ -31,11 +31,6 @@ public abstract class AbstractToolbar<E extends JmeEdit> implements Toolbar<E> {
      */
     protected final SafeArrayList<Tool> toolsEnabled = new SafeArrayList<Tool>(Tool.class);
     
-    /**
-     * 当前处于激活状态的工具栏, 是toolsValid的子集
-     */
-    protected final SafeArrayList<Tool> toolsActivated = new SafeArrayList<Tool>(Tool.class);
-    
     protected Editor editor;
     protected E edit;
     protected boolean initialized;
@@ -43,9 +38,8 @@ public abstract class AbstractToolbar<E extends JmeEdit> implements Toolbar<E> {
     
     public AbstractToolbar(E edit) {
         this.edit = edit;
-        
     }
-
+    
     @Override
     public void initialize() {
         if (initialized) {
@@ -62,7 +56,7 @@ public abstract class AbstractToolbar<E extends JmeEdit> implements Toolbar<E> {
     
     @Override
     public void update(float tpf) {
-        for (Tool t : toolsActivated.getArray()) {
+        for (Tool t : toolsEnabled.getArray()) {
             t.update(tpf);
         }
     }
@@ -85,7 +79,7 @@ public abstract class AbstractToolbar<E extends JmeEdit> implements Toolbar<E> {
     
     @Override
     public void cleanup() {
-        toolsActivated.forEach(t -> {t.cleanup();});
+        toolsEnabled.forEach(t -> {t.cleanup();});
         initialized = false;
     }
     
@@ -103,7 +97,6 @@ public abstract class AbstractToolbar<E extends JmeEdit> implements Toolbar<E> {
     @Override
     public boolean remove(Tool tool) {
         boolean result = tools.remove(tool);
-        toolsActivated.remove(tool);
         toolsEnabled.remove(tool);
         if (tool.isInitialized()) {
             tool.cleanup();
@@ -128,7 +121,6 @@ public abstract class AbstractToolbar<E extends JmeEdit> implements Toolbar<E> {
         }
         tools.clear();
         toolsEnabled.clear();
-        toolsActivated.clear();
     }
 
     @Override
@@ -152,50 +144,13 @@ public abstract class AbstractToolbar<E extends JmeEdit> implements Toolbar<E> {
     }
     
     @Override
-    public <T extends Toolbar> T setActivated(Tool tool, boolean activated) {
-        if (activated) {
-            toolEnabled(tool);
-            toolActivated(tool);
-        } else {
-            toolDeactivated(tool);
-        }
-        return (T) this;
-    }
-    
-    @Override
     public <T extends Toolbar> T setEnabled(Tool tool, boolean enabled) {
         if (enabled) {
             toolEnabled(tool);
         } else {
-            toolDeactivated(tool);
             toolDisabled(tool);
         }
         return (T) this;
-    }
-    
-    private void toolActivated(Tool t) {
-        if (!toolsActivated.contains(t)) {
-            toolsActivated.add(t);
-            if (!t.isInitialized()) {
-                t.initialize(edit, this);
-            }
-            for (ToolbarListener tl : listeners.getArray()) {
-                tl.onToolActivated(t);
-            }
-//            LOG.log(Level.INFO, "toolActivated, tool={0}", t.getName());
-        }
-    }
-    
-    private void toolDeactivated(Tool t) {
-        if (toolsActivated.remove(t)) {
-            if (t.isInitialized()) {
-                t.cleanup();
-            }
-            for (ToolbarListener tl : listeners.getArray()) {
-                tl.onToolDeactivated(t);
-            }
-//            LOG.log(Level.INFO, "toolDeactivated, tool={0}", t.getName());
-        }
     }
     
     private void toolEnabled(Tool t) {
@@ -203,6 +158,9 @@ public abstract class AbstractToolbar<E extends JmeEdit> implements Toolbar<E> {
             return;
         }
         toolsEnabled.add(t);
+        if (!t.isInitialized()) {
+            t.initialize(edit, this);
+        }
         for (ToolbarListener l : listeners.getArray()) {
             l.onToolEnabled(t);
         }
@@ -211,6 +169,9 @@ public abstract class AbstractToolbar<E extends JmeEdit> implements Toolbar<E> {
     
     private void toolDisabled(Tool t) {
         if (toolsEnabled.remove(t)) {
+            if (t.isInitialized()) {
+                t.cleanup();
+            }
             for (ToolbarListener l : listeners.getArray()) {
                 l.onToolDisabled(t);
             }
@@ -242,15 +203,6 @@ public abstract class AbstractToolbar<E extends JmeEdit> implements Toolbar<E> {
     @Override
     public SafeArrayList<Tool> getToolsEnabled() {
         return toolsEnabled;
-    }
-
-    /**
-     * 获取所有激活中的工具
-     * @return 
-     */
-    @Override
-    public SafeArrayList<Tool> getToolsActivated() {
-        return toolsActivated;
     }
 
     @Override

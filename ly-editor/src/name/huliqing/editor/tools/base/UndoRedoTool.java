@@ -8,13 +8,13 @@ package name.huliqing.editor.tools.base;
 import com.jme3.input.KeyInput;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.JmeEvent;
-import name.huliqing.editor.tools.EditTool;
+import name.huliqing.editor.tools.AbstractTool;
 
 /**
  * Undo Redo工具
  * @author huliqing
  */
-public class UndoRedoTool extends EditTool {
+public class UndoRedoTool extends AbstractTool {
     
     private final String EVENT_UNDO_REDO = "undoRedoEvent";
     

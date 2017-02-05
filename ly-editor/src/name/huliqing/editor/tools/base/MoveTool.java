@@ -22,14 +22,15 @@ import name.huliqing.editor.edit.UndoRedo;
 import name.huliqing.luoying.manager.PickManager;
 import name.huliqing.editor.edit.controls.ControlTile;
 import name.huliqing.editor.toolbar.EditToolbar;
-import name.huliqing.editor.tools.EditTool;
 import name.huliqing.editor.edit.SimpleEditListener;
+import name.huliqing.editor.tools.AbstractTool;
+import name.huliqing.editor.tools.ToggleTool;
 
 /**
  * 移动编辑工具
  * @author huliqing
  */
-public class MoveTool extends EditTool implements SimpleEditListener{
+public class MoveTool extends AbstractTool implements SimpleEditListener, ToggleTool{
 //    private static final Logger LOG = Logger.getLogger(MoveTool.class.getName());
     
     private final static String EVENT_MOVE = "moveEvent";
@@ -97,7 +98,7 @@ public class MoveTool extends EditTool implements SimpleEditListener{
     public JmeEvent bindFreeMoveCancelEvent() {
         return bindEvent(EVENT_FREE_MOVE_CANCEL);
     }
-    
+
     @Override
     protected void onToolEvent(Event e) {
         selectObj = edit.getSelected();
@@ -248,6 +249,7 @@ public class MoveTool extends EditTool implements SimpleEditListener{
     
     @Override
     public void update(float tpf) {
+        super.update(tpf);
         // 对于相机视角，Marker必须实时随着相机的移动旋转而更新
         if (edit.getMode() == Mode.CAMERA) {
             updateMarkerState();

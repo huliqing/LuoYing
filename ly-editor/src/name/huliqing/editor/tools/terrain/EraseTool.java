@@ -30,7 +30,7 @@ public class EraseTool extends AbstractTerrainTool {
         super.initialize(edit, toolbar); 
         texLayerTool = toolbar.getTexLayerTool();
     }
-
+ 
     @Override
     public void cleanup() {
         super.cleanup();

@@ -5,10 +5,15 @@
  */
 package name.huliqing.editor.tools;
 
+import name.huliqing.editor.edit.JmeEdit;
+import name.huliqing.editor.toolbar.Toolbar;
+
 /**
  * 无任何方法，主要用于定义一种可开关的工具类型。
  * @author huliqing
+ * @param <E>
+ * @param <T>
  */
-public interface ToggleTool {
+public interface ToggleTool<E extends JmeEdit, T extends Toolbar> extends Tool<E, T> {
     
 }

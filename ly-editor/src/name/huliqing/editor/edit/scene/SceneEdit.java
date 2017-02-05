@@ -94,7 +94,7 @@ public class SceneEdit extends SimpleJmeEdit implements SceneListener {
                 setSelected(cloneData);
                 // 转到移动工具激活并进行自由移动
                 MoveTool moveTool = (MoveTool) toolbar.getTool(MoveTool.class);
-                toolbar.setActivated(moveTool, true);
+                toolbar.setEnabled(moveTool, true);
                 moveTool.startFreeMove();
             }
         });

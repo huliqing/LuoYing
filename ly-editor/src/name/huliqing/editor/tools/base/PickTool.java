@@ -11,14 +11,14 @@ import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.JmeEvent;
 import name.huliqing.editor.edit.UndoRedo;
 import name.huliqing.editor.edit.controls.ControlTile;
-import name.huliqing.editor.tools.EditTool;
+import name.huliqing.editor.tools.AbstractTool;
 import name.huliqing.luoying.manager.PickManager;
 
 /**
  * 选择物体的工具
  * @author huliqing
  */
-public class PickTool extends EditTool {
+public class PickTool extends AbstractTool {
     
     private ControlTile lastSelectedControlTile;
 

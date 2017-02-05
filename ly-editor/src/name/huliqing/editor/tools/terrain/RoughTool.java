@@ -20,16 +20,16 @@ public class RoughTool extends AbstractTerrainTool {
     public RoughTool(String name, String tips, String icon) {
         super(name, tips, icon);
     }
-
+    
     @Override
     protected AbstractTerrainToolAction createAction(float radius, float weight, Vector3f markerWorldLoc, EntityControlTile terrain) {
         RoughExtraToolParams params = new RoughExtraToolParams();
-        params.lacunarity = 2;
-        params.octaves = 6;
-        params.scale = 0.1f;
+        params.lacunarity = toolbar.getRoughParamsTool().getLacunarity().getValue().floatValue();
+        params.octaves = toolbar.getRoughParamsTool().getOctaves().getValue().floatValue();;
+        params.scale = toolbar.getRoughParamsTool().getScale().getValue().floatValue();
         
         RoughTerrainToolAction action = new RoughTerrainToolAction(terrain, markerWorldLoc, radius, weight, params);
         return action;
     }
-   
+    
 }

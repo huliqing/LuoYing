@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.control.Separator;
-import javafx.scene.layout.GridPane;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import name.huliqing.editor.toolbar.Toolbar;
 import name.huliqing.editor.toolbar.ToolbarListener;
 import name.huliqing.editor.tools.Tool;
@@ -28,12 +28,18 @@ public class JfxEditToolbar implements JfxToolbar, ToolbarListener{
 
     private static final Logger LOG = Logger.getLogger(JfxEditToolbar.class.getName());
     
-    private final GridPane layout = new GridPane();
+    private final ScrollPane root = new ScrollPane();
+    private final VBox layout = new VBox();
     private final Map<Tool, JfxTool> toolViewMap = new HashMap<Tool, JfxTool>();
     
     private Toolbar  toolbar;
     private boolean initialized;
-
+    
+    public JfxEditToolbar() {
+        root.setContent(layout);
+        root.setPrefWidth(180);
+    }
+    
     @Override
     public void setToolbar(Toolbar toolbar) {
         this.toolbar = toolbar;
@@ -52,22 +58,17 @@ public class JfxEditToolbar implements JfxToolbar, ToolbarListener{
         initialized = true;
         
         toolbar.addListener(this);
-        List<Tool> enableList =  toolbar.getToolsEnabled();
-        List<Tool> activateList = toolbar.getToolsActivated();
-        int rowIndex = 0;
-        for (Tool tool : enableList) {
-            JfxTool toolView = createToolView(tool, activateList != null && activateList.contains(tool));
-            if (toolView != null) {
-                toolViewMap.put(tool, toolView);
-                layout.addRow(rowIndex++, toolView.getView());
-                
-//                Separator separator = new Separator();
-//                layout.addRow(rowIndex++, separator);
+        List<Tool> tools =  toolbar.getTools();
+        for (Tool tool : tools) {
+            JfxTool jfxTool = createToolView(tool);
+            if (jfxTool != null) {
+                jfxTool.initialize();
+                jfxTool.setEnabled(tool.isInitialized());
+                toolViewMap.put(tool, jfxTool);
+                layout.getChildren().add(jfxTool.getView());
             }
         }
-        
-        layout.setVgap(5);
-        layout.setDisable(true);
+        root.setFitToWidth(true);
     }
     
     @Override
@@ -92,26 +93,6 @@ public class JfxEditToolbar implements JfxToolbar, ToolbarListener{
     }
 
     @Override
-    public void onToolActivated(Tool tool) {
-        Jfx.runOnJfx(() -> {
-            JfxTool tv = toolViewMap.get(tool);
-            if (tv != null) {
-                tv.setActivated(true);
-            }
-        });
-    }
-
-    @Override
-    public void onToolDeactivated(Tool tool) {
-        Jfx.runOnJfx(() -> {
-            JfxTool tv = toolViewMap.get(tool);
-            if (tv != null) {
-                tv.setActivated(false);
-            }
-        });
-    }
-
-    @Override
     public void onToolEnabled(Tool tool) {
         Jfx.runOnJfx(() -> {
             JfxTool tv = toolViewMap.get(tool);
@@ -131,10 +112,9 @@ public class JfxEditToolbar implements JfxToolbar, ToolbarListener{
         });
     }
     
-    private JfxTool createToolView(Tool tool, boolean activated) {
+    private JfxTool createToolView(Tool tool) {
         JfxTool tv = JfxToolFactory.createJfxTool(tool, toolbar);
         if (tv != null) {
-            tv.setActivated(activated);
             return tv;
         }  else {
             LOG.log(Level.WARNING, "Unsupported tool, toolName={0}, tool={1}"
@@ -152,7 +132,7 @@ public class JfxEditToolbar implements JfxToolbar, ToolbarListener{
 
     @Override
     public Region getView() {
-        return layout;
+        return root;
     }
     
 }

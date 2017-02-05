@@ -87,9 +87,9 @@ public class BaseEditToolbar extends EditToolbar<SimpleJmeEdit>{
         rotationTool.bindFreeRotationCancelEvent().setPrior(2).bindButton(MouseInput.BUTTON_RIGHT, true); 
         
         Tool[] conflicts = new Tool[]{moveTool, scaleTool, rotationTool};
-        addToggleMapping(new ToggleMappingEvent(KeyInput.KEY_G, moveTool, conflicts));
-        addToggleMapping(new ToggleMappingEvent(KeyInput.KEY_S, scaleTool, conflicts));
-        addToggleMapping(new ToggleMappingEvent(KeyInput.KEY_R, rotationTool, conflicts));
+        addToggleMapping(new ToggleMappingEvent(KeyInput.KEY_G, moveTool).setConflicts(conflicts));
+        addToggleMapping(new ToggleMappingEvent(KeyInput.KEY_S, scaleTool).setConflicts(conflicts));
+        addToggleMapping(new ToggleMappingEvent(KeyInput.KEY_R, rotationTool).setConflicts(conflicts));
         
         add(undoRedoTool);
         add(cameraTool);
@@ -106,15 +106,16 @@ public class BaseEditToolbar extends EditToolbar<SimpleJmeEdit>{
         setEnabled(gridTool, true);
         setEnabled(pickTool, true);
         setEnabled(moveTool, true);
-        setEnabled(rotationTool, true);
-        setEnabled(scaleTool, true);
         
-        setActivated(undoRedoTool, true);
-        setActivated(cameraTool, true);
-        setActivated(modeTool, true);
-        setActivated(gridTool, true);
-        setActivated(pickTool, true);
-        setActivated(moveTool, true);
+//        setEnabled(rotationTool, true);
+//        setEnabled(scaleTool, true);
+        
+//        setActivated(undoRedoTool, true);
+//        setActivated(cameraTool, true);
+//        setActivated(modeTool, true);
+//        setActivated(gridTool, true);
+//        setActivated(pickTool, true);
+//        setActivated(moveTool, true);
     }
 
     @Override

@@ -26,7 +26,7 @@ import name.huliqing.editor.edit.controls.entity.EntityControlTile;
 import name.huliqing.editor.tiles.AutoScaleControl;
 import name.huliqing.editor.toolbar.TerrainToolbar;
 
-/**
+/**  
  * @author huliqing
  */
 public class SlopeTool extends AbstractTerrainTool {
@@ -78,11 +78,10 @@ public class SlopeTool extends AbstractTerrainTool {
         Vector3f point1 = p1.getControlSpatial().getWorldTranslation();
         Vector3f point2 = p2.getControlSpatial().getWorldTranslation();
         if (point1 != null && point2 != null && point1.distance(point2) > 0.01f) { // Preventing unexpected behavior, like destroying the terrain
-            SlopeExtraToolParams params = new SlopeExtraToolParams();
-            params.precision = false; // Snap on terrain editor
-            params.lock = false; // Contain on terrain editor
+            boolean precision = toolbar.getSlopeParamsTool().getPrecision().getValue(); // Snap on terrain editor
+            boolean lock = toolbar.getSlopeParamsTool().getLock().getValue(); // Contain on terrain editor
             SlopeTerrainToolAction action = new SlopeTerrainToolAction(terrain, markerWorldLoc
-                    , point1, point2, radius, weight, params.precision, params.lock);
+                    , point1, point2, radius, weight, precision, lock);
             return action;
         }
         return null;

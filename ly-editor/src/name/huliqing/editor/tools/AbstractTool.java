@@ -18,7 +18,7 @@ import name.huliqing.editor.toolbar.EditToolbar;
  * @param <E>
  * @param <T>
  */
-public abstract class EditTool<E extends SimpleJmeEdit, T extends EditToolbar> implements Tool<E, T> {
+public abstract class AbstractTool<E extends SimpleJmeEdit, T extends EditToolbar> implements Tool<E, T> {
 
 //    private static final Logger LOG = Logger.getLogger(EditTool.class.getName());
 
@@ -30,10 +30,11 @@ public abstract class EditTool<E extends SimpleJmeEdit, T extends EditToolbar> i
     protected String tips;
     protected String icon;
     protected boolean initialized;
+    
     protected final EventListener eventListener = new ToolEventListener();
     protected final EventHelper eventHelper = new EventHelper(eventListener);
     
-    public EditTool(String name, String tips, String icon) {
+    public AbstractTool(String name, String tips, String icon) {
         this.name = name; 
         this.tips = tips;
         this.icon = icon;
@@ -67,13 +68,13 @@ public abstract class EditTool<E extends SimpleJmeEdit, T extends EditToolbar> i
     }
 
     @Override
-    public boolean isInitialized() {
-        return initialized;
+    public void update(float tpf) {
+        // 由子类覆盖
     }
 
     @Override
-    public void update(float tpf) {
-        // 由子类覆盖
+    public boolean isInitialized() {
+        return initialized;
     }
 
     @Override
@@ -112,7 +113,7 @@ public abstract class EditTool<E extends SimpleJmeEdit, T extends EditToolbar> i
         @Override
         public void onEvent(Event e) {
             // 只有工具栏激活时才响应事件，这可以尽量避免工具栏事件冲突
-            if (!toolbar.isEnabled()) 
+            if (!toolbar.isEnabled() || !isInitialized()) 
                 return;
             
             onToolEvent(e);

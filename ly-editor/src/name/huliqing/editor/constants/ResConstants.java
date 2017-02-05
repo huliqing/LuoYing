@@ -65,8 +65,8 @@ public class ResConstants {
     public final static String TOOL_SCALE = "tool.scale";
     public final static String TOOL_SCALE_TIP = "tool.scale.tip";
     
-    public final static String TOOL_TERRAIN_RADIUS = "tool.terrain.radius";
-    public final static String TOOL_TERRAIN_RADIUS_TIP = "tool.terrain.radius.tip";
+    public final static String TOOL_TERRAIN_SIZE = "tool.terrain.size";
+    public final static String TOOL_TERRAIN_SIZE_TIP = "tool.terrain.size.tip";
     public final static String TOOL_TERRAIN_WEIGHT = "tool.terrain.weight";
     public final static String TOOL_TERRAIN_WEIGHT_TIP = "tool.terrain.weight.tip";
     public final static String TOOL_TERRAIN_RAISE = "tool.terrain.raise";

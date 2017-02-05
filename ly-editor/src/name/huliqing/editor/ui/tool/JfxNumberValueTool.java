@@ -6,13 +6,12 @@
 package name.huliqing.editor.ui.tool;
 
 import javafx.beans.value.ObservableValue;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.GridPane;
 import name.huliqing.editor.tools.NumberValueTool;
 import name.huliqing.editor.tools.ValueChangedListener;
 import name.huliqing.editor.tools.ValueTool;
@@ -25,15 +24,18 @@ import name.huliqing.fxswing.Jfx;
 public class JfxNumberValueTool extends JfxAbstractTool<NumberValueTool> 
         implements ValueChangedListener<Number>{
 
-    private final VBox view = new VBox();
+//    private final HBox view = new HBox();
+    private final GridPane view = new GridPane();
     private final Label label = new Label();
     private final TextField value = new TextField();
     
     private boolean ignoreUpdateView;
     
     public JfxNumberValueTool() {
-        view.getChildren().add(label);
-        view.getChildren().add(value);
+        label.setPrefWidth(64);
+        value.setPrefWidth(64);
+        view.addRow(0, label, value);
+    
          // 失去焦点时更新
         value.focusedProperty().addListener((ObservableValue<? extends Boolean> observable
                 , Boolean oldValue, Boolean newValue) -> {
@@ -50,27 +52,18 @@ public class JfxNumberValueTool extends JfxAbstractTool<NumberValueTool>
             }
         });
     }
-    
-    @Override
-    protected void setViewActivated(boolean activated) {
-        // ignore
-    }
-    
-    @Override
-    protected void setViewEnabled(boolean enabled) {
-        value.setDisable(!enabled);
-    }
 
     @Override
-    public Node getView() {
+    public Node createView() {
         return view;
     }
     
     @Override
     public void initialize() {
+        super.initialize();
         label.setText(tool.getName());
         updateValueToView(tool.getValue());
-        tool.addListener(this);
+        tool.addValueChangeListener(this);
     }
 
     // 当3d场景工具值发生变化时更新到JFX组件
@@ -107,4 +100,5 @@ public class JfxNumberValueTool extends JfxAbstractTool<NumberValueTool>
         }
         value.setText(newValue.doubleValue() + "");
     }
+
 }

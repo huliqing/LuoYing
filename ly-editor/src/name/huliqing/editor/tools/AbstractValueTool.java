@@ -12,12 +12,12 @@ import java.util.List;
  * @author huliqing
  * @param <V>
  */
-public abstract class AbstractValueTool<V> extends EditTool implements ValueTool<V> {
+public abstract class AbstractValueTool<V> extends AbstractTool implements ValueTool<V> {
 
     protected String label;
-    protected V value;
+    protected V value; 
     
-    protected List<ValueChangedListener> listeners;
+    protected List<ValueChangedListener<V>> listeners;
 
     public AbstractValueTool(String name, String tips, String icon) {
         super(name, tips, icon);
@@ -49,7 +49,7 @@ public abstract class AbstractValueTool<V> extends EditTool implements ValueTool
     }
 
     @Override
-    public void addListener(ValueChangedListener listener) {
+    public void addValueChangeListener(ValueChangedListener<V>listener) {
         if (listeners == null) {
             listeners = new ArrayList();
         }
@@ -59,7 +59,7 @@ public abstract class AbstractValueTool<V> extends EditTool implements ValueTool
     }
 
     @Override
-    public boolean removeListener(ValueChangedListener listener) {
+    public boolean removeValueChangeListener(ValueChangedListener<V> listener) {
         return listeners != null && listeners.remove(listener);
     }
 

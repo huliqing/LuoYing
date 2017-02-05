@@ -68,23 +68,14 @@ public class JfxTerrainTexLayerTool extends JfxAbstractTool<TexLayerTool> implem
     }
     
     @Override
-    public Node getView() {
+    public Node createView() {
         return layout;
-    }
-    
-    @Override
-    protected void setViewActivated(boolean activated) {
-        // ignore
-    }
-
-    @Override
-    protected void setViewEnabled(boolean enabled) {
-        layout.setDisable(!enabled);
     }
 
     @Override
     public void initialize() {
-        tool.addListener(this);
+        super.initialize();
+        tool.addLayerChangedListener(this);
         
         reloadLayers(tool.getLayers());
     }
@@ -196,4 +187,5 @@ public class JfxTerrainTexLayerTool extends JfxAbstractTool<TexLayerTool> implem
         label.setGraphic(imageView);
         return label;
     }
+
 }

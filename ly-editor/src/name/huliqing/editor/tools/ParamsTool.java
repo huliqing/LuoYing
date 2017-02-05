@@ -8,10 +8,11 @@ package name.huliqing.editor.tools;
 /**
  *
  * @author huliqing
- * @param <V>
  */
-public interface ValueChangedListener<V> {
+public class ParamsTool extends GroupTool {
     
-    void onValueChanged(ValueTool<V> vt, V oldValue, V newValue);
+    public ParamsTool(String name, String tips, String icon) {
+        super(name, tips, icon);
+    }
     
 }
