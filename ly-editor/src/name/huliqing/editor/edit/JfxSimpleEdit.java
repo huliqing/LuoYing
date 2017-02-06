@@ -56,9 +56,9 @@ public abstract class JfxSimpleEdit<T extends JmeEdit> extends JfxAbstractEdit<T
         mainLeft.prefWidthProperty().bind(mainPanel.widthProperty().subtract(extToolbarPanel.widthProperty()));
         mainLeft.prefHeightProperty().bind(mainPanel.heightProperty());
         
-        extToolbarPanel.prefWidth(180);
         extToolbarPanel.prefHeightProperty().bind(mainPanel.heightProperty());
         extToolbarPanel.setSide(Side.RIGHT);
+        extToolbarPanel.setPadding(new Insets(0));
         
         editPanel.setVisible(false);
         editPanel.setStyle(STYLE_EDIT_PANEL);

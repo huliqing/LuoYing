@@ -87,5 +87,21 @@ public class ResConstants {
     public final static String TOOL_TERRAIN_ERASE_TIP = "tool.terrain.erase.tip";
     public final static String TOOL_TERRAIN_TEXLAYER = "tool.terrain.texLayer";
     public final static String TOOL_TERRAIN_TEXLAYER_TIP = "tool.terrain.texLayer.tip";
+//    public final static String TOOL_TERRAIN_TEXLAYER_SELECT = "tool.terrain.texLayer.select";
+    public final static String TOOL_TERRAIN_TEXLAYER_DIFFUSE = "tool.terrain.texLayer.diffuse";
+    public final static String TOOL_TERRAIN_TEXLAYER_NORMAL = "tool.terrain.texLayer.normal";
+    public final static String TOOL_TERRAIN_TEXLAYER_SCALE = "tool.terrain.texLayer.scale";
+    public final static String TOOL_TERRAIN_TEXLAYER_ADD_LAYER_TIP = "tool.terrain.texLayer.addLayer.tip";
+    public final static String TOOL_TERRAIN_TEXLAYER_REMOVE_LAYER_TIP = "tool.terrain.texLayer.removeLayer.tip";
+    public final static String TOOL_TERRAIN_TEXLAYER_REMOVE_NORMAL_TIP = "tool.terrain.texLayer.removeNormal.tip";
+ 
+    public final static String FORM_CREATE_TERRAIN_TERRAIN_NAME = "form.create.terrain.terrainName";
+    public final static String FORM_CREATE_TERRAIN_TERRAIN_NAME_TIP = "form.create.terrain.terrainName.tip";
+    public final static String FORM_CREATE_TERRAIN_TOTAL_SIZE = "form.create.terrain.totalSize";
+    public final static String FORM_CREATE_TERRAIN_TOTAL_SIZE_TIP = "form.create.terrain.totalSize.tip";
+    public final static String FORM_CREATE_TERRAIN_PATCH_SIZE = "form.create.terrain.patchSize";
+    public final static String FORM_CREATE_TERRAIN_PATCH_SIZE_TIP = "form.create.terrain.patchSize.tip";
+    public final static String FORM_CREATE_TERRAIN_ALPHA_SIZE = "form.create.terrain.alphaSize";
+    public final static String FORM_CREATE_TERRAIN_ALPHA_SIZE_TIP = "form.create.terrain.alphaSize.tip";
     
 }

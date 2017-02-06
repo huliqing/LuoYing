@@ -96,23 +96,23 @@ public class TexLayerTool extends AbstractTool<SimpleJmeEdit, TerrainToolbar> im
      * 获取图层，如果当前没有选择中地形物体，则该方法可能返回null.
      * @return 
      */
-    public List<Layer> getLayers() {
+    public List<TexLayer> getLayers() {
         Terrain terrain = getTerrain();
         if (terrain == null)
             return null;
-        List<Layer> layers = new ArrayList(TerrainUtils.MAX_TEXTURES);
+        List<TexLayer> layers = new ArrayList(TerrainUtils.MAX_TEXTURES);
         Texture normalTex;
         for (int i = 0; i < TerrainUtils.MAX_TEXTURES; i++) {
             Texture tex = TerrainUtils.getDiffuseTexture(terrain, i);
             if (tex == null) {
                 break;
             }
-            Layer layer = new Layer();
-            layer.diffuseMap = tex.getName();
-            layer.scale = TerrainUtils.getDiffuseTextureScale(terrain, i);
+            TexLayer layer = new TexLayer();
+            layer.setDiffuseMap(tex.getName());
+            layer.setScale(TerrainUtils.getDiffuseTextureScale(terrain, i));
             normalTex = TerrainUtils.getNormalTexture(terrain, i);
             if (normalTex != null) {
-                layer.normalMap = normalTex.getName();
+                layer.setNormalMap(normalTex.getName());
             }
             layers.add(layer);
         }
@@ -221,12 +221,6 @@ public class TexLayerTool extends AbstractTool<SimpleJmeEdit, TerrainToolbar> im
     
     @Override
     protected void onToolEvent(Event e) {} // ignore
-    
-    public class Layer {
-        public String diffuseMap;
-        public String normalMap;
-        public float scale;
-    }
     
     private Terrain getTerrain() {
         ControlTile ct = edit.getSelected();

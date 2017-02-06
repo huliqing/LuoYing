@@ -14,12 +14,16 @@ ok.历史记录和jfx的change绑定有冲突
 ok.asset资源重命名功能
 ok.旋转操作controlObj的线条太粗
 
-.工具的参数设置
-.工具的Action类要统一
-.地形刷功能
+ok.工具的参数设置
+ok.工具的Action类要统一
+ok.地形刷功能
+.高度图创建地形
+.随机高度图地形
+.保存地形和alpha贴图
+
 .setWardIsoEnabled参数要增加
 .JmeEvent要支持Analog类型的事件
-.地形的笔刷球要保持大小
+ok.地形的笔刷球要保持大小
 .slopeTool的定位球初始位置要调整一下
 
 

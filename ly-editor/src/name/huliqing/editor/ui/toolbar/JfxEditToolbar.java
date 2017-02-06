@@ -37,7 +37,6 @@ public class JfxEditToolbar implements JfxToolbar, ToolbarListener{
     
     public JfxEditToolbar() {
         root.setContent(layout);
-        root.setPrefWidth(180);
     }
     
     @Override

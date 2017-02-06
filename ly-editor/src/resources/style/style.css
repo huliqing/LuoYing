@@ -1,6 +1,19 @@
 /*https://docs.oracle.com/javase/8/javafx/api/javafx/scene/doc-files/cssref.html*/
 /** 注：pseudo选择器中的":"号之间不能留空格 */
 
+/** 去掉获得焦点时的高亮边框 */
+.scroll-pane:focused,
+.split-pane:focused,
+.list-view:focused,
+.tree-view:focused,
+.table-view:focused,
+.tree-table-view:focused,
+.html-editor:focused {
+    -fx-background-color: -fx-box-border, -fx-control-inner-background;
+    -fx-background-insets: 0, 1;
+    -fx-padding: 1;
+}
+
 /** for all common HBox and VBox */
 .hv-box {
     -fx-padding: 0;
@@ -51,7 +64,7 @@
 }
 
 /** tree-view */
-.tree-view {
+.tree-view, .tree-view:focused {
     /*让tree-view背景透明，这可以让它在放到tab中的时候，不会在标题处产生一个明显的阻隔的线条*/
     -fx-background-color: transparent;
 }
@@ -59,6 +72,7 @@
 .scroll-pane {
     -fx-background-color: transparent;
 }
+
 
 /** see StyleConstants */
 .toolbarButton {

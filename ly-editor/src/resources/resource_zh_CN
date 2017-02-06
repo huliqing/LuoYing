@@ -1,5 +1,9 @@
 #use notepad++ -> 格式 -> 转为UTF-8编码格式 -> AngelCode 导出bmp font
 
+common.ok=确认
+common.cancel=取消
+common.create.terrain=创建地形
+
 menu.file=文件
 menu.file.quick=退出
 menu.file.assets=打开文件夹
@@ -42,4 +46,43 @@ tool.rotation=旋转
 tool.rotation.tip=切换到旋转操作(R)
 tool.scale=缩放
 tool.scale.tip=切换到缩放操作(S)
+
+tool.terrain.size=笔刷大小
+tool.terrain.size.tip=调整笔刷大小
+tool.terrain.weight=权重/高度
+tool.terrain.weight.tip= 调整权重或高度的大小
+tool.terrain.raise=升高
+tool.terrain.raise.tip=升高地形
+tool.terrain.lower=降低
+tool.terrain.lower.tip=降低地形
+tool.terrain.rough=粗糙
+tool.terrain.rough.tip=让地形变得粗糙
+tool.terrain.smooth=平滑
+tool.terrain.smooth.tip=让地形平滑
+tool.terrain.level=拉平
+tool.terrain.level.tip=将地形拉平到指定高度
+tool.terrain.slope=斜坡
+tool.terrain.slope.tip=调整角度球，然后再刷地形。
+tool.terrain.paint=贴图刷
+tool.terrain.paint.tip=选择一个贴图图层，然后刷到地形上
+tool.terrain.erase=贴图擦
+tool.terrain.erase.tip=选择要擦除的贴图图层，然后在地形上把它擦除
+tool.terrain.texLayer=贴图层
+tool.terrain.texLayer.tip=增加、删除或选择贴图图层
+tool.terrain.texLayer.select=选择
+tool.terrain.texLayer.diffuse=贴图
+tool.terrain.texLayer.normal=法线图
+tool.terrain.texLayer.scale=缩放
+tool.terrain.texLayer.addLayer.tip=添加贴图图层
+tool.terrain.texLayer.removeLayer.tip=移除贴图图层
+tool.terrain.texLayer.removeNormal.tip=移除法线贴图
+
+form.create.terrain.terrainName=地形名称
+form.create.terrain.terrainName.tip=地形名称
+form.create.terrain.totalSize=地形大小
+form.create.terrain.totalSize.tip=必须是2的平方，如64、128、256...
+form.create.terrain.patchSize=片块大小
+form.create.terrain.patchSize.tip=必须是2的平方，并且不能大于地形大小
+form.create.terrain.alphaSize=Alpha贴图大小
+form.create.terrain.alphaSize.tip=Alpha贴图大小
 

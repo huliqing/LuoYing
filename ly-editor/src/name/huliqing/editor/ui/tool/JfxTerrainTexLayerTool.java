@@ -7,25 +7,31 @@ package name.huliqing.editor.ui.tool;
 
 import java.io.File;
 import java.util.List;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Labeled;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import name.huliqing.editor.constants.AssetConstants;
+import name.huliqing.editor.constants.ResConstants;
 import name.huliqing.editor.manager.Manager;
+import name.huliqing.editor.tools.terrain.TexLayer;
 import name.huliqing.editor.tools.terrain.TexLayerTool;
-import name.huliqing.editor.tools.terrain.TexLayerTool.Layer;
 import name.huliqing.fxswing.Jfx;
 
 /**
@@ -34,37 +40,190 @@ import name.huliqing.fxswing.Jfx;
  */
 public class JfxTerrainTexLayerTool extends JfxAbstractTool<TexLayerTool> implements TexLayerTool.LayerChangedListener {
 
-    private final VBox layout = new VBox();
-    private final HBox btnZone = new HBox();
-    private final GridPane layerPanel = new GridPane();
+    private final GridPane btnLayout = new GridPane();
+    private final Button addLayer = new Button();
+    private final Button removeLayer = new Button();
+    private final Button removeNormal = new Button();
     
-    private final Button addBtn = new Button("add layer");
-    private final Button removeBtn = new Button("remove layer");
+    private final VBox layout = new VBox();
+    private final TableView<TexLayer> layerPanel = new TableView();
+    private int lastSelectRowIndex;
     
     public JfxTerrainTexLayerTool() {
-        layout.getChildren().addAll(btnZone, layerPanel);
-        btnZone.getChildren().addAll(addBtn, removeBtn);
-        addBtn.setOnAction(e -> {
+        addLayer.setGraphic(createImageView("/" + AssetConstants.INTERFACE_TOOL_TERRAIN_TEXLAYER_ADD));
+        addLayer.setTooltip(new Tooltip(Manager.getRes(ResConstants.TOOL_TERRAIN_TEXLAYER_ADD_LAYER_TIP)));
+        removeLayer.setGraphic(createImageView("/" + AssetConstants.INTERFACE_TOOL_TERRAIN_TEXLAYER_SUBTRACT));
+        removeLayer.setTooltip(new Tooltip(Manager.getRes(ResConstants.TOOL_TERRAIN_TEXLAYER_REMOVE_LAYER_TIP)));
+        removeNormal.setGraphic(createImageView("/" + AssetConstants.INTERFACE_TOOL_TERRAIN_TEXLAYER_REMOVE_NORMAL));
+        removeNormal.setTooltip(new Tooltip(Manager.getRes(ResConstants.TOOL_TERRAIN_TEXLAYER_REMOVE_NORMAL_TIP)));
+        btnLayout.addRow(0, addLayer, removeLayer, removeNormal);
+        btnLayout.setHgap(3);
+        
+        layout.getChildren().addAll(btnLayout, layerPanel);
+        addLayer.setOnAction(e -> {
             Jfx.runOnJme(() -> {
                 int count = tool.getLayerCounts();
                 tool.addTextureLayer(count);
+                Jfx.runOnJfx(() -> {
+                    layerPanel.getSelectionModel().select(count);
+                });
                 if (count >= 1) {
-                    Jfx.runOnJfx(() -> removeBtn.setDisable(false));
+                    Jfx.runOnJfx(() -> removeLayer.setDisable(false));
                 }
             });
         });
-        removeBtn.setOnAction(e -> {
+        removeLayer.setOnAction(e -> {
+            int layerSize = layerPanel.getItems().size();
+            if (layerSize <= 1) {
+                removeLayer.setDisable(true);
+                return;
+            }
             Jfx.runOnJme(() -> {
-                int count = tool.getLayerCounts();
-                if (count >= 1) {
-                    tool.removeTextureLayer(count - 1);
-                }
-                if (count <= 2) {
-                    Jfx.runOnJfx(() -> removeBtn.setDisable(true));
+                tool.removeTextureLayer(layerSize - 1);
+                if (layerSize - 1 <= 1) {
+                    Jfx.runOnJfx(() -> removeLayer.setDisable(true));
                 }
             });
         });
-        layerPanel.setVgap(5);
+        removeNormal.setOnAction(e -> {
+            int layerIndex = layerPanel.getSelectionModel().getSelectedIndex();
+            if (layerIndex < 0) {
+                return;
+            }
+            Jfx.runOnJme(() -> {
+                tool.setNormalTexture(layerIndex, null);
+            });
+        });
+        
+        initTableModel();
+    }
+    
+    private void initTableModel() {
+        TableColumn<TexLayer, String> select = new TableColumn(" ");
+        select.setSortable(false);
+        
+        TableColumn<TexLayer, String> tex = new TableColumn(Manager.getRes(ResConstants.TOOL_TERRAIN_TEXLAYER_DIFFUSE));
+        tex.setSortable(false);
+        tex.setCellValueFactory(new PropertyValueFactory<>("diffuseMap"));
+        tex.setCellFactory(c -> {
+            return new TableCell<TexLayer, String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setText(null);
+                    setGraphic(null);
+                    int rowIndex = getTableRow().getIndex();
+                    if (rowIndex >= layerPanel.getItems().size()) 
+                        return;
+                    Labeled icon = (item == null || item.isEmpty()) ? new Button() : new Label("", createImage(item));
+                    icon.setOnMouseClicked(e -> {
+                        if (e.getButton() != MouseButton.PRIMARY) return;
+                        File abstractFilePath = selectTexture(item);
+                        if (abstractFilePath != null) {
+                            Jfx.runOnJme(() -> {
+                                tool.setDiffuseTexture(rowIndex, toAssetsFilePath(abstractFilePath.getAbsolutePath()));
+                            });
+                        }
+                    });
+                    icon.setPrefWidth(32);
+                    icon.setPrefHeight(32);
+                    setGraphic(icon);
+                    setAlignment(Pos.CENTER);
+                }
+            };
+        });
+        
+        TableColumn<TexLayer, String> nor = new TableColumn(Manager.getRes(ResConstants.TOOL_TERRAIN_TEXLAYER_NORMAL));
+        nor.setSortable(false);
+        nor.setCellValueFactory(new PropertyValueFactory<>("normalMap"));
+        nor.setCellFactory(c -> {
+            return new TableCell<TexLayer, String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setText(null);
+                    setGraphic(null);
+                    int rowIndex = getTableRow().getIndex();
+                    if (rowIndex >= layerPanel.getItems().size()) 
+                        return;
+                    Labeled icon = (item == null || item.isEmpty()) ? new Button() : new Label("", createImage(item));
+                    icon.setOnMouseClicked(e -> {
+                        if (e.getButton() != MouseButton.PRIMARY) return;
+                        File abstractFilePath = selectTexture(item);
+                        if (abstractFilePath != null) {
+                            Jfx.runOnJme(() -> {
+                                tool.setNormalTexture(rowIndex, toAssetsFilePath(abstractFilePath.getAbsolutePath()));
+                            });
+                        }
+                    });
+                    icon.setAlignment(Pos.CENTER);
+                    icon.setPrefWidth(32);
+                    icon.setPrefHeight(32);
+                    setGraphic(icon);
+                    setAlignment(Pos.CENTER);
+                }
+            };
+        });
+        
+        TableColumn<TexLayer, Float> scale = new TableColumn(Manager.getRes(ResConstants.TOOL_TERRAIN_TEXLAYER_SCALE));
+        scale.setSortable(false);
+        scale.setCellValueFactory(new PropertyValueFactory<>("scale"));
+        scale.setCellFactory(c -> {
+            return new TableCell<TexLayer, Float>() {
+                @Override
+                protected void updateItem(Float item, boolean empty) {
+                    super.updateItem(item, empty); 
+                    setText(null);
+                    setGraphic(null);
+                    if (!empty) {
+                        int rowIndex = getTableRow().getIndex();
+                        TextField scaleField = new TextField();
+                        scaleField.setText(item + "");
+                        scaleField.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+                            if (!newValue) {
+                                updateTextureScale(rowIndex, scaleField.getText());
+                            }
+                        });
+                        scaleField.setOnKeyPressed((KeyEvent event) -> {
+                            if (event.getCode() == KeyCode.ENTER) {
+                                updateTextureScale(rowIndex, scaleField.getText());
+                            }
+                        });
+                        scaleField.setPrefWidth(64);
+                        setGraphic(scaleField);
+                        setAlignment(Pos.CENTER);
+                    }
+                }
+            };
+        });
+        select.setPrefWidth(20);
+        tex.setPrefWidth(32);
+        nor.setPrefWidth(32);
+        scale.setPrefWidth(64);
+        layerPanel.getColumns().addAll(select, tex, nor, scale);
+        layerPanel.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        layerPanel.setPlaceholder(new Label("No Textures"));
+        layerPanel.setPrefWidth(200);
+        layerPanel.setPrefHeight(200);
+        layerPanel.getSelectionModel().selectedIndexProperty().addListener((ObservableValue<? extends Number> observable
+                , Number oldValue, Number newValue) -> {
+            if (newValue.intValue() < 0 || newValue.intValue() >= layerPanel.getItems().size() || newValue.intValue() == lastSelectRowIndex) {
+                return;
+            }
+            lastSelectRowIndex = newValue.intValue();
+            Jfx.runOnJme(() -> {
+                tool.setSelectLayerIndex(newValue.intValue());
+            });
+        });
+        layerPanel.getSelectionModel().select(0);
+    }
+    
+    private ImageView createImageView(String path) {
+        Image image = new Image(getClass().getResourceAsStream(path));
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(16);
+        imageView.setFitHeight(16);
+        return imageView;
     }
     
     @Override
@@ -76,7 +235,6 @@ public class JfxTerrainTexLayerTool extends JfxAbstractTool<TexLayerTool> implem
     public void initialize() {
         super.initialize();
         tool.addLayerChangedListener(this);
-        
         reloadLayers(tool.getLayers());
     }
 
@@ -85,57 +243,20 @@ public class JfxTerrainTexLayerTool extends JfxAbstractTool<TexLayerTool> implem
         reloadLayers(tool.getLayers());
     }
     
-    private void reloadLayers(final List<Layer> layers) {
+    private void reloadLayers(final List<TexLayer> layers) {
         Jfx.runOnJfx(() -> {
-            layerPanel.getChildren().clear();
-            if (layers != null) {
-                for (int i = 0; i < layers.size(); i++) {
-                    Layer layer = layers.get(i);
-                    Label select = new Label("Select");
-                    Label diffuse = createImageLabel(layer.diffuseMap);
-                    Label normal = createImageLabel(layer.normalMap != null ? layer.normalMap : AssetConstants.TEXTURES_MISS);
-                    TextField scale = new TextField(layer.scale + "");
-                    layerPanel.addRow(i, select, diffuse, normal, scale);
-                    // action
-                    final int selIndex = i;
-                    select.setOnMouseClicked(e -> {
-                        if (e.getButton() == MouseButton.PRIMARY) {
-                            Jfx.runOnJme(() -> tool.setSelectLayerIndex(selIndex));
-                        }
-                    });
-                    diffuse.setOnMouseClicked(e -> {
-                        if (e.getButton() == MouseButton.PRIMARY) {
-                            File abstractFilePath = selectTexture(layer.diffuseMap);
-                            if (abstractFilePath != null) {
-                                Jfx.runOnJme(() -> {
-                                    tool.setDiffuseTexture(selIndex, toAssetsFilePath(abstractFilePath.getAbsolutePath()));
-                                });
-                            }
-                        }
-                    });
-                    normal.setOnMouseClicked(e -> {
-                        if (e.getButton() == MouseButton.PRIMARY) {
-                            File abstractFilePath = selectTexture(layer.normalMap);
-                            if (abstractFilePath != null) {
-                                Jfx.runOnJme(() -> {
-                                    tool.setNormalTexture(selIndex, toAssetsFilePath(abstractFilePath.getAbsolutePath()));
-                                });
-                            }
-                        }
-                    });
-                    scale.setPrefWidth(64);
-                    scale.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
-                        if (!newValue) {
-                            updateTextureScale(selIndex, scale.getText());
-                        }
-                    });
-                    scale.setOnKeyPressed((KeyEvent event) -> {
-                        if (event.getCode() == KeyCode.ENTER) {
-                            updateTextureScale(selIndex, scale.getText());
-                        }
-                    });
-                }
+            layerPanel.getItems().clear();
+            if (layers != null && !layers.isEmpty()) {
+                layerPanel.getItems().addAll(layers);
             }
+            removeLayer.setDisable(layerPanel.getItems().size() <= 1);
+            if (lastSelectRowIndex >= layerPanel.getItems().size()) {
+                lastSelectRowIndex = layerPanel.getItems().size() -1;
+            }
+            if (lastSelectRowIndex < 0) {
+                lastSelectRowIndex = 0;
+            }
+            layerPanel.getSelectionModel().select(lastSelectRowIndex);
         });
     }
     
@@ -163,6 +284,7 @@ public class JfxTerrainTexLayerTool extends JfxAbstractTool<TexLayerTool> implem
            }
         }
         fc.setInitialDirectory(new File(assetDir));
+        
         return fc.showOpenDialog(this.getView().getScene().getWindow());
     }
     
@@ -174,18 +296,14 @@ public class JfxTerrainTexLayerTool extends JfxAbstractTool<TexLayerTool> implem
         }
         return fileOnAssets;
     }
-    
-    private Label createImageLabel(String texPath) {
-        Label label = new Label();
+
+    private ImageView createImage(String texPath) {
         if (texPath == null || texPath.isEmpty())
-            return label;
-        
+            return null;
         Image image = new Image(getClass().getResourceAsStream("/" + texPath));
         ImageView imageView = new ImageView(image);
         imageView.setFitWidth(30);
         imageView.setFitHeight(30);
-        label.setGraphic(imageView);
-        return label;
+        return imageView;
     }
-
 }

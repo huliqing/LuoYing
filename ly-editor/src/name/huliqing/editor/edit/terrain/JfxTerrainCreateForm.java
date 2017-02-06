@@ -27,13 +27,13 @@ import name.huliqing.editor.manager.Manager;
  */
 public class JfxTerrainCreateForm extends VBox {
     private final GridPane grid = new GridPane();
-    private final Label nameLabel = new Label("Terrain Name: ");
-    private final Label totalSizeLabel = new Label("Total Size: ");
-    private final Label patchSizeLabel = new Label("Patch Size: ");
+    private final Label nameLabel = new Label(Manager.getRes(ResConstants.FORM_CREATE_TERRAIN_TERRAIN_NAME));
+    private final Label totalSizeLabel = new Label(Manager.getRes(ResConstants.FORM_CREATE_TERRAIN_TOTAL_SIZE));
+    private final Label patchSizeLabel = new Label(Manager.getRes(ResConstants.FORM_CREATE_TERRAIN_PATCH_SIZE));
     // The size of one side of the texture, eg. 512. This will be used to blend several textures together into one texture for
     // the terrain. The larger the size, the more detailed the image. But it will use more memory and possibly slow 
     // down the editor. You cannot change this value after it is set!
-    private final Label alphaTextureSizeLabel = new Label("Alpha Texture Size: ");
+    private final Label alphaTextureSizeLabel = new Label(Manager.getRes(ResConstants.FORM_CREATE_TERRAIN_ALPHA_SIZE));
     
     public final TextField nameField = new TextField();
     public final TextField totalSizeField = new TextField("256");
@@ -57,16 +57,16 @@ public class JfxTerrainCreateForm extends VBox {
         
         btnPane.getChildren().addAll(ok, cancel);
         AnchorPane.setTopAnchor(ok, 10.0);
-        AnchorPane.setLeftAnchor(ok, 50.0);
+        AnchorPane.setLeftAnchor(ok, 120.0);
         
         AnchorPane.setTopAnchor(cancel, 10.0);
-        AnchorPane.setRightAnchor(cancel, 50.0);
+        AnchorPane.setRightAnchor(cancel, 100.0);
         btnPane.prefHeight(50);
         
-        nameField.setPromptText("Enter a unique terrain name.");
-        totalSizeField.setPromptText("Must be power of 2.");
-        patchSizeField.setPromptText("Must be power of 2 and less than Total Size.");
-        alphaTextureSizeField.setPromptText("The size of one side of the texture, eg. 512.");
+        nameField.setPromptText(Manager.getRes(ResConstants.FORM_CREATE_TERRAIN_TERRAIN_NAME_TIP));
+        totalSizeField.setPromptText(Manager.getRes(ResConstants.FORM_CREATE_TERRAIN_TOTAL_SIZE_TIP));
+        patchSizeField.setPromptText(Manager.getRes(ResConstants.FORM_CREATE_TERRAIN_PATCH_SIZE_TIP));
+        alphaTextureSizeField.setPromptText(Manager.getRes(ResConstants.FORM_CREATE_TERRAIN_ALPHA_SIZE_TIP));
         
         grid.setVgap(10);
         GridPane.setHalignment(nameLabel, HPos.RIGHT);

@@ -23,6 +23,21 @@ public class AssetConstants {
     /** 缩放 */
     public final static String INTERFACE_TOOL_SCALE = "Interface/tools/scale.png";
     
+    
+    /** 太阳、灯光 */
+    public final static String INTERFACE_ICON_SUN = "Interface/icon/sun.png";
+    
+    /** 材质：TerrainLighting.j3md */
+    public final static String MATERIAL_TERRAIN_LIGHTING = "Common/MatDefs/Terrain/TerrainLighting.j3md";
+    
+    /** 材质：Unshaded.j3md */
+    public final static String MATERIAL_UNSHADED = "Common/MatDefs/Misc/Unshaded.j3md";
+    
+    /** miss.png */
+    public final static String TEXTURES_MISS = "Textures/miss.png";
+    
+    // ---- 地形工具
+    
     /** 地形上升 */
     public final static String INTERFACE_TOOL_TERRAIN_RAISE = "Interface/tools/terrain/icon_terrain-up.png";
     /** 地形下降 */
@@ -39,18 +54,11 @@ public class AssetConstants {
     public final static String INTERFACE_TOOL_TERRAIN_PAINT = "Interface/tools/terrain/icon_terrain-paint-circle.png";
     /** 笔刷擦工具 */
     public final static String INTERFACE_TOOL_TERRAIN_ERASE = "Interface/tools/terrain/icon_terrain-erase-circle.png";
-    
-    /** 太阳、灯光 */
-    public final static String INTERFACE_ICON_SUN = "Interface/icon/sun.png";
-    
-    /** 材质：TerrainLighting.j3md */
-    public final static String MATERIAL_TERRAIN_LIGHTING = "Common/MatDefs/Terrain/TerrainLighting.j3md";
-    
-    /** 材质：Unshaded.j3md */
-    public final static String MATERIAL_UNSHADED = "Common/MatDefs/Misc/Unshaded.j3md";
-    
-    /** miss.png */
-    public final static String TEXTURES_MISS = "Textures/miss.png";
-    
+    /** 增加图层 */
+    public final static String INTERFACE_TOOL_TERRAIN_TEXLAYER_ADD = "Interface/tools/terrain/add.png";
+    /** 移除图层 */
+    public final static String INTERFACE_TOOL_TERRAIN_TEXLAYER_SUBTRACT = "Interface/tools/terrain/subtract.png";
+    /** 移除Normal图 */
+    public final static String INTERFACE_TOOL_TERRAIN_TEXLAYER_REMOVE_NORMAL = "Interface/tools/terrain/remove-tex.png";
     
 }
