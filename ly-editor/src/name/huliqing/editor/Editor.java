@@ -118,4 +118,17 @@ public class Editor extends SimpleApplication{
         super.stop(); 
     }
     
+    /**
+     * 将资源的绝对路径转换到当前主资源文件夹下的路径
+     * @param abstractFilePath
+     * @return 
+     */
+    public final static String toAssetFilePath(String abstractFilePath) {
+        String mainAssetDir = Manager.getConfigManager().getMainAssetDir();
+        String fileOnAssets  = abstractFilePath.replace(mainAssetDir, "").replace("\\", "/");
+        if (fileOnAssets.startsWith("/")) {
+            fileOnAssets = fileOnAssets.substring(1);
+        }
+        return fileOnAssets;
+    }
 }

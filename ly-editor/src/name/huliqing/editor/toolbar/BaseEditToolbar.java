@@ -106,16 +106,6 @@ public class BaseEditToolbar extends EditToolbar<SimpleJmeEdit>{
         setEnabled(gridTool, true);
         setEnabled(pickTool, true);
         setEnabled(moveTool, true);
-        
-//        setEnabled(rotationTool, true);
-//        setEnabled(scaleTool, true);
-        
-//        setActivated(undoRedoTool, true);
-//        setActivated(cameraTool, true);
-//        setActivated(modeTool, true);
-//        setActivated(gridTool, true);
-//        setActivated(pickTool, true);
-//        setActivated(moveTool, true);
     }
 
     @Override

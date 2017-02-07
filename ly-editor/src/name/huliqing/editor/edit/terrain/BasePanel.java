@@ -14,7 +14,9 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -25,7 +27,7 @@ import name.huliqing.editor.manager.Manager;
  *
  * @author huliqing
  */
-public class JfxTerrainCreateForm extends VBox {
+public class BasePanel extends VBox {
     private final GridPane grid = new GridPane();
     private final Label nameLabel = new Label(Manager.getRes(ResConstants.FORM_CREATE_TERRAIN_TERRAIN_NAME));
     private final Label totalSizeLabel = new Label(Manager.getRes(ResConstants.FORM_CREATE_TERRAIN_TOTAL_SIZE));
@@ -40,12 +42,8 @@ public class JfxTerrainCreateForm extends VBox {
     public final TextField patchSizeField = new TextField("64");
     public final TextField alphaTextureSizeField = new TextField("256");
     
-    private final AnchorPane btnPane = new AnchorPane();
-    private final Button ok = new Button(Manager.getRes(ResConstants.COMMON_OK));
-    private final Button cancel = new Button(Manager.getRes(ResConstants.COMMON_CANCEL));
-    
-    public JfxTerrainCreateForm() {
-        getChildren().addAll(grid, btnPane);
+    public BasePanel() {
+        getChildren().addAll(grid);
         
         grid.addRow(0, nameLabel, nameField);
         grid.addRow(1, totalSizeLabel, totalSizeField);
@@ -55,18 +53,14 @@ public class JfxTerrainCreateForm extends VBox {
         GridPane.setHgrow(totalSizeField, Priority.ALWAYS);
         GridPane.setHgrow(patchSizeField, Priority.ALWAYS);
         
-        btnPane.getChildren().addAll(ok, cancel);
-        AnchorPane.setTopAnchor(ok, 10.0);
-        AnchorPane.setLeftAnchor(ok, 120.0);
-        
-        AnchorPane.setTopAnchor(cancel, 10.0);
-        AnchorPane.setRightAnchor(cancel, 100.0);
-        btnPane.prefHeight(50);
-        
         nameField.setPromptText(Manager.getRes(ResConstants.FORM_CREATE_TERRAIN_TERRAIN_NAME_TIP));
+        nameField.setTooltip(new Tooltip(nameField.getPromptText()));
         totalSizeField.setPromptText(Manager.getRes(ResConstants.FORM_CREATE_TERRAIN_TOTAL_SIZE_TIP));
+        totalSizeField.setTooltip(new Tooltip(totalSizeField.getPromptText()));
         patchSizeField.setPromptText(Manager.getRes(ResConstants.FORM_CREATE_TERRAIN_PATCH_SIZE_TIP));
+        patchSizeField.setTooltip(new Tooltip(patchSizeField.getPromptText()));
         alphaTextureSizeField.setPromptText(Manager.getRes(ResConstants.FORM_CREATE_TERRAIN_ALPHA_SIZE_TIP));
+        alphaTextureSizeField.setTooltip(new Tooltip(alphaTextureSizeField.getPromptText()));
         
         grid.setVgap(10);
         GridPane.setHalignment(nameLabel, HPos.RIGHT);
@@ -75,19 +69,14 @@ public class JfxTerrainCreateForm extends VBox {
         GridPane.setHalignment(alphaTextureSizeLabel, HPos.RIGHT);
         setPadding(new Insets(10));
         setMinWidth(400);
+        ColumnConstraints cc = new ColumnConstraints(100);
+        grid.getColumnConstraints().add(cc);
         
         SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmss");
         nameField.setText("terrain" + sdf.format(new Date()));
-        
         // for debug
 //        setStyle("-fx-border: solid inside;-fx-border-width:1;-fx-border-color:red;");
     }
     
-    public void setOnOk(EventHandler<ActionEvent> e) {
-        ok.setOnAction(e);
-    }
-    
-    public void setOnCancel(EventHandler<ActionEvent> e) {
-        cancel.setOnAction(e);
-    }
+
 }

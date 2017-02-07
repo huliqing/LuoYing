@@ -11,6 +11,9 @@ package name.huliqing.editor.constants;
  */
 public class AssetConstants {
     
+    
+    public final static String INTERFACE_COMMON_IMAGE= "Interface/icon/image.png";
+    
     /** Interface/Fonts/Default.fnt */
     public final static String INTERFACE_FONTS_DEFAULT = "Interface/Fonts/Default.fnt";
     

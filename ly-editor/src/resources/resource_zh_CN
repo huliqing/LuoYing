@@ -85,4 +85,16 @@ form.create.terrain.patchSize=片块大小
 form.create.terrain.patchSize.tip=必须是2的平方，并且不能大于地形大小
 form.create.terrain.alphaSize=Alpha贴图大小
 form.create.terrain.alphaSize.tip=Alpha贴图大小
-
+form.create.terrain.type.flat=平地
+form.create.terrain.type.flat.tip=创建为平面地形
+form.create.terrain.type.hill=山地
+form.create.terrain.type.hill.tip=创建为随机山地
+form.create.terrain.type.hill.iterations=迭代
+form.create.terrain.type.hill.seed=随机种子
+form.create.terrain.type.hill.radiusMin=最小半径
+form.create.terrain.type.hill.radiusMax=最大半径
+form.create.terrain.type.image=高度图
+form.create.terrain.type.image.tip=使用高度图创建地形
+form.create.terrain.type.image.file=高度图
+form.create.terrain.type.image.smooth=平滑度
+form.create.terrain.type.image.scale=缩放

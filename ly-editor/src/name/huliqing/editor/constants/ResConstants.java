@@ -103,5 +103,19 @@ public class ResConstants {
     public final static String FORM_CREATE_TERRAIN_PATCH_SIZE_TIP = "form.create.terrain.patchSize.tip";
     public final static String FORM_CREATE_TERRAIN_ALPHA_SIZE = "form.create.terrain.alphaSize";
     public final static String FORM_CREATE_TERRAIN_ALPHA_SIZE_TIP = "form.create.terrain.alphaSize.tip";
+    public final static String FORM_CREATE_TERRAIN_TYPE_FLAT = "form.create.terrain.type.flat";
+    public final static String FORM_CREATE_TERRAIN_TYPE_FLAT_TIP = "form.create.terrain.type.flat.tip";
+    public final static String FORM_CREATE_TERRAIN_TYPE_HILL = "form.create.terrain.type.hill";
+    public final static String FORM_CREATE_TERRAIN_TYPE_HILL_TIP = "form.create.terrain.type.hill.tip";
+    public final static String FORM_CREATE_TERRAIN_TYPE_HILL_ITERATIONS = "form.create.terrain.type.hill.iterations";
+    public final static String FORM_CREATE_TERRAIN_TYPE_HILL_SEED = "form.create.terrain.type.hill.seed";
+    public final static String FORM_CREATE_TERRAIN_TYPE_HILL_RADIUS_MIN = "form.create.terrain.type.hill.radiusMin";
+    public final static String FORM_CREATE_TERRAIN_TYPE_HILL_RADIUS_MAX = "form.create.terrain.type.hill.radiusMax";
+    public final static String FORM_CREATE_TERRAIN_TYPE_IMAGE = "form.create.terrain.type.image";
+    public final static String FORM_CREATE_TERRAIN_TYPE_IMAGE_TIP = "form.create.terrain.type.image.tip";
+    public final static String FORM_CREATE_TERRAIN_TYPE_IMAGE_FILE = "form.create.terrain.type.image.file";
+    public final static String FORM_CREATE_TERRAIN_TYPE_IMAGE_SMOOTH = "form.create.terrain.type.image.smooth";
+    public final static String FORM_CREATE_TERRAIN_TYPE_IMAGE_SCALE = "form.create.terrain.type.image.scale";
+    
     
 }

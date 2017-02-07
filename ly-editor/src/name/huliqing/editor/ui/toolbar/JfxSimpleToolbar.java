@@ -56,9 +56,9 @@ public class JfxSimpleToolbar extends ToolBar implements JfxToolbar, ToolbarList
             if (jfxTool != null) {
                 jfxTool.initialize();
                 jfxTool.setEnabled(tool.isInitialized());
-                getItems().add(jfxTool.getView());
                 jfxTool.getView().getStyleClass().add(StyleConstants.CLASS_TOOLBAR_BUTTON);
                 toolViewMap.put(tool, jfxTool);
+                getItems().add(jfxTool.getView());
             }
         }
     }
@@ -83,26 +83,6 @@ public class JfxSimpleToolbar extends ToolBar implements JfxToolbar, ToolbarList
     @Override
     public void onToolRemoved(Tool toolRemoved) {
     }
-
-//    @Override
-//    public void onToolActivated(Tool tool) {
-//        Jfx.runOnJfx(() -> {
-//            JfxTool tv = toolViewMap.get(tool);
-//            if (tv != null) {
-//                tv.setActivated(true);
-//            }
-//        });
-//    }
-//
-//    @Override
-//    public void onToolDeactivated(Tool tool) {
-//        Jfx.runOnJfx(() -> {
-//            JfxTool tv = toolViewMap.get(tool);
-//            if (tv != null) {
-//                tv.setActivated(false);
-//            }
-//        });
-//    }
 
     @Override
     public void onToolEnabled(Tool tool) {

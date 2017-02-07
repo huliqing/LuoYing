@@ -9,15 +9,15 @@ import com.jme3.app.Application;
 import com.jme3.export.binary.BinaryExporter;
 import com.jme3.scene.Spatial;
 import com.jme3.terrain.Terrain;
+import com.jme3.terrain.heightmap.HeightMap;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import name.huliqing.editor.constants.ResConstants;
 import name.huliqing.editor.edit.scene.JfxSceneEdit;
-import name.huliqing.editor.edit.terrain.JfxTerrainCreateForm;
+import name.huliqing.editor.edit.terrain.BasePanel;
+import name.huliqing.editor.edit.terrain.TerrainCreateForm;
 import name.huliqing.editor.manager.Manager;
 import name.huliqing.editor.ui.CustomDialog;
 import name.huliqing.editor.utils.TerrainUtils;
@@ -43,21 +43,32 @@ public class TerrainEntityComponent extends EntityComponent {
     @Override
     public void create(JfxSceneEdit jfxEdit) {
         CustomDialog dialog = new CustomDialog(jfxEdit.getEditRoot().getScene().getWindow());
-        JfxTerrainCreateForm form = new JfxTerrainCreateForm();
-        HBox.setHgrow(form, Priority.ALWAYS);
+        TerrainCreateForm form = new TerrainCreateForm(jfxEdit.getEditor().getAssetManager());
+        BasePanel baseForm = form.basePanel;
         dialog.getChildren().add(form);
         dialog.setTitle(Manager.getRes(ResConstants.COMMON_CREATE_TERRAIN));
         dialog.show();
 
         form.setOnOk(t -> {
             dialog.hide();
-            String terrainName = form.nameField.getText();
-            int totalSize = Integer.parseInt(form.totalSizeField.getText());
-            int patchSize = Integer.parseInt(form.patchSizeField.getText());
-            int alphaTextureSize = Integer.parseInt(form.alphaTextureSizeField.getText());
+            String terrainName = baseForm.nameField.getText();
+            int totalSize = Integer.parseInt(baseForm.totalSizeField.getText());
+            int patchSize = Integer.parseInt(baseForm.patchSizeField.getText());
+            int alphaTextureSize = Integer.parseInt(baseForm.alphaTextureSizeField.getText());
             String assetFolder = Manager.getConfigManager().getMainAssetDir();
             Jfx.runOnJme(() -> {
-                createTerrain(jfxEdit, jfxEdit.getEditor(), terrainName, totalSize, patchSize, alphaTextureSize, assetFolder);
+                float[] heightMapData = null;
+                if (form.flatPanel.isVisible()) {
+                    heightMapData = null;
+                    
+                } else if (form.hillPanel.isVisible()) {
+                    heightMapData = form.hillPanel.getHeightMap();
+                    
+                } else if (form.imageBasedPanel.isVisible()) {
+                    heightMapData = form.imageBasedPanel.getHeightMap();
+                }
+                createTerrain(jfxEdit, jfxEdit.getEditor(), terrainName, totalSize, patchSize, alphaTextureSize, assetFolder, heightMapData);
+                
             });
         });
         form.setOnCancel(t -> {
@@ -66,11 +77,11 @@ public class TerrainEntityComponent extends EntityComponent {
     }
     
     private void createTerrain(JfxSceneEdit jfxEdit, Application application
-            , String terrainName, int totalSize, int patchSize, int alphaTextureSize, String assetFolder) {
+            , String terrainName, int totalSize, int patchSize, int alphaTextureSize, String assetFolder, float[] heightMap) {
         try {
             // 创建地形
             Terrain terrain = TerrainUtils.doCreateTerrain(application, assetFolder
-                    , alphaTextureDir, terrainName, totalSize, patchSize, alphaTextureSize, null, AssetConstants.TEXTURES_TERRAIN_DIRT);
+                    , alphaTextureDir, terrainName, totalSize, patchSize, alphaTextureSize, heightMap, AssetConstants.TEXTURES_TERRAIN_DIRT);
             Spatial terrainSpatial = (Spatial) terrain;
 
             // 保存地形文件

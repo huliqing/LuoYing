@@ -6,7 +6,6 @@
 package name.huliqing.editor.ui.tool;
 
 import javafx.beans.value.ObservableValue;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
@@ -54,6 +53,9 @@ public class JfxToggleTool extends JfxAbstractTool {
             view.setGraphic(imageView);
         }
         
+        if (tool.isInitialized()) {
+            setViewEnabled(true);
+        }
     }
     
 }
