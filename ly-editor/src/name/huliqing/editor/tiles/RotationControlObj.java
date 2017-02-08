@@ -15,7 +15,7 @@ public class RotationControlObj extends ControlObj {
     
     public RotationControlObj() {
         controlAxis = new RotationAxis();
-        controlAxis.addControl(new AutoScaleControl());
+        controlAxis.addControl(new AutoScaleControl(0.1f));
         attachChild(controlAxis);
     }
     

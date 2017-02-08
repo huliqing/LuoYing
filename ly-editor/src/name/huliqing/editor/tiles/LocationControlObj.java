@@ -20,7 +20,7 @@ public class LocationControlObj extends ControlObj {
     
     public LocationControlObj() {
         controlAxis = new LocationAxis();
-        controlAxis.addControl(new AutoScaleControl());
+        controlAxis.addControl(new AutoScaleControl(0.1f));
         attachChild(controlAxis);
     }
 

@@ -9,11 +9,13 @@ import com.jme3.app.Application;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.TextureKey;
 import com.jme3.bounding.BoundingBox;
+import com.jme3.export.binary.BinaryExporter;
 import com.jme3.gde.terraineditor.tools.PaintTerrainToolAction;
 import com.jme3.material.MatParam;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import com.jme3.terrain.Terrain;
 import com.jme3.terrain.geomipmap.TerrainLodControl;
 import com.jme3.terrain.geomipmap.TerrainQuad;
@@ -388,19 +390,24 @@ public class TerrainUtils {
      * @param texture
      */
     public final static void setNormalTexture(Terrain terrain, int layer, Texture texture) {
-//        if (texture == null) {
-//            if (layer == 0) {
-//                terrain.getMaterial().clearParam("NormalMap");
-//            } else {
-//                terrain.getMaterial().clearParam("NormalMap_" + layer);
-//            }
-//            return;
-//        }
         texture.setWrap(Texture.WrapMode.Repeat);
         if (layer == 0) {
             terrain.getMaterial().setTexture("NormalMap", texture);
         } else {
             terrain.getMaterial().setTexture("NormalMap_" + layer, texture);
+        }
+    }
+    
+    /**
+     * 保存地形
+     * @param terrain
+     * @param saveFile 
+     */
+    public final static void saveTerrain(Spatial terrain, File saveFile) {
+        try {
+            BinaryExporter.getInstance().save(terrain, saveFile);
+        } catch (IOException ex) {
+            LOG.log(Level.SEVERE, null, ex);
         }
     }
 }

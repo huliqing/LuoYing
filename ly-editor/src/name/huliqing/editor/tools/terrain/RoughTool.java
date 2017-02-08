@@ -15,7 +15,7 @@ import name.huliqing.editor.edit.controls.entity.EntityControlTile;
  *
  * @author huliqing
  */
-public class RoughTool extends AbstractTerrainTool {
+public class RoughTool extends AdjustTerrainTool {
     
     public RoughTool(String name, String tips, String icon) {
         super(name, tips, icon);
@@ -29,6 +29,7 @@ public class RoughTool extends AbstractTerrainTool {
         params.scale = toolbar.getRoughParamsTool().getScale().getValue().floatValue();
         
         RoughTerrainToolAction action = new RoughTerrainToolAction(terrain, markerWorldLoc, radius, weight, params);
+        setModified(true);
         return action;
     }
     

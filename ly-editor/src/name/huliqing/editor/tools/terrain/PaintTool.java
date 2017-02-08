@@ -26,7 +26,7 @@ import name.huliqing.editor.utils.TerrainUtils;
  * </code>
  * @author huliqing
  */
-public class PaintTool extends AbstractTerrainTool {
+public class PaintTool extends AdjustTerrainTool {
     
     protected TexLayerTool texLayerTool;
     
@@ -52,6 +52,7 @@ public class PaintTool extends AbstractTerrainTool {
             return null;
         
         PaintTerrainToolAction action = new PaintTerrainToolAction(terrain, markerWorldLoc, radius, weight, textureIndex);
+        setModifiedAlpha(true);
         return action;
     } 
 

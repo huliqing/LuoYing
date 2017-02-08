@@ -7,6 +7,7 @@ package name.huliqing.editor.edit;
 
 import com.jme3.scene.Node;
 import com.jme3.util.SafeArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import name.huliqing.editor.Editor;
 import name.huliqing.editor.toolbar.Toolbar;
@@ -16,7 +17,15 @@ import name.huliqing.editor.toolbar.Toolbar;
  */
 public abstract class JmeAbstractEdit implements JmeEdit {
 
+    /**
+     * 历史记录列表
+     */
     protected final UndoRedoManager undoRedoManager = new UndoRedoManager();
+    
+    /**
+     * 标记编辑器是否经过编辑操作
+     */
+    protected boolean modified;
     
     /**
      * 主编辑器APP
@@ -132,6 +141,21 @@ public abstract class JmeAbstractEdit implements JmeEdit {
     @Override
     public Editor getEditor() {
         return editor;
+    }
+
+    @Override
+    public boolean isModified() {
+        return modified;
+    }
+
+    @Override
+    public void setModified(boolean modified) {
+        this.modified = modified;
+    }
+
+    @Override
+    public void save() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     /**

@@ -22,8 +22,9 @@ public class LowerTool extends RaiseTool {
 
     @Override
     protected AbstractTerrainToolAction createAction(float radius, float weight, Vector3f markerWorldLoc, EntityControlTile terrain) {
-         RaiseTerrainToolAction action = new RaiseTerrainToolAction(terrain, markerWorldLoc, radius, -weight);
-         return action;
+        RaiseTerrainToolAction action = new RaiseTerrainToolAction(terrain, markerWorldLoc, radius, -weight);
+        setModified(true);
+        return action;
     }
     
 }

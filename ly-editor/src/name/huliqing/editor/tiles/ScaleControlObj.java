@@ -19,7 +19,7 @@ public class ScaleControlObj extends ControlObj {
     
     public ScaleControlObj() {
         controlAxis = new ScaleAxis();
-        controlAxis.addControl(new AutoScaleControl());
+        controlAxis.addControl(new AutoScaleControl(0.1f));
         attachChild(controlAxis);
     }
     

@@ -14,7 +14,7 @@ import name.huliqing.editor.edit.controls.entity.EntityControlTile;
  * 地形平滑工具
  * @author huliqing
  */
-public class SmoothTool extends AbstractTerrainTool {
+public class SmoothTool extends AdjustTerrainTool {
     
     public SmoothTool(String name, String tips, String icon) {
         super(name, tips, icon);
@@ -23,6 +23,7 @@ public class SmoothTool extends AbstractTerrainTool {
     @Override
     protected AbstractTerrainToolAction createAction(float radius, float weight, Vector3f markerWorldLoc, EntityControlTile terrain) {
         SmoothTerrainToolAction action = new SmoothTerrainToolAction(terrain, markerWorldLoc, radius, weight);
+        setModified(true);
         return action;
     }
     

@@ -5,7 +5,6 @@
  */
 package name.huliqing.editor.tools.terrain;
 
-import com.jme3.scene.Spatial;
 import com.jme3.terrain.Terrain;
 import com.jme3.texture.Texture;
 import java.util.ArrayList;
@@ -13,11 +12,9 @@ import java.util.List;
 import name.huliqing.editor.edit.Mode;
 import name.huliqing.editor.edit.SimpleJmeEdit;
 import name.huliqing.editor.edit.controls.ControlTile;
-import name.huliqing.editor.edit.controls.entity.EntityControlTile;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.toolbar.TerrainToolbar;
 import name.huliqing.editor.edit.SimpleEditListener;
-import name.huliqing.editor.tools.AbstractTool;
 import name.huliqing.editor.utils.TerrainUtils;
 import name.huliqing.luoying.constants.AssetConstants;
 
@@ -34,7 +31,7 @@ import name.huliqing.luoying.constants.AssetConstants;
  * </code>
  * @author huliqing
  */
-public class TexLayerTool extends AbstractTool<SimpleJmeEdit, TerrainToolbar> implements SimpleEditListener {
+public class TexLayerTool extends AbstractTerrainTool implements SimpleEditListener {
 //    private static final Logger LOG = Logger.getLogger(TexLayerTool.class.getName());
     
     public interface LayerChangedListener {
@@ -132,6 +129,7 @@ public class TexLayerTool extends AbstractTool<SimpleJmeEdit, TerrainToolbar> im
         TerrainUtils.setDiffuseTextureScale(terrain, layer, TerrainUtils.DEFAULT_TEXTURE_SCALE);
         Texture tex = editor.getAssetManager().loadTexture(AssetConstants.TEXTURES_TERRAIN_DIRT);
         TerrainUtils.setDiffuseTexture(terrain, layer, tex);
+        setModified(true);
         texLayerListener.forEach(t -> {t.onLayerChanged(this);});
     }
     
@@ -148,6 +146,8 @@ public class TexLayerTool extends AbstractTool<SimpleJmeEdit, TerrainToolbar> im
         TerrainUtils.removeDiffuseTexture(terrain, layer);
         TerrainUtils.removeNormalTexture(terrain, layer);
         TerrainUtils.doClearAlphaMap(terrain, layer);
+        setModified(true);
+        setModifiedAlpha(true);
         texLayerListener.forEach(t -> {t.onLayerChanged(this);});
     }
     
@@ -158,6 +158,7 @@ public class TexLayerTool extends AbstractTool<SimpleJmeEdit, TerrainToolbar> im
         if (terrain == null)
             return;
         TerrainUtils.setDiffuseTextureScale(terrain, layer, scale);
+        setModified(true);
         texLayerListener.forEach(t -> {t.onLayerChanged(this);});
     }
     
@@ -178,6 +179,7 @@ public class TexLayerTool extends AbstractTool<SimpleJmeEdit, TerrainToolbar> im
             Texture tex = editor.getAssetManager().loadTexture(texturePath);
             TerrainUtils.setDiffuseTexture(terrain, layer, tex);
         }
+        setModified(true);
         texLayerListener.forEach(t -> {t.onLayerChanged(this);});
     }
     
@@ -198,6 +200,7 @@ public class TexLayerTool extends AbstractTool<SimpleJmeEdit, TerrainToolbar> im
             Texture tex = editor.getAssetManager().loadTexture(texturePath);
             TerrainUtils.setNormalTexture(terrain, layer, tex);
         }
+        setModified(true);
         texLayerListener.forEach(t -> {t.onLayerChanged(this);});
     }
     
@@ -222,16 +225,5 @@ public class TexLayerTool extends AbstractTool<SimpleJmeEdit, TerrainToolbar> im
     @Override
     protected void onToolEvent(Event e) {} // ignore
     
-    private Terrain getTerrain() {
-        ControlTile ct = edit.getSelected();
-        if (!(ct instanceof EntityControlTile)) {
-            return null;
-        }
-        Spatial terrainSpatial = ((EntityControlTile) ct).getTarget().getSpatial();
-        if (!(terrainSpatial instanceof Terrain)) {
-            return null;
-        }
-        Terrain terrain = (Terrain) terrainSpatial;
-        return terrain;
-    }
+
 }

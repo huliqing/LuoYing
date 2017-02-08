@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.editor.Editor;
 import name.huliqing.editor.edit.SimpleJmeEdit;
+import name.huliqing.editor.edit.controls.ControlTile;
 import name.huliqing.editor.edit.controls.SpatialControlTile;
 import name.huliqing.editor.manager.Manager;
 
@@ -60,8 +61,8 @@ public class SpatialEdit extends SimpleJmeEdit {
         if (spatial != null) {
             spatial.removeFromParent();
             
-            SafeArrayList<SpatialControlTile> list = getControlTiles();
-            for (SpatialControlTile sct : list.getArray()) {
+            SafeArrayList<ControlTile> list = getControlTiles();
+            for (ControlTile sct : list.getArray()) {
                 if (sct.getControlSpatial() == spatial) {
                     removeControlTile(sct);
                     break;

@@ -7,12 +7,8 @@ package name.huliqing.editor.edit;
 
 import java.util.ArrayList;
 import java.util.List;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.geometry.Side;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
 import javafx.scene.input.DragEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -29,41 +25,37 @@ public abstract class JfxSimpleEdit<T extends JmeEdit> extends JfxAbstractEdit<T
     // editPanel不能完全透明，完全透明则响应不了事件，在响应事件时还需要设置为visible=true
     private final static String STYLE_EDIT_PANEL = "-fx-background-color:rgba(0,0,0,0.01)";
     
-    protected final HBox mainPanel = new HBox();
+    protected final BorderPane layout = new BorderPane();
+    
+    protected final StackPane leftZone = new StackPane();
+    protected final Pane leftPropertyZone = new HBox();
+    protected final Pane leftEditZone = new HBox();
+    
     protected final Pane jfxToolbarPanel = new HBox();
-    
-    protected final StackPane mainLeft = new StackPane();
-    
-    protected final Pane propertyPanel = new HBox();
-    protected final TabPane extToolbarPanel = new TabPane();
-    protected final Pane editPanel = new HBox();
+    protected final JfxExtToolbar jfxExtToolbarPanel = new JfxExtToolbar();
     
     // --
     protected JfxToolbar jfxToolbar;
-    protected List<JfxToolbar> jfxExtToolbars;
+    protected final List<JfxToolbar> jfxExtToolbars = new ArrayList();
+    
+    public JfxSimpleEdit() {
+        layout.setCenter(leftZone);
+        layout.setRight(jfxExtToolbarPanel);
+        layout.setBottom(jfxToolbarPanel);
+
+        leftZone.getChildren().addAll(leftPropertyZone, leftEditZone); // editPanel放在propertyPanel上面，因为要响应拖放事件
+        
+        leftEditZone.setVisible(false);
+        leftEditZone.setStyle(STYLE_EDIT_PANEL);
+        leftEditZone.setOnDragOver(this::onDragOver);
+        leftEditZone.setOnDragDropped(this::onDragDropped);
+    }
     
     @Override
     protected void jfxInitialize() {
-        editRoot.getChildren().addAll(mainPanel, jfxToolbarPanel);
-        
-        mainPanel.getChildren().addAll(mainLeft, extToolbarPanel);
-        mainLeft.getChildren().addAll(propertyPanel, editPanel); // editPanel放在propertyPanel上面，因为要响应拖放事件
-        
-        mainPanel.setAlignment(Pos.TOP_RIGHT);
-        mainPanel.prefWidthProperty().bind(editRoot.widthProperty());
-        mainPanel.prefHeightProperty().bind(editRoot.heightProperty().subtract(jfxToolbarPanel.heightProperty()));
-        
-        mainLeft.prefWidthProperty().bind(mainPanel.widthProperty().subtract(extToolbarPanel.widthProperty()));
-        mainLeft.prefHeightProperty().bind(mainPanel.heightProperty());
-        
-        extToolbarPanel.prefHeightProperty().bind(mainPanel.heightProperty());
-        extToolbarPanel.setSide(Side.RIGHT);
-        extToolbarPanel.setPadding(new Insets(0));
-        
-        editPanel.setVisible(false);
-        editPanel.setStyle(STYLE_EDIT_PANEL);
-        editPanel.setOnDragOver(this::onDragOver);
-        editPanel.setOnDragDropped(this::onDragDropped);
+        editRoot.getChildren().add(layout);
+        layout.prefWidthProperty().bind(editRoot.widthProperty());
+        layout.prefHeightProperty().bind(editRoot.heightProperty());
         
         // 基本工具栏
         Toolbar baseToolbar = jmeEdit.getToolbar();
@@ -82,7 +74,7 @@ public abstract class JfxSimpleEdit<T extends JmeEdit> extends JfxAbstractEdit<T
         
         // 强制刷新一下UI，必须的，否则界面无法实时刷新(JFX嵌入Swing的一个BUG)
         Jfx.jfxForceUpdate();
-        Jfx.jfxCanvasBind(editPanel);
+        Jfx.jfxCanvasBind(leftEditZone);
         
     }
 
@@ -97,38 +89,35 @@ public abstract class JfxSimpleEdit<T extends JmeEdit> extends JfxAbstractEdit<T
                 jtb.cleanup();
             });
             jfxExtToolbars.clear();
-            jfxExtToolbars = null;
         }
-        editRoot.getChildren().clear();
-        mainPanel.getChildren().clear();
-        jfxToolbarPanel.getChildren().clear();
-        mainLeft.getChildren().clear();
-        propertyPanel.getChildren().clear();
-        extToolbarPanel.getTabs().clear();
-        editPanel.getChildren().clear();
-        
-        mainPanel.prefWidthProperty().unbind();
-        mainPanel.prefHeightProperty().unbind();
-        mainLeft.prefWidthProperty().unbind();
-        mainLeft.prefHeightProperty().unbind();
-        extToolbarPanel.prefHeightProperty().unbind();
+        layout.prefWidthProperty().unbind();
+        layout.prefHeightProperty().unbind();
+        editRoot.getChildren().remove(layout);
     }
     
     @Override
     public void jfxOnDragStarted() {
         super.jfxOnDragStarted();
-        editPanel.setVisible(true);
+        leftEditZone.setVisible(true);
     }
 
     @Override
     public void jfxOnDragEnded() {
         super.jfxOnDragEnded(); 
-        editPanel.setVisible(false);
+        leftEditZone.setVisible(false);
     }
 
     @Override
     public Pane getPropertyPanel() {
-        return propertyPanel;
+        return leftPropertyZone;
+    }
+    
+    /**
+     * 设置扩展工具栏是否可见
+     * @param visible 
+     */
+    public void setExtToolbarVisible(boolean visible) {
+        jfxExtToolbarPanel.setToolbarVisible(visible);
     }
     
     /**
@@ -160,34 +149,12 @@ public abstract class JfxSimpleEdit<T extends JmeEdit> extends JfxAbstractEdit<T
         if (!jfxToolbar.isInitialized()) {
             jfxToolbar.initialize();
         }
-        Tab tab = new Tab();
-        tab.setText(jfxToolbar.getName());
-        tab.setClosable(false);
-        
-        // 使用一个Layout来统一设置padding,不能直接设置在TabPane或Tab上。
-        HBox layout = new HBox();
-        layout.setPadding(new Insets(5));
-        layout.getChildren().add(jfxToolbar.getView());
-        tab.setContent(layout);
-        
-        extToolbarPanel.getTabs().add(tab);
-        if (jfxExtToolbars == null) {
-            jfxExtToolbars = new ArrayList();
-        }
+        jfxExtToolbarPanel.addToolbar(jfxToolbar.getName(), jfxToolbar.getView());
         jfxExtToolbars.add(jfxToolbar);
     }
 
     protected boolean removeJfxExtToolbar(JfxToolbar jfxToolbar) {
-        Tab found = null;
-        String name = jfxToolbar.getName();
-        for (Tab tab : extToolbarPanel.getTabs()) {
-            if (name.equals(tab.getText())) {
-                found = tab;
-                break;
-            }
-        }
-        if (found != null) {
-            extToolbarPanel.getTabs().remove(found);
+        if (jfxExtToolbarPanel.removeToolbar(jfxToolbar.getName())) {
             jfxExtToolbars.remove(jfxToolbar);
             if (jfxToolbar.isInitialized()) {
                 jfxToolbar.cleanup();

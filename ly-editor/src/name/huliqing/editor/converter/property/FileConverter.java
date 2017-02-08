@@ -110,7 +110,7 @@ public class FileConverter extends AbstractPropertyConverter {
         }
         String assetsDir = Manager.getConfigManager().getMainAssetDir();
         fileChooser.setInitialDirectory(new File(assetsDir));
-        File file = fileChooser.showOpenDialog(null);
+        File file = fileChooser.showOpenDialog(fileTextField.getScene().getWindow());
         if (file != null && file.exists() && file.isFile()) {
             String fileInAssets = file.getAbsolutePath().replace(assetsDir, "");
             fileInAssets = fileInAssets.replace("\\", "/").trim();

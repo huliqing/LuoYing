@@ -5,14 +5,21 @@
  */
 package name.huliqing.editor.edit.scene;
 
+import com.jme3.app.Application;
+import com.jme3.asset.ModelKey;
 import com.jme3.input.KeyInput;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Spatial;
+import com.jme3.terrain.Terrain;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import name.huliqing.editor.Editor;
+import name.huliqing.editor.constants.UserDataConstants;
+import name.huliqing.editor.edit.SaveAction;
 import name.huliqing.editor.edit.SimpleJmeEdit;
 import name.huliqing.editor.edit.controls.entity.EntityControlTile;
 import name.huliqing.editor.events.Event;
@@ -20,8 +27,10 @@ import name.huliqing.editor.events.JmeEvent;
 import name.huliqing.editor.manager.ControlTileManager;
 import name.huliqing.editor.tools.base.MoveTool;
 import name.huliqing.editor.edit.UndoRedo;
+import name.huliqing.editor.manager.Manager;
 import name.huliqing.editor.toolbar.TerrainToolbar;
 import name.huliqing.editor.toolbar.Toolbar;
+import name.huliqing.editor.utils.TerrainUtils;
 import name.huliqing.fxswing.Jfx;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.constants.IdConstants;
@@ -137,28 +146,6 @@ public class SceneEdit extends SimpleJmeEdit implements SceneListener {
         getEditRoot().attachChild(game.getScene().getRoot());
     }
 
-    // remove20170202
-//    @Override
-//    public EntitySelectObj doPick(Ray ray) {
-//        if (scene == null)
-//            return null;
-//        
-//        EntitySelectObj result = null;
-//        float minDistance = Float.MAX_VALUE;
-//        Float temp;
-//        for (EntitySelectObj seo : objMap.values()) {
-//            temp = seo.distanceOfPick(ray);
-//            if (temp != null && temp < minDistance) {
-//                minDistance = temp;
-//                result = seo;
-//            }
-//        }
-////        if (result != null) {
-////            LOG.log(Level.INFO, "doPick, selectObj={0}", result.getObject().getData().getId());
-////        }
-//        return result;
-//    }
-
     @Override
     public void onSceneLoaded(Scene scene) {
         // 先预生成SelectObjs
@@ -194,13 +181,59 @@ public class SceneEdit extends SimpleJmeEdit implements SceneListener {
     public void reloadEntity(EntityData entityData) {
         if (!sceneLoaded)
             return;
-        EntityControlTile<Entity> eso = objMap.get(entityData);
-        if (eso != null) {
-            eso.getTarget().cleanup();
-            eso.getTarget().setData(entityData);
-            eso.getTarget().initialize();
-            eso.getTarget().onInitScene(scene);
-            eso.updateState();
+        EntityControlTile<Entity> ect = objMap.get(entityData);
+        if (ect != null) {
+            
+            // 在清理之前先把spatial取出,这样不会在entity清理的时候被一同清理掉
+            Spatial terrainSpatial = ect.getTarget().getSpatial();
+            String terrainFilePathInAssets = ect.getTarget().getData().getAsString("file");
+            
+            
+            // 对Entity进行清理，需要优先执行，这样可以清理掉各Module给Spatial添加的Control,这样不会在保存地形的时候
+            // 把Module所添加的各种Control也保存进去。因为这些Control在Module初始化的时候会重装添加。
+            ect.getTarget().cleanup();
+            
+            // 一些控制物体在清理并重新载入之前需要进行保存.
+            // 如, 地形文件(Terrain)，因为地形文件可能编辑后还没有进行过保存, 因为地形文件的修改数据不是保存在EntityData中的，
+            // 则需要在重装载入之前进行保存j3o文件，然后重新载入的时候才不会丢失地形数据及alpha等修改数据
+            // see -> SimpleModelEntityControlTile.java
+            doSaveTerrain(terrainSpatial, terrainFilePathInAssets);
+            
+            // 重新载入实体
+            ect.getTarget().setData(entityData);
+            ect.getTarget().initialize();
+            ect.getTarget().onInitScene(scene);
+            ect.updateState();
+        }
+    }
+    
+    /**
+     * 保存地形修改
+     * @param ect 
+     */
+    private void doSaveTerrain(Spatial terrainSpatial, String filePathInAssets) {
+        if (!(terrainSpatial instanceof Terrain)) 
+            return;
+        
+        // 以下是针对地形(Terrain)实体的特别保存操作，这个方法需要在EntityControl重载入的时候进行保存。
+        String assetFolder = Manager.getConfigManager().getMainAssetDir();
+
+        // 重新把terrainSpatial更新到缓存(或者删除也可以)，必须的，否则地形的材质不会更新,特别是贴图图层没有更新，
+        // 因为缓存中存的仍是旧的,Entity在重新载入的时候会去缓存中获取。
+        editor.getAssetManager().addToCache(new ModelKey(filePathInAssets), terrainSpatial);
+
+        // 保存贴图修改
+        Boolean terrainAlphaModified = terrainSpatial.getUserData(UserDataConstants.EDIT_TERRAIN_MODIFIED_ALPHA);
+        if (terrainAlphaModified != null && terrainAlphaModified) {
+            terrainSpatial.setUserData(UserDataConstants.EDIT_TERRAIN_MODIFIED_ALPHA, null); // clear
+            TerrainUtils.doSaveAlphaImages((Terrain) terrainSpatial, assetFolder);
+        }
+
+        // 保存地形修改
+        Boolean terrainModified = terrainSpatial.getUserData(UserDataConstants.EDIT_TERRAIN_MODIFIED);
+        if (terrainModified != null && terrainModified) {
+            terrainSpatial.setUserData(UserDataConstants.EDIT_TERRAIN_MODIFIED, null); // clear
+            TerrainUtils.saveTerrain(terrainSpatial, new File(assetFolder, filePathInAssets));
         }
     }
     

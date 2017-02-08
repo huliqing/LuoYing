@@ -12,7 +12,11 @@ package name.huliqing.editor.constants;
 public class AssetConstants {
     
     
-    public final static String INTERFACE_COMMON_IMAGE= "Interface/icon/image.png";
+    public final static String INTERFACE_COMMON_IMAGE = "Interface/icon/image.png";
+    public final static String INTERFACE_COMMON_ARROW_TOP = "Interface/icon/arrow-top.png";
+    public final static String INTERFACE_COMMON_ARROW_RIGHT = "Interface/icon/arrow-right.png";
+    public final static String INTERFACE_COMMON_ARROW_DOWN = "Interface/icon/arrow-down.png";
+    public final static String INTERFACE_COMMON_ARROW_LEFT = "Interface/icon/arrow-left.png";
     
     /** Interface/Fonts/Default.fnt */
     public final static String INTERFACE_FONTS_DEFAULT = "Interface/Fonts/Default.fnt";

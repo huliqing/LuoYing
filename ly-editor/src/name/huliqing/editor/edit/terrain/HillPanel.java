@@ -5,8 +5,6 @@
  */
 package name.huliqing.editor.edit.terrain;
 
-import com.jme3.terrain.heightmap.AbstractHeightMap;
-import com.jme3.terrain.heightmap.HeightMap;
 import com.jme3.terrain.heightmap.HillHeightMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;

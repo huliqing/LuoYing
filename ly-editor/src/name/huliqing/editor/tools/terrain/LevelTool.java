@@ -14,7 +14,7 @@ import name.huliqing.editor.edit.controls.entity.EntityControlTile;
 /**
  * @author huliqing
  */
-public class LevelTool extends AbstractTerrainTool {
+public class LevelTool extends AdjustTerrainTool {
     
     private Vector3f desiredHeight; 
 
@@ -39,6 +39,7 @@ public class LevelTool extends AbstractTerrainTool {
         
         LevelTerrainToolAction action = new LevelTerrainToolAction(terrain, markerWorldLoc, radius, weight
                 , desiredHeight, precision);
+        setModified(true);
         return action;
     }
 

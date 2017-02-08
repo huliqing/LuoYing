@@ -75,5 +75,7 @@ public class SimpleModelEntityControlTile extends EntityControlTile<Entity> {
         target.updateDatas();
         notifyPropertyChanged("scale", target.getSpatial().getLocalScale());
     }
+
+
     
 }

@@ -29,7 +29,7 @@ import name.huliqing.editor.toolbar.TerrainToolbar;
 /**  
  * @author huliqing
  */
-public class SlopeTool extends AbstractTerrainTool {
+public class SlopeTool extends AdjustTerrainTool {
     
     private PointControlTile p1;
     private PointControlTile p2;
@@ -82,6 +82,7 @@ public class SlopeTool extends AbstractTerrainTool {
             boolean lock = toolbar.getSlopeParamsTool().getLock().getValue(); // Contain on terrain editor
             SlopeTerrainToolAction action = new SlopeTerrainToolAction(terrain, markerWorldLoc
                     , point1, point2, radius, weight, precision, lock);
+            setModified(true);
             return action;
         }
         return null;
