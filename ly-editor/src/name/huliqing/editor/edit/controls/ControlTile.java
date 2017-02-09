@@ -11,14 +11,16 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.util.SafeArrayList;
+import name.huliqing.editor.edit.JmeEdit;
 import name.huliqing.luoying.manager.PickManager;
 
 /**
  * 控制组件
  * @author huliqing
  * @param <T>
+ * @param <E>
  */
-public abstract class ControlTile<T> {
+public abstract class ControlTile<T, E extends JmeEdit> {
     
     public enum Type {
         location, rotation, scale;
@@ -44,9 +46,9 @@ public abstract class ControlTile<T> {
     
     /**
      * 初始化,该方法在ControlTile放到场景时调用一次，之后不再调用。
-     * @param parent 
+     * @param edit 
      */
-    public void initialize(Node parent) {
+    public void initialize(E edit) {
         if (initialized) {
             throw new IllegalStateException();
         }

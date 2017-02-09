@@ -140,6 +140,23 @@ public abstract class JfxAbstractEdit<T extends JmeEdit> implements JfxEdit<T>, 
             });
         }
     }
+
+    @Override
+    public boolean isModified() {
+        return jmeEdit.isModified();
+    }
+
+    @Override
+    public void setModified(boolean modified) {
+        Jfx.runOnJme(() -> {
+            jmeEdit.setModified(modified);
+        });
+    }
+    
+    @Override
+    public void save() {
+        Jfx.runOnJme(() -> {jmeEdit.save();});
+    }
     
     @Override
     public Editor getEditor() {

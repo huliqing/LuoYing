@@ -11,14 +11,11 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Sphere;
-import com.jme3.terrain.Terrain;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.editor.constants.AssetConstants;
-import name.huliqing.editor.constants.UserDataConstants;
 import name.huliqing.editor.edit.SimpleJmeEdit;
 import name.huliqing.editor.edit.UndoRedo;
-import name.huliqing.editor.edit.controls.ControlTile;
 import name.huliqing.editor.edit.controls.entity.EntityControlTile;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.JmeEvent;
@@ -149,6 +146,7 @@ public abstract class AdjustTerrainTool extends AbstractTerrainTool
         List<AbstractTerrainToolAction> actionList = new ArrayList(actions);
         edit.addUndoRedo(new ToolActionUndoRedo(actionList));
         actions.clear();
+        edit.setModified(true);
     }
     
     @Override

@@ -8,7 +8,6 @@ package name.huliqing.editor.ui;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
-import name.huliqing.editor.manager.EditManager;
 
 /**
  *
@@ -23,7 +22,7 @@ public class YingConfigView extends ScrollPane {
         
         Button btn = new Button("test");
         btn.setOnAction(e -> {
-            EditManager.openTestFormView();
+//            EditManager.openTestFormView();
         });
         
         

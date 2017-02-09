@@ -17,7 +17,7 @@ public class UndoRedoManager {
 
     private static final Logger LOG = Logger.getLogger(UndoRedoManager.class.getName());
     
-    private final int limit = 100;
+    private final int limit = 32;
     private final Stack<UndoRedo> undoList = new Stack<UndoRedo>();
     private final Stack<UndoRedo> redoList = new Stack<UndoRedo>();
     

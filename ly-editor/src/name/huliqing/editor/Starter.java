@@ -21,11 +21,9 @@ import name.huliqing.editor.ui.MainLayout;
 import name.huliqing.fxswing.Jfx;
 
 /**
- *
  * @author huliqing
  */
 public class Starter {
-    
     
     public static void main(String[] args) {
         new Starter().start();
@@ -81,7 +79,6 @@ public class Starter {
     
     private void initJfxEditToJme(Pane jfxEditZone) {
         EditManager.registerEditZone(jfxEditZone);
-        EditManager.openTestFormView();
     }
  
     // 将JFX中的UndoRedo按键转换到JME场景中
@@ -89,9 +86,15 @@ public class Starter {
         Jfx.getJfxRoot().addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
             final KeyCombination undo = new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN);
             final KeyCombination redo = new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN);
+            final KeyCombination save = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
+            final KeyCombination saveAll = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN);
             @Override
             public void handle(KeyEvent ke) {
-                if(redo.match(ke)) {
+                if (save.match(ke)) {
+                    ((Editor) Jfx.getJmeApp()).save();
+                } else if (saveAll.match(ke)) {
+                    ((Editor) Jfx.getJmeApp()).saveAll();
+                } else if(redo.match(ke)) {
                     ((Editor) Jfx.getJmeApp()).redo();
                 } else if (undo.match(ke)) {
                     ((Editor) Jfx.getJmeApp()).undo();

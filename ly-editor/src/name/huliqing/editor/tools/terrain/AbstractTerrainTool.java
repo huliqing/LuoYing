@@ -5,7 +5,6 @@
  */
 package name.huliqing.editor.tools.terrain;
 
-import com.jme3.scene.Spatial;
 import com.jme3.terrain.Terrain;
 import name.huliqing.editor.constants.UserDataConstants;
 import name.huliqing.editor.edit.SimpleJmeEdit;
@@ -58,6 +57,7 @@ public abstract class AbstractTerrainTool extends AbstractTool<SimpleJmeEdit, Te
         if (terrainControl == null) 
             return;
         terrainControl.getTarget().getSpatial().setUserData(UserDataConstants.EDIT_TERRAIN_MODIFIED, modified);
+        edit.setModified(true);
     }
     
     /**
@@ -69,5 +69,6 @@ public abstract class AbstractTerrainTool extends AbstractTool<SimpleJmeEdit, Te
         if (terrainControl == null) 
             return;
         terrainControl.getTarget().getSpatial().setUserData(UserDataConstants.EDIT_TERRAIN_MODIFIED_ALPHA, modified);
+        edit.setModified(true);
     }
 }

@@ -92,7 +92,7 @@ public abstract class SimpleJmeEdit<T extends ControlTile> extends JmeAbstractEd
             controlTiles.add(ct);
         }
         if (!ct.isInitialized()) {
-            ct.initialize(editRoot);
+            ct.initialize(this);
         }
     }
     

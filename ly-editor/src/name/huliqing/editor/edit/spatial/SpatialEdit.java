@@ -91,13 +91,10 @@ public class SpatialEdit extends SimpleJmeEdit {
         }
     }
 
-//    @Override
-//    public SelectObj doPick(Ray ray) {
-//        Spatial spaital = PickManager.pick(ray, editRoot);
-//        if (spatial == null) 
-//            return null;
-//        return new SpatialSelectObj(spaital);
-//    }
+    @Override
+    public void doSaveEdit() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
     
 }

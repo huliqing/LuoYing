@@ -242,6 +242,7 @@ public class ScaleTool extends AbstractTool implements SimpleEditListener, Toggl
         if (transforming) {
             picker.endPick();
             edit.addUndoRedo(new ScaleUndoRedo(selectObj, startScale, afterScale));
+            edit.setModified(true);
         }
         startScale = null;
         afterScale = null;

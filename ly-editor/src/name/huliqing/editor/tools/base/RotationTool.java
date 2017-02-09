@@ -224,6 +224,7 @@ public class RotationTool extends AbstractTool implements SimpleEditListener, To
         if (transforming) {
             picker.endPick();
             edit.addUndoRedo(new RotationUndoRedo(selectObj, startRotate, afterRotate));
+            edit.setModified(true);
         }
         transforming = false;
         freeRotation = false;

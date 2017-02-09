@@ -86,7 +86,6 @@ public abstract class AbstractEntity<T extends EntityData> implements Entity<T> 
         if (initialized) {
             throw new IllegalStateException("Entity already is initialized! entityId=" + data.getId());
         }
-        
         spatial = initSpatial();
         Vector3f location = data.getLocation();
         if (location != null) {

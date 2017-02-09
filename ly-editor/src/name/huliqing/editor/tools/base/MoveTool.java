@@ -225,6 +225,7 @@ public class MoveTool extends AbstractTool implements SimpleEditListener, Toggle
             picker.endPick();
             MoveUndo undoRedo = new MoveUndo(selectObj, startSpatialLoc, lastSpatialLoc);
             edit.addUndoRedo(undoRedo);
+            edit.setModified(true);
         }
         startSpatialLoc = null;
         lastSpatialLoc = null;

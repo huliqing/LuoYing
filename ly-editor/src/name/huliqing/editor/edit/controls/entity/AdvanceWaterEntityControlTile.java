@@ -17,6 +17,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Quad;
 import com.jme3.util.TempVars;
+import name.huliqing.editor.edit.SimpleJmeEdit;
 import name.huliqing.luoying.manager.PickManager;
 import name.huliqing.luoying.object.entity.impl.AdvanceWaterEntity;
 import name.huliqing.luoying.utils.MaterialUtils;
@@ -34,10 +35,10 @@ public class AdvanceWaterEntityControlTile extends EntityControlTile<AdvanceWate
     private final float[] tempAngles  = new float[3];
     
     @Override
-    public void initialize(Node parent) {
-        super.initialize(parent);
-        parent.attachChild(controlObj);
-        parent.attachChild(pickObj);
+    public void initialize(SimpleJmeEdit edit) {
+        super.initialize(edit);
+        edit.getEditRoot().attachChild(controlObj);
+        edit.getEditRoot().attachChild(pickObj);
         updateState();
     }
 

@@ -30,6 +30,24 @@ public interface JmeEdit {
     void addUndoRedo(UndoRedo ur);
     
     /**
+     * 判断当前编辑器是否已经经过修改，一般这表示编辑器在退出的时候需要进行保存操作。
+     * 可调用{@link #save() }来保存操作
+     * @return 
+     */
+    boolean isModified();
+    
+    /**
+     * 设置、标记编辑器是否经过编辑操作。
+     * @param modified 
+     */
+    void setModified(boolean modified);
+    
+    /**
+     * 保存编辑结果
+     */
+    void save();
+    
+    /**
      * 获取主工具栏
      * @param <T>
      * @return 
@@ -47,23 +65,6 @@ public interface JmeEdit {
      * @return 
      */
     Editor getEditor();
-    
-    /**
-     * 判断当前编辑器是否已经经过修改，一般这表示编辑器在退出的时候需要进行保存操作。
-     * 可调用{@link #save() }来保存操作
-     * @return 
-     */
-    boolean isModified();
-    
-    /**
-     * 设置、标记编辑器是否经过编辑操作。
-     * @param modified 
-     */
-    void setModified(boolean modified);
-    
-    /**
-     * 保存编辑结果
-     */
-    void save();
+
     
 }

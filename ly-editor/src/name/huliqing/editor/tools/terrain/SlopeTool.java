@@ -7,7 +7,6 @@ package name.huliqing.editor.tools.terrain;
 
 import com.jme3.font.BitmapText;
 import com.jme3.gde.terraineditor.tools.AbstractTerrainToolAction;
-import com.jme3.gde.terraineditor.tools.SlopeExtraToolParams;
 import com.jme3.gde.terraineditor.tools.SlopeTerrainToolAction;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
@@ -154,9 +153,9 @@ public class SlopeTool extends AdjustTerrainTool {
         }
         
         @Override
-        public void initialize(Node parent) {
-            super.initialize(parent);
-            parent.attachChild(target);
+        public void initialize(SimpleJmeEdit edit) {
+            super.initialize(edit);
+            edit.getEditRoot().attachChild(target);
         }
 
         @Override

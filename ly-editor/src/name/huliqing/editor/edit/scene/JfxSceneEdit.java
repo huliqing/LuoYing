@@ -49,7 +49,11 @@ public class JfxSceneEdit extends JfxSimpleEdit<SceneEdit>
     private final TitledPane scenePropertyPanel = new TitledPane();
     private DataConverter sceneDataConverter;
     
-    private String sceneId;
+    // 场景数据
+    private SceneData sceneData;
+    // 场景数据保存路径，绝对路径，包含文件名及后缀名
+    private String savePath;
+    
     private final List<JfxSceneEditListener<ControlTile>> listeners = new ArrayList();
     // 当前选择中的物体
     private ControlTile entitySelectObj;
@@ -83,8 +87,8 @@ public class JfxSceneEdit extends JfxSimpleEdit<SceneEdit>
         super.jfxInitialize();
         leftPropertyZone.getChildren().add(scenePropertyPanel);
         
-        if (sceneId != null) {
-            loadScene(sceneId);
+        if (sceneData != null) {
+            loadScene(sceneData, savePath);
         }
     } 
     
@@ -93,7 +97,7 @@ public class JfxSceneEdit extends JfxSimpleEdit<SceneEdit>
         leftPropertyZone.getChildren().remove(scenePropertyPanel);
         super.jfxCleanup();
     }
-    
+
     @Override
     protected void onDragOver(DragEvent e) {
         Dragboard db = e.getDragboard();
@@ -127,20 +131,27 @@ public class JfxSceneEdit extends JfxSimpleEdit<SceneEdit>
         }
     }
     
-    public void setScene(String sceneId) {
-        this.sceneId = sceneId;
+    /**
+     * 设置要编辑的场景数据
+     * @param sceneData 场景数据
+     * @param savePath 场景数据保存路径，绝对路径，包含文件名及后缀名
+     */
+    public void setSceneData(SceneData sceneData, String savePath) {
+        this.sceneData = sceneData;
+        this.savePath = savePath;
         if (jfxInitialized) {
-            loadScene(sceneId);
+            loadScene(sceneData, savePath);
         }
     }
     
-    private void loadScene(String sceneId) {
+    private void loadScene(SceneData sceneData, String savePath) {
         Jfx.runOnJme(() -> {
             try {
-                SceneData sd = Loader.loadData(sceneId);
-                Scene scene = Loader.load(sd);
+                Scene scene = Loader.load(sceneData);
                 scene.addSceneListener(this);
+                
                 jmeEdit.setScene(scene);
+                jmeEdit.setSavePath(savePath);
                 
                 Jfx.runOnJfx(() -> {
                     if (sceneDataConverter != null && sceneDataConverter.isInitialized()) {
@@ -153,7 +164,7 @@ public class JfxSceneEdit extends JfxSimpleEdit<SceneEdit>
                 });
                 
             } catch (Exception e) {
-                LOG.log(Level.WARNING, "Could not load scene! sceneId={0}", sceneId);
+                LOG.log(Level.WARNING, "Could not load scene, sceneData=" + sceneData, e);
             }
         });
     }

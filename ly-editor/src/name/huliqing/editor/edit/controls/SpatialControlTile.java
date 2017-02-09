@@ -8,12 +8,13 @@ package name.huliqing.editor.edit.controls;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
+import name.huliqing.editor.edit.SimpleJmeEdit;
 
 /**
  *
  * @author huliqing
  */
-public class SpatialControlTile extends ControlTile<Spatial> {
+public class SpatialControlTile extends ControlTile<Spatial, SimpleJmeEdit> {
 
     @Override
     public Spatial getControlSpatial() {

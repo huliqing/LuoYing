@@ -8,19 +8,13 @@ package name.huliqing.editor.ui;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.SeparatorMenuItem;
-import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.TreeItem;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
@@ -29,12 +23,15 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
-import javafx.stage.Modality;
-import name.huliqing.editor.constants.ResConstants;
 import name.huliqing.editor.manager.Manager;
 import name.huliqing.editor.manager.ConfigManager;
 import name.huliqing.editor.manager.ConfigManager.ConfigChangedListener;
 import name.huliqing.editor.manager.EditManager;
+import name.huliqing.editor.ui.menu.CreateSceneMenuItem;
+import name.huliqing.editor.ui.menu.DeleteMenuItem;
+import name.huliqing.editor.ui.menu.EditMenuItem;
+import name.huliqing.editor.ui.menu.RefreshMenuItem;
+import name.huliqing.editor.ui.menu.RenameMenuItem;
 import name.huliqing.fxswing.Jfx;
 
 /**
@@ -46,8 +43,13 @@ public class AssetsView extends ScrollPane implements ConfigChangedListener {
     private static final Logger LOG = Logger.getLogger(AssetsView.class.getName());
     
     private final FileTree assetTree = new FileTree();
+    
     private String currentAssetDir = "";
-    private final ContextMenu popup = new ContextMenu();
+    
+    private ContextMenu filePopup;
+    private ContextMenu dirPopup;
+    
+    private final EditMenuItem editMenu = new EditMenuItem(assetTree);
     
     public AssetsView() {
         assetTree.minHeightProperty().bind(heightProperty());
@@ -63,7 +65,7 @@ public class AssetsView extends ScrollPane implements ConfigChangedListener {
                 doShowPopup(e.getScreenX(), e.getScreenY());
                 e.consume();
             } else if (e.getButton() == MouseButton.PRIMARY && e.getClickCount() == 2) {
-                doEdit();
+                editMenu.fire();
                 e.consume();
             }
         });
@@ -71,17 +73,6 @@ public class AssetsView extends ScrollPane implements ConfigChangedListener {
         assetTree.setOnDragDetected(this::doDragDetected);
         assetTree.setOnDragDone(this::doDragDone);
 //        assetTree.setOnDragOver(this::doDragOver);
-        
-        MenuItem edit = new MenuItem(Manager.getRes(ResConstants.POPUP_EDIT));
-        MenuItem rename = new MenuItem(Manager.getRes(ResConstants.POPUP_RENAME));
-        MenuItem refresh = new MenuItem(Manager.getRes(ResConstants.POPUP_REFRESH));
-        MenuItem separator = new SeparatorMenuItem();
-        MenuItem delete = new MenuItem(Manager.getRes(ResConstants.POPUP_DELETE));
-        popup.getItems().addAll(edit, rename, refresh, separator, delete);
-        edit.setOnAction(e -> doEdit());
-        rename.setOnAction(e -> doRename());
-        refresh.setOnAction(e -> doRefresh());
-        delete.setOnAction(e -> doDelete());
         
     }
     
@@ -123,82 +114,30 @@ public class AssetsView extends ScrollPane implements ConfigChangedListener {
     
     private void doShowPopup(double x, double y) {
         File fileSelected = getSelectMainFile();
-        if (fileSelected == null)
+        if (fileSelected == null || !fileSelected.exists())
             return;
-        popup.show(this, x, y);
-    }
-    
-    private void doEdit() {
-        File fileSelected = getSelectMainFile();
-        if (fileSelected == null || fileSelected.isDirectory()) 
-            return;
-        EditManager.openSpatialEditor(fileSelected.getAbsolutePath());
-    }
-    
-    private void doRename() {
-        ObservableList<TreeItem<File>> selectedItems = assetTree.getSelectionModel().getSelectedItems();
-        if (selectedItems.isEmpty())
-            return;
-        TreeItem<File> itemSelect = selectedItems.get(0);
-        if (itemSelect == null || itemSelect.getValue() == null) {
-            return;
-        }
-        TextInputDialog dialog = new TextInputDialog(itemSelect.getValue().getName());
-        dialog.setTitle(Manager.getRes(ResConstants.ALERT_RENAME_TITLE));
-        dialog.setHeaderText(Manager.getRes(ResConstants.ALERT_RENAME_HEADER
-                , new Object[] {itemSelect.getValue().getName()}));
-        Optional<String> result = dialog.showAndWait();
-        result.ifPresent(name -> {
-            if (name == null || name.trim().isEmpty()) {
-                return;
+        
+        if (fileSelected.isFile()) {
+            if (filePopup == null) {
+                filePopup = new ContextMenu();
+                filePopup.getItems().add(editMenu);
+                filePopup.getItems().add(new RenameMenuItem(assetTree));
+                filePopup.getItems().add(new RefreshMenuItem(assetTree));
+                filePopup.getItems().add(new SeparatorMenuItem());
+                filePopup.getItems().add(new DeleteMenuItem(assetTree));
             }
-            File file = itemSelect.getValue();
-            File newFile = new File(file.getParent(), name);
-            file.renameTo(newFile);
-            itemSelect.setValue(newFile);
-        });
-    }
-    
-    private void doRefresh() {
-        ObservableList<TreeItem<File>> items = assetTree.getSelectionModel().getSelectedItems();
-        items.filtered(t -> t != null).forEach(t -> {
-            assetTree.refreshItem(t);
-        });
-    }
-    
-    private void doDelete() {
-        ObservableList<TreeItem<File>> items = assetTree.getSelectionModel().getSelectedItems();
-        if (items.isEmpty())
-            return;
-        List<TreeItem<File>> selectList = new ArrayList<TreeItem<File>>(items);
-        Alert alert = new Alert(AlertType.CONFIRMATION);
-        alert.initModality(Modality.WINDOW_MODAL);
-        alert.initOwner(this.getScene().getWindow());
-        alert.setTitle(Manager.getRes(ResConstants.ALERT_DELETE_TITLE));
-        if (selectList.size() == 1 && selectList.get(0).getValue() != null) {
-            alert.setHeaderText(Manager.getRes(ResConstants.ALERT_DELETE_HEADER_SINGLE));
-            alert.setContentText(selectList.get(0).getValue().getName());
+            filePopup.show(this, x, y);
         } else {
-            alert.setHeaderText(Manager.getRes(ResConstants.ALERT_DELETE_HEADER_MULT, new Object[]{selectList.size()}));
-        }
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK){
-            selectList.stream().filter(t -> t.getValue() != null).forEach(t -> {
-                deleteFile(t.getValue()); // 递归删除
-                if (t.getParent() != null) {
-                    t.getParent().getChildren().remove(t);
-                }
-            });
-        }
-    }
-    
-    private void deleteFile(File file) {
-        if (file.isDirectory()) {
-            for (File sub : file.listFiles()) {
-                deleteFile(sub);
+            if (dirPopup == null) {
+                dirPopup = new ContextMenu();
+                dirPopup.getItems().add(new CreateSceneMenuItem(assetTree));
+                dirPopup.getItems().add(new RenameMenuItem(assetTree));
+                dirPopup.getItems().add(new RefreshMenuItem(assetTree));
+                dirPopup.getItems().add(new SeparatorMenuItem());
+                dirPopup.getItems().add(new DeleteMenuItem(assetTree));
             }
+            dirPopup.show(this, x, y);
         }
-        file.delete();
     }
     
     private void doDragDetected(MouseEvent e) {

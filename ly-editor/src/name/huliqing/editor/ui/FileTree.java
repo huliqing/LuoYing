@@ -113,10 +113,7 @@ public class FileTree extends TreeView<File> {
         public void refresh() {
             isFirstTimeChildren = true;
             isFirstTimeLeaf = true;
-            if (isExpanded()) {
-                setExpanded(false);
-                setExpanded(true);
-            }
+            super.getChildren().setAll(buildChildren(this));
         }
         
         @Override

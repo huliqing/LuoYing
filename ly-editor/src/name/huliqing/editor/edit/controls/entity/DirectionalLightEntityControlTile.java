@@ -17,8 +17,8 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.control.BillboardControl;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Line;
-import com.jme3.util.TempVars;
 import name.huliqing.editor.constants.AssetConstants;
+import name.huliqing.editor.edit.SimpleJmeEdit;
 import name.huliqing.editor.tiles.AutoScaleControl;
 import name.huliqing.fxswing.Jfx;
 import name.huliqing.luoying.object.entity.impl.DirectionalLightEntity;
@@ -50,9 +50,9 @@ public class DirectionalLightEntityControlTile extends EntityControlTile<Directi
     }
     
     @Override
-    public void initialize(Node form) {
-        super.initialize(form);
-        form.attachChild(controlSpatial);
+    public void initialize(SimpleJmeEdit edit) {
+        super.initialize(edit);
+        edit.getEditRoot().attachChild(controlSpatial);
         updateState();
     }
     

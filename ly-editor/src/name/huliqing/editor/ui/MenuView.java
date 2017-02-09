@@ -7,13 +7,21 @@ package name.huliqing.editor.ui;
 
 import java.io.File;
 import java.util.List;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.stage.DirectoryChooser;
+import name.huliqing.editor.Editor;
+import name.huliqing.editor.constants.AssetConstants;
 import name.huliqing.editor.manager.Manager;
 import name.huliqing.editor.constants.ResConstants;
 import name.huliqing.editor.manager.ConfigManager;
+import name.huliqing.editor.utils.JfxUtils;
 import name.huliqing.fxswing.Jfx;
 
 /**
@@ -25,28 +33,45 @@ public class MenuView extends MenuBar implements ConfigManager.ConfigChangedList
     private final Menu file;
     private final MenuItem assets;
     private final Menu assetsRecent; // 最近的资源文件夹
+    private final MenuItem save;
     private final MenuItem quick;
     
     private final Menu help;
     
     public MenuView() {
         file = new Menu(Manager.getRes(ResConstants.MENU_FILE));
-        assets = new MenuItem(Manager.getRes(ResConstants.MENU_FILE_ASSETS));
-        assetsRecent = new Menu(Manager.getRes(ResConstants.MENU_FILE_ASSETS_RECENT));
-        quick = new MenuItem(Manager.getRes(ResConstants.MENU_FILE_QUICK));
+        assets = new MenuItem(Manager.getRes(ResConstants.MENU_FILE_ASSETS), JfxUtils.createImage(AssetConstants.INTERFACE_MENU_OPEN_DIR, 16, 16));
+        assetsRecent = new Menu(Manager.getRes(ResConstants.MENU_FILE_ASSETS_RECENT), JfxUtils.createImage(AssetConstants.INTERFACE_MENU_OPEN_DIR_RECENT, 16, 16));
+        save = new MenuItem(Manager.getRes(ResConstants.MENU_FILE_SAVE), JfxUtils.createImage(AssetConstants.INTERFACE_MENU_SAVE, 16, 16));
+        quick = new MenuItem(Manager.getRes(ResConstants.MENU_FILE_QUICK), JfxUtils.createImage(AssetConstants.INTERFACE_MENU_QUIT, 16, 16));
         
         help = new Menu(Manager.getRes(ResConstants.MENU_HELP));
         
+        file.getItems().addAll(assets, assetsRecent, save, quick);
         getMenus().addAll(file, help);
-        file.getItems().addAll(assets, assetsRecent, quick);
-        
-        quick.setOnAction(e -> Jfx.getMainFrame().dispose());
-        assets.setOnAction(e -> openAssetsChooser());
         
         rebuildAssetRecent();
-        
         Manager.getConfigManager().addListener(this);
         
+        assets.setOnAction(e -> openAssetsChooser());
+        save.setOnAction(e -> save());
+        quick.setOnAction(e -> Jfx.getMainFrame().dispose());
+
+        file.showingProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if (newValue) {
+                    Editor editor = (Editor) Jfx.getJmeApp();
+                    save.setDisable(!editor.isModified());
+                }
+            }
+        });
+    }
+    
+    private void save() {
+        Editor editor = (Editor) Jfx.getJmeApp();
+        editor.save();
+        save.setDisable(true);
     }
 
     private void openAssetsChooser() {

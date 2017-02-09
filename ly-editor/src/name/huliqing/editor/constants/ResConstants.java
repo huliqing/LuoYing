@@ -23,6 +23,8 @@ public class ResConstants {
     /** menu.file.assetsRecent */
     public final static String MENU_FILE_ASSETS_RECENT = "menu.file.assetsRecent";
     public final static String MENU_FILE_ASSETS_RECENT_CLEAN = "menu.file.assetsRecent.clean";
+    /** menu.file.save */
+    public final static String MENU_FILE_SAVE = "menu.file.save";
     /** menu.file.quick */
     public final static String MENU_FILE_QUICK = "menu.file.quick";
     /** menu.help */
@@ -32,6 +34,7 @@ public class ResConstants {
     public final static String POPUP_RENAME = "popup.rename";
     public final static String POPUP_REFRESH = "popup.refresh";
     public final static String POPUP_DELETE= "popup.delete";
+    public final static String POPUP_CREATE_SCENE = "popup.create.scene";
     
     public final static String ALERT_RENAME_TITLE = "alert.rename.title";
     public final static String ALERT_RENAME_HEADER = "alert.rename.header";
