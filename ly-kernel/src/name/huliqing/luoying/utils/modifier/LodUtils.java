@@ -36,6 +36,12 @@ import name.huliqing.luoying.utils.ModelFileUtils;
  */
 public class LodUtils {
     
+    /**
+     * 示例：
+     * makeLod("Models/trees/dry/dry389.j3o", am);
+     * @param file
+     * @param am 
+     */
     public static void makeLod(String file, AssetManager am) {
         Spatial spatial;
         try {

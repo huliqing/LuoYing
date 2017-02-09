@@ -2,6 +2,9 @@
 
 common.ok=确认
 common.cancel=取消
+common.quick.confirm=编辑结果尚未保存, 是否要保存?
+common.quick=退出程序
+common.chooser.file=选择文件
 common.create.terrain=创建地形
 
 menu.file=文件

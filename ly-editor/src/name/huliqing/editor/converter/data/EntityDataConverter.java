@@ -45,6 +45,7 @@ public class EntityDataConverter extends AbstractDataConverter<JfxSceneEdit, Ent
     @Override
     public void notifyChangedToParent() {
         jfxEdit.reloadEntity(data);
+        jfxEdit.setModified(true);
         super.notifyChangedToParent();
     }
 

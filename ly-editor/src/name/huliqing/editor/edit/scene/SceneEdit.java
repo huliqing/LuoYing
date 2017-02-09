@@ -229,6 +229,7 @@ public class SceneEdit extends SimpleJmeEdit implements SceneListener {
         eso.setTarget(entity);
         addControlTile(eso);
         addUndoRedo(new EntityAddedUndoRedo(eso));
+        setModified(true);
     }
     
     /**
@@ -255,6 +256,7 @@ public class SceneEdit extends SimpleJmeEdit implements SceneListener {
         eso.setTarget(entity);
         addControlTile(eso);
         addUndoRedo(new EntityAddedUndoRedo(eso));
+        setModified(true);
     }
     
     public boolean removeEntity(EntityData ed) {
@@ -269,6 +271,7 @@ public class SceneEdit extends SimpleJmeEdit implements SceneListener {
         objMap.remove(ed);
         removeControlTile(eso);
         addUndoRedo(new EntityRemovedUndoRedo(eso));
+        setModified(true);
         return true;
     }
 

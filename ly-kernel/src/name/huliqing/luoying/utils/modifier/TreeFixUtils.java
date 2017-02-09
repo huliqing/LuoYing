@@ -39,7 +39,21 @@ import name.huliqing.luoying.utils.ModelFileUtils;
 public class TreeFixUtils {
     private static float alphaFallOff = 0.5f;
     
-    public static void fix(String file, String... childGeometryName) {
+    public final static void setAlphaFallOff(float alphaFallOff) {
+        TreeFixUtils.alphaFallOff = alphaFallOff;
+    }
+    
+    /**
+     * 示例：
+     * <pre>
+     * <code>
+     *  fix("Models/trees/dry/dry389.j3o", "dry389-geom-1");
+     * </code>
+     * </pre>
+     * @param file
+     * @param childGeometryName 
+     */
+    public final static void fix(String file, String... childGeometryName) {
         AssetManager am = LuoYing.getAssetManager();
         
         // 1.重设material
@@ -58,7 +72,7 @@ public class TreeFixUtils {
         }
         
         // 2.处理为Unshaded
-        GeometryUtils.makeUnshaded(spatial);
+//        GeometryUtils.makeUnshaded(spatial);
         
         // 3.保存到系统
         ModelFileUtils.saveTo(spatial, file);
@@ -78,7 +92,7 @@ public class TreeFixUtils {
         geo.getMaterial().getAdditionalRenderState().setAlphaFallOff(alphaFallOff);
         geo.getMaterial().getAdditionalRenderState().setColorWrite(true);
         
-        geo.getMaterial().setBoolean("UseAlpha", true);
+//        geo.getMaterial().setBoolean("UseAlpha", true);
         geo.getMaterial().setBoolean("UseMaterialColors", true);
         geo.getMaterial().setFloat("AlphaDiscardThreshold", alphaFallOff);
         geo.getMaterial().setFloat("Shininess", 16);
@@ -91,28 +105,28 @@ public class TreeFixUtils {
         geo.setQueueBucket(Bucket.Transparent);
     }
     
-    public static void fix_trees_dry() {
+    private static void fix_trees_dry() {
         alphaFallOff = 0.5f;
         fix("Models/trees/dry/dry389.j3o", "dry389-geom-1");
         fix("Models/trees/dry/dry390.j3o", "dry390-geom-1");
         fix("Models/trees/dry/dry410.j3o", "dry410-geom-1");
     }
     
-    public static void fix_trees_fir() {
+    private static void fix_trees_fir() {
         alphaFallOff = 0.5f;
         fix("Models/trees/fir/fir473.j3o", "fir473-geom-0");
         fix("Models/trees/fir/fir483.j3o", "fir483-geom-0");
         fix("Models/trees/fir/fir527.j3o", "fir527-geom-0");
     }
     
-    public static void fix_trees_palm() {
+    private static void fix_trees_palm() {
         alphaFallOff = 0.5f;
         fix("Models/trees/palm/palm111.j3o", "palm111-geom-1");
         fix("Models/trees/palm/palm123.j3o", "palm123-geom-1");
         fix("Models/trees/palm/palm225.j3o", "palm225-geom-1");
     }
     
-    public static void fix_trees_tree() {
+    private static void fix_trees_tree() {
         alphaFallOff = 0.5f;
         fix("Models/trees/tree/tree381.j3o", "tree381-geom-1");
         fix("Models/trees/tree/tree431.j3o", "tree431-geom-1");
@@ -120,7 +134,7 @@ public class TreeFixUtils {
         fix("Models/trees/tree/tree978.j3o", "tree978-geom-1");
     }   
     
-    public static void fix_plant_flower() {
+    private static void fix_plant_flower() {
         alphaFallOff = 0.5f;
         fix("Models/plant/flower/flower1.j3o");
         fix("Models/plant/flower/flower2.j3o");
@@ -134,14 +148,14 @@ public class TreeFixUtils {
         fix("Models/plant/flower/camellia.j3o");
     }
     
-    public static void fix_plant_fruit() {
+    private static void fix_plant_fruit() {
         alphaFallOff = 0.5f;
         fix("Models/plant/fruit/acron.j3o");
         fix("Models/plant/fruit/beet.j3o");
         fix("Models/plant/fruit/carrot.j3o", "carrot-geom-0");
     }
     
-    public static void fix_plant_grass() {
+    private static void fix_plant_grass() {
         alphaFallOff = 0.5f;
         fix("Models/plant/grass/fern.j3o");
         fix("Models/plant/grass/fern2.j3o");
@@ -151,7 +165,7 @@ public class TreeFixUtils {
         fix("Models/plant/grass/tussockB.j3o");
     }
     
-    public static void fix_trees_test() {
+    private static void fix_trees_test() {
         alphaFallOff = 0.5f;
         fix("Textures/test/tt3/Tree.j3o", "Tree-geom-1");
     }

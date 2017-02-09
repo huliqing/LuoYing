@@ -11,9 +11,11 @@ package name.huliqing.editor.constants;
  */
 public class ResConstants {
     
-    public final static String COMMON_CHOOSER_FILE = "common.chooser.file";
     public final static String COMMON_OK = "common.ok";
     public final static String COMMON_CANCEL = "common.cancel";
+    public final static String COMMON_QUICK_CONFIRM = "common.quick.confirm";
+    public final static String COMMON_QUICK = "common.quick";
+    public final static String COMMON_CHOOSER_FILE = "common.chooser.file";
     public final static String COMMON_CREATE_TERRAIN = "common.create.terrain";
     
     /** menu.file */
