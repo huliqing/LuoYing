@@ -62,10 +62,17 @@
     -fx-background-color: transparent;
 }
 
-
 /** see StyleConstants */
 .toolbarButton {
     -fx-padding: 2 2 2 2;
+}
+
+/** 状态栏样式 */
+.statusBar {
+    -fx-background-color: lightgray;
+    -fx-border-style: solid inside;
+    -fx-border-width: 1 0 0 0; 
+    -fx-border-color: #c0c0c0;
 }
 
 /** ---- test---- */

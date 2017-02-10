@@ -17,6 +17,12 @@ public class AssetConstants {
     public final static String INTERFACE_COMMON_ARROW_DOWN = "Interface/icon/arrow-down.png";
     public final static String INTERFACE_COMMON_ARROW_LEFT = "Interface/icon/arrow-left.png";
     
+    /** 太阳、灯光 */
+    public final static String INTERFACE_ICON_SUN = "Interface/icon/sun.png";
+    
+    public final static String INTERFACE_ICON_STATISTICS = "Interface/icon/statistics.png";
+    
+    
     public final static String INTERFACE_MENU_OPEN_DIR = "Interface/icon/open.png";
     public final static String INTERFACE_MENU_OPEN_DIR_RECENT = "Interface/icon/open-recent-dir.png";
     public final static String INTERFACE_MENU_SAVE = "Interface/icon/save.png";
@@ -34,9 +40,6 @@ public class AssetConstants {
     /** 缩放 */
     public final static String INTERFACE_TOOL_SCALE = "Interface/tools/scale.png";
     
-    
-    /** 太阳、灯光 */
-    public final static String INTERFACE_ICON_SUN = "Interface/icon/sun.png";
     
     /** 材质：TerrainLighting.j3md */
     public final static String MATERIAL_TERRAIN_LIGHTING = "Common/MatDefs/Terrain/TerrainLighting.j3md";

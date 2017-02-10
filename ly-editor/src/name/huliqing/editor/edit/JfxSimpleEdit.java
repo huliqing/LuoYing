@@ -49,6 +49,10 @@ public abstract class JfxSimpleEdit<T extends JmeEdit> extends JfxAbstractEdit<T
         leftEditZone.setStyle(STYLE_EDIT_PANEL);
         leftEditZone.setOnDragOver(this::onDragOver);
         leftEditZone.setOnDragDropped(this::onDragDropped);
+        
+        // 只有在有扩展工具栏的时候才应该显示 
+        jfxExtToolbarPanel.managedProperty().bind(jfxExtToolbarPanel.visibleProperty());
+        jfxExtToolbarPanel.setVisible(false);
     }
     
     @Override
@@ -150,6 +154,7 @@ public abstract class JfxSimpleEdit<T extends JmeEdit> extends JfxAbstractEdit<T
             jfxToolbar.initialize();
         }
         jfxExtToolbarPanel.addToolbar(jfxToolbar.getName(), jfxToolbar.getView());
+        jfxExtToolbarPanel.setVisible(true);
         jfxExtToolbars.add(jfxToolbar);
     }
 

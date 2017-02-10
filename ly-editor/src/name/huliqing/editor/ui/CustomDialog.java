@@ -19,6 +19,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
+import name.huliqing.fxswing.Jfx;
 
 /**
  *
@@ -88,8 +89,10 @@ public class CustomDialog extends HBox {
     public Stage getDialog() {
         return dialog;
     }
-    
-    
+
+    /**
+     * @deprecated 
+     */
     public void show() {
         if (dialog.getOwner() != null) {
             // Workaround of RT-29871: Instead of just invoking fixPosition() 
@@ -101,6 +104,13 @@ public class CustomDialog extends HBox {
         }
         popupControl.show(owner);
         popupControl.setAutoHide(false);
+        dialog.show();
+    }
+    
+    public void showOnCenter() {
+        popupControl.show(owner);
+        popupControl.setAutoHide(false);
+        dialog.centerOnScreen();
         dialog.show();
     }
     

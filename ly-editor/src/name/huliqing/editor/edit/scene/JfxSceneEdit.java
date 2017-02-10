@@ -161,6 +161,7 @@ public class JfxSceneEdit extends JfxSimpleEdit<SceneEdit>
                     sceneDataConverter.initialize(null);
                     scenePropertyPanel.setText(scene.getData().getId());
                     scenePropertyPanel.setContent(sceneDataConverter.getLayout());
+                    scenePropertyPanel.setPrefWidth(200);
                 });
                 
             } catch (Exception e) {

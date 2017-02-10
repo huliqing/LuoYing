@@ -97,28 +97,6 @@ public class FileUtils {
         return result;
     }
     
-    public static byte[] readFile(File file) throws IOException {
-        BufferedInputStream bis = null;
-        try {
-            bis = new BufferedInputStream(new FileInputStream(file));
-            byte[] buff = new byte[1024];
-            int len;
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            while ((len = bis.read(buff, 0, buff.length)) != -1) {
-                baos.write(buff, 0, len);
-            }
-            return baos.toByteArray();
-        } finally {
-            if (bis != null) {
-                try {
-                    bis.close();
-                } catch (IOException ex) {
-                    Logger.getLogger(FileUtils.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
-    }
-    
     /**
      * 读取文件,如果文件不存在或读取失败，则返回null.
      * @param savePath 绝对路径
@@ -132,6 +110,39 @@ public class FileUtils {
             Logger.getLogger(FileUtils.class.getName()).log(Level.SEVERE, "Could not read file:" + savePath, ex);
         }
         return null;
+    }
+    
+    public static String readFile(InputStream is, String charset) {
+        try {
+            byte[] data = readFile(is);
+            return new String(data, 0, data.length, charset);
+        } catch (IOException ex) {
+            Logger.getLogger(FileUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    public static byte[] readFile(File file) throws IOException {
+        return readFile(new FileInputStream(file));
+    }
+    
+    public static byte[] readFile(InputStream is) throws IOException {
+        BufferedInputStream bis = new BufferedInputStream(is);
+        try {
+            byte[] buff = new byte[1024];
+            int len;
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            while ((len = bis.read(buff, 0, buff.length)) != -1) {
+                baos.write(buff, 0, len);
+            }
+            return baos.toByteArray();
+        } finally {
+            try {
+                bis.close();
+            } catch (IOException ex) {
+                Logger.getLogger(FileUtils.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
     
     /**

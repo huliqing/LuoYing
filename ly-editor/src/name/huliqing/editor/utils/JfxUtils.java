@@ -7,6 +7,7 @@ package name.huliqing.editor.utils;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Window;
 
 /**
  *
@@ -25,4 +26,5 @@ public class JfxUtils {
         imageView.setFitHeight(height);
         return imageView;
     }
+    
 }

@@ -26,7 +26,6 @@ import javafx.scene.input.TransferMode;
 import name.huliqing.editor.manager.Manager;
 import name.huliqing.editor.manager.ConfigManager;
 import name.huliqing.editor.manager.ConfigManager.ConfigChangedListener;
-import name.huliqing.editor.manager.EditManager;
 import name.huliqing.editor.ui.menu.CreateSceneMenuItem;
 import name.huliqing.editor.ui.menu.DeleteMenuItem;
 import name.huliqing.editor.ui.menu.EditMenuItem;

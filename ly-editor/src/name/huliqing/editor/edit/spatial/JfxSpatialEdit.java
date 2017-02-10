@@ -36,7 +36,10 @@ public class JfxSpatialEdit extends JfxSimpleEdit<SpatialEdit> {
     protected void onDragDropped(DragEvent e) {
         Dragboard db = e.getDragboard();
         if (db.hasFiles()) {
-            EditManager.openSpatialEditor(db.getFiles().get(0).getAbsolutePath());
+            
+            // remove,以后要改为添加节点到当前场景
+//            EditManager.openSpatialEditor(db.getFiles().get(0).getAbsolutePath()); 
+
             e.setDropCompleted(true);
         }
         e.consume();

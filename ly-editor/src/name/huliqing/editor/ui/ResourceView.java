@@ -5,40 +5,38 @@
  */
 package name.huliqing.editor.ui;
 
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.geometry.Insets;
+import javafx.scene.control.TitledPane;
+import javafx.scene.layout.VBox;
 import name.huliqing.editor.manager.ComponentManager;
 
 /**
  *
  * @author huliqing
  */
-public class ResourceView extends TabPane {
+public class ResourceView extends VBox{
     
-    private final Tab assetsTab = new Tab();
-    private final Tab luoYingTab = new Tab();
-    private final Tab components = new Tab();
+    private final TitledPane assetsPanel = new TitledPane();
+    private final TitledPane componentsPanel = new TitledPane();
+    private final TitledPane testPanel = new TitledPane();
     
     public ResourceView() {
         super();
         
-        assetsTab.setContent(new AssetsView());
-        assetsTab.setClosable(false);
-        assetsTab.setText("Assets");
+        assetsPanel.setContent(new AssetsView());
+        assetsPanel.setText("Assets");
         
         ComponentsView cv = new ComponentsView("Entities", ComponentManager.getComponents("Entity"));
-        components.setContent(cv);
-        components.setClosable(false);
-        components.setText("Components");
+        componentsPanel.setContent(cv);
+        componentsPanel.setText("Components");
         
-        luoYingTab.setContent(new YingConfigView());
-        luoYingTab.setClosable(false);
-        luoYingTab.setText("Config");
+        testPanel.setContent(new TestView());
+        testPanel.setText("Test");
+        testPanel.setExpanded(false);
         
-        getTabs().add(assetsTab);
-        getTabs().add(components);
-        getTabs().add(luoYingTab);
-        
+        getChildren().addAll(assetsPanel, componentsPanel, testPanel);
+        setPadding(Insets.EMPTY);
+        setStyle("-fx-background-color: lightgray");
     }
     
 }

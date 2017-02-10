@@ -17,6 +17,7 @@ public class ResConstants {
     public final static String COMMON_QUICK = "common.quick";
     public final static String COMMON_CHOOSER_FILE = "common.chooser.file";
     public final static String COMMON_CREATE_TERRAIN = "common.create.terrain";
+    public final static String COMMON_STATISTICS = "common.statistics";
     
     /** menu.file */
     public final static String MENU_FILE = "menu.file";
@@ -31,6 +32,10 @@ public class ResConstants {
     public final static String MENU_FILE_QUICK = "menu.file.quick";
     /** menu.help */
     public final static String MENU_HELP = "menu.help";
+    public final static String MENU_HELP_SHORTCUT = "menu.help.shortcut";
+    public final static String MENU_HELP_SHORTCUT_TITLE = "menu.help.shortcut.title";
+    public final static String MENU_HELP_ABOUT = "menu.help.about";
+    public final static String MENU_HELP_ABOUT_TITLE = "menu.help.about.title";
     
     public final static String POPUP_EDIT = "popup.edit";
     public final static String POPUP_RENAME = "popup.rename";

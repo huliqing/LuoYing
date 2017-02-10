@@ -6,6 +6,7 @@ common.quick.confirm=编辑结果尚未保存, 是否要保存?
 common.quick=退出程序
 common.chooser.file=选择文件
 common.create.terrain=创建地形
+common.statistics=显示统计信息
 
 menu.file=文件
 menu.file.quick=退出
@@ -14,6 +15,10 @@ menu.file.assetsRecent=打开最近使用的文件夹
 menu.file.assetsRecent.clean=清除记录
 menu.file.save=保存
 menu.help=帮助
+menu.help.shortcut=快捷方式
+menu.help.shortcut.title=快捷方式
+menu.help.about=关于
+menu.help.about.title=关于
 
 popup.edit=编辑
 popup.rename=重命名

@@ -9,7 +9,6 @@ import com.jme3.app.Application;
 import com.jme3.export.binary.BinaryExporter;
 import com.jme3.scene.Spatial;
 import com.jme3.terrain.Terrain;
-import com.jme3.terrain.heightmap.HeightMap;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -47,7 +46,7 @@ public class TerrainEntityComponent extends EntityComponent {
         BasePanel baseForm = form.basePanel;
         dialog.getChildren().add(form);
         dialog.setTitle(Manager.getRes(ResConstants.COMMON_CREATE_TERRAIN));
-        dialog.show();
+        dialog.showOnCenter();
 
         form.setOnOk(t -> {
             dialog.hide();

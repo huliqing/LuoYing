@@ -15,11 +15,14 @@ import name.huliqing.editor.manager.Manager;
 import name.huliqing.fxswing.Jfx;
 
 /**
- *
+ * 退时程序，退出程序时全部交由这个类来管理，以便在退出时判断是否需要存档。
  * @author huliqing
  */
 public class Quit {
     
+    /**
+     * 退时程序，如果还有编辑器存在编辑结果未保存，则该方法会弹出提示窗口进行询问。
+     */
     public final static void doQuit() {
         Editor editor = (Editor) Jfx.getJmeApp();
         if (!editor.isModified()) {

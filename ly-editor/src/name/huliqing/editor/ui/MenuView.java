@@ -9,9 +9,6 @@ import java.io.File;
 import java.util.List;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -21,6 +18,8 @@ import name.huliqing.editor.constants.AssetConstants;
 import name.huliqing.editor.manager.Manager;
 import name.huliqing.editor.constants.ResConstants;
 import name.huliqing.editor.manager.ConfigManager;
+import name.huliqing.editor.ui.menu.AboutMenuItem;
+import name.huliqing.editor.ui.menu.HelpShortcutMenuItem;
 import name.huliqing.editor.utils.JfxUtils;
 import name.huliqing.fxswing.Jfx;
 
@@ -37,6 +36,8 @@ public class MenuView extends MenuBar implements ConfigManager.ConfigChangedList
     private final MenuItem quick;
     
     private final Menu help;
+    private final MenuItem helpShortcut;
+    private final MenuItem helpAbout;
     
     public MenuView() {
         file = new Menu(Manager.getRes(ResConstants.MENU_FILE));
@@ -44,18 +45,19 @@ public class MenuView extends MenuBar implements ConfigManager.ConfigChangedList
         assetsRecent = new Menu(Manager.getRes(ResConstants.MENU_FILE_ASSETS_RECENT), JfxUtils.createImage(AssetConstants.INTERFACE_MENU_OPEN_DIR_RECENT, 16, 16));
         save = new MenuItem(Manager.getRes(ResConstants.MENU_FILE_SAVE), JfxUtils.createImage(AssetConstants.INTERFACE_MENU_SAVE, 16, 16));
         quick = new MenuItem(Manager.getRes(ResConstants.MENU_FILE_QUICK), JfxUtils.createImage(AssetConstants.INTERFACE_MENU_QUIT, 16, 16));
-        
-        help = new Menu(Manager.getRes(ResConstants.MENU_HELP));
-        
+        assets.setOnAction(e -> openAssetsChooser());
+        save.setOnAction(e -> save());
+        quick.setOnAction(e -> Quit.doQuit());
         file.getItems().addAll(assets, assetsRecent, save, quick);
+
+        help = new Menu(Manager.getRes(ResConstants.MENU_HELP));
+        helpShortcut = new HelpShortcutMenuItem();
+        helpAbout = new AboutMenuItem();
+        help.getItems().addAll(helpShortcut, helpAbout);
         getMenus().addAll(file, help);
         
         rebuildAssetRecent();
         Manager.getConfigManager().addListener(this);
-        
-        assets.setOnAction(e -> openAssetsChooser());
-        save.setOnAction(e -> save());
-        quick.setOnAction(e -> Jfx.getMainFrame().dispose());
 
         file.showingProperty().addListener(new ChangeListener<Boolean>() {
             @Override

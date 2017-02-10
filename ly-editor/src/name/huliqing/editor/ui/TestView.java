@@ -13,11 +13,11 @@ import javafx.scene.layout.VBox;
  *
  * @author huliqing
  */
-public class YingConfigView extends ScrollPane {
+public class TestView extends ScrollPane {
     
     private final VBox layout = new VBox();
     
-    public YingConfigView() {
+    public TestView() {
         setContent(layout);
         
         Button btn = new Button("test");

@@ -14,6 +14,7 @@ import javafx.scene.layout.VBox;
 import name.huliqing.editor.Editor;
 import name.huliqing.editor.constants.StyleConstants;
 import name.huliqing.editor.manager.EditManager;
+import name.huliqing.editor.manager.UIManager;
 import name.huliqing.fxswing.Jfx;
 
 /**
@@ -29,12 +30,6 @@ public abstract class JfxAbstractEdit<T extends JmeEdit> implements JfxEdit<T>, 
     protected T jmeEdit;
     protected boolean editInitialized;
     protected boolean jfxInitialized;
-    
-    // JFX的全局根节点
-    private Pane jfxRoot;
-    
-    // JFX编辑器根节点，不包含资源窗口
-    private Pane jfxEditZone; 
     
     /**
      * 当前JFX编辑器的本地根节点
@@ -60,16 +55,13 @@ public abstract class JfxAbstractEdit<T extends JmeEdit> implements JfxEdit<T>, 
                 LOG.info("<<<<JmeEditInitialized");
             }
             Jfx.runOnJfx(() -> {
-                jfxRoot = Jfx.getJfxRoot();
-                jfxRoot.addEventFilter(DragEvent.DRAG_ENTERED, this);
-                jfxRoot.addEventFilter(DragEvent.DRAG_DONE, this);
+                Jfx.getJfxRoot().addEventFilter(DragEvent.DRAG_ENTERED, this);
+                Jfx.getJfxRoot().addEventFilter(DragEvent.DRAG_DONE, this);
 
-                jfxEditZone = EditManager.getJfxEditZone();
-                jfxEditZone.getChildren().add(editRoot);
+                UIManager.ZONE_EDIT.getChildren().add(editRoot);
+                editRoot.prefWidthProperty().bind(UIManager.ZONE_EDIT.widthProperty());
+                editRoot.prefHeightProperty().bind(UIManager.ZONE_EDIT.heightProperty());
                 
-                editRoot.prefWidthProperty().bind(jfxEditZone.widthProperty());
-                editRoot.prefHeightProperty().bind(jfxEditZone.heightProperty());
-//                editRoot.setStyle("-fx-border: solid inside;-fx-border-width:1;-fx-border-color:black;");
                 jfxInitialize();
                 jfxInitialized = true;
                 LOG.info("<<<<JFXEditInitialized");
@@ -91,9 +83,9 @@ public abstract class JfxAbstractEdit<T extends JmeEdit> implements JfxEdit<T>, 
             jfxCleanup();
             editRoot.prefWidthProperty().unbind();
             editRoot.prefHeightProperty().unbind();
-            jfxEditZone.getChildren().remove(editRoot);
-            jfxRoot.removeEventFilter(DragEvent.DRAG_ENTERED, this);
-            jfxRoot.removeEventFilter(DragEvent.DRAG_DONE, this);
+            UIManager.ZONE_EDIT.getChildren().remove(editRoot);
+            Jfx.getJfxRoot().removeEventFilter(DragEvent.DRAG_ENTERED, this);
+            Jfx.getJfxRoot().removeEventFilter(DragEvent.DRAG_DONE, this);
             LOG.info(">>>>----JFXEditCleanup");
         }
         // 再清理3d编辑器

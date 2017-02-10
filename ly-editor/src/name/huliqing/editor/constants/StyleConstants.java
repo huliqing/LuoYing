@@ -27,4 +27,7 @@ public class StyleConstants {
      * 普通Jfx ToolBar内的按钮样式
      */
     public final static String CLASS_TOOLBAR_BUTTON = "toolbarButton";
+    
+    /** 状态栏样式 */
+    public final static String CLASS_STATUS_BAR = "statusBar";
 }

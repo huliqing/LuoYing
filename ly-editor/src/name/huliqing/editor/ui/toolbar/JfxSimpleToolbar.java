@@ -32,6 +32,10 @@ public class JfxSimpleToolbar extends ToolBar implements JfxToolbar, ToolbarList
     
     private Toolbar  toolbar;
     private boolean initialized;
+    
+    public JfxSimpleToolbar() {
+        setStyle("-fx-background-color:transparent;");
+    }
 
     @Override
     public void setToolbar(Toolbar toolbar) {
