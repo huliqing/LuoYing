@@ -7,6 +7,7 @@ package name.huliqing.editor.manager;
 
 import com.jme3.app.Application;
 import com.jme3.font.BitmapFont;
+import name.huliqing.editor.log.LogFactory;
 
 /**
  * 全局管理器
@@ -37,7 +38,11 @@ public class Manager {
         
         app.getAssetManager().registerLocator("", EditAssetLocator.class);
         
+        // 转换器初始化
         ConverterManager.initialize();
+        
+        // 日志初始化
+        LogFactory.initialize();
     }
     
     public static void cleanup() {

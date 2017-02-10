@@ -1,0 +1,1142 @@
+二月 11, 2017 2:02:31 上午 name.huliqing.luoying.LuoYing initialize
+信息: registerSerializer ok
+二月 11, 2017 2:02:31 上午 name.huliqing.luoying.LuoYing initialize
+信息: registerProcessor ok.
+二月 11, 2017 2:02:31 上午 name.huliqing.luoying.LuoYing initialize
+信息: registerMessage ok.
+二月 11, 2017 2:02:31 上午 name.huliqing.luoying.LuoYing initialize
+信息: loadSysData ok.
+二月 11, 2017 2:02:49 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$28
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:02:49 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:02:49 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:02:49 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:02:49 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:02:49 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$27
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:02:49 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'VERTEX_COLOR' mapped to non-existent material parameter 'UseVertexColor', ignoring.
+二月 11, 2017 2:02:49 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'MATERIAL_COLORS' mapped to non-existent material parameter 'UseMaterialColors', ignoring.
+二月 11, 2017 2:02:49 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'V_TANGENT' mapped to non-existent material parameter 'VTangent', ignoring.
+二月 11, 2017 2:02:49 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'MINNAERT' mapped to non-existent material parameter 'Minnaert', ignoring.
+二月 11, 2017 2:02:49 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'PARALLAXMAP' mapped to non-existent material parameter 'ParallaxMap', ignoring.
+二月 11, 2017 2:03:31 上午 name.huliqing.luoying.LuoYing initialize
+信息: registerSerializer ok
+二月 11, 2017 2:03:31 上午 name.huliqing.luoying.LuoYing initialize
+信息: registerProcessor ok.
+二月 11, 2017 2:03:31 上午 name.huliqing.luoying.LuoYing initialize
+信息: registerMessage ok.
+二月 11, 2017 2:03:31 上午 name.huliqing.luoying.LuoYing initialize
+信息: loadSysData ok.
+二月 11, 2017 2:03:38 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$28
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:03:38 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:03:38 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:03:38 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:03:38 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:03:38 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$27
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:03:38 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'VERTEX_COLOR' mapped to non-existent material parameter 'UseVertexColor', ignoring.
+二月 11, 2017 2:03:38 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'MATERIAL_COLORS' mapped to non-existent material parameter 'UseMaterialColors', ignoring.
+二月 11, 2017 2:03:38 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'V_TANGENT' mapped to non-existent material parameter 'VTangent', ignoring.
+二月 11, 2017 2:03:38 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'MINNAERT' mapped to non-existent material parameter 'Minnaert', ignoring.
+二月 11, 2017 2:03:38 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'PARALLAXMAP' mapped to non-existent material parameter 'ParallaxMap', ignoring.
+二月 11, 2017 2:04:05 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:04:05 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$29
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:04:05 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$28
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:04:05 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:04:05 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:04:05 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:04:05 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:04:05 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$27
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:04:22 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:04:22 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$29
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:04:22 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$28
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:04:22 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:04:22 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:04:22 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:04:22 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:04:22 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$27
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:04:31 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:04:31 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$29
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:04:31 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$28
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:04:31 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:04:31 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:04:31 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:04:31 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:04:31 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$27
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:06:26 上午 name.huliqing.luoying.LuoYing initialize
+信息: registerSerializer ok
+二月 11, 2017 2:06:26 上午 name.huliqing.luoying.LuoYing initialize
+信息: registerProcessor ok.
+二月 11, 2017 2:06:26 上午 name.huliqing.luoying.LuoYing initialize
+信息: registerMessage ok.
+二月 11, 2017 2:06:26 上午 name.huliqing.luoying.LuoYing initialize
+信息: loadSysData ok.
+二月 11, 2017 2:06:38 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$28
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:06:38 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:06:38 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:06:38 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:06:38 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:06:38 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$27
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:06:39 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'VERTEX_COLOR' mapped to non-existent material parameter 'UseVertexColor', ignoring.
+二月 11, 2017 2:06:39 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'MATERIAL_COLORS' mapped to non-existent material parameter 'UseMaterialColors', ignoring.
+二月 11, 2017 2:06:39 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'V_TANGENT' mapped to non-existent material parameter 'VTangent', ignoring.
+二月 11, 2017 2:06:39 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'MINNAERT' mapped to non-existent material parameter 'Minnaert', ignoring.
+二月 11, 2017 2:06:39 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'PARALLAXMAP' mapped to non-existent material parameter 'ParallaxMap', ignoring.
+二月 11, 2017 2:06:42 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:06:42 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$29
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:06:42 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$28
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:06:42 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:06:42 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:06:42 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:06:42 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:06:42 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$27
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:07:09 上午 name.huliqing.luoying.LuoYing initialize
+信息: registerSerializer ok
+二月 11, 2017 2:07:10 上午 name.huliqing.luoying.LuoYing initialize
+信息: registerProcessor ok.
+二月 11, 2017 2:07:10 上午 name.huliqing.luoying.LuoYing initialize
+信息: registerMessage ok.
+二月 11, 2017 2:07:10 上午 name.huliqing.luoying.LuoYing initialize
+信息: loadSysData ok.
+二月 11, 2017 2:08:29 上午 name.huliqing.luoying.LuoYing initialize
+信息: registerSerializer ok
+二月 11, 2017 2:08:29 上午 name.huliqing.luoying.LuoYing initialize
+信息: registerProcessor ok.
+二月 11, 2017 2:08:29 上午 name.huliqing.luoying.LuoYing initialize
+信息: registerMessage ok.
+二月 11, 2017 2:08:29 上午 name.huliqing.luoying.LuoYing initialize
+信息: loadSysData ok.
+二月 11, 2017 2:08:37 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$28
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:08:37 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:08:37 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:08:37 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:08:37 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:08:37 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$27
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:08:37 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'VERTEX_COLOR' mapped to non-existent material parameter 'UseVertexColor', ignoring.
+二月 11, 2017 2:08:37 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'MATERIAL_COLORS' mapped to non-existent material parameter 'UseMaterialColors', ignoring.
+二月 11, 2017 2:08:37 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'V_TANGENT' mapped to non-existent material parameter 'VTangent', ignoring.
+二月 11, 2017 2:08:37 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'MINNAERT' mapped to non-existent material parameter 'Minnaert', ignoring.
+二月 11, 2017 2:08:37 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'PARALLAXMAP' mapped to non-existent material parameter 'ParallaxMap', ignoring.
+二月 11, 2017 2:08:49 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:08:49 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$29
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:08:49 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$28
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:08:49 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:08:49 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:08:49 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:08:49 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:08:49 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$27
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:09:05 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:09:05 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$29
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:09:05 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$28
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:09:05 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:09:05 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:09:05 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:09:05 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:09:05 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$27
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:14:07 上午 name.huliqing.luoying.LuoYing initialize
+信息: registerSerializer ok
+二月 11, 2017 2:14:07 上午 name.huliqing.luoying.LuoYing initialize
+信息: registerProcessor ok.
+二月 11, 2017 2:14:07 上午 name.huliqing.luoying.LuoYing initialize
+信息: registerMessage ok.
+二月 11, 2017 2:14:07 上午 name.huliqing.luoying.LuoYing initialize
+信息: loadSysData ok.
+二月 11, 2017 2:14:13 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$28
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:14:13 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:14:13 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:14:13 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:14:13 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:14:13 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$27
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:14:13 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'VERTEX_COLOR' mapped to non-existent material parameter 'UseVertexColor', ignoring.
+二月 11, 2017 2:14:13 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'MATERIAL_COLORS' mapped to non-existent material parameter 'UseMaterialColors', ignoring.
+二月 11, 2017 2:14:13 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'V_TANGENT' mapped to non-existent material parameter 'VTangent', ignoring.
+二月 11, 2017 2:14:13 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'MINNAERT' mapped to non-existent material parameter 'Minnaert', ignoring.
+二月 11, 2017 2:14:13 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'PARALLAXMAP' mapped to non-existent material parameter 'ParallaxMap', ignoring.
+二月 11, 2017 2:15:22 上午 name.huliqing.luoying.LuoYing initialize
+信息: registerSerializer ok
+二月 11, 2017 2:15:22 上午 name.huliqing.luoying.LuoYing initialize
+信息: registerProcessor ok.
+二月 11, 2017 2:15:22 上午 name.huliqing.luoying.LuoYing initialize
+信息: registerMessage ok.
+二月 11, 2017 2:15:22 上午 name.huliqing.luoying.LuoYing initialize
+信息: loadSysData ok.
+二月 11, 2017 2:15:28 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$28
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:15:28 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:15:28 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:15:28 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:15:28 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:15:28 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$27
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:15:29 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'VERTEX_COLOR' mapped to non-existent material parameter 'UseVertexColor', ignoring.
+二月 11, 2017 2:15:29 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'MATERIAL_COLORS' mapped to non-existent material parameter 'UseMaterialColors', ignoring.
+二月 11, 2017 2:15:29 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'V_TANGENT' mapped to non-existent material parameter 'VTangent', ignoring.
+二月 11, 2017 2:15:29 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'MINNAERT' mapped to non-existent material parameter 'Minnaert', ignoring.
+二月 11, 2017 2:15:29 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'PARALLAXMAP' mapped to non-existent material parameter 'ParallaxMap', ignoring.
+二月 11, 2017 2:15:42 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:15:42 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$29
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:15:42 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$28
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:15:42 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:15:42 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:15:42 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:15:42 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:15:42 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$27
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:16:06 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:16:06 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$29
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:16:06 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$28
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:16:06 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:16:06 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:16:06 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:16:06 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:16:06 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$27
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:16:34 上午 name.huliqing.luoying.LuoYing initialize
+信息: registerSerializer ok
+二月 11, 2017 2:16:34 上午 name.huliqing.luoying.LuoYing initialize
+信息: registerProcessor ok.
+二月 11, 2017 2:16:34 上午 name.huliqing.luoying.LuoYing initialize
+信息: registerMessage ok.
+二月 11, 2017 2:16:34 上午 name.huliqing.luoying.LuoYing initialize
+信息: loadSysData ok.
+二月 11, 2017 2:16:42 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$28
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:16:42 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:16:42 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:16:42 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:16:42 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:16:43 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$27
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:16:43 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'VERTEX_COLOR' mapped to non-existent material parameter 'UseVertexColor', ignoring.
+二月 11, 2017 2:16:43 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'MATERIAL_COLORS' mapped to non-existent material parameter 'UseMaterialColors', ignoring.
+二月 11, 2017 2:16:43 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'V_TANGENT' mapped to non-existent material parameter 'VTangent', ignoring.
+二月 11, 2017 2:16:43 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'MINNAERT' mapped to non-existent material parameter 'Minnaert', ignoring.
+二月 11, 2017 2:16:43 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'PARALLAXMAP' mapped to non-existent material parameter 'ParallaxMap', ignoring.
+二月 11, 2017 2:17:05 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:17:05 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$29
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:17:05 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$28
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:17:05 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:17:05 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:17:05 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:17:05 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:17:05 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$27
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:17:23 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:17:23 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$29
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:17:23 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$28
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:17:23 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:17:23 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:17:23 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:17:23 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:17:23 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$27
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:17:27 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:17:27 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$29
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:17:27 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$28
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:17:27 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:17:27 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:17:27 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:17:27 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:17:27 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$27
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:17:48 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:17:48 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$29
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:17:48 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$28
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:17:48 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:17:48 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:17:48 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:17:48 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:17:48 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$27
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:24:23 上午 name.huliqing.luoying.LuoYing initialize
+信息: registerSerializer ok
+二月 11, 2017 2:24:23 上午 name.huliqing.luoying.LuoYing initialize
+信息: registerProcessor ok.
+二月 11, 2017 2:24:23 上午 name.huliqing.luoying.LuoYing initialize
+信息: registerMessage ok.
+二月 11, 2017 2:24:23 上午 name.huliqing.luoying.LuoYing initialize
+信息: loadSysData ok.
+二月 11, 2017 2:24:41 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$28
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:24:41 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:24:41 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:24:41 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:24:41 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:24:41 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$27
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:24:41 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'VERTEX_COLOR' mapped to non-existent material parameter 'UseVertexColor', ignoring.
+二月 11, 2017 2:24:41 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'MATERIAL_COLORS' mapped to non-existent material parameter 'UseMaterialColors', ignoring.
+二月 11, 2017 2:24:41 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'V_TANGENT' mapped to non-existent material parameter 'VTangent', ignoring.
+二月 11, 2017 2:24:41 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'MINNAERT' mapped to non-existent material parameter 'Minnaert', ignoring.
+二月 11, 2017 2:24:41 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'PARALLAXMAP' mapped to non-existent material parameter 'ParallaxMap', ignoring.
+二月 11, 2017 2:24:55 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:24:55 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$29
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:24:55 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$28
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:24:55 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:24:55 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:24:55 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:24:55 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:24:55 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$27
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:29:48 上午 name.huliqing.luoying.LuoYing initialize
+信息: registerSerializer ok
+二月 11, 2017 2:29:48 上午 name.huliqing.luoying.LuoYing initialize
+信息: registerProcessor ok.
+二月 11, 2017 2:29:48 上午 name.huliqing.luoying.LuoYing initialize
+信息: registerMessage ok.
+二月 11, 2017 2:29:48 上午 name.huliqing.luoying.LuoYing initialize
+信息: loadSysData ok.
+二月 11, 2017 2:32:16 上午 name.huliqing.luoying.LuoYing initialize
+信息: registerSerializer ok
+二月 11, 2017 2:32:16 上午 name.huliqing.luoying.LuoYing initialize
+信息: registerProcessor ok.
+二月 11, 2017 2:32:16 上午 name.huliqing.luoying.LuoYing initialize
+信息: registerMessage ok.
+二月 11, 2017 2:32:16 上午 name.huliqing.luoying.LuoYing initialize
+信息: loadSysData ok.
+二月 11, 2017 2:32:43 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$18
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:32:43 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:32:43 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:32:43 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:32:43 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:32:43 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$17
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:32:43 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'VERTEX_COLOR' mapped to non-existent material parameter 'UseVertexColor', ignoring.
+二月 11, 2017 2:32:43 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'MATERIAL_COLORS' mapped to non-existent material parameter 'UseMaterialColors', ignoring.
+二月 11, 2017 2:32:43 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'V_TANGENT' mapped to non-existent material parameter 'VTangent', ignoring.
+二月 11, 2017 2:32:43 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'MINNAERT' mapped to non-existent material parameter 'Minnaert', ignoring.
+二月 11, 2017 2:32:43 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'PARALLAXMAP' mapped to non-existent material parameter 'ParallaxMap', ignoring.
+二月 11, 2017 2:32:52 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:32:52 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$19
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:32:52 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$18
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:32:52 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:32:52 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:32:52 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:32:52 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:32:52 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$17
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:33:01 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:33:01 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$19
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:33:01 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$18
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:33:01 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:33:01 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:33:01 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:33:01 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:33:01 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$17
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:34:25 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:34:25 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$19
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:34:25 上午 name.huliqing.editor.manager.EditAssetLocator locate
+警告: Asset not found, assetDir=C:\home\workspace\jme3.1\luoying\ly-editor\assets, key=Textures/terrains/terrain170208224929-alphablend2.png
+二月 11, 2017 2:34:25 上午 com.jme3.texture.Texture read
+严重: Cannot locate texture Textures/terrains/terrain170208224929-alphablend2.png
+二月 11, 2017 2:34:25 上午 name.huliqing.editor.manager.EditAssetLocator locate
+警告: Asset not found, assetDir=C:\home\workspace\jme3.1\luoying\ly-editor\assets, key=Textures/terrains/terrain170208224929-alphablend1.png
+二月 11, 2017 2:34:25 上午 com.jme3.texture.Texture read
+严重: Cannot locate texture Textures/terrains/terrain170208224929-alphablend1.png
+二月 11, 2017 2:34:25 上午 name.huliqing.editor.manager.EditAssetLocator locate
+警告: Asset not found, assetDir=C:\home\workspace\jme3.1\luoying\ly-editor\assets, key=Textures/terrains/terrain170208224929-alphablend0.png
+二月 11, 2017 2:34:25 上午 com.jme3.texture.Texture read
+严重: Cannot locate texture Textures/terrains/terrain170208224929-alphablend0.png
+二月 11, 2017 2:34:25 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$18
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:34:25 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:34:25 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:34:25 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:34:25 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:34:25 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$17
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:34:30 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:34:30 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$19
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:34:30 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$18
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:34:30 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:34:30 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:34:30 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:34:30 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:34:30 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$17
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:34:33 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:34:33 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$19
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:34:33 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$18
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:34:33 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:34:33 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:34:33 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:34:33 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:34:33 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$17
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:34:36 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:34:36 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$19
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:34:36 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$18
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:34:36 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:34:36 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:34:36 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:34:36 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:34:36 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$17
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:34:41 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:34:41 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$19
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:34:42 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$18
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:34:42 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:34:42 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:34:42 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:34:42 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:34:42 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$17
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:34:48 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:34:48 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$19
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:34:48 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$18
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:34:48 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:34:48 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:34:48 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:34:48 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:34:48 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$17
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:34:54 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:34:54 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$19
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:34:55 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$18
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:34:55 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:34:55 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:34:55 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:34:55 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:34:55 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$17
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:34:55 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:34:55 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$19
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:34:56 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$18
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:34:56 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:34:56 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:34:56 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:34:56 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:34:56 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$17
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:34:57 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:34:57 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$19
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:34:57 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$18
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:34:57 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:34:57 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:34:57 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:34:57 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:34:57 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$17
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:35:04 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:35:04 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$19
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:35:05 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$18
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:35:05 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:35:05 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:35:05 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:35:05 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:35:05 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$17
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:35:11 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:35:11 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$19
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:35:12 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$18
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:35:12 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:35:12 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:35:12 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:35:12 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:35:12 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$17
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:35:17 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:35:17 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$19
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:35:17 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$18
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:35:17 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:35:17 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:35:17 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:35:17 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:35:17 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$17
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:35:18 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:35:18 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$19
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:35:19 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$18
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:35:19 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:35:19 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:35:19 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:35:19 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:35:19 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$17
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:35:20 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:35:20 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$19
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:35:20 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$18
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:35:20 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:35:20 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:35:20 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:35:20 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:35:20 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$17
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:35:22 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:35:22 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$19
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:35:22 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$18
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:35:22 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:35:22 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:35:22 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:35:22 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:35:22 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$17
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:35:23 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:35:23 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$19
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:35:23 上午 name.huliqing.editor.manager.EditAssetLocator locate
+警告: Asset not found, assetDir=C:\home\workspace\jme3.1\luoying\ly-editor\assets, key=Textures/terrains/terrain170208224929-alphablend2.png
+二月 11, 2017 2:35:23 上午 com.jme3.texture.Texture read
+严重: Cannot locate texture Textures/terrains/terrain170208224929-alphablend2.png
+二月 11, 2017 2:35:23 上午 name.huliqing.editor.manager.EditAssetLocator locate
+警告: Asset not found, assetDir=C:\home\workspace\jme3.1\luoying\ly-editor\assets, key=Textures/terrains/terrain170208224929-alphablend1.png
+二月 11, 2017 2:35:23 上午 com.jme3.texture.Texture read
+严重: Cannot locate texture Textures/terrains/terrain170208224929-alphablend1.png
+二月 11, 2017 2:35:23 上午 name.huliqing.editor.manager.EditAssetLocator locate
+警告: Asset not found, assetDir=C:\home\workspace\jme3.1\luoying\ly-editor\assets, key=Textures/terrains/terrain170208224929-alphablend0.png
+二月 11, 2017 2:35:23 上午 com.jme3.texture.Texture read
+严重: Cannot locate texture Textures/terrains/terrain170208224929-alphablend0.png
+二月 11, 2017 2:35:23 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$18
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:35:24 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:35:24 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:35:24 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+警告: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:35:24 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:35:24 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$17
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:39:01 上午 name.huliqing.luoying.LuoYing initialize
+信息: registerSerializer ok
+二月 11, 2017 2:39:01 上午 name.huliqing.luoying.LuoYing initialize
+信息: registerProcessor ok.
+二月 11, 2017 2:39:01 上午 name.huliqing.luoying.LuoYing initialize
+信息: registerMessage ok.
+二月 11, 2017 2:39:01 上午 name.huliqing.luoying.LuoYing initialize
+信息: loadSysData ok.
+二月 11, 2017 2:39:15 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$18
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:39:15 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+信息: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:39:15 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:39:15 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+信息: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:39:15 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:39:15 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$17
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:39:29 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:39:29 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$19
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:39:29 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$18
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:39:29 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+信息: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:39:29 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:39:29 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+信息: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:39:29 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:39:29 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$17
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:39:33 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:39:33 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$19
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:39:33 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$18
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:39:33 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+信息: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:39:33 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:39:33 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+信息: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:39:33 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:39:33 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$17
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:39:35 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:39:35 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$19
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:39:35 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$18
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:39:35 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+信息: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:39:35 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:39:35 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+信息: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:39:35 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:39:35 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$17
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:39:38 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:39:38 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$19
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:39:38 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$18
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:39:38 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+信息: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:39:38 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:39:38 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+信息: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:39:38 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:39:38 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$17
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:39:41 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:39:41 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$19
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:39:41 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$18
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:39:41 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+信息: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:39:41 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:39:41 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+信息: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:39:41 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:39:41 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$17
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:39:43 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:39:43 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$19
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:39:43 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$18
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:39:43 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+信息: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:39:43 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:39:43 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+信息: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:39:43 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:39:43 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$17
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:40:24 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:40:24 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$19
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:40:24 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$18
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:40:24 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+信息: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:40:24 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:40:24 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+信息: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:40:24 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:40:24 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$17
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:40:28 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:40:28 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$19
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:40:28 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$18
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:40:28 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+信息: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:40:28 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:40:28 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+信息: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:40:28 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:40:28 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$17
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:42:29 上午 name.huliqing.luoying.LuoYing initialize
+信息: registerSerializer ok
+二月 11, 2017 2:42:29 上午 name.huliqing.luoying.LuoYing initialize
+信息: registerProcessor ok.
+二月 11, 2017 2:42:29 上午 name.huliqing.luoying.LuoYing initialize
+信息: registerMessage ok.
+二月 11, 2017 2:42:29 上午 name.huliqing.luoying.LuoYing initialize
+信息: loadSysData ok.
+二月 11, 2017 2:42:53 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$18
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:42:53 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+信息: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:42:53 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:42:53 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+信息: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:42:53 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:42:53 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$17
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:43:04 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:43:04 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$19
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:43:04 上午 name.huliqing.editor.manager.EditAssetLocator locate
+警告: Asset not found, assetDir=C:\home\workspace\jme3.1\luoying\ly-editor\assets, key=Textures/terrains/terrain170208224929-alphablend2.png
+二月 11, 2017 2:43:04 上午 com.jme3.texture.Texture read
+严重: Cannot locate texture Textures/terrains/terrain170208224929-alphablend2.png
+二月 11, 2017 2:43:04 上午 name.huliqing.editor.manager.EditAssetLocator locate
+警告: Asset not found, assetDir=C:\home\workspace\jme3.1\luoying\ly-editor\assets, key=Textures/terrains/terrain170208224929-alphablend1.png
+二月 11, 2017 2:43:04 上午 com.jme3.texture.Texture read
+严重: Cannot locate texture Textures/terrains/terrain170208224929-alphablend1.png
+二月 11, 2017 2:43:04 上午 name.huliqing.editor.manager.EditAssetLocator locate
+警告: Asset not found, assetDir=C:\home\workspace\jme3.1\luoying\ly-editor\assets, key=Textures/terrains/terrain170208224929-alphablend0.png
+二月 11, 2017 2:43:04 上午 com.jme3.texture.Texture read
+严重: Cannot locate texture Textures/terrains/terrain170208224929-alphablend0.png
+二月 11, 2017 2:43:04 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'VERTEX_COLOR' mapped to non-existent material parameter 'UseVertexColor', ignoring.
+二月 11, 2017 2:43:04 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'MATERIAL_COLORS' mapped to non-existent material parameter 'UseMaterialColors', ignoring.
+二月 11, 2017 2:43:04 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'V_TANGENT' mapped to non-existent material parameter 'VTangent', ignoring.
+二月 11, 2017 2:43:04 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'MINNAERT' mapped to non-existent material parameter 'Minnaert', ignoring.
+二月 11, 2017 2:43:04 上午 com.jme3.material.plugins.J3MLoader readDefine
+警告: In technique 'GBuf':
+Define 'PARALLAXMAP' mapped to non-existent material parameter 'ParallaxMap', ignoring.
+二月 11, 2017 2:43:04 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$18
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:43:04 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+信息: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:43:04 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:43:04 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+信息: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:43:04 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:43:04 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$17
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:43:24 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:43:24 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$19
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:43:24 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$18
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:43:24 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+信息: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:43:24 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:43:24 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+信息: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:43:24 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:43:24 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$17
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:43:31 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:43:31 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$19
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:43:31 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$18
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:43:31 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+信息: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:43:31 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:43:31 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+信息: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:43:31 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:43:31 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$17
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:43:38 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:43:38 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$19
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:43:38 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$18
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:43:38 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+信息: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:43:38 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:43:38 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+信息: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:43:38 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:43:38 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$17
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:43:42 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:43:42 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$19
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:43:42 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$18
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:43:42 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+信息: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:43:42 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:43:42 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+信息: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:43:42 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:43:42 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$17
+信息: <<<<JFXEditInitialized
+二月 11, 2017 2:43:47 上午 name.huliqing.editor.edit.JfxAbstractEdit cleanup
+信息: >>>>----JFXEditCleanup
+二月 11, 2017 2:43:47 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$cleanup$19
+信息: >>>>----JmeEditCleanup
+二月 11, 2017 2:43:47 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$initialize$18
+信息: <<<<JmeEditInitialized
+二月 11, 2017 2:43:47 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+信息: Mapping not found for toolName=undoRedoTool, toolClass=name.huliqing.editor.tools.base.UndoRedoTool, skipped.
+二月 11, 2017 2:43:47 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=undoRedoTool, tool=name.huliqing.editor.tools.base.UndoRedoTool
+二月 11, 2017 2:43:47 上午 name.huliqing.editor.ui.tool.JfxToolFactory createJfxTool
+信息: Mapping not found for toolName=pickTool, toolClass=name.huliqing.editor.tools.base.PickTool, skipped.
+二月 11, 2017 2:43:47 上午 name.huliqing.editor.ui.toolbar.JfxSimpleToolbar createToolView
+警告: Unsupported tool, toolName=pickTool, tool=name.huliqing.editor.tools.base.PickTool
+二月 11, 2017 2:43:47 上午 name.huliqing.editor.edit.JfxAbstractEdit lambda$null$17
+信息: <<<<JFXEditInitialized

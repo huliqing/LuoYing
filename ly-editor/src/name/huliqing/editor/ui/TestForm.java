@@ -13,11 +13,11 @@ import javafx.scene.layout.VBox;
  *
  * @author huliqing
  */
-public class TestView extends ScrollPane {
+public class TestForm extends ScrollPane {
     
     private final VBox layout = new VBox();
     
-    public TestView() {
+    public TestForm() {
         setContent(layout);
         
         Button btn = new Button("test");

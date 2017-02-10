@@ -32,6 +32,7 @@ import name.huliqing.luoying.data.GameData;
 import name.huliqing.luoying.data.GameLogicData;
 import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.loader.GameDataLoader;
+import name.huliqing.luoying.log.LogFactory;
 import name.huliqing.luoying.manager.ResManager;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.xml.DataFactory;
@@ -79,6 +80,9 @@ public class Init {
     public static void initialize(Application app) {
         // 落樱初始化
         LuoYing.initialize(app);
+        
+        // 落樱日志记录功能
+        LuoYing.initializeLogManager();
         
         // 本地初始化
         registerService();

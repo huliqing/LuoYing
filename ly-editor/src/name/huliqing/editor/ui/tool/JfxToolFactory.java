@@ -82,7 +82,7 @@ public class JfxToolFactory {
                 tv.setTool(tool);
                 return tv;
             }else {
-                LOG.log(Level.WARNING, "Mapping not found for toolName={0}, toolClass={1}, skipped."
+                LOG.log(Level.INFO, "Mapping not found for toolName={0}, toolClass={1}, skipped."
                         , new Object[] {tool.getName(), tool.getClass().getName()});
             }
         } catch (InstantiationException | IllegalAccessException ex) {

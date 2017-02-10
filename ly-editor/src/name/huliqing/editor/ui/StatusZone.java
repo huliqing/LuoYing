@@ -14,9 +14,9 @@ import name.huliqing.editor.constants.StyleConstants;
  *
  * @author huliqing
  */
-public class StatusBar extends HBox {
+public class StatusZone extends HBox {
     
-    public StatusBar() {
+    public StatusZone() {
         setPadding(new Insets(0, 3, 0, 3));
         setMinHeight(25);
         setMaxHeight(25);

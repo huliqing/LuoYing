@@ -22,7 +22,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import name.huliqing.editor.ui.MenuView;
+import name.huliqing.editor.ui.MenuForm;
 
 /**
  *
@@ -37,7 +37,7 @@ public class TestJFX extends Application {
         Scene scene = new Scene(root, 1024, 768, Color.TRANSPARENT);
         
         ObservableList<Node>  rootNode = root.getChildren();
-        MenuView menuView = new MenuView();
+        MenuForm menuView = new MenuForm();
         rootNode.add(menuView);
         
         DoubleBinding db = scene.heightProperty().subtract(menuView.heightProperty()).subtract(-0.1);

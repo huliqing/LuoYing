@@ -8,29 +8,31 @@ package name.huliqing.editor.ui;
 import javafx.geometry.Insets;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.VBox;
+import name.huliqing.editor.constants.ResConstants;
 import name.huliqing.editor.manager.ComponentManager;
+import name.huliqing.editor.manager.Manager;
 
 /**
  *
  * @author huliqing
  */
-public class ResourceView extends VBox{
+public class ResourceZone extends VBox{
     
     private final TitledPane assetsPanel = new TitledPane();
     private final TitledPane componentsPanel = new TitledPane();
     private final TitledPane testPanel = new TitledPane();
     
-    public ResourceView() {
+    public ResourceZone() {
         super();
         
-        assetsPanel.setContent(new AssetsView());
-        assetsPanel.setText("Assets");
+        assetsPanel.setContent(new AssetsForm());
+        assetsPanel.setText(Manager.getRes(ResConstants.FORM_ASSETS_TITLE));
         
-        ComponentsView cv = new ComponentsView("Entities", ComponentManager.getComponents("Entity"));
+        ComponentsForm cv = new ComponentsForm("Entities", ComponentManager.getComponents("Entity"));
         componentsPanel.setContent(cv);
-        componentsPanel.setText("Components");
+        componentsPanel.setText(Manager.getRes(ResConstants.FORM_COMPONENTS_TITLE));
         
-        testPanel.setContent(new TestView());
+        testPanel.setContent(new TestForm());
         testPanel.setText("Test");
         testPanel.setExpanded(false);
         

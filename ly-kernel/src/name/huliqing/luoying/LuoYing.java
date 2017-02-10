@@ -327,7 +327,9 @@ public class LuoYing {
      */
     public static void initialize(Application app) {
         LuoYing.app = app; 
-        LogFactory.initialize(); 
+        
+        // remove20170211,以后由外部程序根据情况自己去调用 initializeLogManager()来启用该功能。
+//        LogFactory.initialize(); 
         
         // 注册需要序列化的数据，对于网络版进行序列化时需要用到。
         registerSerializer();
@@ -353,6 +355,14 @@ public class LuoYing {
         ResManager.loadResource("/LuoYing/Resources/resource_en_US", "utf-8", "en_US");
         ResManager.loadResource("/LuoYing/Resources/resource_zh_CN", "utf-8", "zh_CN");
         
+    }
+    
+    /**
+     * 初始化日志记录, 调用这个方法来启用落樱的日志记录功能，默认情况下日志会记录在程序根目录下的：
+     * log/LuoYing.log下
+     */
+    public static void initializeLogManager() {
+        LogFactory.initialize(); 
     }
 
     private static void registerSerializer() {

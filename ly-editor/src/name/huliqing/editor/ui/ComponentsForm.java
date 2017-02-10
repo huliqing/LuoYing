@@ -23,10 +23,10 @@ import name.huliqing.editor.constants.StyleConstants;
  *
  * @author huliqing
  */
-public class ComponentsView extends ListView<Component> {
+public class ComponentsForm extends ListView<Component> {
 //    private static final Logger LOG = Logger.getLogger(ComponentsView.class.getName());
     
-    public ComponentsView(String title, List<Component> components) {
+    public ComponentsForm(String title, List<Component> components) {
         
         getItems().addAll(components);
 

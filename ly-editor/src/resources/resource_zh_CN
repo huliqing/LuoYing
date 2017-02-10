@@ -19,12 +19,18 @@ menu.help.shortcut=快捷方式
 menu.help.shortcut.title=快捷方式
 menu.help.about=关于
 menu.help.about.title=关于
+menu.form=窗口
+
+form.assets.title=资源
+form.components.title=组件
+form.output.title=输出
 
 popup.edit=编辑
 popup.rename=重命名
 popup.refresh=刷新
 popup.delete=删除
 popup.create.scene=创建场景
+popup.clear=清理
 
 alert.rename.title=重命名
 alert.rename.header=重命名文件：%s

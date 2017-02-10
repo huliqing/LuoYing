@@ -18,6 +18,7 @@ import name.huliqing.editor.constants.AssetConstants;
 import name.huliqing.editor.manager.Manager;
 import name.huliqing.editor.constants.ResConstants;
 import name.huliqing.editor.manager.ConfigManager;
+import name.huliqing.editor.manager.UIManager;
 import name.huliqing.editor.ui.menu.AboutMenuItem;
 import name.huliqing.editor.ui.menu.HelpShortcutMenuItem;
 import name.huliqing.editor.utils.JfxUtils;
@@ -27,7 +28,7 @@ import name.huliqing.fxswing.Jfx;
  *
  * @author huliqing
  */
-public class MenuView extends MenuBar implements ConfigManager.ConfigChangedListener {
+public class MenuForm extends MenuBar implements ConfigManager.ConfigChangedListener {
     
     private final Menu file;
     private final MenuItem assets;
@@ -39,7 +40,10 @@ public class MenuView extends MenuBar implements ConfigManager.ConfigChangedList
     private final MenuItem helpShortcut;
     private final MenuItem helpAbout;
     
-    public MenuView() {
+    private final Menu form;
+    private final MenuItem formOutput;
+    
+    public MenuForm() {
         file = new Menu(Manager.getRes(ResConstants.MENU_FILE));
         assets = new MenuItem(Manager.getRes(ResConstants.MENU_FILE_ASSETS), JfxUtils.createImage(AssetConstants.INTERFACE_MENU_OPEN_DIR, 16, 16));
         assetsRecent = new Menu(Manager.getRes(ResConstants.MENU_FILE_ASSETS_RECENT), JfxUtils.createImage(AssetConstants.INTERFACE_MENU_OPEN_DIR_RECENT, 16, 16));
@@ -49,25 +53,27 @@ public class MenuView extends MenuBar implements ConfigManager.ConfigChangedList
         save.setOnAction(e -> save());
         quick.setOnAction(e -> Quit.doQuit());
         file.getItems().addAll(assets, assetsRecent, save, quick);
+        file.showingProperty().addListener((ObservableValue<? extends Boolean> observable
+                , Boolean oldValue, Boolean newValue) -> {
+            if (newValue) {
+                Editor editor = (Editor) Jfx.getJmeApp();
+                save.setDisable(!editor.isModified());
+            }
+        });
 
         help = new Menu(Manager.getRes(ResConstants.MENU_HELP));
         helpShortcut = new HelpShortcutMenuItem();
         helpAbout = new AboutMenuItem();
         help.getItems().addAll(helpShortcut, helpAbout);
-        getMenus().addAll(file, help);
         
+        form = new Menu(Manager.getRes(ResConstants.MENU_FORM));
+        formOutput = new MenuItem(Manager.getRes(ResConstants.FORM_OUTPUT_TITLE));
+        form.getItems().add(formOutput);
+        formOutput.setOnAction(e -> UIManager.displayOutputForm());
+        
+        getMenus().addAll(file, form, help);
         rebuildAssetRecent();
         Manager.getConfigManager().addListener(this);
-
-        file.showingProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                if (newValue) {
-                    Editor editor = (Editor) Jfx.getJmeApp();
-                    save.setDisable(!editor.isModified());
-                }
-            }
-        });
     }
     
     private void save() {

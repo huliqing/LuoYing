@@ -36,16 +36,17 @@ public class ResConstants {
     public final static String MENU_HELP_SHORTCUT_TITLE = "menu.help.shortcut.title";
     public final static String MENU_HELP_ABOUT = "menu.help.about";
     public final static String MENU_HELP_ABOUT_TITLE = "menu.help.about.title";
+    public final static String MENU_FORM = "menu.form";
     
     public final static String POPUP_EDIT = "popup.edit";
     public final static String POPUP_RENAME = "popup.rename";
     public final static String POPUP_REFRESH = "popup.refresh";
     public final static String POPUP_DELETE= "popup.delete";
     public final static String POPUP_CREATE_SCENE = "popup.create.scene";
+    public final static String POPUP_CLEAR = "popup.clear";
     
     public final static String ALERT_RENAME_TITLE = "alert.rename.title";
     public final static String ALERT_RENAME_HEADER = "alert.rename.header";
-    
     public final static String ALERT_DELETE_TITLE = "alert.delete.title";
     public final static String ALERT_DELETE_HEADER_SINGLE = "alert.delete.header.single";
     public final static String ALERT_DELETE_HEADER_MULT = "alert.delete.header.mult";
@@ -105,6 +106,10 @@ public class ResConstants {
     public final static String TOOL_TERRAIN_TEXLAYER_REMOVE_LAYER_TIP = "tool.terrain.texLayer.removeLayer.tip";
     public final static String TOOL_TERRAIN_TEXLAYER_REMOVE_NORMAL_TIP = "tool.terrain.texLayer.removeNormal.tip";
  
+    public final static String FORM_ASSETS_TITLE = "form.assets.title";
+    public final static String FORM_COMPONENTS_TITLE = "form.components.title";
+    public final static String FORM_OUTPUT_TITLE = "form.output.title";
+    
     public final static String FORM_CREATE_TERRAIN_TERRAIN_NAME = "form.create.terrain.terrainName";
     public final static String FORM_CREATE_TERRAIN_TERRAIN_NAME_TIP = "form.create.terrain.terrainName.tip";
     public final static String FORM_CREATE_TERRAIN_TOTAL_SIZE = "form.create.terrain.totalSize";

@@ -8,11 +8,9 @@ package name.huliqing.editor.ui;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ContextMenu;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TreeItem;
@@ -23,6 +21,7 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.VBox;
 import name.huliqing.editor.manager.Manager;
 import name.huliqing.editor.manager.ConfigManager;
 import name.huliqing.editor.manager.ConfigManager.ConfigChangedListener;
@@ -37,9 +36,9 @@ import name.huliqing.fxswing.Jfx;
  * 
  * @author huliqing
  */
-public class AssetsView extends ScrollPane implements ConfigChangedListener {
+public class AssetsForm extends VBox implements ConfigChangedListener {
 
-    private static final Logger LOG = Logger.getLogger(AssetsView.class.getName());
+    private static final Logger LOG = Logger.getLogger(AssetsForm.class.getName());
     
     private final FileTree assetTree = new FileTree();
     
@@ -50,11 +49,12 @@ public class AssetsView extends ScrollPane implements ConfigChangedListener {
     
     private final EditMenuItem editMenu = new EditMenuItem(assetTree);
     
-    public AssetsView() {
+    public AssetsForm() {
         assetTree.minHeightProperty().bind(heightProperty());
         assetTree.minWidthProperty().bind(widthProperty());
         assetTree.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        setContent(assetTree);
+//        setContent(assetTree);
+        getChildren().add(assetTree);
 
         updateAassetDir();
         Manager.getConfigManager().addListener(this);
@@ -140,7 +140,6 @@ public class AssetsView extends ScrollPane implements ConfigChangedListener {
     }
     
     private void doDragDetected(MouseEvent e) {
-        LOG.log(Level.INFO, "doDragDetected.");
         ObservableList<TreeItem<File>> items = assetTree.getSelectionModel().getSelectedItems();
         if (items.isEmpty()) {
             e.consume();
