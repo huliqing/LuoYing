@@ -1,0 +1,481 @@
+// https://docs.gradle.org/
+
+// // Proguard
+// http://proguard.sourceforge.net/manual/gradle.html
+// http://proguard.sourceforge.net/manual/usage.html
+
+// Launch4j
+// https://github.com/TheBoegl/gradle-launch4j
+// http://launch4j.sourceforge.net/docs.html
+
+// MacAppBundle
+// https://github.com/crotwell/gradle-macappbundle
+// https://github.com/crotwell/gradle-macappbundle/wiki/Intro
+
+apply plugin:"java"
+
+buildscript{
+    repositories{
+        mavenCentral()
+        jcenter()
+    }
+    dependencies{
+        classpath "net.sf.proguard:proguard-gradle:5.2.1"
+    }
+}
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+// 必须指定编码，否则可能会编译不过
+compileJava.options.encoding = 'UTF-8'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+// build目录
+buildDir = 'build-target'
+archivesBaseName = editorArchivesBaseName
+version = editorVersionName
+
+// 主方法名称，不能改
+def fullArchivesName = archivesBaseName + "-" + version;
+// 最终输出的：未经过混淆的原始核心jar包名称 
+def fullArchivesNameJar             = fullArchivesName + ".jar"
+// 最终输出的：经过混淆后的核心jar包名称
+def fullArchivesNameProJar          = fullArchivesName + "-PRO.jar"
+// 构建后的最终输出目录路径
+def archievsDistDir = "$project.buildDir/dist"
+
+// 生成可执行版本时需要用到classPath,这里主要把所有jar包路径拼成字符串放到manifest中。
+def getLibsClassPath() {
+    def path = ''
+    file('libs-jme').eachFile { file -> 
+        path += 'lib/' + file.name + ' '
+    }
+	file('libs-ly').eachFile { file -> 
+        path += 'lib/' + file.name + ' '
+    }
+    path += "lib/$kernelArchivesBaseName-${kernelArchivesVersion}.jar "
+    path += 'lib/assets.jar'
+    return path;
+}
+
+// 这里指定编译Core时需要用到的所有jar包，但没有包含asset.jar,因asset.jar需要动
+// 态打包。
+dependencies {
+    compile fileTree(dir: 'libs-jme', include: ['*.jar'])
+	compile fileTree(dir: 'libs-ly', include: ['*.jar'])
+    compile fileTree(dir: "$rootProject.projectDir$kernelResultDir", include: ['*.jar'])
+}
+
+// Java项目的目录结构与默认的gradle定义不同，需要特别指定src、test等文件夹的路径
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+        resources {
+            srcDir 'src'
+        }
+    }
+}
+
+// 编译core时需要更新版本信息
+compileJava {
+    doFirst {
+    }
+}
+
+jar {
+    manifest {
+        attributes  'VersionName' : editorVersionName,
+                    'VersionCode' : editorVersionCode,
+                    'Class-Path' : getLibsClassPath(),
+                    'Main-Class' : editorMainclass.replace('/', '.')
+    }
+    exclude('**/*.xsd') 
+    exclude('**/meta') 
+}
+
+task proguard(type: proguard.gradle.ProGuardTask, dependsOn:jar) {
+    // jre 依赖包
+    libraryjars  "${System.getProperty('java.home')}/lib/rt.jar"  
+    libraryjars  "${System.getProperty('java.home')}/lib/ext/jfxrt.jar"  
+    // JME 依赖包\LY依赖包
+    libraryjars file("$project.projectDir/libs-jme")
+	libraryjars file("$project.projectDir/libs-ly")
+    // luoying-kernel核心包
+    libraryjars file("$rootProject.projectDir$kernelResultDir")
+
+    injars jar.archivePath
+    outjars ("$project.buildDir/libs/$fullArchivesNameProJar")
+
+    configuration "$project.projectDir/proguard-project.txt"
+
+    // Save the obfuscation mapping to a file, so we can de-obfuscate any stack  
+    // traces later on. Keep a fixed source file attribute and all line number  
+    // tables to get line numbers in the stack traces.  
+    // You can comment this out if you're not interested in stack traces.  
+    //obfuscationdictionary 'proguard/keywords.txt'
+    //classobfuscationdictionary 'proguard/keywords.txt'
+    //packageobfuscationdictionary 'proguard/keywords.txt'
+	
+    printmapping "$project.projectDir/proguard/out.map"
+    applymapping "$project.projectDir/proguard/out.map"
+}
+
+// 把依赖的jar复制到lib下
+task copyLibs(type: Copy, dependsOn: proguard) {
+    copy {
+        from ("$project.projectDir/libs-jme") {
+            include('**/*.jar')
+            //exclude('**/*-javadoc.zip') 
+        }
+        from ("$project.projectDir/libs-ly") {
+            include('**/*.jar')
+        }
+        from ("$rootProject.projectDir$kernelResultDir") {
+            include('**/*.jar')
+        }
+        into ("$project.buildDir/libs/lib/")
+    }
+}
+
+// 将assets打包成jar并放到lib下。
+task buildAssets(type: Jar, dependsOn: copyLibs) {
+    from 'assets'
+    destinationDir = file("$project.buildDir/libs/lib/");
+    baseName 'assets'
+    version ''
+    includeEmptyDirs true
+    editorAssetsExcludes.split(",").each { t ->
+        exclude "$t"
+    }
+//    exclude '**/_*.*'
+//    exclude '**/*_bak'
+}
+
+def untarJre(tarJreFile, outputDirName) {
+    // 检查JRE是否有解压过，如果没有则解压jre
+    def tarJreOutputDir = "$project.buildDir/tmp/jre/$outputDirName"
+    if (!file(tarJreOutputDir).exists()) {
+        println "Untar jre: $tarJreFile"
+        task(outputDirName, type: Copy) {
+            from tarTree(tarJreFile)
+            into tarJreOutputDir
+        }.execute()
+    }
+    
+    // 找出解压后的jre的跟目录路径
+    def jreRoot
+    file(tarJreOutputDir).eachFile { file ->
+        if (file.isDirectory() && file.name.indexOf("jre") != -1) {
+            jreRoot = "$tarJreOutputDir/$file.name"
+            println "Found jre root=" + jreRoot
+        }
+    }
+    return jreRoot
+}
+
+// --替换packageCfg文件中的内容
+//app.mainjar=${jar.name}
+//app.version=1.0
+//app.id=${application.title}
+//app.preferences.id=${application.title}
+//app.mainclass=${main.class}
+//app.classpath=
+//${launcher.jvmargs}
+
+// -- e.g.
+//app.mainjar=LuoYing.jar
+//app.version=1.0
+//app.id=LuoYing
+//app.preferences.id=LuoYing
+//app.mainclass=name/huliqing/luoying/LuoYing
+//app.classpath=
+//jvmarg.1=-Xms10m
+//jvmarg.2=-Darg1=1
+//jvmarg.3=-Darg2=2
+//jvmarg.4=
+//jvmarg.5=
+//jvmarg.6=-Darg3=3
+
+// Build for Windows86/64, Linux86/64
+def buildArchives(distDir, appArchivesBaseName, editorVersionName, mainJarName
+    , platformName, nativeDir, packageCfg, launcher,  jre, icon, jvmargs) {
+    
+    println "----build: $platformName"
+    // 解压JRE，并获得JRE的根目录路径
+    def jreRoot = untarJre("$rootProject.projectDir$jre",  platformName)
+    
+    task(System.currentTimeMillis().toString(), type: Zip) {
+        destinationDir new File(distDir)
+        archiveName "${appArchivesBaseName}-${editorVersionName}-${platformName}.zip"
+        
+        // ---- launcher
+        from ("$rootProject.projectDir$launcher") {
+            into("$appArchivesBaseName")
+            rename {filename -> 
+                if (filename.indexOf(".") != -1) {
+                    appArchivesBaseName + filename.substring(filename.lastIndexOf("."))
+                } else {
+                    appArchivesBaseName
+                }
+            }
+            // "0755" not "755"
+            fileMode 0755
+        }
+        // ---- add native libs
+        from ("$rootProject.projectDir$nativeDir") {
+            include "*.*"
+            into("$appArchivesBaseName/app")
+        }
+        // ---- add package cfg
+        from ("$rootProject.projectDir$packageCfg") {
+            into("$appArchivesBaseName/app")
+            filter { line ->
+                def result = ''
+                if (line.indexOf('app.mainjar') != -1) {
+                    result = "app.mainjar=$mainJarName"
+                }
+                else if (line.indexOf("app.version") != -1) {
+                    result = "app.version=$editorVersionName"
+                } 
+                else if (line.indexOf("app.id") != -1) {
+                    result = "app.id=$appArchivesBaseName"
+                }
+                else if (line.indexOf("app.preferences.id") != -1) {
+                    result = "app.preferences.id=$appArchivesBaseName"
+                }
+                else if (line.indexOf("app.mainclass") != -1) {
+                    result = "app.mainclass=$editorMainclass"
+                }
+                else if (line.indexOf("app.classpath") != -1) {
+                    result = "app.classpath="
+                }
+                else if (line.indexOf("launcher.jvmargs") != -1) {
+                    def args = jvmargs.split(' ')
+                    for (int i = 0; i < args.length; i++) {
+                        result += "jvmarg.${i+1}=" + args[i] + '\r\n'
+                    }         
+                } else {
+                    result = line
+                }
+                println "$result"
+                return result
+            }
+        }
+        // ---- add main jar
+        from ("$project.buildDir/libs/") {
+            include "$mainJarName"
+            into("$appArchivesBaseName/app")
+        }
+        // ---- add jar libs
+        from ("$project.buildDir/libs/lib") {
+            include "*.jar"
+            into("$appArchivesBaseName/app/lib")
+        }
+        // ---- pack jre
+        from (jreRoot) {
+            into("$appArchivesBaseName/runtime/jre")
+            exclude "bin/**"
+        }
+        from (jreRoot) {
+            into("$appArchivesBaseName/runtime/jre")
+            include "bin/**"
+            // "0755" not "755"
+            fileMode 0755
+        }
+        // ---- build icon
+        if (icon != null) {
+            from ("$rootProject.projectDir$icon") {
+                into("$appArchivesBaseName")
+                rename {filename -> "${appArchivesBaseName}.ico"}
+            }
+        }
+    }.execute()
+}
+
+// Build for MacOSX
+def buildMacOSX(distDir, appArchivesBaseName, editorVersionName, mainJarName
+    , platformName, nativeDir, info, launcher,  jre, icon, jvmargs) {
+    
+    println "----build: $platformName"
+    // 解压JRE，并获得JRE的根目录路径
+    def jreRoot = untarJre("$rootProject.projectDir$jre",  platformName)
+    
+//      <zip destfile="${dist.dir}/${application.title}-MacOSX.zip">
+//            <zipfileset file="resources/desktop-deployment/macosx-x64/stub" filemode="755" fullpath="${application.title}.app/Contents/MacOS/JavaAppLauncher"/>
+//            <zipfileset file="resources/desktop-deployment/macosx-x64/_Info.plist" fullpath="${application.title}.app/Contents/Info.plist"/>
+//            <zipfileset file="resources/desktop-deployment/macosx-x64/icon.icns" fullpath="${application.title}.app/Contents/Resources/GenericApp.icns"/>
+//            <zipfileset file="${dist.jar}" prefix="${application.title}.app/Contents/Java"/>
+//            <zipfileset dir="${dist.dir}/lib" excludes="${deployment.jarexcludes}" prefix="${application.title}.app/Contents/Java/lib"/>
+//            <zipfileset dir="${build.dir}/natives/macosx-x64" prefix="${application.title}.app/Contents/Java" erroronmissingdir="false"/>
+//        </zip>
+    
+    task(System.currentTimeMillis().toString(), type: Zip) {
+        destinationDir new File(distDir)
+        archiveName "${appArchivesBaseName}-${editorVersionName}-${platformName}.zip"
+        
+        // ---- launcher and icon
+        from ("$rootProject.projectDir$launcher") {
+            into("${appArchivesBaseName}.app/Contents/MacOS")
+            rename {filename -> "JavaAppLauncher"}
+            // "0755" not "755"
+            fileMode 0755
+        }
+        from ("$rootProject.projectDir$info") {
+            into("${appArchivesBaseName}.app/Contents")
+            rename {filename -> "Info.plist"}
+            filter { line ->
+                line.replace('${main.class}', editorMainclass.replace('/', '.'))
+                .replace('${run.jvmargs}', "$jvmargs")
+                .replace('${application.title}', "$appArchivesBaseName")
+                .replace('${jfxdeploy.jvmargs}', "-Xnoagent")
+                .replace('${jar.name}', "$mainJarName")
+                .replace('<!--jvmruntime-->', "<key>JVMRuntime</key>\r  <string>jre.jre</string>")
+            }
+        }
+        from ("$rootProject.projectDir$icon") {
+            into("${appArchivesBaseName}.app/Contents/Resources")
+            rename {filename -> "GenericApp.icns"}
+        }
+        // ---- add main jar
+        from ("$project.buildDir/libs/") {
+            into("${appArchivesBaseName}.app/Contents/Java")
+            include "$mainJarName"
+        }
+        // ---- add jar libs
+        from ("$project.buildDir/libs/lib") {
+            into("${appArchivesBaseName}.app/Contents/Java/lib")
+            include "*.jar"
+        }
+        // ---- add native libs
+        from ("$rootProject.projectDir$nativeDir") {
+            into("${appArchivesBaseName}.app/Contents/Java")
+            include "*.*"
+        }
+        // ---- pack jre
+//        <zip destfile="${dist.dir}/${application.title}-MacOSX.zip" update="true">
+//            <zipfileset dir="build/jre/${dirName-macosx-x64}/Contents/Home" excludes ="bin/*" prefix="${application.title}.app/Contents/PlugIns/jre.jre/Contents/Home/jre"/>
+//            <zipfileset dir="build/jre/${dirName-macosx-x64}/Contents/Home" includes ="bin/*" filemode="755" prefix="${application.title}.app/Contents/PlugIns/jre.jre/Contents/Home/jre"/>
+//            <zipfileset file="build/jre/${dirName-macosx-x64}/Contents/Info.plist" fullpath="${application.title}.app/Contents/PlugIns/jre.jre/Contents/Info.plist"/>
+//            <zipfileset dir="build/jre/${dirName-macosx-x64}/Contents/MacOS" prefix="${application.title}.app/Contents/PlugIns/jre.jre/Contents/MacOS"/>
+//        </zip>
+        from ("$jreRoot/Contents/Home") {
+            into ("${appArchivesBaseName}.app/Contents/PlugIns/jre.jre/Contents/Home/jre")
+            exclude "bin/**"
+        }
+        from ("$jreRoot/Contents/Home") {
+            into ("${appArchivesBaseName}.app/Contents/PlugIns/jre.jre/Contents/Home/jre")
+            include "bin/**"
+            // "0755" not "755"
+            fileMode 0755
+        }
+        from ("$jreRoot/Contents/Info.plist") {
+            into ("${appArchivesBaseName}.app/Contents/PlugIns/jre.jre/Contents")
+        }
+        from ("$jreRoot/Contents/MacOS") {
+            into ("${appArchivesBaseName}.app/Contents/PlugIns/jre.jre/Contents/MacOS")
+        }
+    }.execute()
+}
+
+build.dependsOn 'buildAssets'
+build {
+    doLast {
+        
+        // build windows 86
+        if (buildWindows_x86 == "1") {
+            buildArchives(archievsDistDir, editorArchivesBaseName, editorVersionName, fullArchivesNameProJar
+                , buildWindows_x86_name
+                , buildWindows_x86_nativeDir
+                , buildWindows_x86_packageCfg
+                , buildWindows_x86_launcher
+                , buildWindows_x86_jre
+                , buildWindows_x86_icon
+                , buildWindows_x86_jvmargs
+            )   
+        }
+        
+        // build windows 64
+        if (buildWindows_x64 == "1") {
+            buildArchives(archievsDistDir, editorArchivesBaseName, editorVersionName, fullArchivesNameProJar
+                , buildWindows_x64_name
+                , buildWindows_x64_nativeDir
+                , buildWindows_x64_packageCfg
+                , buildWindows_x64_launcher
+                , buildWindows_x64_jre
+                , buildWindows_x64_icon
+                , buildWindows_x64_jvmargs
+            )   
+        }
+        
+        // build linux 86
+        if (buildLinux_x86 == "1") {
+            buildArchives(archievsDistDir, editorArchivesBaseName, editorVersionName, fullArchivesNameProJar
+                , buildLinux_x86_name
+                , buildLinux_x86_nativeDir
+                , buildLinux_x86_packageCfg
+                , buildLinux_x86_launcher
+                , buildLinux_x86_jre
+                , null
+                , buildLinux_x86_jvmargs
+            )   
+        }
+        
+        // build linux 64
+        if (buildLinux_x64 == "1") {
+            buildArchives(archievsDistDir, editorArchivesBaseName, editorVersionName, fullArchivesNameProJar
+                , buildLinux_x64_name
+                , buildLinux_x64_nativeDir
+                , buildLinux_x64_packageCfg
+                , buildLinux_x64_launcher
+                , buildLinux_x64_jre
+                , null
+                , buildLinux_x64_jvmargs
+            ) 
+        }
+        
+        // build MacOSX
+        if (buildMacOSX == "1") {
+            buildMacOSX(archievsDistDir, editorArchivesBaseName, editorVersionName, fullArchivesNameProJar
+                , buildMacOSX_name
+                , buildMacOSX_nativeDir
+                , buildMacOSX_info
+                , buildMacOSX_launcher
+                , buildMacOSX_jre
+                , buildMacOSX_icon
+                , buildMacOSX_jvmargs
+            );
+        }
+        
+        println "----Build  OK!!!"
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

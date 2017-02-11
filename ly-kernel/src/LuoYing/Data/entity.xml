@@ -41,7 +41,7 @@
                      refractionStrength="0.2" waterHeight="-2.5" sunScale="3" />
     
     <!--简单的方形物理边界基本配置：需要静态物理，始终隐藏-->
-    <entitySimpleModel id="sysEntityBoundaryBase" cullHint="Always" modules="sysModuleBoundaryPhysics" />
+    <entitySimpleModel id="sysEntityBoundaryBase" file="LuoYing/Assets/Models/unitBoundaryBox.j3o" scale="100,20,100" cullHint="Always" modules="sysModuleBoundaryPhysics" />
     
     <!--基本物理环境-->
     <entityPhysics id="sysEntityPhysicsBase" gravity="0,-9.81,0" threadingType="SEQUENTIAL" />

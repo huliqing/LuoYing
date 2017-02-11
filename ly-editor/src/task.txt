@@ -1,7 +1,7 @@
 ____.全局缩放在缩放经过了旋转的物体时有BUG.
 ____.undo\redo的按键冲突
 ____.JmeEvent要支持Analog类型的事件
-
+____.地形工具参数资源化
 ok.local旋转时要及时更新transformObj
 ok.undo,redo
 ok.scale需要同时三轴缩放
@@ -23,14 +23,15 @@ ok.场景地形在调整缩放后，再编辑时点选不到。
 ok.退出时提示存档
 ok.保存地形和alpha贴图
 ok.地形的笔刷球要保持大小
-
-.帮助菜单-》快捷键说明
-.增加LOG窗口
+ok.帮助菜单-》快捷键说明
+ok.增加LOG窗口
+ok.修改应用标题图标
+.发布打包编辑器应用
 .实体界面Modules Converter界面
 .用线条和箭头优化显示层级关系 -> 子级 -> 子级
 .converter配置参数化
 .scene载入功能不应该依赖Game.java
-.地形工具参数资源化
+
 .增加FogFilterEntity
 .setWardIsoEnabled参数要增加
 .slopeTool的定位球初始位置要调整一下

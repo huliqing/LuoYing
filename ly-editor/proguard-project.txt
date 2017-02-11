@@ -1,0 +1,50 @@
+# This is a configuration file for ProGuard.
+# http://proguard.sourceforge.net/index.html#manual/usage.html
+
+-dontusemixedcaseclassnames
+-dontskipnonpubliclibraryclasses
+-verbose
+
+# Optimization is turned off by default. Dex does not like code run
+# through the ProGuard optimize and preverify steps (and performs some
+# of these optimizations on its own).
+-dontoptimize
+
+# JDK1.8 不能用这个选项，否则会导致 Java.lang.VerifyError异常
+#-dontpreverify
+
+-keepattributes *Annotation*
+
+# For native methods, see http://proguard.sourceforge.net/manual/examples.html#native
+-keepclasseswithmembernames class * {
+    native <methods>;
+}
+
+# For enumeration classes, see http://proguard.sourceforge.net/manual/examples.html#enumerations
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
+# ====================================================================================
+# Local
+# ====================================================================================
+-dontskipnonpubliclibraryclassmembers
+-ignorewarnings
+-keepattributes Exceptions,InnerClasses
+
+-dontwarn !name.huliqing.**,**
+-keep class !name.huliqing.** { *; }
+
+-keep class name.huliqing.fxjme.** {*;}
+-keep class name.huliqing.fxswing.** {*;}
+-keep class name.huliqing.editor.Starter {*;}
+-keep class name.huliqing.editor.log.** {*;}
+-keep class name.huliqing.editor.converter.** {*;}
+# 这个TexLayer,TexLayerTool必须keep,否则会导致地形图层选择不了图形
+-keep class name.huliqing.editor.tools.terrain.TexLayer { *;}
+-keep class name.huliqing.editor.tools.terrain.TexLayerTool { *;}
+#-keep class name.huliqing.editor.tools.*$* { *;}
+-keep class name.huliqing.editor.ui.** { *;}
+-keep class name.huliqing.editor.ui.*$* { *;}
+

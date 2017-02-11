@@ -5,8 +5,6 @@
  */
 package name.huliqing.editor.ui;
 
-import java.util.Arrays;
-import javafx.collections.ListChangeListener;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.control.SplitPane;
@@ -38,7 +36,7 @@ public class MainLayout extends VBox {
     // 主体区
     private final SplitPane contentMainSp = new SplitPane();
     private final SplitPane sp2 = new SplitPane();
-    private double[] lastDividerPositions = new double[]{0.8};
+    private final double[] lastDividerPositions = new double[]{0.8};
     
     public MainLayout(Pane root) {
         this.root = root;
@@ -104,8 +102,8 @@ public class MainLayout extends VBox {
         
         // 特殊方式限制resourceZone在初始化的时候为200的宽度,
         // 并在延迟一帧后去除resourceZone限制并取消自动宽度, 这样resourceZone不会随着父窗口的放大而拉大。
-        resourceZone.setMinWidth(220);
-        resourceZone.setMaxWidth(220);
+        resourceZone.setMinWidth(250);
+        resourceZone.setMaxWidth(250);
         Jfx.runOnJfx(() -> {
             resourceZone.setMinWidth(0);
             resourceZone.setMaxWidth(Integer.MAX_VALUE);

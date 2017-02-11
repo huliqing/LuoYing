@@ -8,10 +8,18 @@ package name.huliqing.editor;
 import com.jme3.system.AppSettings;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import name.huliqing.editor.manager.UIManager;
 import name.huliqing.editor.ui.Quit;
 import name.huliqing.fxswing.Jfx;
+import name.huliqing.luoying.utils.FileUtils;
 
 /**
  * @author huliqing
@@ -32,6 +40,7 @@ public class Starter {
         Jfx.getMainFrame().setLocationRelativeTo(null);
         Jfx.getMainFrame().setVisible(true);
         Jfx.getMainFrame().setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        Jfx.getMainFrame().setIconImages(createIcons());
         Jfx.getMainFrame().addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -50,4 +59,16 @@ public class Starter {
         
     }
     
+    private static List<BufferedImage> createIcons() {
+        try {
+            List<BufferedImage> imgs = new ArrayList();
+            imgs.add(ImageIO.read(FileUtils.readFile("/resources/ly16.png")));
+            imgs.add(ImageIO.read(FileUtils.readFile("/resources/ly32.png")));
+            imgs.add(ImageIO.read(FileUtils.readFile("/resources/ly128.png")));
+            return imgs;
+        } catch (IOException e) {
+            Logger.getLogger(Starter.class.getName()).log(Level.WARNING, null, e);
+        }
+        return null;
+    }
 }

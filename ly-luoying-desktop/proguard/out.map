@@ -338,6 +338,7 @@ name.huliqing.ly.object.chat.Chat -> name.huliqing.ly.g.a.a:
     void setData(name.huliqing.ly.data.ChatData) -> a
     name.huliqing.ly.data.ChatData getData() -> a
     void updateDatas() -> updateDatas
+    com.jme3.scene.Spatial initSpatial() -> initSpatial
     void initEntity() -> initEntity
     void onInitScene(name.huliqing.luoying.object.scene.Scene) -> onInitScene
     void cleanup() -> cleanup
@@ -416,7 +417,6 @@ name.huliqing.ly.object.chat.SellChat -> name.huliqing.ly.g.a.h:
     void <init>() -> <init>
     void setData(name.huliqing.ly.data.ChatData) -> a
     name.huliqing.luoying.ui.UI createChatUI(float,float) -> a
-    void initEntity() -> initEntity
     void onInitScene(name.huliqing.luoying.object.scene.Scene) -> onInitScene
     void billing() -> e
     int assess() -> f
@@ -459,7 +459,6 @@ name.huliqing.ly.object.chat.SendChat -> name.huliqing.ly.g.a.m:
     name.huliqing.luoying.object.entity.Entity sender -> u
     void <init>() -> <init>
     name.huliqing.luoying.ui.UI createChatUI(float,float) -> a
-    void initEntity() -> initEntity
     void onInitScene(name.huliqing.luoying.object.scene.Scene) -> onInitScene
     void send() -> e
     name.huliqing.luoying.object.scene.Scene access$000(name.huliqing.ly.object.chat.SendChat) -> a
@@ -499,7 +498,6 @@ name.huliqing.ly.object.chat.ShopItemChat -> name.huliqing.ly.g.a.r:
     void onDataRemoved(name.huliqing.luoying.xml.ObjectData,int) -> onDataRemoved
     void onDataUsed(name.huliqing.luoying.xml.ObjectData) -> onDataUsed
     void updateProductPanel(name.huliqing.luoying.data.ItemData) -> a
-    void initEntity() -> initEntity
     void onInitScene(name.huliqing.luoying.object.scene.Scene) -> onInitScene
     void setData(name.huliqing.luoying.data.EntityData) -> setData
     void setData(name.huliqing.luoying.xml.ObjectData) -> setData
@@ -566,7 +564,6 @@ name.huliqing.ly.object.chat.TaskChat -> name.huliqing.ly.g.a.y:
     void <init>() -> <init>
     void setData(name.huliqing.ly.data.ChatData) -> a
     name.huliqing.luoying.ui.UI createChatUI(float,float) -> a
-    void initEntity() -> initEntity
     void onInitScene(name.huliqing.luoying.object.scene.Scene) -> onInitScene
     void taskAccept() -> e
     void taskReject() -> f
@@ -1654,11 +1651,11 @@ name.huliqing.ly.object.view.AbstractView -> name.huliqing.ly.g.e.a:
     void setData(name.huliqing.ly.data.ViewData) -> a
     name.huliqing.ly.data.ViewData getData() -> a
     void updateDatas() -> updateDatas
+    com.jme3.scene.Spatial initSpatial() -> initSpatial
     void initEntity() -> initEntity
     void onInitScene(name.huliqing.luoying.object.scene.Scene) -> onInitScene
     void cleanup() -> cleanup
     void doViewInit() -> b
-    com.jme3.scene.Spatial getSpatial() -> getSpatial
     void viewUpdate(float) -> a
     void doExit() -> c
     void setUseTime(float) -> b

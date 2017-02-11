@@ -32,7 +32,6 @@ import name.huliqing.luoying.data.GameData;
 import name.huliqing.luoying.data.GameLogicData;
 import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.loader.GameDataLoader;
-import name.huliqing.luoying.log.LogFactory;
 import name.huliqing.luoying.manager.ResManager;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.xml.DataFactory;

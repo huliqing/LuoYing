@@ -23,6 +23,12 @@ task wrapper(type: Wrapper, description: 'Creates and deploys the Gradle wrapper
 task buildKernel << {println "Build ly-kernel ok!"}
 buildKernel.dependsOn(":ly-kernel:build")
 
+task buildEditor << {println "Build ly-editor ok!"}
+buildEditor.dependsOn(":ly-editor:build")
+buildEditor {
+	mustRunAfter buildKernel
+}
+
 task buildLuoYingDesktop << {println "Build ly-luoying-desktop ok!"}
 buildLuoYingDesktop.dependsOn(":ly-luoying-desktop:build")
 buildLuoYingDesktop {
