@@ -27,7 +27,8 @@ _layout*.*
 /ly-editor/nbproject/private/
 /ly-editor/build/
 /ly-editor/dist/
-/ly-editor/build-target
+/ly-editor/build-target/
+/ly-editor/assets/Models/plants/
 
 /ly-luoying-desktop/.gradle/
 /ly-luoying-desktop/.nb-gradle/
