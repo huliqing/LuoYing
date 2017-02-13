@@ -5,15 +5,14 @@
  */
 package name.huliqing.editor.converter.data;
 
-import java.util.logging.Logger;
-import name.huliqing.editor.converter.AbstractDataConverter;
+import name.huliqing.editor.converter.DataConverter;
+import name.huliqing.editor.converter.FieldConverter;
 import name.huliqing.editor.edit.Mode;
 import name.huliqing.editor.edit.scene.JfxSceneEdit;
 import name.huliqing.editor.edit.scene.JfxSceneEditListener;
 import name.huliqing.editor.edit.controls.entity.EntityControlTile;
 import name.huliqing.fxswing.Jfx;
 import name.huliqing.luoying.data.EntityData;
-import name.huliqing.editor.converter.PropertyConverter;
 import name.huliqing.editor.edit.controls.ControlTile;
 import name.huliqing.editor.edit.controls.entity.EntityControlTileListener;
 
@@ -21,15 +20,15 @@ import name.huliqing.editor.edit.controls.entity.EntityControlTileListener;
  *
  * @author huliqing
  */
-public class EntityDataConverter extends AbstractDataConverter<JfxSceneEdit, EntityData> 
+public class EntityDataConverter extends DataConverter<JfxSceneEdit, EntityData> 
         implements JfxSceneEditListener<ControlTile>, EntityControlTileListener{
 //    private static final Logger LOG = Logger.getLogger(EntityDataConverter.class.getName());
 
     private EntityControlTile selectObj;
     
     @Override
-    public void initialize(PropertyConverter parent) {
-        super.initialize(parent);
+    public void initialize() {
+        super.initialize();
         this.jfxEdit.addListener(this);
     }
 
@@ -43,10 +42,10 @@ public class EntityDataConverter extends AbstractDataConverter<JfxSceneEdit, Ent
     }
     
     @Override
-    public void notifyChangedToParent() {
+    public void notifyChanged() {
         jfxEdit.reloadEntity(data);
         jfxEdit.setModified(true);
-        super.notifyChangedToParent();
+        super.notifyChanged();
     }
 
     @Override
@@ -86,7 +85,7 @@ public class EntityDataConverter extends AbstractDataConverter<JfxSceneEdit, Ent
             return;
         }
         Jfx.runOnJfx(() -> {
-            PropertyConverter pc = propertyConverters.get(property);
+            FieldConverter pc = fieldConverters.get(property);
             if (pc != null) {
                 pc.updateView(value);
 //                LOG.log(Level.INFO, "onPropertyChanged, data={0}, property={1}, value={2}", new Object[] {data.getId(), property, value});

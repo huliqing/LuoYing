@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.converter.property;
+package name.huliqing.editor.converter.field;
 
 import com.jme3.math.Quaternion;
 import javafx.beans.value.ChangeListener;
@@ -18,14 +18,14 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import name.huliqing.editor.constants.StyleConstants;
-import name.huliqing.editor.converter.AbstractPropertyConverter;
+import name.huliqing.editor.converter.FieldConverter;
 import name.huliqing.luoying.xml.Converter;
 
 /**
  *
  * @author huliqing
  */
-public class QuaternionConverter extends AbstractPropertyConverter{
+public class QuaternionConverter extends FieldConverter{
     
     private final float[] temp = new float[3];
     

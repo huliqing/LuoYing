@@ -3,22 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.converter.property;
+package name.huliqing.editor.converter.field;
 
 import java.util.List;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
 import javafx.scene.control.ChoiceBox;
-import name.huliqing.editor.converter.AbstractPropertyConverter;
-import name.huliqing.editor.converter.DataConverter;
+import name.huliqing.editor.converter.FieldConverter;
 
 /**
  * @author huliqing
  */
-public class ChoiceConverter extends AbstractPropertyConverter {
+public class ChoiceConverter extends FieldConverter {
     
     /** 指定可选的项目列表，格式: "item1,item2,item3"*/
-    public final static String FEATURE_ITEMS = ChoiceConverter.class.getName() + ":items";
+    public final static String FEATURE_ITEMS = "items";
 
     private final ChoiceBox<String> choice = new ChoiceBox();
     
@@ -39,8 +38,8 @@ public class ChoiceConverter extends AbstractPropertyConverter {
     }
 
     @Override
-    public void initialize(DataConverter parent) {
-        super.initialize(parent);
+    public void initialize() {
+        super.initialize();
         choice.getItems().clear();
         List<String> items = featureHelper.getAsList(FEATURE_ITEMS);
         if (items != null) {

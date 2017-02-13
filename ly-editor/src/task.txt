@@ -26,24 +26,28 @@ ok.地形的笔刷球要保持大小
 ok.帮助菜单-》快捷键说明
 ok.增加LOG窗口
 ok.修改应用标题图标
-.发布打包编辑器应用
-.实体界面Modules Converter界面
-.用线条和箭头优化显示层级关系 -> 子级 -> 子级
-.converter配置参数化
-.scene载入功能不应该依赖Game.java
+ok.编辑器应用打包脚本编写
+ok.converter配置参数化
+ok.file字段在打开文件夹的时候要增加Filter来过滤显示的文件
+ok.海水在有限和无限切换的时候有BUG
+ok.JFX在面板上的各编辑功能的undo\redo要完善
+ok.3d编辑中，"自由操作"中的Move,Rotation,Scale存在历史记录丢失的BUG。
+ok.Undo,Redo事件要从JFX转换到JME中
+ok.public void jfxOnDragStarted, jfxOnDragEnded(), 要使用JFX全局监听的方式才安全。see Starter
+ok.ObjectData在设置参数的时候要限制空格,以避免Entity在初始化的时候的BUG产生
 
+
+.Entity默认配置需要预设好所有默认参数，以便转换器可以有默认值。
+.实体界面Modules Converter界面
+.转换器的层级关系重构(计划)
+.scene载入功能不应该依赖Game.java
 .增加FogFilterEntity
 .setWardIsoEnabled参数要增加
 .slopeTool的定位球初始位置要调整一下
 .要增加FloatTextFieldConverter, IntegerTextFieldConverter...
-
 .为PropertyConverter增加Validator功能
-.删除Entity功能及复制Entity操作
-.file字段在打开文件夹的时候要增加Filter来过滤显示的文件
+.实体刷工具栏开发
 .初始界面功能
-.海水在有限和无限切换的时候有BUG
-.JFX在面板上的各编辑功能的undo\redo要完善
-.3d编辑中，"自由操作"中的Move,Rotation,Scale存在历史记录丢失的BUG。
-.Undo,Redo事件要从JFX转换到JME中
-.public void jfxOnDragStarted, jfxOnDragEnded(), 要使用JFX全局监听的方式才安全。see Starter
-.ObjectData在设置参数的时候要限制空格,以避免Entity在初始化的时候的BUG产生
+
+
+

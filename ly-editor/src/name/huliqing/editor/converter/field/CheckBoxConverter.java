@@ -3,19 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.converter.property;
+package name.huliqing.editor.converter.field;
 
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
-import name.huliqing.editor.converter.AbstractPropertyConverter;
+import name.huliqing.editor.converter.FieldConverter;
 import name.huliqing.luoying.xml.Converter;
 
 /**
  *
  * @author huliqing
  */
-public class CheckBoxConverter extends AbstractPropertyConverter {
+public class CheckBoxConverter extends FieldConverter {
 
     private final CheckBox checkBox = new CheckBox();
     
@@ -49,5 +49,6 @@ public class CheckBoxConverter extends AbstractPropertyConverter {
         lastValue = Converter.getAsBoolean(propertyValue);
         checkBox.setSelected(lastValue != null ? lastValue : false);
     }
+
     
 }

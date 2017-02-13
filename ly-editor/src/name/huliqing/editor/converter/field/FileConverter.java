@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.converter.property;
+package name.huliqing.editor.converter.field;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import name.huliqing.editor.constants.ResConstants;
 import name.huliqing.editor.constants.StyleConstants;
-import name.huliqing.editor.converter.AbstractPropertyConverter;
+import name.huliqing.editor.converter.FieldConverter;
 import name.huliqing.editor.manager.Manager;
 import name.huliqing.luoying.xml.Converter;
 
@@ -30,13 +30,13 @@ import name.huliqing.luoying.xml.Converter;
  *
  * @author huliqing
  */
-public class FileConverter extends AbstractPropertyConverter {
+public class FileConverter extends FieldConverter {
     
     /**
      * 打开文件夹窗口时文件显示的过滤格式, 格式："des|filter1|filter2, des|filter2|filter3|..."
      * 示例："Model File|*.j3o|*.obj|*.mesh.xml,All Files|*.*"
      */
-    public final static String FEATURE_FILTERS = FileConverter.class.getName() + ":filters";
+    public final static String FEATURE_FILTERS = "filters";
 
     private final HBox layout = new HBox();
     private final TextField fileTextField = new TextField();

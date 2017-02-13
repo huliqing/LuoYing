@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://editor.huliqing.name'
+    xsi:schemaLocation='http://editor.huliqing.name meta.xsd'>
+    
+    <!--DataConverters-->
+    <converter name="EntityDataConverter" value="name.huliqing.editor.converter.data.EntityDataConverter" />
+
+    <data name="entityBase" extends="base" converter="EntityDataConverter">
+        <field name="name" converter="TextConverter">
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="location" converter="Vector3fConverter" />
+        <field name="rotation" converter="QuaternionConverter" />
+        <field name="scale" converter="Vector3fConverter" />
+        <field name="mat" converter="TextConverter">
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="modules" converter="TextConverter">
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="objectDatas" converter="TextConverter">
+            <feature name="collapsed" value="true" />
+        </field>
+    </data>
+    
+    <data name="entityModelBase" extends="entityBase">
+        <field name="shadowMode" converter="ChoiceConverter">
+            <feature name="items" value="Off,Cast,Receive,CastAndReceive,Inherit" />
+        </field>
+        <field name="cullHint" converter="ChoiceConverter">
+            <feature name="items" value="Inherit,Dynamic,Always,Never" />
+        </field>
+        <field name="queueBucket" converter="ChoiceConverter">
+            <feature name="items" value="Opaque,Transparent,Sky,Translucent,Gui,Inherit" />
+        </field>
+        <field name="preferUnshaded" converter="CheckBoxConverter"/>
+    </data>
+    
+    <data name="entityPlantBase" extends="entityModelBase">
+        <field name="file" converter="FileConverter">
+            <feature name="filters" value="Model Files|*.j3o|*.obj|*.mesh.xml,All Files|*.*" />
+        </field>
+        <field name="randomScale" converter="CheckBoxConverter" />
+        <field name="minScale" converter="TextConverter" />
+        <field name="maxScale" converter="TextConverter" />
+    </data>
+    
+    <data name="entityAudio" extends="entityBase">
+        <feature name="hideFields" value="rotation,scale,mat" />
+        <field name="debug" converter="CheckBoxConverter" />
+        <field name="sound" converter="DataFieldConverter" />
+    </data>
+    
+    <data name="entityAmbientLight" extends="entityBase">
+        <feature name="hideFields" value="location,rotation,scale" />
+        <field name="color" converter="ColorConverter" />
+    </data>
+    
+    <data name="entityDirectionalLight" extends="entityBase">
+        <feature name="hideFields" value="rotation,scale,mat" />
+        <field name="direction" converter="Vector3fConverter" />
+        <field name="color" converter="ColorConverter" />
+    </data>
+    
+    <data name="entityDirectionalLightFilterShadow" extends="entityBase">
+        <feature name="hideFields" value="location,rotation,scale,mat" />
+        <field name="disabledOnPlatforms" converter="TextConverter">
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="shadowMapSize" converter="TextConverter"/>
+        <field name="shadowMaps" converter="TextConverter"/>
+        <field name="edgeFilteringMode" converter="ChoiceConverter">
+            <feature name="items" value="Nearest,Bilinear,Dither,PCF4,PCFPOISSON,PCF8" />
+        </field>
+        <field name="edgesThickness" converter="TextConverter"/>
+        <field name="enabledStabilization" converter="CheckBoxConverter"/>
+        <field name="lambda" converter="TextConverter"/>
+        <field name="renderBackFacesShadows" converter="CheckBoxConverter"/>
+        <field name="shadowCompareMode" converter="ChoiceConverter">
+            <feature name="items" value="Software,Hardware" />
+        </field>
+        <field name="shadowIntensity" converter="TextConverter"/>
+        <field name="shadowZExtend" converter="TextConverter"/>
+        <field name="shadowZFadeLength" converter="TextConverter"/>
+    </data>
+    
+    <data name="entityChaseCamera" extends="entityBase">
+        <feature name="hideFields" value="scale,mat" />
+        <field name="debug" converter="CheckBoxConverter"/>
+       <field name="smoothMotion" converter="CheckBoxConverter"/>
+       <field name="trailingEnabled" converter="CheckBoxConverter"/>
+       <field name="invertVerticalAxis" converter="CheckBoxConverter"/>
+       <field name="lookAtOffset" converter="Vector3fConverter"/>
+       <field name="zoomSensitivity" converter="TextConverter"/>
+       <field name="rotationSpeed" converter="TextConverter"/>
+       <field name="rotationSensitivity" converter="TextConverter"/>
+       <field name="maxDistance" converter="TextConverter"/>
+       <field name="minDistance" converter="TextConverter"/>
+       <field name="defaultDistance" converter="TextConverter"/>
+       <field name="chasingSensitivity" converter="TextConverter"/>
+       <field name="downRotateOnCloseViewOnly" converter="CheckBoxConverter"/>
+       <field name="upVector" converter="Vector3fConverter"/>
+       <field name="hideCursorOnRotate" converter="CheckBoxConverter"/>
+    </data>
+
+    <data name="entityPhysics" extends="entityBase">
+        <feature name="hideFields" value="location,rotation,scale,mat,modules,objectDatas" />
+        <field name="debug" converter="CheckBoxConverter" />
+        <field name="gravity" converter="Vector3fConverter" />
+        <field name="broadphaseType" converter="ChoiceConverter">
+            <feature name="items" value="SIMPLE,AXIS_SWEEP_3,AXIS_SWEEP_3_32,DBVT" />
+        </field>
+        <field name="threadingType" converter="ChoiceConverter">
+            <feature name="items" value="SEQUENTIAL,PARALLEL" />
+        </field>
+        <field name="speed" converter="TextConverter" />
+        <field name="worldMax" converter="Vector3fConverter" />
+        <field name="worldMin" converter="Vector3fConverter" />
+        <field name="accuracy" converter="TextConverter" />
+        <field name="maxSubSteps" converter="TextConverter" />
+        <field name="solverNumIterations" converter="TextConverter" />
+    </data>
+
+    <data name="entitySimpleModel" extends="entityModelBase">
+        <field name="file" converter="FileConverter" />
+    </data>
+
+    <data name="entitySimpleTerrain" extends="entityModelBase">
+        <field name="file" converter="FileConverter" />
+    </data>
+
+    <data name="entitySimpleWater" extends="entityModelBase">
+        <feature name="hideFields" value="mat,modules,objectDatas,shadowMode,cullHint,queueBucket,preferUnshaded" />
+        <field name="waterModel" converter="FileConverter" />
+        <field name="waterColor" converter="ColorConverter" />
+        <field name="texScale" converter="TextConverter" />
+        <field name="waveSpeed" converter="TextConverter" />
+        <field name="distortionMix" converter="TextConverter" />
+        <field name="distortionScale" converter="TextConverter" />
+        <field name="foamMap" converter="FileConverter" />
+        <field name="foamScale" converter="Vector2fConverter" />
+        <field name="foamMaskMap" converter="FileConverter" />
+        <field name="foamMaskScale" converter="TextConverter" />
+    </data>
+    
+    <data name="entityAdvanceWater" extends="entityModelBase">
+        <feature name="hideFields" value="mat,modules,objectDatas,rotation,scale,shadowMode,cullHint,queueBucket,preferUnshaded" />
+        <field name="center" converter="Vector3fConverter" />
+        <field name="radius" converter="TextConverter" />
+        <field name="waterHeight" converter="TextConverter" />
+        <field name="waterColor" converter="ColorConverter" />
+        <field name="deepWaterColor" converter="ColorConverter" />
+        <field name="lightColor" converter="ColorConverter" />
+        <field name="lightDirection" converter="Vector3fConverter" />
+        <field name="colorExtinction" converter="Vector3fConverter" />
+        <field name="foamExistence" converter="Vector3fConverter" />
+        <field name="foamHardness" converter="TextConverter" />
+        <field name="foamIntensity" converter="TextConverter" />
+        <field name="maxAmplitude" converter="TextConverter" />
+        <field name="normalScale" converter="TextConverter" />
+        <field name="reflectionDisplace" converter="TextConverter" />
+        <field name="reflectionMapSize" converter="TextConverter" />
+        <field name="refractionConstant" converter="TextConverter" />
+        <field name="refractionStrength" converter="TextConverter" />
+        <field name="shapeType" converter="ChoiceConverter">
+            <feature name="items" value="Square,Circular" />
+        </field>
+        <field name="shininess" converter="TextConverter" />
+        <field name="shoreHardness" converter="TextConverter" />
+        <field name="speed" converter="TextConverter" />
+        <field name="sunScale" converter="TextConverter" />
+        <field name="underWaterFogDistance" converter="TextConverter" />
+        <field name="useCaustics" converter="CheckBoxConverter" />
+        <field name="useFoam" converter="CheckBoxConverter" />
+        <field name="useHQShoreline" converter="CheckBoxConverter" />
+        <field name="useRefraction" converter="CheckBoxConverter" />
+        <field name="useRipples" converter="CheckBoxConverter" />
+        <field name="useSpecular" converter="CheckBoxConverter" />
+        <field name="waterTransparency" converter="TextConverter" />
+        <field name="waveScale" converter="TextConverter" />
+        <field name="windDirection" converter="Vector2fConverter" />
+        <field name="causticsTexture" converter="FileConverter" />
+        <field name="foamTexture" converter="FileConverter" />
+        <field name="heightTexture" converter="FileConverter" />
+        <field name="normalTexture" converter="FileConverter" />
+        <field name="useSceneLight" converter="TextConverter" />
+    </data>
+    
+    <data name="entitySkyBox" extends="entityModelBase">
+        <feature name="hideFields" value="location,rotation,scale,mat,modules,objectDatas,shadowMode,cullHint,queueBucket,preferUnshaded" />
+        <field name="west" converter="FileConverter" />
+        <field name="east" converter="FileConverter" />
+        <field name="north" converter="FileConverter" />
+        <field name="south" converter="FileConverter" />
+        <field name="up" converter="FileConverter" />
+        <field name="down" converter="FileConverter" />
+    </data>
+
+    <data name="entityTree" extends="entityPlantBase" />
+    
+    <data name="entityGrass" extends="entityPlantBase" />
+    
+
+</root>

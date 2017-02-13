@@ -54,7 +54,7 @@ def getLibsClassPath() {
     file('libs-jme').eachFile { file -> 
         path += 'lib/' + file.name + ' '
     }
-	file('libs-ly').eachFile { file -> 
+    file('libs-ly').eachFile { file -> 
         path += 'lib/' + file.name + ' '
     }
     path += "lib/$kernelArchivesBaseName-${kernelArchivesVersion}.jar "
@@ -105,7 +105,7 @@ task proguard(type: proguard.gradle.ProGuardTask, dependsOn:jar) {
     libraryjars  "${System.getProperty('java.home')}/lib/ext/jfxrt.jar"  
     // JME 依赖包\LY依赖包
     libraryjars file("$project.projectDir/libs-jme")
-	libraryjars file("$project.projectDir/libs-ly")
+    libraryjars file("$project.projectDir/libs-ly")
     // luoying-kernel核心包
     libraryjars file("$rootProject.projectDir$kernelResultDir")
 
@@ -276,6 +276,11 @@ def buildArchives(distDir, appArchivesBaseName, editorVersionName, mainJarName
         from ("$project.buildDir/libs/lib") {
             include "*.jar"
             into("$appArchivesBaseName/app/lib")
+        }
+        // ---- 打包data(包含Converter配置)
+        from ("$project.projectDir") {
+            include "data/**"
+            into("$appArchivesBaseName/app")
         }
         // ---- pack jre
         from (jreRoot) {

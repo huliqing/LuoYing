@@ -18,15 +18,16 @@ _layout*.*
 
 /ly-kernel/.gradle/
 /ly-kernel/.nb-gradle/
+/ly-kernel/nbproject/private/
 /ly-kernel/build/
-/ly-kernel/nbproject/
-/ly-kernel/build.xml
-/ly-kernel/MANIFEST.MF
 /ly-kernel/dist/
 
+/ly-editor/.gradle/
+/ly-editor/.nb-gradle/
 /ly-editor/nbproject/private/
 /ly-editor/build/
 /ly-editor/dist/
+/ly-editor/build-target
 
 /ly-luoying-desktop/.gradle/
 /ly-luoying-desktop/.nb-gradle/

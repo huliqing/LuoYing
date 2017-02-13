@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://editor.huliqing.name'
+    xsi:schemaLocation='http://editor.huliqing.name meta.xsd'>
+    
+    <converter name="EntitiesFieldConverter" value="name.huliqing.editor.converter.field.EntitiesFieldConverter" />
+    
+    <data name="scene" extends="base">
+        <field name="entities" converter="EntitiesFieldConverter" />
+        <field name="progress" converter="TextConverter" />
+    </data>
+    
+</root>

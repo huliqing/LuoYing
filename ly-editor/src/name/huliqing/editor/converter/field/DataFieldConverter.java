@@ -3,14 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.converter.property;
+package name.huliqing.editor.converter.field;
 
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.input.MouseEvent;
-import name.huliqing.editor.converter.AbstractPropertyConverter;
 import name.huliqing.editor.converter.DataConverter;
+import name.huliqing.editor.converter.FieldConverter;
 import name.huliqing.editor.manager.ConverterManager;
 import name.huliqing.luoying.xml.ObjectData;
 
@@ -18,7 +18,7 @@ import name.huliqing.luoying.xml.ObjectData;
  *
  * @author huliqing
  */
-public class DataFieldConverter extends AbstractPropertyConverter{
+public class DataFieldConverter extends FieldConverter{
 
     private final TextField content = new TextField("");
     private ObjectData lastObjectData;
@@ -45,8 +45,8 @@ public class DataFieldConverter extends AbstractPropertyConverter{
     }
     
     @Override
-    public void initialize(DataConverter parent) {
-        super.initialize(parent);
+    public void initialize() {
+        super.initialize();
     }
 
     @Override
@@ -66,8 +66,8 @@ public class DataFieldConverter extends AbstractPropertyConverter{
             if (dc != null) {
                 dc.cleanup();
             }
-            dc = ConverterManager.createConverter(jfxEdit, lastObjectData);
-            dc.initialize(this);
+            dc = ConverterManager.createDataConverter(jfxEdit, lastObjectData, this);
+            dc.initialize();
             bodyPanel.setText(lastObjectData.getId());
             bodyPanel.setContent(dc.getLayout());
         }

@@ -3,25 +3,23 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.converter.property;
+package name.huliqing.editor.converter.field;
 
 import com.jme3.math.ColorRGBA;
 import java.util.logging.Logger;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.paint.Color;
-import name.huliqing.editor.converter.AbstractPropertyConverter;
-import name.huliqing.editor.converter.DataConverter;
+import name.huliqing.editor.converter.FieldConverter;
 import name.huliqing.luoying.xml.Converter;
 
 /**
  *
  * @author huliqing
  */
-public class ColorConverter extends AbstractPropertyConverter {
+public class ColorConverter extends FieldConverter {
 
     private static final Logger LOG = Logger.getLogger(ColorConverter.class.getName());
 
@@ -61,8 +59,8 @@ public class ColorConverter extends AbstractPropertyConverter {
     }
 
     @Override
-    public void initialize(DataConverter parent) {
-        super.initialize(parent); 
+    public void initialize() {
+        super.initialize(); 
     }
 
     @Override

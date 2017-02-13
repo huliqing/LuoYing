@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.converter.property;
+package name.huliqing.editor.converter.field;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,8 +16,8 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
-import name.huliqing.editor.converter.AbstractPropertyConverter;
 import name.huliqing.editor.converter.DataConverter;
+import name.huliqing.editor.converter.FieldConverter;
 import name.huliqing.editor.edit.Mode;
 import name.huliqing.editor.edit.controls.ControlTile;
 import name.huliqing.editor.edit.scene.JfxSceneEdit;
@@ -25,13 +25,12 @@ import name.huliqing.editor.edit.scene.JfxSceneEditListener;
 import name.huliqing.editor.edit.controls.entity.EntityControlTile;
 import name.huliqing.editor.manager.ConverterManager;
 import name.huliqing.luoying.data.EntityData;
-import name.huliqing.luoying.data.SceneData;
 
 /**
  * 场景的"entities"字段的转换器, 将entities转换为列表
  * @author huliqing
  */
-public class EntitiesPropertyConverter extends AbstractPropertyConverter<JfxSceneEdit, SceneData> implements JfxSceneEditListener {
+public class EntitiesFieldConverter extends FieldConverter<JfxSceneEdit> implements JfxSceneEditListener {
 
     private final VBox layout = new VBox();
     private final ToolBar toolBar = new ToolBar();
@@ -39,11 +38,11 @@ public class EntitiesPropertyConverter extends AbstractPropertyConverter<JfxScen
     private boolean ignoreSelectEvent;
     
     private final TitledPane entityPanel = new TitledPane();
-    private final Map<EntityData, DataConverter> entityConverterMaps = new HashMap<EntityData, DataConverter>();
+    private final Map<EntityData, DataConverter> entityConverterMaps = new HashMap();
     // 当前正在显示的EntityConverter
     private DataConverter currentDisplayConverter;
     
-    public EntitiesPropertyConverter() {
+    public EntitiesFieldConverter() {
         // 工具栏
         Button remove = new Button("-");
         toolBar.getItems().addAll(remove);
@@ -71,8 +70,8 @@ public class EntitiesPropertyConverter extends AbstractPropertyConverter<JfxScen
     }
     
     @Override
-    public void initialize(DataConverter<JfxSceneEdit, SceneData> parent) {
-        super.initialize(parent);
+    public void initialize() {
+        super.initialize();
         
         // remove20170116不再需要
 //        List<EntityData> eds = parent.getData().getEntityDatas();
@@ -150,14 +149,14 @@ public class EntitiesPropertyConverter extends AbstractPropertyConverter<JfxScen
         
         DataConverter dc = entityConverterMaps.get(entityData);
         if (dc == null) {
-            dc = ConverterManager.createConverter(jfxEdit, entityData);
+            dc = ConverterManager.createDataConverter(jfxEdit, entityData, this);
             entityConverterMaps.put(entityData, dc);
         }
         if (currentDisplayConverter != null) {
             currentDisplayConverter.cleanup();
         }
         currentDisplayConverter = dc;
-        currentDisplayConverter.initialize(this);
+        currentDisplayConverter.initialize();
         entityPanel.setText(entityData.getId());
         entityPanel.setContent(currentDisplayConverter.getLayout());
         entityPanel.setVisible(true);

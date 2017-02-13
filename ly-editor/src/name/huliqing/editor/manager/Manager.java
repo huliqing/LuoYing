@@ -39,7 +39,7 @@ public class Manager {
         app.getAssetManager().registerLocator("", EditAssetLocator.class);
         
         // 转换器初始化
-        ConverterManager.initialize();
+        ConverterManager.initialize(); 
         
         // 日志初始化
         LogFactory.initialize();

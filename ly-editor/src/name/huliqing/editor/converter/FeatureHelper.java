@@ -5,24 +5,19 @@
  */
 package name.huliqing.editor.converter;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import name.huliqing.editor.converter.define.Feature;
 
 /**
- *
  * @author huliqing
  */
 public class FeatureHelper {
     
-    private final Map features;
+    protected Map<String, Feature> features;
     
-    public FeatureHelper(Map features) {
+    public FeatureHelper(Map<String, Feature> features) {
         this.features = features;
-    }
-    
-    public Map getFeatures() {
-        return features;
     }
     
     /**
@@ -31,10 +26,11 @@ public class FeatureHelper {
      * @return 
      */
     public boolean getAsBoolean(String key) {
-        Object value = get(key);
-        if (value == null) 
+        if (features == null)
             return false;
-        return Boolean.valueOf((String) value);
+        
+        Feature feature = features.get(key);
+        return feature != null && feature.getAsBoolean();
     }
     
     /**
@@ -43,10 +39,14 @@ public class FeatureHelper {
      * @return 
      */
     public String[] getAsArray(String key) {
-        Object value = get(key);
-        if (value == null) 
+        if (features == null)
             return null;
-        return ((String) value).split(",");
+        
+        Feature feature = features.get(key);
+        if (feature == null)
+            return null;
+        
+        return feature.getAsArray();
     }
     
     /**
@@ -55,15 +55,14 @@ public class FeatureHelper {
      * @return 
      */
     public List<String> getAsList(String key) {
-        Object value = get(key);
-        if (value == null) 
-            return null;
-        return Arrays.asList(((String) value).split(","));
-    }
-    
-    private Object get(String key) {
         if (features == null)
             return null;
-        return features.get(key);
+        
+        Feature feature = features.get(key);
+        if (feature == null)
+            return null;
+        
+        return feature.getAsList();
     }
+    
 }
