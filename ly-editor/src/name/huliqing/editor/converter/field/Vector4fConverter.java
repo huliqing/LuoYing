@@ -5,7 +5,6 @@
  */
 package name.huliqing.editor.converter.field;
 
-import com.jme3.math.Vector3f;
 import com.jme3.math.Vector4f;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -19,14 +18,14 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import name.huliqing.editor.constants.StyleConstants;
-import name.huliqing.editor.converter.FieldConverter;
+import name.huliqing.editor.converter.SimpleFieldConverter;
 import name.huliqing.luoying.xml.Converter;
 
 /**
  *
  * @author huliqing
  */
-public class Vector4fConverter extends FieldConverter{
+public class Vector4fConverter extends SimpleFieldConverter {
     
     
     private final VBox layout = new VBox();
@@ -96,6 +95,8 @@ public class Vector4fConverter extends FieldConverter{
         yField.setOnKeyPressed(keyHandler);
         zField.setOnKeyPressed(keyHandler);
         wField.setOnKeyPressed(keyHandler);
+        
+        layout.setSpacing(3);
     }
 
     @Override
@@ -135,7 +136,8 @@ public class Vector4fConverter extends FieldConverter{
     }
 
     @Override
-    public void updateUI(Object propertyValue) {
+    protected void updateUI() {
+        Object propertyValue = data.getAttribute(field);
         lastValue = Converter.getAsVector4f(propertyValue);
         if (lastValue != null) {
             xField.setText(lastValue.x + "");

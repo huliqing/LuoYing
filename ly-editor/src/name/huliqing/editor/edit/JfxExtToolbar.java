@@ -15,7 +15,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import name.huliqing.editor.constants.AssetConstants;
-import name.huliqing.editor.utils.JfxUtils;
+import name.huliqing.editor.constants.StyleConstants;
+import name.huliqing.editor.ui.utils.JfxUtils;
 
 /**
  *
@@ -34,10 +35,10 @@ public class JfxExtToolbar extends HBox {
         arrowL.setVisible(false);
         arrowR.setVisible(true);
         
-        visibleControl.setStyle("-fx-background-color:lightgray;");
+        visibleControl.setStyle("-fx-background-color:rgb(140, 140, 140);");
         visibleControl.getChildren().addAll(arrowR, arrowL);
-        visibleControl.setMinWidth(10);
-        visibleControl.setMaxWidth(10);
+        visibleControl.setMinWidth(12);
+        visibleControl.setMaxWidth(12);
         visibleControl.setAlignment(Pos.CENTER);
         visibleControl.setPadding(Insets.EMPTY);
         visibleControl.setOnMouseClicked(e -> {
@@ -51,6 +52,7 @@ public class JfxExtToolbar extends HBox {
         tabPane.managedProperty().bind(tabPane.visibleProperty());
         
         getChildren().addAll(visibleControl, tabPane);
+        getStyleClass().add(StyleConstants.CLASS_HVBOX);
         setPadding(Insets.EMPTY);
     }
     
@@ -58,13 +60,7 @@ public class JfxExtToolbar extends HBox {
         Tab tab = new Tab();
         tab.setText(name);
         tab.setClosable(false);
-        
-        // 使用一个Layout来统一设置padding,不能直接设置在TabPane或Tab上。
-        HBox layout = new HBox();
-        layout.setPadding(new Insets(5));
-        layout.getChildren().add(toolbar);
-        tab.setContent(layout);
-        
+        tab.setContent(toolbar);
         tabPane.getTabs().add(tab);
     }
     

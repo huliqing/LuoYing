@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://editor.huliqing.name'
+    xsi:schemaLocation='http://editor.huliqing.name meta.xsd'>
+    
+    <component id="sysEntitySky" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="sysEntityAmbientLight" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="sysEntityDirectionalLight" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="sysEntityTerrain" type="entity" icon="" converterClass="name.huliqing.editor.component.TerrainEntityComponentConverter" />
+    <component id="sysEntityModel" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="sysEntityTree" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="sysEntitySimpleWater" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="sysEntityAdvanceWater" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="sysEntityBoundary" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="sysEntityChaseCamera" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="sysEntityPhysics" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="sysEntityShadow" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="sysEntityAudio" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    
+</root>

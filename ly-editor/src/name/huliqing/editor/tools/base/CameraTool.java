@@ -219,7 +219,7 @@ public class CameraTool extends AbstractTool implements EditorListener {
      * 把镜头移动场景中选择的物体
      */
     public void doChaseSelected() {
-        if (edit.getSelected() != null) {
+        if (edit.getSelected() != null && edit.getSelected().getControlSpatial() != null) {
             doChase(edit.getSelected().getControlSpatial().getWorldTranslation());
         }
     }

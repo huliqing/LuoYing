@@ -18,7 +18,7 @@ import name.huliqing.editor.constants.AssetConstants;
 import name.huliqing.editor.constants.ResConstants;
 import name.huliqing.editor.manager.Manager;
 import name.huliqing.editor.manager.UIManager;
-import name.huliqing.editor.utils.JfxUtils;
+import name.huliqing.editor.ui.utils.JfxUtils;
 import name.huliqing.fxswing.Jfx;
 
 /**
@@ -50,7 +50,7 @@ public class EditorStatsAppState extends AbstractAppState {
             statisticsIcon.prefWidth(20);
             statisticsIcon.prefHeight(20);
             statisticsIcon.setPadding(Insets.EMPTY);
-            statisticsIcon.setGraphic(JfxUtils.createImage(AssetConstants.INTERFACE_ICON_STATISTICS, 20, 20));
+            statisticsIcon.setGraphic(JfxUtils.createIcon(AssetConstants.INTERFACE_ICON_STATISTICS));
             statisticsIcon.selectedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
                 label.setVisible(newValue);
                 setEnabled(newValue);

@@ -8,13 +8,21 @@ package name.huliqing.editor.converter;
 import java.util.Map;
 import javafx.scene.Node;
 import name.huliqing.editor.converter.define.Feature;
+import name.huliqing.luoying.xml.ObjectData;
 
 /**
  * 数据转换器，将给定的数据转换为可视的jfx组件节点。
  * @author huliqing
+ * @param <T>
  * @param <C>
  */
-public interface Converter<C extends Converter> {
+public interface Converter<T extends ObjectData, C extends Converter> {
+    
+    /**
+     * 设置要转换的数据类型
+     * @param data 
+     */
+    void setData(T data);
     
     /**
      * 设置数据转换参数

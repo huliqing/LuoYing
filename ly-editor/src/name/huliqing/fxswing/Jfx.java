@@ -21,6 +21,7 @@ import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -224,7 +225,7 @@ public class Jfx {
 
         Platform.runLater(() -> {
             // 设置JFX主场景，并让JFX主界面变得透明，这样不会覆盖整个Canvas.
-            jfxRoot.setBackground(javafx.scene.layout.Background.EMPTY);
+            jfxRoot.setBackground(Background.EMPTY);
             jfxPanel.setScene(new Scene(jfxRoot, Color.TRANSPARENT));
         });
         return jwin;

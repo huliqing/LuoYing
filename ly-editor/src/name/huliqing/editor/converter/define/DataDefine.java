@@ -67,7 +67,7 @@ public class DataDefine {
             return;
         }
         String _extends = attributes.get("extends");
-        if (_extends != null) {
+        if (_extends != null && !_extends.trim().isEmpty()) {
             DataDefine parent = ConverterManager.getDataDefine(_extends);
             if (parent == null) {
                 LOG.log(Level.WARNING, "DataDefine not found by extends={0}, dataDefine={1}"

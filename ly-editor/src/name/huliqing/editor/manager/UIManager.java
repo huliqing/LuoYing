@@ -54,14 +54,14 @@ public class UIManager {
 
     public final static void initializeLayout(Pane jfxRoot) {
         ZONE_EDIT.setBackground(Background.EMPTY);
-        ZONE_TEXT.setStyle("-fx-background-color: lightgray;");
         ZONE_TEXT.getTabs().addListener((ListChangeListener.Change<? extends Tab> c) -> {
             if (mainLayout != null) 
                 mainLayout.setTextZoneVisible(!c.getList().isEmpty());
         });
         
         // 加载样式文件
-        Jfx.getJfxRoot().getStylesheets().add("resources/style/style.css");
+        Jfx.getJfxRoot().getStylesheets().add("resources/style/gray_style.css");
+        Jfx.getJfxRoot().getStylesheets().add("resources/style/gray_scroll_bar.css");
 
         // 创建主编辑器布器
         initMainLayout(jfxRoot);

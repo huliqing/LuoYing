@@ -15,29 +15,29 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
-import name.huliqing.editor.components.Component;
 import name.huliqing.editor.constants.DataFormatConstants;
 import name.huliqing.editor.constants.StyleConstants;
+import name.huliqing.editor.component.ComponentDefine;
 
 /**
  *
  * @author huliqing
  */
-public class ComponentsForm extends ListView<Component> {
+public class ComponentsForm extends ListView<ComponentDefine> {
 //    private static final Logger LOG = Logger.getLogger(ComponentsView.class.getName());
     
-    public ComponentsForm(String title, List<Component> components) {
+    public ComponentsForm(List<ComponentDefine> components) {
         
         getItems().addAll(components);
 
-        setCellFactory((ListView<Component> param) -> new ListCell<Component>() {
+        setCellFactory((ListView<ComponentDefine> param) -> new ListCell<ComponentDefine>() {
             @Override
-            protected void updateItem(Component item, boolean empty) {
+            protected void updateItem(ComponentDefine item, boolean empty) {
                 super.updateItem(item, empty);
                 String name = null;
                 Node icon = null;
                 if (item != null && !empty) {
-                    name = item.getName();
+                    name = item.getId();
                 }
                 setText(name);
                 setGraphic(icon);
@@ -47,15 +47,14 @@ public class ComponentsForm extends ListView<Component> {
         setOnDragDetected(this::doDragDetected);
         setOnDragDone(this::doDragDone);
         
-        setId(StyleConstants.ID_COMPONENTS);
     }
 
-    private Component getMainSelectItem() {
-        ObservableList<Component> items = getSelectionModel().getSelectedItems();
+    private ComponentDefine getMainSelectItem() {
+        ObservableList<ComponentDefine> items = getSelectionModel().getSelectedItems();
         if (items.isEmpty()) {
             return null;
         }
-        for (Component c : items) {
+        for (ComponentDefine c : items) {
             if (c != null) {
                 return c;
             }
@@ -65,14 +64,14 @@ public class ComponentsForm extends ListView<Component> {
 
     private void doDragDetected(MouseEvent e) {
 //        LOG.log(Level.INFO, "EntityComponents: doDragDetected.");
-        Component selected = getMainSelectItem();
+        ComponentDefine selected = getMainSelectItem();
         if (selected == null) {
             e.consume();
             return;
         }
         Dragboard db = startDragAndDrop(TransferMode.ANY);
         ClipboardContent clipboardContent = new ClipboardContent();
-        clipboardContent.put(DataFormatConstants.COMPONENT_ENTITY, selected);
+        clipboardContent.put(DataFormatConstants.COMPONENT_DEFINE, selected);
         db.setContent(clipboardContent);
         e.consume();
     }

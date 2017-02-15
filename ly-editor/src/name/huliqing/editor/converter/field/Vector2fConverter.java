@@ -18,14 +18,14 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import name.huliqing.editor.constants.StyleConstants;
-import name.huliqing.editor.converter.FieldConverter;
+import name.huliqing.editor.converter.SimpleFieldConverter;
 import name.huliqing.luoying.xml.Converter;
 
 /**
  *
  * @author huliqing
  */
-public class Vector2fConverter extends FieldConverter{
+public class Vector2fConverter extends SimpleFieldConverter{
     
     private final VBox layout = new VBox();
     
@@ -73,6 +73,8 @@ public class Vector2fConverter extends FieldConverter{
         yField.focusedProperty().addListener(focusedListener);
         xField.setOnKeyPressed(keyHandler);
         yField.setOnKeyPressed(keyHandler);
+        
+        layout.setSpacing(3);
     }
 
     @Override
@@ -103,7 +105,8 @@ public class Vector2fConverter extends FieldConverter{
     }
 
     @Override
-    public void updateUI(Object propertyValue) {
+    protected void updateUI() {
+        Object propertyValue = data.getAttribute(field);
         lastValue = Converter.getAsVector2f(propertyValue);
         if (lastValue != null) {
             xField.setText(lastValue.x + "");

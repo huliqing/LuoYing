@@ -7,11 +7,14 @@ package name.huliqing.editor.edit;
 
 import java.util.ArrayList;
 import java.util.List;
+import javafx.geometry.Insets;
 import javafx.scene.input.DragEvent;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import name.huliqing.editor.constants.StyleConstants;
 import name.huliqing.editor.toolbar.Toolbar;
 import name.huliqing.fxswing.Jfx;
 import name.huliqing.editor.ui.toolbar.JfxToolbar;
@@ -31,7 +34,7 @@ public abstract class JfxSimpleEdit<T extends JmeEdit> extends JfxAbstractEdit<T
     protected final Pane leftPropertyZone = new HBox();
     protected final Pane leftEditZone = new HBox();
     
-    protected final Pane jfxToolbarPanel = new HBox();
+    protected final HBox jfxToolbarPanel = new HBox();
     protected final JfxExtToolbar jfxExtToolbarPanel = new JfxExtToolbar();
     
     // --
@@ -42,7 +45,9 @@ public abstract class JfxSimpleEdit<T extends JmeEdit> extends JfxAbstractEdit<T
         layout.setCenter(leftZone);
         layout.setRight(jfxExtToolbarPanel);
         layout.setBottom(jfxToolbarPanel);
+        layout.setBackground(Background.EMPTY);
 
+        leftZone.setBackground(Background.EMPTY);
         leftZone.getChildren().addAll(leftPropertyZone, leftEditZone); // editPanel放在propertyPanel上面，因为要响应拖放事件
         
         leftEditZone.setVisible(false);
@@ -50,9 +55,14 @@ public abstract class JfxSimpleEdit<T extends JmeEdit> extends JfxAbstractEdit<T
         leftEditZone.setOnDragOver(this::onDragOver);
         leftEditZone.setOnDragDropped(this::onDragDropped);
         
+        jfxToolbarPanel.setPadding(Insets.EMPTY);
+        jfxToolbarPanel.getStyleClass().add(StyleConstants.CLASS_HVBOX);
+        
         // 只有在有扩展工具栏的时候才应该显示 
         jfxExtToolbarPanel.managedProperty().bind(jfxExtToolbarPanel.visibleProperty());
         jfxExtToolbarPanel.setVisible(false);
+        jfxExtToolbarPanel.setPadding(Insets.EMPTY);
+//        jfxExtToolbarPanel.setStyle("-fx-background-color:red;"); // debug
     }
     
     @Override

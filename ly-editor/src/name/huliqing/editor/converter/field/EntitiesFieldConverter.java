@@ -8,6 +8,7 @@ package name.huliqing.editor.converter.field;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
@@ -16,6 +17,8 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
+import name.huliqing.editor.component.ComponentDefine;
+import name.huliqing.editor.constants.AssetConstants;
 import name.huliqing.editor.converter.DataConverter;
 import name.huliqing.editor.converter.FieldConverter;
 import name.huliqing.editor.edit.Mode;
@@ -23,14 +26,17 @@ import name.huliqing.editor.edit.controls.ControlTile;
 import name.huliqing.editor.edit.scene.JfxSceneEdit;
 import name.huliqing.editor.edit.scene.JfxSceneEditListener;
 import name.huliqing.editor.edit.controls.entity.EntityControlTile;
+import name.huliqing.editor.manager.ComponentManager;
 import name.huliqing.editor.manager.ConverterManager;
+import name.huliqing.editor.ui.ComponentSearch;
+import name.huliqing.editor.ui.utils.JfxUtils;
 import name.huliqing.luoying.data.EntityData;
 
 /**
  * 场景的"entities"字段的转换器, 将entities转换为列表
  * @author huliqing
  */
-public class EntitiesFieldConverter extends FieldConverter<JfxSceneEdit> implements JfxSceneEditListener {
+public class EntitiesFieldConverter extends FieldConverter<JfxSceneEdit, EntityData> implements JfxSceneEditListener {
 
     private final VBox layout = new VBox();
     private final ToolBar toolBar = new ToolBar();
@@ -42,16 +48,28 @@ public class EntitiesFieldConverter extends FieldConverter<JfxSceneEdit> impleme
     // 当前正在显示的EntityConverter
     private DataConverter currentDisplayConverter;
     
+    private final ComponentSearch<ComponentDefine> componentSearch = new ComponentSearch(ComponentManager.getComponents("entity"));
+    
     public EntitiesFieldConverter() {
         // 工具栏
-        Button remove = new Button("-");
-        toolBar.getItems().addAll(remove);
-        toolBar.setStyle("-fx-background-color:lightgray;");
+        Button add = new Button("", JfxUtils.createIcon(AssetConstants.INTERFACE_ICON_ADD));
+        Button remove = new Button("", JfxUtils.createIcon(AssetConstants.INTERFACE_ICON_SUBTRACT));
+        toolBar.getItems().addAll(add, remove);
+        add.setOnAction(e -> {
+            componentSearch.show(add, -10, -10);
+        });
         remove.setOnAction(e -> {
             EntityData ed = listView.getSelectionModel().getSelectedItem();
             if (ed != null) {
                 jfxEdit.removeEntity(ed);
                 listView.getItems().remove(ed);
+            }
+        });
+        componentSearch.getListView().setOnMouseClicked(e -> {
+            ComponentDefine cd = componentSearch.getListView().getSelectionModel().getSelectedItem();
+            if (cd != null) {
+                ComponentManager.createComponent(cd, jfxEdit);
+                componentSearch.hide();
             }
         });
         
@@ -62,6 +80,7 @@ public class EntitiesFieldConverter extends FieldConverter<JfxSceneEdit> impleme
         layout.setStyle("-fx-padding:0;-fx-border-width:0;");
         
         entityPanel.setVisible(false);
+        entityPanel.setPrefWidth(200);
     }
         
     @Override
@@ -163,7 +182,7 @@ public class EntitiesFieldConverter extends FieldConverter<JfxSceneEdit> impleme
     }
 
     @Override
-    public void updateUI(Object propertyValue) {
+    public void updateView() {
         // ignore
     }
 

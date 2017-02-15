@@ -38,7 +38,7 @@ import name.huliqing.fxswing.Jfx;
  */
 public class AssetsForm extends VBox implements ConfigChangedListener {
 
-    private static final Logger LOG = Logger.getLogger(AssetsForm.class.getName());
+//    private static final Logger LOG = Logger.getLogger(AssetsForm.class.getName());
     
     private final FileTree assetTree = new FileTree();
     
@@ -50,15 +50,9 @@ public class AssetsForm extends VBox implements ConfigChangedListener {
     private final EditMenuItem editMenu = new EditMenuItem(assetTree);
     
     public AssetsForm() {
-        assetTree.minHeightProperty().bind(heightProperty());
-        assetTree.minWidthProperty().bind(widthProperty());
-        assetTree.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-//        setContent(assetTree);
         getChildren().add(assetTree);
-
-        updateAassetDir();
-        Manager.getConfigManager().addListener(this);
         
+        assetTree.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         assetTree.setOnMouseClicked((e) -> {
             if (e.getButton() == MouseButton.SECONDARY) {
                 doShowPopup(e.getScreenX(), e.getScreenY());
@@ -72,6 +66,14 @@ public class AssetsForm extends VBox implements ConfigChangedListener {
         assetTree.setOnDragDetected(this::doDragDetected);
         assetTree.setOnDragDone(this::doDragDone);
 //        assetTree.setOnDragOver(this::doDragOver);
+        assetTree.prefWidthProperty().bind(widthProperty());
+        assetTree.prefHeightProperty().bind(heightProperty());
+
+        updateAassetDir();
+        Manager.getConfigManager().addListener(this);
+        setPrefHeight(300);
+        
+        setStyle("-fx-background-radius: 7;-fx-padding:7;-fx-background-color:lightgray;");
         
     }
     

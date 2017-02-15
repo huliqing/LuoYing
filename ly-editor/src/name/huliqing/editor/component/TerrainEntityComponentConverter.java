@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.components;
+package name.huliqing.editor.component;
 
 import com.jme3.app.Application;
 import com.jme3.export.binary.BinaryExporter;
@@ -26,21 +26,17 @@ import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.object.Loader;
 
 /**
- *
+ * 地形组件的转换器
  * @author huliqing
  */
-public class TerrainEntityComponent extends EntityComponent {
-    public final static String MATERIAL_TERRAIN_LIGHTING = "Common/MatDefs/Terrain/TerrainLighting.j3md";
+public class TerrainEntityComponentConverter extends EntityComponentConverter {
+//    public final static String MATERIAL_TERRAIN_LIGHTING = "Common/MatDefs/Terrain/TerrainLighting.j3md";
     
     private final String modelDir = "/Models/terrains";
     private final String alphaTextureDir = "/Textures/terrains";
     
-    public TerrainEntityComponent(String id, String name) {
-        super(id, name);
-    }
-
     @Override
-    public void create(JfxSceneEdit jfxEdit) {
+    public void create(ComponentDefine cd, JfxSceneEdit jfxEdit) {
         CustomDialog dialog = new CustomDialog(jfxEdit.getEditRoot().getScene().getWindow());
         TerrainCreateForm form = new TerrainCreateForm(jfxEdit.getEditor().getAssetManager());
         BasePanel baseForm = form.basePanel;
@@ -66,7 +62,7 @@ public class TerrainEntityComponent extends EntityComponent {
                 } else if (form.imageBasedPanel.isVisible()) {
                     heightMapData = form.imageBasedPanel.getHeightMap();
                 }
-                createTerrain(jfxEdit, jfxEdit.getEditor(), terrainName, totalSize, patchSize, alphaTextureSize, assetFolder, heightMapData);
+                createTerrain(cd, jfxEdit, jfxEdit.getEditor(), terrainName, totalSize, patchSize, alphaTextureSize, assetFolder, heightMapData);
                 
             });
         });
@@ -75,7 +71,7 @@ public class TerrainEntityComponent extends EntityComponent {
         });
     }
     
-    private void createTerrain(JfxSceneEdit jfxEdit, Application application
+    private void createTerrain(ComponentDefine cd, JfxSceneEdit jfxEdit, Application application
             , String terrainName, int totalSize, int patchSize, int alphaTextureSize, String assetFolder, float[] heightMap) {
         try {
             // 创建地形
@@ -89,14 +85,14 @@ public class TerrainEntityComponent extends EntityComponent {
             BinaryExporter.getInstance().save(terrainSpatial, terrainFile);
 
             // 添加到3D场景编辑
-            EntityData ed = Loader.loadData(id);
+            EntityData ed = Loader.loadData(cd.getId());
             ed.setAttribute("file", terrainFullName.substring(1)); // 去掉"/"
             Jfx.runOnJfx(() -> {
                 jfxEdit.addEntity(ed);
             });
 
         } catch (IOException ex) {
-            Logger.getLogger(TerrainEntityComponent.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TerrainEntityComponentConverter.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

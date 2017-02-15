@@ -9,6 +9,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.VBox;
 import name.huliqing.editor.constants.ResConstants;
+import name.huliqing.editor.constants.StyleConstants;
 import name.huliqing.editor.manager.ComponentManager;
 import name.huliqing.editor.manager.Manager;
 
@@ -28,7 +29,7 @@ public class ResourceZone extends VBox{
         assetsPanel.setContent(new AssetsForm());
         assetsPanel.setText(Manager.getRes(ResConstants.FORM_ASSETS_TITLE));
         
-        ComponentsForm cv = new ComponentsForm("Entities", ComponentManager.getComponents("Entity"));
+        ComponentsForm cv = new ComponentsForm(ComponentManager.getComponents("entity"));
         componentsPanel.setContent(cv);
         componentsPanel.setText(Manager.getRes(ResConstants.FORM_COMPONENTS_TITLE));
         
@@ -37,8 +38,8 @@ public class ResourceZone extends VBox{
         testPanel.setExpanded(false);
         
         getChildren().addAll(assetsPanel, componentsPanel, testPanel);
+        getStyleClass().add(StyleConstants.CLASS_HVBOX);
         setPadding(Insets.EMPTY);
-        setStyle("-fx-background-color: lightgray");
     }
     
 }

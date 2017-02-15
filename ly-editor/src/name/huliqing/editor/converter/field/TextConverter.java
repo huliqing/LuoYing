@@ -10,13 +10,13 @@ import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import name.huliqing.editor.converter.FieldConverter;
+import name.huliqing.editor.converter.SimpleFieldConverter;
 import name.huliqing.luoying.xml.Converter;
 
 /**
  * @author huliqing
  */
-public class TextConverter extends FieldConverter {
+public class TextConverter extends SimpleFieldConverter {
 
     private final TextField content = new TextField("");
     private String lastValueSaved;
@@ -55,7 +55,8 @@ public class TextConverter extends FieldConverter {
     }
     
     @Override
-    public void updateUI(Object propertyValue) {
+    protected void updateUI() {
+        Object propertyValue = data.getAttribute(field);
         lastValueSaved = Converter.getAsString(propertyValue);
         if (lastValueSaved != null) {
             content.setText(lastValueSaved);

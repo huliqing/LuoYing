@@ -17,6 +17,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToolBar;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -32,6 +33,7 @@ import name.huliqing.editor.constants.ResConstants;
 import name.huliqing.editor.manager.Manager;
 import name.huliqing.editor.tools.terrain.TexLayer;
 import name.huliqing.editor.tools.terrain.TexLayerTool;
+import name.huliqing.editor.ui.utils.JfxUtils;
 import name.huliqing.fxswing.Jfx;
 
 /**
@@ -40,26 +42,22 @@ import name.huliqing.fxswing.Jfx;
  */
 public class JfxTerrainTexLayerTool extends JfxAbstractTool<TexLayerTool> implements TexLayerTool.LayerChangedListener {
 
-    private final GridPane btnLayout = new GridPane();
-    private final Button addLayer = new Button();
-    private final Button removeLayer = new Button();
-    private final Button removeNormal = new Button();
+    private final ToolBar toolBar = new ToolBar();
+    private final Button addLayer = new Button("", JfxUtils.createIcon(AssetConstants.INTERFACE_TOOL_TERRAIN_TEXLAYER_ADD));
+    private final Button removeLayer = new Button("", JfxUtils.createIcon(AssetConstants.INTERFACE_TOOL_TERRAIN_TEXLAYER_SUBTRACT));
+    private final Button removeNormal = new Button("", JfxUtils.createIcon(AssetConstants.INTERFACE_TOOL_TERRAIN_TEXLAYER_REMOVE_NORMAL));
     
     private final VBox layout = new VBox();
     private final TableView<TexLayer> layerPanel = new TableView();
     private int lastSelectRowIndex;
     
     public JfxTerrainTexLayerTool() {
-        addLayer.setGraphic(createImageView("/" + AssetConstants.INTERFACE_TOOL_TERRAIN_TEXLAYER_ADD));
         addLayer.setTooltip(new Tooltip(Manager.getRes(ResConstants.TOOL_TERRAIN_TEXLAYER_ADD_LAYER_TIP)));
-        removeLayer.setGraphic(createImageView("/" + AssetConstants.INTERFACE_TOOL_TERRAIN_TEXLAYER_SUBTRACT));
         removeLayer.setTooltip(new Tooltip(Manager.getRes(ResConstants.TOOL_TERRAIN_TEXLAYER_REMOVE_LAYER_TIP)));
-        removeNormal.setGraphic(createImageView("/" + AssetConstants.INTERFACE_TOOL_TERRAIN_TEXLAYER_REMOVE_NORMAL));
         removeNormal.setTooltip(new Tooltip(Manager.getRes(ResConstants.TOOL_TERRAIN_TEXLAYER_REMOVE_NORMAL_TIP)));
-        btnLayout.addRow(0, addLayer, removeLayer, removeNormal);
-        btnLayout.setHgap(3);
+        toolBar.getItems().addAll(addLayer, removeLayer, removeNormal);
         
-        layout.getChildren().addAll(btnLayout, layerPanel);
+        layout.getChildren().addAll(toolBar, layerPanel);
         addLayer.setOnAction(e -> {
             Jfx.runOnJme(() -> {
                 int count = tool.getLayerCounts();
@@ -216,14 +214,6 @@ public class JfxTerrainTexLayerTool extends JfxAbstractTool<TexLayerTool> implem
             });
         });
         layerPanel.getSelectionModel().select(0);
-    }
-    
-    private ImageView createImageView(String path) {
-        Image image = new Image(getClass().getResourceAsStream(path));
-        ImageView imageView = new ImageView(image);
-        imageView.setFitWidth(16);
-        imageView.setFitHeight(16);
-        return imageView;
     }
     
     @Override

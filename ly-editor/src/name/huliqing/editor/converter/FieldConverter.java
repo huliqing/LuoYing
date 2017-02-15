@@ -9,13 +9,15 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.TitledPane;
 import name.huliqing.editor.edit.JfxAbstractEdit;
+import name.huliqing.luoying.xml.ObjectData;
 
 /**
  * 字段转换器
  * @author huliqing
  * @param <E>
+ * @param <T>
  */
-public abstract class FieldConverter<E extends JfxAbstractEdit> extends AbstractConverter<E, DataConverter> {
+public abstract class FieldConverter<E extends JfxAbstractEdit, T extends ObjectData> extends AbstractConverter<E, T, DataConverter> {
 //    private static final Logger LOG = Logger.getLogger(AbstractFieldConverter.class.getName());
     
     /** 指定要DISABLED的字段，格式:"field1,field2,..." */
@@ -27,8 +29,6 @@ public abstract class FieldConverter<E extends JfxAbstractEdit> extends Abstract
     protected String field; 
     
     protected final TitledPane root = new TitledPane();
-    
-    protected boolean ignoreChangedEvent;
     
     public String getField() {
         return field;
@@ -62,35 +62,9 @@ public abstract class FieldConverter<E extends JfxAbstractEdit> extends Abstract
     }
 
     @Override
-    public void cleanup() {
+    public void cleanup() { 
         root.setContent(null);
         super.cleanup();
-    }
-    
-    /**
-     * 更新属性
-     * @param propertyValue 
-     */
-    public void updateAttribute(Object propertyValue) {
-        if (ignoreChangedEvent) {
-            return;
-        }
-        parent.updateAttribute(field, propertyValue);
-    }
-    
-    /**
-     * 更新View组件
-     * @param propertyValue 
-     */
-    public void updateView(Object propertyValue) {
-        // ignoreChangedEvent确保在更新UI的时候不会再回调到3D编辑场景中
-        ignoreChangedEvent = true;
-        updateUI(propertyValue);
-        ignoreChangedEvent = false;
-    }
-    
-    protected void addUndoRedo(Object beforeValue, Object afterValue) {
-        parent.addUndoRedo(field, beforeValue, afterValue);
     }
     
     /**
@@ -100,9 +74,9 @@ public abstract class FieldConverter<E extends JfxAbstractEdit> extends Abstract
     protected abstract Node createLayout();
     
     /**
-     * 更新UI
-     * @param propertyValue 属性值
+     * 更新View组件
      */
-    protected abstract void updateUI(Object propertyValue);
+    public abstract void updateView();
+
     
 }

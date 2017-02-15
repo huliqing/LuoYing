@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package name.huliqing.editor.utils;
+package name.huliqing.editor.ui.utils;
 
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;

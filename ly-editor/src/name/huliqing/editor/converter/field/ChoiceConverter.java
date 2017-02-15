@@ -9,12 +9,12 @@ import java.util.List;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
 import javafx.scene.control.ChoiceBox;
-import name.huliqing.editor.converter.FieldConverter;
+import name.huliqing.editor.converter.SimpleFieldConverter;
 
 /**
  * @author huliqing
  */
-public class ChoiceConverter extends FieldConverter {
+public class ChoiceConverter extends SimpleFieldConverter {
     
     /** 指定可选的项目列表，格式: "item1,item2,item3"*/
     public final static String FEATURE_ITEMS = "items";
@@ -48,7 +48,8 @@ public class ChoiceConverter extends FieldConverter {
     }
     
     @Override
-    public void updateUI(Object propertyValue) {
+    protected void updateUI() {
+        Object propertyValue = data.getAttribute(field);
         lastValueSaved = propertyValue != null ? propertyValue.toString() : null;
         choice.setValue(lastValueSaved);
     }

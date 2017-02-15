@@ -18,14 +18,14 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import name.huliqing.editor.constants.StyleConstants;
-import name.huliqing.editor.converter.FieldConverter;
+import name.huliqing.editor.converter.SimpleFieldConverter;
 import name.huliqing.luoying.xml.Converter;
 
 /**
  *
  * @author huliqing
  */
-public class Vector3fConverter extends FieldConverter{
+public class Vector3fConverter extends SimpleFieldConverter{
     
     private final VBox layout = new VBox();
     
@@ -83,6 +83,8 @@ public class Vector3fConverter extends FieldConverter{
         xField.setOnKeyPressed(keyHandler);
         yField.setOnKeyPressed(keyHandler);
         zField.setOnKeyPressed(keyHandler);
+        
+        layout.setSpacing(3);
     }
 
     @Override
@@ -123,7 +125,8 @@ public class Vector3fConverter extends FieldConverter{
     }
 
     @Override
-    public void updateUI(Object propertyValue) {
+    protected void updateUI() {
+        Object propertyValue = data.getAttribute(field);
         lastValue = Converter.getAsVector3f(propertyValue);
         if (lastValue != null) {
             xField.setText(lastValue.x + "");

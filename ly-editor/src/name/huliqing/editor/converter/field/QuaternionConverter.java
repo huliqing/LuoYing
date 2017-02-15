@@ -18,14 +18,14 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import name.huliqing.editor.constants.StyleConstants;
-import name.huliqing.editor.converter.FieldConverter;
+import name.huliqing.editor.converter.SimpleFieldConverter;
 import name.huliqing.luoying.xml.Converter;
 
 /**
  *
  * @author huliqing
  */
-public class QuaternionConverter extends FieldConverter{
+public class QuaternionConverter extends SimpleFieldConverter {
     
     private final float[] temp = new float[3];
     
@@ -87,6 +87,7 @@ public class QuaternionConverter extends FieldConverter{
         yField.setOnKeyPressed(keyHandler);
         zField.setOnKeyPressed(keyHandler);
         
+        layout.setSpacing(3);
     }
 
     @Override
@@ -125,7 +126,8 @@ public class QuaternionConverter extends FieldConverter{
     }
 
     @Override
-    public void updateUI(Object propertyValue) {
+    protected void updateUI() {
+        Object propertyValue = data.getAttribute(field);
         lastValueSaved = Converter.getAsQuaternion(propertyValue);
         if (lastValueSaved != null) {
             lastValueSaved.toAngles(temp);

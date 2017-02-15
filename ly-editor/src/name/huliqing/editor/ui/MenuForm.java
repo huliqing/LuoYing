@@ -21,7 +21,7 @@ import name.huliqing.editor.manager.ConfigManager;
 import name.huliqing.editor.manager.UIManager;
 import name.huliqing.editor.ui.menu.AboutMenuItem;
 import name.huliqing.editor.ui.menu.HelpShortcutMenuItem;
-import name.huliqing.editor.utils.JfxUtils;
+import name.huliqing.editor.ui.utils.JfxUtils;
 import name.huliqing.fxswing.Jfx;
 
 /**
@@ -45,10 +45,10 @@ public class MenuForm extends MenuBar implements ConfigManager.ConfigChangedList
     
     public MenuForm() {
         file = new Menu(Manager.getRes(ResConstants.MENU_FILE));
-        assets = new MenuItem(Manager.getRes(ResConstants.MENU_FILE_ASSETS), JfxUtils.createImage(AssetConstants.INTERFACE_MENU_OPEN_DIR, 16, 16));
-        assetsRecent = new Menu(Manager.getRes(ResConstants.MENU_FILE_ASSETS_RECENT), JfxUtils.createImage(AssetConstants.INTERFACE_MENU_OPEN_DIR_RECENT, 16, 16));
-        save = new MenuItem(Manager.getRes(ResConstants.MENU_FILE_SAVE), JfxUtils.createImage(AssetConstants.INTERFACE_MENU_SAVE, 16, 16));
-        quick = new MenuItem(Manager.getRes(ResConstants.MENU_FILE_QUICK), JfxUtils.createImage(AssetConstants.INTERFACE_MENU_QUIT, 16, 16));
+        assets = new MenuItem(Manager.getRes(ResConstants.MENU_FILE_ASSETS), JfxUtils.createIcon(AssetConstants.INTERFACE_MENU_OPEN_DIR));
+        assetsRecent = new Menu(Manager.getRes(ResConstants.MENU_FILE_ASSETS_RECENT), JfxUtils.createIcon(AssetConstants.INTERFACE_MENU_OPEN_DIR_RECENT));
+        save = new MenuItem(Manager.getRes(ResConstants.MENU_FILE_SAVE), JfxUtils.createIcon(AssetConstants.INTERFACE_MENU_SAVE));
+        quick = new MenuItem(Manager.getRes(ResConstants.MENU_FILE_QUICK), JfxUtils.createIcon(AssetConstants.INTERFACE_MENU_QUIT));
         assets.setOnAction(e -> openAssetsChooser());
         save.setOnAction(e -> save());
         quick.setOnAction(e -> Quit.doQuit());

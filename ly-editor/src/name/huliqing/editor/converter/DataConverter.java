@@ -15,8 +15,6 @@ import name.huliqing.editor.constants.StyleConstants;
 import name.huliqing.editor.converter.define.FieldDefine;
 import name.huliqing.editor.edit.JfxAbstractEdit;
 import name.huliqing.editor.manager.ConverterManager;
-import name.huliqing.editor.edit.UndoRedo;
-import name.huliqing.fxswing.Jfx;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
@@ -24,7 +22,7 @@ import name.huliqing.luoying.xml.ObjectData;
  * @param <E>
  * @param <T>
  */
-public abstract class DataConverter<E extends JfxAbstractEdit, T extends ObjectData> extends AbstractConverter<E, FieldConverter> {
+public abstract class DataConverter<E extends JfxAbstractEdit, T extends ObjectData> extends AbstractConverter<E, T, FieldConverter> {
 //    private static final Logger LOG = Logger.getLogger(AbstractDataConverter.class.getName());
         
     /** 指定要隐藏的字段, 格式:"field1,field2,..." */
@@ -32,7 +30,6 @@ public abstract class DataConverter<E extends JfxAbstractEdit, T extends ObjectD
     
     protected Map<String, FieldDefine> fieldDefines;
     
-    protected T data;
     protected final Map<String, FieldConverter> fieldConverters = new LinkedHashMap();
     protected final ScrollPane dataScroll = new ScrollPane();
     protected final VBox fieldPanel = new VBox();
@@ -55,19 +52,15 @@ public abstract class DataConverter<E extends JfxAbstractEdit, T extends ObjectD
         data.setAttribute(property, value);
         notifyChanged();
     }
-
-    public void setData(T data) {
-        this.data = data;
-    }
     
     @Override
     public void initialize() {
         super.initialize();
         if (fieldDefines != null && !fieldDefines.isEmpty()) {
             fieldDefines.values().forEach(t -> {
-                FieldConverter pc = ConverterManager.createPropertyConverter(jfxEdit, t, this);
+                FieldConverter pc = ConverterManager.createPropertyConverter(jfxEdit, data, t, this);
                 pc.initialize();
-                pc.updateView(data.getAttribute(pc.getField()));
+                pc.updateView();
                 fieldPanel.getChildren().add(pc.getLayout());
                 fieldConverters.put(t.getName(), pc);
             });
@@ -98,45 +91,45 @@ public abstract class DataConverter<E extends JfxAbstractEdit, T extends ObjectD
         super.cleanup();
     }
     
-    public void addUndoRedo(String property, Object beforeValue, Object afterValue) {
-         jfxEdit.addUndoRedo(new JfxEditUndoRedo(property, beforeValue, afterValue));
-    }
+//    public void addUndoRedo(String property, Object beforeValue, Object afterValue) {
+//         jfxEdit.addUndoRedo(new JfxEditUndoRedo(property, beforeValue, afterValue));
+//    }
     
-    private class JfxEditUndoRedo implements UndoRedo {
-
-        private final String property;
-        private final Object before;
-        private final Object after;
-        
-        public JfxEditUndoRedo(String property, Object before, Object after) {
-            this.property = property;
-            this.before = before;
-            this.after = after;
-        }
-        
-        @Override
-        public void undo() {
-            data.setAttribute(property, before);
-            Jfx.runOnJfx(() -> {
-                notifyChanged();
-                FieldConverter pc  = fieldConverters.get(property);
-                if (pc != null) {
-                    pc.updateView(before);
-                }
-            });
-        }
-        
-        @Override
-        public void redo() {
-            data.setAttribute(property, after);
-            Jfx.runOnJfx(() -> {
-                notifyChanged();
-                FieldConverter pc  = fieldConverters.get(property);
-                if (pc != null) {
-                    pc.updateView(after);
-                }
-            });
-        }
-        
-    }
+//    private class JfxEditUndoRedo implements UndoRedo {
+//
+//        private final String property;
+//        private final Object before;
+//        private final Object after;
+//        
+//        public JfxEditUndoRedo(String property, Object before, Object after) {
+//            this.property = property;
+//            this.before = before;
+//            this.after = after;
+//        }
+//        
+//        @Override
+//        public void undo() {
+//            data.setAttribute(property, before);
+//            Jfx.runOnJfx(() -> {
+//                notifyChanged();
+//                FieldConverter pc  = fieldConverters.get(property);
+//                if (pc != null) {
+//                    pc.updateView(before);
+//                }
+//            });
+//        }
+//        
+//        @Override
+//        public void redo() {
+//            data.setAttribute(property, after);
+//            Jfx.runOnJfx(() -> {
+//                notifyChanged();
+//                FieldConverter pc  = fieldConverters.get(property);
+//                if (pc != null) {
+//                    pc.updateView(after);
+//                }
+//            });
+//        }
+//        
+//    }
 }

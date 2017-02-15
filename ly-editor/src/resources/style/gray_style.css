@@ -1,0 +1,218 @@
+/*https://docs.oracle.com/javase/8/javafx/api/javafx/scene/doc-files/cssref.html*/
+/** 注：pseudo选择器中的":"号之间不能留空格 */
+
+/** for all common HBox and VBox */
+
+.root { 
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.hv-box {
+    -fx-base: darkgray;
+    -fx-padding: 0;
+    -fx-background-color: darkgray;
+}
+
+.text-field {
+    -fx-base: darkgray;
+    -fx-background-radius: 7;
+    -fx-border-width: 0;
+}
+
+.combo-box {
+    -fx-base: derive(darkgray, 50%);
+    -fx-background-insets: 0;
+    -fx-background-color:transparent;
+}
+.combo-box .list-cell {}
+.combo-box .arrow-button {
+    -fx-border-width: 0;
+}
+.combo-box .text-input {
+    -fx-border-width: 0;
+    -fx-background-radius: 7 0 0 7;
+}
+
+.choice-box {
+    -fx-base: derive(darkgray, 50%);
+    -fx-background-insets: 0;
+}
+.choice-box .label {}
+.choice-box .arrow {}
+.choice-box .open-button {}
+
+.check-box {
+    -fx-base: derive(darkgray, 50%);
+    -fx-background-insets: 0;
+}
+.check-box .box{
+    -fx-base: derive(darkgray, 50%);
+    -fx-background-insets: 0;
+}
+
+.button {
+    -fx-base: derive(darkgray, 50%);
+    -fx-background-insets: 0;
+}
+
+.toggle-button {
+    -fx-base: derive(darkgray, 50%);
+    -fx-background-insets: 0;
+}
+
+.menu-button {
+    -fx-base: derive(darkgray, 50%);
+    -fx-background-insets: 0;
+}
+
+.menu-bar {
+    -fx-base: darkgray;
+    -fx-background-color: linear-gradient(to bottom, -fx-base, derive(-fx-base,30%));
+        
+    /*-fx-background-color: darkgray;*/
+    -fx-border-style: solid inside;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: rgba(100, 100, 100, 1);
+}
+
+.tool-bar {
+    -fx-base: darkgray;
+    /*-fx-background-color: darkgray;*/
+    -fx-padding: 0;
+    -fx-spacing: 3;
+}
+.tool-bar > .container {
+    -fx-background-color: darkgray;
+    -fx-padding: 0;
+    -fx-spacing: 3;
+}
+
+/** 去掉TreeView在失去焦点时的灰色边框 */
+.tree-view {
+    -fx-base: darkgray;
+    -fx-skin: "com.sun.javafx.scene.control.skin.TreeViewSkin";
+    /*-fx-background-color: darkgray;*/
+    -fx-background-color: transparent, -fx-control-inner-background;
+    -fx-background-insets: 0, 1;
+
+    /* There is some oddness if padding is in em values rather than pixels,
+       in particular, the left border of the control doesn't show. */
+    -fx-padding: 1; /* 0.083333em; */
+}
+.tree-view:focused {
+    /*让tree-view背景透明，这可以让它在放到tab中的时候，不会在标题处产生一个明显的阻隔的线条*/
+    -fx-background-color: transparent;
+}
+.tree-cell {
+    -fx-base: darkgray;
+    -fx-background-color: lightgray;
+}
+
+/** 去掉scroll-pane的背景 */
+.scroll-pane {
+    -fx-base: darkgray;
+    -fx-background-color:transparent;
+}
+
+.split-pane:horizontal > .split-pane-divider {
+    -fx-base: darkgray;
+    -fx-pref-width: 7;
+}
+.split-pane:vertical > .split-pane-divider {
+    -fx-base: darkgray;
+    -fx-pref-width: 7;
+}
+
+.titled-pane {
+    -fx-base: darkgray;
+    -fx-animated: false;
+    -fx-collapsible: true;
+    -fx-padding:0;
+}
+.titled-pane > .title {
+    -fx-background-color: darkgray;
+    -fx-background-radius:0;
+    -fx-alignment: CENTER_LEFT;
+}
+.titled-pane > .title > .text {
+    -fx-font-size: 12;
+    -fx-font-weight: bold;
+}
+.titled-pane > .title > .arrow-button > .arrow {
+    -fx-background-color: black;
+}
+.titled-pane > .content {
+    -fx-background-color: darkgray;
+    -fx-border-width:0;
+    -fx-padding: 5;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.list-view {
+    -fx-base: darkgray;
+    -fx-border-width: 0;
+    -fx-background-color: darkgray;
+}
+
+.list-view .list-cell {
+    -fx-background-radius: 10;
+    -fx-background-color:lightgray;
+}
+
+.table-view {
+    -fx-base: darkgray;
+    /*-fx-background-color: darkgray;*/
+    -fx-background-insets: 0, 0;
+    -fx-padding: 0;
+}
+/*.table-view:focused{
+    -fx-background-color: darkgray;
+    -fx-background-insets: 0, 0;
+    -fx-padding: 0;
+}
+.table-view .column-header-background{
+    -fx-background-color: linear-gradient(rgb(200, 200, 200) 0%, rgb(220, 220, 220) 50%, rgb(200, 200, 200) 100%);
+}
+.table-view .column-header-background .label{}
+.table-view .column-header {
+    -fx-background-color: transparent;
+}
+.table-view .table-cell{
+    -fx-text-fill: white;
+}
+.table-row-cell {
+    -fx-background-color: rgb(96, 96, 96);
+}
+.table-row-cell:odd{
+    -fx-background-color: -fx-table-cell-border-color, rgb(128, 128, 128);
+}
+.table-row-cell:selected {
+    -fx-background-color: rgb(0, 128, 210);
+}
+.table-row-cell .table-cell {
+    -fx-border-color: transparent rgb(140, 140, 140) rgb(140, 140, 140) transparent;
+}
+.table-row-cell:empty .table-cell {
+    -fx-border-color: transparent;
+    -fx-background-color: darkgray;
+}
+.table-row-cell .text {}*/
+
+/* color-picker */
+.color-picker {
+    -fx-base: derive(darkgray, 50%);
+    -fx-background-radius: 7;
+    -fx-background-insets: 0;
+}
+
+/** 状态栏样式 */
+.statusBar {
+    -fx-base: darkgray;
+    -fx-background-color: darkgray;
+    -fx-border-style: solid inside;
+    -fx-border-width: 1 0 0 0; 
+    -fx-border-color: rgba(96, 96, 96, 1);
+}
+
+

@@ -7,6 +7,7 @@
     
     <!--DataConverters-->
     <converter name="EntityDataConverter" value="name.huliqing.editor.converter.data.EntityDataConverter" />
+    <converter name="ModuleFieldConverter" value="name.huliqing.editor.converter.field.ModuleFieldConverter" />
 
     <data name="entityBase" extends="base" converter="EntityDataConverter">
         <field name="name" converter="TextConverter">
@@ -18,7 +19,7 @@
         <field name="mat" converter="TextConverter">
             <feature name="collapsed" value="true" />
         </field>
-        <field name="modules" converter="TextConverter">
+        <field name="modules" converter="ModuleFieldConverter">
             <feature name="collapsed" value="true" />
         </field>
         <field name="objectDatas" converter="TextConverter">
@@ -43,9 +44,9 @@
         <field name="file" converter="FileConverter">
             <feature name="filters" value="Model Files|*.j3o|*.obj|*.mesh.xml,All Files|*.*" />
         </field>
-        <field name="randomScale" converter="CheckBoxConverter" />
+<!--        <field name="randomScale" converter="CheckBoxConverter" />
         <field name="minScale" converter="TextConverter" />
-        <field name="maxScale" converter="TextConverter" />
+        <field name="maxScale" converter="TextConverter" />-->
     </data>
     
     <data name="entityAudio" extends="entityBase">
@@ -143,7 +144,7 @@
         <field name="foamMap" converter="FileConverter" />
         <field name="foamScale" converter="Vector2fConverter" />
         <field name="foamMaskMap" converter="FileConverter" />
-        <field name="foamMaskScale" converter="TextConverter" />
+        <field name="foamMaskScale" converter="Vector2fConverter" />
     </data>
     
     <data name="entityAdvanceWater" extends="entityModelBase">

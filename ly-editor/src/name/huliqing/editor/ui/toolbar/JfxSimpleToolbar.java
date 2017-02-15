@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.control.ToolBar;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.Region;
 import name.huliqing.editor.constants.StyleConstants;
 import name.huliqing.editor.toolbar.Toolbar;
@@ -34,7 +35,7 @@ public class JfxSimpleToolbar extends ToolBar implements JfxToolbar, ToolbarList
     private boolean initialized;
     
     public JfxSimpleToolbar() {
-        setStyle("-fx-background-color:transparent;");
+        setBackground(Background.EMPTY);
     }
 
     @Override
@@ -60,7 +61,6 @@ public class JfxSimpleToolbar extends ToolBar implements JfxToolbar, ToolbarList
             if (jfxTool != null) {
                 jfxTool.initialize();
                 jfxTool.setEnabled(tool.isInitialized());
-                jfxTool.getView().getStyleClass().add(StyleConstants.CLASS_TOOLBAR_BUTTON);
                 toolViewMap.put(tool, jfxTool);
                 getItems().add(jfxTool.getView());
             }

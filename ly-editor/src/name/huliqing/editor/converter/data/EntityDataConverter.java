@@ -87,7 +87,7 @@ public class EntityDataConverter extends DataConverter<JfxSceneEdit, EntityData>
         Jfx.runOnJfx(() -> {
             FieldConverter pc = fieldConverters.get(property);
             if (pc != null) {
-                pc.updateView(value);
+                pc.updateView();
 //                LOG.log(Level.INFO, "onPropertyChanged, data={0}, property={1}, value={2}", new Object[] {data.getId(), property, value});
             }
         });

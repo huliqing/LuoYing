@@ -5,50 +5,179 @@
  */
 package name.huliqing.editor.manager;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import name.huliqing.editor.components.Component;
-import name.huliqing.editor.components.EntityComponent;
-import name.huliqing.editor.components.TerrainEntityComponent;
-import name.huliqing.luoying.constants.IdConstants;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.xml.parsers.ParserConfigurationException;
+import name.huliqing.editor.component.ComponentConverter;
+import name.huliqing.editor.component.ComponentDefine;
+import name.huliqing.editor.edit.JfxEdit;
+import name.huliqing.luoying.utils.FileUtils;
+import name.huliqing.luoying.xml.XmlUtils;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  *
  * @author huliqing
  */
 public class ComponentManager {
+
+    private static final Logger LOG = Logger.getLogger(ComponentManager.class.getName());
     
-    private final static Map<String, List<Component>> COMPONENTS = new HashMap<>();
+    // 缓存组件转换器
+    private final static Map<String, ComponentConverter> CONVERTER_CACHE = new HashMap();
+    
+    // key = Componety Type
+    private final static Map<String, List<ComponentDefine>> COMPONENT_DEFINES = new LinkedHashMap();
     
     public static void loadComponents() {
+        COMPONENT_DEFINES.clear();
+        File rootDir = new File("data/component");
+        if (!rootDir.exists() || !rootDir.isDirectory()) {
+            LOG.log(Level.SEVERE, "data/component direction not found!");
+            return;
+        }
         
-        List<Component> sceneEntities = new ArrayList<Component>();
-        sceneEntities.add(new EntityComponent(IdConstants.SYS_ENTITY_SKY, "Sky"));
-        sceneEntities.add(new EntityComponent(IdConstants.SYS_ENTITY_AMBIENT_LIGHT, "Ambient Light"));
-        sceneEntities.add(new EntityComponent(IdConstants.SYS_ENTITY_DIRECTIONAL_LIGHT, "Directional Light"));
-        sceneEntities.add(new EntityComponent(IdConstants.SYS_ENTITY_TERRAIN, "Simple Terrain"));
-        sceneEntities.add(new TerrainEntityComponent(IdConstants.SYS_ENTITY_TERRAIN, "AdvanceTerrain"));
-        sceneEntities.add(new EntityComponent(IdConstants.SYS_ENTITY_MODEL, "Model"));
-        sceneEntities.add(new EntityComponent(IdConstants.SYS_ENTITY_TREE, "Tree"));
-        sceneEntities.add(new EntityComponent(IdConstants.SYS_ENTITY_SIMPLE_WATER, "Simple Water"));
-        sceneEntities.add(new EntityComponent(IdConstants.SYS_ENTITY_ADVANCE_WATER, "Advance Water"));
-        sceneEntities.add(new EntityComponent(IdConstants.SYS_ENTITY_BOUNDARY, "Boundary"));
-        sceneEntities.add(new EntityComponent(IdConstants.SYS_ENTITY_CHASE_CAMERA, "Chase Camera"));
-        sceneEntities.add(new EntityComponent(IdConstants.SYS_ENTITY_PHYSICS, "Physics Space"));
-        sceneEntities.add(new EntityComponent(IdConstants.SYS_ENTITY_SHADOW, "Shadow"));
-        sceneEntities.add(new EntityComponent(IdConstants.SYS_ENTITY_AUDIO, "Audio"));
-        
-        COMPONENTS.put("Entity", sceneEntities);
+        // 递归载入data/component目录下的转换器配置，data/component下允许多层次目录
+        // 每个目录放一个config文件，config文件中每一行定义一个要载入的转换器配置
+        loadComponentFromDir(rootDir);
+    }
+
+    private static void loadComponentFromDir(File dir) {
+        if (!dir.exists() || !dir.isDirectory())
+            return;
+        // 载入当前文件夹中的配置
+        try {
+            File configFile = new File(dir, "config");
+            if (!configFile.exists() || !configFile.isFile()) {
+                LOG.log(Level.WARNING, "Config file not found!");
+            } else {
+                loadComponentFromConfigFile(configFile);
+            }
+        } catch (FileNotFoundException ex) {
+            LOG.log(Level.SEVERE, "Could not load component, dir=" + dir.getAbsolutePath(), ex);
+        } catch (IOException ex) {
+            LOG.log(Level.SEVERE, "Could not load component, dir=" + dir.getAbsolutePath(), ex);
+        }
+        // 载入子文件夹中的配置
+        File[] children = dir.listFiles();
+        for (File f : children) {
+            loadComponentFromDir(f);
+        }
+    }
+
+    private static void loadComponentFromConfigFile(File configFile) throws UnsupportedEncodingException, FileNotFoundException, IOException {
+        // 从config中读取 converter xml配置文件
+        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(configFile), "utf-8"));
+        String line;
+        while ((line = br.readLine()) != null) {
+            if (line.trim().length() <= 0) 
+                continue;
+            if (line.trim().startsWith("#")) 
+                continue;
+            File converterFile = new File(configFile.getParent(), line);
+            if (!converterFile.exists() || !converterFile.isFile()) 
+                continue;
+            try {
+                loadComponentFile(converterFile);
+            } catch (Exception e) {
+                LOG.log(Level.SEVERE, "Could not load component file=" + line, e);
+            }
+        }
+        try {
+            br.close();
+        } catch (IOException e) {
+            LOG.log(Level.SEVERE, null, e);
+        }
     }
     
-    public static void clearComponents() {
-        COMPONENTS.clear();
+    private static void loadComponentFile(File componentFile) throws IOException, ParserConfigurationException, SAXException {
+        String xmlStr = FileUtils.readFile(componentFile, "utf-8");
+        Element root = XmlUtils.newDocument(xmlStr).getDocumentElement();
+        NodeList componentList = root.getElementsByTagName("component");
+        int componentSize = componentList.getLength();
+        for (int i = 0; i < componentSize; i++) {
+            Element cEle = (Element) componentList.item(i);
+            String id = cEle.getAttribute("id");
+            String type = cEle.getAttribute("type");
+            String icon = cEle.getAttribute("icon");
+            String converterClass = cEle.getAttribute("converterClass");
+            addComponentDefine(new ComponentDefine(id, type, icon, converterClass));
+        }
     }
     
-    public static List<Component> getComponents(String componentType) {
-        return COMPONENTS.get(componentType);
+    /**
+     * 添加一个组件定义
+     * @param cd 
+     */
+    public final static void addComponentDefine(ComponentDefine cd) {
+        List<ComponentDefine> typeList = COMPONENT_DEFINES.get(cd.getType());
+        if (typeList == null) {
+            typeList = new ArrayList();
+            COMPONENT_DEFINES.put(cd.getType(), typeList);
+        }
+        typeList.add(cd);
+    }
+    
+    /**
+     * 创建组件
+     * @param cd
+     * @param jfxEdit 编辑器
+     */
+    public final static void createComponent(ComponentDefine cd, JfxEdit  jfxEdit) {
+        try {
+            ComponentConverter cc = getConverter(cd);
+            if (cc == null) {
+                LOG.log(Level.WARNING, "Could not find component converter, cd={0}", cd);
+                return;
+            }
+            cc.create(cd, jfxEdit);
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+            Logger.getLogger(ComponentManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /**
+     * 通过组件定义查找组件的转换器
+     * @param cd
+     * @return
+     * @throws ClassNotFoundException
+     * @throws InstantiationException
+     * @throws IllegalAccessException 
+     */
+    public final static ComponentConverter getConverter(ComponentDefine cd) throws 
+            ClassNotFoundException, InstantiationException, IllegalAccessException {
+        ComponentConverter converter = CONVERTER_CACHE.get(cd.getConverterClass());
+        if (converter == null) {
+            synchronized (CONVERTER_CACHE) {
+                Class clazz = Class.forName(cd.getConverterClass());
+                converter = (ComponentConverter) clazz.newInstance();
+                CONVERTER_CACHE.put(cd.getConverterClass(), converter);
+            }
+        }
+        return converter;
+    }
+
+    /**
+     * 获取组件列表
+     * @param componentType 组件类型
+     * @return 
+     */
+    public static List<ComponentDefine> getComponents(String componentType) {
+        return COMPONENT_DEFINES.get(componentType);
     }
     
 }

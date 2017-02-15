@@ -357,6 +357,11 @@ def buildMacOSX(distDir, appArchivesBaseName, editorVersionName, mainJarName
             into("${appArchivesBaseName}.app/Contents/Java/lib")
             include "*.jar"
         }
+        // ---- 打包data(包含Converter配置)
+        from ("$project.projectDir") {
+            include "data/**"
+            into("$appArchivesBaseName/app")
+        }
         // ---- add native libs
         from ("$rootProject.projectDir$nativeDir") {
             into("${appArchivesBaseName}.app/Contents/Java")

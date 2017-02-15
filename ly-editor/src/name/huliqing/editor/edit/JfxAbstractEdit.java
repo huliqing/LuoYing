@@ -8,12 +8,13 @@ package name.huliqing.editor.edit;
 import java.util.logging.Logger;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.input.DragEvent;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import name.huliqing.editor.Editor;
 import name.huliqing.editor.constants.StyleConstants;
-import name.huliqing.editor.manager.EditManager;
 import name.huliqing.editor.manager.UIManager;
 import name.huliqing.fxswing.Jfx;
 
@@ -34,10 +35,11 @@ public abstract class JfxAbstractEdit<T extends JmeEdit> implements JfxEdit<T>, 
     /**
      * 当前JFX编辑器的本地根节点
      */
-    protected final Pane editRoot = new VBox();
+    protected final VBox editRoot = new VBox();
     
     public JfxAbstractEdit() {
-        editRoot.getStyleClass().add(StyleConstants.CLASS_HVBOX);
+        editRoot.setPadding(Insets.EMPTY);
+        editRoot.setBackground(Background.EMPTY);
     }
 
     @Override

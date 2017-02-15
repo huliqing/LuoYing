@@ -8,14 +8,14 @@ package name.huliqing.editor.converter.field;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
-import name.huliqing.editor.converter.FieldConverter;
+import name.huliqing.editor.converter.SimpleFieldConverter;
 import name.huliqing.luoying.xml.Converter;
 
 /**
  *
  * @author huliqing
  */
-public class CheckBoxConverter extends FieldConverter {
+public class CheckBoxConverter extends SimpleFieldConverter {
 
     private final CheckBox checkBox = new CheckBox();
     
@@ -45,7 +45,8 @@ public class CheckBoxConverter extends FieldConverter {
     }
     
     @Override
-    protected void updateUI(Object propertyValue) {
+    protected void updateUI() {
+        Object propertyValue = data.getAttribute(field);
         lastValue = Converter.getAsBoolean(propertyValue);
         checkBox.setSelected(lastValue != null ? lastValue : false);
     }

@@ -47,7 +47,6 @@ public class Manager {
     
     public static void cleanup() {
         CONFIG_MANAGER.saveConfig();
-        ComponentManager.clearComponents();
     }
     
     // 资源文件必须优先载入,因为JFX也要依赖这个资源

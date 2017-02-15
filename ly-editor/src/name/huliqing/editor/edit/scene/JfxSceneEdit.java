@@ -17,7 +17,6 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
-import name.huliqing.editor.components.Component;
 import name.huliqing.editor.constants.DataFormatConstants;
 import name.huliqing.editor.constants.ResConstants;
 import name.huliqing.editor.manager.ConverterManager;
@@ -35,6 +34,8 @@ import name.huliqing.editor.manager.Manager;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.scene.SceneListener;
 import name.huliqing.editor.edit.SimpleEditListener;
+import name.huliqing.editor.component.ComponentDefine;
+import name.huliqing.editor.manager.ComponentManager;
 
 /**
  * 场景编辑器
@@ -101,7 +102,7 @@ public class JfxSceneEdit extends JfxSimpleEdit<SceneEdit>
     @Override
     protected void onDragOver(DragEvent e) {
         Dragboard db = e.getDragboard();
-        if (db.hasContent(DataFormatConstants.COMPONENT_ENTITY)) {
+        if (db.hasContent(DataFormatConstants.COMPONENT_DEFINE)) {
             e.acceptTransferModes(TransferMode.ANY);
         }
         e.consume();
@@ -110,8 +111,8 @@ public class JfxSceneEdit extends JfxSimpleEdit<SceneEdit>
     @Override
     protected void onDragDropped(DragEvent e) {
         Dragboard db = e.getDragboard();
-        if (db.hasContent(DataFormatConstants.COMPONENT_ENTITY)) {
-            Component c = (Component) db.getContent(DataFormatConstants.COMPONENT_ENTITY);
+        if (db.hasContent(DataFormatConstants.COMPONENT_DEFINE)) {
+            ComponentDefine c = (ComponentDefine) db.getContent(DataFormatConstants.COMPONENT_DEFINE);
             e.setDropCompleted(true);
             e.consume();
 
@@ -126,7 +127,7 @@ public class JfxSceneEdit extends JfxSimpleEdit<SceneEdit>
             // Exception in thread "JavaFX Application Thread" java.lang.IllegalArgumentException: 
             // Key already associated with a running event loop: com.sun.javafx.tk.quantum.EmbeddedSceneDnD@4535965c
             Jfx.runOnJfx(() -> {
-                c.create(this);
+                ComponentManager.createComponent(c, this);
             });
         }
     }

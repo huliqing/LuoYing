@@ -41,6 +41,7 @@
 -keep class name.huliqing.editor.Starter {*;}
 -keep class name.huliqing.editor.log.** {*;}
 -keep class name.huliqing.editor.converter.** {*;}
+-keep class name.huliqing.editor.component.** {*;}
 # 这个TexLayer,TexLayerTool必须keep,否则会导致地形图层选择不了图形
 -keep class name.huliqing.editor.tools.terrain.TexLayer { *;}
 -keep class name.huliqing.editor.tools.terrain.TexLayerTool { *;}

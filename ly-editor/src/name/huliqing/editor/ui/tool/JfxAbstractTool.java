@@ -27,7 +27,7 @@ public abstract class JfxAbstractTool<T extends Tool> implements JfxTool<T> {
     protected final VBox root = new VBox();
     
     public JfxAbstractTool() {
-        root.setPadding(new Insets(5,0,5,0));
+        root.setPadding(new Insets(3,0,3,0));
         root.managedProperty().bind(root.visibleProperty());
     }
 

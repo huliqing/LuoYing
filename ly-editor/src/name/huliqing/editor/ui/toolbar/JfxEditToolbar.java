@@ -10,9 +10,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.geometry.Insets;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import name.huliqing.editor.constants.StyleConstants;
 import name.huliqing.editor.toolbar.Toolbar;
 import name.huliqing.editor.toolbar.ToolbarListener;
 import name.huliqing.editor.tools.Tool;
@@ -37,6 +39,11 @@ public class JfxEditToolbar implements JfxToolbar, ToolbarListener{
     
     public JfxEditToolbar() {
         root.setContent(layout);
+        root.setPadding(new Insets(5));
+        
+        layout.prefHeightProperty().bind(root.heightProperty());
+        layout.getStyleClass().add(StyleConstants.CLASS_HVBOX);
+        layout.setPadding(Insets.EMPTY);
     }
     
     @Override

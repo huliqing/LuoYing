@@ -12,14 +12,14 @@ import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.paint.Color;
-import name.huliqing.editor.converter.FieldConverter;
+import name.huliqing.editor.converter.SimpleFieldConverter;
 import name.huliqing.luoying.xml.Converter;
 
 /**
  *
  * @author huliqing
  */
-public class ColorConverter extends FieldConverter {
+public class ColorConverter extends SimpleFieldConverter {
 
     private static final Logger LOG = Logger.getLogger(ColorConverter.class.getName());
 
@@ -94,9 +94,9 @@ public class ColorConverter extends FieldConverter {
     }
     
     @Override
-    protected void updateUI(Object propertyValue) {
+    protected void updateUI() {
+        Object propertyValue = data.getAttribute(field);
         ColorRGBA jmeColor = Converter.getAsColor(propertyValue);
-//        LOG.log(Level.INFO, "颜色更新(从3D)，color={0}", jmeColor);
         Color jfxColor = toJfxColor(jmeColor);
         layout.setValue(jfxColor);
         lastColorSaved = new Color(jfxColor.getRed(), jfxColor.getGreen(), jfxColor.getBlue(), jfxColor.getOpacity());

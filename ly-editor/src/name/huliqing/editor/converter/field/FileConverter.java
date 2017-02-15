@@ -20,17 +20,19 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+import name.huliqing.editor.constants.AssetConstants;
 import name.huliqing.editor.constants.ResConstants;
 import name.huliqing.editor.constants.StyleConstants;
-import name.huliqing.editor.converter.FieldConverter;
+import name.huliqing.editor.converter.SimpleFieldConverter;
 import name.huliqing.editor.manager.Manager;
+import name.huliqing.editor.ui.utils.JfxUtils;
 import name.huliqing.luoying.xml.Converter;
 
 /**
  *
  * @author huliqing
  */
-public class FileConverter extends FieldConverter {
+public class FileConverter extends SimpleFieldConverter {
     
     /**
      * 打开文件夹窗口时文件显示的过滤格式, 格式："des|filter1|filter2, des|filter2|filter3|..."
@@ -40,7 +42,7 @@ public class FileConverter extends FieldConverter {
 
     private final HBox layout = new HBox();
     private final TextField fileTextField = new TextField();
-    private final Button btn = new Button("...");
+    private final Button btn = new Button("", JfxUtils.createIcon(AssetConstants.INTERFACE_ICON_FILE));
     
     private String lastValueSaved;
     
@@ -69,7 +71,8 @@ public class FileConverter extends FieldConverter {
                 updateChangedAndSave();
             }
         });
-        
+        fileTextField.setStyle("-fx-background-radius: 7 0 0 7;");
+        btn.setStyle("-fx-background-radius: 0 7 7 0;");
     }
     
     @Override
@@ -92,7 +95,8 @@ public class FileConverter extends FieldConverter {
     }
     
     @Override
-    public void updateUI(Object propertyValue) {
+    protected void updateUI() {
+        Object propertyValue = data.getAttribute(field);
         lastValueSaved = Converter.getAsString(propertyValue);
         if (lastValueSaved != null) {
             fileTextField.setText(lastValueSaved);

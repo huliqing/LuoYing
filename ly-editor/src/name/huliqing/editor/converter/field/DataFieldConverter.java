@@ -10,7 +10,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.input.MouseEvent;
 import name.huliqing.editor.converter.DataConverter;
-import name.huliqing.editor.converter.FieldConverter;
+import name.huliqing.editor.converter.SimpleFieldConverter;
 import name.huliqing.editor.manager.ConverterManager;
 import name.huliqing.luoying.xml.ObjectData;
 
@@ -18,7 +18,7 @@ import name.huliqing.luoying.xml.ObjectData;
  *
  * @author huliqing
  */
-public class DataFieldConverter extends FieldConverter{
+public class DataFieldConverter extends SimpleFieldConverter{
 
     private final TextField content = new TextField("");
     private ObjectData lastObjectData;
@@ -59,7 +59,8 @@ public class DataFieldConverter extends FieldConverter{
     }
 
     @Override
-    protected void updateUI(Object propertyValue) {
+    protected void updateUI() {
+        Object propertyValue = data.getAttribute(field);
         ObjectData temp = (ObjectData) propertyValue;
         if (temp != lastObjectData) {
             lastObjectData = temp;

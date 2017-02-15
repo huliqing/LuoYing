@@ -39,6 +39,7 @@ public class MainLayout extends VBox {
     private final double[] lastDividerPositions = new double[]{0.8};
     
     public MainLayout(Pane root) {
+        setBackground(Background.EMPTY);
         this.root = root;
         // 固定的设置，不能动态改变
         contentMainSp.setBackground(Background.EMPTY);
