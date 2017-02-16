@@ -16,7 +16,6 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import name.huliqing.editor.constants.DataFormatConstants;
-import name.huliqing.editor.constants.StyleConstants;
 import name.huliqing.editor.component.ComponentDefine;
 
 /**

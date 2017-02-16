@@ -10,7 +10,10 @@
     <!--==========================================================================-->
     
    <modulePhysics id="sysModuleEnvPhysicsBase" moduleOrder="0" mass="0" friction="0" kinematic="0" restitution="0" />
-    
+
+   <!-- 普通物理模块 -->    
+    <modulePhysics id="sysModulePhysics" extends="sysModuleEnvPhysicsBase" />
+
     <!--地形的物理模块-->
     <modulePhysics id="sysModuleTerrainPhysics" extends="sysModuleEnvPhysicsBase" />
     
@@ -19,6 +22,8 @@
 
     <!--包围盒的物理模块-->
     <modulePhysics id="sysModuleBoundaryPhysics" extends="sysModuleEnvPhysicsBase" />
+    
+    
 
     <!--==========================================================================-->
     <!--

@@ -19,4 +19,7 @@
     <component id="sysEntityShadow" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
     <component id="sysEntityAudio" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
     
+    <component id="sysModulePhysics" type="module" icon="" converterClass="" />
+    
+    
 </root>

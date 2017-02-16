@@ -108,7 +108,7 @@ public class EntityData extends ObjectData {
         this.moduleDatas = moduleDatas;
     }
     
-    public void addModuleData(ModuleData moduleData) {
+    public synchronized void addModuleData(ModuleData moduleData) {
         if (moduleDatas == null) {
             moduleDatas = new ArrayList<ModuleData>();
         }
@@ -117,7 +117,7 @@ public class EntityData extends ObjectData {
         }
     }
     
-    public boolean removeModuleData(ModuleData moduleData) {
+    public synchronized boolean removeModuleData(ModuleData moduleData) {
         return moduleDatas != null && moduleDatas.remove(moduleData);
     }
     
@@ -125,7 +125,7 @@ public class EntityData extends ObjectData {
      * 添加一个ObjectData
      * @param objectData 
      */
-    public void addObjectData(ObjectData objectData) {
+    public synchronized void addObjectData(ObjectData objectData) {
         if (objectDatas == null) {
             objectDatas = new ArrayList<ObjectData>();
         }
@@ -135,7 +135,7 @@ public class EntityData extends ObjectData {
         }
     }
 
-    public boolean removeObjectData(ObjectData objectData) {
+    public synchronized boolean removeObjectData(ObjectData objectData) {
         return objectDatas != null && objectDatas.remove(objectData);
     }
     

@@ -1,4 +1,5 @@
 #每一行指定一个配置文件
 base.xml
 entity.xml
+module.xml
 scene.xml

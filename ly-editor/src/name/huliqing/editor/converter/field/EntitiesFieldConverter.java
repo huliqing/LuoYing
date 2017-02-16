@@ -8,7 +8,6 @@ package name.huliqing.editor.converter.field;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.beans.value.ObservableValue;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
@@ -19,6 +18,7 @@ import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import name.huliqing.editor.component.ComponentDefine;
 import name.huliqing.editor.constants.AssetConstants;
+import name.huliqing.editor.constants.ComponentConstants;
 import name.huliqing.editor.converter.DataConverter;
 import name.huliqing.editor.converter.FieldConverter;
 import name.huliqing.editor.edit.Mode;
@@ -48,7 +48,7 @@ public class EntitiesFieldConverter extends FieldConverter<JfxSceneEdit, EntityD
     // 当前正在显示的EntityConverter
     private DataConverter currentDisplayConverter;
     
-    private final ComponentSearch<ComponentDefine> componentSearch = new ComponentSearch(ComponentManager.getComponents("entity"));
+    private final ComponentSearch<ComponentDefine> componentSearch = new ComponentSearch(ComponentManager.getComponents(ComponentConstants.ENTITY));
     
     public EntitiesFieldConverter() {
         // 工具栏
@@ -80,7 +80,6 @@ public class EntitiesFieldConverter extends FieldConverter<JfxSceneEdit, EntityD
         layout.setStyle("-fx-padding:0;-fx-border-width:0;");
         
         entityPanel.setVisible(false);
-        entityPanel.setPrefWidth(200);
     }
         
     @Override
@@ -194,13 +193,12 @@ public class EntitiesFieldConverter extends FieldConverter<JfxSceneEdit, EntityD
                 @Override
                 protected void updateItem(EntityData item, boolean empty) {
                     super.updateItem(item, empty);
+                    setGraphic(null);
                     if (!empty && item != null) {
-//                        setText(item.getId() + "(" + item.getUniqueId() + ")");
                         setText(item.getId());
                     } else {
                         setText(null); // 必须设置为null,否则会有重复数据可能(在动态添加item的时候)
                     }
-                    setGraphic(null);
                 }
             };
             return lc;

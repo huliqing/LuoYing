@@ -69,6 +69,19 @@ public abstract class SimpleFieldConverter<E extends JfxAbstractEdit, T extends 
         ignoreChangedEvent = false;
     }
     
+    /**
+     * 直接添加一个历史记录。
+     * @param ur 
+     */
+    protected void addUndoRedo(UndoRedo ur) {
+        jfxEdit.addUndoRedo(ur);
+    }
+    
+    /**
+     * 添加一个历史记录
+     * @param beforeValue 字段改变前的值
+     * @param afterValue 字段改变后的值
+     */
     protected void addUndoRedo(Object beforeValue, Object afterValue) {
         jfxEdit.addUndoRedo(new JfxEditUndoRedo(field, beforeValue, afterValue));
     }

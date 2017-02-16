@@ -71,21 +71,21 @@
         <field name="disabledOnPlatforms" converter="TextConverter">
             <feature name="collapsed" value="true" />
         </field>
-        <field name="shadowMapSize" converter="TextConverter"/>
-        <field name="shadowMaps" converter="TextConverter"/>
+        <field name="shadowMapSize" converter="IntegerTextConverter"/>
+        <field name="shadowMaps" converter="IntegerTextConverter"/>
         <field name="edgeFilteringMode" converter="ChoiceConverter">
             <feature name="items" value="Nearest,Bilinear,Dither,PCF4,PCFPOISSON,PCF8" />
         </field>
-        <field name="edgesThickness" converter="TextConverter"/>
+        <field name="edgesThickness" converter="IntegerTextConverter"/>
         <field name="enabledStabilization" converter="CheckBoxConverter"/>
-        <field name="lambda" converter="TextConverter"/>
+        <field name="lambda" converter="FloatTextConverter"/>
         <field name="renderBackFacesShadows" converter="CheckBoxConverter"/>
         <field name="shadowCompareMode" converter="ChoiceConverter">
             <feature name="items" value="Software,Hardware" />
         </field>
-        <field name="shadowIntensity" converter="TextConverter"/>
-        <field name="shadowZExtend" converter="TextConverter"/>
-        <field name="shadowZFadeLength" converter="TextConverter"/>
+        <field name="shadowIntensity" converter="FloatTextConverter"/>
+        <field name="shadowZExtend" converter="FloatTextConverter"/>
+        <field name="shadowZFadeLength" converter="FloatTextConverter"/>
     </data>
     
     <data name="entityChaseCamera" extends="entityBase">
@@ -95,13 +95,13 @@
        <field name="trailingEnabled" converter="CheckBoxConverter"/>
        <field name="invertVerticalAxis" converter="CheckBoxConverter"/>
        <field name="lookAtOffset" converter="Vector3fConverter"/>
-       <field name="zoomSensitivity" converter="TextConverter"/>
-       <field name="rotationSpeed" converter="TextConverter"/>
-       <field name="rotationSensitivity" converter="TextConverter"/>
-       <field name="maxDistance" converter="TextConverter"/>
-       <field name="minDistance" converter="TextConverter"/>
-       <field name="defaultDistance" converter="TextConverter"/>
-       <field name="chasingSensitivity" converter="TextConverter"/>
+       <field name="zoomSensitivity" converter="FloatTextConverter"/>
+       <field name="rotationSpeed" converter="FloatTextConverter"/>
+       <field name="rotationSensitivity" converter="FloatTextConverter"/>
+       <field name="maxDistance" converter="FloatTextConverter"/>
+       <field name="minDistance" converter="FloatTextConverter"/>
+       <field name="defaultDistance" converter="FloatTextConverter"/>
+       <field name="chasingSensitivity" converter="FloatTextConverter"/>
        <field name="downRotateOnCloseViewOnly" converter="CheckBoxConverter"/>
        <field name="upVector" converter="Vector3fConverter"/>
        <field name="hideCursorOnRotate" converter="CheckBoxConverter"/>
@@ -117,12 +117,12 @@
         <field name="threadingType" converter="ChoiceConverter">
             <feature name="items" value="SEQUENTIAL,PARALLEL" />
         </field>
-        <field name="speed" converter="TextConverter" />
+        <field name="speed" converter="FloatTextConverter" />
         <field name="worldMax" converter="Vector3fConverter" />
         <field name="worldMin" converter="Vector3fConverter" />
-        <field name="accuracy" converter="TextConverter" />
-        <field name="maxSubSteps" converter="TextConverter" />
-        <field name="solverNumIterations" converter="TextConverter" />
+        <field name="accuracy" converter="FloatTextConverter" />
+        <field name="maxSubSteps" converter="IntegerTextConverter" />
+        <field name="solverNumIterations" converter="IntegerTextConverter" />
     </data>
 
     <data name="entitySimpleModel" extends="entityModelBase">
@@ -137,10 +137,10 @@
         <feature name="hideFields" value="mat,modules,objectDatas,shadowMode,cullHint,queueBucket,preferUnshaded" />
         <field name="waterModel" converter="FileConverter" />
         <field name="waterColor" converter="ColorConverter" />
-        <field name="texScale" converter="TextConverter" />
-        <field name="waveSpeed" converter="TextConverter" />
-        <field name="distortionMix" converter="TextConverter" />
-        <field name="distortionScale" converter="TextConverter" />
+        <field name="texScale" converter="FloatTextConverter" />
+        <field name="waveSpeed" converter="FloatTextConverter" />
+        <field name="distortionMix" converter="FloatTextConverter" />
+        <field name="distortionScale" converter="FloatTextConverter" />
         <field name="foamMap" converter="FileConverter" />
         <field name="foamScale" converter="Vector2fConverter" />
         <field name="foamMaskMap" converter="FileConverter" />
@@ -150,44 +150,55 @@
     <data name="entityAdvanceWater" extends="entityModelBase">
         <feature name="hideFields" value="mat,modules,objectDatas,rotation,scale,shadowMode,cullHint,queueBucket,preferUnshaded" />
         <field name="center" converter="Vector3fConverter" />
-        <field name="radius" converter="TextConverter" />
-        <field name="waterHeight" converter="TextConverter" />
+        <field name="radius" converter="FloatTextConverter" />
+        <field name="waterHeight" converter="FloatTextConverter" />
         <field name="waterColor" converter="ColorConverter" />
         <field name="deepWaterColor" converter="ColorConverter" />
         <field name="lightColor" converter="ColorConverter" />
         <field name="lightDirection" converter="Vector3fConverter" />
         <field name="colorExtinction" converter="Vector3fConverter" />
+        <field name="waterTransparency" converter="FloatTextConverter" />
+        
+        <field name="shininess" converter="FloatTextConverter" />
+        <field name="shoreHardness" converter="FloatTextConverter" />
+        <field name="underWaterFogDistance" converter="FloatTextConverter" />
+        <field name="windDirection" converter="Vector2fConverter" />
+                
+        <field name="waveScale" converter="FloatTextConverter" />
+        <field name="speed" converter="FloatTextConverter" />
+        <field name="maxAmplitude" converter="FloatTextConverter" />
+        
+        <field name="reflectionDisplace" converter="FloatTextConverter" />
+        <field name="reflectionMapSize" converter="IntegerTextConverter" />
+
+        <field name="useSpecular" converter="CheckBoxConverter" />
+        <field name="sunScale" converter="FloatTextConverter" />
+
+        <field name="useRefraction" converter="CheckBoxConverter" />
+        <field name="refractionConstant" converter="FloatTextConverter" />
+        <field name="refractionStrength" converter="FloatTextConverter" />
+        
+        <field name="useFoam" converter="CheckBoxConverter" />
         <field name="foamExistence" converter="Vector3fConverter" />
-        <field name="foamHardness" converter="TextConverter" />
-        <field name="foamIntensity" converter="TextConverter" />
-        <field name="maxAmplitude" converter="TextConverter" />
-        <field name="normalScale" converter="TextConverter" />
-        <field name="reflectionDisplace" converter="TextConverter" />
-        <field name="reflectionMapSize" converter="TextConverter" />
-        <field name="refractionConstant" converter="TextConverter" />
-        <field name="refractionStrength" converter="TextConverter" />
+        <field name="foamHardness" converter="FloatTextConverter" />
+        <field name="foamIntensity" converter="FloatTextConverter" />
+        <field name="foamTexture" converter="FileConverter" />
+
+        <field name="useCaustics" converter="CheckBoxConverter" />
+        <field name="causticsIntensity" converter="FloatTextConverter" />
+        <field name="causticsTexture" converter="FileConverter" />
+        
+        <field name="useHQShoreline" converter="CheckBoxConverter" />
+        <field name="useRipples" converter="CheckBoxConverter" />
+        <field name="useSceneLight" converter="CheckBoxConverter" />
+        
+        <field name="normalScale" converter="FloatTextConverter" />
+        <field name="normalTexture" converter="FileConverter" />
+        <field name="heightTexture" converter="FileConverter" />
+
         <field name="shapeType" converter="ChoiceConverter">
             <feature name="items" value="Square,Circular" />
         </field>
-        <field name="shininess" converter="TextConverter" />
-        <field name="shoreHardness" converter="TextConverter" />
-        <field name="speed" converter="TextConverter" />
-        <field name="sunScale" converter="TextConverter" />
-        <field name="underWaterFogDistance" converter="TextConverter" />
-        <field name="useCaustics" converter="CheckBoxConverter" />
-        <field name="useFoam" converter="CheckBoxConverter" />
-        <field name="useHQShoreline" converter="CheckBoxConverter" />
-        <field name="useRefraction" converter="CheckBoxConverter" />
-        <field name="useRipples" converter="CheckBoxConverter" />
-        <field name="useSpecular" converter="CheckBoxConverter" />
-        <field name="waterTransparency" converter="TextConverter" />
-        <field name="waveScale" converter="TextConverter" />
-        <field name="windDirection" converter="Vector2fConverter" />
-        <field name="causticsTexture" converter="FileConverter" />
-        <field name="foamTexture" converter="FileConverter" />
-        <field name="heightTexture" converter="FileConverter" />
-        <field name="normalTexture" converter="FileConverter" />
-        <field name="useSceneLight" converter="TextConverter" />
     </data>
     
     <data name="entitySkyBox" extends="entityModelBase">

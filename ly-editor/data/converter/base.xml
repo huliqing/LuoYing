@@ -9,19 +9,27 @@
     <converter name="SimpleDataConverter" value="name.huliqing.editor.converter.data.SimpleDataConverter" />
     
     <!--FieldConverters-->
+    <converter name="UniqueIdConverter" value="name.huliqing.editor.converter.field.UniqueIdConverter" />
+    <converter name="TextConverter" value="name.huliqing.editor.converter.field.TextConverter" />
+    <converter name="FloatTextConverter" value="name.huliqing.editor.converter.field.FloatTextConverter" />
+    <converter name="IntegerTextConverter" value="name.huliqing.editor.converter.field.IntegerTextConverter" />
+    <converter name="LongTextConverter" value="name.huliqing.editor.converter.field.LongTextConverter" />
     <converter name="CheckBoxConverter" value="name.huliqing.editor.converter.field.CheckBoxConverter" />
     <converter name="ChoiceConverter" value="name.huliqing.editor.converter.field.ChoiceConverter" />
     <converter name="ColorConverter" value="name.huliqing.editor.converter.field.ColorConverter" />
-    <converter name="DataFieldConverter" value="name.huliqing.editor.converter.field.DataFieldConverter" />
-    <converter name="FileConverter" value="name.huliqing.editor.converter.field.FileConverter" />
-    <converter name="QuaternionConverter" value="name.huliqing.editor.converter.field.QuaternionConverter" />
-    <converter name="TextConverter" value="name.huliqing.editor.converter.field.TextConverter" />
     <converter name="Vector2fConverter" value="name.huliqing.editor.converter.field.Vector2fConverter" />
     <converter name="Vector3fConverter" value="name.huliqing.editor.converter.field.Vector3fConverter" />
     <converter name="Vector4fConverter" value="name.huliqing.editor.converter.field.Vector4fConverter" />
+    <converter name="QuaternionConverter" value="name.huliqing.editor.converter.field.QuaternionConverter" />
+    <converter name="FileConverter" value="name.huliqing.editor.converter.field.FileConverter" />
+    <converter name="DataFieldConverter" value="name.huliqing.editor.converter.field.DataFieldConverter" />
     
     <data name="base" extends="" converter="SimpleDataConverter">
         <field name="id" converter="TextConverter">
+            <feature name="disabled" value="true" />
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="uniqueId" converter="UniqueIdConverter" >
             <feature name="disabled" value="true" />
             <feature name="collapsed" value="true" />
         </field>

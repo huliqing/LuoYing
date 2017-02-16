@@ -24,7 +24,10 @@ xs:time
                 <xs:element ref="moduleAction" />
                 <xs:element ref="moduleChannel" />
                 <xs:element ref="moduleColor" />
-                <xs:element ref="moduleChat" />
+
+                <!--remove20170216-->                
+                <!--<xs:element ref="moduleChat" />-->
+
                 <xs:element ref="moduleDrop" />
                 <xs:element ref="moduleItem" />
                 <xs:element ref="moduleLevel" />
@@ -77,7 +80,7 @@ xs:time
                     <xs:attribute name="bindRotatableAttribute" type="xs:string" use="required">
                         <xs:annotation><xs:documentation>BooleanAttribute, 绑定角色属性，这个属性定义角色是否是可转动朝向的。</xs:documentation></xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="bindLocationAttribute" type="xs:string" use="required">
+                    <xs:attribute name="bindRotatableAttribute" type="xs:string" use="required">
                         <xs:annotation>
                             <xs:documentation>Vector3fAttribute, 绑定角色的位置属性，当绑定了这个属性之后可以用这个属性来控制角色的位置.</xs:documentation>
                         </xs:annotation>
@@ -133,7 +136,8 @@ xs:time
         </xs:complexType>
     </xs:element>
         
-    <xs:element name="moduleChat">
+        <!--remove20170216-->
+<!--    <xs:element name="moduleChat">
         <xs:annotation>
             <xs:documentation>角色对话模块</xs:documentation>
         </xs:annotation>
@@ -142,7 +146,7 @@ xs:time
                 <xs:extension base="moduleBase"></xs:extension>
             </xs:complexContent>
         </xs:complexType>
-    </xs:element>
+    </xs:element>-->
     
     <xs:element name="moduleDrop">
         <xs:annotation>
@@ -215,7 +219,7 @@ xs:time
                     </xs:attribute>
                     <xs:attribute name="effect" type="xs:string" use="required">
                         <xs:annotation>
-                            <xs:documentation>升级时的特效</xs:documentation>
+                            <xs:documentation>升级时的特效,关联一个特殊ID</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
                 </xs:extension>

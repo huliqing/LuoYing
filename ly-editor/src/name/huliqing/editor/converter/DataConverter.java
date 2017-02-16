@@ -37,6 +37,7 @@ public abstract class DataConverter<E extends JfxAbstractEdit, T extends ObjectD
     public DataConverter() {
         dataScroll.setId(StyleConstants.ID_PROPERTY_PANEL);
         dataScroll.setContent(fieldPanel);
+        dataScroll.setPrefWidth(210);
     }
     
     @Override
@@ -91,45 +92,4 @@ public abstract class DataConverter<E extends JfxAbstractEdit, T extends ObjectD
         super.cleanup();
     }
     
-//    public void addUndoRedo(String property, Object beforeValue, Object afterValue) {
-//         jfxEdit.addUndoRedo(new JfxEditUndoRedo(property, beforeValue, afterValue));
-//    }
-    
-//    private class JfxEditUndoRedo implements UndoRedo {
-//
-//        private final String property;
-//        private final Object before;
-//        private final Object after;
-//        
-//        public JfxEditUndoRedo(String property, Object before, Object after) {
-//            this.property = property;
-//            this.before = before;
-//            this.after = after;
-//        }
-//        
-//        @Override
-//        public void undo() {
-//            data.setAttribute(property, before);
-//            Jfx.runOnJfx(() -> {
-//                notifyChanged();
-//                FieldConverter pc  = fieldConverters.get(property);
-//                if (pc != null) {
-//                    pc.updateView(before);
-//                }
-//            });
-//        }
-//        
-//        @Override
-//        public void redo() {
-//            data.setAttribute(property, after);
-//            Jfx.runOnJfx(() -> {
-//                notifyChanged();
-//                FieldConverter pc  = fieldConverters.get(property);
-//                if (pc != null) {
-//                    pc.updateView(after);
-//                }
-//            });
-//        }
-//        
-//    }
 }
