@@ -1,0 +1,208 @@
+<?xml version="1.0"?>
+<!--
+xs:string
+xs:decimal
+xs:integer
+xs:boolean
+xs:date
+xs:time
+-->
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://luoying.huliqing.name"
+           xmlns="http://luoying.huliqing.name"
+           elementFormDefault="qualified"
+        >
+    
+    <xs:include schemaLocation="./base.xsd" />
+    
+    <xs:element name="root">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="actor" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="actor">
+        <xs:annotation>
+            <xs:documentation>定义一个角色</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="actorBase">
+                    <xs:attribute name="file" ref="file" use="required"/>
+                    <xs:attribute name="icon" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>为角色指定一个图标(64x64), 如：Interface/item/face/female.jpg</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="mat" type="xs:string" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>质地，参考：define.xml的定义</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="effects" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                效果列表，格式："effect1,effect2,effect3..."
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+<!--                    <xs:attribute name="modules" type="xs:string" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>角色模块列表，格式: "module1,module2,..."</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>-->
+                    <!--<xs:attribute name="scale" type="xs:decimal" use="optional"/>-->
+<!--                    <xs:attribute name="collisionShape" ref="collisionShape" use="optional" ></xs:attribute>
+                    <xs:attribute name="collisionRadius" type="xs:decimal" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>碰撞盒半径,只对capsule类型的collisionShape有效，默认0.4</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="collisionHeight" type="xs:decimal" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>碰撞盒高度，只对capsule类型的collisionShape有效，默认3.2</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="collisionBoxScale" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>碰撞盒高度的缩放，只对box类型的collisionShape有效，默认"1,1,1",当box类型的
+                            碰撞盒太大或者太小时，可使用该参数进行适当缩放</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>-->
+<!--                    <xs:attribute name="hardwareSkinning" type="bool" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                硬件加速，使用GPU提升skining性能，只有角色拥有skeletonControl时才有意义。
+                                默认情况下，该设置会跟随系统的全局设置，但是某些模型可能在使用该功能时
+                                存在蒙皮错误，这时候可以使用该选项来关闭该功能。注：只有全局系统打开了
+                                hardwareSkinning功能时，该设置才有效。如果全局设置关闭了hardwareSkinning，
+                                则即使当前模型打开了该功能也没有用。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>-->
+                    <xs:attribute name="drops" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                角色物品的掉落设置，格式： "drop1,drop2,..."
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+<!--                    <xs:attribute name="extAnim" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                扩展的骨骼动画包，这个参数指向一个asset中的目录,如：Models/actor/anim
+                                当角色使用的技能中找不到相应的动画时将会从这个目录中查找动画文件,注意：
+                                动画名称要与文件名一致，比如：动画名称duck_left_roll,则动画文件名为：duck_left_roll.j3o
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>-->
+                    <xs:attribute name="logics" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>关联逻辑,多个逻辑使用半角逗号分开，如：logic1,logic2,logic3</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="skills" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>
+                                技能列表,半角色逗号分隔
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="skinBase" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                角色的基本皮肤，基本皮肤是用来在切换装备后“修补皮肤”缺失的问题。比如当
+                                穿上一套上下连身的法袍（同时包含lowerBody和upperBody）后，再使用一件只
+                                包含upperBody的装备来换上时，由于法袍被替换，这时角色身上将丢失lowerBody
+                                的装备，这时就需要从skinBase中查看是否有lowerBody的基本皮肤来补上，否则角
+                                色会缺少下半身的装备模型。
+                                注意：基本皮肤中不要指定哪些包含两个或两个以上type部位的皮肤。比如：
+                                同时包含lowerBody和upperBody的skin,如上下连身的套装之类的皮肤，这类皮肤
+                                会造成在换装备后进行修补的时候又替换掉已经穿上的装备。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="skins" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>指定角色拥有的装备，这些装备是存放在角色包裹上的，格式如: "skin1|total,skin2|total,..."
+                                其中total可以省略，默认total=1
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="skinOutfit" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>这个参数指定了正在使用中的装备，关联到一件或多件装备,格式如："skinOutfit1,skinOutfit2,..."</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="skinWeapon" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>这个参数指定了正在使用中的武器，关联到一件或多件武器，格式如："skinWeapon1,skinWeapon2,..."</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="items" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>角色包裹物品列表，半角逗号分隔,格式如: 
+                                itemId1|total,itemId2|total,itemId3</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="resists" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                设置抗性，格式："resist1,resist2,..."
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="channels" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                角色的channel定义,关联一些channel，格式："channel1,channel2,...".
+                                如果不设置则默认使用一个包含所有骨骼的channel
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="attributes" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>
+                                定义角色的所有属性值,格式如："attribute1,attribute2,attribute3,..."
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="talents" type="xs:string" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                角色的天赋，格式: "talent1,talent2,talent3"
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="chat" type="xs:string" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                关联到一个Chat
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="localForward" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>指定角色原始视角方向,默认情况下为(0,0,1),如果模型默认不是该方向,
+                                则需要使用该方向指定模型的正视角方向。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+        
+    <xs:complexType name="actorBase">
+        <xs:complexContent>
+            <xs:extension base="entityModelBase">
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    
+</xs:schema>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root 
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://luoying.huliqing.name'
+    xsi:schemaLocation='http://luoying.huliqing.name meta/emitter.xsd' >
+    
+    <!-- =================================================================== -->
+    <!--通用：火焰爆炸-->
+    <!-- =================================================================== -->
+    <!--火焰-->
+    <emitter id="emitterFlame" name="flame" numParticles="5" 
+             startColor="1,0.4,0.05,1" endColor="0.4, 0.22, 0.12, 0" startSize="1.3" 
+             endSize="2" highLife="0.5" lowLife="0.4" texture="Textures/effect/flame.jpg" 
+             imagesX="2" imagesY="2" selectRandomImage="1" shape="positionFlameShape" 
+             particlesPerSec="0" gravity="0, -5, 0" initialVelocity="0,7,0" velocityVariation="1" />
+    <!--闪光-->
+    <emitter id="emitterFlash" name="flash" numParticles="5" 
+             selectRandomImage="1" startColor="1,0.8,0.36,1" 
+             endColor="1,0.8,0.36,0" startSize="0.1" endSize="3.0" 
+             shape="positionFlashShape" highLife="0.2" lowLife="0.2" 
+             texture="Textures/effect/flash.png" imagesX="2" imagesY="2" 
+             particlesPerSec="0" gravity="0,0,0" initialVelocity="0,5,0" velocityVariation="1" />
+    <!--火花-->
+    <emitter id="emitterSpark" name="spark" numParticles="5" 
+             startColor="1, 0.8, 0.36, 1" endColor="1, 0.8, 0.36, 0" 
+             startSize="1" endSize="0.5" highLife="1.5" lowLife="1.1" 
+             texture="Textures/effect/spark.png" imagesX="1" imagesY="1" 
+             facingVelocity="1" particlesPerSec="0" gravity="0,0,0" 
+             initialVelocity="0, 10, 0" velocityVariation="1" />
+    <!--向四周发散的冲击波-->
+    <emitter id="emitterShockwave" name="shockwave" 
+             numParticles="1" startColor="0.48, 0.17, 0.01, 0.8" endColor="0.48, 0.17, 0.01, 0" 
+             startSize="0" endSize="7" highLife="0.5" lowLife="0.5" 
+             texture="Textures/effect/shockwave.png" imagesX="1" imagesY="1" 
+             faceNormal="0,1,0" particlesPerSec="0" gravity="0,0,0" 
+             initialVelocity="0,0,0" velocityVariation="0" />
+    
+    <!-- ====================================================================-->
+    <!--火塔尾焰-->
+    <!-- ====================================================================-->
+
+    <!--烟雾，火光，火球发射过程-->
+    <emitter id="emitterSmoketrail" name="smoketrail" 
+             numParticles="20" particlesPerSec="20" 
+             startColor="1,1,0,1" endColor="1,0,0,1" startSize="1.5" endSize="0.75" 
+             highLife="0.25" lowLife="0.25" 
+             texture="Textures/effect/smoketrail.png" imagesX="1" imagesY="3"
+             facingVelocity="1" initialVelocity="0,0,1" velocityVariation="0" gravity="0,0,0"
+    />
+    
+    <!--==========================================================================-->
+    <!--骷髅散架，死亡-->
+    <!--==========================================================================-->
+    <emitter id="emitterSkeletonExplosion" numParticles="12" particlesPerSec="0" startColor="1,1,1,1" endColor="1,1,1,0.1" 
+             startSize="0.2" endSize="0.1" highLife="2" lowLife="2" texture="Textures/effect/skeleton.png" imagesX="3" imagesY="3" 
+             initialVelocity="0,6,0" velocityVariation="0.5" randomAngle="1" selectRandomImage="1" gravity="0,10,0"
+        />
+    <emitter id="emitterSkeletonSmoke" numParticles="10" particlesPerSec="0" startColor="1,1,1,0.1" endColor="1,1,1,0" 
+             startSize="1.2" endSize="6" highLife="3" lowLife="3" 
+             texture="Textures/effect/flame.jpg" imagesX="2" imagesY="2" 
+             initialVelocity="0,4,0" velocityVariation="1"  />
+ 
+</root>
+
+
+

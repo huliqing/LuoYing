@@ -1,0 +1,48 @@
+MaterialDef SlideColorIO {
+ 
+    MaterialParameters {
+        Texture2D MaskMap
+        Texture2D TexMap
+        Boolean TexAnimY
+        Boolean TexChangeDir
+        // TexCoord offset in y Dir.
+        Float offsetY
+
+        Color Color
+        Color StartColor : 1.0 1.0 1.0 1.0
+        Color EndColor : 1.0 1.0 1.0 1.0
+
+        // For hardware skinning
+        Int NumberOfBones
+        Matrix4Array BoneMatrices
+
+        // Fog
+        Color FogColor
+        TextureCubeMap FogSkyBox
+
+        // Refraction Filter
+        Boolean DoRefract : False
+        Float Distance : 200.0
+        Texture2D Mask_Texture        
+        
+    }
+ 
+    Technique {
+        VertexShader GLSL100:   LuoYingSys/Assets/MatDefs/SlideColorIO/slideColorIO.vert
+        FragmentShader GLSL100: LuoYingSys/Assets/MatDefs/SlideColorIO/slideColorIO.frag
+ 
+        WorldParameters {
+            WorldViewProjectionMatrix
+        }
+ 
+        Defines {
+            TEX_ANIM_Y :  TexAnimY
+            TEX_CHANGE_DIR : TexChangeDir
+            COLOR : Color
+
+            FOG : FogColor
+            FOG_SKY : FogSkyBox
+            NUM_BONES : NumberOfBones
+        }
+    }
+}

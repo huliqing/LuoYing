@@ -8,6 +8,7 @@ package name.huliqing.editor.ui;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
+import name.huliqing.editor.constants.StyleConstants;
 
 /**
  *
@@ -25,7 +26,7 @@ public class TestForm extends ScrollPane {
 //            EditManager.openTestFormView();
         });
         
-        
+        layout.getStyleClass().add(StyleConstants.CLASS_HVBOX);
         layout.getChildren().addAll(btn);
         
     }

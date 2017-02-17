@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://luoying.huliqing.name'
+    xsi:schemaLocation='http://luoying.huliqing.name meta/gameLogic.xsd'>
+    
+    <!-- ========================================================================= -->
+    <!-- Game Logics -->
+    <!-- ========================================================================= -->
+    
+    <!--战场角色清理器: 只有“死亡”并且“非必要”的角色才会被清理-->
+    <gameLogicActorClean id="gameLogicActorClean" checkEl="elActorCleanCheck" interval="10" deathDelay="10" />
+    
+    <!--生命值恢复器-->
+    <gameLogicAttributeChange id="gameLogicHealthRecover" interval="5" speed="1" applyAttribute="attributeHealth" 
+                              bindFactorAttribute="attributeHealthRestore" baseValue="1" checkEl="elActorUndeadCheck" />
+    
+    <!--魔法值恢复器-->
+    <gameLogicAttributeChange id="gameLogicManaRecover" interval="5" speed="1" applyAttribute="attributeMana" 
+                              bindFactorAttribute="attributeManaRestore" baseValue="1" checkEl="elActorUndeadCheck" />
+</root>
+
+
+

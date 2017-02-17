@@ -1,0 +1,469 @@
+<?xml version="1.0"?>
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://luoying.huliqing.name"
+           xmlns="http://luoying.huliqing.name"
+           elementFormDefault="qualified" >
+    
+    <xs:include schemaLocation="./base.xsd" />
+    
+    <xs:element name="root">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="effectBase" />
+                <xs:element ref="effectGroup" />
+                <xs:element ref="effectParticle" />
+                <xs:element ref="effectTexture" />
+                <xs:element ref="effectModel" />
+                <xs:element ref="effectSlideColor" />
+                <xs:element ref="effectSlideColorSpline" />
+                <xs:element ref="effectSlideColorIOSpline" />
+                <xs:element ref="effectProjection" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="effectGroup">
+        <xs:annotation>
+            <xs:documentation>
+效果组, effectGroup可以打包一组子效果一起执行.1.子效果会追随着当前效果; 2.对effectGroup设置动画同时也会影响到子效果;
+3.设置effectGroup的运行速度会直接影响到所有子效果。
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="effectBase">
+                    <xs:attribute name="effects" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>
+                                注意：该参数中不能包含无限时的子效果，否则该效果可能永远不会结束。
+                                子效果组的id列表，用半角逗号分隔,如："effect1,effect2,effect3..."
+如果子效果需要延迟启动，则在效果id后面添加延迟时间，使用"|"号隔开。该时间设置使用
+单位秒, 如："effect1,effect2|0.3, effect3...", 其中effect2将在效果组启动后0.3秒的时候启动。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="effectProjection">
+        <xs:annotation>
+            <xs:documentation>
+                投射类效果，这个效果可以把一些材质贴图投射到指定的物体上。在使用
+                时需要指定一些投射目标对象。
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="effectBase">
+                    <xs:attribute name="texture" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>指定要使用来投射的材质贴图，如："Textures/tex/demo.jpg"</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="color" type="xs:string" use="optional">
+                        <xs:annotation><xs:documentation>贴图颜色混合，格式:"r,g,b,a",如"1.0,1.0,1.0,1.0"</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="projDir" type="xs:string" use="optional">
+                        <xs:annotation><xs:documentation>投射方向(Direction)，格式:"x,y,z"，不需要归一化，后台会自动归一</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="projUp" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                投射时的up方向，注意不要与投射方向projDir平行，否则可能出现投射后变形的问题。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="projPos" type="xs:string" use="optional">
+                        <xs:annotation><xs:documentation>投射位置，格式:"x,y,z"</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="debug" type="bool" use="optional"></xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="effectSlideColorIOSpline">
+        <xs:annotation>
+            <xs:documentation>
+                Spline曲面颜色滑动效果,材质贴图可以从一端滑入，然后从另一端滑出。
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="effectBase">
+                    <xs:attribute name="startColor" type="xs:string" use="optional">
+                        <xs:annotation><xs:documentation>可视贴图的基本颜色,格式："r,g,b,a", 如: "1,1,1,1"</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="endColor" type="xs:string" use="optional">
+                        <xs:annotation><xs:documentation>可视贴图的基本颜色,格式："r,g,b,a", 如: "1,1,1,1"</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="mask" type="xs:string" use="optional">
+                        <xs:annotation><xs:documentation>遮罩材质贴图,示例："Textures/mask.jpg"</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="tex" type="xs:string" use="optional">
+                        <xs:annotation><xs:documentation>可视材质贴图，示例："Textures/tex.jpg"</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="texChangeDir" type="bool" use="optional" />
+                    <xs:attribute name="fixedPoints" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>固定的路径点,格式: "x|y|z,x|y|z,..."</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="randomPoints" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation> 随机路径点,关联到emitterShape,格式："emitterShape1,emitterShape2,..."。如果指定了fixPoints则随机路径点将无效。</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="width" type="xs:decimal" use="optional">
+                        <xs:annotation><xs:documentation>曲面宽度</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="segments" type="xs:integer" use="optional">
+                        <xs:annotation><xs:documentation>曲面的分段数，值越高则曲面越平滑，但是占用资源越多，该值不能小于1.默认20左右</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="tension" type="xs:decimal" use="optional">
+                        <xs:annotation><xs:documentation>spline曲线的张弛度，默认0.5f</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="cycle" type="bool" use="optional">
+                        <xs:annotation><xs:documentation>是否让spline封闭,默认false</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="up" type="xs:string" use="optional">
+                        <xs:annotation><xs:documentation>曲面的开始的up方向，默认Vector3f.UNIT_Y,该方向影响曲面的面朝向。</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="dimension" type="xs:integer" use="optional">
+                        <xs:annotation><xs:documentation>曲面维度，整数值，默认1，值越大效果越有实体感，但占资源越多。</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="repeatTimes" type="xs:integer" use="optional">
+                        <xs:annotation><xs:documentation>动画循环次数，默认1次</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="effectSlideColorSpline">
+        <xs:annotation>
+            <xs:documentation>
+                Spline曲面颜色滑动效果
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="effectSlideColorBase">
+                    <xs:attribute name="fixedPoints" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>固定的路径点,格式: "x|y|z,x|y|z,..."</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="randomPoints" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation> 随机路径点,关联到emitterShape,格式："emitterShape1,emitterShape2,..."。如果指定了fixPoints则随机路径点将无效。</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="width" type="xs:decimal" use="optional">
+                        <xs:annotation><xs:documentation>曲面宽度</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="segments" type="xs:integer" use="optional">
+                        <xs:annotation><xs:documentation>曲面的分段数，值越高则曲面越平滑，但是占用资源越多，该值不能小于1.默认20左右</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="tension" type="xs:decimal" use="optional">
+                        <xs:annotation><xs:documentation>spline曲线的张弛度，默认0.5f</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="cycle" type="bool" use="optional">
+                        <xs:annotation><xs:documentation>是否让spline封闭,默认false</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="up" type="xs:string" use="optional">
+                        <xs:annotation><xs:documentation>曲面的开始的up方向，默认Vector3f.UNIT_Y,该方向影响曲面的面朝向。</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="dimension" type="xs:integer" use="optional">
+                        <xs:annotation><xs:documentation>曲面维度，整数值，默认1，值越大效果越有实体感，但占资源越多。</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="effectSlideColor">
+        <xs:annotation>
+            <xs:documentation>
+                滑动的颜色特效
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="effectSlideColorBase">
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:complexType name="effectSlideColorBase">
+        <xs:annotation>
+            <xs:documentation>
+                滑动的颜色特效
+            </xs:documentation>
+        </xs:annotation>        
+        <xs:complexContent>
+            <xs:extension base="effectBase">
+                <xs:attribute name="startColor" type="xs:string" use="optional">
+                    <xs:annotation><xs:documentation>可视贴图的基本颜色,格式："r,g,b,a", 如: "1,1,1,1"</xs:documentation></xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="endColor" type="xs:string" use="optional">
+                    <xs:annotation><xs:documentation>可视贴图的基本颜色,格式："r,g,b,a", 如: "1,1,1,1"</xs:documentation></xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="mask" type="xs:string" use="optional">
+                    <xs:annotation><xs:documentation>遮罩材质贴图,示例："Textures/mask.jpg"</xs:documentation></xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="maskAnimY" type="bool" use="optional" />
+                <xs:attribute name="maskAnimX" type="bool" use="optional" />
+                <xs:attribute name="maskChangeDir" type="bool" use="optional" />
+                <xs:attribute name="maskScaleY" type="xs:decimal" use="optional" />
+                <xs:attribute name="maskScaleX" type="xs:decimal" use="optional" />
+                <xs:attribute name="maskSpeed" type="xs:decimal" use="optional" />
+                <xs:attribute name="maskWrap" use="optional" >
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="Repeat" />
+                            <xs:enumeration value="MirroredRepeat" />
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="tex" type="xs:string" use="optional">
+                    <xs:annotation><xs:documentation>可视材质贴图，示例："Textures/tex.jpg"</xs:documentation></xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="texAnimY" type="bool" use="optional" />
+                <xs:attribute name="texAnimX" type="bool" use="optional" />
+                <xs:attribute name="texChangeDir" type="bool" use="optional" />
+                <xs:attribute name="texScaleY" type="xs:decimal" use="optional" />
+                <xs:attribute name="texScaleX" type="xs:decimal" use="optional" />
+                <xs:attribute name="texSpeed" type="xs:decimal" use="optional" />
+                <xs:attribute name="texWrap" use="optional" >
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="Repeat" />
+                            <xs:enumeration value="MirroredRepeat" />
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:element name="effectModel">
+        <xs:annotation>
+            <xs:documentation>
+                使用一个模型作为特效
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="effectBase">
+                    <xs:attribute name="file" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>模型路径，如：Models/weapon/bow/arrow000.mesh.j3o</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="effectTexture">
+        <xs:annotation>
+            <xs:documentation>
+                一个由简单的材质图片构成的特效
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="effectBase">
+                    <xs:attribute name="texture" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>材质贴图,在一个平面上进行贴图，可指定原始位置在哪一个平面上。</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="size" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>贴图大小,示例："1,1,1",最后一个值没有意义，但是不能省略。</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="plane" type="plane" use="required">
+                        <xs:annotation>
+                            <xs:documentation>
+                                指定贴图所在的原始平面：xy\xz\yz, 默认的贴图在xy平面上，可指定为xz或yz平面
+                                (内部是以xy平面为标准，按逆时针方向旋转到指定平面),如指定为xz,则系统是以xy
+                                为初始平面，并以x为轴旋转90度. 当指定为yz平面时，是以y为轴进行旋转90度
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="color" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                贴图初始颜色
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="effectParticle">
+        <xs:annotation>
+            <xs:documentation>
+                粒子效果
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="effectBase">
+                    <xs:attribute name="emitter" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>联接一个粒子发射器</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="emitAll" type="bool" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>是否立即发射所有料子</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="randomColor" type="bool" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>是否让粒子随机颜色，该设置会使粒子发射器中startColor和endColor的设置失效。</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="inWorldSpace" type="bool" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>是否让效果产生的粒子处于世界坐标位置，默认true,即粒子产生后不再受当前效果transform的影响。
+                                如果设为false则产生的粒子位置会一直受效果transform的影响。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="blendMode" ref="blendMode" use="optional">
+                        <xs:annotation>
+                            <xs:documentation> 
+                                粒子材质的混合模式，默认AlphaAdditive,这意味着粒子图片中的黑色背
+                                景会被过滤掉。这会导致无法创建黑色烟雾的效果，这个时候可以使用
+                                Alpha模式来代替。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="effectBase">
+        <xs:annotation>
+            <xs:documentation>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="effectBase"></xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:attribute name="blendMode">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:enumeration value="AlphaAdditive"/>
+                <xs:enumeration value="Alpha"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:attribute>
+    
+    <xs:complexType name="effectBase">
+        <xs:complexContent>
+            <xs:extension base="entityModelBase">
+                <xs:attribute name="useTime" type="xs:decimal" use="required">
+                    <xs:annotation>
+                        <xs:documentation>特效运行时间，单位秒。默认"1.0", 如果这个值小于0，则效果将永远不会结束。</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <!--注：speed不开放到xml配置，speed会作为动态参数在程序运行时根据情况动态设置。-->
+<!--                <xs:attribute name="speed" type="xs:decimal" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>特效运行速度。默认"1.0"</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>-->
+                <xs:attribute name="animations" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            绑定动画，格式："animation1|startTime,animation2|startTime,..."
+                            startTime为动画开始的时间，单位“秒”,默认0
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="sounds" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            绑定声音，格式："sound1|startTime,sound2|startTime,..."
+                            startTime为声音开始的时间，单位“秒”,默认0
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="traceLocation" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>是否让效果跟踪目标，默认true,打开该参数后，必须在程序
+                            运行时设置traceObject才有意义，否则将不会跟踪.</xs:documentation>
+                    </xs:annotation>
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string" >
+                            <xs:enumeration value="no" />
+                            <xs:enumeration value="once" />
+                            <xs:enumeration value="always" />
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="traceRotation" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>是否跟随目标的旋转</xs:documentation>
+                    </xs:annotation>
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string" >
+                            <xs:enumeration value="no" />
+                            <xs:enumeration value="once" />
+                            <xs:enumeration value="always" />
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="traceLocationType" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            特效的跟随位置,默认origin,即以原点为跟随位置
+                        </xs:documentation>
+                    </xs:annotation>
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="origin" />
+                            <xs:enumeration value="origin_bound_center" />
+                            <xs:enumeration value="origin_bound_top" />
+                            <xs:enumeration value="bound_center" />
+                            <xs:enumeration value="bound_top" />
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="traceLocationOffset" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            效果在跟随时的位置偏移，格式: "x,y,z"
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="traceRotationOffset" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                           效果在跟随时的旋转偏移, 格式:"x,y,z"
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="endImmediate" type="bool" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>判断特效是否可以立即结束，默认false, 大部分情况下特效都应该”自然结束“，
+                            但是存在一些特殊特效，这些特效需要在被依赖的目标（如技能）结束的时候立即也一起结束。</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+   
+</xs:schema>

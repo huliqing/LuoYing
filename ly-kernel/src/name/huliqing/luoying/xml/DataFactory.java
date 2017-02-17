@@ -238,6 +238,21 @@ public class DataFactory {
         }
     }
     
+    public static void loadData(String xmlStr) throws LuoYingException {
+        try {
+            List<Proto> protos = DATA_STORE_LOADER.loadData(xmlStr);
+            if (protos != null && !protos.isEmpty()) {
+                DATA_STORE.addProtos(protos);
+            }
+        } catch (ParserConfigurationException ex) {
+            throw new LuoYingException(ex);
+        } catch (SAXException ex) {
+            throw new LuoYingException(ex);
+        } catch (IOException ex) {
+            throw new LuoYingException(ex);
+        }
+    }
+    
     public static Proto createProtoByExtends(String newId, String extProtoId) {
         return DATA_STORE.createProtoByExtends(newId, extProtoId);
     }
@@ -255,7 +270,14 @@ public class DataFactory {
         return ProtoUtils.getProto(DATA_STORE, id);
     }
     
-    public static void clearData() {
+    /**
+     * 清理掉所有数据及配置.
+     * 注：一般这个方法只有在需要重新初始化系统的时候才应该使用。
+     */
+    public static void cleanup() {
+        TAG_DATAS.clear();
+        TAG_LOADERS.clear();
+        TAG_PROCESSORS.clear();
         DATA_STORE.clearData();
     }
     

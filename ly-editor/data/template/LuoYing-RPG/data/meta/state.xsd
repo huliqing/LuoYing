@@ -1,0 +1,351 @@
+<?xml version="1.0"?>
+<!--
+xs:string
+xs:decimal
+xs:integer
+xs:boolean
+xs:date
+xs:time
+-->
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://luoying.huliqing.name"
+           xmlns="http://luoying.huliqing.name"
+           elementFormDefault="qualified">
+    
+    <xs:include schemaLocation="./base.xsd" />
+    
+    <xs:element name="root">
+        <xs:complexType>
+            <xs:all>
+                <!--改变属性-->
+                <xs:element ref="stateAttribute" />
+
+                <!--移动速度-->
+                <xs:element ref="stateAttributeMove" />
+                
+                <!--可持续改变角色属性动态值的状态-->
+                <xs:element ref="stateAttributeDynamic" />
+
+                <!--可改变角色Boolean属性的状态-->
+                <xs:element ref="stateBooleanAttribute" />
+
+                <!--技能锁定-->
+                <xs:element ref="stateSkillLocked" />
+                
+                <!--remove20161218-->
+<!--                执行技能
+                <xs:element ref="stateSkill" />-->
+
+                <!--状态清除-->
+                <xs:element ref="stateClean" />
+
+                <!--状态组-->
+                <xs:element ref="stateGroup" />
+                <xs:element ref="statePrivateGroup" />
+                
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="statePrivateGroup">
+        <xs:annotation>
+            <xs:documentation>
+                私有状态组，这个状态可以自己持有一些子状态，这些子状态由当前私自持有，并且和当前状态一起结束,
+                对外部不可见。和GroupState不同，GroupState所持有的子状态是独立存在的。
+                换句话说：statePrivateGroup会把所有子状态变成一个状态，而GroupState所持有的子状态是独立存在的。
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="stateBase">
+                    <xs:attribute name="states" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>状态组，格式："stateId,stateId,..."</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="stateGroup">
+        <xs:annotation>
+            <xs:documentation>
+                状态组, 这个状态可以用于打包子状态，当给角色添加这个状态之后，所有子状态都会一起添加到角色身上。
+                子状态是独立的，不受当前状态的设置影响。
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="stateBase">
+                    <xs:attribute name="states" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>状态组，格式："stateId,stateId,..."</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="stateClean">
+        <xs:annotation>
+            <xs:documentation>
+                这类状态可以用来清除角色身上的一些其它状态,当状态在运行时会不停的检查角色当前的状态
+                列表，并偿试清除指定的状态，甚至清除自身状态。可用用来作为一些净化类的技能使用。
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="stateBase">
+                    <xs:attribute name="states" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>指定要清除的状态列表，格式:"stateId,stateId,..."</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <!--remove20161218-->
+<!--    <xs:element name="stateSkill">
+        <xs:annotation>
+            <xs:documentation>执行一个技能</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="stateBase">
+                    <xs:attribute name="skillTypes" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>
+                                指定要执行的是哪些类型的技能，如果角色不存在该类型的技能则什么也不做， 如果存在多个则随机选择一个。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="force" type="bool" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>是否强制执行技能</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>-->
+    
+    <xs:element name="stateSkillLocked">
+        <xs:annotation>
+            <xs:documentation>锁定角色的技能</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="stateBase">
+                    <xs:attribute name="lockAtSkillTypes" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>把角色锁定在特定类型的技能上, 格式 : "skillType1,skillType2,..."</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="lockAtFrame" type="bool" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>把角色锁定在当前动画帧上</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="lockAllSkillTypes" type="bool" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                强制锁定所有技能,如果该值设置为true, 则忽略参数:lockSkillTypes、lockSkillIds的设置。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="lockSkillTypes" type="skillType" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                指定要锁定的特定的技能类型列表,可以设置多个，使用半角逗号分隔，
+                                如："wait,walk,run,fight..."
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="lockSkillIds" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                指定要锁定的特定技能的id列表,如果角色没有指定id的技能则不会有任何影响,
+                                格式："skillId1,skillId2,..."
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="lockChannels" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                指定要锁定的角色动画通道列表,如果指定的角色没有相应的动画通道则什么也不处理
+                                ,格式："channel1,channel2,..."
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="lockLocation" type="bool" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                是否锁定位置,不让移动。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="stateBooleanAttribute">
+        <xs:annotation>
+            <xs:documentation>切换角色的essential状态</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="stateBase">
+                    <xs:attribute name="bindAttribute" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>绑定一个角色的Boolean类型的属性</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="value" type="bool" use="required">
+                        <xs:annotation>
+                            <xs:documentation>对属性设置的值</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="restore" type="bool" use="required">
+                        <xs:annotation>
+                            <xs:documentation>当状态结束后是否恢复角色属性的初始值.</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="stateAttributeDynamic">
+        <xs:annotation>
+            <xs:documentation>可以"持续"改变角色属性"动态值"的状态.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="stateBase">
+                    <xs:attribute name="bindNumberAttribute" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>NumberAttribute,绑定角色的属性, 状态将会持续对这个属性的值进行改变。</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="addValue" type="xs:decimal" use="required">
+                        <xs:annotation>
+                            <xs:documentation>指定每次要增加的属性值,这个值可正可负
+                                示例，如：bindNumberAttribute="attributeHealth" addValue="10", interval="3", 则表示每3秒给角色的attributeHealth属性添加10点值。</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="interval" type="xs:decimal" use="required">
+                        <xs:annotation>
+                            <xs:documentation>
+                                改变的时间间隔，单位秒,默认1.0秒.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="stateAttributeMove">
+        <xs:annotation>
+            <xs:documentation>
+                提升角色移动速度的状态
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="stateAttributeBase">
+                    <xs:attribute name="moveEffect" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                联接一个特效．移动时的效果，只有在移动时才出现．
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="stateAttribute">
+        <xs:annotation>
+            <xs:documentation>
+                可以改变角色属性数值的状态
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="stateAttributeBase">
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:complexType name="stateAttributeBase">
+        <xs:complexContent>
+            <xs:extension base="stateBase">
+                <xs:attribute name="bindNumberAttribute" type="xs:string" use="required">
+                    <xs:annotation><xs:documentation>NumberAttribute,绑定角色的一个Number属性，指定状态要改变的是哪一个属性</xs:documentation></xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="addValue" type="xs:decimal" use="required">
+                    <xs:annotation><xs:documentation>要改变的属性数值。可正，可负</xs:documentation></xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="restore" type="bool" use="required">
+                    <xs:annotation><xs:documentation>是否在状态移除时恢复属性的原值。</xs:documentation></xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="stateBase">
+        <xs:complexContent>
+            <xs:extension base="base">
+                <xs:attribute name="icon" type="xs:string" use="required">
+                    <xs:annotation>
+                        <xs:documentation>状态图标，如：Interface/item/skill/....png,一般使用64*64图标</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="useTime" type="xs:decimal" use="required">
+                    <xs:annotation>
+                        <xs:documentation>状态的作用时间,单位秒,如果该值小于0，则状态将永远存在，不会退出。</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="effects" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            联接一些效果，格式："effectId1,effectId2,effectId3"，
+                            角色获得状态时的效果,这些效果会在状态开始时附加在角色身上，在状态结束时停止．
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="animations" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            动画，格式： "animation1|delayTime, animation2|delayTime,..."， 这些动画会作用在角色身上,delayTime为
+                            动画的延迟执行时间，单位秒。
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="removeOnDead" type="bool" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            当角色死亡时是否自动移除这个状态,默认false, 这个参数必须设置bindDeadAttribute才有意义。
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="bindDeadAttribute" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>绑定BooleanAttribute, 用于判断角色是否死亡。</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+</xs:schema>

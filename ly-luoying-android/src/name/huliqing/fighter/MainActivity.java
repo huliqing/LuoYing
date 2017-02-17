@@ -52,7 +52,6 @@ public class MainActivity extends Activity {
         // 注：其它所有Service的注册替换都必须统一放在这里,避免混乱。
         // 重要说明：这里必须放在任何调用Service之前进行注册替换，不能放在layoutDisplay中再注册
         Factory.register(SystemService.class, AndroidSystemServiceImpl.class);
-//        Factory.register(SaveService.class, AndroidSaveServiceImpl.class);
         Factory.register(ConfigService.class, AndroidConfigServiceImpl.class);
         
         // ==== 允许android进行udp广播和接收广播

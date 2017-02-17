@@ -29,7 +29,7 @@ public class ResourceZone extends VBox{
         assetsPanel.setContent(new AssetsForm());
         assetsPanel.setText(Manager.getRes(ResConstants.FORM_ASSETS_TITLE));
         
-        ComponentsForm cv = new ComponentsForm(ComponentManager.getComponents("entity"));
+        ComponentsForm cv = new ComponentsForm();
         componentsPanel.setContent(cv);
         componentsPanel.setText(Manager.getRes(ResConstants.FORM_COMPONENTS_TITLE));
         

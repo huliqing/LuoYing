@@ -43,69 +43,19 @@ public class ConverterManager {
     private final static Map<String, ConverterDefine> CONVERTER_MAP = new HashMap();
     private final static Map<String, DataDefine> DATA_DEFINES = new HashMap();
     
-    public static void initialize() {
-        CONVERTER_MAP.clear();
-        DATA_DEFINES.clear();
-        
-        File rootDir = new File("data/converter");
-        if (!rootDir.exists() || !rootDir.isDirectory()) {
-            LOG.log(Level.SEVERE, "data/converter direction not found!");
-            return;
-        }
-        
-        // 递归载入data/converter目录下的转换器配置，data/converter下允许多层次目录
-        // 每个目录放一个config文件，config文件中每一行定义一个要载入的转换器配置
-        loadConverterFromDir(rootDir);
-    }
-    
     /**
-     * @param dir 
+     * 给定转换器定义文件的根目录，重新载入转换器定义.该根目录下的转换器定义文件必须是以".xml"为后缀结尾的组件定义文件。
+     * @param convertersDir 组件定义的根目录
      */
-    private static void loadConverterFromDir(File dir) {
-        if (!dir.exists() || !dir.isDirectory())
-            return;
-        // 载入当前文件夹中的配置
-        try {
-            File configFile = new File(dir, "config");
-            if (!configFile.exists() || !configFile.isFile()) {
-                LOG.log(Level.WARNING, "Config file not found!");
-            } else {
-                loadConverterFromConfigFile(configFile);
+    public final static void reloadConverters(File convertersDir) {
+        for (File converterFile : convertersDir.listFiles()) {
+            if (converterFile.exists() && converterFile.isFile() && converterFile.getAbsolutePath().endsWith(".xml")) {
+                try {
+                    loadConverterFile(converterFile);
+                } catch (Exception e) {
+                    LOG.log(Level.SEVERE, "Could not load converter define file, file={0}", converterFile.getAbsolutePath());
+                }
             }
-        } catch (FileNotFoundException ex) {
-            LOG.log(Level.SEVERE, "Could not load converters, dir=" + dir.getAbsolutePath(), ex);
-        } catch (IOException ex) {
-            LOG.log(Level.SEVERE, "Could not load converters, dir=" + dir.getAbsolutePath(), ex);
-        }
-        // 载入子文件夹中的配置
-        File[] children = dir.listFiles();
-        for (File f : children) {
-            loadConverterFromDir(f);
-        }
-    }
-    
-    private static void loadConverterFromConfigFile(File configFile) throws UnsupportedEncodingException, FileNotFoundException, IOException {
-        // 从config中读取 converter xml配置文件
-        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(configFile), "utf-8"));
-        String line;
-        while ((line = br.readLine()) != null) {
-            if (line.trim().length() <= 0) 
-                continue;
-            if (line.trim().startsWith("#")) 
-                continue;
-            File converterFile = new File(configFile.getParent(), line);
-            if (!converterFile.exists() || !converterFile.isFile()) 
-                continue;
-            try {
-                loadConverterFile(converterFile);
-            } catch (Exception e) {
-                LOG.log(Level.SEVERE, "Could not load converter file=" + line, e);
-            }
-        }
-        try {
-            br.close();
-        } catch (IOException e) {
-            LOG.log(Level.SEVERE, null, e);
         }
     }
     
@@ -204,4 +154,55 @@ public class ConverterManager {
         return null;
     }
     
+    // remove20170218
+//    /**
+//     * @param dir 
+//     */
+//    private static void loadConverterFromDir(File dir) {
+//        if (!dir.exists() || !dir.isDirectory())
+//            return;
+//        // 载入当前文件夹中的配置
+//        try {
+//            File configFile = new File(dir, "config");
+//            if (!configFile.exists() || !configFile.isFile()) {
+//                LOG.log(Level.WARNING, "Config file not found!");
+//            } else {
+//                loadConverterFromConfigFile(configFile);
+//            }
+//        } catch (FileNotFoundException ex) {
+//            LOG.log(Level.SEVERE, "Could not load converters, dir=" + dir.getAbsolutePath(), ex);
+//        } catch (IOException ex) {
+//            LOG.log(Level.SEVERE, "Could not load converters, dir=" + dir.getAbsolutePath(), ex);
+//        }
+//        // 载入子文件夹中的配置
+//        File[] children = dir.listFiles();
+//        for (File f : children) {
+//            loadConverterFromDir(f);
+//        }
+//    }
+//    
+//    private static void loadConverterFromConfigFile(File configFile) throws UnsupportedEncodingException, FileNotFoundException, IOException {
+//        // 从config中读取 converter xml配置文件
+//        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(configFile), "utf-8"));
+//        String line;
+//        while ((line = br.readLine()) != null) {
+//            if (line.trim().length() <= 0) 
+//                continue;
+//            if (line.trim().startsWith("#")) 
+//                continue;
+//            File converterFile = new File(configFile.getParent(), line);
+//            if (!converterFile.exists() || !converterFile.isFile()) 
+//                continue;
+//            try {
+//                loadConverterFile(converterFile);
+//            } catch (Exception e) {
+//                LOG.log(Level.SEVERE, "Could not load converter file=" + line, e);
+//            }
+//        }
+//        try {
+//            br.close();
+//        } catch (IOException e) {
+//            LOG.log(Level.SEVERE, null, e);
+//        }
+//    }
 }

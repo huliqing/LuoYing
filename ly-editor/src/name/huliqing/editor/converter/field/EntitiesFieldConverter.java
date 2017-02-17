@@ -48,7 +48,7 @@ public class EntitiesFieldConverter extends FieldConverter<JfxSceneEdit, EntityD
     // 当前正在显示的EntityConverter
     private DataConverter currentDisplayConverter;
     
-    private final ComponentSearch<ComponentDefine> componentSearch = new ComponentSearch(ComponentManager.getComponents(ComponentConstants.ENTITY));
+    private final ComponentSearch<ComponentDefine> componentSearch = new ComponentSearch(ComponentManager.getComponentsByType(ComponentConstants.ENTITY));
     
     public EntitiesFieldConverter() {
         // 工具栏

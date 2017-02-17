@@ -55,4 +55,10 @@ public interface DefineService extends Inject {
      */
     MatDefine getMatDefine();
     
+    /**
+     * 清理并重置,调用这个方法来清理各种定义的缓存。
+     * 特别是当系统数据重置或重新初始化的时候需要调用这个方法来确保各种定义的重新载入.
+     */
+    void clearAndReset();
+    
 }

@@ -1,0 +1,216 @@
+<?xml version="1.0"?>
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://luoying.huliqing.name"
+           xmlns="http://luoying.huliqing.name"
+           elementFormDefault="qualified">
+    
+    <xs:include schemaLocation="../../../../../ly-kernel/src/LuoYing/Data/meta/base.xsd" />
+    
+    <xs:element name="root">
+        <xs:complexType>
+            <xs:all>
+                <!--文本信息-->
+                <xs:element ref="viewText" />
+                
+                <!--带标题栏的TextView-->
+                <xs:element ref="viewTextPanel" />
+                
+                <!--计时器-->
+                <xs:element ref="viewTimer" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="viewTimer">
+        <xs:annotation>
+            <xs:documentation>时分秒计时方式</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="viewBase">
+                    <xs:attribute name="title" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>title</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="startTime" type="xs:decimal" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>开始计时的时间,单位秒</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="up" type="bool" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>是否为正计时，即递增时间。否则为递减（即倒计时)</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="format" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>时间格式,如 "yyyy-MM-dd HH:mm:ss"</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="viewTextPanel">
+        <xs:annotation><xs:documentation>带标题栏的文字信息</xs:documentation></xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="viewTextBase">
+                    <xs:attribute name="title" type="xs:string" use="required" >
+                        <xs:annotation><xs:documentation>标题</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="viewText">
+        <xs:annotation><xs:documentation>显示文字信息</xs:documentation></xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="viewTextBase"></xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:complexType name="viewTextBase" >
+        <xs:complexContent>
+            <xs:extension base="viewBase">
+                <xs:attribute name="textKey" type="xs:string" use="required" >
+                    <xs:annotation>
+                        <xs:documentation>资源文件中的文字内容，关联到资源文件中的键，textKey和text二选一</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="text" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>直接的文字内容，textKey和text二选一</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="fontColor" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>文字颜色,格工："r,g,b,a"</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="fontSize" type="xs:decimal" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>文字大小</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="align" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>文字内容的水平对齐方式</xs:documentation>
+                    </xs:annotation>
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="Center" />
+                            <xs:enumeration value="Left" />
+                            <xs:enumeration value="Right" />
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="valign" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>文字内容的垂直对齐方式</xs:documentation>
+                    </xs:annotation>
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="Center" />
+                            <xs:enumeration value="Top" />
+                            <xs:enumeration value="Bottom" />
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="viewBase">
+        <xs:annotation>
+            <xs:documentation></xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="base">
+                <xs:attribute name="useTime" type="xs:decimal" use="required" >
+                    <xs:annotation>
+                        <xs:documentation>视图组件的运行时间，单位秒，如果该值小于或等于0，则表示组件永远存在，无时间限制。</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="enabled" type="bool" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>是否开启逻辑行为,默认true</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="widthWeight" type="xs:decimal" use="required" >
+                    <xs:annotation>
+                        <xs:documentation>视图初始宽度权重，取值0.0~1.0. 1.0表示占据整个屏幕宽度</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="heightWeight" type="xs:decimal" use="required" >
+                    <xs:annotation>
+                        <xs:documentation>视图初始高度权重，取值0.0~1.0. 1.0表示占据整个屏幕高度</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="resize" type="bool" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>自动调整视图大小，该参数会影响width和height的设置。</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="fixedPosition" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>固定位置，格式:"x,y", x,y的值为屏幕宽高的比率,取值为 0.0~1.0.注：fixPosition和cornerPosition只能一个生效</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="cornerPosition" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>角落位置，支持: LB,LC,LT,CB,CC,CT,RB,RC,RT, 示例："CC" 即居中.注：fixPosition和cornerPosition只能一个生效</xs:documentation>
+                    </xs:annotation>
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="LB" />
+                            <xs:enumeration value="LC" />
+                            <xs:enumeration value="LT" />
+                            <xs:enumeration value="CB" />
+                            <xs:enumeration value="CC" />
+                            <xs:enumeration value="CT" />
+                            <xs:enumeration value="RB" />
+                            <xs:enumeration value="RC" />
+                            <xs:enumeration value="RT" />
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="marginWeight" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>
+                            marginWeight, 格式："left,top,right,bottom", 如: "0.1,0.1,0,0" 
+                            表示距离左边"0.1 * ScreenWidth"和上边"0.1 * ScreenHeight"像素的位置.
+                            注意:这里表示的是屏幕宽高度的权重，各个分值取值范围: 0.0~`1.0
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="onTop" type="bool" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>出现时是否置顶。</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="dragEnabled" type="bool" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>是否可拖动</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="animations" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>
+                            动画，关联到animation.xml, 格式: "animation|startTime,animation|startTime,...".
+                            startTime为开始执行动画的时间点，单位秒。如:"anim1|1.5"表示在View出现1.5秒后开始执行动画anim1
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+</xs:schema>

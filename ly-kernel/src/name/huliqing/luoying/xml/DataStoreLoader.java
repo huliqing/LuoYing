@@ -41,17 +41,15 @@ import org.xml.sax.SAXException;
 public class DataStoreLoader {
     
     /**
-     * 通过数据流的方式载入数据，这些数据将会添加到当前数据容器中,如果容器中存在重复ID的数据，则数据会被覆盖替换。
-     * @param dataStream 
-     * @param encoding 
+     * 载入xml格式的数据.
+     * @param xmlStr 
      * @return  
      * @throws ParserConfigurationException
      * @throws SAXException
      * @throws IOException 
      */
-    public List<Proto> loadData(InputStream dataStream, String encoding) 
+    public List<Proto> loadData(String xmlStr) 
             throws ParserConfigurationException, SAXException, IOException {
-        String xmlStr = readFile(dataStream, encoding);
         String xmlEscapsed = XmlElEscape.convert(xmlStr);
         Element root = XmlUtils.newDocument(xmlEscapsed).getDocumentElement();
         NodeList children = root.getChildNodes();
@@ -68,6 +66,40 @@ public class DataStoreLoader {
             protos.add(proto);
         }
         return protos;
+    }
+    
+    /**
+     * 通过数据流的方式载入数据，这些数据将会添加到当前数据容器中,如果容器中存在重复ID的数据，则数据会被覆盖替换。
+     * @param dataStream 
+     * @param encoding 
+     * @return  
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     * @throws IOException 
+     */
+    public List<Proto> loadData(InputStream dataStream, String encoding) 
+            throws ParserConfigurationException, SAXException, IOException {
+        
+        // remove20170217
+//        String xmlStr = readFile(dataStream, encoding);
+//        String xmlEscapsed = XmlElEscape.convert(xmlStr);
+//        Element root = XmlUtils.newDocument(xmlEscapsed).getDocumentElement();
+//        NodeList children = root.getChildNodes();
+//        int length = children.getLength();
+//        List<Proto> protos = new ArrayList<Proto>(length);
+//        for (int i = 0; i < length; i++) {
+//            Node node = children.item(i);
+//            if (!(node instanceof Element)) {
+//                continue;
+//            }
+//            Element ele = (Element) node;
+//            Map<String, String> attributes = XmlUtils.getAttributes(ele);
+//            Proto proto = new Proto(ele.getTagName(), attributes);
+//            protos.add(proto);
+//        }
+//        return protos;
+
+        return loadData(readFile(dataStream, encoding));
     }
     
     /**

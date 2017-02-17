@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+skinType => 0:body; 1:armor 
+skinPart => 0:ear;1:eyeL;2:eyeR;3:face;4:foot;5:hair;6:hand;7:lowerBody;8:upperBody; 
+-->
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://luoying.huliqing.name'
+    xsi:schemaLocation='http://luoying.huliqing.name meta/skin.xsd'>
+    
+    <!-- =========================================================================-->
+    <!--基本定义-->
+    <!-- =========================================================================-->
+    
+    <!--人类武器装备: 只有人类种族才可以使用的装备-->
+    <skinOutfit id="weaponHumanBase" checkEl="elSkinHuman" />
+    
+    <!-- =========================================================================-->
+    <!--人类武器分类定义-->
+    <!-- =========================================================================-->
+    
+    <!--右手剑-->
+    <skinWeapon id="weaponHumanRightSwordBase" extends="weaponHumanBase" 
+                parts="rightHandWeapon" weaponType="rightSword" mat="metal" 
+                bindBone="weapon.R" localLocation="0,0,0" localRotation="0,0,0" sounds="soundDrawSword" 
+                slots="slotSwordLeftBack,slotSwordLeftBack2,slotSwordRightBack,slotSwordRightBack2,slotSwordLeftWaist,slotSwordLeftWaist2" />
+    
+    <!--左手剑-->
+    <skinWeapon id="weaponHumanLeftSwordBase" extends="weaponHumanRightSwordBase" 
+                parts="leftHandWeapon" weaponType="leftSword" mat="metal" 
+                bindBone="weapon.L" localLocation="0,0,0" localRotation="0,3.14159265,0" />
+
+    <!--弓-->
+    <skinWeapon id="weaponHumanBowBase" extends="weaponHumanBase" 
+                parts="leftHandWeapon,rightHandWeapon" weaponType="bow"
+                bindBone="weapon.L" localRotation="0,0,0" localLocation="0,0,0"
+                mat="wood" slots="slotBowLeftBack" sounds="soundDrawBow" />
+
+    <!--魔杖-->
+    <skinWeapon id="weaponHumanWandBase" extends="weaponHumanBase" 
+                parts="leftHandWeapon,rightHandWeapon" weaponType="wand" 
+                bindBone="weapon.R" localRotation="0,0,0" localLocation="0,0,0"
+                mat="wood" slots="slotWandLeftBack" sounds="soundDressOutfit2" />
+    
+    <!--魔法书：暂未开放-->
+    <skinWeapon id="weaponHumanBookBase" extends="weaponHumanBase" 
+                parts="leftHandWeapon,rightHandWeapon" weaponType="unknow" 
+                bindBone="weapon.L" mat="" localRotation="0,0,0" localLocation="0,0,0"
+                sounds="" />
+    
+    <!--=====================================================================-->
+    <!--虚拟的武器，无实物模型,用于所有无实际武器的角色。-->
+    <!--=====================================================================-->
+    
+    <!--虚拟一把右手剑-->
+    <skinWeapon id="weaponMockRightSword" parts="rightHandWeapon" weaponType="rightSword" mat="metal" sounds="soundDrawSword" />
+    <!--虚拟一把右手剑（木）-->
+    <skinWeapon id="weaponMockRightWoodSword" parts="rightHandWeapon" weaponType="rightSword" mat="wood" sounds="soundDrawSword" />
+    <!--虚拟一动物爪子-->
+    <skinWeapon id="weaponMockAnimalClaw" parts="leftHandWeapon,rightHandWeapon" weaponType="leftClaw,rightClaw" mat="calcium" sounds="soundDrawSword" />
+    
+    <!-- ====================================================================-->
+    <!--实质武器:刀，剑-->
+    <!-- ====================================================================-->
+    
+    <skinWeapon id="weaponSword000"  extends="weaponHumanRightSwordBase" cost="0"
+                icon="Models/weapon/sword/sword000.png" file="Models/weapon/sword/sword000.j3o" 
+                applyAttributes="attributeAttack|10,attributeMagicAttack|5" />
+    <skinWeapon id="weaponSword000L" extends="weaponHumanLeftSwordBase" cost="0"
+                icon="Models/weapon/sword/sword000.png" file="Models/weapon/sword/sword000.j3o"
+                applyAttributes="attributeAttack|5,attributeMagicAttack|2" />
+    
+    <skinWeapon id="weaponSword001"  extends="weaponHumanRightSwordBase" cost="1200"
+                icon="Models/weapon/sword/sword001.png" file="Models/weapon/sword/sword001.j3o"
+                applyAttributes="attributeAttack|15,attributeMagicAttack|7" />
+    <skinWeapon id="weaponSword001L" extends="weaponHumanLeftSwordBase" cost="1200"
+                icon="Models/weapon/sword/sword001.png" file="Models/weapon/sword/sword001.j3o" 
+                applyAttributes="attributeAttack|10,attributeMagicAttack|5" />
+    
+    <skinWeapon id="weaponSword002"  extends="weaponHumanRightSwordBase" cost="1400"
+                icon="Models/weapon/sword/sword002.png" file="Models/weapon/sword/sword002.j3o" 
+                applyAttributes="attributeAttack|20,attributeMagicAttack|8" />
+    <skinWeapon id="weaponSword002L" extends="weaponHumanLeftSwordBase" cost="1400"
+                icon="Models/weapon/sword/sword002.png" file="Models/weapon/sword/sword002.j3o"
+                applyAttributes="attributeAttack|15,attributeMagicAttack|6" />
+    
+    <skinWeapon id="weaponSword003"  extends="weaponHumanRightSwordBase" cost="1600"
+                icon="Models/weapon/sword/sword003.png" file="Models/weapon/sword/sword003.j3o" 
+                applyAttributes="attributeAttack|25,attributeMagicAttack|10" />
+    <skinWeapon id="weaponSword003L" extends="weaponHumanLeftSwordBase" cost="1600"
+                icon="Models/weapon/sword/sword003.png" file="Models/weapon/sword/sword003.j3o"
+                applyAttributes="attributeAttack|20,attributeMagicAttack|8" />
+    
+    <!-- ====================================================================-->
+    <!--实质武器:弓-->
+    <!-- ====================================================================-->
+    
+    <skinWeapon id="weaponBow000" extends="weaponHumanBowBase" cost="0"
+                icon="Models/weapon/bow/bow000.mesh.png" file="Models/weapon/bow/bow000.mesh.j3o" 
+                applyAttributes="attributeAttack|30" />
+    
+    <skinWeapon id="weaponBow001" extends="weaponHumanBowBase" cost="1600"
+                icon="Models/weapon/bow/bow001.mesh.png" file="Models/weapon/bow/bow001.mesh.j3o"
+                applyAttributes="attributeAttack|40" />
+    
+    <!-- ====================================================================-->
+    <!--实质武器:魔杖-->
+    <!-- ====================================================================-->
+    
+    <skinWeapon id="weaponWand000" extends="weaponHumanWandBase" cost="1200"
+                icon="Models/weapon/wand/wand000.png" file="Models/weapon/wand/wand000.j3o" 
+                applyAttributes="attributeAttack|10,attributeMagicAttack|50,attributeMana|100" />
+    
+    <!-- ====================================================================-->
+    <!--实质武器:魔法书-->
+    <!-- ====================================================================-->
+    <skinWeapon id="weaponBook000" extends="weaponHumanBookBase" icon="Models/weapon/book/book000.mesh.png" 
+                file="Models/weapon/book/book000.mesh.j3o" cost="1200"
+                applyAttributes="attributeAttack|5,attributeMagicAttack|40,attributeMana|100" />
+    
+    <!-- ====================================================================-->
+    <!--特殊角色的武器-->
+    <!-- ====================================================================-->
+    
+    <!--Sinbad的大刀-->
+    <skinWeapon id="weaponSinbad" icon="" file="Models/monster/sinbad/Sword.j3o" 
+                parts="rightHandWeapon" weaponType="rightSword" 
+                bindBone="weapon.R" mat="metal" sounds="soundDrawSword" 
+                applyAttributes="attributeAttack|25" />
+
+</root>

@@ -9,6 +9,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import name.huliqing.editor.constants.AssetConstants;
 
 /**
  *
@@ -18,9 +19,13 @@ public class JfxUtils {
     
     public final static ImageView createImage(String path) {
         String truePath = path.startsWith("/") ? path : "/" + path;
-        Image image = new Image(JfxUtils.class.getResourceAsStream(truePath));
-        ImageView imageView = new ImageView(image);
-        return imageView;
+        Image image;
+        try {
+            image = new Image(JfxUtils.class.getResourceAsStream(truePath));
+        } catch (Exception e) {
+            image = new Image(AssetConstants.TEXTURES_MISS);
+        }
+        return new ImageView(image);
     }
     
     /**

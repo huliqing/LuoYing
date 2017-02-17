@@ -5,13 +5,8 @@
  */
 package name.huliqing.editor.manager;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -30,7 +25,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 /**
- *
+ * 组件管理。
  * @author huliqing
  */
 public class ComponentManager {
@@ -43,64 +38,23 @@ public class ComponentManager {
     // key = Componety Type
     private final static Map<String, List<ComponentDefine>> COMPONENT_DEFINES = new LinkedHashMap();
     
-    public static void loadComponents() {
+    /**
+     * 给定组件定义文件的根目录，重新载入组件定义.“组件定义”的根目录路径示例：<br>
+     * componentDir=C:\home\workspace\luoying\ly-editor\assets\LuoYing\editor\component <br>
+     * 该根目录下的组件定义文件必须是以".xml"为后缀结尾的文件。
+     * @param componentDir 组件定义的根目录
+     */
+    public final static void reloadComponents(File componentDir) {
         COMPONENT_DEFINES.clear();
-        File rootDir = new File("data/component");
-        if (!rootDir.exists() || !rootDir.isDirectory()) {
-            LOG.log(Level.SEVERE, "data/component direction not found!");
-            return;
-        }
-        
-        // 递归载入data/component目录下的转换器配置，data/component下允许多层次目录
-        // 每个目录放一个config文件，config文件中每一行定义一个要载入的转换器配置
-        loadComponentFromDir(rootDir);
-    }
-
-    private static void loadComponentFromDir(File dir) {
-        if (!dir.exists() || !dir.isDirectory())
-            return;
-        // 载入当前文件夹中的配置
-        try {
-            File configFile = new File(dir, "config");
-            if (!configFile.exists() || !configFile.isFile()) {
-                LOG.log(Level.WARNING, "Config file not found!");
-            } else {
-                loadComponentFromConfigFile(configFile);
+        CONVERTER_CACHE.clear();
+        for (File componentFile : componentDir.listFiles()) {
+            if (componentFile.exists() && componentFile.isFile() && componentFile.getAbsolutePath().endsWith(".xml")) {
+                try {
+                    loadComponentFile(componentFile);
+                } catch (Exception e) {
+                    LOG.log(Level.SEVERE, "Could not load component define file, file={0}", componentFile.getAbsolutePath());
+                }
             }
-        } catch (FileNotFoundException ex) {
-            LOG.log(Level.SEVERE, "Could not load component, dir=" + dir.getAbsolutePath(), ex);
-        } catch (IOException ex) {
-            LOG.log(Level.SEVERE, "Could not load component, dir=" + dir.getAbsolutePath(), ex);
-        }
-        // 载入子文件夹中的配置
-        File[] children = dir.listFiles();
-        for (File f : children) {
-            loadComponentFromDir(f);
-        }
-    }
-
-    private static void loadComponentFromConfigFile(File configFile) throws UnsupportedEncodingException, FileNotFoundException, IOException {
-        // 从config中读取 converter xml配置文件
-        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(configFile), "utf-8"));
-        String line;
-        while ((line = br.readLine()) != null) {
-            if (line.trim().length() <= 0) 
-                continue;
-            if (line.trim().startsWith("#")) 
-                continue;
-            File converterFile = new File(configFile.getParent(), line);
-            if (!converterFile.exists() || !converterFile.isFile()) 
-                continue;
-            try {
-                loadComponentFile(converterFile);
-            } catch (Exception e) {
-                LOG.log(Level.SEVERE, "Could not load component file=" + line, e);
-            }
-        }
-        try {
-            br.close();
-        } catch (IOException e) {
-            LOG.log(Level.SEVERE, null, e);
         }
     }
     
@@ -170,14 +124,89 @@ public class ComponentManager {
         }
         return converter;
     }
+    
+    /**
+     * 获取所有组件定义
+     * @param store
+     * @return 
+     */
+    public final static List<ComponentDefine> getComponents(List<ComponentDefine> store) {
+        if (store == null) {
+            store = new ArrayList();
+        }
+        for (List<ComponentDefine> list : COMPONENT_DEFINES.values()) {
+            store.addAll(list);
+        }
+        return store;
+    }
 
     /**
-     * 获取组件列表
+     * 获取指定类型的组件定义列表
      * @param componentType 组件类型
      * @return 
      */
-    public static List<ComponentDefine> getComponents(String componentType) {
+    public final static List<ComponentDefine> getComponentsByType(String componentType) {
         return COMPONENT_DEFINES.get(componentType);
     }
     
+    // remove20170218
+//        public static void loadComponents() {
+//         COMPONENT_DEFINES.clear();
+//         File rootDir = new File("data/component");
+//         if (!rootDir.exists() || !rootDir.isDirectory()) {
+//             LOG.log(Level.SEVERE, "data/component direction not found!");
+//             return;
+//         }
+//
+//         // 递归载入data/component目录下的转换器配置，data/component下允许多层次目录
+//         // 每个目录放一个config文件，config文件中每一行定义一个要载入的转换器配置
+//         loadComponentFromDir(rootDir);
+//     }
+    //    private static void loadComponentFromConfigFile(File configFile) throws UnsupportedEncodingException, FileNotFoundException, IOException {
+//        // 从config中读取 converter xml配置文件
+//        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(configFile), "utf-8"));
+//        String line;
+//        while ((line = br.readLine()) != null) {
+//            if (line.trim().length() <= 0) 
+//                continue;
+//            if (line.trim().startsWith("#")) 
+//                continue;
+//            File converterFile = new File(configFile.getParent(), line);
+//            if (!converterFile.exists() || !converterFile.isFile()) 
+//                continue;
+//            try {
+//                loadComponentFile(converterFile);
+//            } catch (Exception e) {
+//                LOG.log(Level.SEVERE, "Could not load component file=" + line, e);
+//            }
+//        }
+//        try {
+//            br.close();
+//        } catch (IOException e) {
+//            LOG.log(Level.SEVERE, null, e);
+//        }
+//    }
+    
+    //    private static void loadComponentFromDir(File dir) {
+//        if (!dir.exists() || !dir.isDirectory())
+//            return;
+//        // 载入当前文件夹中的配置
+//        try {
+//            File configFile = new File(dir, "config");
+//            if (!configFile.exists() || !configFile.isFile()) {
+//                LOG.log(Level.WARNING, "Config file not found!");
+//            } else {
+//                loadComponentFromConfigFile(configFile);
+//            }
+//        } catch (FileNotFoundException ex) {
+//            LOG.log(Level.SEVERE, "Could not load component, dir=" + dir.getAbsolutePath(), ex);
+//        } catch (IOException ex) {
+//            LOG.log(Level.SEVERE, "Could not load component, dir=" + dir.getAbsolutePath(), ex);
+//        }
+//        // 载入子文件夹中的配置
+//        File[] children = dir.listFiles();
+//        for (File f : children) {
+//            loadComponentFromDir(f);
+//        }
+//    }
 }

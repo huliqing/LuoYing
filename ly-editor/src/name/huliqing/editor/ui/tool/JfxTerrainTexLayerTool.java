@@ -290,10 +290,7 @@ public class JfxTerrainTexLayerTool extends JfxAbstractTool<TexLayerTool> implem
     private ImageView createImage(String texPath) {
         if (texPath == null || texPath.isEmpty())
             return null;
-        Image image = new Image(getClass().getResourceAsStream("/" + texPath));
-        ImageView imageView = new ImageView(image);
-        imageView.setFitWidth(30);
-        imageView.setFitHeight(30);
+        ImageView imageView = JfxUtils.createImage(texPath, 30, 30);
         return imageView;
     }
 }

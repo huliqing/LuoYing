@@ -11,11 +11,13 @@
 .hv-box {
     -fx-base: darkgray;
     -fx-padding: 0;
+    -fx-background-insets: 0;
     -fx-background-color: darkgray;
 }
 
 .text-field {
     -fx-base: darkgray;
+    -fx-background-insets: 0;
     -fx-background-radius: 7;
     -fx-border-width: 0;
 }
@@ -23,20 +25,19 @@
 .combo-box {
     -fx-base: derive(darkgray, 50%);
     -fx-background-insets: 0;
-    -fx-background-color:transparent;
+    -fx-background-radius: 7;
 }
 .combo-box .list-cell {}
-.combo-box .arrow-button {
-    -fx-border-width: 0;
-}
+.combo-box .arrow-button {}
 .combo-box .text-input {
     -fx-border-width: 0;
-    -fx-background-radius: 7 0 0 7;
+    -fx-background-radius: 7;
 }
 
 .choice-box {
     -fx-base: derive(darkgray, 50%);
     -fx-background-insets: 0;
+    -fx-background-radius: 7;
 }
 .choice-box .label {}
 .choice-box .arrow {}
@@ -45,6 +46,7 @@
 .check-box {
     -fx-base: derive(darkgray, 50%);
     -fx-background-insets: 0;
+    -fx-background-radius: 7;
 }
 .check-box .box{
     -fx-base: derive(darkgray, 50%);
@@ -53,27 +55,30 @@
 
 .button {
     -fx-base: derive(darkgray, 50%);
-    -fx-background-insets: 0;
+    -fx-background-insets: 0, 0;
+    -fx-background-radius: 7;
+    -fx-border-width: 0;
+    -fx-pref-height: 25;
 }
 
 .toggle-button {
     -fx-base: derive(darkgray, 50%);
-    -fx-background-insets: 0;
+    -fx-background-insets: 0, 0;
+    -fx-background-radius: 7;
 }
 
 .menu-button {
     -fx-base: derive(darkgray, 50%);
     -fx-background-insets: 0;
+    -fx-background-radius: 7;
 }
 
 .menu-bar {
     -fx-base: darkgray;
     -fx-background-color: linear-gradient(to bottom, -fx-base, derive(-fx-base,30%));
-        
-    /*-fx-background-color: darkgray;*/
     -fx-border-style: solid inside;
     -fx-border-width: 0 0 1 0;
-    -fx-border-color: rgba(100, 100, 100, 1);
+    -fx-border-color: derive(darkgray, -30%);
 }
 
 .tool-bar {
@@ -87,31 +92,17 @@
     -fx-padding: 0;
     -fx-spacing: 3;
 }
-
-/** 去掉TreeView在失去焦点时的灰色边框 */
-.tree-view {
-    -fx-base: darkgray;
-    -fx-skin: "com.sun.javafx.scene.control.skin.TreeViewSkin";
-    -fx-background-color: transparent, -fx-control-inner-background;
-    -fx-background-insets: 0, 1;
-
-    /* There is some oddness if padding is in em values rather than pixels,
-       in particular, the left border of the control doesn't show. */
-    -fx-padding: 1; /* 0.083333em; */
-}
-.tree-view:focused {
-    /*让tree-view背景透明，这可以让它在放到tab中的时候，不会在标题处产生一个明显的阻隔的线条*/
-    -fx-background-color: transparent;
-}
-.tree-cell {
-    -fx-base: darkgray;
-    -fx-background-color: lightgray;
+.tool-bar .button {
+    -fx-pref-width: 20;
+    -fx-pref-height: 20;
+    -fx-padding: 3;
 }
 
-/** 去掉scroll-pane的背景 */
 .scroll-pane {
     -fx-base: darkgray;
+    -fx-background-insets: 0, 0;
     -fx-background-color:transparent;
+    -fx-background-radius: 7;
 }
 
 .split-pane:horizontal > .split-pane-divider {
@@ -131,9 +122,12 @@
 }
 .titled-pane > .title {
     -fx-background-color: darkgray;
-    -fx-background-radius:0;
     -fx-alignment: CENTER_LEFT;
 }
+.titled-pane:hover{
+    -fx-text-fill: derive(white, -10%);
+}
+
 .titled-pane > .title > .text {
     -fx-font-size: 12;
     -fx-font-weight: bold;
@@ -150,25 +144,102 @@
 
 .list-view {
     -fx-base: darkgray;
-    -fx-border-width: 0;
-    -fx-background-color: darkgray;
-    /* There is some oddness if padding is in em values rather than pixels,
-       in particular, the left border of the control doesn't show. */
-    -fx-padding: 1; /* 0.083333em; */
+    -fx-background-insets: 0, 0;
+    -fx-background-radius: 7;
+    -fx-background-color: derive(darkgray, -20%);
 }
 .list-view .list-cell {
-    -fx-background-radius: 10;
-    -fx-background-color:lightgray;
+    -fx-background-radius: 7;
+    -fx-background-color:derive(darkgray, -20%);
+    -fx-text-fill: derive(black, 10%);
+}
+.list-view .list-cell:empty {
+    -fx-opacity: 0;
+}
+.list-view .list-cell:hover {
+    -fx-background-color: derive(darkblue, 100%);
+    -fx-text-fill: derive(white, -10%);
+}
+.list-view .list-cell:pressed {
+    -fx-background-color: derive(darkblue, 80%);
+    -fx-text-fill: derive(white, -10%);
 }
 .list-view .list-cell:selected {
     -fx-background-color: derive(darkblue, 80%);
-    -fx-text-fill: lightgray;
+    -fx-text-fill: derive(white, -10%);
 }
+
 
 .table-view {
     -fx-base: darkgray;
     -fx-background-insets: 0, 0;
-    -fx-padding: 0;
+    -fx-background-radius: 7;
+    -fx-background-color:derive(darkgray, -20%);
+    /*-fx-padding: 0;*/
+}
+.table-view .column-header-background{
+    -fx-base: darkgray;
+    -fx-background-radius: 7 7 0 0;
+}
+.table-view .column-header {
+    -fx-base: darkgray;
+    -fx-background-radius: 7 7 0 0;
+}
+.table-view .table-cell{
+    -fx-base: darkgray;
+    -fx-background-insets: 0, 0;
+    -fx-background-radius: 7;
+}
+.table-row-cell {
+    -fx-base: darkgray;
+    -fx-background-insets: 0, 0;
+    -fx-background-radius: 7;
+    -fx-background-color:derive(darkgray, -20%);
+    -fx-text-fill: derive(black, 10%);
+}
+.table-row-cell:hover {
+    -fx-background-color: derive(darkblue, 100%);
+    -fx-text-fill: derive(white, -10%);
+}
+.table-row-cell:pressed {
+    -fx-background-color: derive(darkblue, 80%);
+    -fx-text-fill: derive(white, -10%);
+}
+.table-row-cell:selected {
+    -fx-background-color: derive(darkblue, 80%);
+    -fx-text-fill: derive(white, -10%);
+}
+
+/** 去掉TreeView在失去焦点时的灰色边框 */
+.tree-view {
+    -fx-base: darkgray;
+    -fx-background-insets: 0, 0;
+    -fx-background-radius: 7;
+    -fx-background-color:derive(darkgray, -20%);
+}
+.tree-cell {
+    -fx-base: darkgray;
+    -fx-background-radius: 7;
+    -fx-background-color:derive(darkgray, -20%);
+    -fx-text-fill: derive(black, 10%);
+}
+.tree-cell:hover {
+    -fx-base: darkgray;
+    -fx-background-radius: 7;
+    -fx-background-color: derive(darkblue, 100%);
+    -fx-text-fill: derive(white, -10%);
+}
+.tree-cell:pressed {
+    -fx-base: darkgray;
+    -fx-background-radius: 7;
+    -fx-background-color: derive(darkblue, 80%);
+    -fx-text-fill: derive(white, -10%);
+}
+.tree-cell:selected {
+    -fx-base: darkgray;
+    -fx-background-radius: 7;
+    -fx-background-color: derive(darkblue, 80%);
+    -fx-text-fill: derive(white, -10%);
 }
 
 /* color-picker */
@@ -184,7 +255,7 @@
     -fx-background-color: darkgray;
     -fx-border-style: solid inside;
     -fx-border-width: 1 0 0 0; 
-    -fx-border-color: rgba(96, 96, 96, 1);
+    -fx-border-color: derive(darkgray, -30%);
 }
 
 

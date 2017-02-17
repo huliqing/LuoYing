@@ -29,6 +29,7 @@ _layout*.*
 /ly-editor/dist/
 /ly-editor/build-target/
 /ly-editor/assets/Models/plants/
+/ly-editor/assets/LuoYing/
 
 /ly-luoying-desktop/.gradle/
 /ly-luoying-desktop/.nb-gradle/

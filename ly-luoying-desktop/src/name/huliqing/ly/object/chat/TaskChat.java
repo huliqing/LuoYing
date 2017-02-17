@@ -41,7 +41,7 @@ import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.ui.UIFactory;
 import name.huliqing.luoying.ui.Window;
 import name.huliqing.ly.layer.service.GameService;
-
+ 
 /**
  * 任务对话，用于玩家向NPC接任务或提交任务时的对话
  * @author huliqing

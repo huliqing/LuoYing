@@ -1,0 +1,300 @@
+<?xml version="1.0"?>
+<!--
+xs:string
+xs:decimal
+xs:integer
+xs:boolean
+xs:date
+xs:time
+-->
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://luoying.huliqing.name"
+           xmlns="http://luoying.huliqing.name"
+           elementFormDefault="qualified">
+    
+    <xs:include schemaLocation="./base.xsd" />
+    
+    <xs:element name="root">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="itemTest" />
+                <xs:element ref="itemAttribute" />
+                <xs:element ref="itemBook" />
+                <xs:element ref="itemMap" />
+                <xs:element ref="itemSimple" />
+                <xs:element ref="itemSkill" />
+                <xs:element ref="itemState" />
+                <xs:element ref="itemStateRemove" />
+                <xs:element ref="itemSummon" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="itemTest">
+        <xs:annotation>
+            <xs:documentation>测试用</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="itemBase">
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="itemAttribute">
+        <xs:annotation>
+            <xs:documentation>消耗品，用于为指定角色补充属性值的物品</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="itemBase">
+                    <xs:attribute name="attribute" type="xs:integer" use="required" >
+                        <xs:annotation><xs:documentation>指定要操作的是哪一个属性ID</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="amount" type="xs:decimal" use="required" >
+                        <xs:annotation><xs:documentation>指定补多少量,可正可负，正表示增加，负表示减少</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="itemBook">
+        <xs:annotation>
+            <xs:documentation>技能书, 使用后消耗技能书,并获得一个指定的技能</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="itemBase">
+                    <xs:attribute name="skill" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>指定要学习的技能ID</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="itemMap">
+        <xs:annotation>
+            <xs:documentation>地图物品，点击后可打开地图</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="itemBase">
+                    <xs:attribute name="image" use="optional" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>指定一个地图图片，格式: "Interface/map/xxx.jpg"</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="locations" use="optional" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>格式： "id|x|y|enabled|gameId|icon", 
+                                id为地图点名称;
+                                x,y为地图上的坐标位置,取值[0.0~1.0]; 
+                                enabled是否激活这个位置点,取值: 0/1, 0或其它值表示未开启，1表示开启
+                                gameId为连接到一个游戏场景(game.xml), 可不设置;
+                                icon可为位置点指定一个特别的图标，可不设置。
+                                示例: "place1|0.2|0.5|1|treasureGame|Interface/map/place.jpg"
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="mapSize" type="xs:decimal" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>地图大小倍率，默认1.0</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="mapAlpha" type="xs:decimal" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>地图透明度，默认1.0</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="locationIcon" type="xs:string" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                默认的位置点图标,如: "Interface/map/location.png", 必须是完整路径，所有在locations中未指定图标的
+                                位置点将使用这个图标作为默认图标。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="locationSize" type="xs:decimal" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>地图位置点图标大小倍率，默认1.0</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="baseIconPath" type="xs:string" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>位置点图标的基本路径，如果指定了这个基本路径，则locations中的图标不需要再配置上完整的
+                            图标路径。示例："Interface/map/"
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="flipVertical" type="bool" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                是否反转位置点上的垂直位置。
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="itemSimple">
+        <xs:annotation>
+            <xs:documentation>普通物品，没有任何属性的物品</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="itemBase"></xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="itemSkill">
+        <xs:annotation>
+            <xs:documentation>消耗物品来使用一个技能，示例：如使用复活卷轴,在使用这个物品的时候会调用一个技能来让角色执行。</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="itemBase">
+                    <xs:attribute name="skill" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>默认要使用的技能</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="itemState">
+        <xs:annotation>
+            <xs:documentation>可让角色获得某些状态的物品</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="itemBase">
+                    <xs:attribute name="states" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>指定要获得的状态列表，格式如："stateId,stateId,..."</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="itemStateRemove">
+        <xs:annotation>
+            <xs:documentation>可用于删除角色身上某些状态的物品</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="itemBase">
+                    <xs:attribute name="states" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>要移除的状态列表，格式如："stateId,stateId,..."</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="itemSummon">
+        <xs:annotation>
+            <xs:documentation>可用于召唤角色的物品</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="itemBase">
+                    <xs:attribute name="actorId" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                指定要召唤的角色ID
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="summonTotal" type="xs:integer" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                指定要召唤多少个角色,默认：1
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="copyAttributesFromSource" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                设置要从source（召唤者）同步的属性值，这是个属性名称列表，当召唤后，被召唤的角色的这些属性的值将从召唤者身上获取。
+                                比如等级属性，分组属性，以便被召唤后的角色与召唤者有一样的等级和分组, 示例："attributeGroup,attributeLevel"
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="linkAttributesToSource" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>
+                                设置要将被召唤者的属性的值连接到召唤者的属性名称。当召唤后，被召唤的角色的这些属性将指向召唤者的entityId.所以这些属性必须是NumberAttribute类型。
+                                比如attributeFollow,attributeOwner属性，指向跟随者和拥有者，示例："attributeOwner,attributeFollow"
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="itemBase">
+        <xs:complexContent>
+            <xs:extension base="base">
+                <xs:attribute name="icon" ref="icon" use="required" />
+                <xs:attribute name="checkEl" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>绑定或直接填写一条SBooleanEl, 这条El用来判断s角色是否可以使用这件物品，示例：#{!s.attributeDead}</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="effects" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>
+                        效果,格式: "effect1,effect2,...",这些效果会在执行时立即应用在角色身上。
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="sounds" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>
+                        声效,格式: "sound1,sound2,...",这些声音会在执行时立即播放,在角色的位置。
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute ref="total" use="optional" />
+                <xs:attribute ref="tradeInfos" use="optional" />
+                <xs:attribute name="deletable" type="bool" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>物品是否可删除</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="sellable" type="bool" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>物品是否可以进行出售</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="localObject" type="bool" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>
+                            是否为本地物体,对于本地物体在使用的时候不需要把事件传递到服务端或客户端。比如：客户端或服务端在打开地图
+                            的时候是不需要把事件传递到其它客户端或服务端的。localObject这是一种特殊的物品，只通过本地handler执行，
+                            所以使用后物品数量不会实时同步到其它客户端。需要注意这一点。
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+</xs:schema>

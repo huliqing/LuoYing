@@ -73,6 +73,15 @@ public class DefineServiceImpl implements DefineService {
         return matDefine;
     }
 
+    @Override
+    public void clearAndReset() {
+        // 清理这些缓存，以便重新载入
+        matDefine = null;
+        skillTypeDefine = null;
+        skinPartDefine = null;
+        weaponTypeDefine = null;
+    }
+    
     private static <T extends Define> T loadDefine(String id) {
         Define define = Loader.load(id);
         if (define == null) {

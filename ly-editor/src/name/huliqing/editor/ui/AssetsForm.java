@@ -8,7 +8,6 @@ package name.huliqing.editor.ui;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.SelectionMode;
@@ -22,8 +21,8 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.VBox;
+import name.huliqing.editor.constants.ConfigConstants;
 import name.huliqing.editor.manager.Manager;
-import name.huliqing.editor.manager.ConfigManager;
 import name.huliqing.editor.manager.ConfigManager.ConfigChangedListener;
 import name.huliqing.editor.ui.menu.CreateSceneMenuItem;
 import name.huliqing.editor.ui.menu.DeleteMenuItem;
@@ -72,15 +71,12 @@ public class AssetsForm extends VBox implements ConfigChangedListener {
         updateAassetDir();
         Manager.getConfigManager().addListener(this);
         setPrefHeight(300);
-        
-        setStyle("-fx-background-radius: 7;-fx-padding:7;-fx-background-color:lightgray;");
-        
     }
     
     @Override
     public void onConfigChanged(String key) {
         String newMainAssets = Manager.getConfigManager().getMainAssetDir();
-        if (key.equals(ConfigManager.KEY_MAIN_ASSETS) && !currentAssetDir.equals(newMainAssets)) {
+        if (key.equals(ConfigConstants.KEY_MAIN_ASSETS) && !currentAssetDir.equals(newMainAssets)) {
             Jfx.runOnJfx(() -> updateAassetDir());
         }
     }

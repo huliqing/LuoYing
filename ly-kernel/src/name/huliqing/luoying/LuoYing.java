@@ -22,6 +22,7 @@ package name.huliqing.luoying;
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
+import com.jme3.asset.AssetNotFoundException;
 import com.jme3.asset.DesktopAssetManager;
 import com.jme3.font.BitmapFont;
 import com.jme3.input.InputManager;
@@ -35,7 +36,16 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.UserData; 
 import com.jme3.system.AppSettings;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.LinkedHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -83,6 +93,7 @@ import name.huliqing.luoying.data.TalentData;
 import name.huliqing.luoying.data.TaskData;
 import name.huliqing.luoying.data.TradeObjectData;
 import name.huliqing.luoying.data.define.TradeInfo;
+import name.huliqing.luoying.layer.service.DefineService;
 import name.huliqing.luoying.mess.ActorPhysicsMess;
 import name.huliqing.luoying.mess.ActorTransformMess;
 import name.huliqing.luoying.mess.ActorTransformDirectMess;
@@ -284,7 +295,6 @@ import name.huliqing.luoying.object.entity.impl.UnshadedEntity;
 import name.huliqing.luoying.object.game.SimpleGame;
 import name.huliqing.luoying.object.item.AttributeItem;
 import name.huliqing.luoying.object.item.BookItem;
-//import name.huliqing.luoying.object.item.MapItem;
 import name.huliqing.luoying.object.item.SimpleItem;
 import name.huliqing.luoying.object.item.SkillItem;
 import name.huliqing.luoying.object.item.StateItem;
@@ -318,6 +328,11 @@ import name.huliqing.luoying.xml.DataFactory;
 public class LuoYing {
     private static final Logger LOG = Logger.getLogger(LuoYing.class.getName());
     
+    /**
+     * 项目自定义数据的配置文件, dataConfig.ini中定义了需要在系统初始化时载入的所有配置文件。
+     */
+    private final static String PROJECT_CONFIG_FILE = "LuoYing/dataConfig.ini";
+    
     private static Application app;
     private static BitmapFont font;
     
@@ -326,60 +341,116 @@ public class LuoYing {
      * @param app
      */
     public static void initialize(Application app) {
-        LuoYing.app = app; 
+        LuoYing.app = app;
         
         // remove20170211,以后由外部程序根据情况自己去调用 initializeLogManager()来启用该功能。
 //        LogFactory.initialize(); 
         
+        // 注册载入器，用于载入"*.ini"和 "*.xml"配置文件
+        app.getAssetManager().registerLoader(TextFileLoader.class, "ini", "xml");
+        
         // 注册需要序列化的数据，对于网络版进行序列化时需要用到。
-        registerSerializer();
+        registerSysBaseSerializer();
         LOG.log(Level.INFO, "registerSerializer ok");
         
-        // 注册数据处理器
-        registerProcessor();
-        LOG.log(Level.INFO, "registerProcessor ok.");
-        
-        // 注册messages,用于network通信
-        registerMessage();
-        LOG.log(Level.INFO, "registerMessage ok.");
-        
-        // 载入系统数据
-        try {
-            reloadSysData();
-            LOG.log(Level.INFO, "loadSysData ok.");
-        } catch (Exception e) {
-            throw new LuoYingException("Could not load SysData!", e);
-        }
-        
-        // 载入资源文件
-        ResManager.loadResource("/LuoYing/Resources/resource_en_US", "utf-8", "en_US");
-        ResManager.loadResource("/LuoYing/Resources/resource_zh_CN", "utf-8", "zh_CN");
-        
+        // 载入数据
+        reloadData();
     }
     
     /**
      * 初始化日志记录, 调用这个方法来启用落樱的日志记录功能，默认情况下日志会记录在程序根目录下的：
      * log/LuoYing.log下
      */
-    public static void initializeLogManager() {
+    public final static void initializeLogManager() {
         LogFactory.initialize(); 
     }
+    
+    /**
+     * 重新载入系统数据,这个方法会清理当前系统所有数据，并重新载入.
+     */
+    public final static void reloadData() {
+        DataFactory.cleanup();
+        ResManager.clearResources();
+        LOG.log(Level.INFO, "DataFactory cleanup ok!");
+        
+        // 注册数据处理器
+        registerSysProcessor();
+        LOG.log(Level.INFO, "registerSysProcessor ok!");
+        
+        // 载入系统内置数据
+        loadSysData();
+        LOG.log(Level.INFO, "loadSysData ok!");
+        
+        // 载入项目数据
+        loadProjectData();
+        LOG.log(Level.INFO, "loadProjectData ok!");
+        
+        // 载入资源文件
+        ResManager.loadResource("/LuoYingSys/Resources/resource_en_US", "utf-8", "en_US");
+        ResManager.loadResource("/LuoYingSys/Resources/resource_zh_CN", "utf-8", "zh_CN");
+        
+        // 清理一些定义的缓存，以便让这些配置在下次调用的时候重新载入
+        Factory.get(DefineService.class).clearAndReset();
+    }
 
-    private static void registerSerializer() {
+    /**
+     * 载入系统内置数据
+     * @throws LuoYingException 
+     */
+    private static void loadSysData() throws LuoYingException {
+        loadData("LuoYingSys/Data/action.xml");
+        loadData("LuoYingSys/Data/channel.xml");
+        loadData("LuoYingSys/Data/el.xml");
+        loadData("LuoYingSys/Data/entity.xml");
+        loadData("LuoYingSys/Data/game.xml");
+        loadData("LuoYingSys/Data/module.xml");
+        loadData("LuoYingSys/Data/scene.xml");
+        loadData("LuoYingSys/Data/progress.xml");
+        loadData("LuoYingSys/Data/anim.xml");
+        loadData("LuoYingSys/Data/sound.xml");
+    }
+    
+    /**
+     * 载入项目工程自定义的数据
+     * @throws LuoYingException 
+     */
+    private static void loadProjectData() throws LuoYingException {
+        try {
+            String dataConfigStr = (String) app.getAssetManager().loadAsset(PROJECT_CONFIG_FILE);
+            // 从config中读取 data xml配置文件
+            ByteArrayInputStream bais = new ByteArrayInputStream(dataConfigStr.getBytes());
+            BufferedReader br = new BufferedReader(new InputStreamReader(bais, "utf-8"));
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.trim().length() <= 0) 
+                    continue;
+                if (line.trim().startsWith("#")) 
+                    continue;
+
+                loadData(line);
+            }
+        } catch (AssetNotFoundException anfe) {
+            LOG.log(Level.WARNING, "Data config file \"{0}\" not found!", PROJECT_CONFIG_FILE);
+        } catch (IOException ioe) {
+            LOG.log(Level.WARNING, "Could not load config file \"{0}\" ", PROJECT_CONFIG_FILE);
+        }
+    }
+
+    private static void registerSysBaseSerializer() {
+        // ======== 基本
         
         Serializer.registerClass(Vector2f.class,  new Vector2fSerializer());
-//        Serializer.registerClass(Vector3f.class,  new Vector3fSerializer()); // Serializer已经内置
+        // Serializer.registerClass(Vector3f.class,  new Vector3fSerializer()); // Serializer已经内置
         Serializer.registerClass(Vector4f.class,  new Vector4fSerializer());
         Serializer.registerClass(Quaternion.class,  new QuaternionSerializer());
         Serializer.registerClass(ColorRGBA.class,  new ColorRGBASerializer());
         Serializer.registerClass(UserData.class,  new UserDataSerializer());
         Serializer.registerClass(LinkedHashMap.class, new MapSerializer());
         
-        Serializer.registerClass(TradeInfo.class);
+        // ======== 数据类型
         
-        // Proto不在网络中传输
-//        Serializer.registerClass(Proto.class);
-
+        Serializer.registerClass(TradeInfo.class);
+        // Serializer.registerClass(Proto.class); // Proto不在网络中传输
         Serializer.registerClass(AttributeApply.class);
         Serializer.registerClass(AttributeUse.class);
         Serializer.registerClass(Data.class);
@@ -423,9 +494,63 @@ public class LuoYing {
         Serializer.registerClass(TalentData.class);
         Serializer.registerClass(TaskData.class);
         Serializer.registerClass(TradeObjectData.class);
+        
+        // ======== 模块相关
+        
+        // Network Message
+        Serializer.registerClass(ClientExitMess.class);
+        Serializer.registerClass(ClientMess.class);
+        Serializer.registerClass(ClientsMess.class);
+        Serializer.registerClass(GameDataMess.class);
+        Serializer.registerClass(GetClientsMess.class);
+        Serializer.registerClass(GetGameDataMess.class);
+        Serializer.registerClass(GetServerStateMess.class);
+        Serializer.registerClass(PingMess.class);
+        Serializer.registerClass(RequestGameInitMess.class);
+        Serializer.registerClass(RequestGameInitStartMess.class);
+        Serializer.registerClass(ServerStateMess.class);
+        
+        Serializer.registerClass(ActorFightMess.class);
+        Serializer.registerClass(ActorLoadSavedMess.class);
+        Serializer.registerClass(ActorLoadSavedResultMess.class);
+        Serializer.registerClass(ActorLookAtMess.class);
+        Serializer.registerClass(ActorPhysicsMess.class);
+        Serializer.registerClass(ActorSelectMess.class);
+        Serializer.registerClass(ActorSelectResultMess.class);
+        Serializer.registerClass(ActorSetLocationMess.class);
+        Serializer.registerClass(ActorTransformDirectMess.class);
+        Serializer.registerClass(ActorTransformMess.class);
+        Serializer.registerClass(ActorViewDirMess.class);
+        
+        // Entity
+        Serializer.registerClass(EntityAddDataMess.class);
+        Serializer.registerClass(EntityAddMess.class);
+        Serializer.registerClass(EntityHitAttributeMess.class);
+        Serializer.registerClass(EntityHitNumberAttributeMess.class);
+        Serializer.registerClass(EntityRemoveDataMess.class);
+        Serializer.registerClass(EntityRemoveMess.class);
+        Serializer.registerClass(EntityUseDataByIdMess.class);
+        
+        // 随机种子
+        Serializer.registerClass(RandomSeedMess.class);
+        
+        // Scene
+        Serializer.registerClass(SceneLoadedMess.class);
+        
+        // Skill
+        Serializer.registerClass(SkillWalkMess.class);
+        
+        // Skin
+        Serializer.registerClass(SkinWeaponTakeOnMess.class);
+        
+        // Talents
+        Serializer.registerClass(TalentAddPointMess.class);
+        
+        // Task
+        Serializer.registerClass(TaskCompleteMess.class);
     }
     
-    private static void registerProcessor() {
+    private static void registerSysProcessor() {
         // 特殊的自定义类型
         DataFactory.addCustomDataDefine("_TAG_FOR_DELAY_ANIM_", IdConstants.SYS_CUSTOM_ANIM_DELAY, DelayAnimData.class, null, DelayAnim.class);
         
@@ -554,7 +679,6 @@ public class LuoYing {
         DataFactory.register("itemState",  ItemData.class, ItemDataLoader.class, StateItem.class);
         DataFactory.register("itemStateRemove",  ItemData.class, ItemDataLoader.class, StateRemoveItem.class);
         DataFactory.register("itemSummon",  ItemData.class, ItemDataLoader.class, SummonItem.class);
-//        DataFactory.register("itemMap",  ItemData.class, ItemDataLoader.class, MapItem.class);
 
         // Logic
         DataFactory.register("logicFight",  LogicData.class, LogicDataLoader.class, FightLogic.class);
@@ -617,7 +741,6 @@ public class LuoYing {
         DataFactory.register("skillIdle",  SkillData.class, SkillDataLoader.class, IdleSkill.class);
         DataFactory.register("skillHurt",  SkillData.class, SkillDataLoader.class, HurtSkill.class);
         DataFactory.register("skillDead",  SkillData.class, SkillDataLoader.class, DeadSkill.class);
-//        DataFactory.register("skillDeadRagdoll",  SkillData.class, SkillDataLoader.class, DeadRagdollSkill.class);
         DataFactory.register("skillAttack",  SkillData.class, SkillDataLoader.class, AttackSkill.class);
         DataFactory.register("skillShot",  SkillData.class, SkillDataLoader.class, ShotSkill.class); 
         DataFactory.register("skillShotBow",  SkillData.class, SkillDataLoader.class, ShotBowSkill.class);
@@ -656,61 +779,12 @@ public class LuoYing {
         DataFactory.register("taskCollect",  TaskData.class, TaskDataLoader.class, CollectTask.class);
     }
     
-    public static void reloadSysData() throws LuoYingException {
-        
-        loadData("/LuoYing/Data/action.xml");
-        loadData("/LuoYing/Data/channel.xml");
-        loadData("/LuoYing/Data/el.xml");
-        loadData("/LuoYing/Data/entity.xml");
-        loadData("/LuoYing/Data/game.xml");
-        loadData("/LuoYing/Data/module.xml");
-        loadData("/LuoYing/Data/scene.xml");
-        loadData("/LuoYing/Data/progress.xml");
-        loadData("/LuoYing/Data/anim.xml");
-        loadData("/LuoYing/Data/sound.xml");
-        
-//        loadData("/LuoYing/Data/config.xml");
-//        loadData("/LuoYing/Data/actor.xml");
-//        loadData("/LuoYing/Data/actorAnim.xml");
-//        loadData("/LuoYing/Data/attribute.xml");
-//        loadData("/LuoYing/Data/bullet.xml");
-//        loadData("/LuoYing/Data/define.xml");
-//        loadData("/LuoYing/Data/drop.xml");
-//        loadData("/LuoYing/Data/effect.xml");
-//        loadData("/LuoYing/Data/emitter.xml");
-//        loadData("/LuoYing/Data/gameLogic.xml");
-//        loadData("/LuoYing/Data/item.xml");
-//        loadData("/LuoYing/Data/logic.xml");
-//        loadData("/LuoYing/Data/magic.xml");
-//        loadData("/LuoYing/Data/position.xml");
-//        loadData("/LuoYing/Data/resist.xml");
-//        loadData("/LuoYing/Data/shape.xml");
-//
-//        // 技能
-//        loadData("/LuoYing/Data/skill.xml");
-//        loadData("/LuoYing/Data/skill_monster.xml");
-//        loadData("/LuoYing/Data/skill_skin.xml");
-//
-//        // 装备、武器
-//        loadData("/LuoYing/Data/skin.xml");
-//        loadData("/LuoYing/Data/skin_male.xml");
-//        loadData("/LuoYing/Data/skin_weapon.xml");
-//
-//        // 武器槽位配置
-//        loadData("/LuoYing/Data/slot.xml");
-//
-//        loadData("/LuoYing/Data/state.xml");
-//        loadData("/LuoYing/Data/talent.xml");
-//        loadData("/LuoYing/Data/task.xml");
-//        loadData("/LuoYing/Data/view.xml");
-    }
-    
     /**
      * 载入数据, 如：
      * <code>
      * <pre>
-     * loadData("/data/game.xml");
-     * loadData("/data/scene.xml");
+     * loadData("data/game.xml");
+     * loadData("data/scene.xml");
      * ...
      * </pre>
      * </code>
@@ -718,7 +792,17 @@ public class LuoYing {
      * @throws LuoYingException 
      */
     public static void loadData(String dataFile) throws LuoYingException {
-        loadData(LuoYing.class.getResourceAsStream(dataFile), null);
+        
+        // remove20170217,不再使用这种方式，以后统一使用AssetManager载入资源
+//        loadData(LuoYing.class.getResourceAsStream(dataFile), null);
+
+        try {
+            String xmlStrData = (String) app.getAssetManager().loadAsset(dataFile);
+            DataFactory.loadData(xmlStrData);
+            LOG.log(Level.INFO, "Load data ok: {0}", dataFile);
+        } catch (Exception anfe) {
+            LOG.log(Level.SEVERE, "Could not loadData, dataFile={0}", dataFile);
+        }
     }
     
     /**
@@ -729,65 +813,6 @@ public class LuoYing {
      */
     public static void loadData(InputStream inputStream, String encoding) throws LuoYingException {
         DataFactory.loadData(inputStream, encoding);
-    }
-    
-    public static void clearData() {
-        DataFactory.clearData();
-    }
-    
-    private static void registerMessage() {
-        // Network Message
-        Serializer.registerClass(ClientExitMess.class);
-        Serializer.registerClass(ClientMess.class);
-        Serializer.registerClass(ClientsMess.class);
-        Serializer.registerClass(GameDataMess.class);
-        Serializer.registerClass(GetClientsMess.class);
-        Serializer.registerClass(GetGameDataMess.class);
-        Serializer.registerClass(GetServerStateMess.class);
-        Serializer.registerClass(PingMess.class);
-        Serializer.registerClass(RequestGameInitMess.class);
-        Serializer.registerClass(RequestGameInitStartMess.class);
-        Serializer.registerClass(ServerStateMess.class);
-        
-        Serializer.registerClass(ActorFightMess.class);
-        Serializer.registerClass(ActorLoadSavedMess.class);
-        Serializer.registerClass(ActorLoadSavedResultMess.class);
-        Serializer.registerClass(ActorLookAtMess.class);
-        Serializer.registerClass(ActorPhysicsMess.class);
-        Serializer.registerClass(ActorSelectMess.class);
-        Serializer.registerClass(ActorSelectResultMess.class);
-        Serializer.registerClass(ActorSetLocationMess.class);
-        Serializer.registerClass(ActorTransformDirectMess.class);
-        Serializer.registerClass(ActorTransformMess.class);
-        Serializer.registerClass(ActorViewDirMess.class);
-        
-        // Entity
-        Serializer.registerClass(EntityAddDataMess.class);
-        Serializer.registerClass(EntityAddMess.class);
-        Serializer.registerClass(EntityHitAttributeMess.class);
-        Serializer.registerClass(EntityHitNumberAttributeMess.class);
-        Serializer.registerClass(EntityRemoveDataMess.class);
-        Serializer.registerClass(EntityRemoveMess.class);
-        Serializer.registerClass(EntityUseDataByIdMess.class);
-        
-        // 随机种子
-        Serializer.registerClass(RandomSeedMess.class);
-        
-        // Scene
-        Serializer.registerClass(SceneLoadedMess.class);
-        
-        // Skill
-        Serializer.registerClass(SkillWalkMess.class);
-        
-        // Skin
-        Serializer.registerClass(SkinWeaponTakeOnMess.class);
-        
-        // Talents
-        Serializer.registerClass(TalentAddPointMess.class);
-        
-        // Task
-        Serializer.registerClass(TaskCompleteMess.class);
-        
     }
     
     /**

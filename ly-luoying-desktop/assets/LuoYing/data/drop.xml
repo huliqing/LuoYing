@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--定义角色的可掉落物-->
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://luoying.huliqing.name'
+    xsi:schemaLocation='http://luoying.huliqing.name meta/drop.xsd'>
+
+    <!--==========================================================================-->
+    <dropItem id="dropItemGoldBase" item="itemGold" rate="0.99" sounds="soundCoin2" />
+    
+    <!--==========================================================================-->
+    
+    <!--==========================================================================-->
+    <!-- 基本配置, 主要配置各种物品的掉落机率
+    注：在定义一个DropGroup时要注意不要互相嵌套DropGroup，尽量保持简单清晰.避免造成无限循环异常（StackOverflowError）。
+    比如：dropGroupA -> dropGroupB -> ... -> dropGroupA. 
+    -->
+    <!--==========================================================================-->
+
+    <!--经验值掉落-->
+    <dropAttribute id="dropXp" attribute="attributeXp" valueHitEl="elDropXp" />
+
+    <!--金币掉落-->
+    <dropItem id="dropItemGold" extends="dropItemGoldBase" count="20" />
+
+    <!--红药掉落-->
+    <dropItem id="dropItemTonicRed" item="itemTonicRed" count="2" rate="0.5" />
+
+    <!--蓝药掉落-->
+    <dropItem id="dropItemTonicBlue" item="itemTonicBlue" count="2" rate="0.5" />
+    
+    <!--==========================================================================-->
+    <!-- 特殊配置: 配置给各种角色的掉落设置 -->
+    <!--==========================================================================-->
+    
+    <!--丛林蜘蛛掉落设置-->
+    <dropGroup id="dropSpider" drops="dropXp, dropItemGold,dropItemTonicRed,dropItemTonicBlue" />
+    
+    <!--raptor-->
+    <dropGroup id="dropRaptor" drops="dropXp, dropItemGold,dropItemTonicRed,dropItemTonicBlue" />
+
+</root>
+
+
+

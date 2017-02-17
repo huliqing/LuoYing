@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root 
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://luoying.huliqing.name'
+    xsi:schemaLocation='http://luoying.huliqing.name meta/effect.xsd' >
+    
+    <effectBase id="effectBase" queueBucket="Translucent" />
+    
+    <!-- ========================================================================= -->
+    <!--通用爆炸: 火、炸弹、炮击,其它爆炸效果可继承这个配置-->
+    <!-- ========================================================================= -->
+    <effectGroup id="effectExplosion" extends="effectBase" useTime="10" sounds="soundExplosion" effects="effectFlame,effectFlash,effectSpark" />
+    <effectParticle id="effectFlame" extends="effectBase" useTime="3"  emitter="emitterFlame" emitAll="1" />
+    <effectParticle id="effectFlash" extends="effectBase" useTime="3"  emitter="emitterFlash" emitAll="1" />
+    <effectParticle id="effectSpark" extends="effectBase" useTime="3"  emitter="emitterSpark" emitAll="1" />
+    
+    <!-- ========================================================================= -->
+    <!--火塔子弹效果-->
+    <!-- ========================================================================= -->
+    <effectParticle id="effectSmokeFire" extends="effectBase" useTime="6"  emitter="emitterSmoketrail" 
+                    traceLocation="always" traceRotation="always" />
+    
+    <!-- ========================================================================= -->
+    <!--骷髅死亡效果-->
+    <!-- ========================================================================= -->
+    <effectGroup id="effectSkeletonDead" extends="effectBase" useTime="10" traceLocation="once" traceRotation="no"  traceLocationType="origin_bound_center" 
+                 effects="effectSkeletonExplosion,effectSkeletonSmoke" sounds="soundSkeletonDead" />
+    <effectParticle id="effectSkeletonExplosion" extends="effectBase" useTime="3" emitter="emitterSkeletonExplosion" emitAll="1" blendMode="Alpha" />
+    <effectParticle id="effectSkeletonSmoke" extends="effectBase" useTime="3" emitter="emitterSkeletonSmoke" emitAll="1" />
+</root>
+
+
+

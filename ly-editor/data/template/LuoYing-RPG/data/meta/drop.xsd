@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+<!--
+xs:string
+xs:decimal
+xs:integer
+xs:boolean
+xs:date
+xs:time
+-->
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://luoying.huliqing.name"
+           xmlns="http://luoying.huliqing.name"
+           elementFormDefault="qualified">
+    
+    <xs:include schemaLocation="./base.xsd" />
+    
+    <xs:element name="root">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="dropAttribute" />
+                <xs:element ref="dropGroup" />
+                <xs:element ref="dropItem" />
+                <xs:element ref="dropSkin" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="dropAttribute">
+        <xs:annotation>
+            <xs:documentation></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="dropBase">
+                    <xs:attribute name="attribute" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>指定要掉落的属性名称</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="valueHitEl" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>绑定或直接填写一条hitEl,这条El用于计算source可以掉落多少属性值给目标target
+                            示例： #{(source.attributeLevel + 1) / (target.attributeLevel + 1) * (12 * Math:pow(1.1, source.attributeLevel))}</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="dropGroup">
+        <xs:annotation>
+            <xs:documentation>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="dropBase">
+                    <xs:attribute name="drops" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>绑定其它掉落设置，格式："drop1,drop2,..."</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="dropItem">
+        <xs:annotation>
+            <xs:documentation>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="dropBase">
+                    <xs:attribute name="item" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>掉落物品的id</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="count" type="xs:integer" use="required">
+                        <xs:annotation><xs:documentation>掉落物品的数量，默认1.</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="rate" type="xs:decimal" use="required">
+                        <xs:annotation><xs:documentation>掉落机率，取值 [0.0~1.0], 0为不掉落，1.0为始终掉落，默认值1.0。注：当取值为1.0是将忽略全局掉落设置的影响，物品将被视为始终掉落。</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="dropSkin">
+        <xs:annotation>
+            <xs:documentation>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="dropBase">
+                    <xs:attribute name="skin" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>掉落装备的id</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="count" type="xs:integer" use="required">
+                        <xs:annotation><xs:documentation>掉落的数量，默认1</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="rate" type="xs:decimal" use="required">
+                        <xs:annotation><xs:documentation>掉落机率，取值 [0.0~1.0], 0为不掉落，1.0为始终掉落，默认值1.0。注：当取值为1.0是将忽略全局掉落设置的影响，物品将被视为始终掉落。</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:complexType name="dropBase">
+        <xs:complexContent>
+            <xs:extension base="base">
+                <xs:attribute name="sounds" type="xs:string" use="optional">
+                    <xs:annotation><xs:documentation>掉落物品时的声效，格式 : "sound1,sound2,..."</xs:documentation></xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:schema>

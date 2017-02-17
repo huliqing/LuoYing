@@ -51,8 +51,8 @@ public class ComponentSearch<T extends ComponentDefine> {
         });
         // 匹配检查的时候要用字符串转换器
         componentView.setConverter((T t) -> t.getId());
-        componentView.setPrefWidth(200);
-        componentView.setPrefHeight(200);
+        componentView.setPrefWidth(250);
+        componentView.setPrefHeight(250);
         componentView.setEffect(new DropShadow());
     }
 

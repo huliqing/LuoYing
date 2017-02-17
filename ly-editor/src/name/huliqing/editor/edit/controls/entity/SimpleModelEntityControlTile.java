@@ -73,7 +73,7 @@ public class SimpleModelEntityControlTile extends EntityControlTile<Entity> impl
             return;
         }
         // 在清理之前先把spatial取出,这样不会在entity清理的时候被一同清理掉
-        Spatial terrainSpatial = target.getSpatial();        
+        Spatial terrainSpatial = target.getSpatial();
          // 判断地形贴图是否有修改
         Boolean terrainAlphaModified = terrainSpatial.getUserData(UserDataConstants.EDIT_TERRAIN_MODIFIED_ALPHA);
         // 判断地形是否有修改
@@ -102,8 +102,10 @@ public class SimpleModelEntityControlTile extends EntityControlTile<Entity> impl
         // 因为缓存中存的仍是旧的,Entity在重新载入的时候会去缓存中获取
         // 注：直接更新缓存比删除性能要好，因删除后再重新载入会导致一次轻微的视觉闪烁。
         // 注：这里必须强制更新一下变换，否则缩放后的地形没有实时更新，导致点选的时候无法正确选择到。
-        terrainSpatial.updateGeometricState();
-        edit.getEditor().getAssetManager().addToCache(new ModelKey(terrainFilePathInAssets), terrainSpatial); 
+//        terrainSpatial.updateGeometricState();
+//        edit.getEditor().getAssetManager().addToCache(new ModelKey(terrainFilePathInAssets), terrainSpatial); 
+
+        edit.getEditor().getAssetManager().deleteFromCache(new ModelKey(terrainFilePathInAssets));
 
         // 保存贴图修改，然后清除标记,这样下次就不会再需要处理
         if (terrainAlphaModified != null && terrainAlphaModified) {

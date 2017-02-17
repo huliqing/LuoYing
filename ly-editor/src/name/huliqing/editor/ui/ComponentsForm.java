@@ -5,6 +5,7 @@
  */
 package name.huliqing.editor.ui;
 
+import java.io.File;
 import java.util.List;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -17,17 +18,20 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import name.huliqing.editor.constants.DataFormatConstants;
 import name.huliqing.editor.component.ComponentDefine;
+import name.huliqing.editor.constants.ConfigConstants;
+import name.huliqing.editor.manager.ComponentManager;
+import name.huliqing.editor.manager.ConfigManager.ConfigChangedListener;
+import name.huliqing.editor.manager.Manager;
+import name.huliqing.fxswing.Jfx;
 
 /**
  *
  * @author huliqing
  */
-public class ComponentsForm extends ListView<ComponentDefine> {
+public class ComponentsForm extends ListView<ComponentDefine> implements ConfigChangedListener{
 //    private static final Logger LOG = Logger.getLogger(ComponentsView.class.getName());
     
-    public ComponentsForm(List<ComponentDefine> components) {
-        
-        getItems().addAll(components);
+    public ComponentsForm() {
 
         setCellFactory((ListView<ComponentDefine> param) -> new ListCell<ComponentDefine>() {
             @Override
@@ -46,6 +50,25 @@ public class ComponentsForm extends ListView<ComponentDefine> {
         setOnDragDetected(this::doDragDetected);
         setOnDragDone(this::doDragDone);
         
+        updateAassetDir();
+        
+        // 切换资源目录的时候要重置组件面板
+        Manager.getConfigManager().addListener(this);
+    }
+    
+    @Override
+    public void onConfigChanged(String key) {
+        if (key.equals(ConfigConstants.KEY_MAIN_ASSETS)) {
+            Jfx.runOnJfx(() -> updateAassetDir());
+        }
+    }
+    
+    private void updateAassetDir() {
+        getItems().clear();
+        List<ComponentDefine> cds = ComponentManager.getComponentsByType("entity");
+        if (cds != null) {
+            getItems().addAll(cds);
+        }
     }
 
     private ComponentDefine getMainSelectItem() {
@@ -79,4 +102,5 @@ public class ComponentsForm extends ListView<ComponentDefine> {
         e.consume(); // 不要直接取消事件传递
 //        LOG.log(Level.INFO, "EntityComponents: doDragDone.");
     }
+
 }

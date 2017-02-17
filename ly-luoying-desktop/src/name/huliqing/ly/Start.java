@@ -114,28 +114,31 @@ public class Start extends SimpleApplication {
     // 当前的state
     private AppState currentState;
 
-    @Override
-    public void start(JmeContext.Type contextType, boolean waitFor) {
-        startInit();
-        super.start(contextType, waitFor); 
-    }
-
-    @Override
-    public void startCanvas(boolean waitFor) {
-        startInit();
-        super.startCanvas(waitFor);
-    }
-    
-    private void startInit() {
-        // ----------
-        // 这里必须优先载入,因为在Android下，需要在start之后和simpleInitApp之前做
-        // 一些特殊设置,所以ConfigService必须在这里优先载入。
-        // ----------
-        Init.initialize(this);
-    }
+    // remove20170217
+//    @Override
+//    public void start(JmeContext.Type contextType, boolean waitFor) {
+//        startInit();
+//        super.start(contextType, waitFor); 
+//    }
+//
+//    @Override
+//    public void startCanvas(boolean waitFor) {
+//        startInit();
+//        super.startCanvas(waitFor);
+//    }
+//    
+//    private void startInit() {
+//        // ----------
+//        // 这里必须优先载入,因为在Android下，需要在start之后和simpleInitApp之前做
+//        // 一些特殊设置,所以ConfigService必须在这里优先载入。
+//        // ----------
+//        Init.initialize(this);
+//    }
     
     @Override
     public void simpleInitApp() {
+        Init.initialize(this);
+        
         // 载入字体
         BitmapFont chFont = assetManager.loadFont("data/font/chinese.fnt");
         LuoYing.setFont(chFont);

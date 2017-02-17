@@ -1,0 +1,145 @@
+<?xml version="1.0"?>
+<!--
+xs:string
+xs:decimal
+xs:integer
+xs:boolean
+xs:date
+xs:time
+-->
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://luoying.huliqing.name"
+           xmlns="http://luoying.huliqing.name"
+           elementFormDefault="qualified" >
+    
+    <xs:include schemaLocation="./base.xsd" />
+    
+    <xs:element name="root">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="emitter" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="emitter" type="emitter" />
+    
+    <xs:complexType name="emitter">
+        <xs:complexContent>
+            <xs:extension base="base">
+                <xs:attribute name="numParticles" use="required" >
+                    <xs:annotation>
+                        <xs:documentation>e.g. "10"</xs:documentation>
+                    </xs:annotation>
+                    <xs:simpleType>
+                        <xs:restriction base="xs:integer">
+                            <xs:minInclusive value="1"  />
+                            <xs:maxInclusive value="30" />
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="startColor" type="xs:string" use="required">
+                    <xs:annotation>
+                        <xs:documentation>RGBA, e.g. "1, 1, 0, 1" </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="endColor" type="xs:string" use="required">
+                    <xs:annotation>
+                        <xs:documentation>RGBA, e.g. "1, 0, 0, 1" </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="startSize" type="xs:decimal" use="required">
+                    <xs:annotation>
+                        <xs:documentation>e.g. "0.2"</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="endSize" type="xs:decimal" use="required">
+                    <xs:annotation>
+                        <xs:documentation>e.g. "1.0" </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="highLife" type="xs:decimal" use="required">
+                    <xs:annotation>
+                        <xs:documentation>e.g. "1.0"</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="lowLife" type="xs:decimal" use="required">
+                    <xs:annotation>
+                        <xs:documentation>e.g. "0.2"</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="texture" type="xs:string" use="required">
+                    <xs:annotation>
+                        <xs:documentation>e.g. "Textures/tex/effect/flash.png"</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="imagesX" type="xs:integer" use="required">
+                    <xs:annotation>
+                        <xs:documentation>e.g. "2"</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="imagesY" type="xs:integer" use="required">
+                    <xs:annotation>
+                        <xs:documentation>e.g. "2" </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="gravity" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>e.g. "0, 0, 0"</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="initialVelocity" type="xs:string" use="required">
+                    <xs:annotation>
+                        <xs:documentation>e.g. "0,0,0"</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="velocityVariation" type="xs:decimal" use="required">
+                    <xs:annotation>
+                        <xs:documentation>e.g. "0.0"</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="particlesPerSec" type="xs:integer" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>e.g. "10.0"</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="randomAngle" use="optional" type="bool">
+                    <xs:annotation>
+                        <xs:documentation>e.g. "0" or "1"</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="rotateSpeed" type="xs:decimal" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>e.g. "1.0"</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="selectRandomImage" type="bool" use="optional" default="0" >
+                    <xs:annotation>
+                        <xs:documentation>e.g. "0" or "1"</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="faceNormal" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>e.g. "1, 1, 1"</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="facingVelocity" type="bool" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>e.g. "0" or "1"</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="shape" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>关联一个emitterShape</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+
+    
+    
+</xs:schema>

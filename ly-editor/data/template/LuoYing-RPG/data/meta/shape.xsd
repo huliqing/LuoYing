@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!--
+xs:string
+xs:decimal
+xs:integer
+xs:boolean
+xs:date
+xs:time
+-->
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://luoying.huliqing.name"
+           xmlns="http://luoying.huliqing.name"
+           elementFormDefault="qualified">
+    
+    <xs:include schemaLocation="./base.xsd" />
+    
+    <xs:element name="root">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="shapeBox" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="shapeBox" >
+        <xs:annotation>
+            <xs:documentation>Box类型的Shape</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="shapeBase">
+                    <xs:attribute name="extents" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>box在各个方向的延伸，格式："x,y,z"</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:complexType name="shapeBase">
+        <xs:complexContent>
+            <xs:extension base="base">
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:schema>

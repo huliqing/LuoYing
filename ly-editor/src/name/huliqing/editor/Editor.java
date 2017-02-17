@@ -50,9 +50,6 @@ public class Editor extends SimpleApplication{
         jeas.setInputManager(inputManager);
         stateManager.attach(jeas);
         
-        // 落樱初始化
-        LuoYing.initialize(this);
-        
         // 快捷键保存,一般优先级应该比其它操作都要高
         EventListener el = (Event e) -> {
             if (e.isMatch()) {

@@ -51,6 +51,9 @@ def archievsDistDir = "$project.buildDir/dist"
 // 生成可执行版本时需要用到classPath,这里主要把所有jar包路径拼成字符串放到manifest中。
 def getLibsClassPath() {
     def path = ''
+    file('libs').eachFile { file -> 
+        path += 'lib/' + file.name + ' '
+    }
     file('libs-jme').eachFile { file -> 
         path += 'lib/' + file.name + ' '
     }
@@ -65,8 +68,9 @@ def getLibsClassPath() {
 // 这里指定编译Core时需要用到的所有jar包，但没有包含asset.jar,因asset.jar需要动
 // 态打包。
 dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
     compile fileTree(dir: 'libs-jme', include: ['*.jar'])
-	compile fileTree(dir: 'libs-ly', include: ['*.jar'])
+    compile fileTree(dir: 'libs-ly', include: ['*.jar'])
     compile fileTree(dir: "$rootProject.projectDir$kernelResultDir", include: ['*.jar'])
 }
 
@@ -104,6 +108,7 @@ task proguard(type: proguard.gradle.ProGuardTask, dependsOn:jar) {
     libraryjars  "${System.getProperty('java.home')}/lib/rt.jar"  
     libraryjars  "${System.getProperty('java.home')}/lib/ext/jfxrt.jar"  
     // JME 依赖包\LY依赖包
+    libraryjars file("$project.projectDir/libs")
     libraryjars file("$project.projectDir/libs-jme")
     libraryjars file("$project.projectDir/libs-ly")
     // luoying-kernel核心包
@@ -129,9 +134,12 @@ task proguard(type: proguard.gradle.ProGuardTask, dependsOn:jar) {
 // 把依赖的jar复制到lib下
 task copyLibs(type: Copy, dependsOn: proguard) {
     copy {
-        from ("$project.projectDir/libs-jme") {
+        from ("$project.projectDir/libs") {
             include('**/*.jar')
             //exclude('**/*-javadoc.zip') 
+        }
+        from ("$project.projectDir/libs-jme") {
+            include('**/*.jar')
         }
         from ("$project.projectDir/libs-ly") {
             include('**/*.jar')

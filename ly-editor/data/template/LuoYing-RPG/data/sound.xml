@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://luoying.huliqing.name'
+    xsi:schemaLocation='http://luoying.huliqing.name meta/sound.xsd'>
+    
+    <!-- 
+    非常重要：将声音文件转换为ogg时，工程采样率不能低于44100， 否则可能在游
+    戏中无法播放，导致画面直接卡死。 
+    -->
+    
+    <!--==========================================================================-->
+    <!--通用碰撞音效: 各种材质的默认碰撞音效-->
+    <!--==========================================================================-->
+    
+    <!--// TODO-->
+    
+    <!--==========================================================================-->
+    <!--环境-->
+    <!--==========================================================================-->
+    <sound id="soundOcean" file="Sounds/environment/ocean.ogg" looping="1" />
+    <sound id="soundRiver" file="Sounds/environment/river.ogg" looping="1" />
+    
+    <!--==========================================================================-->
+    <!--通用提示音效: 任务、物品、装备、升级、金币等提示，
+    如:获得金币提示、装备盔甲提示、刀剑取出或入鞘提示、获得任务提示等等-->
+    <!--==========================================================================-->
+
+    <!--升级: 角色升级提示-->
+    <sound id="soundLevelup"  file="Sounds/levelup.ogg" />
+    <!--提示音: 正面，获得物品、任务完成、奖励等-->
+    <sound id="soundNote"   file="Sounds/note.ogg" />
+    <!--金币声：较少-->
+    <sound id="soundCoin1"  file="Sounds/coin1.ogg" />
+    
+    <!--装备弓箭-->
+    <sound id="soundDrawBow" file="Sounds/bow/drawBow.ogg"  volume="1.2" timeOffset="0.2" />
+    <!--装备刀剑-->
+    <sound id="soundDrawSword" file="Sounds/sword/drawSword.ogg"  volume="0.5" timeOffset="0" />
+    <!--装备盔甲1-->
+    <sound id="soundDressOutfit" file="Sounds/dress.ogg" timeOffset="0.1" />
+    <!--装备盔甲2-->
+    <sound id="soundDressOutfit2" file="Sounds/dress2.ogg" timeOffset="0" />
+    
+    <!--==========================================================================-->
+    <!--通用武器音效: 各种武器的攻击音效，刀剑、弓箭、魔杖、匕首等等-->
+    <!--==========================================================================-->
+
+    <!--刀剑: 攻击-->
+    <sound id="soundSwordAttack1" file="Sounds/sword/zj_001.ogg" des="hj,short"  />
+    <sound id="soundSwordAttack2" file="Sounds/sword/qj_002.ogg" des="hj" />
+    <sound id="soundSwordAttack3" file="Sounds/sword/qj_008.ogg" des="hj" />
+    
+    <!--弓箭: 射击时-->
+    <sound id="soundShot" file="Sounds/magic/shot.ogg"  />
+    <sound id="soundBowPull" file="Sounds/bow/pull.ogg"   timeOffset="0.5" />
+    <sound id="soundBowShot" file="Sounds/bow/shot.ogg"   timeOffset="0" />
+    <sound id="soundBowShotHeavy" file="Sounds/bow/shot_heavy.ogg"   timeOffset="0.5" />
+    <sound id="soundBowHit" file="Sounds/bow/hit.ogg"   timeOffset="0.6" />
+    
+    <!--=====================================================================-->
+    <!--通用属性类声效：金、木、水、火、土、风、气、电-->
+    <!--=====================================================================-->
+    
+    <!--风: -->
+    <sound id="soundWind1" file="Sounds/magic/wind.ogg"  />
+    <!--风: 1秒-->
+    <sound id="soundWind2" file="Sounds/magic/wind2.ogg"  />
+    <!--风: 1.5秒-->
+    <sound id="soundWind3" file="Sounds/magic/wind3.ogg" timeOffset="1.5"  />
+    <!--急速环绕的风声-->
+    <sound id="soundWindSurround" file="Sounds/magic/wind_surround.ogg" timeOffset="0.5" />
+    
+    <!--水：跳入水中-->
+    <sound id="soundWater" file="Sounds/magic/water.ogg" />
+    
+    <!--冰: 冻结-->
+    <sound id="soundIceFrozen" file="Sounds/magic/ice_frozen.ogg" />
+    <sound id="soundIceBreak" file="Sounds/magic/ice_break.ogg" />
+    
+    <!--电: 电流涌动、魔幻-->
+    <sound id="soundElectricity" file="Sounds/magic/electricity.ogg"  timeOffset="0" />
+    <!--电: 电流滋滋声-->
+    <sound id="soundElectricity2" file="Sounds/magic/electricity2.ogg"  timeOffset="0.5" />
+    
+    <!--气: 聚气-->
+    <sound id="soundGasGathering" file="Sounds/magic/gasGathering.ogg"  volume="0.5" />
+    <!--气: 爆气-->
+    <sound id="soundGasExplosion" file="Sounds/magic/gasExplosion.ogg"  />
+    
+    <!--=====================================================================-->
+    <!--通用技能类音效-->
+    <!--=====================================================================-->
+    
+    <!--恢复：使用药品-->
+    <sound id="soundRecover" file="Sounds/magic/recover.ogg"   />
+    
+    <!--爆炸-->
+    <sound id="soundExplosion" file="Sounds/magic/explosion.ogg"  />
+    
+    <!--魔法阵张开-->
+    <sound id="soundMagicExpand" file="Sounds/magic/magicExpand.ogg"  />
+
+    <!--治愈: 恢复生命-->
+    <sound id="soundRestore" file="Sounds/magic/restore.ogg"  />
+    
+    <!--魔法发射-->
+    <sound id="soundShot2" file="Sounds/magic/shot2.ogg" />
+    <sound id="soundShot3" file="Sounds/magic/shot3.ogg" />
+    
+    <!--=====================================================================-->
+    <!--特殊生物: 特殊角色、特殊生物音效-->
+    <!--=====================================================================-->
+    
+    <!-- Spider -->
+    <sound id="soundSpiderAttack1" file="Sounds/creature/spider/attack1.ogg"  />
+    <sound id="soundSpiderAttack2" file="Sounds/creature/spider/attack2.ogg"  />
+    <sound id="soundSpiderDead" file="Sounds/creature/spider/dead.ogg"  />
+    <sound id="soundSpiderHurt" file="Sounds/creature/spider/hurt.ogg"  />
+
+    <!--skeleton-->
+    <sound id="soundSkeletonDead" file="Sounds/creature/skeleton/dead.ogg" />
+    <sound id="soundSkeletonStep1" file="Sounds/creature/skeleton/ske_step1.ogg" />
+    <sound id="soundSkeletonStep2" file="Sounds/creature/skeleton/ske_step2.ogg" />
+</root>
+
+
+

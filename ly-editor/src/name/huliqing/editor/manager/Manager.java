@@ -5,9 +5,12 @@
  */
 package name.huliqing.editor.manager;
 
+import name.huliqing.editor.EditAssetLocator;
 import com.jme3.app.Application;
 import com.jme3.font.BitmapFont;
 import name.huliqing.editor.log.LogFactory;
+import name.huliqing.luoying.LuoYing;
+import name.huliqing.luoying.TextFileLoader;
 
 /**
  * 全局管理器
@@ -25,24 +28,29 @@ public class Manager {
     private static boolean configLoaded;
     
     public static void initialize(Application app) {
-        // 载入资源文件
+        // 资源路径，及资源载入器实始化
+        app.getAssetManager().registerLoader(TextFileLoader.class, "ini", "xml");
+        app.getAssetManager().registerLocator("", EditAssetLocator.class);
+        
+        // 日志初始化
+        LogFactory.initialize();
+        
+        // 载入编辑器资源文件
         initializeResource();
 
         // 载入配置
         initializeConfig();
-        
-        ComponentManager.loadComponents();
 
         // 载入字体
         font = app.getAssetManager().loadFont("/resources/font/chinese.fnt");
+
+        // 落樱初始化,需要先初始化
+        LuoYing.initialize(app);
         
-        app.getAssetManager().registerLocator("", EditAssetLocator.class);
+        // 重新设置一次资源文件夹，以便触发资源的重新载入。
+        String mainAssetDir = CONFIG_MANAGER.getMainAssetDir();
+        CONFIG_MANAGER.setMainAssetDir(mainAssetDir);
         
-        // 转换器初始化
-        ConverterManager.initialize(); 
-        
-        // 日志初始化
-        LogFactory.initialize();
     }
     
     public static void cleanup() {
@@ -96,6 +104,7 @@ public class Manager {
     public final static String getRes(String resKey) {
         return getResManager().get(resKey);
     }
+    
     public final static String getRes(String resKey, Object[] params) {
         return getResManager().get(resKey, params);
     }

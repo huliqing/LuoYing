@@ -1,0 +1,22 @@
+MaterialDef FacePanel {
+ 
+    MaterialParameters {
+        Texture2D Texture
+        Color Color
+        Float Radius
+        Color BorderColor
+        Float BorderWidth
+    }
+ 
+    Technique {
+        VertexShader GLSL100:   LuoYingSys/Assets/MatDefs/FacePanel/facePanel.vert
+        FragmentShader GLSL100: LuoYingSys/Assets/MatDefs/FacePanel/facePanel.frag
+ 
+        WorldParameters {
+            WorldViewProjectionMatrix
+        }
+ 
+        Defines {
+        }
+    }
+}

@@ -7,7 +7,6 @@ package name.huliqing.editor.ui;
 
 import java.io.File;
 import java.util.List;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -15,6 +14,7 @@ import javafx.scene.control.MenuItem;
 import javafx.stage.DirectoryChooser;
 import name.huliqing.editor.Editor;
 import name.huliqing.editor.constants.AssetConstants;
+import name.huliqing.editor.constants.ConfigConstants;
 import name.huliqing.editor.manager.Manager;
 import name.huliqing.editor.constants.ResConstants;
 import name.huliqing.editor.manager.ConfigManager;
@@ -126,7 +126,7 @@ public class MenuForm extends MenuBar implements ConfigManager.ConfigChangedList
 
     @Override
     public void onConfigChanged(String key) {
-        if (ConfigManager.KEY_ASSETS.equals(key)) {
+        if (ConfigConstants.KEY_ASSETS.equals(key)) {
             Jfx.runOnJfx(() -> {rebuildAssetRecent();});
         }
     }

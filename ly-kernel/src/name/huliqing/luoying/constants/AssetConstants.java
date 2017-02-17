@@ -29,14 +29,14 @@ public class AssetConstants {
     // Models
     /** =========================================================================== */
     
-    /** LuoYing/Assets/Models/unitBox.j3o */
-    public final static String MODEL_UNIT_BOX = "LuoYing/Assets/Models/unitBox.j3o";
+    /** LuoYingSys/Assets/Models/unitBox.j3o */
+    public final static String MODEL_UNIT_BOX = "LuoYingSys/Assets/Models/unitBox.j3o";
     
-    /** LuoYing/Assets/Models/Boundary/boundaryBox.j3o */
-    public final static String MODEL_BOUNDARY = "LuoYing/Assets/Models/unitBoundaryBox.j3o";
+    /** LuoYingSys/Assets/Models/Boundary/boundaryBox.j3o */
+    public final static String MODEL_BOUNDARY = "LuoYingSys/Assets/Models/unitBoundaryBox.j3o";
     
-    /** LuoYing/Assets/MatDefs/SlideColor/slideColor.j3o */
-    public final static String MODEL_SLIDE_COLOR = "LuoYing/Assets/MatDefs/SlideColor/slideColor.j3o";
+    /** LuoYingSys/Assets/MatDefs/SlideColor/slideColor.j3o */
+    public final static String MODEL_SLIDE_COLOR = "LuoYingSys/Assets/MatDefs/SlideColor/slideColor.j3o";
     
     
     /** =========================================================================== */
@@ -52,81 +52,81 @@ public class AssetConstants {
     /** Common/MatDefs/Misc/Particle.j3md */
     public final static String MATERIAL_PARTICLE = "Common/MatDefs/Misc/Particle.j3md";
     
-    /** LuoYing/Assets/MatDefs/SimpleWater/water.j3md */
-    public final static String MATERIAL_SIMPLE_WATER = "LuoYing/Assets/MatDefs/SimpleWater/water.j3md";
+    /** LuoYingSys/Assets/MatDefs/SimpleWater/water.j3md */
+    public final static String MATERIAL_SIMPLE_WATER = "LuoYingSys/Assets/MatDefs/SimpleWater/water.j3md";
     
-    /** LuoYing/Assets/MatDefs/SlideColor/slideColor.j3md */
-    public final static String MATERIAL_SLIDE_COLOR = "LuoYing/Assets/MatDefs/SlideColor/slideColor.j3md";
+    /** LuoYingSys/Assets/MatDefs/SlideColor/slideColor.j3md */
+    public final static String MATERIAL_SLIDE_COLOR = "LuoYingSys/Assets/MatDefs/SlideColor/slideColor.j3md";
         
-    /** LuoYing/Assets/MatDefs/SlideColorIO/slideColorIO.j3md */
-    public final static String MATERIAL_SLIDE_COLOR_IO = "LuoYing/Assets/MatDefs/SlideColorIO/slideColorIO.j3md";
+    /** LuoYingSys/Assets/MatDefs/SlideColorIO/slideColorIO.j3md */
+    public final static String MATERIAL_SLIDE_COLOR_IO = "LuoYingSys/Assets/MatDefs/SlideColorIO/slideColorIO.j3md";
     
-    /** LuoYing/Assets/MatDefs/SlideTrail/slideTrail.j3md */
-    public final static String MATERIAL_SLIDE_TRAIL = "LuoYing/Assets/MatDefs/SlideTrail/slideTrail.j3md";
+    /** LuoYingSys/Assets/MatDefs/SlideTrail/slideTrail.j3md */
+    public final static String MATERIAL_SLIDE_TRAIL = "LuoYingSys/Assets/MatDefs/SlideTrail/slideTrail.j3md";
     
-    /** LuoYing/Assets/MatDefs/FacePanel/facePanel.j3md */
-    public final static String MATERIAL_FACE_PANEL = "LuoYing/Assets/MatDefs/FacePanel/facePanel.j3md";
+    /** LuoYingSys/Assets/MatDefs/FacePanel/facePanel.j3md */
+    public final static String MATERIAL_FACE_PANEL = "LuoYingSys/Assets/MatDefs/FacePanel/facePanel.j3md";
     
-    /** LuoYing/Assets/MatDefs/View/view.j3md */
-    public final static String MATERIAL_VIEW = "LuoYing/Assets/MatDefs/View/view.j3md";
+    /** LuoYingSys/Assets/MatDefs/View/view.j3md */
+    public final static String MATERIAL_VIEW = "LuoYingSys/Assets/MatDefs/View/view.j3md";
     
-    /** LuoYing/Assets/MatDefs/Projection/projection.j3md */
-    public final static String MATERIAL_PROJECTION = "LuoYing/Assets/MatDefs/Projection/projection.j3md";
+    /** LuoYingSys/Assets/MatDefs/Projection/projection.j3md */
+    public final static String MATERIAL_PROJECTION = "LuoYingSys/Assets/MatDefs/Projection/projection.j3md";
     
-    /** LuoYing/Assets/MatDefs/Skill/cooldown.j3md */
-    public final static String MATERIAL_SKILL_COOLDOWN = "LuoYing/Assets/MatDefs/Skill/cooldown.j3md";
+    /** LuoYingSys/Assets/MatDefs/Skill/cooldown.j3md */
+    public final static String MATERIAL_SKILL_COOLDOWN = "LuoYingSys/Assets/MatDefs/Skill/cooldown.j3md";
     
     /** =========================================================================== */
     // Textures
     /** =========================================================================== */
     
      /** 默认的地形基本贴图 */
-    public final static String TEXTURES_TERRAIN_DIRT = "LuoYing/Assets/Textures/dirt.jpg";
+    public final static String TEXTURES_TERRAIN_DIRT = "LuoYingSys/Assets/Textures/dirt.jpg";
     
-    /** LuoYing/Assets/MatDefs/SimpleWater/normalMap.jpg */
-    public final static String TEXTURE_SIMPLE_WATER_NORMAL = "LuoYing/Assets/MatDefs/SimpleWater/normalMap.jpg";
+    /** LuoYingSys/Assets/MatDefs/SimpleWater/normalMap.jpg */
+    public final static String TEXTURE_SIMPLE_WATER_NORMAL = "LuoYingSys/Assets/MatDefs/SimpleWater/normalMap.jpg";
     
-    /** LuoYing/Assets/MatDefs/SimpleWater/dudvMap.jpg */
-    public final static String TEXTURE_SIMPLE_WATER_DUDV = "LuoYing/Assets/MatDefs/SimpleWater/dudvMap.jpg";
+    /** LuoYingSys/Assets/MatDefs/SimpleWater/dudvMap.jpg */
+    public final static String TEXTURE_SIMPLE_WATER_DUDV = "LuoYingSys/Assets/MatDefs/SimpleWater/dudvMap.jpg";
     
-    /** LuoYing/Assets/Textures/magic.jpg */
-    public final static String TEXTURE_MAGIC = "LuoYing/Assets/Textures/magic.jpg";
+    /** LuoYingSys/Assets/Textures/magic.jpg */
+    public final static String TEXTURE_MAGIC = "LuoYingSys/Assets/Textures/magic.jpg";
     
-    /** LuoYing/Assets/Textures/mask.jpg */
-    public final static String TEXTURE_MASK = "LuoYing/Assets/Textures/mask.jpg";
+    /** LuoYingSys/Assets/Textures/mask.jpg */
+    public final static String TEXTURE_MASK = "LuoYingSys/Assets/Textures/mask.jpg";
     
-    /** LuoYing/Assets/Textures/particles.jpg */
-    public final static String TEXTURE_PARTICLES = "LuoYing/Assets/Textures/particles.jpg";
+    /** LuoYingSys/Assets/Textures/particles.jpg */
+    public final static String TEXTURE_PARTICLES = "LuoYingSys/Assets/Textures/particles.jpg";
     
     /** =========================================================================== */
     // UI
     /** =========================================================================== */
     
-    /** LuoYing/Assets/Interface/UI/miss.png */
-    public final static String UI_MISS = "LuoYing/Assets/Interface/UI/miss.png";
+    /** LuoYingSys/Assets/Interface/UI/miss.png */
+    public final static String UI_MISS = "LuoYingSys/Assets/Interface/UI/miss.png";
     
-    /** LuoYing/Assets/Interface/UI/background.png */
-    public final static String UI_BACKGROUND = "LuoYing/Assets/Interface/UI/background.png";
+    /** LuoYingSys/Assets/Interface/UI/background.png */
+    public final static String UI_BACKGROUND = "LuoYingSys/Assets/Interface/UI/background.png";
     
-    /** LuoYing/Assets/Interface/UI/button_ok.png */
-    public final static String UI_BUTTON_OK = "LuoYing/Assets/Interface/UI/button_ok.png";
+    /** LuoYingSys/Assets/Interface/UI/button_ok.png */
+    public final static String UI_BUTTON_OK = "LuoYingSys/Assets/Interface/UI/button_ok.png";
     
-    /** LuoYing/Assets/Interface/UI/button_cancel.png */
-    public final static String UI_BUTTON_CANCEL = "LuoYing/Assets/Interface/UI/button_cancel.png";
+    /** LuoYingSys/Assets/Interface/UI/button_cancel.png */
+    public final static String UI_BUTTON_CANCEL = "LuoYingSys/Assets/Interface/UI/button_cancel.png";
     
-    /** LuoYing/Assets/Interface/UI/button_close.png */
-    public final static String UI_BUTTON_CLOSE = "LuoYing/Assets/Interface/UI/button_close.png";
+    /** LuoYingSys/Assets/Interface/UI/button_close.png */
+    public final static String UI_BUTTON_CLOSE = "LuoYingSys/Assets/Interface/UI/button_close.png";
     
-    /** LuoYing/Assets/Interface/UI/checkbox_on.jpg */
-    public final static String UI_CHECKBOX_ON = "LuoYing/Assets/Interface/UI/checkbox_on.jpg";
+    /** LuoYingSys/Assets/Interface/UI/checkbox_on.jpg */
+    public final static String UI_CHECKBOX_ON = "LuoYingSys/Assets/Interface/UI/checkbox_on.jpg";
     
-    /** LuoYing/Assets/Interface/UI/checkbox_off.jpg */
-    public final static String UI_CHECKBOX_OFF = "LuoYing/Assets/Interface/UI/checkbox_off.jpg";
+    /** LuoYingSys/Assets/Interface/UI/checkbox_off.jpg */
+    public final static String UI_CHECKBOX_OFF = "LuoYingSys/Assets/Interface/UI/checkbox_off.jpg";
     
     /** =========================================================================== */
     // Sound
     /** =========================================================================== */
     
-    /** LuoYing/Assets/Interface/UI/sound_click.ogg */
-    public final static String SOUND_CLICK = "LuoYing/Assets/Sounds/uiClick.ogg";
+    /** LuoYingSys/Assets/Interface/UI/sound_click.ogg */
+    public final static String SOUND_CLICK = "LuoYingSys/Assets/Sounds/uiClick.ogg";
 }
