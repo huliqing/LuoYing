@@ -71,6 +71,16 @@ public class PhysicsEntity extends NonModelEntity implements SceneListener {
     @Override
     public void updateDatas() {
         super.updateDatas();
+        data.setAttribute("debug", bulletAppState.isDebugEnabled());
+        data.setAttribute("gravity", bulletAppState.getPhysicsSpace().getGravity(new Vector3f()));
+//        data.setAttribute("broadphaseType", bulletAppState.xxx.name()); // no change
+        data.setAttribute("threadingType", bulletAppState.getThreadingType().name());
+        data.setAttribute("speed", bulletAppState.getSpeed());
+        data.setAttribute("worldMax", bulletAppState.getPhysicsSpace().getWorldMax());
+        data.setAttribute("worldMin", bulletAppState.getPhysicsSpace().getWorldMin());
+        data.setAttribute("accuracy", bulletAppState.getPhysicsSpace().getAccuracy());
+//        data.setAttribute("maxSubSteps", bulletAppState.getPhysicsSpace().xxx); // no change
+        data.setAttribute("solverNumIterations", bulletAppState.getPhysicsSpace().getSolverNumIterations());
     }
 
     @Override

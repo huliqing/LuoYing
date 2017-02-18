@@ -39,11 +39,13 @@ public class JfxEditToolbar implements JfxToolbar, ToolbarListener{
     
     public JfxEditToolbar() {
         root.setContent(layout);
-        root.setPadding(new Insets(5));
+        root.setPadding(new Insets(7));
         
         layout.prefHeightProperty().bind(root.heightProperty());
+        layout.prefWidthProperty().bind(root.widthProperty());
         layout.getStyleClass().add(StyleConstants.CLASS_HVBOX);
         layout.setPadding(Insets.EMPTY);
+        layout.setSpacing(5);
     }
     
     @Override
@@ -71,7 +73,9 @@ public class JfxEditToolbar implements JfxToolbar, ToolbarListener{
                 jfxTool.initialize();
                 jfxTool.setEnabled(tool.isInitialized());
                 toolViewMap.put(tool, jfxTool);
-                layout.getChildren().add(jfxTool.getView());
+                Region view = jfxTool.getView();
+                layout.getChildren().add(view);
+                view.prefWidthProperty().bind(layout.widthProperty());
             }
         }
         root.setFitToWidth(true);

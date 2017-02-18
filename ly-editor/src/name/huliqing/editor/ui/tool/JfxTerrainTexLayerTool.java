@@ -20,12 +20,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import name.huliqing.editor.constants.AssetConstants;
@@ -92,6 +91,10 @@ public class JfxTerrainTexLayerTool extends JfxAbstractTool<TexLayerTool> implem
                 tool.setNormalTexture(layerIndex, null);
             });
         });
+        
+        layerPanel.prefWidthProperty().bind(layout.widthProperty());
+        layerPanel.prefHeightProperty().bind(layout.heightProperty());
+        layout.setMinHeight(250);
         
         initTableModel();
     }
@@ -201,8 +204,6 @@ public class JfxTerrainTexLayerTool extends JfxAbstractTool<TexLayerTool> implem
         layerPanel.getColumns().addAll(select, tex, nor, scale);
         layerPanel.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         layerPanel.setPlaceholder(new Label("No Textures"));
-        layerPanel.setPrefWidth(200);
-        layerPanel.setPrefHeight(200);
         layerPanel.getSelectionModel().selectedIndexProperty().addListener((ObservableValue<? extends Number> observable
                 , Number oldValue, Number newValue) -> {
             if (newValue.intValue() < 0 || newValue.intValue() >= layerPanel.getItems().size() || newValue.intValue() == lastSelectRowIndex) {
@@ -217,7 +218,7 @@ public class JfxTerrainTexLayerTool extends JfxAbstractTool<TexLayerTool> implem
     }
     
     @Override
-    public Node createView() {
+    public Region createView() {
         return layout;
     }
 

@@ -6,9 +6,9 @@
 package name.huliqing.editor.ui.tool;
 
 import javafx.beans.value.ObservableValue;
-import javafx.scene.Node;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Tooltip;
+import javafx.scene.layout.Region;
 import name.huliqing.editor.edit.Mode;
 import name.huliqing.editor.tools.base.ModeTool;
 import name.huliqing.fxswing.Jfx;
@@ -23,8 +23,14 @@ public class JfxModeTool extends JfxAbstractTool implements ModeTool.ModeChanged
     private ModeTool modeTool;
     private boolean ignoreEvent;
     
+    public JfxModeTool() {
+        view.setPrefWidth(80);
+        view.setPrefHeight(25);
+        view.setMaxHeight(25);
+    }
+    
     @Override
-    public Node createView() {
+    public Region createView() {
         return view;
     }
 

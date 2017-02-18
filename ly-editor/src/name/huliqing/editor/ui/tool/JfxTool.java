@@ -5,7 +5,7 @@
  */
 package name.huliqing.editor.ui.tool;
 
-import javafx.scene.Node;
+import javafx.scene.layout.Region;
 import name.huliqing.editor.toolbar.Toolbar;
 import name.huliqing.editor.tools.Tool;
 
@@ -27,7 +27,7 @@ public interface JfxTool<T extends Tool> {
      * 获取编辑工具的渲染UI
      * @return 
      */
-    Node getView();
+    Region getView();
     
     /**
      * 设置工具是否可用。

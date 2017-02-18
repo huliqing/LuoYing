@@ -83,14 +83,10 @@
 
 .tool-bar {
     -fx-base: darkgray;
-    /*-fx-background-color: darkgray;*/
-    -fx-padding: 0;
-    -fx-spacing: 3;
+    -fx-background-color: darkgray;
 }
 .tool-bar > .container {
     -fx-background-color: darkgray;
-    -fx-padding: 0;
-    -fx-spacing: 3;
 }
 .tool-bar .button {
     -fx-pref-width: 20;
@@ -160,15 +156,15 @@
     -fx-background-color: derive(darkblue, 100%);
     -fx-text-fill: derive(white, -10%);
 }
-.list-view .list-cell:pressed {
+/** 不要这个样式:这会造成在有鼠标拖动行为的时候，鼠标按下并拖出list-cell之后该样式仍然不会消息的BUG */
+/*.list-view .list-cell:pressed {
     -fx-background-color: derive(darkblue, 80%);
     -fx-text-fill: derive(white, -10%);
-}
+}*/
 .list-view .list-cell:selected {
     -fx-background-color: derive(darkblue, 80%);
     -fx-text-fill: derive(white, -10%);
 }
-
 
 .table-view {
     -fx-base: darkgray;

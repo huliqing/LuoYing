@@ -124,6 +124,16 @@
     <entitySimpleModel id="sysEntityModel" extends="sysEntityModelBase" file="LuoYingSys/Assets/Models/unitBox.j3o" scale="1,1,1" />
     
     <!-- ========================================================================= -->
+    <!-- 以下为内置过滤器 -->
+    <!-- ========================================================================= -->
+    
+    <entityBloomFilter id="sysEntityBloomFilter" bloomIntensity="2.0" blurScale="1.5" downSamplingFactor="1" exposureCutOff="0" exposurePower="5.0" />
+    <entityFXAAFilter id="sysEntityFXAAFilter" reduceMul="0.125" spanMax="8" subPixelShift="0.25" vxOffset="0" />
+    <entityFogFilter id="sysEntityFogFilter" fogColor="1,1,1,1" fogDensity="0.7" fogDistance="1000" />
+    <entityLightScatteringFilter id="sysEntityLightScatteringFilter" blurStart="0.02" blurWidth="0.9" lightDensity="1.4" lightPosition="0,0,0" nbSamples="50" />
+    <entitySSAOFilter id="sysEntitySSAOFilter" bias="0.1" intensity="1.5" sampleRadius="5.1" ssaoScale="0.2" />
+    
+    <!-- ========================================================================= -->
     <!-- 一些额外的参考配置，不能直接使用，根据应用和资源环境的不同实际情况，配置参数会有所不同 -->
     <!-- ========================================================================= -->
     <!--  

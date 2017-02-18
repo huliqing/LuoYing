@@ -38,14 +38,9 @@ import com.jme3.scene.UserData;
 import com.jme3.system.AppSettings;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.util.LinkedHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -288,6 +283,11 @@ import name.huliqing.luoying.object.el.STNumberEl;
 import name.huliqing.luoying.object.el.LNumberEl;
 import name.huliqing.luoying.object.el.SBooleanEl;
 import name.huliqing.luoying.object.el.SkillHitNumberEl;
+import name.huliqing.luoying.object.entity.filter.BloomFilterEntity;
+import name.huliqing.luoying.object.entity.filter.FXAAFilterEntity;
+import name.huliqing.luoying.object.entity.filter.FogFilterEntity;
+import name.huliqing.luoying.object.entity.filter.LightScatteringFilterEntity;
+import name.huliqing.luoying.object.entity.filter.SSAOFilterEntity;
 import name.huliqing.luoying.object.entity.impl.DirectionalLightShadowEntity;
 import name.huliqing.luoying.object.entity.impl.GrassEntity;
 import name.huliqing.luoying.object.entity.impl.SimpleModelEntity;
@@ -662,6 +662,13 @@ public class LuoYing {
         DataFactory.register("entitySkyBox", ModelEntityData.class, EntityDataLoader.class, SkyBoxEntity.class);
         DataFactory.register("entityTree", ModelEntityData.class, PlantEnvLoader.class, TreeEntity.class);
         DataFactory.register("entityUnshaded", EntityData.class, EntityDataLoader.class, UnshadedEntity.class);
+        
+        // 各种Filter
+        DataFactory.register("entityBloomFilter", EntityData.class, EntityDataLoader.class, BloomFilterEntity.class);
+        DataFactory.register("entityFXAAFilter", EntityData.class, EntityDataLoader.class, FXAAFilterEntity.class);
+        DataFactory.register("entityFogFilter", EntityData.class, EntityDataLoader.class, FogFilterEntity.class);
+        DataFactory.register("entityLightScatteringFilter", EntityData.class, EntityDataLoader.class, LightScatteringFilterEntity.class);
+        DataFactory.register("entitySSAOFilter", EntityData.class, EntityDataLoader.class, SSAOFilterEntity.class);
         
         // Game
         DataFactory.register("gameSimple", GameData.class, GameDataLoader.class, SimpleGame.class);

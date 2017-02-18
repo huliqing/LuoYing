@@ -18,8 +18,11 @@
     <component id="sysEntityPhysics" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
     <component id="sysEntityShadow" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
     <component id="sysEntityAudio" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
-    
     <component id="sysModulePhysics" type="module" icon="" converterClass="" />
     
-    
+    <component id="sysEntityBloomFilter" type="entityFilter" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="sysEntityFXAAFilter" type="entityFilter" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="sysEntityFogFilter" type="entityFilter" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="sysEntityLightScatteringFilter" type="entityFilter" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="sysEntitySSAOFilter" type="entityFilter" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
 </root>

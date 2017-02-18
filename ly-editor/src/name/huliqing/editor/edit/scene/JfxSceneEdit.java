@@ -17,6 +17,7 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.Region;
 import name.huliqing.editor.constants.DataFormatConstants;
 import name.huliqing.editor.constants.ResConstants;
 import name.huliqing.editor.manager.ConverterManager;
@@ -102,7 +103,7 @@ public class JfxSceneEdit extends JfxSimpleEdit<SceneEdit>
     @Override
     protected void onDragOver(DragEvent e) {
         Dragboard db = e.getDragboard();
-        if (db.hasContent(DataFormatConstants.COMPONENT_DEFINE)) {
+        if (db.hasContent(DataFormatConstants.COMPONENT_ENTITY)) {
             e.acceptTransferModes(TransferMode.ANY);
         }
         e.consume();
@@ -111,8 +112,8 @@ public class JfxSceneEdit extends JfxSimpleEdit<SceneEdit>
     @Override
     protected void onDragDropped(DragEvent e) {
         Dragboard db = e.getDragboard();
-        if (db.hasContent(DataFormatConstants.COMPONENT_DEFINE)) {
-            ComponentDefine c = (ComponentDefine) db.getContent(DataFormatConstants.COMPONENT_DEFINE);
+        if (db.hasContent(DataFormatConstants.COMPONENT_ENTITY)) {
+            ComponentDefine c = (ComponentDefine) db.getContent(DataFormatConstants.COMPONENT_ENTITY);
             e.setDropCompleted(true);
             e.consume();
 
@@ -160,9 +161,11 @@ public class JfxSceneEdit extends JfxSimpleEdit<SceneEdit>
                     }
                     sceneDataConverter = ConverterManager.createDataConverter(this, scene.getData(), null);
                     sceneDataConverter.initialize();
+                    Region layout = sceneDataConverter.getLayout();
                     scenePropertyPanel.setText(scene.getData().getId());
-                    scenePropertyPanel.setContent(sceneDataConverter.getLayout());
-                    scenePropertyPanel.setPrefWidth(200);
+                    scenePropertyPanel.setContent(layout);
+                    scenePropertyPanel.setPrefWidth(250);
+                    layout.prefWidthProperty().bind(scenePropertyPanel.widthProperty());
                 });
                 
             } catch (Exception e) {

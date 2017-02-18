@@ -6,7 +6,7 @@
 package name.huliqing.editor.ui.tool;
 
 import javafx.geometry.Insets;
-import javafx.scene.Node;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import name.huliqing.editor.toolbar.Toolbar;
 import name.huliqing.editor.tools.Tool;
@@ -27,7 +27,6 @@ public abstract class JfxAbstractTool<T extends Tool> implements JfxTool<T> {
     protected final VBox root = new VBox();
     
     public JfxAbstractTool() {
-        root.setPadding(new Insets(3,0,3,0));
         root.managedProperty().bind(root.visibleProperty());
     }
 
@@ -52,7 +51,7 @@ public abstract class JfxAbstractTool<T extends Tool> implements JfxTool<T> {
     }
 
     @Override
-    public final Node getView() {
+    public final Region getView() {
         return root;
     }
 
@@ -61,7 +60,10 @@ public abstract class JfxAbstractTool<T extends Tool> implements JfxTool<T> {
         if (initialized) {
             throw new IllegalStateException();
         }
-        root.getChildren().add(createView());
+        Region region = createView();
+        region.prefWidthProperty().bind(root.widthProperty());
+        region.prefHeightProperty().bind(root.heightProperty());
+        root.getChildren().add(region);
         initialized = true;
     }
 
@@ -98,5 +100,5 @@ public abstract class JfxAbstractTool<T extends Tool> implements JfxTool<T> {
      * 创建工具的组件
      * @return 
      */
-    protected abstract Node createView();
+    protected abstract Region createView();
 }

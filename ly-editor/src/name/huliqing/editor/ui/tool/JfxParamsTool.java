@@ -7,8 +7,9 @@ package name.huliqing.editor.ui.tool;
 
 import java.util.ArrayList;
 import java.util.List;
-import javafx.scene.Node;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
+import name.huliqing.editor.constants.StyleConstants;
 import name.huliqing.editor.tools.ParamsTool;
 import name.huliqing.editor.tools.Tool;
 import name.huliqing.fxswing.Jfx;
@@ -19,14 +20,15 @@ import name.huliqing.fxswing.Jfx;
  */
 public class JfxParamsTool extends JfxAbstractTool<ParamsTool> {
 
-    private final GridPane layout = new GridPane();
+    private final VBox layout = new VBox();
     
     public JfxParamsTool() {
-        layout.setVgap(5);
+        layout.getStyleClass().add(StyleConstants.CLASS_HVBOX);
+        layout.setSpacing(5);
     }
     
     @Override
-    public Node createView() {
+    public Region createView() {
         return layout;
     }
 
@@ -46,7 +48,9 @@ public class JfxParamsTool extends JfxAbstractTool<ParamsTool> {
                     JfxTool jt = JfxToolFactory.createJfxTool(child, toolbar);
                     if (jt != null) {
                         jt.initialize();
-                        layout.addRow(i, jt.getView());
+                        Region toolView = jt.getView();
+                        toolView.prefWidthProperty().bind(layout.widthProperty());
+                        layout.getChildren().add(toolView);
                     }
                 }
             });

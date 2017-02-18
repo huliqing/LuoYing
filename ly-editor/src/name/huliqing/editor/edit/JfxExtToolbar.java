@@ -8,12 +8,12 @@ package name.huliqing.editor.edit;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
-import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import name.huliqing.editor.constants.AssetConstants;
 import name.huliqing.editor.constants.StyleConstants;
 import name.huliqing.editor.ui.utils.JfxUtils;
@@ -30,6 +30,7 @@ public class JfxExtToolbar extends HBox {
     private final TabPane tabPane = new TabPane();
     
     public JfxExtToolbar() {
+        setPadding(Insets.EMPTY);
         arrowL.managedProperty().bind(arrowL.visibleProperty());
         arrowR.managedProperty().bind(arrowR.visibleProperty());
         arrowL.setVisible(false);
@@ -50,13 +51,16 @@ public class JfxExtToolbar extends HBox {
         tabPane.setSide(Side.RIGHT);
         tabPane.setPadding(Insets.EMPTY);
         tabPane.managedProperty().bind(tabPane.visibleProperty());
-        
         getChildren().addAll(visibleControl, tabPane);
+        
         getStyleClass().add(StyleConstants.CLASS_HVBOX);
-        setPadding(Insets.EMPTY);
+        
+        visibleControl.prefHeightProperty().bind(heightProperty());
+        tabPane.prefHeightProperty().bind(heightProperty());
+        tabPane.setPrefWidth(250);
     }
     
-    public void addToolbar(String name, Node toolbar) {
+    public void addToolbar(String name, Region toolbar) {
         Tab tab = new Tab();
         tab.setText(name);
         tab.setClosable(false);

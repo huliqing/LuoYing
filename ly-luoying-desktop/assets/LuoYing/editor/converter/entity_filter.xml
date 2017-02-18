@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://editor.huliqing.name'
+    xsi:schemaLocation='http://editor.huliqing.name meta.xsd'>
+    
+    <data name="entityFilterBase" extends="entityBase">
+        <feature name="hideFields" value="location,rotation,scale,mat,modules,objectDatas" />
+    </data>
+    
+    <data name="entityBloomFilter" extends="entityFilterBase">
+        <field name="bloomIntensity" converter="FloatTextConverter" />
+        <field name="blurScale" converter="FloatTextConverter" />
+        <field name="downSamplingFactor" converter="FloatTextConverter" />      
+        <field name="exposureCutOff" converter="FloatTextConverter" />      
+        <field name="exposurePower" converter="FloatTextConverter" /> 
+    </data>
+
+    <data name="entityFXAAFilter" extends="entityFilterBase">
+        <field name="reduceMul" converter="FloatTextConverter" />      
+        <field name="spanMax" converter="FloatTextConverter" />      
+        <field name="subPixelShift" converter="FloatTextConverter" />      
+        <field name="vxOffset" converter="FloatTextConverter" />      
+    </data>
+
+    <data name="entityFogFilter" extends="entityFilterBase">
+        <field name="fogColor" converter="ColorConverter" />      
+        <field name="fogDensity" converter="FloatTextConverter" />      
+        <field name="fogDistance" converter="FloatTextConverter" />      
+    </data>
+
+    <data name="entityLightScatteringFilter" extends="entityFilterBase">
+        <field name="blurStart" converter="FloatTextConverter" />      
+        <field name="blurWidth" converter="FloatTextConverter" />      
+        <field name="lightDensity" converter="FloatTextConverter" />      
+        <field name="lightPosition" converter="FloatTextConverter" />      
+        <field name="nbSamples" converter="IntegerTextConverter" />      
+    </data>
+
+    <data name="entitySSAOFilter" extends="entityFilterBase">
+        <field name="bias" converter="FloatTextConverter" />      
+        <field name="intensity" converter="FloatTextConverter" />      
+        <field name="sampleRadius" converter="FloatTextConverter" />      
+        <field name="scale" converter="FloatTextConverter" />      
+    </data>
+    
+    
+
+</root>

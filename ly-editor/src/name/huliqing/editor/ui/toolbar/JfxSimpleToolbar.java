@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.geometry.Insets;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.Region;
-import name.huliqing.editor.constants.StyleConstants;
 import name.huliqing.editor.toolbar.Toolbar;
 import name.huliqing.editor.toolbar.ToolbarListener;
 import name.huliqing.editor.tools.Tool;
@@ -35,6 +35,7 @@ public class JfxSimpleToolbar extends ToolBar implements JfxToolbar, ToolbarList
     private boolean initialized;
     
     public JfxSimpleToolbar() {
+        setPadding(new Insets(3));
         setBackground(Background.EMPTY);
     }
 
@@ -62,7 +63,9 @@ public class JfxSimpleToolbar extends ToolBar implements JfxToolbar, ToolbarList
                 jfxTool.initialize();
                 jfxTool.setEnabled(tool.isInitialized());
                 toolViewMap.put(tool, jfxTool);
-                getItems().add(jfxTool.getView());
+                Region region = jfxTool.getView();
+                region.setPrefWidth(70);
+                getItems().add(region);
             }
         }
     }

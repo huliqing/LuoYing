@@ -6,10 +6,10 @@
 package name.huliqing.editor.ui.tool;
 
 import javafx.beans.value.ObservableValue;
-import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import name.huliqing.editor.tools.BooleanValueTool;
 import name.huliqing.editor.tools.ValueChangedListener;
 import name.huliqing.editor.tools.ValueTool;
@@ -41,7 +41,7 @@ public class JfxBooleanValueTool extends JfxAbstractTool<BooleanValueTool> imple
     }
     
     @Override
-    public Node createView() {
+    public Region createView() {
         return layout;
     }
 

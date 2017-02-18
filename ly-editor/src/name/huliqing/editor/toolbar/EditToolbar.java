@@ -74,14 +74,13 @@ public abstract class EditToolbar<E extends SimpleJmeEdit> extends AbstractToolb
     @Override
     public <T extends Toolbar> T setEnabled(Tool tool, boolean enabled) {
         ToggleMappingEvent tme = toggleMapping.get(tool);
-        // 关闭的时候相关联的要一起关闭，但不去关闭冲突的
+        // 关闭的时候相关联的要一起关闭，但不去关闭互斥的conflicts
         if (!enabled) {
-            // 会让工具位置变来变去，不友好
-//            if (tme != null && tme.relations != null) {
-//                for (Tool t : tme.relations) {
-//                    super.setEnabled(t, false);
-//                }
-//            }
+            if (tme != null && tme.relations != null) {
+                for (Tool t : tme.relations) {
+                    super.setEnabled(t, false);
+                }
+            }
             super.setEnabled(tool, false);
             return (T) this;
         }

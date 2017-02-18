@@ -6,7 +6,7 @@
 package name.huliqing.editor.converter;
 
 import java.util.Map;
-import javafx.scene.Node;
+import javafx.scene.layout.Region;
 import name.huliqing.editor.converter.define.Feature;
 import name.huliqing.luoying.xml.ObjectData;
 
@@ -40,7 +40,7 @@ public interface Converter<T extends ObjectData, C extends Converter> {
      * 获取转换后的JFX组件节点。
      * @return 
      */
-    Node getLayout();
+    Region getLayout();
     
     /**
      * 初始化转换器

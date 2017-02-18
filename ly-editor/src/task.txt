@@ -36,6 +36,7 @@ ok.Undo,Redo事件要从JFX转换到JME中
 ok.public void jfxOnDragStarted, jfxOnDragEnded(), 要使用JFX全局监听的方式才安全。see Starter
 ok.ObjectData在设置参数的时候要限制空格,以避免Entity在初始化的时候的BUG产生
 
+.需要把状态表显示在3D界面上
 
 .Entity默认配置需要预设好所有默认参数，以便转换器可以有默认值。
 .实体界面Modules Converter界面

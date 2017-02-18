@@ -36,7 +36,7 @@ public abstract class AdjustTerrainTool extends AbstractTerrainTool
 //    private static final Logger LOG = Logger.getLogger(AbstractTerrainTool.class.getName());
     
     // 工具的基本大小
-    private final float baseSize = 0.1f;
+    private final float baseSize = 0.05f;
     
     private boolean modifying;
     // how frequently (in seconds) it should update to throttle down the tool effect

@@ -5,10 +5,10 @@
  */
 package name.huliqing.editor.ui.tool;
 
-import javafx.scene.Node;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tooltip;
+import javafx.scene.layout.Region;
 import name.huliqing.editor.constants.ResConstants;
 import name.huliqing.editor.manager.Manager;
 import name.huliqing.editor.tools.base.CameraTool;
@@ -22,8 +22,14 @@ public class JfxCameraTool extends JfxAbstractTool<CameraTool> {
     
     private final MenuButton view = new MenuButton();
 
+    public JfxCameraTool() {
+        view.setPrefWidth(80);
+        view.setPrefHeight(25);
+        view.setMaxHeight(25);
+    }
+    
     @Override
-    public Node createView() {
+    public Region createView() {
         return view;
     }
 

@@ -5,8 +5,9 @@
  */
 package name.huliqing.editor.ui;
 
-import java.io.File;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.ListCell;
@@ -29,7 +30,7 @@ import name.huliqing.fxswing.Jfx;
  * @author huliqing
  */
 public class ComponentsForm extends ListView<ComponentDefine> implements ConfigChangedListener{
-//    private static final Logger LOG = Logger.getLogger(ComponentsView.class.getName());
+    private static final Logger LOG = Logger.getLogger(ComponentsForm.class.getName());
     
     public ComponentsForm() {
 
@@ -69,6 +70,10 @@ public class ComponentsForm extends ListView<ComponentDefine> implements ConfigC
         if (cds != null) {
             getItems().addAll(cds);
         }
+        List<ComponentDefine> cdsFilter = ComponentManager.getComponentsByType("entityFilter");
+        if (cdsFilter != null) {
+            getItems().addAll(cdsFilter);
+        }
     }
 
     private ComponentDefine getMainSelectItem() {
@@ -93,14 +98,14 @@ public class ComponentsForm extends ListView<ComponentDefine> implements ConfigC
         }
         Dragboard db = startDragAndDrop(TransferMode.ANY);
         ClipboardContent clipboardContent = new ClipboardContent();
-        clipboardContent.put(DataFormatConstants.COMPONENT_DEFINE, selected);
+        clipboardContent.put(DataFormatConstants.COMPONENT_ENTITY, selected);
         db.setContent(clipboardContent);
         e.consume();
     }
 
     private void doDragDone(DragEvent e) {
-        e.consume(); // 不要直接取消事件传递
 //        LOG.log(Level.INFO, "EntityComponents: doDragDone.");
+        e.consume();
     }
 
 }

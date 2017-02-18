@@ -8,6 +8,7 @@ package name.huliqing.editor.converter;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.TitledPane;
+import javafx.scene.layout.Region;
 import name.huliqing.editor.edit.JfxAbstractEdit;
 import name.huliqing.luoying.xml.ObjectData;
 
@@ -39,7 +40,7 @@ public abstract class FieldConverter<E extends JfxAbstractEdit, T extends Object
     }
 
     @Override
-    public Node getLayout() {
+    public Region getLayout() {
         return root;
     }
 

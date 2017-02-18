@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import name.huliqing.editor.constants.StyleConstants;
 import name.huliqing.editor.converter.define.FieldDefine;
@@ -41,7 +42,7 @@ public abstract class DataConverter<E extends JfxAbstractEdit, T extends ObjectD
     }
     
     @Override
-    public Node getLayout() {
+    public Region getLayout() {
         return dataScroll; 
     }
     

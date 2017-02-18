@@ -13,5 +13,5 @@ import javafx.scene.input.DataFormat;
  */
 public class DataFormatConstants {
     
-    public final static DataFormat COMPONENT_DEFINE = new DataFormat("component/define");
+    public final static DataFormat COMPONENT_ENTITY = new DataFormat("component/entity");
 }

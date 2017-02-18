@@ -35,7 +35,146 @@ xs:time
                 <xs:element ref="entitySkyBox" />
                 <xs:element ref="entityTree" />
                 <xs:element ref="entityUnshaded" />
+                
+                <xs:element ref="entityBloomFilter" />
+                <xs:element ref="entityFXAAFilter" />
+                <xs:element ref="entityFogFilter" />
+                <xs:element ref="entityLightScatteringFilter" />
+                <xs:element ref="entitySSAOFilter" />
             </xs:all>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="entitySSAOFilter">
+        <xs:annotation><xs:documentation>SSAO stands for screen space ambient occlusion
+ It's a technique that fake ambient lighting by computing shadows that near by objects would casts on each others 
+ under the effect of an ambient light
+ more info on this in this blog post http://jmonkeyengine.org/2010/08/16/screen-space-ambient-occlusion-for-jmonkeyengine-3-0/
+ </xs:documentation></xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="entityBase">
+                    <xs:attribute name="bias" type="xs:decimal" use="optional" >
+                        <xs:annotation><xs:documentation>Sets the the width of the occlusion cone considered by the occludee default is 0.1f</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="intensity" type="xs:decimal" use="optional" >
+                        <xs:annotation><xs:documentation>Sets the Ambient occlusion intensity default is 1.5f</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="sampleRadius" type="xs:decimal" use="optional" >
+                        <xs:annotation><xs:documentation>Sets the radius of the area where random samples will be picked dafault 5.1f</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="ssaoScale" type="xs:decimal" use="optional" >
+                        <xs:annotation><xs:documentation>Returns the distance between occluders and occludee. default 0.2f</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="entityLightScatteringFilter">
+        <xs:annotation><xs:documentation>LightScattering filters creates rays comming from a light sources 
+  This is often reffered as god rays.</xs:documentation></xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="entityBase">
+                    <xs:attribute name="blurStart" type="xs:decimal" use="optional" >
+                        <xs:annotation><xs:documentation>sets the blur start
+      at which distance from the light source the effect starts default is 0.02</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="blurWidth" type="xs:decimal" use="optional" >
+                        <xs:annotation><xs:documentation>sets the blur width default is 0.9</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="lightDensity" type="xs:decimal" use="optional" >
+                        <xs:annotation><xs:documentation>sets how much the effect is visible over the rendered scene default is 1.4</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="lightPosition" type="xs:string" use="optional" >
+                        <xs:annotation><xs:documentation>sets the light position, e.g. "x,y,z", default is "0,0,0"</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="nbSamples" type="xs:integer" use="optional" >
+                        <xs:annotation><xs:documentation>sets the number of samples for the radial blur default is 50
+      the higher the value the higher the quality, but the slower the performances.</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="entityFogFilter">
+        <xs:annotation><xs:documentation>A filter to render a fog effect</xs:documentation></xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="entityBase">
+                    <xs:attribute name="fogColor" type="xs:string" use="optional" >
+                        <xs:annotation><xs:documentation>Sets the color of the fog, 格式: "r,g,b,a"</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="fogDensity" type="xs:decimal" use="optional" >
+                        <xs:annotation><xs:documentation>Sets the density of the fog, a high value gives a thick fog, default is 0.7</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="fogDistance" type="xs:decimal" use="optional" >
+                        <xs:annotation><xs:documentation>the distance of the fog. the higer the value the distant the fog looks, default is 1000</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="entityFXAAFilter">
+        <xs:annotation><xs:documentation>
+            http://www.geeks3d.com/20110405/fxaa-fast-approximate-anti-aliasing-demo-glsl-opengl-test-radeon-geforce/3/
+            http://developer.download.nvidia.com/assets/gamedev/files/sdk/11/FXAA_WhitePaper.pdf               
+        </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="entityBase">
+                    <xs:attribute name="reduceMul" type="xs:decimal" use="optional" >
+                        <xs:annotation><xs:documentation>set to 0.0f for higher quality, default is 0.125</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="spanMax" type="xs:decimal" use="optional" >
+                        <xs:annotation><xs:documentation>set to 0.0f for higher quality, default is 8.0</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="subPixelShift" type="xs:decimal" use="optional" >
+                        <xs:annotation><xs:documentation>default is 0.25</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="vxOffset" type="xs:decimal" use="optional" >
+                        <xs:annotation><xs:documentation>default is 0</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="entityBloomFilter">
+        <xs:annotation><xs:documentation>
+            BloomFilter is used to make objects in the scene have a glow effect.
+ There are 2 mode : Scene and Objects.
+ Scene mode extracts the bright parts of the scene to make them glow.
+ Object mode make objects glow according to their material's glowMap or their GlowColor.
+ @see http://jmonkeyengine.org/wiki/doku.php/jme3:advanced:bloom_and_glow for more details
+        </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="entityBase">
+                    <xs:attribute name="bloomIntensity" type="xs:decimal" use="optional" >
+                        <xs:annotation><xs:documentation>intensity of the bloom effect default is 2.0f</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="blurScale" type="xs:decimal" use="optional" >
+                        <xs:annotation><xs:documentation>sets The spread of the bloom default is 1.5f</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="downSamplingFactor" type="xs:decimal" use="optional" >
+                        <xs:annotation><xs:documentation>Sets the downSampling factor : the size of the computed texture will be divided by this factor. default is 1f for no downsampling
+      A 2 value is a good way of widening the blur</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="exposureCutOff" type="xs:decimal" use="optional" >
+                        <xs:annotation><xs:documentation>Define the color threshold on which the bloom will be applied (0.0 to 1.0)</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="exposurePower" type="xs:decimal" use="optional" >
+                        <xs:annotation><xs:documentation>defines how many time the bloom extracted color will be multiplied by itself. default id 5.0
+      a high value will reduce rough edges in the bloom and somhow the range of the bloom area</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
         </xs:complexType>
     </xs:element>
     

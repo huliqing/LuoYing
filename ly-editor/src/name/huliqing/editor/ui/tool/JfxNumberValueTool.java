@@ -6,12 +6,13 @@
 package name.huliqing.editor.ui.tool;
 
 import javafx.beans.value.ObservableValue;
-import javafx.scene.Node;
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Region;
 import name.huliqing.editor.tools.NumberValueTool;
 import name.huliqing.editor.tools.ValueChangedListener;
 import name.huliqing.editor.tools.ValueTool;
@@ -24,7 +25,6 @@ import name.huliqing.fxswing.Jfx;
 public class JfxNumberValueTool extends JfxAbstractTool<NumberValueTool> 
         implements ValueChangedListener<Number>{
 
-//    private final HBox view = new HBox();
     private final GridPane view = new GridPane();
     private final Label label = new Label();
     private final TextField value = new TextField();
@@ -32,8 +32,7 @@ public class JfxNumberValueTool extends JfxAbstractTool<NumberValueTool>
     private boolean ignoreUpdateView;
     
     public JfxNumberValueTool() {
-        label.setPrefWidth(64);
-        value.setPrefWidth(64);
+        view.setPadding(Insets.EMPTY);
         view.addRow(0, label, value);
     
          // 失去焦点时更新
@@ -51,10 +50,16 @@ public class JfxNumberValueTool extends JfxAbstractTool<NumberValueTool>
                 updateValueToEdit();
             }
         });
+        
+        value.prefHeightProperty().bind(view.heightProperty());
+        label.prefHeightProperty().bind(view.heightProperty());
+        label.setPrefWidth(64);
+        value.setPrefWidth(64);
+        view.setMaxHeight(25);
     }
 
     @Override
-    public Node createView() {
+    public Region createView() {
         return view;
     }
     

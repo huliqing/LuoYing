@@ -6,11 +6,11 @@
 package name.huliqing.editor.ui.tool;
 
 import javafx.beans.value.ObservableValue;
-import javafx.scene.Node;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Region;
 
 /**
  *
@@ -20,8 +20,14 @@ public class JfxToggleTool extends JfxAbstractTool {
 
     private final ToggleButton view = new ToggleButton();
     
+    public JfxToggleTool() {
+        view.setPrefWidth(80);
+        view.setPrefHeight(25);
+        view.setMaxHeight(25);
+    }
+    
     @Override
-    public Node createView() {
+    public Region createView() {
         return view;
     }
 
