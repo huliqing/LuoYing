@@ -74,6 +74,10 @@ public class ComponentsForm extends ListView<ComponentDefine> implements ConfigC
         if (cdsFilter != null) {
             getItems().addAll(cdsFilter);
         }
+        List<ComponentDefine> effects = ComponentManager.getComponentsByType("effect");
+        if (effects != null) {
+            getItems().addAll(effects);
+        }
     }
 
     private ComponentDefine getMainSelectItem() {

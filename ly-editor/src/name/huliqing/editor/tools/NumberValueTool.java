@@ -77,10 +77,13 @@ public class NumberValueTool extends AbstractValueTool<Number> {
 
     /**
      * 设置步增或步减的量
+     * @param <T>
      * @param stepAmount 
+     * @return  
      */
-    public void setStepAmount(Number stepAmount) {
+    public <T extends NumberValueTool> T setStepAmount(Number stepAmount) {
         this.stepAmount = stepAmount;
+        return (T) this;
     }
     
     @Override

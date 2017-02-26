@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import java.util.logging.StreamHandler;
+import javafx.scene.paint.Color;
 import name.huliqing.editor.manager.UIManager;
 
 /**
@@ -38,7 +39,13 @@ public class OutputFormHandler extends StreamHandler {
             return;
         }
         String msg = getFormatter().format(record);
-        UIManager.output(msg);
+        if (record.getLevel() == Level.SEVERE) {
+            UIManager.output(msg, Color.RED);
+        } else if (record.getLevel() == Level.WARNING) {
+            UIManager.output(msg, new Color(0.7, 0.25, 0, 1));
+        } else {
+            UIManager.output(msg, new Color(0.2, 0.2, 0.2, 1));
+        }
     }
     
 }

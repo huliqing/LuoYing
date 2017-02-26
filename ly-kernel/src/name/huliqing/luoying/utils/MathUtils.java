@@ -54,6 +54,27 @@ public class MathUtils {
     public final static float ZERO_NEAR = 0.0001f;
     
     /**
+     * 以原点为中心，在半径为radius的xz平面范围内取一个点
+     * @param maxRadius
+     * @param store
+     * @return 
+     */
+    public static Vector3f getRandomPositionInXZPlane(float maxRadius, Vector3f store) {
+        if (store == null) {
+            store = new Vector3f();
+        }
+        TempVars tv = TempVars.get();
+       
+        float radius = FastMath.nextRandomFloat() * maxRadius;
+        float angleInRadian = FastMath.nextRandomFloat() * FastMath.TWO_PI;
+        float x = FastMath.cos(angleInRadian) * radius;
+        float y = FastMath.sin(angleInRadian) * radius;
+        store.set(x, 0, y); // xz平面
+        tv.release();
+        return store;
+    }
+    
+    /**
      * 以一个点为中心，在该点的周围(xz平面内)的一个圆环内随机取一点。圆环内外半径由
      * innerRadius和outRadius指定
      * @param center 中心点位置

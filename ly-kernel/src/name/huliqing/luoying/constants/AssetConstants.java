@@ -76,6 +76,8 @@ public class AssetConstants {
     /** LuoYingSys/Assets/MatDefs/Skill/cooldown.j3md */
     public final static String MATERIAL_SKILL_COOLDOWN = "LuoYingSys/Assets/MatDefs/Skill/cooldown.j3md";
     
+    public final static String MATERIAL_GRASS = "LuoYingSys/Assets/MatDefs/Grass/Grass.j3md";
+    
     /** =========================================================================== */
     // Textures
     /** =========================================================================== */

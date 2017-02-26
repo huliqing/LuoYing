@@ -29,7 +29,6 @@ import com.jme3.scene.Spatial;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.LuoYing;
-import name.huliqing.luoying.utils.GeometryUtils;
 import name.huliqing.luoying.utils.ModelFileUtils;
 
 /**
@@ -95,7 +94,7 @@ public class TreeFixUtils {
 //        geo.getMaterial().setBoolean("UseAlpha", true);
         geo.getMaterial().setBoolean("UseMaterialColors", true);
         geo.getMaterial().setFloat("AlphaDiscardThreshold", alphaFallOff);
-        geo.getMaterial().setFloat("Shininess", 16);
+        geo.getMaterial().setFloat("Shininess", 0.3f);
         geo.getMaterial().setColor("Ambient", new ColorRGBA(0.7f, 0.7f, 0.7f, 1f));
         geo.getMaterial().setColor("Diffuse", new ColorRGBA(0.7f, 0.7f, 0.7f, 1f));
         geo.getMaterial().setColor("Specular", new ColorRGBA(0, 0, 0, 1));

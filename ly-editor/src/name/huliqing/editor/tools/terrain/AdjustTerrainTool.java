@@ -10,9 +10,12 @@ import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
+import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Sphere;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import name.huliqing.editor.constants.AssetConstants;
 import name.huliqing.editor.edit.SimpleJmeEdit;
 import name.huliqing.editor.edit.UndoRedo;
@@ -33,7 +36,7 @@ import name.huliqing.luoying.manager.PickManager;
  */
 public abstract class AdjustTerrainTool extends AbstractTerrainTool 
         implements ToggleTool<SimpleJmeEdit, TerrainToolbar>, ValueChangedListener<Number>{
-//    private static final Logger LOG = Logger.getLogger(AbstractTerrainTool.class.getName());
+    private static final Logger LOG = Logger.getLogger(AbstractTerrainTool.class.getName());
     
     // 工具的基本大小
     private final float baseSize = 0.05f;
@@ -131,6 +134,13 @@ public abstract class AdjustTerrainTool extends AbstractTerrainTool
         if (terrain == null) 
             return;
         
+        int radiusStepsX = (int)(radius / terrain.getTarget().getSpatial().getLocalScale().x);
+        if (radiusStepsX <= 0) {
+            LOG.log(Level.WARNING, "Radius to small! radius={0} terrainScale={1}, radiusSteps={2}"
+                    , new Object[] {radius, terrain.getTarget().getSpatial().getLocalScale().x, radiusStepsX});
+            return;
+        }
+        
         AbstractTerrainToolAction action = createAction(radius, weight, controlObj.getWorldTranslation(), terrain);
         if (action != null) {
             action.doAction();
@@ -182,7 +192,7 @@ public abstract class AdjustTerrainTool extends AbstractTerrainTool
         if (eso == null)
             return null;
         
-        Vector3f result = PickManager.pick(editor.getCamera(), editor.getInputManager().getCursorPosition(), eso.getTarget().getSpatial());
+        Vector3f result = PickManager.pickPoint(editor.getCamera(), editor.getInputManager().getCursorPosition(), eso.getTarget().getSpatial());
         return result;
     }
     

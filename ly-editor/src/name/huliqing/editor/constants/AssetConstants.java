@@ -21,6 +21,8 @@ public class AssetConstants {
     public final static String INTERFACE_ICON_SUBTRACT = "Interface/icon/subtract.png";
     public final static String INTERFACE_ICON_SEARCH = "Interface/icon/search.png";
     public final static String INTERFACE_ICON_FILE = "Interface/icon/file.png";
+    public final static String INTERFACE_ICON_PAINT = "Interface/icon/paint.png";
+    public final static String INTERFACE_ICON_BESOM = "Interface/icon/besom.png";
     /** 太阳、灯光 */
     public final static String INTERFACE_ICON_SUN = "Interface/icon/sun.png";
     
@@ -72,10 +74,6 @@ public class AssetConstants {
     public final static String INTERFACE_TOOL_TERRAIN_PAINT = "Interface/tools/terrain/icon_terrain-paint-circle.png";
     /** 笔刷擦工具 */
     public final static String INTERFACE_TOOL_TERRAIN_ERASE = "Interface/tools/terrain/icon_terrain-erase-circle.png";
-    /** 增加图层 */
-    public final static String INTERFACE_TOOL_TERRAIN_TEXLAYER_ADD = INTERFACE_ICON_ADD;
-    /** 移除图层 */
-    public final static String INTERFACE_TOOL_TERRAIN_TEXLAYER_SUBTRACT = INTERFACE_ICON_SUBTRACT;
     /** 移除Normal图 */
     public final static String INTERFACE_TOOL_TERRAIN_TEXLAYER_REMOVE_NORMAL = "Interface/tools/terrain/remove-tex.png";
     

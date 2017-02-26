@@ -49,7 +49,7 @@ public abstract class AbstractValueTool<V> extends AbstractTool implements Value
     }
 
     @Override
-    public void addValueChangeListener(ValueChangedListener<V>listener) {
+    public synchronized void addValueChangeListener(ValueChangedListener<V>listener) {
         if (listeners == null) {
             listeners = new ArrayList();
         }
@@ -59,7 +59,7 @@ public abstract class AbstractValueTool<V> extends AbstractTool implements Value
     }
 
     @Override
-    public boolean removeValueChangeListener(ValueChangedListener<V> listener) {
+    public synchronized boolean removeValueChangeListener(ValueChangedListener<V> listener) {
         return listeners != null && listeners.remove(listener);
     }
 

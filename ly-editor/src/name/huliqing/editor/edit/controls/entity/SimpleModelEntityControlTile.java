@@ -14,7 +14,6 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import com.jme3.terrain.Terrain;
 import java.io.File;
-import java.util.logging.Logger;
 import name.huliqing.editor.constants.UserDataConstants;
 import name.huliqing.editor.edit.SaveAction;
 import name.huliqing.editor.edit.SimpleJmeEdit;

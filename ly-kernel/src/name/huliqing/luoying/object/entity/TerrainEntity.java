@@ -19,6 +19,7 @@
  */
 package name.huliqing.luoying.object.entity;
 
+import com.jme3.collision.CollisionResults;
 import com.jme3.math.Vector3f;
 
 /**
@@ -34,4 +35,12 @@ public interface TerrainEntity extends Entity {
      * @return 
      */
     Vector3f getHeight(float x, float z);
+    
+    /**
+     * 通过射线方式获取地面x,z处的位置点。
+     * @param x
+     * @param z
+     * @return 
+     */
+    CollisionResults getHeightPoint(float x, float z);
 }

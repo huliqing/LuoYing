@@ -5,13 +5,16 @@
  */
 package name.huliqing.editor.converter.field;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.VBox;
@@ -19,17 +22,21 @@ import javafx.util.Callback;
 import name.huliqing.editor.component.ComponentDefine;
 import name.huliqing.editor.constants.AssetConstants;
 import name.huliqing.editor.constants.ComponentConstants;
+import name.huliqing.editor.constants.StyleConstants;
 import name.huliqing.editor.converter.DataConverter;
 import name.huliqing.editor.converter.FieldConverter;
 import name.huliqing.editor.edit.Mode;
+import name.huliqing.editor.edit.UndoRedo;
 import name.huliqing.editor.edit.controls.ControlTile;
 import name.huliqing.editor.edit.scene.JfxSceneEdit;
 import name.huliqing.editor.edit.scene.JfxSceneEditListener;
 import name.huliqing.editor.edit.controls.entity.EntityControlTile;
+import name.huliqing.editor.edit.scene.SceneEdit;
 import name.huliqing.editor.manager.ComponentManager;
 import name.huliqing.editor.manager.ConverterManager;
 import name.huliqing.editor.ui.ComponentSearch;
 import name.huliqing.editor.ui.utils.JfxUtils;
+import name.huliqing.fxswing.Jfx;
 import name.huliqing.luoying.data.EntityData;
 
 /**
@@ -59,11 +66,29 @@ public class EntitiesFieldConverter extends FieldConverter<JfxSceneEdit, EntityD
             componentSearch.show(add, -10, -10);
         });
         remove.setOnAction(e -> {
-            EntityData ed = listView.getSelectionModel().getSelectedItem();
-            if (ed != null) {
-                jfxEdit.removeEntity(ed);
-                listView.getItems().remove(ed);
-            }
+            List<EntityData> eds = listView.getSelectionModel().getSelectedItems();
+            if (eds == null || eds.isEmpty())
+                return;
+            
+            Jfx.runOnJme(() -> {
+                List<EntityControlTile> ectsRemove = new ArrayList(eds.size());
+                SceneEdit se = jfxEdit.getJmeEdit();
+                for (EntityData ed : eds) {
+                    EntityControlTile ect = se.getEntityControlTile(ed);
+                    if (ect != null) {
+                        ectsRemove.add(ect);
+                    }
+                }
+                EntityRemovedUndoRedo erur = new EntityRemovedUndoRedo(ectsRemove);
+                erur.redo();
+                se.addUndoRedo(erur);
+                
+                // 这一步不需要，因为已经做了监听场景实体移除的功能,当场景实体移除的时候会自动触发onEntityRemoved方法
+//                Jfx.runOnJfx(() -> {
+//                    listView.getItems().removeAll(eds);
+//                });
+
+            });
         });
         componentSearch.getListView().setOnMouseClicked(e -> {
             ComponentDefine cd = componentSearch.getListView().getSelectionModel().getSelectedItem();
@@ -76,8 +101,10 @@ public class EntitiesFieldConverter extends FieldConverter<JfxSceneEdit, EntityD
         // 列表
         listView.setCellFactory(new CellInner());
         listView.getSelectionModel().selectedItemProperty().addListener(this::onJfxSelectChanged);
+        listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        
+        layout.getStyleClass().add(StyleConstants.CLASS_HVBOX);
         layout.getChildren().addAll(toolBar, listView);
-        layout.setStyle("-fx-padding:0;-fx-border-width:0;");
         
         entityPanel.setVisible(false);
     }
@@ -203,6 +230,30 @@ public class EntitiesFieldConverter extends FieldConverter<JfxSceneEdit, EntityD
             };
             return lc;
         }
+    }
+    
+    private class EntityRemovedUndoRedo implements UndoRedo {
         
+        private final List<EntityControlTile> ectRemoved = new ArrayList();
+
+        public EntityRemovedUndoRedo(List<EntityControlTile> ectRemoved) {
+            this.ectRemoved.addAll(ectRemoved);
+        }
+        
+        @Override
+        public void undo() {
+            SceneEdit se = jfxEdit.getJmeEdit();
+            for (int i = ectRemoved.size() - 1; i >= 0; i--) {
+                se.addControlTile(ectRemoved.get(i));
+            }
+        }
+
+        @Override
+        public void redo() {
+            SceneEdit se = jfxEdit.getJmeEdit();
+            for (int i = 0; i < ectRemoved.size(); i++) {
+                se.removeControlTile(ectRemoved.get(i));
+            }
+        }
     }
 }

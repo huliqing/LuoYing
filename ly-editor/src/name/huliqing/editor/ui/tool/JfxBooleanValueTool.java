@@ -28,8 +28,6 @@ public class JfxBooleanValueTool extends JfxAbstractTool<BooleanValueTool> imple
     private boolean ignoreViewUpdate;
     
     public JfxBooleanValueTool() {
-        label.setPrefWidth(64);
-        checkBox.setPrefWidth(64);
         layout.getChildren().addAll(label, checkBox);
         checkBox.selectedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
             Jfx.runOnJme(() -> {
@@ -38,6 +36,9 @@ public class JfxBooleanValueTool extends JfxAbstractTool<BooleanValueTool> imple
                 ignoreViewUpdate = false;
             });
         });
+        
+        label.setPrefWidth(100);
+        checkBox.setPrefWidth(64);
     }
     
     @Override

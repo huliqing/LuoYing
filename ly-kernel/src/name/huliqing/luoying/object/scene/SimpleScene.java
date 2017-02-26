@@ -41,6 +41,9 @@ public class SimpleScene extends AbstractScene {
     
     @Override
     public void addEntity(Entity entity) {
+        if (entityMap.containsKey(entity.getEntityId())) {
+            return;
+        }
         entityMap.put(entity.getEntityId(), entity);
         if (entity instanceof Actor) {
             actors.add((Actor) entity);

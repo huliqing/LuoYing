@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<!--
+xs:string
+xs:decimal
+xs:integer
+xs:boolean
+xs:date
+xs:time
+-->
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://luoying.huliqing.name"
+           xmlns="http://luoying.huliqing.name"
+           elementFormDefault="qualified">
+    
+    <xs:include schemaLocation="./base.xsd" />
+    
+    <xs:element name="root">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="scene" />
+                <xs:element ref="sceneRandom" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="scene">
+        <xs:annotation>
+            <xs:documentation>普通场景</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="sceneBase">
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="sceneRandom">
+        <xs:annotation>
+            <xs:documentation>随机场景,允许指定一些可随机摆放于场景中的物体</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="sceneBase">
+                    <xs:attribute name="emptyZones" type="xs:string" use="optional" >
+                        <xs:annotation><xs:documentation>指定一些空白区域，格式："x|z|radius,x|z|radius,..."</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="randomXExtent" type="xs:decimal" use="optional" >
+                        <xs:annotation><xs:documentation>指定在x向上的最大随机范围值。</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="randomZExtent" type="xs:decimal" use="optional" >
+                        <xs:annotation><xs:documentation>指定在z向上的最大随机范围值。</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="randomEntities" type="xs:string" use="optional" >
+                        <xs:annotation><xs:documentation>随机物体列表，这些物体将会在场景中被随机摆放，格式："entity1,entity2,..."</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:complexType name="sceneBase">
+        <xs:annotation>
+            <xs:documentation>基本场景</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="base">
+                <xs:attribute name="entities" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>
+                            场景物体，格式："entity1,entity2,entity3,..."
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="progress" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>指定一个进度条指示器，当场景载入时用于显示载入进度。</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+</xs:schema>

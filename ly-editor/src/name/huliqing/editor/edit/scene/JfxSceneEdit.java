@@ -76,7 +76,7 @@ public class JfxSceneEdit extends JfxSimpleEdit<SceneEdit>
         delPop.getItems().addAll(delBtn);
         delBtn.setOnAction(e -> {
             if (delTarget != null) {
-                removeEntity(delTarget.getTarget().getData());
+                removeEntityUseUndoRedo(delTarget.getTarget().getData());
                 delTarget = null;
                 // 删除后重新将焦点定位到canvas上
                 Jfx.requestFocusCanvas();
@@ -222,16 +222,16 @@ public class JfxSceneEdit extends JfxSimpleEdit<SceneEdit>
         });
     }
     
-    public void addEntity(EntityData ed) {
+    public void addEntityUseUndoRedo(EntityData ed) {
         Jfx.runOnJme(() -> {
             Vector2f pos = new Vector2f((float)lastDragXPos, (float)(leftEditZone.getHeight() - lastDragYPos));
-            jmeEdit.addEntityOnCursor(ed, pos);
+            jmeEdit.addEntityOnCursorUseUndoRedo(ed, pos);
         });
     }
     
-    public void removeEntity(EntityData ed) {
+    public void removeEntityUseUndoRedo(EntityData ed) {
         Jfx.runOnJme(() -> {
-            jmeEdit.removeEntity(ed);
+            jmeEdit.removeEntityUseUndoRedo(ed);
         });
     }
 
@@ -264,5 +264,4 @@ public class JfxSceneEdit extends JfxSimpleEdit<SceneEdit>
         Jfx.requestFocus(delPop);
     }
 
-    
 }

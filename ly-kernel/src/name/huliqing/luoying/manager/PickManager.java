@@ -36,6 +36,22 @@ import name.huliqing.luoying.utils.TempPick;
 public class PickManager {
     
     /**
+     * @param origin
+     * @param direction 必须归一
+     * @param pickRoot
+     * @return 
+     */
+    public final static CollisionResults pickResults(Vector3f origin, Vector3f direction, Spatial pickRoot) {
+        TempPick tp = TempPick.get();
+        tp.ray.setOrigin(origin);
+        tp.ray.setDirection(direction); // 必须归一
+        CollisionResults results = new CollisionResults();
+        PickManager.pickResults(tp.ray, pickRoot, results);
+        tp.release();
+        return results;
+    }
+    
+    /**
      * 选择最近的物体
      * @param ray
      * @param pickRoot
@@ -45,11 +61,26 @@ public class PickManager {
         TempPick tp = TempPick.get();
         CollisionResults cr = tp.results;
         cr.clear();
-        pickResults(ray, pickRoot, cr);
+        PickManager.pickResults(ray, pickRoot, cr);
         Spatial result = null;
         if (cr.size() > 0) {
             result = cr.getClosestCollision().getGeometry();
         }
+        tp.release();
+        return result;
+    }
+    
+    /**
+     * @param origin
+     * @param direction 需要归一
+     * @param pickRoot
+     * @return 
+     */
+    public final static Vector3f pickPoint(Vector3f origin, Vector3f direction, Spatial pickRoot) {
+        TempPick tp = TempPick.get();
+        tp.ray.setOrigin(origin);
+        tp.ray.setDirection(direction);
+        Vector3f result = PickManager.pickPoint(tp.ray, pickRoot);
         tp.release();
         return result;
     }
@@ -60,11 +91,31 @@ public class PickManager {
      * @param pickRoot
      * @return 
      */
-    public static Vector3f pickPoint(Ray ray, Spatial pickRoot) {
+    public final static Vector3f pickPoint(Ray ray, Spatial pickRoot) {
         TempPick tp = TempPick.get();
         CollisionResults cr = tp.results;
         cr.clear();
-        pickResults(ray, pickRoot, cr);
+        PickManager.pickResults(ray, pickRoot, cr);
+        Vector3f result = null;
+        if (cr.size() > 0) {
+            result = cr.getClosestCollision().getContactPoint();
+        }
+        tp.release();
+        return result;
+    }
+    
+        /**
+     * 获取鼠标点击到物体的世界位置点, 如果没有点击到指定的物体，则返回null.
+     * @param camera
+     * @param screenLoc
+     * @param pickRoot 
+     * @return 
+     */
+    public final static Vector3f pickPoint(Camera camera, Vector2f screenLoc, Spatial pickRoot) {
+        TempPick tp = TempPick.get();
+        CollisionResults cr = tp.results;
+        cr.clear();
+        pickResults(camera, screenLoc, pickRoot, cr);
         Vector3f result = null;
         if (cr.size() > 0) {
             result = cr.getClosestCollision().getContactPoint();
@@ -111,25 +162,7 @@ public class PickManager {
         return result;
     }
     
-    /**
-     * 获取鼠标点击到物体的世界位置点, 如果没有点击到指定的物体，则返回null.
-     * @param camera
-     * @param screenLoc
-     * @param pickRoot 
-     * @return 
-     */
-    public static Vector3f pick(Camera camera, Vector2f screenLoc, Spatial pickRoot) {
-        TempPick tp = TempPick.get();
-        CollisionResults cr = tp.results;
-        cr.clear();
-        pick(camera, screenLoc, pickRoot, cr);
-        Vector3f result = null;
-        if (cr.size() > 0) {
-            result = cr.getClosestCollision().getContactPoint();
-        }
-        tp.release();
-        return result;
-    }
+
     
     /**
      * 找出最接近的,可被选择的对象.如果最接近的对象不能被选择,则返回null.
@@ -139,7 +172,7 @@ public class PickManager {
      * @param store
      * @return 
      */
-    public static CollisionResults pick(Camera camera, Vector2f screenLoc, Spatial pickRoot, CollisionResults store) {
+    public final static CollisionResults pickResults(Camera camera, Vector2f screenLoc, Spatial pickRoot, CollisionResults store) {
         if (store == null) {
             store = new CollisionResults();
         }

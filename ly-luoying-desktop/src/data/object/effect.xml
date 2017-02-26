@@ -3,7 +3,7 @@
 <root 
     xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
     xmlns='http://luoying.huliqing.name'
-    xsi:schemaLocation='http://luoying.huliqing.name ../../../../ly-kernel/src/LuoYing/Data/meta/effect.xsd' >
+    xsi:schemaLocation='http://luoying.huliqing.name ../../../../ly-kernel/src/LuoYingSys/Data/meta/effect.xsd' >
     
     <effectBase id="effectBase" queueBucket="Translucent" />
     
@@ -156,8 +156,8 @@
     <!-- ========================================================================= -->
     <!--黑暗祭坛的特效-->
     <!-- ========================================================================= -->
-    <effectParticle id="effectAltar" extends="effectBase" useTime="-1"  location="0, 1.5, 0" emitter="emitterAltar" /> 
-    <effectParticle id="effectAltar2" extends="effectBase" useTime="-1"  location="0, 2.5, 0" emitter="emitterAltarSkull" />
+    <effectParticle id="effectAltar" extends="effectBase" useTime="5" loop="1"  location="0, 1.5, 0" emitter="emitterAltar" /> 
+    <effectParticle id="effectAltar2" extends="effectBase" useTime="5" loop="1" location="0, 2.5, 0" emitter="emitterAltarSkull" />
     
     <!-- ========================================================================= -->
     <!--闪电箭-->

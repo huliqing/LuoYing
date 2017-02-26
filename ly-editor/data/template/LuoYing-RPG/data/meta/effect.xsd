@@ -379,6 +379,11 @@
                         <xs:documentation>特效运行时间，单位秒。默认"1.0", 如果这个值小于0，则效果将永远不会结束。</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
+                <xs:attribute name="loop" type="bool" use="required">
+                    <xs:annotation>
+                        <xs:documentation>是否循环运行特效</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
                 <!--注：speed不开放到xml配置，speed会作为动态参数在程序运行时根据情况动态设置。-->
 <!--                <xs:attribute name="speed" type="xs:decimal" use="optional">
                     <xs:annotation>

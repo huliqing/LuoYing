@@ -14,7 +14,6 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import name.huliqing.editor.Editor;
-import name.huliqing.editor.constants.StyleConstants;
 import name.huliqing.editor.manager.UIManager;
 import name.huliqing.fxswing.Jfx;
 
@@ -157,6 +156,11 @@ public abstract class JfxAbstractEdit<T extends JmeEdit> implements JfxEdit<T>, 
         return editor;
     }
 
+    @Override
+    public T getJmeEdit() {
+        return jmeEdit;
+    }
+    
     @Override
     public Pane getEditRoot() {
         return editRoot;

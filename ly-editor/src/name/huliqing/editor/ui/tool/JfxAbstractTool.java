@@ -5,7 +5,6 @@
  */
 package name.huliqing.editor.ui.tool;
 
-import javafx.geometry.Insets;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import name.huliqing.editor.toolbar.Toolbar;

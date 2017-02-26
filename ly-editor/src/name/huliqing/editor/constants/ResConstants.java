@@ -63,6 +63,12 @@ public class ResConstants {
     public final static String VIEW_FOCUS_TARGET = "view.focus.target";
     public final static String VIEW_FOCUS_ORIGIN = "view.focus.origin";
     
+    // 编辑工具栏名称
+    public final static String EDIT_TOOLBAR_BASE = "edit.toolbar.base";
+    public final static String EDIT_TOOLBAR_TERRAIN = "edit.toolbar.terrain";
+    public final static String EDIT_TOOLBAR_ENTITY_BRUSH = "edit.toolbar.entity.brush";
+    
+    // 基本工具
     public final static String TOOL_MODE = "tool.mode";
     public final static String TOOL_MODE_TIP = "tool.mode.tip";
     public final static String TOOL_CAMERA = "tool.camera";
@@ -76,6 +82,7 @@ public class ResConstants {
     public final static String TOOL_SCALE = "tool.scale";
     public final static String TOOL_SCALE_TIP = "tool.scale.tip";
     
+    // 地形工具
     public final static String TOOL_TERRAIN_SIZE = "tool.terrain.size";
     public final static String TOOL_TERRAIN_SIZE_TIP = "tool.terrain.size.tip";
     public final static String TOOL_TERRAIN_WEIGHT = "tool.terrain.weight";
@@ -105,6 +112,32 @@ public class ResConstants {
     public final static String TOOL_TERRAIN_TEXLAYER_ADD_LAYER_TIP = "tool.terrain.texLayer.addLayer.tip";
     public final static String TOOL_TERRAIN_TEXLAYER_REMOVE_LAYER_TIP = "tool.terrain.texLayer.removeLayer.tip";
     public final static String TOOL_TERRAIN_TEXLAYER_REMOVE_NORMAL_TIP = "tool.terrain.texLayer.removeNormal.tip";
+    
+    // 实体刷工具
+    public final static String TOOL_ENTITY_BRUSH_SIZE = "tool.entity.brush.size";
+    public final static String TOOL_ENTITY_BRUSH_SIZE_TIP = "tool.entity.brush.size.tip";
+    public final static String TOOL_ENTITY_BRUSH_ERASE = "tool.entity.brush.erase";
+    public final static String TOOL_ENTITY_BRUSH_ERASE_TIP = "tool.entity.brush.erase.tip";
+    public final static String TOOL_ENTITY_BRUSH_PAINT = "tool.entity.brush.paint";
+    public final static String TOOL_ENTITY_BRUSH_PAINT_TIP = "tool.entity.brush.paint.tip";
+    public final static String TOOL_ENTITY_BRUSH_SOURCE = "tool.entity.brush.source";
+    public final static String TOOL_ENTITY_BRUSH_SOURCE_TIP = "tool.entity.brush.source.tip";
+    public final static String TOOL_ENTITY_BRUSH_LOCATION_OFFSET = "tool.entity.brush.location.offset";
+    public final static String TOOL_ENTITY_BRUSH_LOCATION_OFFSET_TIP = "tool.entity.brush.location.offset.tip";
+    public final static String TOOL_ENTITY_BRUSH_SCALE_MIN = "tool.entity.brush.scale.min";
+    public final static String TOOL_ENTITY_BRUSH_SCALE_MIN_TIP = "tool.entity.brush.scale.min.tip";
+    public final static String TOOL_ENTITY_BRUSH_SCALE_MAX = "tool.entity.brush.scale.max";
+    public final static String TOOL_ENTITY_BRUSH_SCALE_MAX_TIP = "tool.entity.brush.scale.max.tip";
+    public final static String TOOL_ENTITY_BRUSH_ROTATION_MIN = "tool.entity.brush.rotation.min";
+    public final static String TOOL_ENTITY_BRUSH_ROTATION_MIN_TIP = "tool.entity.brush.rotation.min.tip";
+    public final static String TOOL_ENTITY_BRUSH_ROTATION_MAX = "tool.entity.brush.rotation.max";
+    public final static String TOOL_ENTITY_BRUSH_ROTATION_MAX_TIP = "tool.entity.brush.rotation.max.tip";
+    public final static String TOOL_ENTITY_BRUSH_DENSITY = "tool.entity.brush.density";
+    public final static String TOOL_ENTITY_BRUSH_DENSITY_TIP = "tool.entity.brush.density.tip";
+    public final static String TOOL_ENTITY_BRUSH_MIN_HEIGHT = "tool.entity.brush.min.height";
+    public final static String TOOL_ENTITY_BRUSH_MIN_HEIGHT_TIP = "tool.entity.brush.min.height.tip";
+    public final static String TOOL_ENTITY_BRUSH_FACE_NORMAL = "tool.entity.brush.face.normal";
+    public final static String TOOL_ENTITY_BRUSH_FACE_NORMAL_TIP = "tool.entity.brush.face.normal.tip";
  
     public final static String FORM_ASSETS_TITLE = "form.assets.title";
     public final static String FORM_COMPONENTS_TITLE = "form.components.title";

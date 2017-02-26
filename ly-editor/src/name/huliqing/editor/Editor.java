@@ -13,7 +13,6 @@ import com.jme3.math.ColorRGBA;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.editor.events.JmeEvent;
-import name.huliqing.luoying.LuoYing;
 import name.huliqing.editor.edit.JfxEdit;
 import name.huliqing.editor.events.JmeEventAppState;
 import name.huliqing.editor.edit.UndoRedo;
@@ -36,7 +35,8 @@ public class Editor extends SimpleApplication{
         if (stats != null) {
             stateManager.detach(stats);
         }
-        stateManager.attach(new EditorStatsAppState());
+//        stateManager.attach(new EditorStatsAppState()); // remove
+        stateManager.attach(new FpsAppState());
         inputManager.setCursorVisible(true);
         viewPort.setBackgroundColor(ColorRGBA.DarkGray);
         flyCam.setEnabled(false);

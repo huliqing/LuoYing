@@ -39,13 +39,17 @@ import com.jme3.scene.Spatial;
 import com.jme3.terrain.Terrain;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.editor.edit.UndoRedo;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import name.huliqing.editor.edit.controls.entity.EntityControlTile;
 
 /**
  * 升高地形
  */
 public class RaiseTerrainToolAction extends AbstractTerrainToolAction {
+
+    private static final Logger LOG = Logger.getLogger(RaiseTerrainToolAction.class.getName());
+    
 
     // 注：undo和redo的对象必须始终是EntitySelectObj，因为EntitySelectObj中Object等参数是可能发生变化的,
     // 也就是其中的TerrainEntity中的Terrain对象可能是发生变化的.
@@ -79,7 +83,8 @@ public class RaiseTerrainToolAction extends AbstractTerrainToolAction {
     private void modifyHeight(EntityControlTile eso, Vector3f worldLoc, float radius, float heightDir) {
         Spatial terrainSpatial = eso.getTarget().getSpatial();
         if (!(terrainSpatial instanceof Terrain)) {
-            throw new IllegalStateException("terrainSpatial must be a Terrain object! eso=" + eso);
+            LOG.log(Level.WARNING, "Spatial not a Terrain object! eso={0}", eso);
+            return;
         }
         Terrain terrain = (Terrain) terrainSpatial;
         // 消除地形的位置和旋转导致的偏移,但是不消除缩放,这们允许地形在缩放、旋转和移动后进行编辑。

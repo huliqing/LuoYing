@@ -22,7 +22,7 @@
     <entitySimpleTerrain id="sysEntityTerrainBase" shadowMode="Receive" modules="sysModuleTerrainPhysics" />
 
     <!--树木基本配置： 需要投影，需要静态物理-->
-    <entityTree id="sysEntityTreeBase" shadowMode="Cast" cullHint="Never" queueBucket="Opaque" modules="sysModuleTreePhysics"  />
+    <entityTree id="sysEntityTreeBase" shadowMode="Cast" cullHint="Never" queueBucket="Opaque" modules="sysModuleTreePhysics" />
     
     <!--花草植被的基本配置: 不需要投影，不需要物理-->
     <entityGrass id="sysEntityGrassBase" shadowMode="Off" cullHint="Never" queueBucket="Opaque" />
@@ -91,7 +91,11 @@
     <entitySimpleTerrain id="sysEntityTerrain" extends="sysEntityTerrainBase" file="LuoYingSys/Assets/Models/unitBox.j3o" scale="1,1,1"  />
     
     <!--内置测试用的树模型-->
-    <entityTree id="sysEntityTree" extends="sysEntityTreeBase" file="LuoYingSys/Assets/Models/Tree/tree431.obj" scale="10,10,10" />
+    <entityTree id="sysEntityTree" extends="sysEntityTreeBase" file="LuoYingSys/Assets/Models/Plants/palm-11225.j3o" 
+                sway="0" swayFrequency="1.5" swayVariation="0.3" swayDistance="1.0" swayWind="0,1" swayGeometries="palm-11225-geom-1" />
+
+    <entityGrass id="sysEntityGrass" extends="sysEntityGrassBase" file="LuoYingSys/Assets/Models/Plants/flower-428.j3o" 
+                 sway="1" swayFrequency="1.5" swayVariation="0.3" swayDistance="1.0" swayWind="0,1" swayGeometries=""/>
     
     <!--内置物理环境-->
     <entityPhysics id="sysEntityPhysics" extends="sysEntityPhysicsBase" />

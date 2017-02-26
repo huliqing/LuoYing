@@ -26,6 +26,8 @@ import name.huliqing.editor.events.JmeEvent;
 import name.huliqing.editor.manager.ControlTileManager;
 import name.huliqing.editor.tools.base.MoveTool;
 import name.huliqing.editor.edit.UndoRedo;
+import name.huliqing.editor.edit.controls.ControlTile;
+import name.huliqing.editor.toolbar.EntityBrushToolbar;
 import name.huliqing.editor.toolbar.TerrainToolbar;
 import name.huliqing.editor.toolbar.Toolbar;
 import name.huliqing.fxswing.Jfx;
@@ -50,14 +52,15 @@ public class SceneEdit extends SimpleJmeEdit implements SceneListener {
     private final PlayService playService = Factory.get(PlayService.class);
     private final JfxSceneEdit jfxEdit;
     
-    private final Toolbar extTerrainTools = new TerrainToolbar(this);
+    private final Toolbar extTerrainToolbar = new TerrainToolbar(this);
+    private final Toolbar extEntityBrushToolbar = new EntityBrushToolbar(this);
 
     private Game game;
     private Scene scene;
     private boolean sceneLoaded;
     
     // 保存当前实体数据列表与ControlTile的匹配关系
-    private final Map<EntityData, EntityControlTile> objMap = new LinkedHashMap<EntityData, EntityControlTile>();
+    private final Map<EntityData, EntityControlTile> controlTileMap = new LinkedHashMap<EntityData, EntityControlTile>();
     
     private final JmeEvent delEvent = new JmeEvent("delete");
     private final JmeEvent duplicateEvent = new JmeEvent("duplicate");
@@ -72,7 +75,8 @@ public class SceneEdit extends SimpleJmeEdit implements SceneListener {
     @Override
     protected List<Toolbar> createExtToolbars() {
         List<Toolbar> tbs = new ArrayList();
-        tbs.add(extTerrainTools);
+        tbs.add(extTerrainToolbar);
+        tbs.add(extEntityBrushToolbar);
         return tbs;
     }
     
@@ -95,12 +99,21 @@ public class SceneEdit extends SimpleJmeEdit implements SceneListener {
         duplicateEvent.bindKey(KeyInput.KEY_D, true).bindKey(KeyInput.KEY_LSHIFT, true);
         duplicateEvent.addListener((Event e) -> {
             if (e.isMatch() && (selectObj instanceof EntityControlTile)) {
-                Entity entity = (Entity) selectObj.getTarget();
-                entity.updateDatas();
-                EntityData cloneData = entity.getData().clone();
+                Entity source = (Entity) selectObj.getTarget();
+                source.updateDatas();
+                
+                EntityData cloneData = source.getData().clone();
                 cloneData.setUniqueId(DataFactory.generateUniqueId()); // 需要生成一个新的唯一ID
-                addEntity(cloneData);
-                setSelected(cloneData);
+                
+                EntityControlTile ectCloned = ControlTileManager.createEntityControlTile(cloneData);
+                ectCloned.setTarget(Loader.load(cloneData));
+                
+                EntityAddedUndoRedo eaur = new EntityAddedUndoRedo(ectCloned);
+                eaur.redo();
+                addUndoRedo(eaur);
+                
+                setSelected(ectCloned);
+                
                 // 转到移动工具激活并进行自由移动
                 MoveTool moveTool = (MoveTool) toolbar.getTool(MoveTool.class);
                 toolbar.setEnabled(moveTool, true);
@@ -161,7 +174,7 @@ public class SceneEdit extends SimpleJmeEdit implements SceneListener {
         if (game != null) {
             game.cleanup();
             game = null;
-            objMap.clear();
+            controlTileMap.clear();
         }
         sceneLoaded = false;
         scene = newScene;
@@ -181,8 +194,7 @@ public class SceneEdit extends SimpleJmeEdit implements SceneListener {
         List<Entity> entities = scene.getEntities();
         if (entities != null) {
             entities.stream().filter(t -> t != null).forEach(t -> {
-                EntityControlTile eso = ControlTileManager.createEntityControlTile(t.getData().getTagName());
-                objMap.put(t.getData(), eso);
+                EntityControlTile eso = ControlTileManager.createEntityControlTile(t.getData());
                 eso.setTarget(t);
                 addControlTile(eso);
             });
@@ -197,7 +209,7 @@ public class SceneEdit extends SimpleJmeEdit implements SceneListener {
     public void onSceneEntityRemoved(Scene scene, Entity entityRemoved) {}
     
     public void setSelected(EntityData entityData) {
-        EntityControlTile eso = objMap.get(entityData);
+        EntityControlTile eso = controlTileMap.get(entityData);
         if (eso != null) {
             setSelected(eso);
         }
@@ -208,28 +220,50 @@ public class SceneEdit extends SimpleJmeEdit implements SceneListener {
      * @param entityData 
      */
     public void reloadEntity(EntityData entityData) {
-        if (!sceneLoaded)
-            return;
-        EntityControlTile<Entity> ect = objMap.get(entityData);
+        EntityControlTile<Entity> ect = controlTileMap.get(entityData);
         if (ect != null) {
             ect.reloadEntity(scene);
         }
     }
+
+    @Override
+    public void addControlTile(ControlTile ct) {
+        if (ct instanceof EntityControlTile) {
+            EntityControlTile ect = (EntityControlTile) ct;
+            scene.addEntity(ect.getTarget());
+            controlTileMap.put(ect.getTarget().getData(), ect);
+            setModified(true);
+        }
+        super.addControlTile(ct); 
+    }
+
+    @Override
+    public boolean removeControlTile(ControlTile ct) {
+        if (ct instanceof EntityControlTile) {
+            EntityControlTile ect = (EntityControlTile) ct;
+            Entity entity = ect.getTarget();
+            entity.updateDatas();
+            controlTileMap.remove(entity.getData());
+            scene.removeEntity(entity);
+            setModified(true);
+        }
+        return super.removeControlTile(ct);
+    }
     
-    public void addEntity(EntityData ed) {
-        if (!sceneLoaded)
-            return;
-        if (objMap.containsKey(ed)) {
+    /**
+     * 向场景中添加实体，这个方法会记录历史操作, 注：如果指定的EntityData已经存在于场景中，则该方法将什么也不做。
+     * @param ed 
+     */
+    public void addEntityUseUndoRedo(EntityData ed) {
+        if (controlTileMap.containsKey(ed)) {
             return;
         }
         Entity entity = Loader.load(ed);
-        scene.addEntity(entity);
-        EntityControlTile<Entity> eso = ControlTileManager.createEntityControlTile(ed.getTagName());
-        objMap.put(ed, eso);
-        eso.setTarget(entity);
-        addControlTile(eso);
-        addUndoRedo(new EntityAddedUndoRedo(eso));
-        setModified(true);
+        EntityControlTile<Entity> ect = ControlTileManager.createEntityControlTile(ed);
+        ect.setTarget(entity);
+        EntityAddedUndoRedo eaur = new EntityAddedUndoRedo(ect);
+        eaur.redo();
+        addUndoRedo(eaur);
     }
     
     /**
@@ -239,88 +273,72 @@ public class SceneEdit extends SimpleJmeEdit implements SceneListener {
      * @param ed
      * @param cursorPos 
      */
-    public void addEntityOnCursor(EntityData ed, Vector2f cursorPos) {
-        if (!sceneLoaded)
-            return;
-        if (objMap.containsKey(ed)) {
-            return;
-        }
-        Vector3f loc = PickManager.pick(editor.getCamera(), cursorPos, editRoot);
-        if (loc != null) {
+    public void addEntityOnCursorUseUndoRedo(EntityData ed, Vector2f cursorPos) {
+        Vector3f loc = PickManager.pickPoint(editor.getCamera(), cursorPos, editRoot);
+        if (loc != null) 
             ed.setLocation(loc);
-        }
-        Entity entity = Loader.load(ed);
-        scene.addEntity(entity);
-        EntityControlTile<Entity> eso = ControlTileManager.createEntityControlTile(ed.getTagName());
-        objMap.put(ed, eso);
-        eso.setTarget(entity);
-        addControlTile(eso);
-        addUndoRedo(new EntityAddedUndoRedo(eso));
-        setModified(true);
+        addEntityUseUndoRedo(ed);
     }
     
-    public boolean removeEntity(EntityData ed) {
-        if (!sceneLoaded) 
-            return false;
-        EntityControlTile<Entity> eso = objMap.get(ed);
-        if (eso == null) {
+    /**
+     * 从场景中移除指定EntityData所关联的实体,该方法同时会记录历史记录操作。
+     * 如果关联的实体不存在或者删除失败，则该方法会返回false.
+     * @param ed
+     * @return 
+     */
+    public boolean removeEntityUseUndoRedo(EntityData ed) {
+        EntityControlTile<Entity> ect = controlTileMap.get(ed);
+        if (ect == null) {
             return false;
         }
-        eso.getTarget().updateDatas();
-        scene.removeEntity(eso.getTarget());
-        objMap.remove(ed);
-        removeControlTile(eso);
-        addUndoRedo(new EntityRemovedUndoRedo(eso));
-        setModified(true);
+        EntityRemovedUndoRedo erur = new EntityRemovedUndoRedo(ect);
+        erur.redo();
+        addUndoRedo(erur);
         return true;
+    }
+    
+    /**
+     * 通过EntityData来获取场景中的控制物体，如果不存在则返回null.
+     * @param ed
+     * @return 
+     */
+    public EntityControlTile getEntityControlTile(EntityData ed) {
+        return controlTileMap.get(ed);
     }
 
     private class EntityAddedUndoRedo implements UndoRedo {
-        private final EntityControlTile<Entity> eso;
-        public EntityAddedUndoRedo(EntityControlTile eso) {
-            this.eso = eso;
+        private final EntityControlTile<Entity> ectAdded;
+        public EntityAddedUndoRedo(EntityControlTile ectAdded) {
+            this.ectAdded = ectAdded;
         }
         
         @Override
         public void undo() {
-            eso.getTarget().updateDatas();
-            objMap.remove(eso.getTarget().getData());
-            scene.removeEntity(eso.getTarget());
-            removeControlTile(eso);
+            removeControlTile(ectAdded);
         }
 
         @Override
         public void redo() {
-            eso.getTarget().setData(eso.getTarget().getData()); // 重新更新一次数据，优先
-            scene.addEntity(eso.getTarget());
-            objMap.put(eso.getTarget().getData(), eso);
-            addControlTile(eso);
+            addControlTile(ectAdded);
         }
-        
     }
     
     private class EntityRemovedUndoRedo implements UndoRedo {
 
-        private final EntityControlTile<Entity> ect;
+        private final EntityControlTile<Entity> ectRemoved;
         
         public EntityRemovedUndoRedo(EntityControlTile ect) {
-            this.ect = ect;
+            this.ectRemoved = ect;
         }
         
         @Override
         public void undo() {
-            ect.getTarget().setData(ect.getTarget().getData()); // 重新更新一次数据，优先
-            objMap.put(ect.getTarget().getData(), ect);
-            scene.addEntity(ect.getTarget());
-            addControlTile(ect);
+            addControlTile(ectRemoved);
         }
 
         @Override
         public void redo() {
-            ect.getTarget().updateDatas();
-            objMap.remove(ect.getTarget().getData());
-            scene.removeEntity(ect.getTarget());
-            removeControlTile(ect);
+            removeControlTile(ectRemoved);
         }
         
     }

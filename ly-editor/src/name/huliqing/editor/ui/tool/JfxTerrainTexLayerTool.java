@@ -9,7 +9,6 @@ import java.io.File;
 import java.util.List;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
@@ -41,28 +40,28 @@ import name.huliqing.fxswing.Jfx;
  */
 public class JfxTerrainTexLayerTool extends JfxAbstractTool<TexLayerTool> implements TexLayerTool.LayerChangedListener {
 
-    private final ToolBar toolBar = new ToolBar();
-    private final Button addLayer = new Button("", JfxUtils.createIcon(AssetConstants.INTERFACE_TOOL_TERRAIN_TEXLAYER_ADD));
-    private final Button removeLayer = new Button("", JfxUtils.createIcon(AssetConstants.INTERFACE_TOOL_TERRAIN_TEXLAYER_SUBTRACT));
+    private final VBox view = new VBox();
+    private final ToolBar btnPanel = new ToolBar();
+    private final Button addLayer = new Button("", JfxUtils.createIcon(AssetConstants.INTERFACE_ICON_ADD));
+    private final Button removeLayer = new Button("", JfxUtils.createIcon(AssetConstants.INTERFACE_ICON_SUBTRACT));
     private final Button removeNormal = new Button("", JfxUtils.createIcon(AssetConstants.INTERFACE_TOOL_TERRAIN_TEXLAYER_REMOVE_NORMAL));
     
-    private final VBox layout = new VBox();
-    private final TableView<TexLayer> layerPanel = new TableView();
+    private final TableView<TexLayer> content = new TableView();
     private int lastSelectRowIndex;
     
     public JfxTerrainTexLayerTool() {
         addLayer.setTooltip(new Tooltip(Manager.getRes(ResConstants.TOOL_TERRAIN_TEXLAYER_ADD_LAYER_TIP)));
         removeLayer.setTooltip(new Tooltip(Manager.getRes(ResConstants.TOOL_TERRAIN_TEXLAYER_REMOVE_LAYER_TIP)));
         removeNormal.setTooltip(new Tooltip(Manager.getRes(ResConstants.TOOL_TERRAIN_TEXLAYER_REMOVE_NORMAL_TIP)));
-        toolBar.getItems().addAll(addLayer, removeLayer, removeNormal);
+        btnPanel.getItems().addAll(addLayer, removeLayer, removeNormal);
+        view.getChildren().addAll(btnPanel, content);
         
-        layout.getChildren().addAll(toolBar, layerPanel);
         addLayer.setOnAction(e -> {
             Jfx.runOnJme(() -> {
                 int count = tool.getLayerCounts();
                 tool.addTextureLayer(count);
                 Jfx.runOnJfx(() -> {
-                    layerPanel.getSelectionModel().select(count);
+                    content.getSelectionModel().select(count);
                 });
                 if (count >= 1) {
                     Jfx.runOnJfx(() -> removeLayer.setDisable(false));
@@ -70,7 +69,7 @@ public class JfxTerrainTexLayerTool extends JfxAbstractTool<TexLayerTool> implem
             });
         });
         removeLayer.setOnAction(e -> {
-            int layerSize = layerPanel.getItems().size();
+            int layerSize = content.getItems().size();
             if (layerSize <= 1) {
                 removeLayer.setDisable(true);
                 return;
@@ -83,7 +82,7 @@ public class JfxTerrainTexLayerTool extends JfxAbstractTool<TexLayerTool> implem
             });
         });
         removeNormal.setOnAction(e -> {
-            int layerIndex = layerPanel.getSelectionModel().getSelectedIndex();
+            int layerIndex = content.getSelectionModel().getSelectedIndex();
             if (layerIndex < 0) {
                 return;
             }
@@ -92,9 +91,9 @@ public class JfxTerrainTexLayerTool extends JfxAbstractTool<TexLayerTool> implem
             });
         });
         
-        layerPanel.prefWidthProperty().bind(layout.widthProperty());
-        layerPanel.prefHeightProperty().bind(layout.heightProperty());
-        layout.setMinHeight(250);
+        content.prefWidthProperty().bind(view.widthProperty());
+        content.prefHeightProperty().bind(view.heightProperty().subtract(btnPanel.heightProperty()));
+        view.setMinHeight(250);
         
         initTableModel();
     }
@@ -114,7 +113,7 @@ public class JfxTerrainTexLayerTool extends JfxAbstractTool<TexLayerTool> implem
                     setText(null);
                     setGraphic(null);
                     int rowIndex = getTableRow().getIndex();
-                    if (rowIndex >= layerPanel.getItems().size()) 
+                    if (rowIndex >= content.getItems().size()) 
                         return;
                     Labeled icon = (item == null || item.isEmpty()) ? new Button() : new Label("", createImage(item));
                     icon.setOnMouseClicked(e -> {
@@ -145,7 +144,7 @@ public class JfxTerrainTexLayerTool extends JfxAbstractTool<TexLayerTool> implem
                     setText(null);
                     setGraphic(null);
                     int rowIndex = getTableRow().getIndex();
-                    if (rowIndex >= layerPanel.getItems().size()) 
+                    if (rowIndex >= content.getItems().size()) 
                         return;
                     Labeled icon = (item == null || item.isEmpty()) ? new Button() : new Label("", createImage(item));
                     icon.setOnMouseClicked(e -> {
@@ -201,12 +200,12 @@ public class JfxTerrainTexLayerTool extends JfxAbstractTool<TexLayerTool> implem
         tex.setPrefWidth(32);
         nor.setPrefWidth(32);
         scale.setPrefWidth(64);
-        layerPanel.getColumns().addAll(select, tex, nor, scale);
-        layerPanel.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        layerPanel.setPlaceholder(new Label("No Textures"));
-        layerPanel.getSelectionModel().selectedIndexProperty().addListener((ObservableValue<? extends Number> observable
+        content.getColumns().addAll(select, tex, nor, scale);
+        content.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        content.setPlaceholder(new Label("No Textures"));
+        content.getSelectionModel().selectedIndexProperty().addListener((ObservableValue<? extends Number> observable
                 , Number oldValue, Number newValue) -> {
-            if (newValue.intValue() < 0 || newValue.intValue() >= layerPanel.getItems().size() || newValue.intValue() == lastSelectRowIndex) {
+            if (newValue.intValue() < 0 || newValue.intValue() >= content.getItems().size() || newValue.intValue() == lastSelectRowIndex) {
                 return;
             }
             lastSelectRowIndex = newValue.intValue();
@@ -214,12 +213,12 @@ public class JfxTerrainTexLayerTool extends JfxAbstractTool<TexLayerTool> implem
                 tool.setSelectLayerIndex(newValue.intValue());
             });
         });
-        layerPanel.getSelectionModel().select(0);
+        content.getSelectionModel().select(0);
     }
     
     @Override
     public Region createView() {
-        return layout;
+        return view;
     }
 
     @Override
@@ -236,18 +235,18 @@ public class JfxTerrainTexLayerTool extends JfxAbstractTool<TexLayerTool> implem
     
     private void reloadLayers(final List<TexLayer> layers) {
         Jfx.runOnJfx(() -> {
-            layerPanel.getItems().clear();
+            content.getItems().clear();
             if (layers != null && !layers.isEmpty()) {
-                layerPanel.getItems().addAll(layers);
+                content.getItems().addAll(layers);
             }
-            removeLayer.setDisable(layerPanel.getItems().size() <= 1);
-            if (lastSelectRowIndex >= layerPanel.getItems().size()) {
-                lastSelectRowIndex = layerPanel.getItems().size() -1;
+            removeLayer.setDisable(content.getItems().size() <= 1);
+            if (lastSelectRowIndex >= content.getItems().size()) {
+                lastSelectRowIndex = content.getItems().size() -1;
             }
             if (lastSelectRowIndex < 0) {
                 lastSelectRowIndex = 0;
             }
-            layerPanel.getSelectionModel().select(lastSelectRowIndex);
+            content.getSelectionModel().select(lastSelectRowIndex);
         });
     }
     

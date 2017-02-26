@@ -15,6 +15,7 @@ import name.huliqing.editor.edit.controls.entity.DirectionalLightEntityControlTi
 import name.huliqing.editor.edit.controls.entity.EmptyEntityControlTile;
 import name.huliqing.editor.edit.controls.entity.EntityControlTile;
 import name.huliqing.editor.edit.controls.entity.SimpleModelEntityControlTile;
+import name.huliqing.luoying.data.EntityData;
 
 /**
  *
@@ -42,10 +43,27 @@ public class ControlTileManager {
         MAPPING.put("entityPhysics", EmptyEntityControlTile.class);
     }
     
-    public final static <T extends EntityControlTile> T createEntityControlTile(String tagName) {
-        Class<? extends ControlTile> clazz = MAPPING.get(tagName);
+//    public final static <T extends EntityControlTile> T createEntityControlTile(EntityData ed) {
+//        Class<? extends ControlTile> clazz = MAPPING.get(ed.getTagName());
+//        if (clazz == null) {
+//            LOG.log(Level.WARNING, "Could not create select obj, unknow tagName={0}", ed.getTagName());
+//            return (T) new EmptyEntityControlTile();
+//        }
+//         
+//        ControlTile obj;
+//        try {
+//            obj = clazz.newInstance();
+//        } catch (InstantiationException | IllegalAccessException ex) {
+//            obj = new EmptyEntityControlTile();
+//            Logger.getLogger(ControlTileManager.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return (T) obj;
+//    }
+    
+    public final static <T extends EntityControlTile> T createEntityControlTile(EntityData ed) {
+        Class<? extends ControlTile> clazz = MAPPING.get(ed.getTagName());
         if (clazz == null) {
-            LOG.log(Level.WARNING, "Could not create select obj, unknow tagName={0}", tagName);
+            LOG.log(Level.WARNING, "Could not create select obj, unknow tagName={0}", ed.getTagName());
             return (T) new EmptyEntityControlTile();
         }
          
@@ -58,4 +76,6 @@ public class ControlTileManager {
         }
         return (T) obj;
     }
+    
+    
 }

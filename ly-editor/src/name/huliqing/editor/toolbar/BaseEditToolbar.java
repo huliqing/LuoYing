@@ -22,7 +22,7 @@ import name.huliqing.editor.tools.base.PickTool;
 import name.huliqing.editor.tools.base.UndoRedoTool;
 
 /**
- * 最基本的3D编辑工具栏
+ * 最基本的3D编辑工具栏,包含移动、旋转、缩放、网格、选择、镜头、回退及重做等工具。
  * @author huliqing
  */
 public class BaseEditToolbar extends EditToolbar<SimpleJmeEdit>{
@@ -43,7 +43,7 @@ public class BaseEditToolbar extends EditToolbar<SimpleJmeEdit>{
 
     @Override
     public String getName() {
-        return "Base Edit";
+        return Manager.getRes(ResConstants.EDIT_TOOLBAR_BASE);
     }
     
     @Override

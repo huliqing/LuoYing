@@ -88,7 +88,7 @@ public class TerrainEntityComponentConverter extends EntityComponentConverter {
             EntityData ed = Loader.loadData(cd.getId());
             ed.setAttribute("file", terrainFullName.substring(1)); // 去掉"/"
             Jfx.runOnJfx(() -> {
-                jfxEdit.addEntity(ed);
+                jfxEdit.addEntityUseUndoRedo(ed);
             });
 
         } catch (IOException ex) {

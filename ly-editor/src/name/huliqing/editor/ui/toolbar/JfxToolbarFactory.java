@@ -33,15 +33,15 @@ public class JfxToolbarFactory {
         JfxToolbar jtb;
         if (clazz == null) {
             LOG.log(Level.WARNING
-                    , "Could not createJfxToolbar, unknow toolbar class={0}, now use JfxSimpleToolbar instead!"
+                    , "Could not createJfxToolbar, unknow toolbar class={0}, now use JfxEditToolbar instead!"
                     , toolbar.getClass());
-            jtb = new JfxSimpleToolbar();
+            jtb = new JfxEditToolbar();
         } else {
             try {
                 jtb = clazz.newInstance();
             } catch (InstantiationException | IllegalAccessException ex) {
-                LOG.log(Level.SEVERE, "Could not createJfxToolbar, now use JfxSimpleToolbar instead!", ex);
-                jtb = new JfxSimpleToolbar();
+                LOG.log(Level.SEVERE, "Could not createJfxToolbar, now use JfxEditToolbar instead!", ex);
+                jtb = new JfxEditToolbar();
             }
         }
         jtb.setToolbar(toolbar);

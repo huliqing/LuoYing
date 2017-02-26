@@ -808,6 +808,24 @@ xs:time
         <xs:complexContent>
             <xs:extension base="entityModelBase">
                 <xs:attribute ref="file" />
+                <xs:attribute name="sway" type="bool" use="optional">
+                    <xs:annotation><xs:documentation>打开树叶、草叶摇摆功能</xs:documentation></xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="swayFrequency" type="xs:decimal" use="optional">
+                    <xs:annotation><xs:documentation>摇摆频率</xs:documentation></xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="swayVariation" type="xs:decimal" use="optional">
+                    <xs:annotation><xs:documentation>摇摆扭曲</xs:documentation></xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="swayDistance" type="xs:decimal" use="optional">
+                    <xs:annotation><xs:documentation>最大摇摆距离</xs:documentation></xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="swayWind" type="xs:string" use="optional">
+                    <xs:annotation><xs:documentation>风向, 格式："x,y"</xs:documentation></xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="swayGeometries" type="xs:string" use="optional">
+                    <xs:annotation><xs:documentation>特殊指定要摇摆的网格物体，格式："geometryName1,geometryName2,...", 如果没有指定则所有网格摆动。</xs:documentation></xs:annotation>
+                </xs:attribute>
                 <xs:attribute name="randomScale" type="bool" use="optional">
                     <xs:annotation><xs:documentation>是否允许随机缩放，注意：打开该选项后，scale选项将被minScale和maxScale替换</xs:documentation></xs:annotation>
                 </xs:attribute>

@@ -73,6 +73,12 @@ public interface JfxEdit<T extends JmeEdit> {
     Editor getEditor();
     
     /**
+     * 获取JmeEdit
+     * @return 
+     */
+    T getJmeEdit();
+    
+    /**
      * 获取当前编辑器的UI根节点
      * @return 
      */

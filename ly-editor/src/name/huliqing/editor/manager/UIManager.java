@@ -16,6 +16,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import name.huliqing.editor.Editor;
 import name.huliqing.editor.constants.ResConstants;
 import name.huliqing.editor.ui.MainLayout;
@@ -88,9 +90,12 @@ public class UIManager {
         }
     }
     
-    public final static void output(String output) {
+    public final static void output(String output, Color color) {
         if (outputForm != null && outputForm.isVisible()) {
-            Jfx.runOnJfx(() -> outputForm.appendText(output));
+            Jfx.runOnJfx(() -> {
+                outputForm.addText(output, color);
+                outputForm.scrollToBottom();
+            });
         }
     }
     

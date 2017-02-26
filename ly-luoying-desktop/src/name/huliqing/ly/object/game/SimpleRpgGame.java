@@ -263,7 +263,7 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
                     tempTerrainsPicked.clear();
                     List<TerrainEntity> terrains = scene.getEntities(TerrainEntity.class, null);
                     for (TerrainEntity te : terrains) {
-                        PickManager.pick(app.getCamera(), app.getInputManager().getCursorPosition(), te.getSpatial(), tempTerrainsPicked);
+                        PickManager.pickResults(app.getCamera(), app.getInputManager().getCursorPosition(), te.getSpatial(), tempTerrainsPicked);
                     }
                     if (onPickedTerrain(tempTerrainsPicked)) {
                         return true;

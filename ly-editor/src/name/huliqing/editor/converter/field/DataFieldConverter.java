@@ -5,6 +5,8 @@
  */
 package name.huliqing.editor.converter.field;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
@@ -19,6 +21,8 @@ import name.huliqing.luoying.xml.ObjectData;
  * @author huliqing
  */
 public class DataFieldConverter extends SimpleFieldConverter{
+
+    private static final Logger LOG = Logger.getLogger(DataFieldConverter.class.getName());
 
     private final TextField content = new TextField("");
     private ObjectData lastObjectData;
@@ -61,7 +65,13 @@ public class DataFieldConverter extends SimpleFieldConverter{
     @Override
     protected void updateUI() {
         Object propertyValue = data.getAttribute(field);
-        ObjectData temp = (ObjectData) propertyValue;
+        ObjectData temp;
+        try {
+            temp = (ObjectData) propertyValue;
+        } catch (java.lang.ClassCastException e) {
+            LOG.log(Level.SEVERE, "Could not convert property to ObjectData, data=" + data.getId() + ", field=" + field, e);
+            return;
+        }
         if (temp != lastObjectData) {
             lastObjectData = temp;
             if (dc != null) {

@@ -10,7 +10,6 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.layout.VBox;
 import name.huliqing.editor.constants.ResConstants;
 import name.huliqing.editor.constants.StyleConstants;
-import name.huliqing.editor.manager.ComponentManager;
 import name.huliqing.editor.manager.Manager;
 
 /**

@@ -18,7 +18,7 @@ public class EntityComponentConverter extends AbstractComponentConverter<JfxScen
     @Override
     public void create(ComponentDefine cd, JfxSceneEdit jfxEdit) {
         EntityData ed = Loader.loadData(cd.getId());
-        jfxEdit.addEntity(ed);
+        jfxEdit.addEntityUseUndoRedo(ed);
     }
     
 }

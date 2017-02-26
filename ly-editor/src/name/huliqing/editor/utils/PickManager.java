@@ -57,7 +57,7 @@ public class PickManager {
         plane.setLocalTranslation(startSpatialLocation);
 
 //        startPickLoc = SceneEditTool.pickWorldLocation(camera, screenCoord, plane, null);
-        startPickLoc = name.huliqing.luoying.manager.PickManager.pick(camera, screenCoord, plane);
+        startPickLoc = name.huliqing.luoying.manager.PickManager.pickPoint(camera, screenCoord, plane);
     }
 
     public void setTransformation(Quaternion planeRotation, Mode type, Camera camera) {
@@ -93,7 +93,7 @@ public class PickManager {
      */
     public boolean updatePick(Camera camera, Vector2f screenCoord) {
 //        finalPickLoc = SceneEditTool.pickWorldLocation(camera, screenCoord, plane, null);
-        finalPickLoc = name.huliqing.luoying.manager.PickManager.pick(camera, screenCoord, plane);
+        finalPickLoc = name.huliqing.luoying.manager.PickManager.pickPoint(camera, screenCoord, plane);
         return finalPickLoc != null;
     }
 

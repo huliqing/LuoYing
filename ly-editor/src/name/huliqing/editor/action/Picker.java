@@ -52,7 +52,7 @@ public class Picker {
         setTransformation(planeRotation, cam);
         plane.setLocalTranslation(startSpatialLocation);
         
-        startPickLoc = PickManager.pick(cam, mouseLoc, plane);
+        startPickLoc = PickManager.pickPoint(cam, mouseLoc, plane);
     }
     
     public void setTransformation(Quaternion planeRotation, Camera camera) {
@@ -86,7 +86,7 @@ public class Picker {
         if (startPickLoc == null) {
             return false;
         }
-        endPickLoc = PickManager.pick(cam, screenLoc, plane);
+        endPickLoc = PickManager.pickPoint(cam, screenLoc, plane);
         return endPickLoc != null;
     }
     

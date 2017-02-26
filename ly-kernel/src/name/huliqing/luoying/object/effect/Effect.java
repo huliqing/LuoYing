@@ -46,12 +46,6 @@ import name.huliqing.luoying.utils.GeometryUtils;
  */
 public class Effect extends ModelEntity<EffectData> {
     
-    /** 动画控制,所有动画控制器都作用在animRoot上。*/
-    protected SafeArrayList<DelayAnim> animations;
-    
-    /** 特效声音 */
-    protected SafeArrayList<SoundWrap> sounds;
- 
     /** 特效的总的使用时间，注：特效的使用时间受特效执行速度的影响。
      * 如果特效速度为2.0则实际执行时间只有useTime的一半，反之也然 */
     protected float useTime = 1.0f;
@@ -62,9 +56,18 @@ public class Effect extends ModelEntity<EffectData> {
     /** 特效速度 */
     protected float speed = 1.0f;
     
+    /** 是否循环 */
+    protected boolean loop;
+    
     /** 判断特效是否可以立即结束，默认false, 大部分情况下特效都应该”自然结束“，
      * 但是存在一些特殊特效，这些特效需要在被依赖的目标（如技能）结束的时候立即也一起结束。 */
     protected boolean endImmediate;
+    
+    /** 动画控制,所有动画控制器都作用在animRoot上。*/
+    protected SafeArrayList<DelayAnim> animations;
+    
+    /** 特效声音 */
+    protected SafeArrayList<SoundWrap> sounds;
     
     /** 要跟随的物体的ID,这个物体必须存在于场景中,值小于等于0表示不跟随 */
     protected long traceEntityId;
@@ -112,6 +115,12 @@ public class Effect extends ModelEntity<EffectData> {
     public void setData(EffectData data) {
         super.setData(data);
         
+        useTime = data.getAsFloat("useTime", useTime);
+        timeUsed = data.getAsFloat("timeUsed", timeUsed);
+        speed = data.getAsFloat("speed", speed);
+        loop = data.getAsBoolean("loop", loop);
+        endImmediate = data.getAsBoolean("endImmediate", endImmediate);
+        
         // 声音: "sound1 | startTime, sound2 | startTime, ..."
         String[] cArr = data.getAsArray("sounds");
         if (cArr != null) {
@@ -124,11 +133,6 @@ public class Effect extends ModelEntity<EffectData> {
                 sounds.add(sw);
             }
         }
-        
-        useTime = data.getAsFloat("useTime", useTime);
-        timeUsed = data.getAsFloat("timeUsed", timeUsed);
-        speed = data.getAsFloat("speed", speed);
-        endImmediate = data.getAsBoolean("endImmediate", endImmediate);
         
         // 跟随
         traceEntityId = data.getAsLong("traceEntityId", traceEntityId);
@@ -185,8 +189,6 @@ public class Effect extends ModelEntity<EffectData> {
         // 计算实际时间
         trueTimeTotal = useTime / speed;
         
-        // 
-        LuoYing.preloadScene(effectNode);
     }
 
     @Override
@@ -252,9 +254,9 @@ public class Effect extends ModelEntity<EffectData> {
             }
         }
         
-        // 检查是否需要结束特效,
-        // 如果useTime值小于0，则表示永不结束
-        if (useTime >= 0 && timeUsed >= trueTimeTotal) {
+        if (loop) {
+            timeUsed = 0;
+        } else if (timeUsed >= trueTimeTotal) {
             doEndEffect();
         }
     }

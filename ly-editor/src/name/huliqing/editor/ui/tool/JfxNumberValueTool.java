@@ -9,6 +9,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
@@ -38,7 +39,6 @@ public class JfxNumberValueTool extends JfxAbstractTool<NumberValueTool>
          // 失去焦点时更新
         value.focusedProperty().addListener((ObservableValue<? extends Boolean> observable
                 , Boolean oldValue, Boolean newValue) -> {
-            // 如果是获得焦点则不理睬。
             if (newValue) {
                 return;
             }
@@ -53,7 +53,7 @@ public class JfxNumberValueTool extends JfxAbstractTool<NumberValueTool>
         
         value.prefHeightProperty().bind(view.heightProperty());
         label.prefHeightProperty().bind(view.heightProperty());
-        label.setPrefWidth(64);
+        label.setPrefWidth(100);
         value.setPrefWidth(64);
         view.setMaxHeight(25);
     }
@@ -69,6 +69,11 @@ public class JfxNumberValueTool extends JfxAbstractTool<NumberValueTool>
         label.setText(tool.getName());
         updateValueToView(tool.getValue());
         tool.addValueChangeListener(this);
+        
+        // tooltip
+        if (tool.getTips() != null) {
+            label.setTooltip(new Tooltip(tool.getTips()));
+        }
     }
 
     // 当3d场景工具值发生变化时更新到JFX组件

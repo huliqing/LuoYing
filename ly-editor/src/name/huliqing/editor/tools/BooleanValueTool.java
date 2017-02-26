@@ -15,6 +15,7 @@ public class BooleanValueTool extends AbstractValueTool<Boolean>{
 
     public BooleanValueTool(String name, String tips, String icon) {
         super(name, tips, icon);
+        setValue(false);
     }
 
     @Override

@@ -64,7 +64,7 @@ public class TerrainToolbar extends EditToolbar<SimpleJmeEdit> implements Simple
     
     @Override
     public String getName() {
-        return "Terrain Toolbar";
+        return Manager.getRes(ResConstants.EDIT_TOOLBAR_TERRAIN);
     }
     
     @Override

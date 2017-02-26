@@ -1,0 +1,122 @@
+<?xml version="1.0"?>
+<!--
+    转换器定义
+-->
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://editor.huliqing.name"
+           xmlns="http://editor.huliqing.name"
+           elementFormDefault="qualified">
+    
+    <xs:element name="root">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="data" />
+                <xs:element ref="converter" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="converter">
+        <xs:annotation>
+            <xs:documentation>定义一个转换器</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="base">
+                    <xs:attribute name="name" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>转换器名称</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="value" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>转换器, 格式：name.huliqing.editor.converter.XXXConverter</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+            <xs:sequence>
+                <xs:element ref="feature" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="feature">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="base">
+                    <xs:attribute name="name" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>feature名称</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="value" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>feature值</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="data">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="base">
+                    <xs:attribute name="name" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>转换tag名称</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="extends" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>继承自另一个转换器</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="converter" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>关联一个转换器定义</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="features" type="xs:string" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>数据转换器的配置，格式："feature1,feature2,feature3"，如果不设置这个参数则使用关联的转换器的默认的配置</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+            <xs:sequence>
+                <xs:element ref="feature" />
+                <xs:element ref="field" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="field">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="base">
+                    <xs:attribute name="name" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>转换字段名称</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="converter" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>关联一个转换器定义</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+            <xs:sequence>
+                <xs:element ref="feature" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:complexType name="base" >
+    </xs:complexType>
+
+</xs:schema>
