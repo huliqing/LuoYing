@@ -33,6 +33,7 @@ public class ControlTileManager {
         MAPPING.put("entitySimpleTerrain", SimpleModelEntityControlTile.class);
         MAPPING.put("entityTree", SimpleModelEntityControlTile.class);
         MAPPING.put("entityGrass", SimpleModelEntityControlTile.class);
+        MAPPING.put("entityEffect", SimpleModelEntityControlTile.class);
         MAPPING.put("entityDirectionalLight", DirectionalLightEntityControlTile.class);
         MAPPING.put("entityAdvanceWater", AdvanceWaterEntityControlTile.class);
         

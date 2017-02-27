@@ -143,6 +143,7 @@
     -fx-background-insets: 0, 0;
     -fx-background-radius: 7;
     -fx-background-color: derive(darkgray, -20%);
+    -fx-pref-width:200;
 }
 .list-view .list-cell {
     -fx-background-radius: 7;

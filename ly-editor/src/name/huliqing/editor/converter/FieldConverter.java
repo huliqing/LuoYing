@@ -39,9 +39,12 @@ public abstract class FieldConverter<E extends JfxAbstractEdit, T extends Object
         this.field = field;
     }
 
-    @Override
     public Region getLayout() {
         return root;
+    }
+
+    public DataConverter getParent() {
+        return parent;
     }
 
     @Override

@@ -126,6 +126,9 @@
     <!--内置模型:一个单位立方体-->
     <entitySimpleModel id="sysEntityModel" extends="sysEntityModelBase" file="LuoYingSys/Assets/Models/unitBox.j3o" scale="1,1,1" />
     
+    <!--特效-->
+    <entityEffect id="sysEntityEffect" effect="sysEffectFire" />
+    
     <!-- ========================================================================= -->
     <!-- 以下为内置过滤器 -->
     <!-- ========================================================================= -->
@@ -139,20 +142,7 @@
     <!-- ========================================================================= -->
     <!-- 一些额外的参考配置，不能直接使用，根据应用和资源环境的不同实际情况，配置参数会有所不同 -->
     <!-- ========================================================================= -->
-    <!--  
-    地形：落樱小岛
-    <entitySimpleTerrain id="sysEntitySakuraIslandTerrain" extends="sysEntityTerrainBase" file="Models/env/terrain/scene.j3o" scale="5,5,5" />
-    边界盒： 落樱小岛的边界盒
-    <entitySimpleModel id="sysEntitySakuraIslandBoundary" extends="sysEntityBoundaryBase" location="0,0,5" scale="220,80,210" />
-    简单水体:移动平台
-    <entitySimpleWater id="sysEntitySakuraIslandSimpleWater" extends="sysEntitySimpleWater" />
-    默认海水:桌面平台
-    <entityAdvanceWater id="sysEntitySakuraIslandAdvanceWater" extends="sysEntityAdvanceWater" />
-    海水环境代理：根据平台在桌面环境下使用高级水体效果，在其它平台（主要是移动平台）下使用简单水体效果
-    <entityPlatformProxy id="sysEntitySakuraIslandWater" defaultEnv="entitySakuraIslandSimpleWater" mapping="entitySakuraIslandAdvanceWater|Windows32|Windows64|Linux32|Linux64|MacOSX32|MacOSX64|MacOSX_PPC32|MacOSX_PPC64" />
-    海边环境音效
-    <entityAudio id="sysEntitySakuraIslandAudioSea" sound="soundOcean" debug="0" location="0, 0, 120" maxDistance="100" refDistance="20" looping="1" volume="1" />
-    -->
+
     
 </root>
 

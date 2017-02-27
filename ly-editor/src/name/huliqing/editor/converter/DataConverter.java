@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TitledPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import name.huliqing.editor.constants.StyleConstants;
@@ -32,13 +33,17 @@ public abstract class DataConverter<E extends JfxAbstractEdit, T extends ObjectD
     protected Map<String, FieldDefine> fieldDefines;
     
     protected final Map<String, FieldConverter> fieldConverters = new LinkedHashMap();
+    
     protected final ScrollPane dataScroll = new ScrollPane();
     protected final VBox fieldPanel = new VBox();
+    
+    protected final TitledPane childPane = new TitledPane();
     
     public DataConverter() {
         dataScroll.setId(StyleConstants.ID_PROPERTY_PANEL);
         dataScroll.setContent(fieldPanel);
-        dataScroll.setPrefWidth(210);
+        
+        childPane.managedProperty().bind(childPane.visibleProperty());
     }
     
     @Override
@@ -58,6 +63,10 @@ public abstract class DataConverter<E extends JfxAbstractEdit, T extends ObjectD
     @Override
     public void initialize() {
         super.initialize();
+        
+        jfxEdit.getPropertyPanel().getChildren().addAll(childPane);
+        childPane.setVisible(false);
+        
         if (fieldDefines != null && !fieldDefines.isEmpty()) {
             fieldDefines.values().forEach(t -> {
                 FieldConverter pc = ConverterManager.createPropertyConverter(jfxEdit, data, t, this);
@@ -90,7 +99,14 @@ public abstract class DataConverter<E extends JfxAbstractEdit, T extends ObjectD
         );
         fieldConverters.clear();
         fieldPanel.getChildren().clear();
+        
+        jfxEdit.getPropertyPanel().getChildren().removeAll(childPane);
         super.cleanup();
     }
     
+    public void setChildContent(String childTitle, Node childContent) {
+        childPane.setText(childTitle);
+        childPane.setContent(childContent);
+        childPane.setVisible(true);
+    }
 }

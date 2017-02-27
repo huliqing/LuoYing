@@ -9,7 +9,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TitledPane;
 import javafx.scene.input.MouseEvent;
 import name.huliqing.editor.converter.DataConverter;
 import name.huliqing.editor.converter.SimpleFieldConverter;
@@ -27,19 +26,17 @@ public class DataFieldConverter extends SimpleFieldConverter{
     private final TextField content = new TextField("");
     private ObjectData lastObjectData;
     
-    private DataConverter dc;
-    private boolean displayed;
-    
-    private final TitledPane bodyPanel = new TitledPane();
+    private DataConverter dataConverter;
     
     public DataFieldConverter() {
         content.setOnMouseClicked((MouseEvent event) -> {
-            if (displayed) {
-                return;
+            if (dataConverter == null && lastObjectData != null) {
+                dataConverter = ConverterManager.createDataConverter(jfxEdit, lastObjectData, this);
+                dataConverter.initialize();
             }
-            dc.getLayout().setVisible(true);
-            jfxEdit.getPropertyPanel().getChildren().add(bodyPanel);
-            displayed = true;
+            if (dataConverter != null) {
+                getParent().setChildContent(lastObjectData.getId(), dataConverter.getLayout());
+            }
         });
     }
     
@@ -55,10 +52,10 @@ public class DataFieldConverter extends SimpleFieldConverter{
 
     @Override
     public void cleanup() {
-        jfxEdit.getPropertyPanel().getChildren().remove(bodyPanel);
-        dc.cleanup();
-        dc = null;
-        displayed = false;
+        if (dataConverter != null) {
+            dataConverter.cleanup();
+            dataConverter = null;
+        }
         super.cleanup(); 
     }
 
@@ -72,15 +69,12 @@ public class DataFieldConverter extends SimpleFieldConverter{
             LOG.log(Level.SEVERE, "Could not convert property to ObjectData, data=" + data.getId() + ", field=" + field, e);
             return;
         }
-        if (temp != lastObjectData) {
+        if (lastObjectData != temp) {
             lastObjectData = temp;
-            if (dc != null) {
-                dc.cleanup();
+            if (dataConverter != null) {
+                dataConverter.cleanup();
+                dataConverter = null;
             }
-            dc = ConverterManager.createDataConverter(jfxEdit, lastObjectData, this);
-            dc.initialize();
-            bodyPanel.setText(lastObjectData.getId());
-            bodyPanel.setContent(dc.getLayout());
         }
         content.setText(lastObjectData.getId());
     }

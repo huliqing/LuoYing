@@ -406,6 +406,9 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
+                <xs:attribute ref="location" />
+                <xs:attribute ref="rotation" />
+                <xs:attribute ref="scale" />
                 <xs:attribute ref="queueBucket" />
                 <xs:attribute ref="cullHint" />
                 <xs:attribute ref="shadowMode" />

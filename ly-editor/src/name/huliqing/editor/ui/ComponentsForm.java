@@ -19,6 +19,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import name.huliqing.editor.constants.DataFormatConstants;
 import name.huliqing.editor.component.ComponentDefine;
+import name.huliqing.editor.constants.ComponentConstants;
 import name.huliqing.editor.constants.ConfigConstants;
 import name.huliqing.editor.manager.ComponentManager;
 import name.huliqing.editor.manager.ConfigManager.ConfigChangedListener;
@@ -66,17 +67,13 @@ public class ComponentsForm extends ListView<ComponentDefine> implements ConfigC
     
     private void updateAassetDir() {
         getItems().clear();
-        List<ComponentDefine> cds = ComponentManager.getComponentsByType("entity");
+        List<ComponentDefine> cds = ComponentManager.getComponentsByType(ComponentConstants.ENTITY);
         if (cds != null) {
             getItems().addAll(cds);
         }
-        List<ComponentDefine> cdsFilter = ComponentManager.getComponentsByType("entityFilter");
+        List<ComponentDefine> cdsFilter = ComponentManager.getComponentsByType(ComponentConstants.ENTITY_FILTER);
         if (cdsFilter != null) {
             getItems().addAll(cdsFilter);
-        }
-        List<ComponentDefine> effects = ComponentManager.getComponentsByType("effect");
-        if (effects != null) {
-            getItems().addAll(effects);
         }
     }
 

@@ -50,10 +50,9 @@ public class EntitiesFieldConverter extends FieldConverter<JfxSceneEdit, EntityD
     private final ListView<EntityData> listView = new ListView();
     private boolean ignoreSelectEvent;
     
-    private final TitledPane entityPanel = new TitledPane();
     private final Map<EntityData, DataConverter> entityConverterMaps = new HashMap();
     // 当前正在显示的EntityConverter
-    private DataConverter currentDisplayConverter;
+    private DataConverter dataConverter;
     
     private final ComponentSearch<ComponentDefine> componentSearch = new ComponentSearch(ComponentManager.getComponentsByType(ComponentConstants.ENTITY));
     
@@ -101,12 +100,11 @@ public class EntitiesFieldConverter extends FieldConverter<JfxSceneEdit, EntityD
         // 列表
         listView.setCellFactory(new CellInner());
         listView.getSelectionModel().selectedItemProperty().addListener(this::onJfxSelectChanged);
-        listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+//        listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         
         layout.getStyleClass().add(StyleConstants.CLASS_HVBOX);
         layout.getChildren().addAll(toolBar, listView);
         
-        entityPanel.setVisible(false);
     }
         
     @Override
@@ -127,15 +125,12 @@ public class EntitiesFieldConverter extends FieldConverter<JfxSceneEdit, EntityD
 //            });
 //        }
         
-        jfxEdit.getPropertyPanel().getChildren().add(entityPanel);
-        
         // 用于监听3D场景中选择物体的变化
         jfxEdit.addListener(this);
     }
     
     @Override
     public void cleanup() {
-        jfxEdit.getPropertyPanel().getChildren().remove(entityPanel);
         jfxEdit.removeListener(this);
         super.cleanup(); 
     }
@@ -182,6 +177,7 @@ public class EntitiesFieldConverter extends FieldConverter<JfxSceneEdit, EntityD
         
         ignoreSelectEvent = true;
         EntityData ed = ((EntityControlTile)selectObj).getTarget().getData();
+//        listView.getSelectionModel().clearSelection();
         listView.getSelectionModel().select(ed);
         doUpdateEntityView(ed);
         ignoreSelectEvent = false;
@@ -197,14 +193,12 @@ public class EntitiesFieldConverter extends FieldConverter<JfxSceneEdit, EntityD
             dc = ConverterManager.createDataConverter(jfxEdit, entityData, this);
             entityConverterMaps.put(entityData, dc);
         }
-        if (currentDisplayConverter != null) {
-            currentDisplayConverter.cleanup();
+        if (dataConverter != null) {
+            dataConverter.cleanup();
         }
-        currentDisplayConverter = dc;
-        currentDisplayConverter.initialize();
-        entityPanel.setText(entityData.getId());
-        entityPanel.setContent(currentDisplayConverter.getLayout());
-        entityPanel.setVisible(true);
+        dataConverter = dc;
+        dataConverter.initialize();
+        getParent().setChildContent(entityData.getId(), dataConverter.getLayout());
     }
 
     @Override

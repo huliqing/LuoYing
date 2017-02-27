@@ -6,6 +6,7 @@
 package name.huliqing.editor.converter.field;
 
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
 import java.util.logging.Logger;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -122,7 +123,11 @@ public class ColorConverter extends SimpleFieldConverter {
         if (jmeColor == null) {
             return new Color(1,1,1,1);
         }
-        return new Color(jmeColor.r, jmeColor.g, jmeColor.b, jmeColor.a);
+        
+        return new Color(FastMath.clamp(jmeColor.r, 0, 1)
+                , FastMath.clamp(jmeColor.g, 0, 1)
+                , FastMath.clamp(jmeColor.b, 0, 1)
+                , FastMath.clamp(jmeColor.a, 0, 1));
     }
     
     private ColorRGBA toJmeColor(Color color) {

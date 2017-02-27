@@ -12,5 +12,7 @@ package name.huliqing.editor.constants;
 public class ComponentConstants {
     
     public final static String ENTITY = "entity";
+    public final static String ENTITY_FILTER = "entityFilter";
+    public final static String EFFECT = "effect";
     public final static String MODULE = "module";
 }

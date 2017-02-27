@@ -5,7 +5,7 @@
     xmlns='http://editor.huliqing.name'
     xsi:schemaLocation='http://editor.huliqing.name meta.xsd'>
     
-    <data name="effectBase" extends="entityModelBase" >
+    <data name="effectBase" extends="base" >
         <field name="useTime" converter="FloatTextConverter" />
         <field name="speed" converter="FloatTextConverter" />
         <field name="loop" converter="CheckBoxConverter" />

@@ -110,6 +110,11 @@ public class Effect<T extends EffectData> extends Node implements DataProcessor<
     }
     
     @Override
+    public T getData() {
+        return data;
+    }
+    
+    @Override
     public void setData(T data) {
         this.data = data;
         
@@ -151,6 +156,19 @@ public class Effect<T extends EffectData> extends Node implements DataProcessor<
         traceRotationOffset = data.getAsQuaternion("traceRotationOffset");
         traceLocationType = TraceOffsetType.identify(data.getAsString("traceLocationType", TraceOffsetType.origin.name()));
         
+        Vector3f location = data.getAsVector3f("location");
+        if (location != null) {
+            setLocalTranslation(location);
+        }
+        Quaternion rotation = data.getAsQuaternion("rotation");
+        if (rotation != null) {
+            setLocalRotation(rotation);
+        }
+        Vector3f scale = data.getAsVector3f("scale");
+        if (scale != null) {
+            setLocalScale(scale);
+        }
+        
         String tempQueueBucket = data.getAsString("queueBucket");
         if (tempQueueBucket != null) {
             setQueueBucket(Bucket.valueOf(tempQueueBucket));
@@ -163,11 +181,7 @@ public class Effect<T extends EffectData> extends Node implements DataProcessor<
         if (tempShadowMode != null) {
             setShadowMode(ShadowMode.valueOf(tempShadowMode));
         }
-    }
-    
-    @Override
-    public T getData() {
-        return data;
+        
     }
     
     @Override
@@ -175,6 +189,9 @@ public class Effect<T extends EffectData> extends Node implements DataProcessor<
 //     data.setAttribute("useTime", useTime); // 不改变的数据不需要更新
         data.setAttribute("timeUsed", timeUsed);
         data.setAttribute("speed", speed);
+        data.setAttribute("location", getLocalTranslation());
+        data.setAttribute("rotation", getLocalRotation());
+        data.setAttribute("scale", getLocalScale());
         if (animations != null) {
             for (DelayAnim da : animations) {
                 da.updateDatas();

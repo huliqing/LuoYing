@@ -141,6 +141,45 @@ xs:time
     
     <!-- ==== Attribute ==== -->
     
+    <xs:attribute name="shadowMode">
+        <xs:annotation><xs:documentation>投影模式，默认值Inherit</xs:documentation></xs:annotation>
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:enumeration value="Off" />
+                <xs:enumeration value="Cast" />
+                <xs:enumeration value="Receive" />
+                <xs:enumeration value="CastAndReceive" />
+                <xs:enumeration value="Inherit" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:attribute>
+    
+    <xs:attribute name="cullHint">
+        <xs:annotation><xs:documentation>剪裁方式，默认值Inherit</xs:documentation></xs:annotation>
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:enumeration value="Inherit" />
+                <xs:enumeration value="Dynamic" />
+                <xs:enumeration value="Always" />
+                <xs:enumeration value="Never" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:attribute>
+                
+    <xs:attribute name="queueBucket">
+        <xs:annotation><xs:documentation>渲染队列</xs:documentation></xs:annotation>
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:enumeration value="Opaque" />
+                <xs:enumeration value="Transparent" />
+                <xs:enumeration value="Sky" />
+                <xs:enumeration value="Translucent" />
+                <xs:enumeration value="Gui" />
+                <xs:enumeration value="Inherit" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:attribute>
+    
     <xs:attribute name="file" type="xs:string">
         <xs:annotation>
             <xs:documentation>指定物品的模型文件路径，如：Models/trees/flower/flower1.j3o</xs:documentation>

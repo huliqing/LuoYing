@@ -13,7 +13,6 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.VBox;
 import name.huliqing.editor.component.ComponentDefine;
@@ -46,9 +45,7 @@ public class ModulesFieldConverter extends SimpleFieldConverter<JfxSceneEdit, En
     private final ComponentSearch<ComponentDefine> componentInput = 
             new ComponentSearch(ComponentManager.getComponentsByType(ComponentConstants.MODULE));
     
-    // 点击模块后显示子模块界面
-    private final TitledPane childPanel = new TitledPane();
-    private DataConverter currentDisplayConverter;
+    private DataConverter dataConverter;
     
     public ModulesFieldConverter() {
         Button add = new Button("", JfxUtils.createIcon(AssetConstants.INTERFACE_ICON_ADD));
@@ -99,35 +96,27 @@ public class ModulesFieldConverter extends SimpleFieldConverter<JfxSceneEdit, En
         listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<ModuleData>() {
             @Override
             public void changed(ObservableValue<? extends ModuleData> observable, ModuleData oldValue, ModuleData newValue) {
-                if (currentDisplayConverter != null && currentDisplayConverter.isInitialized()) {
-                    currentDisplayConverter.cleanup();
-                    childPanel.setContent(null);
+                if (dataConverter != null && dataConverter.isInitialized()) {
+                    dataConverter.cleanup();
                 }
                 // 注：newVaue是有可能为null的，当删除了列表中的节点时可能发生，所以要避免NPE
                 if (newValue == null) {
-                    childPanel.setVisible(false);
                     return;
                 }
-                currentDisplayConverter = ConverterManager.createDataConverter(jfxEdit, newValue, ModulesFieldConverter.this);
-                currentDisplayConverter.initialize();
-                childPanel.setContent(currentDisplayConverter.getLayout());
-                childPanel.setText(newValue.getId());
-                childPanel.setVisible(true);
+                dataConverter = ConverterManager.createDataConverter(jfxEdit, newValue, ModulesFieldConverter.this);
+                dataConverter.initialize();
+                getParent().setChildContent(newValue.getId(), dataConverter.getLayout());
             }
         });
-        
-        childPanel.setVisible(false);
     }
 
     @Override
     public void initialize() {
         super.initialize();
-        jfxEdit.getPropertyPanel().getChildren().add(childPanel);
     }
 
     @Override
     public void cleanup() {
-        jfxEdit.getPropertyPanel().getChildren().remove(childPanel);
         super.cleanup(); 
     }
     
@@ -139,12 +128,12 @@ public class ModulesFieldConverter extends SimpleFieldConverter<JfxSceneEdit, En
             listView.getItems().addAll(moduleDatas);
         }
     }
-
+    
     @Override
     protected Node createLayout() {
         return layout;
     }
- 
+    
     private class ModuleDataAddedUndoRedo implements UndoRedo {
         private final ModuleData mdAdded;
         public ModuleDataAddedUndoRedo(ModuleData added) {

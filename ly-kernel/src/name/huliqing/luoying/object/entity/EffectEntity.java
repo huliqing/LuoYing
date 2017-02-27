@@ -20,29 +20,21 @@
 package name.huliqing.luoying.object.entity;
 
 import com.jme3.scene.Spatial;
-import name.huliqing.luoying.data.EffectData;
 import name.huliqing.luoying.data.EffectEntityData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.effect.Effect;
 import name.huliqing.luoying.object.scene.Scene;
 
 /**
- *
  * @author huliqing
  */
 public class EffectEntity extends ModelEntity<EffectEntityData> {
     
     private Effect effect;
     
-    public EffectEntity() {}
-    
     @Override
     public void setData(EffectEntityData data) {
         super.setData(data);
-        if (effect == null) {
-            EffectData ed = data.getEffectData();
-            effect = Loader.load(ed);
-        }
     }
 
     @Override
@@ -56,6 +48,9 @@ public class EffectEntity extends ModelEntity<EffectEntityData> {
     
     @Override
     protected Spatial loadModel() {
+        if (effect == null) {
+            effect = Loader.load(data.getEffectData());
+        }
         return effect;
     }
 
@@ -67,7 +62,20 @@ public class EffectEntity extends ModelEntity<EffectEntityData> {
     @Override
     public void onInitScene(Scene scene) {
         super.onInitScene(scene);
-        throw new UnsupportedOperationException();
+        if (!effect.isInitialized()) {
+            effect.initialize();
+        }
+        scene.getRoot().attachChild(effect);
+    }
+
+    @Override
+    public void cleanup() {
+        if (effect.isInitialized()) {
+            effect.cleanup();
+        }
+        effect.removeFromParent();
+        effect = null;
+        super.cleanup(); 
     }
     
 }

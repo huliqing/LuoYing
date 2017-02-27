@@ -18,7 +18,7 @@
  * along with LuoYing.  If not, see <http://www.gnu.org/licenses/>.
  */
 package name.huliqing.luoying;
-
+ 
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
@@ -403,6 +403,7 @@ public class LuoYing {
     private static void loadSysData() throws LuoYingException {
         loadData("LuoYingSys/Data/action.xml");
         loadData("LuoYingSys/Data/channel.xml");
+        loadData("LuoYingSys/Data/effect.xml");
         loadData("LuoYingSys/Data/el.xml");
         loadData("LuoYingSys/Data/entity.xml");
         loadData("LuoYingSys/Data/game.xml");

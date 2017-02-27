@@ -222,5 +222,7 @@
     
     <data name="entityGrass" extends="entityPlantBase" />
     
-
+    <data name="entityEffect" extends="entityModelBase" >
+        <field name="effect" converter="DataFieldConverter" />
+    </data>
 </root>
