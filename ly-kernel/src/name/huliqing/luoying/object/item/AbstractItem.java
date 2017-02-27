@@ -77,7 +77,8 @@ public abstract class AbstractItem implements Item {
             for (String eid : effects) {
                  Effect effect = Loader.load(eid);
                  effect.setTraceObject(actor.getSpatial());
-                 actor.getScene().addEntity(effect);
+                 effect.initialize();
+                 actor.getScene().getRoot().attachChild(effect);
             }
         }
         if (sounds != null) {

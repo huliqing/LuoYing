@@ -10,17 +10,16 @@
     <!-- ========================================================================= -->
     <!--刀剑碰撞效果:火花-->
     <!-- ========================================================================= -->
-    <effectGroup id="effectCollisionMM" des="metal-metal"  useTime="9999"
+    <effectGroup id="effectCollisionMM" des="metal-metal"  useTime="2" 
                    effects="effectCollisionMM1,effectCollisionMM2" traceLocation="once" traceRotation="once" />
     <effectParticle id="effectCollisionMM1" des="spark"  useTime="1"  emitter="emitterCollisionMM1" emitAll="1" inWorldSpace="0" />
     <effectParticle id="effectCollisionMM2" des="flash"  useTime="1"  emitter="emitterCollisionMM2" emitAll="1" inWorldSpace="0" />
-    
     <!-- ========================================================================= -->
     <!--通用刀光剑影特效:刀剑匕首等冷兵器攻击时的光影特效-->
     <!-- ========================================================================= -->
     
     <!--从上往下砍-->
-    <effectGroup id="effectSwordShadow1" extends="effectBase" useTime="9999"
+    <effectGroup id="effectSwordShadow1" extends="effectBase" useTime="1" 
                  traceLocation="once" traceRotation="once" traceLocationOffset="0,2,0"
                  effects="effectSwordShadow1A,effectSwordShadow1B" />
     <effectSlideColorIOSpline id="effectSwordShadow1A" extends="effectBase" useTime="0.4" 
@@ -43,7 +42,7 @@
     <effectSlideColorIOSpline id="effectSwordShadow2B" extends="effectSwordShadow2A" width="0.25" up="0,0,1" /> 
     
     <!--从右下到左上斜挑约45度的剑光效果-->
-    <effectGroup id="effectSwordShadow3" extends="effectBase" useTime="9999"
+    <effectGroup id="effectSwordShadow3" extends="effectBase" useTime="1"
                  traceLocation="once" traceRotation="once"  
                  traceLocationOffset="0,2,0" traceRotationOffset="0,0,0.5"
                  effects="effectSwordShadow3A,effectSwordShadow3B" />
@@ -143,7 +142,7 @@
     <!-- ========================================================================= -->
     <!--星光传送特效-->
     <!-- ========================================================================= -->
-    <effectGroup id="effectBackTown" extends="effectBase" useTime="9999"
+    <effectGroup id="effectBackTown" extends="effectBase" useTime="6"
                    effects="effectBackTownCircle,effectEncircleHalo|0.18,effectHaloExp|2.2" traceLocation="once" traceRotation="no" />
     
     <effectProjection id="effectBackTownCircle" extends="effectBase" useTime="1.8" 
@@ -163,7 +162,7 @@
     <!--闪电箭-->
     <!-- ========================================================================= -->
     <!-- 主效果 -->
-    <effectGroup id="effectLightningShot" extends="effectBase" useTime="9999" traceLocation="always" traceRotation="always" traceLocationOffset="0, 2, 1.6" 
+    <effectGroup id="effectLightningShot" extends="effectBase" useTime="6" traceLocation="always" traceRotation="always" traceLocationOffset="0, 2, 1.6" 
                    effects="effectLightningShotVortex,effectLightningShotFlare|0.65,effectLightningShotBolt|0.75" />
     <!-- 风旋涡 -->
     <effectTexture id="effectLightningShotVortex" extends="effectBase" useTime="1" 
@@ -176,7 +175,7 @@
     <!-- 闪电 -->
     <effectParticle id="effectLightningShotBolt" extends="effectBase" useTime="1"  emitter="emitterLightningShotBolt" sounds="soundElectricity2" />
     <!-- 子弹Main -->
-    <effectGroup id="effectLightningShotBullet" extends="effectBase" useTime="9999" traceLocation="always" traceRotation="always" 
+    <effectGroup id="effectLightningShotBullet" extends="effectBase" useTime="6" traceLocation="always" traceRotation="always" 
                    effects="effectLightningShotBullet1,effectLightningShotBullet2" />
     <!--子弹-->
     <effectSlideColor id="effectLightningShotBullet1" extends="effectBase" useTime="6"  scale="1,5,1" rotation="-1.57,0,0" texAnimY="1" texChangeDir="1" />
@@ -196,7 +195,7 @@
                       rotation="-1.57,0,0" texAnimY="1" texChangeDir="1" />
 
     <!--蓄势-->
-    <effectGroup id="effectIceSmoke" extends="effectBase" useTime="9999" sounds="soundWind3"
+    <effectGroup id="effectIceSmoke" extends="effectBase" useTime="6" sounds="soundWind3"
                  traceLocation="always" traceRotation="always" traceLocationOffset="0,0,0.2"
                  effects="effectIceSmoke1,effectIceSmoke2,effectIceSmoke3,effectIceSmoke4" />
     <effectSlideColorSpline id="effectIceSmoke1" extends="effectBase" useTime="1.5" 
@@ -214,7 +213,7 @@
     <!-- ========================================================================= -->
     <!--冰冻-->
     <!-- ========================================================================= -->
-    <effectGroup id="effectFrozen" extends="effectBase" useTime="9999"  traceLocation="once" traceRotation="once" 
+    <effectGroup id="effectFrozen" extends="effectBase" useTime="7"  traceLocation="once" traceRotation="once" 
                 sounds="soundIceFrozen"
                  effects="effectFrozenIce|0.15
                  ,effectFrozenDebris|0,effectFrozenSmoke|0
@@ -231,7 +230,7 @@
     <!-- ========================================================================= -->
     <!--状态：疾风步效果-->
     <!-- ========================================================================= -->
-    <effectGroup id="effectStateWindWalkStart" extends="effectBase" useTime="9999"
+    <effectGroup id="effectStateWindWalkStart" extends="effectBase" useTime="6"
                    effects="effectStateWindWalkStartParticle,effectStateWindWalkStartFlash|0.75,effectStateWindWalkStartSmoke|0.75" 
                    traceLocation="always" traceRotation="always" traceLocationOffset="0,1,0" />
     <!--开始效果--> 
@@ -334,7 +333,7 @@
     <!--二刀流冲击波-->
     <!-- ========================================================================= -->
     <!--缠绕的光波-->
-    <effectGroup id="effectWaveSpline" extends="effectBase" useTime="9999"
+    <effectGroup id="effectWaveSpline" extends="effectBase" useTime="6"
                  traceLocation="once" traceRotation="once" sounds="soundWindSurround"
                  effects="effectWaveSmoke,effectWaveSpline1,effectWaveSpline2|0.3,effectWaveSpline3|0.6" 
                  traceLocationOffset="0,1.5,0" />

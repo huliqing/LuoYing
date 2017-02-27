@@ -27,13 +27,14 @@ import com.jme3.network.serializing.Serializable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import name.huliqing.luoying.xml.ObjectData;
 
 /**
  *
  * @author huliqing
  */
 @Serializable
-public class EffectData extends ModelEntityData {
+public class EffectData extends ObjectData {
     
     private List<DelayAnimData> delayAnimDatas;
     

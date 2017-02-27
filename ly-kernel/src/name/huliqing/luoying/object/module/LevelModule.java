@@ -216,8 +216,11 @@ public class LevelModule extends AbstractModule implements ValueChangeListener{
             // 3.提示升级(效果）
             if (effect != null) {
                 Effect levelUpEffect = Loader.load(effect);
-                levelUpEffect.setTraceEntity(entity.getEntityId());
-                this.entity.getScene().addEntity(levelUpEffect);
+//                levelUpEffect.setTraceEntity(entity.getEntityId());
+//                this.entity.getScene().addEntity(levelUpEffect);
+                levelUpEffect.setTraceObject(entity.getSpatial());
+                levelUpEffect.initialize();
+                this.entity.getScene().getRoot().attachChild(levelUpEffect);
             }
             
             if (isMessageEnabled()) {

@@ -22,29 +22,30 @@ package name.huliqing.luoying.object.effect;
 import com.jme3.bounding.BoundingVolume;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.queue.RenderQueue.Bucket;
+import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.util.SafeArrayList;
 import com.jme3.util.TempVars;
-import name.huliqing.luoying.LuoYing;
+import java.util.List;
 import name.huliqing.luoying.data.DelayAnimData;
 import name.huliqing.luoying.data.EffectData;
 import name.huliqing.luoying.object.ControlAdapter;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.anim.DelayAnim;
-import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.entity.ModelEntity;
-import name.huliqing.luoying.object.scene.Scene;
-import name.huliqing.luoying.object.sound.Sound;
-import name.huliqing.luoying.object.sound.SoundManager;
 import name.huliqing.luoying.utils.GeometryUtils;
+import name.huliqing.luoying.xml.DataProcessor;
 
 /**
- * 特效, 作为一个Entity可以直接添加到场景，也可以直接添加到一个Node下面。
+ * 特效
  * @author huliqing
+ * @version v1.5 20170227
  * @version v1.4 20161011
+ * @param <T>
  */
-public class Effect extends ModelEntity<EffectData> {
+public class Effect<T extends EffectData> extends Node implements DataProcessor<T> {
+    
+    protected T data;
     
     /** 特效的总的使用时间，注：特效的使用时间受特效执行速度的影响。
      * 如果特效速度为2.0则实际执行时间只有useTime的一半，反之也然 */
@@ -64,13 +65,11 @@ public class Effect extends ModelEntity<EffectData> {
     protected boolean endImmediate;
     
     /** 动画控制,所有动画控制器都作用在animRoot上。*/
-    protected SafeArrayList<DelayAnim> animations;
+    protected DelayAnim[] animations;
     
     /** 特效声音 */
-    protected SafeArrayList<SoundWrap> sounds;
+    protected SoundWrap[] sounds;
     
-    /** 要跟随的物体的ID,这个物体必须存在于场景中,值小于等于0表示不跟随 */
-    protected long traceEntityId;
     /** 特效跟随位置的类型 */
     private TraceType traceLocation;
     /** 特效跟随旋转的类型  */
@@ -84,9 +83,6 @@ public class Effect extends ModelEntity<EffectData> {
     
     // ---------- inner
     
-    /** 特效的根节点 */
-    protected final Node effectNode = new Node("EffectRoot");
-    
     /**
      * 动画(Anim)根作点, 为了隔离Effect自身的变换和Anim所执行的动画变换，必须提供一个节点用于接受所有动画变换的节点。
      * animations所执行的动画变换都作用在这个节点上。
@@ -99,6 +95,8 @@ public class Effect extends ModelEntity<EffectData> {
     /** 实际效果所用的时间,这个实际时间受速度的影响,效果速度越快则效果的实际执行时间越少。*/
     protected float trueTimeTotal;
     
+    protected boolean initialized;
+    
     protected final ControlAdapter control = new ControlAdapter() {
         @Override
         public void update(float tpf) {
@@ -107,13 +105,13 @@ public class Effect extends ModelEntity<EffectData> {
     };
     
     public Effect() {
-        effectNode.attachChild(animNode);
-        effectNode.addControl(control);
+        attachChild(animNode);
+        addControl(control);
     }
     
     @Override
-    public void setData(EffectData data) {
-        super.setData(data);
+    public void setData(T data) {
+        this.data = data;
         
         useTime = data.getAsFloat("useTime", useTime);
         timeUsed = data.getAsFloat("timeUsed", timeUsed);
@@ -123,103 +121,80 @@ public class Effect extends ModelEntity<EffectData> {
         
         // 声音: "sound1 | startTime, sound2 | startTime, ..."
         String[] cArr = data.getAsArray("sounds");
-        if (cArr != null) {
-            sounds = new SafeArrayList<SoundWrap>(SoundWrap.class);
-            for (String c : cArr) {
-                String[] dArr = c.split("\\|");
-                SoundWrap sw = new SoundWrap();
+        if (cArr != null && cArr.length > 0) {
+            sounds = new SoundWrap[cArr.length];
+            for (int i = 0; i < cArr.length; i++) {
+                String[] dArr = cArr[i].split("\\|");
+                SoundWrap sw = new SoundWrap(this);
                 sw.soundId = dArr[0];
                 sw.startTime = dArr.length > 1 ? Float.parseFloat(dArr[1]) : 0;
-                sounds.add(sw);
+                sounds[i] = sw;
+            }
+        }
+        
+        // 状态的动画功能
+        List<DelayAnimData> dads = data.getDelayAnimDatas();
+        if (dads != null && dads.size() > 0) {
+            animations = new DelayAnim[dads.size()];
+            for (int i = 0; i < dads.size(); i++) {
+                DelayAnim da = Loader.load(dads.get(i));
+                da.setSpeed(speed);
+                da.setTarget(animNode);
+                animations[i] = da;
             }
         }
         
         // 跟随
-        traceEntityId = data.getAsLong("traceEntityId", traceEntityId);
         traceLocation = TraceType.identity(data.getAsString("traceLocation", TraceType.no.name()));
         traceRotation = TraceType.identity(data.getAsString("traceRotation", TraceType.no.name()));
         traceLocationOffset = data.getAsVector3f("traceLocationOffset");
         traceRotationOffset = data.getAsQuaternion("traceRotationOffset");
         traceLocationType = TraceOffsetType.identify(data.getAsString("traceLocationType", TraceOffsetType.origin.name()));
+        
+        String tempQueueBucket = data.getAsString("queueBucket");
+        if (tempQueueBucket != null) {
+            setQueueBucket(Bucket.valueOf(tempQueueBucket));
+        }
+        String tempCullHint = data.getAsString("cullHint");
+        if (tempCullHint != null) {
+            setCullHint(CullHint.valueOf(tempCullHint));
+        }
+        String tempShadowMode = data.getAsString("shadowMode");
+        if (tempShadowMode != null) {
+            setShadowMode(ShadowMode.valueOf(tempShadowMode));
+        }
     }
     
     @Override
-    public EffectData getData() {
+    public T getData() {
         return data;
     }
     
     @Override
     public void updateDatas() {
-        super.updateDatas();
 //     data.setAttribute("useTime", useTime); // 不改变的数据不需要更新
         data.setAttribute("timeUsed", timeUsed);
         data.setAttribute("speed", speed);
-        data.setAttribute("traceEntityId", traceEntityId);
         if (animations != null) {
-            for (DelayAnim da : animations.getArray()) {
+            for (DelayAnim da : animations) {
                 da.updateDatas();
             }
         }
         // xxx to save Sounds data
     }
-
-    @Override
-    protected Spatial loadModel() {
-        return effectNode;
-    }
     
     /**
      * 初始化特效
      */
-    @Override
-    public void initEntity() {
-        super.initEntity();
-        
-        // 状态的动画功能
-        if (data.getDelayAnimDatas() != null) {
-            animations = new SafeArrayList<DelayAnim>(DelayAnim.class);
-            for (DelayAnimData dad : data.getDelayAnimDatas()) {
-                DelayAnim da = Loader.load(dad);
-                da.setSpeed(speed);
-                da.setTarget(animNode);
-                animations.add(da);
-            }
+    public void initialize() {
+        if (initialized) {
+            throw new IllegalStateException("Effect already initialized! effect=" + data.getId());
         }
+        initialized = true;
         
         // 计算实际时间
         trueTimeTotal = useTime / speed;
         
-    }
-
-    @Override
-    public void onInitScene(Scene scene) {
-        super.onInitScene(scene);
-        if (traceObject == null) {
-            setTraceObject(findTraceObject(traceEntityId));
-        }
-        
-        // 计算实际时间
-        trueTimeTotal = useTime / speed;
-        
-        // 1.查找被跟随的对象，并初始化位置
-        initTrace();
-        
-         // 2.初始化动画
-        if (animations != null) {
-            for (DelayAnim da : animations.getArray()) {
-                da.setSpeed(speed);
-                da.initialize();
-            }
-        }
-    }
-    
-    /**
-     * 查找被跟随的对象，并初始化位置
-     */
-    private void initTrace() {
-        if (traceObject == null) {
-            traceObject = findTraceObject(traceEntityId);
-        }
         if (traceObject != null) {
             if (traceLocation == TraceType.once || traceLocation == TraceType.always) {
                 doUpdateTracePosition();
@@ -230,11 +205,19 @@ public class Effect extends ModelEntity<EffectData> {
         }
     }
     
+    public boolean isInitialized() {
+        return initialized;
+    }
+    
     /**
      * 更新效果逻辑
      * @param tpf 
      */
     protected void effectUpdate(float tpf) {
+        if (!initialized) {
+            return;
+        }
+        
         timeUsed += tpf;
         
         // 更新位置
@@ -242,46 +225,46 @@ public class Effect extends ModelEntity<EffectData> {
         
         // 更新声音
          if (sounds != null) {
-            for (SoundWrap sw : sounds.getArray()) {
+            for (SoundWrap sw : sounds) {
                 sw.update(tpf, timeUsed);
             }
         }
         
         // 更新动画
         if (animations != null) {
-            for (DelayAnim da : animations.getArray()) {
+            for (DelayAnim da : animations) {
                 da.update(tpf);
             }
         }
         
-        if (loop) {
-            timeUsed = 0;
-        } else if (timeUsed >= trueTimeTotal) {
-            doEndEffect();
+        if (timeUsed >= trueTimeTotal) {
+            if (loop) {
+                timeUsed = 0;
+            } else {
+                doEndEffect();
+            }
         }
     }
     
     /**
      * 清理效果数据.
      */
-    @Override
     public void cleanup() {
+        initialized = false;
+        timeUsed = 0;
          if (sounds != null) {
-            for (SoundWrap aw : sounds.getArray()) {
+            for (SoundWrap aw : sounds) {
                 aw.cleanup();
             }
         }
-
+        
         if (animations != null) {
-            for (DelayAnim anim : animations.getArray()) {
+            for (DelayAnim anim : animations) {
                 anim.cleanup();
             }
         }
         
-        // 重置效果时间
-        timeUsed = 0;
-        effectNode.removeFromParent();
-        super.cleanup();
+        removeFromParent();
     }
     
     /**
@@ -300,12 +283,7 @@ public class Effect extends ModelEntity<EffectData> {
      * 当子类需要特殊结束效果时可以直接调用这个方法。
      */
     protected void doEndEffect() {
-        // 在部分情况下，特效可能会被直接放置在一些特殊节点下，这时scene可能为null.
-        if (scene != null) {
-            removeFromScene();
-        } else {
-            cleanup();
-        }
+        cleanup();
     }
     
     /**
@@ -313,16 +291,14 @@ public class Effect extends ModelEntity<EffectData> {
      * @return 
      */
     public boolean isEnd() {
-        return !initialized;
-    }
-    
-    /**
-     * 设置要跟随的场景中的物体的id
-     * @param entityId 
-     */
-    public void setTraceEntity(long entityId) {
-        this.traceEntityId = entityId;
-        setTraceObject(findTraceObject(traceEntityId));
+        if (!initialized) {
+            return true;
+        }
+        
+        if (!loop && timeUsed >= trueTimeTotal) {
+            return true;
+        }
+        return false;
     }
     
     /**
@@ -331,10 +307,6 @@ public class Effect extends ModelEntity<EffectData> {
      */
     public void setTraceObject(Spatial traceObject) {
         this.traceObject = traceObject;
-        // 重新查找被跟随的节点并立即初始化位置
-        if (initialized) {
-            initTrace();
-        }
     }
     
     /**
@@ -359,7 +331,7 @@ public class Effect extends ModelEntity<EffectData> {
         
         // 速度更新时要一起更新动画速度
         if (animations != null) {
-            for (DelayAnim da : animations.getArray()) {
+            for (DelayAnim da : animations) {
                 da.setSpeed(speed);
             }
         }
@@ -379,20 +351,9 @@ public class Effect extends ModelEntity<EffectData> {
         }
     }
     
-    // 查找被跟随的节点
-    private Spatial findTraceObject(long entityId) {
-        if (entityId > 0 && scene != null) {
-            Entity traceEntity = scene.getEntity(entityId);
-            if (traceEntity != null) {
-                return traceEntity.getSpatial();
-            }
-        }
-        return null;
-    }
-    
     private void doUpdateTracePosition() {
         // add type offset
-        Vector3f pos = effectNode.getLocalTranslation();
+        Vector3f pos = getLocalTranslation();
         
         if (traceLocationType == TraceOffsetType.origin) {
             pos.set(traceObject.getWorldTranslation());
@@ -424,51 +385,17 @@ public class Effect extends ModelEntity<EffectData> {
             pos.addLocal(tv.vect2);
             tv.release();
         }
-        effectNode.setLocalTranslation(pos);
+        setLocalTranslation(pos);
 //        LOG.log(Level.INFO, "AbstractEffect doUpdateTracePosition, pos={0}", new Object[] {pos});
     }
     
     private void doUpdateTraceRotation() {
-        Quaternion rot = effectNode.getLocalRotation();
+        Quaternion rot = getLocalRotation();
         rot.set(traceObject.getWorldRotation());
         if (traceRotationOffset != null) {
             rot.multLocal(traceRotationOffset);
         }
-        effectNode.setLocalRotation(rot);
-    }
-    
-    protected class SoundWrap {
-        // xml上配置的声音id
-        String soundId;
-        // xml上配置的声音的开始时间
-        float startTime;
-        // 缓存的声音控制器
-        Sound sound;
-        // 声音的实际开始时间，受效果速度的影响。
-        float trueStartTime;
-        // 表示声音播放是否已经开始
-        boolean started;
-        
-        void update(float tpf, float effectTimeUsed) {
-            if (started) {
-                return;
-            }
-            if (effectTimeUsed >= trueStartTime) {
-                if (sound == null) {
-                    sound = Loader.load(soundId);
-                    effectNode.attachChild(sound);
-                }
-                SoundManager.getInstance().addAndPlay(sound);
-                started = true;
-            }
-        }
-        
-        void cleanup() {
-            if (sound != null) {
-                SoundManager.getInstance().removeAndStopLoop(sound);
-            }
-            started = false;
-        }
+        setLocalRotation(rot);
     }
     
 }

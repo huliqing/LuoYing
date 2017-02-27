@@ -373,7 +373,7 @@
     
     <xs:complexType name="effectBase">
         <xs:complexContent>
-            <xs:extension base="entityModelBase">
+            <xs:extension base="base">
                 <xs:attribute name="useTime" type="xs:decimal" use="required">
                     <xs:annotation>
                         <xs:documentation>特效运行时间，单位秒。默认"1.0", 如果这个值小于0，则效果将永远不会结束。</xs:documentation>
@@ -406,6 +406,9 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
+                <xs:attribute ref="queueBucket" />
+                <xs:attribute ref="cullHint" />
+                <xs:attribute ref="shadowMode" />
                 <xs:attribute name="traceLocation" use="optional" >
                     <xs:annotation>
                         <xs:documentation>是否让效果跟踪目标，默认true,打开该参数后，必须在程序

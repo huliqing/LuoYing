@@ -17,30 +17,22 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with LuoYing.  If not, see <http://www.gnu.org/licenses/>.
  */
-package name.huliqing.luoying.object.effect;
+package name.huliqing.luoying.data;
 
-import com.jme3.scene.Spatial;
-import name.huliqing.luoying.object.Loader;
+import com.jme3.network.serializing.Serializable;
 
 /**
- * 用一个模型作为一个效果
+ *
  * @author huliqing
  */
-public class ModelEffect extends Effect {
-
-    private Spatial model;
+@Serializable
+public class EffectEntityData extends ModelEntityData {
     
-    @Override
-    public void initialize() {
-        super.initialize();
-        model = Loader.loadModel(data.getAsString("file"));
-        animNode.attachChild(model);
-    }
-
-    @Override
-    public void cleanup() {
-        model.removeFromParent();
-        super.cleanup(); 
+    public EffectData getEffectData() {
+        return getAsObjectData("effect");
     }
     
+    public void setEffectData(EffectData effectData) {
+        setAttribute("effect", effectData);
+    }
 }

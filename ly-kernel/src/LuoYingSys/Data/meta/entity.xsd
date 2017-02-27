@@ -35,6 +35,7 @@ xs:time
                 <xs:element ref="entitySkyBox" />
                 <xs:element ref="entityTree" />
                 <xs:element ref="entityUnshaded" />
+                <xs:element ref="entityEffect" />
                 
                 <xs:element ref="entityBloomFilter" />
                 <xs:element ref="entityFXAAFilter" />
@@ -172,6 +173,21 @@ xs:time
                     <xs:attribute name="exposurePower" type="xs:decimal" use="optional" >
                         <xs:annotation><xs:documentation>defines how many time the bloom extracted color will be multiplied by itself. default id 5.0
       a high value will reduce rough edges in the bloom and somhow the range of the bloom area</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="entityEffect">
+        <xs:annotation>
+            <xs:documentation></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="entityBase">
+                    <xs:attribute name="effect" type="xs:string" use="required" >
+                        <xs:annotation><xs:documentation>关联一个特效id</xs:documentation></xs:annotation>
                     </xs:attribute>
                 </xs:extension>
             </xs:complexContent>

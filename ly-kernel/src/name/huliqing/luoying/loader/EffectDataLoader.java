@@ -26,6 +26,7 @@ import name.huliqing.luoying.data.AnimData;
 import name.huliqing.luoying.data.DelayAnimData;
 import name.huliqing.luoying.data.EffectData;
 import name.huliqing.luoying.object.Loader;
+import name.huliqing.luoying.xml.DataLoader;
 import name.huliqing.luoying.xml.Proto;
 
 /**
@@ -33,11 +34,10 @@ import name.huliqing.luoying.xml.Proto;
  * @author huliqing
  * @param <T>
  */
-public class EffectDataLoader<T extends EffectData> extends EntityDataLoader <T>{
+public class EffectDataLoader<T extends EffectData> implements DataLoader<T>{
 
     @Override
     public void load(Proto proto, T store) {
-        super.load(proto, store);
         // animations="anim1|delayTime, anim2|delayTime,..."
         String[] tempAnims = proto.getAsArray("animations");
         if (tempAnims != null && tempAnims.length > 0) {

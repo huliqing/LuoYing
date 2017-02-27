@@ -155,7 +155,8 @@ public abstract class AbstractBullet extends ModelEntity<BulletData> implements 
         if (effectIds != null) {
             for (String eid : effectIds) {
                 Effect e = Loader.load(eid);
-                bulletNode.attachChild(e.getSpatial());
+                e.initialize();
+                bulletNode.attachChild(e);
             }
         }
         
@@ -305,8 +306,10 @@ public abstract class AbstractBullet extends ModelEntity<BulletData> implements 
         if (hitEffects != null) {
             for (String eid : hitEffects) {
                 Effect effect = Loader.load(eid);
-                effect.getSpatial().setLocalTranslation(bulletNode.getWorldTranslation());
-                scene.addEntity(effect);
+                effect.setLocalTranslation(bulletNode.getWorldTranslation());
+                effect.initialize();
+//                scene.addEntity(effect); // xxx
+                scene.getRoot().attachChild(effect);
             }            
         }
         if (hitSounds != null) {

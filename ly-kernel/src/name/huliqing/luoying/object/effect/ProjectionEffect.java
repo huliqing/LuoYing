@@ -44,8 +44,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.Config;
+import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.constants.AssetConstants;
 import name.huliqing.luoying.data.EffectData;
+import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.object.entity.TerrainEntity;
 import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.utils.GeometryUtils;
@@ -56,6 +58,7 @@ import name.huliqing.luoying.utils.GeometryUtils;
  * @author huliqing
  */
 public class ProjectionEffect extends Effect {
+    private final PlayService playService = Factory.get(PlayService.class);
 
     // 需要投射的材质贴图
     private Texture texture;
@@ -92,6 +95,8 @@ public class ProjectionEffect extends Effect {
     private final List<Geometry> availableReceivers = new ArrayList<Geometry>(5);
     // 用于处理和渲染被投射物体
     private final ProjectionSceneProcessor processor = new ProjectionSceneProcessor();
+    
+    private Scene scene;
 
     @Override
     public void setData(EffectData data) {
@@ -151,10 +156,10 @@ public class ProjectionEffect extends Effect {
     }
 
     @Override
-    public void onInitScene(Scene scene) {
-        super.onInitScene(scene);
-        
+    public void initialize() {
+        super.initialize(); //To change body of generated methods, choose Tools | Templates.
         // ProjectionEffect需要Scene来添加场景Processor
+        scene = playService.getGame().getScene();
         if (scene == null)
             throw new NullPointerException("For ProjectionEffect, the scene could not be null, effect=" + data.getId());
 

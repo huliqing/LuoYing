@@ -64,9 +64,10 @@ public class MoveSpeedState extends AttributeState {
         
         if (moveEffect == null && moveEffectId != null) {
             moveEffect = Loader.load(moveEffectId);
-            moveEffect.setTraceEntity(entity.getEntityId());
+            moveEffect.setTraceObject(entity.getSpatial());
+            moveEffect.initialize();
             if (entity.getScene() != null) {
-                entity.getScene().addEntity(moveEffect);
+                entity.getScene().getRoot().attachChild(moveEffect);
             }
         }
         
@@ -108,13 +109,13 @@ public class MoveSpeedState extends AttributeState {
     private void showMoveEffect() {
         if (moveEffect.isEnd()) {
             moveEffect.initialize();
-            entity.getScene().addEntity(moveEffect);
+            entity.getScene().getRoot().attachChild(moveEffect);
         }
-        moveEffect.getSpatial().setCullHint(Spatial.CullHint.Never);
+        moveEffect.setCullHint(Spatial.CullHint.Never);
     }
     
     private void hideMoveEffect() {
-        moveEffect.getSpatial().setCullHint(Spatial.CullHint.Always);
+        moveEffect.setCullHint(Spatial.CullHint.Always);
     }
     
     

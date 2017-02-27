@@ -121,7 +121,7 @@ public class ActorModelLoader {
         if (effects != null) {
             for (String eid : effects) {
                 Effect ae = Loader.load(eid);
-                ((Node) actorModel).attachChild(ae.getSpatial());
+                ((Node) actorModel).attachChild(ae);
             }
         }
 

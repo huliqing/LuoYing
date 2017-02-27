@@ -64,6 +64,7 @@ import name.huliqing.luoying.data.DropItem;
 import name.huliqing.luoying.data.ElData;
 import name.huliqing.luoying.data.EmitterData;
 import name.huliqing.luoying.data.EffectData;
+import name.huliqing.luoying.data.EffectEntityData;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.data.GameData;
 import name.huliqing.luoying.data.GameLogicData;
@@ -178,6 +179,7 @@ import name.huliqing.luoying.loader.ActorDataLoader;
 import name.huliqing.luoying.loader.AudioEntityDataLoader;
 import name.huliqing.luoying.loader.DefineDataLoader;
 import name.huliqing.luoying.loader.EffectDataLoader;
+import name.huliqing.luoying.loader.EffectEntityDataLoader;
 import name.huliqing.luoying.loader.EntityDataLoader;
 import name.huliqing.luoying.object.entity.impl.PhysicsEntity;
 import name.huliqing.luoying.object.entity.impl.PlatformProxyEntity;
@@ -283,6 +285,7 @@ import name.huliqing.luoying.object.el.STNumberEl;
 import name.huliqing.luoying.object.el.LNumberEl;
 import name.huliqing.luoying.object.el.SBooleanEl;
 import name.huliqing.luoying.object.el.SkillHitNumberEl;
+import name.huliqing.luoying.object.entity.EffectEntity;
 import name.huliqing.luoying.object.entity.filter.BloomFilterEntity;
 import name.huliqing.luoying.object.entity.filter.FXAAFilterEntity;
 import name.huliqing.luoying.object.entity.filter.FogFilterEntity;
@@ -467,6 +470,7 @@ public class LuoYing {
         Serializer.registerClass(DefineData.class);
         Serializer.registerClass(DropData.class);
         Serializer.registerClass(EffectData.class);
+        Serializer.registerClass(EffectEntityData.class);
         Serializer.registerClass(ElData.class);
         Serializer.registerClass(EmitterData.class);
         Serializer.registerClass(EntityData.class);
@@ -662,6 +666,7 @@ public class LuoYing {
         DataFactory.register("entitySkyBox", ModelEntityData.class, EntityDataLoader.class, SkyBoxEntity.class);
         DataFactory.register("entityTree", ModelEntityData.class, PlantEnvLoader.class, TreeEntity.class);
         DataFactory.register("entityUnshaded", EntityData.class, EntityDataLoader.class, UnshadedEntity.class);
+        DataFactory.register("entityEffect", EffectEntityData.class, EffectEntityDataLoader.class, EffectEntity.class);
         
         // 各种Filter
         DataFactory.register("entityBloomFilter", EntityData.class, EntityDataLoader.class, BloomFilterEntity.class);

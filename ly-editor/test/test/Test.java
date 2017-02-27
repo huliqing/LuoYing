@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package game;
+package test;
 
 /**
  *
@@ -12,7 +12,5 @@ package game;
 public class Test {
     
     public static void main(String[] args) {
-        String ss = "abc";
-        System.out.println(ss == "abc");
     }
 }

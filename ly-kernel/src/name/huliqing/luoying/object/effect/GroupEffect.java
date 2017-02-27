@@ -19,24 +19,17 @@
  */
 package name.huliqing.luoying.object.effect;
 
-import java.util.logging.Logger;
 import name.huliqing.luoying.data.EffectData;
 import name.huliqing.luoying.object.Loader;
-import name.huliqing.luoying.object.scene.Scene;
 
 /**
  * 效果组
  * @author huliqing
  */
 public class GroupEffect extends Effect {
-    private static final Logger LOG = Logger.getLogger(GroupEffect.class.getName());
+//    private static final Logger LOG = Logger.getLogger(GroupEffect.class.getName());
     
     private EffectWrap[] effects;
-    
-    // 当该参数为true时需要检查并结束当前效果,并且不再启动新的子效果。
-    private boolean endCheck;
-    
-    private boolean end;
     
     @Override
     public void setData(EffectData data) {
@@ -56,10 +49,16 @@ public class GroupEffect extends Effect {
     }
     
     @Override
-    public void initEntity() {
-        super.initEntity();
-        end = false;
+    public void initialize() {
+        super.initialize();
         updateAnimSpeed();
+        
+         for (EffectWrap ew : effects) {
+            if (ew.effect != null) {
+                ew.effect.initialize();
+                animNode.attachChild(ew.effect);
+            }
+        }
     }
 
     @Override
@@ -73,52 +72,13 @@ public class GroupEffect extends Effect {
             ew.updateSpeed(speed);
         }
     }
-
-    @Override
-    public void onInitScene(Scene scene) {
-        super.onInitScene(scene);
-        for (EffectWrap ew : effects) {
-            if (ew.effect != null) {
-                // onInitScene会导致子特效被直接贴到场景，需要重新贴到animNode下面
-                ew.effect.onInitScene(scene);
-                animNode.attachChild(ew.effect.getSpatial());
-            }
-        }
-    }
     
     @Override
     protected void effectUpdate(float tpf) {
         super.effectUpdate(tpf);
-        
-        // 结束特效
-        if (end) {
-            doEndEffect();
-            return;
-        }
-        
-        // endCheck为true则检查是否可以结束当前效果组。注：当endCheck为true时未开始执行的子效果将不再执行。
-        // 也就是不再去启动未开始的效果。当所有子效果都结束时则可以将当前效果组(GroupEffect)结束。
-        if (endCheck) {
-            int countEnd = 0;
-            for (EffectWrap ew : effects) {
-                if (!ew.started || (ew.started && ew.effect.isEnd())) {
-                    countEnd++;
-                }
-            }
-            // 结束当前所有特效
-            end = countEnd >= effects.length;
-            return;
-        }
-        
-        // 检查并启动子效果。
-        int countStarted = 0;
         for (EffectWrap ew : effects) {
             ew.checkToStart(timeUsed);
-            countStarted += ew.started ? 1 : 0;
         }
-        
-        // 当所有子效果启动后开始检查是否可以结束当前效果。
-        endCheck = countStarted >= effects.length;
     }
 
     @Override
@@ -133,8 +93,6 @@ public class GroupEffect extends Effect {
                 ew.effect.requestEnd();
             }
         }
-        // 标记endCheck,这可以让哪些还未开始执行的子效果不再检查是否要需要执行。
-        endCheck = true;
     }
 
     @Override
@@ -144,7 +102,6 @@ public class GroupEffect extends Effect {
                 ew.cleanup();
             }
         }
-        endCheck = false;
         super.cleanup();
     }
     
@@ -167,20 +124,12 @@ public class GroupEffect extends Effect {
                 // 1.同步speed属性
                 // 与group保持一致的速度,这样当设置GroupEffect的速度的时候可以同时影响子效果的速度
                 effect.setSpeed(speed);
-                
-                // 部分效果需要场景引用
-                if (scene != null) {
-                    effect.onInitScene(scene);
-                }
-                
 //                // 不要再设置子效果的跟随
 //                effect.setTraceObject(animRoot);
-
-                // 注意：子效果是放在GroupEffect下的，不要直接放在scene场景内，因为当前效果可能直接放在某些特殊节
-                // 点下，在这种情况下，所有的子效果也应该一起放在当前的效果内，受当前效果变换的影响。
+                effect.initialize();
                 
                 // 把子效果的跟踪目标设置为animRoot，这样当GroupEffect添加了动画控制时，可以同时影响到子效果的变换。
-                animNode.attachChild(effect.getSpatial());
+                animNode.attachChild(effect);
                 
                 started = true;
             }

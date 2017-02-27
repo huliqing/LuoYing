@@ -123,9 +123,10 @@ public abstract class AbstractState<T extends StateData> implements State<T> {
             if (entity.getScene() != null) {
                 for (String effectId : effects) {
                     Effect effect = Loader.load(effectId);
-                    effect.setTraceEntity(entity.getEntityId());
-                    entity.getScene().addEntity(effect);
+                    effect.setTraceObject(entity.getSpatial());
+                    entity.getScene().getRoot().attachChild(effect);
                     tempEffects.add(effect);
+                    effect.initialize();
                 }
             }
         }

@@ -106,7 +106,8 @@ public abstract class AbstractMagic extends ModelEntity<MagicData> implements Ma
             }
             for (String eid : effects) {
                 Effect effect = Loader.load(eid);
-                magicRoot.attachChild(effect.getSpatial());
+                effect.initialize();
+                magicRoot.attachChild(effect);
                 tempEffects.add(effect);
             }
         }

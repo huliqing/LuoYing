@@ -47,6 +47,8 @@ public class ParticleEffect extends Effect {
     // Alpha模式来代替。
     private BlendMode blendMode = BlendMode.AlphaAdditive;
     
+    private Bucket bucket;
+    
     // -- Inner
     private ParticleEmitter pe;
     private boolean emitted;
@@ -62,11 +64,15 @@ public class ParticleEffect extends Effect {
         if (tempBlendMode != null) {
             blendMode = BlendMode.valueOf(tempBlendMode);
         }
+        String tempBucket = data.getAsString("queueBucket");
+        if (tempBucket != null) {
+            bucket = Bucket.valueOf(tempBucket);
+        }
     }
     
     @Override
-    public void initEntity() {
-        super.initEntity();
+    public void initialize() {
+        super.initialize();
         if (pe == null) {
             Emitter em = Loader.load(emitter);
             if (randomColor) {
@@ -76,7 +82,6 @@ public class ParticleEffect extends Effect {
             }
             // 这里必须从data中偿试获取Bucket设置，因为粒子有可能是在“世界”空间产生的，即粒子可能不是放在animNode
             // 下的，所以在父节点effect上的Bucket设置并不一定适应于这些粒子，这里必须直接把bucket的配置设置到粒子上。
-            Bucket bucket = data.getQueueBucket();
             if (bucket != null) {
                 pe.setQueueBucket(bucket);
             }

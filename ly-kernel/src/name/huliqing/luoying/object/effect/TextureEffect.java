@@ -58,8 +58,8 @@ public class TextureEffect extends Effect {
     }
     
     @Override
-    public void initEntity() {
-        super.initEntity();
+    public void initialize() {
+        super.initialize();
         Material mat = MaterialUtils.createTransparent(texture);
         mat.setColor("Color", color);
         textureNode = new Geometry("TextureEffect_root", new QuadXYC(size.x, size.y));

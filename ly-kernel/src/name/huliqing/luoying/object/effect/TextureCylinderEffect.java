@@ -65,8 +65,8 @@ public class TextureCylinderEffect extends Effect {
     }
         
     @Override
-    public void initEntity() {
-        super.initEntity();
+    public void initialize() {
+        super.initialize();
         Material mat = MaterialUtils.createTransparent(texture);
         mat.setColor("Color", color);
 
