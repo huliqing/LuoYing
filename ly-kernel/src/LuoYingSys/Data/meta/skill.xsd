@@ -361,7 +361,7 @@ xs:time
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="timeBulletTake" type="xs:string" use="required">
+                    <xs:attribute name="timeBulletTake" type="xs:decimal" use="required">
                         <xs:annotation>
                             <xs:documentation>
                                 开始取箭的时间点，也就是箭开始出现时的时间点. 取值0.0~1.0,
@@ -369,7 +369,7 @@ xs:time
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="timeBulletPull" type="xs:string" use="required">
+                    <xs:attribute name="timeBulletPull" type="xs:decimal" use="required">
                         <xs:annotation>
                             <xs:documentation>
                                 开始拉弓的时间点，取值0.0~1.0,这时箭在弦上。
@@ -405,8 +405,16 @@ xs:time
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="shotDownOffset" type="xs:string" use="optional"/>
-                    <xs:attribute name="shotUpOffset" type="xs:string" use="optional"/>
+                    <xs:attribute name="shotDownOffset" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>格式："x,y,z"</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="shotUpOffset" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>格式："x,y,z"</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
@@ -423,7 +431,7 @@ xs:time
         </xs:complexType>
     </xs:element>
 
-    <xs:complexType name="skillShotBase" >
+    <xs:complexType name="skillShotBase">
         <xs:complexContent>
             <xs:extension base="skillHitBase">
                 <xs:attribute name="bullets" type="xs:string" use="required">
@@ -636,7 +644,7 @@ xs:time
         </xs:annotation>
         <xs:complexType>
             <xs:complexContent>
-                <xs:extension base="baseWalk"></xs:extension>
+                <xs:extension base="skillWalkBase"></xs:extension>
             </xs:complexContent>
         </xs:complexType>
     </xs:element>
@@ -647,12 +655,12 @@ xs:time
         </xs:annotation>
         <xs:complexType>
             <xs:complexContent>
-                <xs:extension base="baseWalk"></xs:extension>
+                <xs:extension base="skillWalkBase"></xs:extension>
             </xs:complexContent>
         </xs:complexType>
     </xs:element>
     
-    <xs:complexType name="baseWalk">
+    <xs:complexType name="skillWalkBase">
         <xs:complexContent>
             <xs:extension base="skillBase">
                 <xs:attribute name="animSpeed" type="xs:decimal" use="optional" >

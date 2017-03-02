@@ -128,7 +128,8 @@ public class DataFactory {
     public static <T extends ObjectData> T createData(String id) {
         Proto proto = ProtoUtils.getProto(DATA_STORE, id);
         if (proto == null) {
-            throw new LuoYingException("Could not find object, id=" + id);
+            LOG.log(Level.WARNING, "Could not find object, id={0}", id);
+            return null;
         }
         
         try {

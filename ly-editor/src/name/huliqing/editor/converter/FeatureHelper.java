@@ -20,6 +20,17 @@ public class FeatureHelper {
         this.features = features;
     }
     
+    public String getAsString(String key) {
+        if (features == null)
+            return null;
+        
+        Feature feature = features.get(key);
+        if (feature != null) {
+            return feature.getValue();
+        }
+        return null;
+    }
+    
     /**
      * 以boolean方式获取参数，如果不存在指定参数则返回false.
      * @param key

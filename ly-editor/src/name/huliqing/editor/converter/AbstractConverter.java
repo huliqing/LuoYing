@@ -35,6 +35,11 @@ public abstract class AbstractConverter<E extends JfxAbstractEdit, T extends Obj
     }
     
     @Override
+    public T getData() {
+        return data;
+    }
+    
+    @Override
     public void setFeatures(Map<String, Feature> features) {
         this.featureHelper = new FeatureHelper(features);
     }
@@ -42,6 +47,11 @@ public abstract class AbstractConverter<E extends JfxAbstractEdit, T extends Obj
     @Override
     public void setParent(C parent) {
         this.parent = parent;
+    }
+
+    @Override
+    public C getParent() {
+        return parent;
     }
     
     public void setEdit(E edit) {
@@ -72,6 +82,6 @@ public abstract class AbstractConverter<E extends JfxAbstractEdit, T extends Obj
     public void cleanup() {
         initialized = false;
     }
-    
-    
+
+
 }

@@ -11,6 +11,28 @@
         <field name="loop" converter="CheckBoxConverter" />
         <field name="animations" converter="TextConverter" />
         <field name="sounds" converter="TextConverter" />
+        <field name="endImmediate" converter="CheckBoxConverter" />
+        <field name="location" converter="Vector3fConverter">
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="rotation" converter="QuaternionConverter">
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="scale" converter="Vector3fConverter">
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="shadowMode" converter="ChoiceConverter">
+            <feature name="items" value="Off,Cast,Receive,CastAndReceive,Inherit" />
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="cullHint" converter="ChoiceConverter">
+            <feature name="items" value="Inherit,Dynamic,Always,Never" />
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="queueBucket" converter="ChoiceConverter">
+            <feature name="items" value="Opaque,Transparent,Sky,Translucent,Gui,Inherit" />
+            <feature name="collapsed" value="true" />
+        </field>
         <field name="traceLocation" converter="ChoiceConverter" >
             <feature name="items" value="no,once,always" />
         </field>
@@ -20,9 +42,12 @@
         <field name="traceLocationType" converter="ChoiceConverter" >
             <feature name="items" value="origin,origin_bound_center,origin_bound_top,bound_center,bound_top" />
         </field>
-        <field name="traceLocationOffset" converter="Vector3fConverter" />
-        <field name="traceRotationOffset" converter="Vector3fConverter" />
-        <field name="endImmediate" converter="CheckBoxConverter" />
+        <field name="traceLocationOffset" converter="Vector3fConverter">
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="traceRotationOffset" converter="Vector3fConverter">
+            <feature name="collapsed" value="true" />
+        </field>
     </data>
     
     <data name="effectGroup" extends="effectBase">
@@ -30,7 +55,8 @@
     </data>
     
     <data name="effectParticle" extends="effectBase">
-        <field name="emitter" converter="DataFieldConverter" />
+        <!--<field name="emitter" converter="DataFieldConverter" />-->
+        <field name="emitter" converter="TextConverter" />
         <field name="emitAll" converter="CheckBoxConverter" />
         <field name="randomColor" converter="CheckBoxConverter" />
         <field name="inWorldSpace" converter="CheckBoxConverter" />
@@ -41,7 +67,9 @@
     
     <data name="effectTexture" extends="effectBase">
         <field name="texture" converter="TextConverter" />
-        <field name="size" converter="Vector3fConverter" />
+        <field name="size" converter="Vector3fConverter">
+            <feature name="collapsed" value="true" />
+        </field>
         <field name="plane" converter="ChoiceConverter" >
             <feature name="items" value="xy,xz,yz" />
         </field>
@@ -49,23 +77,29 @@
     </data>
     
     <data name="effectModel" extends="effectBase">
-        <field name="file" converter="FileConverter" />
+        <field name="file" converter="FileConverter">
+            <feature name="filters" value="Model Files|*.j3o,All Files|*.*" />
+        </field>
     </data>
     
     <data name="effectSlideColorBase" extends="effectBase">
         <field name="startColor" converter="ColorConverter" />
         <field name="endColor" converter="ColorConverter" />
-        <field name="mask" converter="FileConverter" />
+        <field name="mask" converter="FileConverter">
+            <feature name="filters" value="Model Files|*.jpg|*.png|*.bmp,All Files|*.*" />
+        </field>
         <field name="maskAnimY" converter="CheckBoxConverter" />
         <field name="maskAnimX" converter="CheckBoxConverter" />
         <field name="maskChangeDir" converter="CheckBoxConverter" />
         <field name="maskScaleY" converter="FloatTextConverter" />
         <field name="maskScaleX" converter="FloatTextConverter" />
         <field name="maskSpeed" converter="FloatTextConverter" />
-        <field name="maskWrap" converter="ChoiceConverter" >
+        <field name="maskWrap" converter="ChoiceConverter">
             <feature name="items" value="Repeat,MirroredRepeat" />
         </field>
-        <field name="tex" converter="FileConverter" />
+        <field name="tex" converter="FileConverter">
+            <feature name="filters" value="Model Files|*.jpg|*.png|*.bmp,All Files|*.*" />
+        </field>
         <field name="texAnimY" converter="CheckBoxConverter" />
         <field name="texAnimX" converter="CheckBoxConverter" />
         <field name="texChangeDir" converter="CheckBoxConverter" />
@@ -87,15 +121,21 @@
         <field name="segments" converter="IntegerConverter" />
         <field name="tension" converter="FloatTextConverter" />
         <field name="cycle" converter="CheckBoxConverter" />
-        <field name="up" converter="Vector3fConverter" />
+        <field name="up" converter="Vector3fConverter">
+            <feature name="collapsed" value="true" />
+        </field>
         <field name="dimension" converter="IntegerConverter" />
     </data>
     
     <data name="effectSlideColorIOSpline" extends="effectBase">
         <field name="startColor" converter="ColorConverter" />
         <field name="endColor" converter="ColorConverter" />
-        <field name="mask" converter="FileConverter" />
-        <field name="tex" converter="FileConverter" />
+        <field name="mask" converter="FileConverter">
+            <feature name="filters" value="Model Files|*.jpg|*.png|*.bmp,All Files|*.*" />
+        </field>
+        <field name="tex" converter="FileConverter">
+            <feature name="filters" value="Model Files|*.jpg|*.png|*.bmp,All Files|*.*" />
+        </field>
         <field name="texChangeDir" converter="CheckBoxConverter" />
         <field name="fixedPoints" converter="TextConverter" />
         <field name="randomPoints" converter="TextConverter" />
@@ -103,17 +143,27 @@
         <field name="segments" converter="IntegerConverter" />
         <field name="tension" converter="FloatTextConverter" />
         <field name="cycle" converter="CheckBoxConverter" />
-        <field name="up" converter="Vector3fConverter" />
+        <field name="up" converter="Vector3fConverter">
+            <feature name="collapsed" value="true" />
+        </field>
         <field name="dimension" converter="IntegerConverter" />
         <field name="repeatTimes" converter="IntegerConverter" />
     </data>
     
     <data name="effectProjection" extends="effectBase">
-        <field name="texture" converter="FileConverter" />
+        <field name="texture" converter="FileConverter">
+            <feature name="filters" value="Model Files|*.jpg|*.png|*.bmp,All Files|*.*" />
+        </field>
         <field name="color" converter="ColorConverter" />
-        <field name="projDir" converter="Vector3fConverter" />
-        <field name="projUp" converter="Vector3fConverter" />
-        <field name="projPos" converter="Vector3fConverter" />
+        <field name="projDir" converter="Vector3fConverter">
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="projUp" converter="Vector3fConverter">
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="projPos" converter="Vector3fConverter">
+            <feature name="collapsed" value="true" />
+        </field>
         <field name="debug" converter="CheckBoxConverter" />
     </data>
 

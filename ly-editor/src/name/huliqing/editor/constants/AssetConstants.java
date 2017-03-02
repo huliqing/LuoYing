@@ -23,6 +23,7 @@ public class AssetConstants {
     public final static String INTERFACE_ICON_FILE = "Interface/icon/file.png";
     public final static String INTERFACE_ICON_PAINT = "Interface/icon/paint.png";
     public final static String INTERFACE_ICON_BESOM = "Interface/icon/besom.png";
+    public final static String INTERFACE_ICON_PLAY = "Interface/icon/play.png";
     /** 太阳、灯光 */
     public final static String INTERFACE_ICON_SUN = "Interface/icon/sun.png";
     

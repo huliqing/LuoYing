@@ -128,8 +128,12 @@ public class ActorModule extends AbstractModule implements SimpleValueChangeList
         nameAttribute = getAttribute(bindNameAttribute, StringAttribute.class);
         
         // 监听角色健康值属性，当健康值等于或小于0于，角色要标记为死亡。
-        deadAttribute.addSimpleValueChangeListener(this);
-        targetAttribute.addSimpleValueChangeListener(this);
+        if (deadAttribute != null) {
+            deadAttribute.addSimpleValueChangeListener(this);
+        }
+        if (targetAttribute != null) {
+            targetAttribute.addSimpleValueChangeListener(this);
+        }
         if (massAttribute != null) {
             massAttribute.addSimpleValueChangeListener(this);
         }
@@ -266,7 +270,9 @@ public class ActorModule extends AbstractModule implements SimpleValueChangeList
         if (movableAttribute != null && !movableAttribute.getValue()) {
             return;
         }
-        innerControl.setWalkDirection(walkDirection);
+        if (walkDirection != null) {
+            innerControl.setWalkDirection(walkDirection);
+        }
     }
     
     public Vector3f getViewDirection() {
@@ -277,7 +283,9 @@ public class ActorModule extends AbstractModule implements SimpleValueChangeList
         if (rotatableAttribute != null && !rotatableAttribute.getValue()) {
             return;
         }
-        innerControl.setViewDirection(viewDirection);
+        if (viewDirection != null) {
+            innerControl.setViewDirection(viewDirection);
+        }
     }
     
     /**

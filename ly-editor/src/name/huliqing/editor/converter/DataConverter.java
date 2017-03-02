@@ -26,47 +26,48 @@ import name.huliqing.luoying.xml.ObjectData;
  */
 public abstract class DataConverter<E extends JfxAbstractEdit, T extends ObjectData> extends AbstractConverter<E, T, FieldConverter> {
 //    private static final Logger LOG = Logger.getLogger(AbstractDataConverter.class.getName());
-        
-    /** 指定要隐藏的字段, 格式:"field1,field2,..." */
+
+    /**
+     * 指定要隐藏的字段, 格式:"field1,field2,..."
+     */
     public final static String FEATURE_HIDE_FIELDS = "hideFields";
-    
+
     protected Map<String, FieldDefine> fieldDefines;
-    
+
     protected final Map<String, FieldConverter> fieldConverters = new LinkedHashMap();
-    
+
     protected final ScrollPane dataScroll = new ScrollPane();
     protected final VBox fieldPanel = new VBox();
-    
+
     protected final TitledPane childPane = new TitledPane();
-    
+
     public DataConverter() {
         dataScroll.setId(StyleConstants.ID_PROPERTY_PANEL);
         dataScroll.setContent(fieldPanel);
-        
         childPane.managedProperty().bind(childPane.visibleProperty());
     }
-    
+
     @Override
     public Region getLayout() {
-        return dataScroll; 
+        return dataScroll;
     }
-    
+
     public void setFieldDefines(Map<String, FieldDefine> fieldDefines) {
         this.fieldDefines = fieldDefines;
     }
-    
+
     public void updateAttribute(String property, Object value) {
         data.setAttribute(property, value);
         notifyChanged();
     }
-    
+
     @Override
     public void initialize() {
         super.initialize();
-        
-        jfxEdit.getPropertyPanel().getChildren().addAll(childPane);
+
+        jfxEdit.getEditPanel().getChildren().addAll(childPane);
         childPane.setVisible(false);
-        
+
         if (fieldDefines != null && !fieldDefines.isEmpty()) {
             fieldDefines.values().forEach(t -> {
                 FieldConverter pc = ConverterManager.createPropertyConverter(jfxEdit, data, t, this);
@@ -76,7 +77,7 @@ public abstract class DataConverter<E extends JfxAbstractEdit, T extends ObjectD
                 fieldConverters.put(t.getName(), pc);
             });
         }
-        
+
         // 隐藏指定的字段
         List<String> hideFields = featureHelper.getAsList(FEATURE_HIDE_FIELDS);
         if (hideFields != null) {
@@ -95,15 +96,17 @@ public abstract class DataConverter<E extends JfxAbstractEdit, T extends ObjectD
     @Override
     public void cleanup() {
         fieldConverters.values().stream().filter(t -> t.isInitialized()).forEach(
-            t -> {t.cleanup();}
+                t -> {
+                    t.cleanup();
+                }
         );
         fieldConverters.clear();
         fieldPanel.getChildren().clear();
-        
-        jfxEdit.getPropertyPanel().getChildren().removeAll(childPane);
+
+        jfxEdit.getEditPanel().getChildren().removeAll(childPane);
         super.cleanup();
     }
-    
+
     public void setChildContent(String childTitle, Node childContent) {
         childPane.setText(childTitle);
         childPane.setContent(childContent);

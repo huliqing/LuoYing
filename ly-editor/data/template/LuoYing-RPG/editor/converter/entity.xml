@@ -5,18 +5,26 @@
     xmlns='http://editor.huliqing.name'
     xsi:schemaLocation='http://editor.huliqing.name meta.xsd'>
     
-    <!--DataConverters-->
+    <!--Entity FieldConverter-->
     <converter name="EntityDataConverter" value="name.huliqing.editor.converter.data.EntityDataConverter" />
     <converter name="ObjectDatasFieldConverter" value="name.huliqing.editor.converter.field.ObjectDatasFieldConverter" />
     <converter name="ModulesFieldConverter" value="name.huliqing.editor.converter.field.ModulesFieldConverter" />
+    <converter name="EntityObjectDatasFieldConverter" value="name.huliqing.editor.converter.field.EntityObjectDatasFieldConverter" />
+    <converter name="ActorSkillsFieldConverter" value="name.huliqing.editor.converter.field.ActorSkillsFieldConverter" />
 
     <data name="entityBase" extends="base" converter="EntityDataConverter">
         <field name="name" converter="TextConverter">
             <feature name="collapsed" value="true" />
         </field>
-        <field name="location" converter="Vector3fConverter" />
-        <field name="rotation" converter="QuaternionConverter" />
-        <field name="scale" converter="Vector3fConverter" />
+        <field name="location" converter="Vector3fConverter">
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="rotation" converter="QuaternionConverter">
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="scale" converter="Vector3fConverter">
+            <feature name="collapsed" value="true" />
+        </field>
         <field name="mat" converter="TextConverter">
             <feature name="collapsed" value="true" />
         </field>
@@ -31,25 +39,32 @@
     <data name="entityModelBase" extends="entityBase">
         <field name="shadowMode" converter="ChoiceConverter">
             <feature name="items" value="Off,Cast,Receive,CastAndReceive,Inherit" />
+            <feature name="collapsed" value="true" />
         </field>
         <field name="cullHint" converter="ChoiceConverter">
             <feature name="items" value="Inherit,Dynamic,Always,Never" />
+            <feature name="collapsed" value="true" />
         </field>
         <field name="queueBucket" converter="ChoiceConverter">
             <feature name="items" value="Opaque,Transparent,Sky,Translucent,Gui,Inherit" />
+            <feature name="collapsed" value="true" />
         </field>
-        <field name="preferUnshaded" converter="CheckBoxConverter"/>
+        <field name="preferUnshaded" converter="CheckBoxConverter">
+            <feature name="collapsed" value="true" />
+        </field>
     </data>
     
     <data name="entityPlantBase" extends="entityModelBase">
         <field name="file" converter="FileConverter">
-            <feature name="filters" value="Model Files|*.j3o|*.obj|*.mesh.xml,All Files|*.*" />
+            <feature name="filters" value="Model Files|*.j3o,All Files|*.*" />
         </field>
         <field name="sway" converter="CheckBoxConverter" />
         <field name="swayFrequency" converter="FloatTextConverter" />
         <field name="swayVariation" converter="FloatTextConverter" />
         <field name="swayDistance" converter="FloatTextConverter" />
-        <field name="swayWind" converter="Vector2fConverter" />
+        <field name="swayWind" converter="Vector2fConverter">
+            <feature name="collapsed" value="true" />
+        </field>
         <field name="swayGeometries" converter="TextConverter" />
 <!--        <field name="randomScale" converter="CheckBoxConverter" />
         <field name="minScale" converter="TextConverter" />
@@ -59,7 +74,9 @@
     <data name="entityAudio" extends="entityBase">
         <feature name="hideFields" value="rotation,scale,mat" />
         <field name="debug" converter="CheckBoxConverter" />
-        <field name="sound" converter="DataFieldConverter" />
+        <field name="sound" converter="DataFieldConverter">
+            <feature name="componentType" value="sound" />
+        </field>
     </data>
     
     <data name="entityAmbientLight" extends="entityBase">
@@ -69,7 +86,9 @@
     
     <data name="entityDirectionalLight" extends="entityBase">
         <feature name="hideFields" value="rotation,scale,mat" />
-        <field name="direction" converter="Vector3fConverter" />
+        <field name="direction" converter="Vector3fConverter">
+            <feature name="collapsed" value="true" />
+        </field>
         <field name="color" converter="ColorConverter" />
     </data>
     
@@ -101,7 +120,9 @@
        <field name="smoothMotion" converter="CheckBoxConverter"/>
        <field name="trailingEnabled" converter="CheckBoxConverter"/>
        <field name="invertVerticalAxis" converter="CheckBoxConverter"/>
-       <field name="lookAtOffset" converter="Vector3fConverter"/>
+       <field name="lookAtOffset" converter="Vector3fConverter">
+            <feature name="collapsed" value="true" />
+        </field>
        <field name="zoomSensitivity" converter="FloatTextConverter"/>
        <field name="rotationSpeed" converter="FloatTextConverter"/>
        <field name="rotationSensitivity" converter="FloatTextConverter"/>
@@ -110,14 +131,18 @@
        <field name="defaultDistance" converter="FloatTextConverter"/>
        <field name="chasingSensitivity" converter="FloatTextConverter"/>
        <field name="downRotateOnCloseViewOnly" converter="CheckBoxConverter"/>
-       <field name="upVector" converter="Vector3fConverter"/>
+       <field name="upVector" converter="Vector3fConverter">
+            <feature name="collapsed" value="true" />
+        </field>
        <field name="hideCursorOnRotate" converter="CheckBoxConverter"/>
     </data>
 
     <data name="entityPhysics" extends="entityBase">
         <feature name="hideFields" value="location,rotation,scale,mat,modules,objectDatas" />
         <field name="debug" converter="CheckBoxConverter" />
-        <field name="gravity" converter="Vector3fConverter" />
+        <field name="gravity" converter="Vector3fConverter">
+            <feature name="collapsed" value="true" />
+        </field>
         <field name="broadphaseType" converter="ChoiceConverter">
             <feature name="items" value="SIMPLE,AXIS_SWEEP_3,AXIS_SWEEP_3_32,DBVT" />
         </field>
@@ -125,51 +150,77 @@
             <feature name="items" value="SEQUENTIAL,PARALLEL" />
         </field>
         <field name="speed" converter="FloatTextConverter" />
-        <field name="worldMax" converter="Vector3fConverter" />
-        <field name="worldMin" converter="Vector3fConverter" />
+        <field name="worldMax" converter="Vector3fConverter">
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="worldMin" converter="Vector3fConverter">
+            <feature name="collapsed" value="true" />
+        </field>
         <field name="accuracy" converter="FloatTextConverter" />
         <field name="maxSubSteps" converter="IntegerTextConverter" />
         <field name="solverNumIterations" converter="IntegerTextConverter" />
     </data>
 
     <data name="entitySimpleModel" extends="entityModelBase">
-        <field name="file" converter="FileConverter" />
+        <field name="file" converter="FileConverter">
+            <feature name="filters" value="Model Files|*.j3o,All Files|*.*" />
+        </field>
     </data>
 
     <data name="entitySimpleTerrain" extends="entityModelBase">
-        <field name="file" converter="FileConverter" />
+        <field name="file" converter="FileConverter">
+            <feature name="filters" value="Model Files|*.j3o,All Files|*.*" />
+        </field>
     </data>
 
     <data name="entitySimpleWater" extends="entityModelBase">
         <feature name="hideFields" value="mat,modules,objectDatas,shadowMode,cullHint,queueBucket,preferUnshaded" />
-        <field name="waterModel" converter="FileConverter" />
+        <field name="waterModel" converter="FileConverter">
+            <feature name="filters" value="Model Files|*.j3o,All Files|*.*" />
+        </field>
         <field name="waterColor" converter="ColorConverter" />
         <field name="texScale" converter="FloatTextConverter" />
         <field name="waveSpeed" converter="FloatTextConverter" />
         <field name="distortionMix" converter="FloatTextConverter" />
         <field name="distortionScale" converter="FloatTextConverter" />
-        <field name="foamMap" converter="FileConverter" />
-        <field name="foamScale" converter="Vector2fConverter" />
-        <field name="foamMaskMap" converter="FileConverter" />
-        <field name="foamMaskScale" converter="Vector2fConverter" />
+        <field name="foamMap" converter="FileConverter">
+            <feature name="filters" value="Images|*.jpg|*.jpeg|*.png,All Files|*.*" />
+        </field>
+        <field name="foamScale" converter="Vector2fConverter">
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="foamMaskMap" converter="FileConverter">
+            <feature name="filters" value="Images|*.jpg|*.jpeg|*.png,All Files|*.*" />
+        </field>
+        <field name="foamMaskScale" converter="Vector2fConverter">
+            <feature name="collapsed" value="true" />
+        </field>
     </data>
     
     <data name="entityAdvanceWater" extends="entityModelBase">
         <feature name="hideFields" value="mat,modules,objectDatas,rotation,scale,shadowMode,cullHint,queueBucket,preferUnshaded" />
-        <field name="center" converter="Vector3fConverter" />
+        <field name="center" converter="Vector3fConverter">
+            <feature name="collapsed" value="true" />
+        </field>
         <field name="radius" converter="FloatTextConverter" />
         <field name="waterHeight" converter="FloatTextConverter" />
         <field name="waterColor" converter="ColorConverter" />
         <field name="deepWaterColor" converter="ColorConverter" />
         <field name="lightColor" converter="ColorConverter" />
-        <field name="lightDirection" converter="Vector3fConverter" />
-        <field name="colorExtinction" converter="Vector3fConverter" />
+        <field name="lightDirection" converter="Vector3fConverter">
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="colorExtinction" converter="Vector3fConverter">
+            <feature name="collapsed" value="true" />
+        </field>
         <field name="waterTransparency" converter="FloatTextConverter" />
         
         <field name="shininess" converter="FloatTextConverter" />
         <field name="shoreHardness" converter="FloatTextConverter" />
         <field name="underWaterFogDistance" converter="FloatTextConverter" />
-        <field name="windDirection" converter="Vector2fConverter" />
+        <field name="windDirection" converter="Vector2fConverter">
+            <feature name="collapsed" value="true" />
+        </field>
                 
         <field name="waveScale" converter="FloatTextConverter" />
         <field name="speed" converter="FloatTextConverter" />
@@ -186,22 +237,32 @@
         <field name="refractionStrength" converter="FloatTextConverter" />
         
         <field name="useFoam" converter="CheckBoxConverter" />
-        <field name="foamExistence" converter="Vector3fConverter" />
+        <field name="foamExistence" converter="Vector3fConverter">
+            <feature name="collapsed" value="true" />
+        </field>
         <field name="foamHardness" converter="FloatTextConverter" />
         <field name="foamIntensity" converter="FloatTextConverter" />
-        <field name="foamTexture" converter="FileConverter" />
+        <field name="foamTexture" converter="FileConverter">
+            <feature name="filters" value="Images|*.jpg|*.jpeg|*.png,All Files|*.*" />
+        </field>
 
         <field name="useCaustics" converter="CheckBoxConverter" />
         <field name="causticsIntensity" converter="FloatTextConverter" />
-        <field name="causticsTexture" converter="FileConverter" />
+        <field name="causticsTexture" converter="FileConverter">
+            <feature name="filters" value="Images|*.jpg|*.jpeg|*.png,All Files|*.*" />
+        </field>
         
         <field name="useHQShoreline" converter="CheckBoxConverter" />
         <field name="useRipples" converter="CheckBoxConverter" />
         <field name="useSceneLight" converter="CheckBoxConverter" />
         
         <field name="normalScale" converter="FloatTextConverter" />
-        <field name="normalTexture" converter="FileConverter" />
-        <field name="heightTexture" converter="FileConverter" />
+        <field name="normalTexture" converter="FileConverter">
+            <feature name="filters" value="Images|*.jpg|*.jpeg|*.png,All Files|*.*" />
+        </field>
+        <field name="heightTexture" converter="FileConverter">
+            <feature name="filters" value="Images|*.jpg|*.jpeg|*.png,All Files|*.*" />
+        </field>
 
         <field name="shapeType" converter="ChoiceConverter">
             <feature name="items" value="Square,Circular" />
@@ -210,12 +271,24 @@
     
     <data name="entitySkyBox" extends="entityModelBase">
         <feature name="hideFields" value="location,rotation,scale,mat,modules,objectDatas,shadowMode,cullHint,queueBucket,preferUnshaded" />
-        <field name="west" converter="FileConverter" />
-        <field name="east" converter="FileConverter" />
-        <field name="north" converter="FileConverter" />
-        <field name="south" converter="FileConverter" />
-        <field name="up" converter="FileConverter" />
-        <field name="down" converter="FileConverter" />
+        <field name="west" converter="FileConverter">
+            <feature name="filters" value="Images|*.jpg|*.jpeg|*.png,All Files|*.*" />
+        </field>
+        <field name="east" converter="FileConverter">
+            <feature name="filters" value="Images|*.jpg|*.jpeg|*.png,All Files|*.*" />
+        </field>
+        <field name="north" converter="FileConverter">
+            <feature name="filters" value="Images|*.jpg|*.jpeg|*.png,All Files|*.*" />
+        </field>
+        <field name="south" converter="FileConverter">
+            <feature name="filters" value="Images|*.jpg|*.jpeg|*.png,All Files|*.*" />
+        </field>
+        <field name="up" converter="FileConverter">
+            <feature name="filters" value="Images|*.jpg|*.jpeg|*.png,All Files|*.*" />
+        </field>
+        <field name="down" converter="FileConverter">
+            <feature name="filters" value="Images|*.jpg|*.jpeg|*.png,All Files|*.*" />
+        </field>
     </data>
 
     <data name="entityTree" extends="entityPlantBase" />
@@ -223,6 +296,85 @@
     <data name="entityGrass" extends="entityPlantBase" />
     
     <data name="entityEffect" extends="entityModelBase" >
-        <field name="effect" converter="DataFieldConverter" />
+        <feature name="hideFields" value="mat,preferUnshaded" />
+        <field name="effect" converter="DataFieldConverter" >
+            <feature name="componentType" value="effect" />
+        </field>
+    </data>
+    
+    <data name="actor" extends="entityModelBase">
+        <field name="file" converter="FileConverter">
+            <feature name="filters" value="Images|*.jpg|*.jpeg|*.png,All Files|*.*" />
+        </field>
+        <field name="icon" converter="FileConverter">
+            <feature name="filters" value="Images|*.jpg|*.jpeg|*.png,All Files|*.*" />
+        </field>
+        <field name="attributes" converter="EntityObjectDatasFieldConverter">
+            <feature name="dataType" value="name.huliqing.luoying.data.AttributeData" />
+            <feature name="componentType" value="attribute" />
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="channels" converter="EntityObjectDatasFieldConverter">
+            <feature name="dataType" value="name.huliqing.luoying.data.ChannelData" />
+            <feature name="componentType" value="channel" />
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="skills" converter="ActorSkillsFieldConverter">
+            <feature name="dataType" value="name.huliqing.luoying.data.SkillData" />
+            <feature name="componentType" value="skill" />
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="logics" converter="EntityObjectDatasFieldConverter">
+            <feature name="dataType" value="name.huliqing.luoying.data.LogicData" />
+            <feature name="componentType" value="logic" />
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="skinBase" converter="EntityObjectDatasFieldConverter">
+            <feature name="dataType" value="name.huliqing.luoying.data.SkinData" />
+            <feature name="componentType" value="skin" />
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="skins" converter="EntityObjectDatasFieldConverter">
+            <feature name="dataType" value="name.huliqing.luoying.data.SkinData" />
+            <feature name="componentType" value="skin" />
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="skinOutfit" converter="EntityObjectDatasFieldConverter">
+            <feature name="dataType" value="name.huliqing.luoying.data.SkinData" />
+            <feature name="componentType" value="skin" />
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="skinWeapon" converter="EntityObjectDatasFieldConverter">
+            <feature name="dataType" value="name.huliqing.luoying.data.SkinData" />
+            <feature name="componentType" value="skin" />
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="items" converter="EntityObjectDatasFieldConverter">
+            <feature name="dataType" value="name.huliqing.luoying.data.ItemData" />
+            <feature name="componentType" value="item" />
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="talents" converter="EntityObjectDatasFieldConverter">
+            <feature name="dataType" value="name.huliqing.luoying.data.TalentData" />
+            <feature name="componentType" value="talent" />
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="resists" converter="EntityObjectDatasFieldConverter">
+            <feature name="dataType" value="name.huliqing.luoying.data.ResistData" />
+            <feature name="componentType" value="resist" />
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="drops" converter="EntityObjectDatasFieldConverter">
+            <feature name="dataType" value="name.huliqing.luoying.data.DropData" />
+            <feature name="componentType" value="drop" />
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="effects" converter="EntityObjectDatasFieldConverter">
+            <feature name="dataType" value="name.huliqing.luoying.data.EffectData" />
+            <feature name="componentType" value="effect" />
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="localForward" converter="TextConverter" />
+        <field name="chat" converter="TextConverter" />
     </data>
 </root>

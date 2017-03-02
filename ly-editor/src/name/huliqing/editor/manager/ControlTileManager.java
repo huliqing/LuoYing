@@ -44,35 +44,20 @@ public class ControlTileManager {
         MAPPING.put("entityPhysics", EmptyEntityControlTile.class);
     }
     
-//    public final static <T extends EntityControlTile> T createEntityControlTile(EntityData ed) {
-//        Class<? extends ControlTile> clazz = MAPPING.get(ed.getTagName());
-//        if (clazz == null) {
-//            LOG.log(Level.WARNING, "Could not create select obj, unknow tagName={0}", ed.getTagName());
-//            return (T) new EmptyEntityControlTile();
-//        }
-//         
-//        ControlTile obj;
-//        try {
-//            obj = clazz.newInstance();
-//        } catch (InstantiationException | IllegalAccessException ex) {
-//            obj = new EmptyEntityControlTile();
-//            Logger.getLogger(ControlTileManager.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        return (T) obj;
-//    }
-    
     public final static <T extends EntityControlTile> T createEntityControlTile(EntityData ed) {
         Class<? extends ControlTile> clazz = MAPPING.get(ed.getTagName());
         if (clazz == null) {
-            LOG.log(Level.WARNING, "Could not create select obj, unknow tagName={0}", ed.getTagName());
-            return (T) new EmptyEntityControlTile();
+            LOG.log(Level.WARNING, "Could not find controlTile Mapping, unknow tagName={0}", ed.getTagName());
+//            return (T) new EmptyEntityControlTile();
+            return (T) new SimpleModelEntityControlTile();
         }
          
         ControlTile obj;
         try {
             obj = clazz.newInstance();
         } catch (InstantiationException | IllegalAccessException ex) {
-            obj = new EmptyEntityControlTile();
+//            obj = new EmptyEntityControlTile();
+            obj = new SimpleModelEntityControlTile();
             Logger.getLogger(ControlTileManager.class.getName()).log(Level.SEVERE, null, ex);
         }
         return (T) obj;

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://editor.huliqing.name'
+    xsi:schemaLocation='http://editor.huliqing.name meta.xsd'>
+    
+    <!--Entity-->
+    <component id="sysEntitySky" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="sysEntityAmbientLight" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="sysEntityDirectionalLight" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="sysEntityTerrain" type="entity" icon="" converterClass="name.huliqing.editor.component.TerrainEntityComponentConverter" />
+    <component id="sysEntityModel" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="sysEntityTree" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="sysEntityGrass" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="sysEntitySimpleWater" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="sysEntityAdvanceWater" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="sysEntityBoundary" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="sysEntityChaseCamera" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="sysEntityPhysics" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="sysEntityShadow" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="sysEntityAudio" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="sysEntityEffect" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="sysActor" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    
+    <component id="sysEntityBloomFilter" type="entityFilter" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="sysEntityFXAAFilter" type="entityFilter" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="sysEntityFogFilter" type="entityFilter" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="sysEntityLightScatteringFilter" type="entityFilter" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="sysEntitySSAOFilter" type="entityFilter" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    
+    <component id="sysModulePhysics" type="module" />
+    
+    <!--Module-->
+    <component id="moduleChannel" type="module" />
+    <component id="moduleItem" type="module" />
+    <component id="moduleActor" type="module" />
+    <component id="moduleSkill" type="module" />
+    <component id="moduleSkin" type="module" />
+    <component id="moduleAction" type="module" />
+    <component id="moduleLogic" type="module" />
+    <component id="moduleDrop" type="module" />
+    <component id="moduleChat" type="module" />
+    <component id="moduleTask" type="module" />
+    <component id="moduleState" type="module" />
+    <component id="moduleResist" type="module" />
+    <component id="moduleTalent" type="module" />
+    <component id="moduleLevel" type="module" />
+    <component id="moduleColor" type="module" />
+    
+    <!--Attribute-->
+    <component id="attributeName" type="attribute" />
+    <component id="attributeSex" type="attribute" />
+    <component id="attributeRace" type="attribute" />
+    <component id="attributePlayer" type="attribute" />
+    <component id="attributeDead" type="attribute" />
+    <component id="attributeBiology" type="attribute" />
+    <component id="attributeLevel" type="attribute" />
+    <component id="attributeLevelUp" type="attribute" />
+    <component id="attributeXp" type="attribute" />
+    <component id="attributeXpNext" type="attribute" />
+    <component id="attributeGroup" type="attribute" />
+    <component id="attributeTeam" type="attribute" />
+    <component id="attributeVision" type="attribute" />
+    <component id="attributeMoveSpeed" type="attribute" />
+    <component id="attributeMass" type="attribute" />
+    <component id="attributeMovable" type="attribute" />
+    <component id="attributeRotatable" type="attribute" />
+    <component id="attributeEssential" type="attribute" />
+    <component id="attributeAutoLogic" type="attribute" />
+    <component id="attributeAutoAi" type="attribute" />
+    <component id="attributeTarget" type="attribute" />
+    <component id="attributeFollow" type="attribute" />
+    <component id="attributeOwner" type="attribute" />
+    <component id="attributeTalentPoints" type="attribute" />
+    <component id="attributeHealth" type="attribute" />
+    <component id="attributeHealthMax" type="attribute" />
+    <component id="attributeMana" type="attribute" />
+    <component id="attributeManaMax" type="attribute" />
+    <component id="attributeAttack" type="attribute" />
+    <component id="attributeMagicAttack" type="attribute" />
+    <component id="attributeDefence" type="attribute" />
+    <component id="attributeMagicDefence" type="attribute" />
+    <component id="attributeHealthRestore" type="attribute" />
+    <component id="attributeManaRestore" type="attribute" />
+    <component id="attributeAttackSpeed" type="attribute" />
+    <component id="attributeMagicSpeed" type="attribute" />
+    <component id="attributeDefenceRate" type="attribute" />
+    <component id="attributeDuckRate" type="attribute" />
+    <component id="attributeGhostRate" type="attribute" />
+    <component id="attributeResistInterruptRate" type="attribute" />
+    <component id="attributeWeaponSlots" type="attribute" />
+    <component id="attributeLocation" type="attribute" />
+    <component id="attributeColor" type="attribute" />
+    <component id="attributeMessage" type="attribute" />
+    
+    <component id="attributeGroupBase" type="attribute" />
+    <component id="attributeDynamicBuildingGroup" type="attribute" />
+    <component id="attributeStaticBuildingGroup" type="attribute" />
+    <component id="attributeCreatureGroup" type="attribute" />
+    <component id="attributeHumanFemaleGroup" type="attribute" />
+    <component id="attributeHumanMaleGroup" type="attribute" />
+
+    <!--Effect-->
+    <component id="effectExplosion" type="effect" />
+    <component id="effectSmokeFire" type="effect" />
+    <component id="effectSkeletonDead" type="effect" />
+
+    <!--Skill-->
+    <component id="skillWait" type="skill" />
+    <component id="skillWalk" type="skill" />
+    <component id="skillRun" type="skill" />
+    <component id="skillHurtFront" type="skill" />
+    <component id="skillHurtBack" type="skill" />
+    <component id="skillDead" type="skill" />
+    <component id="skillReset" type="skill" />
+</root>

@@ -195,6 +195,7 @@ import name.huliqing.luoying.object.gamelogic.AttributeChangeGameLogic;
 import name.huliqing.luoying.loader.ItemDataLoader;
 import name.huliqing.luoying.object.magic.AttributeHitMagic;
 import name.huliqing.luoying.loader.MagicDataLoader;
+import name.huliqing.luoying.loader.ParticleEffectDataLoader;
 import name.huliqing.luoying.object.magic.StateMagic;
 import name.huliqing.luoying.object.position.FixedPosition;
 import name.huliqing.luoying.loader.PositionDataLoader;
@@ -402,6 +403,7 @@ public class LuoYing {
      */
     private static void loadSysData() throws LuoYingException {
         loadData("LuoYingSys/Data/action.xml");
+        loadData("LuoYingSys/Data/actor.xml");
         loadData("LuoYingSys/Data/channel.xml");
         loadData("LuoYingSys/Data/effect.xml");
         loadData("LuoYingSys/Data/el.xml");
@@ -628,7 +630,7 @@ public class LuoYing {
         
         // Effect
         DataFactory.register("effectHalo",  EffectData.class, EffectDataLoader.class, HaloEffect.class);
-        DataFactory.register("effectParticle", EffectData.class, EffectDataLoader.class, ParticleEffect.class);
+        DataFactory.register("effectParticle", EffectData.class, ParticleEffectDataLoader.class, ParticleEffect.class);
         DataFactory.register("effectGroup", EffectData.class, EffectDataLoader.class, GroupEffect.class);
         DataFactory.register("effectEncircleHalo", EffectData.class, EffectDataLoader.class, EncircleHaloEffect.class);
         DataFactory.register("effectTexture", EffectData.class, EffectDataLoader.class, TextureEffect.class);

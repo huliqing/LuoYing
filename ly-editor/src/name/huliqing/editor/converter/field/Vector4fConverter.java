@@ -27,7 +27,6 @@ import name.huliqing.luoying.xml.Converter;
  */
 public class Vector4fConverter extends SimpleFieldConverter {
     
-    
     private final VBox layout = new VBox();
     
     private final HBox xLayout = new HBox();
@@ -75,7 +74,7 @@ public class Vector4fConverter extends SimpleFieldConverter {
         zLayout.getStyleClass().add(StyleConstants.CLASS_HVBOX);
         wLayout.getStyleClass().add(StyleConstants.CLASS_HVBOX);
         
-        layout.getChildren().addAll(xLayout, yLayout, zLayout);
+        layout.getChildren().addAll(xLayout, yLayout, zLayout, wLayout);
         xLayout.getChildren().addAll(xLabel, xField);
         yLayout.getChildren().addAll(yLabel, yField);
         zLayout.getChildren().addAll(zLabel, zField);
@@ -96,6 +95,10 @@ public class Vector4fConverter extends SimpleFieldConverter {
         zField.setOnKeyPressed(keyHandler);
         wField.setOnKeyPressed(keyHandler);
         
+        xLabel.setMinWidth(15);
+        yLabel.setMinWidth(15);
+        zLabel.setMinWidth(15);
+        wLabel.setMinWidth(15);
         layout.setSpacing(3);
     }
 

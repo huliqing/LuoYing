@@ -74,8 +74,8 @@ public class ModulesFieldConverter extends SimpleFieldConverter<JfxSceneEdit, En
                         addUndoRedo(ur);
                     }
                 });
-                componentInput.hide();
             }
+            componentInput.hide();
         });
         
         layout.setPadding(Insets.EMPTY);
@@ -108,16 +108,6 @@ public class ModulesFieldConverter extends SimpleFieldConverter<JfxSceneEdit, En
                 getParent().setChildContent(newValue.getId(), dataConverter.getLayout());
             }
         });
-    }
-
-    @Override
-    public void initialize() {
-        super.initialize();
-    }
-
-    @Override
-    public void cleanup() {
-        super.cleanup(); 
     }
     
     @Override

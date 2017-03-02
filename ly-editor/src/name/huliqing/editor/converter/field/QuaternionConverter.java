@@ -87,6 +87,9 @@ public class QuaternionConverter extends SimpleFieldConverter {
         yField.setOnKeyPressed(keyHandler);
         zField.setOnKeyPressed(keyHandler);
         
+        xLabel.setMinWidth(15);
+        yLabel.setMinWidth(15);
+        zLabel.setMinWidth(15);
         layout.setSpacing(3);
     }
 

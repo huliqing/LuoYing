@@ -15,12 +15,13 @@ import javafx.scene.input.KeyEvent;
 import javafx.util.StringConverter;
 
 /**
- *
+ * 用于支持自动完成功能，让ComboBox有自动提示录入的功能。
  * @author huliqing
+ * @param <T>
  */
 public class AutoCompleteComboBoxListener<T> implements EventHandler<KeyEvent> {
 
-    private ComboBox comboBox;
+    private final ComboBox comboBox;
     private final ObservableList<T> items = FXCollections.observableArrayList();
     private final ObservableList filterItems = FXCollections.observableArrayList();
     
@@ -32,11 +33,8 @@ public class AutoCompleteComboBoxListener<T> implements EventHandler<KeyEvent> {
     public AutoCompleteComboBoxListener(final ComboBox comboBox) {
         this.comboBox = comboBox;
         this.comboBox.setEditable(true);
-        this.comboBox.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent t) {
-                comboBox.hide();
-            }
+        this.comboBox.setOnKeyPressed((KeyEvent t) -> {
+            comboBox.hide();
         });
         this.comboBox.setOnKeyReleased(AutoCompleteComboBoxListener.this);
         setItems(comboBox.getItems());

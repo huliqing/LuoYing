@@ -227,18 +227,23 @@
                        attributes="attributeGroupBase,attributeBiologyYes,attributeRaceHuman,attributeSexFemale
 ,attributeMovableYes,attributeRotatableYes,attributeMassDynamic,attributeLevelUpYes
 ,attributeHumanFemaleWeaponSlot" />
+    <attributeGroup id="attributeHumanFemaleGroup" 
+                    name="attributeHumanFemaleGroup" extends="attributeHumanFemale" />
     
     <!--配置给：人类男性角色-->
     <attributeGroup id="attributeHumanMale" name="attributeHumanMale" 
                        attributes="attributeGroupBase,attributeBiologyYes,attributeRaceHuman,attributeSexMale
 ,attributeMovableYes,attributeRotatableYes,attributeMassDynamic,attributeLevelUpYes" />
+    <attributeGroup id="attributeHumanMaleGroup" 
+                    name="attributeHumanMaleGroup" extends="attributeHumanMale" />
+    
     
     <!--==========================================================================-->
     <!-- 特殊角色的属性 -->
     <!--==========================================================================-->
     
     <!--蒂娜的武器槽位：挂在左腰间-->
-    <attributeStringList id="attributeWeaponSlotDiNa" extends="attributeWeaponSlots" value="slotSwordLeftWaist,slotSwordLeftWaist2" />
+    <!--<attributeStringList id="attributeWeaponSlotDiNa" extends="attributeWeaponSlots" value="slotSwordLeftWaist,slotSwordLeftWaist2" />-->
     
 </root>
 

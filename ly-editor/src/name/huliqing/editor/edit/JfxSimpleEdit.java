@@ -30,9 +30,10 @@ public abstract class JfxSimpleEdit<T extends JmeEdit> extends JfxAbstractEdit<T
     
     protected final BorderPane layout = new BorderPane();
     
-    protected final StackPane leftZone = new StackPane();
-    protected final Pane leftPropertyZone = new HBox();
-    protected final Pane leftEditZone = new HBox();
+    protected final HBox propertyZone = new HBox();
+    protected final StackPane bodyZone = new StackPane();
+    protected final Pane editPanelBinder = new HBox();
+    protected final Pane editPanel = new HBox();
     
     protected final HBox jfxToolbarPanel = new HBox();
     protected final JfxExtToolbar jfxExtToolbarPanel = new JfxExtToolbar();
@@ -42,18 +43,21 @@ public abstract class JfxSimpleEdit<T extends JmeEdit> extends JfxAbstractEdit<T
     protected final List<JfxToolbar> jfxExtToolbars = new ArrayList();
     
     public JfxSimpleEdit() {
-        layout.setCenter(leftZone);
+        layout.setLeft(propertyZone);
+        layout.setCenter(bodyZone);
         layout.setRight(jfxExtToolbarPanel);
         layout.setBottom(jfxToolbarPanel);
         layout.setBackground(Background.EMPTY);
-
-        leftZone.setBackground(Background.EMPTY);
-        leftZone.getChildren().addAll(leftPropertyZone, leftEditZone); // editPanel放在propertyPanel上面，因为要响应拖放事件
         
-        leftEditZone.setVisible(false);
-        leftEditZone.setStyle(STYLE_EDIT_PANEL);
-        leftEditZone.setOnDragOver(this::onDragOver);
-        leftEditZone.setOnDragDropped(this::onDragDropped);
+        propertyZone.getStyleClass().add(StyleConstants.CLASS_HVBOX);
+        
+        bodyZone.setBackground(Background.EMPTY);
+        bodyZone.getChildren().addAll(editPanel, editPanelBinder); // editPanelBinder要放上面，以响应拖放事件
+        
+        editPanelBinder.setVisible(false);
+        editPanelBinder.setStyle(STYLE_EDIT_PANEL);
+        editPanelBinder.setOnDragOver(this::onDragOver);
+        editPanelBinder.setOnDragDropped(this::onDragDropped);
         
         jfxToolbarPanel.setPadding(Insets.EMPTY);
         jfxToolbarPanel.getStyleClass().add(StyleConstants.CLASS_HVBOX);
@@ -87,7 +91,7 @@ public abstract class JfxSimpleEdit<T extends JmeEdit> extends JfxAbstractEdit<T
         
         // 强制刷新一下UI，必须的，否则界面无法实时刷新(JFX嵌入Swing的一个BUG)
         Jfx.jfxForceUpdate();
-        Jfx.jfxCanvasBind(leftEditZone);
+        Jfx.jfxCanvasBind(editPanelBinder);
         
     }
 
@@ -111,18 +115,23 @@ public abstract class JfxSimpleEdit<T extends JmeEdit> extends JfxAbstractEdit<T
     @Override
     public void jfxOnDragStarted() {
         super.jfxOnDragStarted();
-        leftEditZone.setVisible(true);
+        editPanelBinder.setVisible(true);
     }
 
     @Override
     public void jfxOnDragEnded() {
         super.jfxOnDragEnded(); 
-        leftEditZone.setVisible(false);
+        editPanelBinder.setVisible(false);
     }
 
     @Override
     public Pane getPropertyPanel() {
-        return leftPropertyZone;
+        return propertyZone;
+    }
+
+    @Override
+    public Pane getEditPanel() {
+        return editPanel;
     }
     
     /**

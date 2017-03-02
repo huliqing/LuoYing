@@ -90,4 +90,6 @@ public interface JfxEdit<T extends JmeEdit> {
      */
     Pane getPropertyPanel();
     
+    Pane getEditPanel();
+    
 }

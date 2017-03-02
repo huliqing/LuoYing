@@ -24,6 +24,8 @@ public interface Converter<T extends ObjectData, C extends Converter> {
      */
     void setData(T data);
     
+    T getData();
+    
     /**
      * 设置数据转换参数
      * @param features 
@@ -35,6 +37,8 @@ public interface Converter<T extends ObjectData, C extends Converter> {
      * @param parent 
      */
     void setParent(C parent);
+    
+    C getParent();
     
     /**
      * 获取转换后的JFX组件节点。

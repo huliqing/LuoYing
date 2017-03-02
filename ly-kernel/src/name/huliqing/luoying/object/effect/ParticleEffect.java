@@ -27,6 +27,7 @@ import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.FastMath;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
 import name.huliqing.luoying.data.EffectData;
+import name.huliqing.luoying.data.EmitterData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.emitter.Emitter;
 
@@ -35,7 +36,8 @@ import name.huliqing.luoying.object.emitter.Emitter;
  * @author huliqing
  */
 public class ParticleEffect extends Effect {
-    private String emitter;
+    private EmitterData emitterData;
+    
     // 是否立即执行所有粒子发射
     private boolean emitAll;
     // 是否随机颜色
@@ -56,7 +58,8 @@ public class ParticleEffect extends Effect {
     @Override
     public void setData(EffectData data) {
         super.setData(data); 
-        emitter = data.getAsString("emitter", emitter);
+        emitterData = data.getAsObjectData("emitter");
+        
         emitAll = data.getAsBoolean("emitAll", emitAll);
         randomColor = data.getAsBoolean("randomColor", randomColor);
         inWorldSpace = data.getAsBoolean("inWorldSpace", inWorldSpace);
@@ -73,22 +76,20 @@ public class ParticleEffect extends Effect {
     @Override
     public void initialize() {
         super.initialize();
-        if (pe == null) {
-            Emitter em = Loader.load(emitter);
-            if (randomColor) {
-                pe = em.getParticleEmitter(new RandomColorEmitter());
-            } else {
-                pe = em.getParticleEmitter();
-            }
-            // 这里必须从data中偿试获取Bucket设置，因为粒子有可能是在“世界”空间产生的，即粒子可能不是放在animNode
-            // 下的，所以在父节点effect上的Bucket设置并不一定适应于这些粒子，这里必须直接把bucket的配置设置到粒子上。
-            if (bucket != null) {
-                pe.setQueueBucket(bucket);
-            }
-            pe.setInWorldSpace(inWorldSpace);
-            pe.getMaterial().getAdditionalRenderState().setBlendMode(blendMode);
-            animNode.attachChild(pe);
+        Emitter em = Loader.load(emitterData);
+        if (randomColor) {
+            pe = em.getParticleEmitter(new RandomColorEmitter());
+        } else {
+            pe = em.getParticleEmitter();
         }
+        // 这里必须从data中偿试获取Bucket设置，因为粒子有可能是在“世界”空间产生的，即粒子可能不是放在animNode
+        // 下的，所以在父节点effect上的Bucket设置并不一定适应于这些粒子，这里必须直接把bucket的配置设置到粒子上。
+        if (bucket != null) {
+            pe.setQueueBucket(bucket);
+        }
+        pe.setInWorldSpace(inWorldSpace);
+        pe.getMaterial().getAdditionalRenderState().setBlendMode(blendMode);
+        animNode.attachChild(pe);
     }
 
     @Override

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://editor.huliqing.name'
+    xsi:schemaLocation='http://editor.huliqing.name meta.xsd'>
+    
+    <converter name="SkillAnimationFieldConverter" value="name.huliqing.editor.converter.field.SkillAnimationFieldConverter" />
+    
+    <data name="skillBase" extends="base" >
+        <field name="icon" converter="FileConverter" />
+        <field name="useTime" converter="FloatTextConverter" />
+        <field name="types" converter="TextConverter" />
+        <field name="overlapTypes" converter="TextConverter" />
+        <field name="interruptTypes" converter="TextConverter" />
+        <field name="prior" converter="IntegerTextConverter" />
+        <field name="animation" converter="SkillAnimationFieldConverter" />
+        <field name="channels" converter="TextConverter" />
+        <field name="channelLockAll" converter="CheckBoxConverter" />
+        <field name="channelLocks" converter="TextConverter" />
+        <field name="cooldown" converter="FloatTextConverter" />
+        <field name="weaponStateLimit" converter="TextConverter" />
+        <field name="loop" converter="CheckBoxConverter" />
+        <field name="sounds" converter="TextConverter" />
+        <field name="effects" converter="TextConverter" />
+        <field name="boneEffects" converter="TextConverter" />
+        <field name="magics" converter="TextConverter" />
+        <field name="actorAnims" converter="TextConverter" />
+        <field name="bindCutTimeEndAttribute" converter="TextConverter" />
+        <field name="cutTimeStartMax" converter="FloatTextConverter" />
+        <field name="cutTimeEndMax" converter="FloatTextConverter" />
+        <field name="checkEl" converter="TextConverter" />
+        <field name="level" converter="IntegerTextConverter" />
+        <field name="maxLevel" converter="IntegerTextConverter" />
+        <field name="levelEl" converter="TextConverter" />
+        <field name="levelUpEl" converter="TextConverter" />
+        <field name="playCount" converter="IntegerTextConverter" />
+        <field name="useAttributes" converter="TextConverter" />
+        <field name="bindSpeedAttribute" converter="TextConverter" />
+        <field name="bindAvoidInterruptAttribute" converter="TextConverter" />
+    </data>
+    
+    <data name="skillWait" extends="skillBase"/>
+    
+    <data name="skillWalkBase" extends="skillBase">
+        <field name="animSpeed" converter="FloatTextConverter" />
+        <field name="baseSpeed" converter="FloatTextConverter" />
+    </data>
+    <data name="skillWalk" extends="skillWalkBase" />
+    <data name="skillRun" extends="skillWalkBase" />
+    
+    <data name="skillIdle" extends="skillBase" />
+    
+    <data name="skillHurt" extends="skillBase" >
+        <field name="hurtFace" converter="ChoiceConverter">
+            <feature name="items" value="front,back,left,right" />
+        </field>
+    </data>
+    
+    <data name="skillReset" extends="skillBase" >
+        <field name="timePoint" converter="FloatTextConverter" />
+    </data>
+    
+    <data name="skillDefend" extends="skillBase">
+        <field name="defendDir" converter="ChoiceConverter">
+            <feature name="items" value="front,back,left,right" />
+        </field>
+    </data>
+    
+    <data name="skillDuck" extends="skillBase" >
+        <field name="duckDir" converter="ChoiceConverter">
+            <feature name="items" value="front,back,left,right" />
+        </field>
+        <field name="force" converter="TextConverter" />
+    </data>
+    
+    <data name="skillDeadRagdoll" extends="skillBase" >
+        <field name="useRagdoll" converter="CheckBoxConverter" />
+        <field name="forceOnly" converter="CheckBoxConverter" />
+        <field name="bones" converter="TextConverter" />
+        <field name="bonesHit" converter="TextConverter" />
+        <field name="deadAnimPoint" converter="FloatTextConverter" />
+        <field name="lastWords" converter="TextConverter" />
+    </data>
+    
+    <data name="skillDead" extends="skillBase" >
+        <field name="remove" converter="CheckBoxConverter" />
+    </data>
+    
+    <data name="skillHitBase" extends="skillBase" >
+        <field name="bindTargetAttribute" converter="TextConverter" />
+        <field name="hitCheckEl" converter="TextConverter" />
+        <field name="hitAttribute" converter="TextConverter" />
+        <field name="hitValue" converter="FloatTextConverter" />
+        <field name="hitDistance" converter="FloatTextConverter" />
+        <field name="hitAngle" converter="FloatTextConverter" />
+        <field name="hitEl" converter="TextConverter" />
+        <field name="hitStates" converter="TextConverter" />
+        <field name="hitMagics" converter="TextConverter" />
+    </data>
+    
+    <data name="skillAttack" extends="skillHitBase" >
+        <field name="multHit" converter="CheckBoxConverter" />
+        <field name="checkPoint" converter="TextConverter" />
+        <field name="defendable" converter="CheckBoxConverter" />
+        <field name="defendSkillTypes" converter="TextConverter" />
+        <field name="collisionOffset" converter="Vector3fConverter" />
+    </data>
+    
+    <data name="skillShotBase" extends="skillHitBase" >
+        <field name="bullets" converter="TextConverter" />
+        <field name="shotTimes" converter="TextConverter" />
+        <field name="shotOffsets" converter="TextConverter" />
+        <field name="shotSpeed" converter="FloatTextConverter" />
+        <field name="multHit" converter="CheckBoxConverter" />
+        <field name="multTarget" converter="CheckBoxConverter" />
+        <field name="shotTargetType" converter="ChoiceConverter">
+            <feature name="items" value="origin,center,bound" />
+        </field>
+    </data>
+    
+    <data name="skillShot" extends="skillShotBase" />
+    
+    <data name="skillShotBow" extends="skillShotBase">
+        <field name="weaponAnim" converter="TextConverter" />
+        <field name="timeBulletTake" converter="FloatTextConverter" />
+        <field name="timeBulletPull" converter="FloatTextConverter" />
+        <field name="arrow" converter="FileConverter">
+            <feature name="filters" value="Model Files|*.j3o,All Files|*.*" />
+        </field>
+        <field name="animationShotDown" converter="TextConverter" />
+        <field name="animationShotUp" converter="TextConverter" />
+        <field name="arrowBindBone" converter="TextConverter" />
+        <field name="shotDownOffset" converter="Vector3fConverter" />
+        <field name="shotUpOffset" converter="Vector3fConverter" />
+    </data>
+    
+    <data name="skillBack" extends="skillBase" >
+        <field name="backPoint" converter="FloatTextConverter" />
+    </data>
+    
+    <data name="skillSummon" extends="skillBase">
+        <field name="summonActorId" converter="TextConverter" />
+        <field name="copyAttributesFromSource" converter="TextConverter" />
+        <field name="linkAttributesToSource" converter="TextConverter" />
+        <field name="summonOffset" converter="Vector3fConverter" />
+        <field name="summonPoint" converter="FloatTextConverter" />
+        <field name="summonTime" converter="FloatTextConverter" />
+    </data>
+    
+    <data name="skillSkin" extends="skillBase">
+        <field name="hangTimePoint" converter="FloatTextConverter" />
+    </data>
+
+</root>

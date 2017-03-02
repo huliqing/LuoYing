@@ -57,6 +57,8 @@ public class ComponentSearch<T extends ComponentDefine> {
     }
 
     public void setComponents(List<T> items) {
+        if (items == null) 
+            return;
         componentView.setAllItems(items);
     }
     

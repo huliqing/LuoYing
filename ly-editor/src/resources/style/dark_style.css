@@ -9,6 +9,7 @@
 
 .hv-box {
     -fx-padding: 0;
+    -fx-background-color: derive(-fx-base,30%);
 }
 
 .tab {
@@ -20,8 +21,7 @@
 }
 
 .tool-bar:horizontal {
-    -fx-background-color:
-        linear-gradient(to bottom, derive(-fx-base,+50%), derive(-fx-base,-40%), derive(-fx-base,-20%));
+    -fx-background-color: linear-gradient(to bottom, derive(-fx-base,+50%), derive(-fx-base,-40%), derive(-fx-base,-20%));
 }
 
 .button {

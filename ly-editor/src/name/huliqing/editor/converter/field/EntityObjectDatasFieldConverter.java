@@ -7,17 +7,18 @@ package name.huliqing.editor.converter.field;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.value.ObservableValue;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.VBox;
 import name.huliqing.editor.component.ComponentDefine;
 import name.huliqing.editor.constants.AssetConstants;
+import name.huliqing.editor.constants.StyleConstants;
 import name.huliqing.editor.converter.DataConverter;
 import name.huliqing.editor.converter.SimpleFieldConverter;
 import name.huliqing.editor.edit.UndoRedo;
@@ -32,56 +33,63 @@ import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
- * 针对Entity的objectDatas字段的转换器
+ * 用于转换Entity的objectDatas字段,可以指定DataType和ComponentType
  * @author huliqing
  */
-public class ObjectDatasFieldConverter extends SimpleFieldConverter<JfxSceneEdit, EntityData> {
+public class EntityObjectDatasFieldConverter extends SimpleFieldConverter<JfxSceneEdit, EntityData>{
 
-    private final VBox layout = new VBox();
+    private static final Logger LOG = Logger.getLogger(EntityObjectDatasFieldConverter.class.getName());
     
-    private final ToolBar toolBar = new ToolBar();
-    private final ListView<ObjectData> listView = new ListView();
+    private final static String FEATURE_DATA_TYPE = "dataType";
+    private final static String FEATURE_COMPONENT_TYPE = "componentType";
+    private Class<? extends ObjectData> dataType;
+    private String componentType;
+
+    protected ComponentSearch<ComponentDefine> componentList = new ComponentSearch();
     
-    private final ComponentSearch<ComponentDefine> componentInput = 
-            new ComponentSearch(ComponentManager.getComponents(new ArrayList()));
+    protected final VBox layout = new VBox();
+    protected final ToolBar toolbar = new ToolBar();
+    protected final ListView<ObjectData> listView = new ListView();
     
     private DataConverter dataConverter;
     
-    public ObjectDatasFieldConverter() {
+    public EntityObjectDatasFieldConverter() {
         Button add = new Button("", JfxUtils.createIcon(AssetConstants.INTERFACE_ICON_ADD));
         Button remove = new Button("", JfxUtils.createIcon(AssetConstants.INTERFACE_ICON_SUBTRACT));
-        toolBar.getItems().addAll(add, remove);
+        
         add.setOnAction(e -> {
-            componentInput.show(add, -10, -10);
+            componentList.show(add, -10, -10);
         });
         remove.setOnAction(e -> {
-            ObjectData od = listView.getSelectionModel().getSelectedItem();
-            if (od != null) {
-                ObjectDataRemovedUndoRedo ur = new ObjectDataRemovedUndoRedo(od);
-                ur.redo();
-                addUndoRedo(ur);
-            }
+            List<ObjectData> eds = listView.getSelectionModel().getSelectedItems();
+            if (eds == null || eds.isEmpty())
+                return;
+            
+            Jfx.runOnJme(() -> {
+                ObjectData od = listView.getSelectionModel().getSelectedItem();
+                if (od != null) {
+                    ObjectDataRemovedUndoRedo ur = new ObjectDataRemovedUndoRedo(od);
+                    ur.redo();
+                    jfxEdit.getJmeEdit().addUndoRedo(ur);
+                }
+            });
         });
         
-        componentInput.getListView().setOnMouseClicked(e -> {
-            ComponentDefine cd = componentInput.getListView().getSelectionModel().getSelectedItem();
+        componentList.getListView().setOnMouseClicked(e -> {
+            ComponentDefine cd = componentList.getListView().getSelectionModel().getSelectedItem();
             if (cd != null) {
                 Jfx.runOnJme(() -> {
                     ObjectData od = Loader.loadData(cd.getId());
                     if (od != null) {
                         ObjectDataAddedUndoRedo ur = new ObjectDataAddedUndoRedo(od);
                         ur.redo();
-                        addUndoRedo(ur);
+                        jfxEdit.getJmeEdit().addUndoRedo(ur);
                     }
                 });
-                componentInput.hide();
             }
+            componentList.hide();
         });
         
-        layout.setPadding(Insets.EMPTY);
-        layout.getChildren().addAll(toolBar, listView);
-        
-        listView.setPrefHeight(160);
         listView.setCellFactory((ListView<ObjectData> param) -> new ListCell<ObjectData>(){
             @Override
             protected void updateItem(ObjectData item, boolean empty) {
@@ -93,6 +101,7 @@ public class ObjectDatasFieldConverter extends SimpleFieldConverter<JfxSceneEdit
                 }
             }
         });
+        
         listView.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends ObjectData> observable
                 , ObjectData oldValue, ObjectData newValue) -> {
             if (dataConverter != null && dataConverter.isInitialized()) {
@@ -102,69 +111,92 @@ public class ObjectDatasFieldConverter extends SimpleFieldConverter<JfxSceneEdit
             if (newValue == null) {
                 return;
             }
-            
-            dataConverter = ConverterManager.createDataConverter(jfxEdit, newValue, ObjectDatasFieldConverter.this);
+            dataConverter = ConverterManager.createDataConverter(jfxEdit, newValue, EntityObjectDatasFieldConverter.this);
             dataConverter.initialize();
             getParent().setChildContent(newValue.getId(), dataConverter.getLayout());
-            
         });
+        listView.setPrefHeight(160);
+        
+        toolbar.getItems().addAll(add, remove);
+        layout.getStyleClass().add(StyleConstants.CLASS_HVBOX);
+        layout.getChildren().addAll(toolbar, listView);
     }
 
     @Override
-    protected void updateUI() {
-        List<ObjectData> objectDatas = data.getObjectDatas();
-        listView.getItems().clear();
-        if (objectDatas != null) {
-            listView.getItems().addAll(objectDatas);
+    public void initialize() {
+        super.initialize();
+        
+        String tempDataType = featureHelper.getAsString(FEATURE_DATA_TYPE);
+        try {
+            dataType = (Class<? extends ObjectData>) Class.forName(tempDataType);
+        } catch (Exception ex) {
+            dataType = ObjectData.class;
+            LOG.log(Level.WARNING
+                    , "Unknow dataType! dataType=" + tempDataType + ", field=" + field + ", data=" + data.getId()
+                    , ex);
+        }
+        componentType = featureHelper.getAsString(FEATURE_COMPONENT_TYPE);
+        if (componentType != null) {
+            componentList.setComponents(ComponentManager.getComponentsByType(componentType));
+        } else {
+            componentList.setComponents(ComponentManager.getComponents(null));
         }
     }
-
+    
     @Override
     protected Node createLayout() {
         return layout;
     }
- 
+
+    @Override
+    protected void updateUI() {
+        List dataList = new ArrayList();
+        data.getObjectDatas(dataType, dataList);
+        listView.getItems().clear();
+        listView.getItems().addAll(dataList);
+    }
+    
     private class ObjectDataAddedUndoRedo implements UndoRedo {
-        private final ObjectData odAdded;
+        private final ObjectData added;
         public ObjectDataAddedUndoRedo(ObjectData added) {
-            this.odAdded = added;
+            this.added = added;
         }
         @Override
         public void undo() {
-            data.removeObjectData(odAdded);
+            data.removeObjectData(added);
             Jfx.runOnJfx(() -> {
-                listView.getItems().remove(odAdded);
+                listView.getItems().remove(added);
                 notifyChanged();
             });
         }
         @Override
         public void redo() {
-            data.addObjectData(odAdded);
+            data.addObjectData(added);
             Jfx.runOnJfx(() -> {
-                listView.getItems().add(odAdded);
+                listView.getItems().add(added);
                 notifyChanged();
             });
         }
     }
     
     private class ObjectDataRemovedUndoRedo implements UndoRedo {
-        private final ObjectData odRemoved;
-        public ObjectDataRemovedUndoRedo(ObjectData odRemoved) {
-            this.odRemoved = odRemoved;
+        private final ObjectData removed;
+        public ObjectDataRemovedUndoRedo(ObjectData removed) {
+            this.removed = removed;
         }
         @Override
         public void undo() {
-            data.addObjectData(odRemoved);
+            data.addObjectData(removed);
             Jfx.runOnJfx(() -> {
-                listView.getItems().add(odRemoved);
+                listView.getItems().add(removed);
                 notifyChanged();
             });
         }
         @Override
         public void redo() {
-            data.removeObjectData(odRemoved);
+            data.removeObjectData(removed);
             Jfx.runOnJfx(() -> {
-                listView.getItems().remove(odRemoved);
+                listView.getItems().remove(removed);
                 notifyChanged();
             });
         }

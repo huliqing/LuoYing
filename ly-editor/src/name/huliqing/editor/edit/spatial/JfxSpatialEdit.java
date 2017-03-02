@@ -9,7 +9,6 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import name.huliqing.editor.edit.JfxSimpleEdit;
-import name.huliqing.editor.manager.EditManager;
 import name.huliqing.fxswing.Jfx;
 
 /**
@@ -50,6 +49,6 @@ public class JfxSpatialEdit extends JfxSimpleEdit<SpatialEdit> {
             jmeEdit.setFilePath(abstractFilePath);
         });
     }
-
+ 
     
 }

@@ -87,7 +87,7 @@ public class JfxSceneEdit extends JfxSimpleEdit<SceneEdit>
     @Override
     protected void jfxInitialize() {
         super.jfxInitialize();
-        leftPropertyZone.getChildren().add(scenePropertyPanel);
+        propertyZone.getChildren().add(scenePropertyPanel);
         
         if (sceneData != null) {
             loadScene(sceneData, savePath);
@@ -96,7 +96,7 @@ public class JfxSceneEdit extends JfxSimpleEdit<SceneEdit>
     
     @Override
     protected void jfxCleanup() {
-        leftPropertyZone.getChildren().remove(scenePropertyPanel);
+        propertyZone.getChildren().remove(scenePropertyPanel);
         super.jfxCleanup();
     }
 
@@ -224,7 +224,7 @@ public class JfxSceneEdit extends JfxSimpleEdit<SceneEdit>
     
     public void addEntityUseUndoRedo(EntityData ed) {
         Jfx.runOnJme(() -> {
-            Vector2f pos = new Vector2f((float)lastDragXPos, (float)(leftEditZone.getHeight() - lastDragYPos));
+            Vector2f pos = new Vector2f((float)lastDragXPos, (float)(editPanelBinder.getHeight() - lastDragYPos));
             jmeEdit.addEntityOnCursorUseUndoRedo(ed, pos);
         });
     }
@@ -260,7 +260,7 @@ public class JfxSceneEdit extends JfxSimpleEdit<SceneEdit>
     
     public void showDeleteConfirm(float x, float y, EntityControlTile entityObj) {
         delTarget = entityObj;
-        delPop.show(leftEditZone, Side.TOP, x - delPop.getWidth() * 0.25, y + delPop.getHeight() * 0.25);
+        delPop.show(editPanelBinder, Side.TOP, x - delPop.getWidth() * 0.25, y + delPop.getHeight() * 0.25);
         Jfx.requestFocus(delPop);
     }
 

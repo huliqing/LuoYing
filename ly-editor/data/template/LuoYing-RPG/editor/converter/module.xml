@@ -5,7 +5,6 @@
     xmlns='http://editor.huliqing.name'
     xsi:schemaLocation='http://editor.huliqing.name meta.xsd'>
     
-    
     <data name="moduleBase" extends="base">
         <field name="moduleOrder" converter="IntegerTextConverter" />
         <field name="bindMessageEnabledAttribute" converter="TextConverter" />

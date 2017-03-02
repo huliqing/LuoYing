@@ -159,7 +159,7 @@ public class EntityData extends ObjectData {
      * 查找指定类型的数据
      * @param <T>
      * @param objectType 数据类型
-     * @param store 存放结束
+     * @param store 存放结果
      * @return 
      */
     public <T extends ObjectData> List<T> getObjectDatas(Class<T> objectType, List<T> store) {

@@ -74,6 +74,8 @@ public class Vector2fConverter extends SimpleFieldConverter{
         xField.setOnKeyPressed(keyHandler);
         yField.setOnKeyPressed(keyHandler);
         
+        xLabel.setMinWidth(15);
+        yLabel.setMinWidth(15);
         layout.setSpacing(3);
     }
 

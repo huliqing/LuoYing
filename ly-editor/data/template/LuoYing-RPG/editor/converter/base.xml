@@ -23,6 +23,7 @@
     <converter name="QuaternionConverter" value="name.huliqing.editor.converter.field.QuaternionConverter" />
     <converter name="FileConverter" value="name.huliqing.editor.converter.field.FileConverter" />
     <converter name="DataFieldConverter" value="name.huliqing.editor.converter.field.DataFieldConverter" />
+    <converter name="ListDataFieldConverter" value="name.huliqing.editor.converter.field.ListDataFieldConverter" />
     
     <data name="base" extends="" converter="SimpleDataConverter">
         <field name="id" converter="TextConverter">

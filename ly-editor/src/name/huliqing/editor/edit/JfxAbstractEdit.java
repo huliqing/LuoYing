@@ -30,7 +30,7 @@ public abstract class JfxAbstractEdit<T extends JmeEdit> implements JfxEdit<T>, 
     protected T jmeEdit;
     protected boolean editInitialized;
     protected boolean jfxInitialized;
-    
+     
     /**
      * 当前JFX编辑器的本地根节点
      */
