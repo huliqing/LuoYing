@@ -33,7 +33,7 @@ xs:time
         </xs:annotation>
         <xs:complexType>
             <xs:complexContent>
-                <xs:extension base="baseSkin">
+                <xs:extension base="skinBase">
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
@@ -47,7 +47,7 @@ xs:time
         </xs:annotation>
         <xs:complexType>
             <xs:complexContent>
-                <xs:extension base="baseSkin">
+                <xs:extension base="skinBase">
                     <xs:attribute name="weaponType" type="xs:string" use="required" >
                         <xs:annotation>
                             <xs:documentation>
@@ -55,7 +55,7 @@ xs:time
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="slots" type="xs:integer" use="required" >
+                    <xs:attribute name="slots" type="xs:string" use="required" >
                         <xs:annotation>
                             <xs:documentation>
                                 设置武器支持的槽位列表,格式如："slot1,slot2,...",
@@ -67,7 +67,7 @@ xs:time
         </xs:complexType>
     </xs:element>
     
-    <xs:complexType name="baseSkin">
+    <xs:complexType name="skinBase">
         <xs:complexContent>
             <xs:extension base="base">
                 <xs:attribute name="icon" ref="icon" use="required" />
@@ -132,7 +132,6 @@ xs:time
                 <xs:attribute ref="mat" use="optional" />
                 <xs:attribute ref="total" use="optional" />
                 <xs:attribute ref="tradeInfos" use="optional" />
-                <!--<xs:attribute name="cost" ref="cost" use="optional" />-->
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>

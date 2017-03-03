@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://editor.huliqing.name'
+    xsi:schemaLocation='http://editor.huliqing.name meta.xsd'>
+    
+    <data name="itemBase" extends="base">
+        <field name="icon" converter="FileConverter">
+            <feature name="filters" value="Images|*.jpg|*.jpeg|*.png,All Files|*.*" />
+        </field>
+        <field name="checkEl" converter="TextConverter" />
+        <field name="effects" converter="TextConverter" />
+        <field name="sounds" converter="TextConverter" />
+        <field name="total" converter="IntegerTextConverter" />
+        <field name="tradeInfos" converter="TextConverter" />
+        <field name="deletable" converter="CheckBoxConverter" />
+        <field name="sellable" converter="CheckBoxConverter" />
+        <field name="localObject" converter="CheckBoxConverter" />
+    </data>
+
+    <data name="itemAttribute" extends="itemBase">
+        <field name="attribute" converter="IntegerTextConverter" />
+        <field name="amount" converter="FloatTextConverter" />
+    </data>
+
+    <data name="itemBook" extends="itemBase">
+        <field name="skill" converter="TextConverter" />
+    </data>
+
+    <data name="itemMap" extends="itemBase">
+        <field name="image" converter="FileConverter">
+            <feature name="filters" value="Images|*.jpg|*.jpeg|*.png,All Files|*.*" />
+        </field>
+        <field name="locations" converter="TextConverter" />
+        <field name="mapSize" converter="FloatTextConverter" />
+        <field name="mapAlpha" converter="FloatTextConverter" />
+        <field name="locationIcon" converter="FileConverter">
+            <feature name="filters" value="Images|*.jpg|*.jpeg|*.png,All Files|*.*" />
+        </field>
+        <field name="locationSize" converter="FloatTextConverter" />
+        <field name="baseIconPath" converter="TextConverter" />
+        <field name="flipVertical" converter="CheckBoxConverter" />
+    </data>
+
+    <data name="itemSimple" extends="itemBase">
+    </data>
+
+    <data name="itemSkill" extends="itemBase">
+        <field name="skill" converter="TextConverter" />
+    </data>
+    
+    <data name="itemState" extends="itemBase">
+        <field name="states" converter="TextConverter" />
+    </data>
+    
+    <data name="itemStateRemove" extends="itemBase">
+        <field name="states" converter="TextConverter" />
+    </data>
+    
+    <data name="itemSummon" extends="itemBase">
+        <field name="actorId" converter="TextConverter" />
+        <field name="summonTotal" converter="IntegerTextConverter" />
+        <field name="copyAttributesFromSource" converter="TextConverter" />
+        <field name="linkAttributesToSource" converter="TextConverter" />
+    </data>
+    
+    
+</root>

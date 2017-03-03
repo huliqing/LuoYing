@@ -36,9 +36,6 @@ import name.huliqing.luoying.xml.SimpleCloner;
 @Serializable
 public class SkillData extends ObjectData {
     
-    // 技能的执行时间，单位秒
-    private float useTime;
-
     // 技能的冷却时间,单位秒
     private float cooldown;
     
@@ -53,7 +50,6 @@ public class SkillData extends ObjectData {
     
     // 技能允许的最高等级
     private int maxLevel;
-    
     
     // 技能类型
     private long types;
@@ -75,11 +71,11 @@ public class SkillData extends ObjectData {
     }
     
     public float getUseTime() {
-        return useTime;
+        return getAsFloat("useTime", 1.0f);
     }
 
     public void setUseTime(float useTime) {
-        this.useTime = useTime;
+        setAttribute("useTime", useTime);
     }
 
     /**
@@ -262,7 +258,7 @@ public class SkillData extends ObjectData {
     public void write(JmeExporter ex) throws IOException {
         super.write(ex);
         OutputCapsule oc = ex.getCapsule(this);
-        oc.write(useTime, "useTime", 1);
+//        oc.write(useTime, "useTime", 1);
         oc.write(cooldown, "cooldown", 0);
         oc.write(weaponStateLimit, "weaponStateLimit", null);
         if (useAttributes != null) {
@@ -282,7 +278,7 @@ public class SkillData extends ObjectData {
     public void read(JmeImporter im) throws IOException {
         super.read(im);
         InputCapsule ic = im.getCapsule(this);
-        useTime = ic.readFloat("useTime", 1);
+//        useTime = ic.readFloat("useTime", 1);
         cooldown = ic.readFloat("cooldown", 0);
         weaponStateLimit = ic.readLongArray("weaponStateLimit", null);
         useAttributes = ic.readSavableArrayList("useAttributes", null);

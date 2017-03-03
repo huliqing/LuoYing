@@ -21,7 +21,7 @@ import name.huliqing.luoying.xml.Converter;
 public class LongTextConverter extends SimpleFieldConverter{
     
     private final TextField content = new TextField("");
-    private String lastValueSaved;
+    private Long lastValueSaved;
     
     public LongTextConverter() {
         // 失去焦点时更新
@@ -43,10 +43,9 @@ public class LongTextConverter extends SimpleFieldConverter{
 
     @Override
     protected void updateUI() {
-        Object propertyValue = data.getAttribute(field);
-        lastValueSaved = Converter.getAsString(propertyValue);
+        lastValueSaved = data.getAsLong(field);
         if (lastValueSaved != null) {
-            content.setText(lastValueSaved);
+            content.setText(lastValueSaved + "");
         } else {
             content.setText("");
         }
@@ -58,14 +57,26 @@ public class LongTextConverter extends SimpleFieldConverter{
     }
     
     private void updateChangedAndSave() {
-        String newValue = content.getText();
-        if (newValue != null && newValue.equals(lastValueSaved)) {
+        String newStrValue = content.getText();
+        if (newStrValue == null || newStrValue.trim().isEmpty()) {
+            if (lastValueSaved == null) {
+                return;
+            } else {
+                updateAttribute(null);
+                addUndoRedo(lastValueSaved, null);
+                lastValueSaved = null;
+                return;
+            }
+        }
+        
+        if (!Validator.isLong(newStrValue)) {
             return;
         }
-        if (newValue != null && !Validator.isLong(newValue)) {
+        
+        Long newValue = Converter.getAsLong(newStrValue);
+        if (lastValueSaved != null && lastValueSaved.longValue() == newValue.longValue()) {
             return;
         }
-        // newValue为null或为Float都可以
         updateAttribute(newValue);
         addUndoRedo(lastValueSaved, newValue);
         lastValueSaved = newValue;

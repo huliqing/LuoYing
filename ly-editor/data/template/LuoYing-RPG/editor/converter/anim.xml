@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://editor.huliqing.name'
+    xsi:schemaLocation='http://editor.huliqing.name meta.xsd'>
+    
+    <data name="animBase" extends="base">
+        <field name="debug" converter="CheckBoxConverter" />
+        <field name="useTime" converter="FloatTextConverter" />
+        <field name="speed" converter="FloatTextConverter" />
+        <field name="loop" converter="ChoiceConverter">
+            <feature name="items" value="loop,dontLoop,cycle" />
+        </field>
+        <field name="motionType" converter="ChoiceConverter">
+            <feature name="items" value="Linear,Bezier,CatmullRom" />
+        </field>
+        <field name="bezierFactor" converter="TextConverter" />
+        <field name="catmullRomFactor" converter="TextConverter" />
+    </data>
+    
+    <data name="animMove" extends="animBase">
+        <field name="startPos" converter="Vector3fConverter" />
+        <field name="startPosOffset" converter="Vector3fConverter" />
+        <field name="endPos" converter="Vector3fConverter" />
+        <field name="endPosOffset" converter="Vector3fConverter" />
+        <field name="facing" converter="CheckBoxConverter" />
+    </data>
+    
+    <data name="animCurveMove" extends="animBase">
+        <field name="waypoints" converter="TextConverter" />
+        <field name="curveTension" converter="FloatTextConverter" />
+        <field name="facePath" converter="CheckBoxConverter" />
+        <field name="rotationOffset" converter="Vector3fConverter" />
+    </data>
+    
+    <data name="animRotation" extends="animBase">
+        <field name="axis" converter="Vector3fConverter" />
+        <field name="degree" converter="FloatTextConverter" />
+        <field name="invert" converter="CheckBoxConverter" />
+        <field name="restore" converter="CheckBoxConverter" />
+    </data>
+    
+    <data name="animInterpolateRotation" extends="animBase">
+        <field name="start" converter="Vector3fConverter" />
+        <field name="end" converter="Vector3fConverter" />
+    </data>
+    
+    <data name="animRandomRotation" extends="animBase">
+        <field name="minDegree" converter="FloatTextConverter" />
+        <field name="maxDegree" converter="FloatTextConverter" />
+        <field name="axis" converter="Vector3fConverter" />
+    </data>
+    
+    <data name="animScale" extends="animBase">
+        <field name="startScale" converter="Vector3fConverter" />
+        <field name="endScale" converter="Vector3fConverter" />
+        <field name="restore" converter="CheckBoxConverter" />
+        <field name="scaleOffset" converter="Vector3fConverter" />
+    </data>
+    
+    <data name="animColor" extends="animBase">
+        <field name="startColor" converter="ColorConverter" />
+        <field name="endColor" converter="ColorConverter" />
+    </data>
+    
+</root>

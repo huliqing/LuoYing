@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://editor.huliqing.name'
+    xsi:schemaLocation='http://editor.huliqing.name meta.xsd'>
+    
+    <data name="shapeBase" extends="base">
+    </data>
+
+    <data name="shapeBox" extends="shapeBase">
+        <field name="extents" converter="Vector3fConverter" />
+    </data>
+    
+    
+    
+</root>

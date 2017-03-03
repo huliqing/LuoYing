@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://editor.huliqing.name'
+    xsi:schemaLocation='http://editor.huliqing.name meta.xsd'>
+    
+    <data name="talentBase" extends="base">
+        <field name="icon" converter="FileConverter">
+            <feature name="filters" value="Images|*.jpg|*.jpeg|*.png,All Files|*.*" />
+        </field>
+        <field name="level" converter="IntegerTextConverter" />
+        <field name="maxLevel" converter="IntegerTextConverter" />
+    </data>
+
+    <data name="talentAttribute" extends="talentBase">
+        <field name="bindAttribute" converter="TextConverter" />
+        <field name="valueLevelEl" converter="TextConverter" />
+    </data>
+    
+</root>

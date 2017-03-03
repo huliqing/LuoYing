@@ -74,7 +74,7 @@ xs:time
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="attackIntervalMax" type="xs:string" use="optional" >
+                    <xs:attribute name="attackIntervalMax" type="xs:decimal" use="optional" >
                         <xs:annotation>
                             <xs:documentation>
                                 指定用于限制角色攻击的最高时间间隔，单位秒。攻击时间间隔即两个攻击技能之间的

@@ -22,6 +22,7 @@ import name.huliqing.editor.utils.TerrainUtils;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.entity.TerrainEntity;
+import name.huliqing.luoying.object.module.ActorModule;
 import name.huliqing.luoying.object.scene.Scene;
 
 /**
@@ -158,6 +159,12 @@ public class SimpleModelEntityControlTile extends EntityControlTile<Entity> impl
         RigidBodyControl control = target.getSpatial().getControl(RigidBodyControl.class);
         if (control != null) {
             control.setPhysicsRotation(rotation);
+        }
+        // 角色类型使用的不是普通的RigidBodyControl来控制旋转。
+        // 需要通过ActorModule来旋转
+        ActorModule actorModule = target.getModuleManager().getModule(ActorModule.class);
+        if (actorModule != null) {
+            actorModule.setRotation(rotation);
         }
         target.getSpatial().setLocalRotation(rotation);
         target.updateDatas();

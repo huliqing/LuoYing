@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://editor.huliqing.name'
+    xsi:schemaLocation='http://editor.huliqing.name meta.xsd'>
+    
+    <data name="channelBase" extends="base">
+    </data>
+
+    <data name="channel" extends="channelBase">
+        <field name="fromRootBones" converter="TextConverter" />
+        <field name="toRootBones" converter="TextConverter" />
+        <field name="bones" converter="TextConverter" />
+    </data>
+    
+</root>

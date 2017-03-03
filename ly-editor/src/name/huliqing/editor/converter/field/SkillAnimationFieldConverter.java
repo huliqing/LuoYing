@@ -13,6 +13,7 @@ import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import name.huliqing.editor.constants.StyleConstants;
 import name.huliqing.editor.converter.Converter;
 import name.huliqing.editor.converter.SimpleFieldConverter;
 import name.huliqing.editor.edit.scene.SceneEdit;
@@ -42,6 +43,7 @@ public class SkillAnimationFieldConverter extends SimpleFieldConverter{
                 updateChangedAndSave();
             }
         });
+        animField.getEditor().getStyleClass().add(StyleConstants.CLASS_CORNER_ROUND_LB);
     }
     
     private void updateChangedAndSave() {

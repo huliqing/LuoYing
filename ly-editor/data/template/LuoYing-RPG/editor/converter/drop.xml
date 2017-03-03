@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://editor.huliqing.name'
+    xsi:schemaLocation='http://editor.huliqing.name meta.xsd'>
+    
+    <data name="dropBase" extends="base">
+        <field name="sounds" converter="ListDataFieldConverter" />
+    </data>
+
+    <data name="dropAttribute" extends="dropBase">
+        <field name="attribute" converter="TextConverter" />
+        <field name="valueHitEl" converter="TextConverter" />
+    </data>
+
+    <data name="dropGroup" extends="dropBase">
+        <field name="drops" converter="TextConverter" />
+    </data>
+
+    <data name="dropItem" extends="dropBase">
+        <field name="item" converter="TextConverter" />
+        <field name="count" converter="IntegerTextConverter" />
+        <field name="rate" converter="FloatTextConverter" />
+    </data>
+
+    <data name="dropSkin" extends="dropBase">
+        <field name="skin" converter="TextConverter" />
+        <field name="count" converter="IntegerTextConverter" />
+        <field name="rate" converter="FloatTextConverter" />
+    </data>
+    
+</root>

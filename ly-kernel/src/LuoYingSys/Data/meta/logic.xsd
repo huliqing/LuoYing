@@ -131,7 +131,7 @@ xs:time
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="logicBase">
-                    <xs:attribute name="value" type="xs:string" use="required">
+                    <xs:attribute name="value" type="xs:decimal" use="required">
                         <xs:annotation>
                             <xs:documentation>改变的值，该值表示每秒要改变的目标属性的值。</xs:documentation>
                         </xs:annotation>
@@ -171,26 +171,6 @@ xs:time
             </xs:complexContent>
         </xs:complexType>
     </xs:element>
-    
-    <!--remove20161121-->
-<!--    <xs:element name="logicPlayer">
-        <xs:annotation>
-            <xs:documentation>
-                针对player类型的逻辑,特别去掉了idle行为。
-            </xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="logicBase">
-                    <xs:attribute name="fightAction" type="xs:string" use="required">
-                        <xs:annotation>
-                            <xs:documentation>指定一个FightAction</xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
-                </xs:extension>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>-->
     
     <xs:element name="logicNotify">
         <xs:annotation>
@@ -341,6 +321,11 @@ xs:time
                 <xs:attribute name="enabledCheckEl" type="xs:string" use="required">
                     <xs:annotation><xs:documentation>STBooleanEl, 绑定一个el用来判断是否打开当前逻辑。</xs:documentation></xs:annotation>
                 </xs:attribute>
+                <xs:attribute name="enemyCheckEl" type="xs:string" use="required">
+                    <xs:annotation>
+                        <xs:documentation>STBooleanEl, 用于判断一个目标是否为敌人</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
                 <xs:attribute name="bindTargetAttribute" type="xs:string" use="required">
                     <xs:annotation>
                         <xs:documentation>NumberAttribute, 绑定角色的“目标”属性，这个属性存放了角色的当前目标对象的唯一id.</xs:documentation>
@@ -349,11 +334,6 @@ xs:time
                 <xs:attribute name="bindViewAttribute" type="xs:string" use="required">
                     <xs:annotation>
                         <xs:documentation>NumberAttribute, 绑定角色的视角范围属性，这个属性的值定义了角色可以看多远，决定了寻敌范围。</xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="enemyCheckEl" type="xs:string" use="required">
-                    <xs:annotation>
-                        <xs:documentation>STBooleanEl, 用于判断一个目标是否为敌人</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
             </xs:extension>

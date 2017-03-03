@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://editor.huliqing.name'
+    xsi:schemaLocation='http://editor.huliqing.name meta.xsd'>
+    
+    <data name="actionBase" extends="base" />
+    
+    <data name="actionStaticIdle" extends="actionBase">
+    </data>
+    
+    <data name="actionDynamicIdle" extends="actionBase">
+        <field name="intervalMax" converter="FloatTextConverter" />
+    </data>
+    
+    <data name="actionPatrolIdle" extends="actionBase">
+        <field name="walkPosTotal" converter="IntegerTextConverter" />
+        <field name="walkRadius" converter="FloatTextConverter" />
+        <field name="waitingTimeMax" converter="FloatTextConverter" />
+    </data>
+    
+    <data name="actionPathRun" extends="actionBase">
+        <field name="debug" converter="CheckBoxConverter" />
+    </data>
+    
+    <data name="actionSimpleRun" extends="actionBase"/>
+    
+    <data name="actionPathFollow" extends="actionBase">
+        <field name="autoFacing" converter="CheckBoxConverter" />
+        <field name="debug" converter="CheckBoxConverter" />
+    </data>
+    
+    <data name="actionDynamicFight" extends="actionBase">
+        <field name="allowFollow" converter="CheckBoxConverter" />
+        <field name="autoFacing" converter="CheckBoxConverter" />
+        <field name="autoTakeOffWeapon" converter="CheckBoxConverter" />
+        <field name="followTimeMax" converter="FloatTextConverter" />
+        <field name="fightSkillTypes" converter="TextConverter" />
+        <field name="attackIntervalAttribute" converter="TextConverter" />
+        <field name="attackIntervalMax" converter="FloatTextConverter" />
+    </data>
+    
+</root>

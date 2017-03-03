@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://editor.huliqing.name'
+    xsi:schemaLocation='http://editor.huliqing.name meta.xsd'>
+    
+    <data name="stateBase" extends="base">
+        <field name="icon" converter="FileConverter">
+            <feature name="filters" value="Images|*.jpg|*.jpeg|*.png,All Files|*.*" />
+        </field>
+        <field name="useTime" converter="FloatTextConverter" />
+        <field name="effects" converter="TextConverter" />
+        <field name="animations" converter="TextConverter" />
+        <field name="removeOnDead" converter="CheckBoxConverter" />
+        <field name="bindDeadAttribute" converter="TextConverter" />
+    </data>
+
+    <data name="stateAttributeBase" extends="stateBase">
+        <field name="bindNumberAttribute" converter="TextConverter" />
+        <field name="addValue" converter="FloatTextConverter" />
+        <field name="restore" converter="CheckBoxConverter" />
+    </data>
+
+    <data name="stateAttribute" extends="stateAttributeBase" />
+
+    <data name="stateAttributeMove" extends="stateAttributeBase">
+        <field name="moveEffect" converter="TextConverter" />
+    </data>
+
+    <data name="stateAttributeDynamic" extends="stateBase">
+        <field name="bindNumberAttribute" converter="TextConverter" />
+        <field name="addValue" converter="FloatTextConverter" />
+        <field name="interval" converter="FloatTextConverter" />
+    </data>
+
+    <data name="stateBooleanAttribute" extends="stateBase">
+        <field name="bindAttribute" converter="TextConverter" />
+        <field name="value" converter="CheckBoxConverter" />
+        <field name="restore" converter="CheckBoxConverter" />
+    </data>
+
+    <data name="stateSkillLocked" extends="stateBase">
+        <field name="lockAtSkillTypes" converter="TextConverter" />
+        <field name="lockAtFrame" converter="CheckBoxConverter" />
+        <field name="lockAllSkillTypes" converter="CheckBoxConverter" />
+        <field name="lockSkillTypes" converter="TextConverter" />
+        <field name="lockSkillIds" converter="TextConverter" />
+        <field name="lockChannels" converter="TextConverter" />
+        <field name="lockLocation" converter="CheckBoxConverter" />
+    </data>
+
+    <data name="stateClean" extends="stateBase">
+        <field name="states" converter="TextConverter" />
+    </data>
+
+    <data name="stateGroup" extends="stateBase">
+        <field name="states" converter="TextConverter" />
+    </data>
+
+    <data name="statePrivateGroup" extends="stateBase">
+        <field name="states" converter="TextConverter" />
+    </data>
+    
+    
+    
+</root>

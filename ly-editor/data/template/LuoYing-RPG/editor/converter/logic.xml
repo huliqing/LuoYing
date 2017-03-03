@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://editor.huliqing.name'
+    xsi:schemaLocation='http://editor.huliqing.name meta.xsd'>
+    
+    <data name="logicBase" extends="base">
+        <field name="interval" converter="FloatTextConverter" />
+        <field name="enabledCheckEl" converter="TextConverter"/>
+        <field name="enemyCheckEl" converter="TextConverter"/>
+        <field name="bindTargetAttribute" converter="TextConverter"/>
+        <field name="bindViewAttribute" converter="TextConverter"/>
+    </data>
+
+    <data name="logicFight" extends="logicBase">
+        <field name="fightAction" converter="TextConverter"/>
+        <field name="bindAiAttribute" converter="TextConverter"/>
+    </data>
+
+    <data name="logicFollow" extends="logicBase">
+        <field name="bindFollowAttribute" converter="TextConverter"/>
+        <field name="followAction" converter="TextConverter"/>
+        <field name="minFollow" converter="FloatTextConverter" />
+        <field name="maxFollow" converter="FloatTextConverter" />
+    </data>
+
+    <data name="logicNotify" extends="logicBase">
+        <field name="distance" converter="FloatTextConverter" />
+    </data>
+
+    <data name="logicPosition" extends="logicBase">
+        <field name="runAction" converter="TextConverter"/>
+        <field name="position" converter="Vector3fConverter" />
+        <field name="nearest" converter="FloatTextConverter" />
+    </data>
+
+    <data name="logicSearchEnemy" extends="logicBase">
+    </data>
+
+    <data name="logicDefend" extends="logicBase">
+        <field name="defendRateAttribute" converter="TextConverter" />
+        <field name="duckRateAttribute" converter="TextConverter" />
+        <field name="listenAttributes" converter="TextConverter" />
+        <field name="listenSkillTypes" converter="TextConverter" />
+        <field name="defendSkillTypes" converter="TextConverter" />
+        <field name="duckSkillTypes" converter="TextConverter" />
+    </data>
+
+    <data name="logicIdle" extends="logicBase">
+        <field name="idleSimpleAction" converter="TextConverter"/>
+        <field name="idlePatrolAction" converter="TextConverter"/>
+        <field name="patrolCheckEl" converter="TextConverter"/>
+    </data>
+    
+    <data name="logicShop" extends="logicBase">
+        <field name="items" converter="TextConverter" />
+        <field name="stockSpeed" converter="FloatTextConverter" />
+        <field name="initStock" converter="CheckBoxConverter" />
+    </data>
+    
+    <data name="logicAttributeChange" extends="logicBase">
+        <field name="value" converter="FloatTextConverter" />
+        <field name="applyAttribute" converter="TextConverter" />
+        <field name="bindFactorAttribute" converter="TextConverter"/>
+    </data>
+    
+    
+    
+</root>

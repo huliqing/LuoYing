@@ -11,6 +11,7 @@
     
     <!-- ========================================================================= -->
     <!--基本配置: 配置技能的优先级(技能标记参考: define.xml)-->
+    <!--所有带"base"后缀的按规范不能直接配置给角色，只能被用于继承。-->
     <!-- ========================================================================= -->
     
     <!--普通的idle技能-->
@@ -67,7 +68,7 @@
     <!--防守-->
     <skillDefend id="skillDefendBase" extends="skillDefendTagBase" weaponStateLimit="leftSword|rightSword,rightSword" bindSpeedAttribute="attributeAttackSpeed" bindCutTimeEndAttribute="attributeGhostRate" />
     
-    <!--及躲闪-->
+    <!--躲闪-->
     <skillDuck   id="skillDuckBase"      extends="skillDuckTagBase"     weaponStateLimit="leftSword|rightSword,rightSword" bindSpeedAttribute="attributeAttackSpeed" bindCutTimeEndAttribute="attributeGhostRate" />
     
     <!--受伤-->
@@ -77,7 +78,7 @@
     <skillDead id="skillDeadBase" extends="skillDeadTagBase" />
     
     <!--魔法:基本(非战斗魔法)-->
-    <skillShot id="skillMagicBase"        extends="skillMagicTagBase" levelEl="elSkillLevel" maxLevel="5" levelUpEl="elSkillLevelUp" bindTargetAttribute="attributeTarget" bindSpeedAttribute="attributeMagicSpeed" bindAvoidInterruptAttribute="attributeResistInterruptRate" />
+    <skillShot id="skillMagicBase" extends="skillMagicTagBase" levelEl="elSkillLevel" maxLevel="5" levelUpEl="elSkillLevelUp" bindTargetAttribute="attributeTarget" bindSpeedAttribute="attributeMagicSpeed" bindAvoidInterruptAttribute="attributeResistInterruptRate" />
     <!--魔法:BUFF类-->
     <skillShot id="skillMagicBuffBase" extends="skillMagicBase" hitDistance="35" hitEl="elSkillBuff" hitCheckEl="elSkillBuffCheck" bullets="bulletBuff" />
 
@@ -127,15 +128,54 @@
              cooldown="1" useAttributes="attributeMana|30" summonOffset="0,0.1,4.5" summonPoint="0.95" summonTime="4" effects="effectSummon|0.5" />
     
     <!-- ========================================================================= -->
-    <!--特殊配置-->
+    <!--技能分类预配置，可以被继承后再配置使用-->
     <!-- ========================================================================= -->
-    
+    <!--等待、待机技能-->
     <skillWait id="skillWait" extends="skillWaitBase" useTime="0.5" animation=""  />
+    <!--步行技能-->
     <skillWalk id="skillWalk" extends="skillWalkBase" useTime="1.0" animation="" />
+    <!--跑步技能-->
     <skillRun id="skillRun" extends="skillRunBase" useTime="1.0" animation="" />
-    <skillHurt id="skillHurtFront" extends="skillHurtBase" useTime="0.3" animation=""  hurtFace="front" />
-    <skillHurt id="skillHurtBack"  extends="skillHurtBase" useTime="0.3" animation=""  hurtFace="back" />
+    <!--受伤技能-->
+    <skillHurt id="skillHurt" extends="skillHurtBase" useTime="0.3" animation=""  hurtFace="front" />
+    <!--死亡技能-->
     <skillDead id="skillDead" extends="skillDeadBase" useTime="1" animation="" />
+    <!--通用Reset技能-->
     <skillReset id="skillReset" extends="skillResetBase" useTime="0" animation="" timePoint="1.0" />
-
+    <!--空闲技能-->
+    <skillIdle id="skillIdle" extends="skillIdleBase" useTime="1" animation="" />
+    <!--穿装备\武器时用的特殊动画技能-->
+    <skillSkin id="skillSkin" extends="skillSkinBase" />
+    <!--防守-->
+    <skillDefend id="skillDefend" extends="skillDefendBase" useTime="1" />
+    <!--躲闪-->
+    <skillDuck id="skillDuck" extends="skillDuckBase" useTime="1" />
+    <!--魔法:基本(非战斗魔法)-->
+    <skillShot id="skillMagic" extends="skillMagicBase" /> 
+    <!--魔法:BUFF类-->
+    <skillShot id="skillMagicBuff" extends="skillMagicBuffBase" /> 
+    <!--普通物理攻击：普通，一般可配置给冷兵器技能，如：刀、剑、斧、匕首、大刀、长枪...-->
+    <skillAttack id="skillFightSimpleAttack" extends="skillFightSimpleAttackBase" />
+    <!--普通物理攻击：远程，一般可配置给远程攻击兵器用的技能，如：弓箭、炮塔，枪械等远程攻击技能 -->
+    <skillShot id="skillFightSimpleAttackShot" extends="skillFightSimpleAttackShotBase" />
+    <!--普通魔法攻击：普通-->
+    <skillAttack id="skillFightSimpleMagic" extends="skillFightSimpleMagicBase" />
+    <!--普通魔法攻击：远程 -->
+    <skillShot id="skillFightSimpleMagicShot" extends="skillFightSimpleMagicShotBase" />
+    <!--普通物理技能大招：近战大招-->
+    <skillAttack id="skillFightTrickAttack" extends="skillFightTrickAttackBase" />
+    <!--普通物理技能大招：远程大招-->
+    <skillShot id="skillFightTrickAttackShot" extends="skillFightTrickAttackShotBase" />
+    <!--魔法技能大招：普通-->
+    <skillAttack id="skillFightTrickMagic" extends="skillFightTrickMagicBase" />
+    <!--魔法技能大招：远程-->
+    <skillShot id="skillFightTrickMagicShot" extends="skillFightTrickMagicShotBase"/>
+    <!--弓箭普通攻击-->
+    <skillShotBow id="skillFightSimpleAttackShotBow" extends="skillFightSimpleAttackShotBowBase" />
+    <!--弓箭特殊技能-->
+    <skillShotBow id="skillFightTrickAttackShotBow" extends="skillFightTrickAttackShotBowBase" />
+    <!--召唤技能-->
+    <skillSummon id="skillSummon" extends="skillSummonBase" />
+    <!--野兽召唤术的基本设置-->
+    <skillSummon id="skillSummonCreature" extends="skillSummonCreatureBase" />
 </root>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://editor.huliqing.name'
+    xsi:schemaLocation='http://editor.huliqing.name meta.xsd'>
+    
+    <data name="slotBase" extends="base">
+    </data>
+
+    <data name="slot" extends="slotBase">
+        <field name="bindBone" converter="TextConverter" />
+        <field name="localLocation" converter="Vector3fConverter" />
+        <field name="localRotation" converter="Vector3fConverter" />
+        <field name="localScale" converter="Vector3fConverter" />
+        <field name="hangSkills" converter="TextConverter" />
+    </data>
+    
+</root>

@@ -295,86 +295,12 @@
     
     <data name="entityGrass" extends="entityPlantBase" />
     
-    <data name="entityEffect" extends="entityModelBase" >
+    <data name="entityEffect" extends="entityModelBase">
         <feature name="hideFields" value="mat,preferUnshaded" />
-        <field name="effect" converter="DataFieldConverter" >
+        <field name="effect" converter="DataFieldConverter">
             <feature name="componentType" value="effect" />
         </field>
     </data>
     
-    <data name="actor" extends="entityModelBase">
-        <field name="file" converter="FileConverter">
-            <feature name="filters" value="Images|*.jpg|*.jpeg|*.png,All Files|*.*" />
-        </field>
-        <field name="icon" converter="FileConverter">
-            <feature name="filters" value="Images|*.jpg|*.jpeg|*.png,All Files|*.*" />
-        </field>
-        <field name="attributes" converter="EntityObjectDatasFieldConverter">
-            <feature name="dataType" value="name.huliqing.luoying.data.AttributeData" />
-            <feature name="componentType" value="attribute" />
-            <feature name="collapsed" value="true" />
-        </field>
-        <field name="channels" converter="EntityObjectDatasFieldConverter">
-            <feature name="dataType" value="name.huliqing.luoying.data.ChannelData" />
-            <feature name="componentType" value="channel" />
-            <feature name="collapsed" value="true" />
-        </field>
-        <field name="skills" converter="ActorSkillsFieldConverter">
-            <feature name="dataType" value="name.huliqing.luoying.data.SkillData" />
-            <feature name="componentType" value="skill" />
-            <feature name="collapsed" value="true" />
-        </field>
-        <field name="logics" converter="EntityObjectDatasFieldConverter">
-            <feature name="dataType" value="name.huliqing.luoying.data.LogicData" />
-            <feature name="componentType" value="logic" />
-            <feature name="collapsed" value="true" />
-        </field>
-        <field name="skinBase" converter="EntityObjectDatasFieldConverter">
-            <feature name="dataType" value="name.huliqing.luoying.data.SkinData" />
-            <feature name="componentType" value="skin" />
-            <feature name="collapsed" value="true" />
-        </field>
-        <field name="skins" converter="EntityObjectDatasFieldConverter">
-            <feature name="dataType" value="name.huliqing.luoying.data.SkinData" />
-            <feature name="componentType" value="skin" />
-            <feature name="collapsed" value="true" />
-        </field>
-        <field name="skinOutfit" converter="EntityObjectDatasFieldConverter">
-            <feature name="dataType" value="name.huliqing.luoying.data.SkinData" />
-            <feature name="componentType" value="skin" />
-            <feature name="collapsed" value="true" />
-        </field>
-        <field name="skinWeapon" converter="EntityObjectDatasFieldConverter">
-            <feature name="dataType" value="name.huliqing.luoying.data.SkinData" />
-            <feature name="componentType" value="skin" />
-            <feature name="collapsed" value="true" />
-        </field>
-        <field name="items" converter="EntityObjectDatasFieldConverter">
-            <feature name="dataType" value="name.huliqing.luoying.data.ItemData" />
-            <feature name="componentType" value="item" />
-            <feature name="collapsed" value="true" />
-        </field>
-        <field name="talents" converter="EntityObjectDatasFieldConverter">
-            <feature name="dataType" value="name.huliqing.luoying.data.TalentData" />
-            <feature name="componentType" value="talent" />
-            <feature name="collapsed" value="true" />
-        </field>
-        <field name="resists" converter="EntityObjectDatasFieldConverter">
-            <feature name="dataType" value="name.huliqing.luoying.data.ResistData" />
-            <feature name="componentType" value="resist" />
-            <feature name="collapsed" value="true" />
-        </field>
-        <field name="drops" converter="EntityObjectDatasFieldConverter">
-            <feature name="dataType" value="name.huliqing.luoying.data.DropData" />
-            <feature name="componentType" value="drop" />
-            <feature name="collapsed" value="true" />
-        </field>
-        <field name="effects" converter="EntityObjectDatasFieldConverter">
-            <feature name="dataType" value="name.huliqing.luoying.data.EffectData" />
-            <feature name="componentType" value="effect" />
-            <feature name="collapsed" value="true" />
-        </field>
-        <field name="localForward" converter="TextConverter" />
-        <field name="chat" converter="TextConverter" />
-    </data>
+    
 </root>

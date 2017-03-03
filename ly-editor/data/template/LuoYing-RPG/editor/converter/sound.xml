@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://editor.huliqing.name'
+    xsi:schemaLocation='http://editor.huliqing.name meta.xsd'>
+    
+    <data name="soundBase" extends="base">
+    </data>
+
+    <data name="sound" extends="soundBase">
+        <field name="file" converter="FileConverter">
+            <feature name="filters" value="Sounds|*.ogg|*.wav,All Files|*.*" />
+        </field>
+        <field name="type" converter="ChoiceConverter">
+            <feature name="items" value="Buffer,Stream" />
+        </field>
+        <field name="directional" converter="CheckBoxConverter" />
+        <field name="direction" converter="Vector3fConverter" />
+        <field name="positional" converter="CheckBoxConverter" />
+        <field name="innerAngle" converter="FloatTextConverter" />
+        <field name="outerAngle" converter="FloatTextConverter" />
+        <field name="looping" converter="CheckBoxConverter" />
+        <field name="maxDistance" converter="FloatTextConverter" />
+        <field name="pitch" converter="FloatTextConverter" />
+        <field name="refDistance" converter="FloatTextConverter" />
+        <field name="reverbEnabled" converter="CheckBoxConverter" />
+        <field name="timeOffset" converter="FloatTextConverter" />
+        <field name="velocity" converter="Vector3fConverter" />
+        <field name="velocityFromTranslation" converter="CheckBoxConverter" />
+        <field name="volume" converter="FloatTextConverter" />
+    </data>
+    
+    
+    
+</root>

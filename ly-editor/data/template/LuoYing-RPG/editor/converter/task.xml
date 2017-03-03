@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://editor.huliqing.name'
+    xsi:schemaLocation='http://editor.huliqing.name meta.xsd'>
+    
+    <data name="taskBase" extends="base">
+        <field name="rewardItems" converter="TextConverter" />
+        <field name="rewardAttributes" converter="TextConverter" />
+    </data>
+
+    <data name="taskCollect" extends="taskBase">
+        <field name="items" converter="TextConverter" />
+        <field name="targets" converter="TextConverter" />
+        <field name="dropFactor" converter="FloatTextConverter" />
+    </data>
+    
+</root>

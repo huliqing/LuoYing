@@ -33,10 +33,6 @@ xs:time
 
                 <!--技能锁定-->
                 <xs:element ref="stateSkillLocked" />
-                
-                <!--remove20161218-->
-<!--                执行技能
-                <xs:element ref="stateSkill" />-->
 
                 <!--状态清除-->
                 <xs:element ref="stateClean" />
@@ -159,7 +155,7 @@ xs:time
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="lockSkillTypes" type="skillType" use="optional">
+                    <xs:attribute name="lockSkillTypes" type="xs:string" use="optional">
                         <xs:annotation>
                             <xs:documentation>
                                 指定要锁定的特定的技能类型列表,可以设置多个，使用半角逗号分隔，

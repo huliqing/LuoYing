@@ -21,7 +21,7 @@ import name.huliqing.luoying.xml.Converter;
 public class IntegerTextConverter extends SimpleFieldConverter{
     
     private final TextField content = new TextField("");
-    private String lastValueSaved;
+    private Integer lastValueSaved;
     
     public IntegerTextConverter() {
         // 失去焦点时更新
@@ -43,10 +43,9 @@ public class IntegerTextConverter extends SimpleFieldConverter{
 
     @Override
     protected void updateUI() {
-        Object propertyValue = data.getAttribute(field);
-        lastValueSaved = Converter.getAsString(propertyValue);
+        lastValueSaved = data.getAsInteger(field);
         if (lastValueSaved != null) {
-            content.setText(lastValueSaved);
+            content.setText(lastValueSaved + "");
         } else {
             content.setText("");
         }
@@ -58,14 +57,26 @@ public class IntegerTextConverter extends SimpleFieldConverter{
     }
     
     private void updateChangedAndSave() {
-        String newValue = content.getText();
-        if (newValue != null && newValue.equals(lastValueSaved)) {
+        String newStrValue = content.getText();
+        if (newStrValue == null || newStrValue.trim().isEmpty()) {
+            if (lastValueSaved == null) {
+                return;
+            } else {
+                updateAttribute(null);
+                addUndoRedo(lastValueSaved, null);
+                lastValueSaved = null;
+                return;
+            }
+        }
+        
+        if (!Validator.isInteger(newStrValue)) {
             return;
         }
-        if (newValue != null && !Validator.isInteger(newValue)) {
+        
+        Integer newValue = Converter.getAsInteger(newStrValue);
+        if (lastValueSaved != null && lastValueSaved.intValue() == newValue.intValue()) {
             return;
         }
-        // newValue为null或为Float都可以
         updateAttribute(newValue);
         addUndoRedo(lastValueSaved, newValue);
         lastValueSaved = newValue;

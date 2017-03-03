@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://editor.huliqing.name'
+    xsi:schemaLocation='http://editor.huliqing.name meta.xsd'>
+    
+    <data name="positionBase" extends="base">
+    </data>
+
+    <data name="positionRandomSphere" extends="positionBase">
+        <field name="center" converter="Vector3fConverter" />
+        <field name="radius" converter="FloatTextConverter" />
+    </data>
+
+    <data name="positionRandomBox" extends="positionBase">
+        <field name="min" converter="Vector3fConverter" />
+        <field name="max" converter="Vector3fConverter" />
+    </data>
+
+    <data name="positionRandomCircle" extends="positionBase">
+        <field name="plane" converter="ChoiceConverter" >
+            <feature name="items" value="xy,xz,yz" />
+        </field>
+        <field name="minRadius" converter="FloatTextConverter" />
+        <field name="maxRadius" converter="FloatTextConverter" />
+        <field name="minOffset" converter="Vector3fConverter" />
+        <field name="maxOffset" converter="Vector3fConverter" />
+        <field name="order" converter="CheckBoxConverter" />
+        <field name="orderInvert" converter="CheckBoxConverter" />
+        <field name="orderSize" converter="IntegerTextConverter" />
+        <field name="orderStartDegree" converter="FloatTextConverter" />
+    </data>
+
+    <data name="positionFixedPoint" extends="positionBase">
+        <field name="point" converter="Vector3fConverter" />
+    </data>
+
+    <data name="positionView" extends="positionBase">
+        <field name="corner" converter="ChoiceConverter" >
+            <feature name="items" value="LB,LC,LT,CB,CC,CT,RB,RC,RT" />
+        </field>
+        <field name="marginWeight" converter="TextConverter" />
+    </data>
+    
+</root>

@@ -110,8 +110,25 @@
     <component id="skillWait" type="skill" />
     <component id="skillWalk" type="skill" />
     <component id="skillRun" type="skill" />
-    <component id="skillHurtFront" type="skill" />
-    <component id="skillHurtBack" type="skill" />
+    <component id="skillHurt" type="skill" />
     <component id="skillDead" type="skill" />
     <component id="skillReset" type="skill" />
+    <component id="skillIdle" type="skill" />
+    <component id="skillSkin" type="skill" />
+    <component id="skillDefend" type="skill" />
+    <component id="skillDuck" type="skill" />
+    <component id="skillMagic" type="skill" />
+    <component id="skillMagicBuff" type="skill" />
+    <component id="skillFightSimpleAttack" type="skill" />
+    <component id="skillFightSimpleAttackShot" type="skill" />
+    <component id="skillFightSimpleMagic" type="skill" />
+    <component id="skillFightSimpleMagicShot" type="skill" />
+    <component id="skillFightTrickAttack" type="skill" />
+    <component id="skillFightTrickAttackShot" type="skill" />
+    <component id="skillFightTrickMagic" type="skill" />
+    <component id="skillFightTrickMagicShot" type="skill" />
+    <component id="skillFightSimpleAttackShotBow" type="skill" />
+    <component id="skillFightTrickAttackShotBow" type="skill" />
+    <component id="skillSummon" type="skill" />
+    <component id="skillSummonCreature" type="skill" />
 </root>

@@ -7,13 +7,24 @@
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
 }
-
+/** 特殊样式，在程序中动态添加到组件中 */
 .hv-box {
     -fx-base: darkgray;
     -fx-padding: 0;
     -fx-background-insets: 0;
     -fx-background-color: darkgray;
 }
+
+/** 左上和左下圆角化 */
+.corner-round-LB {
+    -fx-background-radius: 7 0 0 7;
+}
+/** 右上和右下圆角化 */
+.corner-round-RB {
+    -fx-background-radius: 0 7 7 0;
+}
+
+/** 组件样式 */
 
 .text-field {
     -fx-base: darkgray;
@@ -28,10 +39,13 @@
     -fx-background-radius: 7;
 }
 .combo-box .list-cell {}
-.combo-box .arrow-button {}
+.combo-box .arrow-button {
+    -fx-background-radius: 0 7 7 0;
+    -fx-pref-height: 25;
+}
 .combo-box .text-input {
     -fx-border-width: 0;
-    -fx-background-radius: 7;
+    -fx-background-radius: 7 0 0 7;
 }
 
 .choice-box {

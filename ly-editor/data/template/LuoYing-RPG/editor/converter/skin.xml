@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://editor.huliqing.name'
+    xsi:schemaLocation='http://editor.huliqing.name meta.xsd'>
+    
+    <data name="skinBase" extends="base">
+        <field name="icon" converter="FileConverter">
+            <feature name="filters" value="Images|*.jpg|*.jpeg|*.png,All Files|*.*" />
+        </field>
+        <field name="file" converter="FileConverter">
+            <feature name="filters" value="Model Files|*.j3o,All Files|*.*" />
+        </field>
+        <field name="baseSkin" converter="CheckBoxConverter" />
+        <field name="parts" converter="TextConverter" />
+        <field name="conflictParts" converter="TextConverter" />
+        <field name="bindBone" converter="TextConverter" />
+        <field name="localLocation" converter="Vector3fConverter" />
+        <field name="localRotation" converter="Vector3fConverter" />
+        <field name="localScale" converter="Vector3fConverter" />
+        <field name="applyAttributes" converter="TextConverter" />
+        <field name="checkEl" converter="TextConverter" />
+        <field name="sounds" converter="TextConverter" />
+        <field name="mat" converter="TextConverter" />
+        <field name="total" converter="IntegerTextConverter" />
+        <field name="tradeInfos" converter="TextConverter" />
+    </data>
+
+    <data name="skinOutfit" extends="skinBase">
+    </data>
+
+    <data name="skinWeapon" extends="skinBase">
+        <field name="weaponType" converter="TextConverter" />
+        <field name="slots" converter="TextConverter" />
+    </data>
+    
+    
+    
+</root>

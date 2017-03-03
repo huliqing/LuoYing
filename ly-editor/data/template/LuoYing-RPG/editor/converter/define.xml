@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://editor.huliqing.name'
+    xsi:schemaLocation='http://editor.huliqing.name meta.xsd'>
+    
+    <data name="defineBase" extends="base">
+    </data>
+
+    <data name="defineSkillType" extends="defineBase">
+        <field name="skillTypes" converter="TextConverter" />
+    </data>
+
+    <data name="defineSkinPart" extends="defineBase">
+        <field name="skinParts" converter="TextConverter" />
+    </data>
+
+    <data name="defineWeaponType" extends="defineBase">
+        <field name="weaponTypes" converter="TextConverter" />
+    </data>
+
+    <data name="defineMat" extends="defineBase">
+        <field name="mats" converter="TextConverter" />
+        <field name="collisionSounds" converter="TextConverter" />
+        <field name="collisionEffects" converter="TextConverter" />
+    </data>
+    
+    
+    
+</root>

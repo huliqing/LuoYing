@@ -460,6 +460,12 @@ public class ActorModule extends AbstractModule implements SimpleValueChangeList
         @Override
         public void setPhysicsRotation(Quaternion rotation) {
             super.setPhysicsRotation(rotation);
+            
+            TempVars tv = TempVars.get();
+            rotation.mult(localForward, tv.vect1);
+            setViewDirection(tv.vect1);
+            
+            tv.release();
         }
     }
     

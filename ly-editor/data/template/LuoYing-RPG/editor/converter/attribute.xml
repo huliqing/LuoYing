@@ -30,19 +30,13 @@
     <data name="attributeLevelFloat" extends="base">
         <field name="value" converter="FloatTextConverter" />
         <field name="level" converter="IntegerTextConverter" />
-        <field name="levelEl" converter="DataFieldConverter">
-            <feature name="dataType" value="name.huliqing.luoying.data.ElData" />
-            <feature name="componentType" value="el" />
-        </field>
+        <field name="levelEl" converter="TextConverter"/>
     </data>
     
     <data name="attributeLevelInteger" extends="base">
         <field name="value" converter="IntegerTextConverter" />
         <field name="level" converter="IntegerTextConverter" />
-        <field name="levelEl" converter="DataFieldConverter">
-            <feature name="dataType" value="name.huliqing.luoying.data.ElData" />
-            <feature name="componentType" value="el" />
-        </field>
+        <field name="levelEl" converter="TextConverter"/>
     </data>
     
     <data name="attributeLimitInteger" extends="base">

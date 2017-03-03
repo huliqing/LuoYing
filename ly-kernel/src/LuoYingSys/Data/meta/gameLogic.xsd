@@ -85,7 +85,7 @@ xs:time
     <xs:complexType name="gameLogicBase">
         <xs:complexContent>
             <xs:extension base="base">
-                <xs:attribute name="interval" type="xs:string" use="optional">
+                <xs:attribute name="interval" type="xs:decimal" use="optional">
                     <xs:annotation><xs:documentation>游戏逻辑的时间间隔，单位秒，默认:"0"</xs:documentation></xs:annotation>
                 </xs:attribute>
             </xs:extension>

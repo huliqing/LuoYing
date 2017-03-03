@@ -39,26 +39,5 @@
             <feature name="collapsed" value="true" />
         </field>
     </data>
-
-    <data name="sound" extends="base" >
-        <field name="file" converter="FileConverter" />
-        <field name="type" converter="ChoiceConverter" >
-            <feature name="items" value="Buffer,Stream" />
-        </field>
-        <field name="direction" converter="Vector3fConverter" />
-        <field name="directional" converter="CheckBoxConverter" />
-        <field name="positional" converter="CheckBoxConverter" />
-        <field name="innerAngle" converter="TextConverter" />
-        <field name="outerAngle" converter="TextConverter" />
-        <field name="looping" converter="CheckBoxConverter" />
-        <field name="maxDistance" converter="TextConverter" />
-        <field name="pitch" converter="TextConverter" />
-        <field name="refDistance" converter="TextConverter" />
-        <field name="reverbEnabled" converter="CheckBoxConverter" />
-        <field name="timeOffset" converter="TextConverter" />
-        <field name="velocity" converter="Vector3fConverter" />
-        <field name="velocityFromTranslation" converter="CheckBoxConverter" />
-        <field name="volume" converter="TextConverter" />
-    </data>
     
 </root>

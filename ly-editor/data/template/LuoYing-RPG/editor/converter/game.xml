@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://editor.huliqing.name'
+    xsi:schemaLocation='http://editor.huliqing.name meta.xsd'>
+    
+    <data name="gameBase" extends="base">
+        <field name="icon" converter="FileConverter">
+            <feature name="filters" value="Images|*.jpg|*.jpeg|*.png,All Files|*.*" />
+        </field>
+        <field name="scene" converter="DataFieldConverter" >
+            <feature name="componentType" value="scene" />
+        </field>
+        <field name="guiScene" converter="DataFieldConverter">
+            <feature name="componentType" value="scene" />
+        </field>
+        <field name="gameLogics" converter="TextConverter" />
+    </data>
+
+    <data name="gameSimple" extends="gameBase" />
+    
+</root>

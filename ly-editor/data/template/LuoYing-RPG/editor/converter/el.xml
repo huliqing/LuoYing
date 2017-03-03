@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://editor.huliqing.name'
+    xsi:schemaLocation='http://editor.huliqing.name meta.xsd'>
+    
+    <data name="elBase" extends="base">
+    </data>
+
+    <data name="elCustom" extends="elBase">
+        <field name="expression" converter="TextConverter" />
+    </data>
+
+    <data name="elLNumber" extends="elBase">
+        <field name="expression" converter="TextConverter" />
+    </data>
+
+    <data name="elSBoolean" extends="elBase">
+        <field name="expression" converter="TextConverter" />
+    </data>
+
+    <data name="elSTBoolean" extends="elBase">
+        <field name="expression" converter="TextConverter" />
+    </data>
+
+    <data name="elSTNumber" extends="elBase">
+        <field name="expression" converter="TextConverter" />
+    </data>
+
+    <data name="elSkillHitNumber" extends="elBase">
+        <field name="expression" converter="TextConverter" />
+    </data>
+    
+    
+    
+</root>

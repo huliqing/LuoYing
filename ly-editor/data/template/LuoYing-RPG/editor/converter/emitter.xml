@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://editor.huliqing.name'
+    xsi:schemaLocation='http://editor.huliqing.name meta.xsd'>
+    
+    <data name="emitterBase" extends="base">
+    </data>
+
+    <data name="emitter" extends="emitterBase">
+        <field name="numParticles" converter="IntegerTextConverter" />
+        <field name="startColor" converter="ColorConverter" />
+        <field name="endColor" converter="ColorConverter" />
+        <field name="startSize" converter="FloatTextConverter" />
+        <field name="endSize" converter="FloatTextConverter" />
+        <field name="highLife" converter="FloatTextConverter" />
+        <field name="lowLife" converter="FloatTextConverter" />
+        <field name="texture" converter="FileConverter">
+            <feature name="filters" value="Images|*.jpg|*.jpeg|*.png,All Files|*.*" />
+        </field>
+        <field name="imagesX" converter="IntegerTextConverter" />
+        <field name="imagesY" converter="IntegerTextConverter" />
+        <field name="gravity" converter="Vector3fConverter" />
+        <field name="initialVelocity" converter="Vector3fConverter" />
+        <field name="velocityVariation" converter="FloatTextConverter" />
+        <field name="particlesPerSec" converter="IntegerTextConverter" />
+        <field name="randomAngle" converter="CheckBoxConverter" />
+        <field name="rotateSpeed" converter="FloatTextConverter" />
+        <field name="selectRandomImage" converter="CheckBoxConverter" />
+        <field name="faceNormal" converter="Vector3fConverter" />
+        <field name="facingVelocity" converter="CheckBoxConverter" />
+        <field name="shape" converter="DataFieldConverter">
+            <feature name="componentType" value="shape" />
+        </field>
+    </data>
+    
+    
+    
+</root>

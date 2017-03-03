@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://editor.huliqing.name'
+    xsi:schemaLocation='http://editor.huliqing.name meta.xsd'>
+    
+    <data name="gameLogicBase" extends="base">
+        <field name="interval" converter="FloatTextConverter" />
+    </data>
+
+    <data name="gameLogicPlayerDeadChecker" extends="gameLogicBase">
+    </data>
+
+    <data name="gameLogicActorClean" extends="gameLogicBase">
+        <field name="checkEl" converter="TextConverter" />
+        <field name="deathDelay" converter="FloatTextConverter" />
+    </data>
+
+    <data name="gameLogicAttributeChange" extends="gameLogicBase">
+        <field name="checkEl" converter="TextConverter" />
+        <field name="applyAttribute" converter="TextConverter" />
+        <field name="bindFactorAttribute" converter="TextConverter" />
+        <field name="baseValue" converter="FloatTextConverter" />
+        <field name="speed" converter="FloatTextConverter" />
+    </data>
+    
+    
+</root>

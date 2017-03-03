@@ -81,7 +81,7 @@ xs:time
         <xs:complexContent>
             <xs:extension base="base">
                 <xs:attribute ref="icon" />
-                <xs:attribute name="value" type="xs:string" use="required">
+                <xs:attribute name="value" type="xs:decimal" use="required">
                     <xs:annotation>
                         <xs:documentation>抗性值, 该参数取值范围为："0.0~1.0"</xs:documentation>
                     </xs:annotation>

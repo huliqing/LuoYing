@@ -30,7 +30,7 @@
                     <xs:attribute name="mask" type="xs:string" use="required">
                         <xs:annotation>
                             <xs:documentation>
-                                拖尾遮罩
+                                拖尾遮罩贴图
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
@@ -92,36 +92,6 @@
             </xs:complexContent>
         </xs:complexType>
     </xs:element>
-    
-    <xs:complexType name="bulletCurveBase">
-        <xs:complexContent>
-            <xs:extension base="bulletPathBase">
-                <xs:attribute name="tension" type="xs:string" use="optional">
-                    <xs:annotation>
-                        <xs:documentation>
-                            曲线张力，取值[0.0~1.0],默认0.5
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="positions" type="xs:string" use="optional">
-                    <xs:annotation>
-                        <xs:documentation>
-                            中间路径点(即不包含开始点和结束点), 关联到position.xml.
-                            这些路径点是以子弹的射击方向所在的坐标系为基准进行计算的(初始up=0,1,0)。
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="up" type="xs:string" use="optional">
-                    <xs:annotation>
-                        <xs:documentation>
-                            指定用于计算子弹坐标系的UP方向，格式"x,y,z", 该方向用于计
-                            算出子弹的坐标系。默认"0,1,0"
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
 
     <xs:element name="bulletStraight">
         <xs:annotation>
@@ -155,6 +125,36 @@
             </xs:complexContent>
         </xs:complexType>
     </xs:element>
+    
+    <xs:complexType name="bulletCurveBase">
+        <xs:complexContent>
+            <xs:extension base="bulletPathBase">
+                <xs:attribute name="tension" type="xs:decimal" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            曲线张力，取值[0.0~1.0],默认0.5
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="positions" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            中间路径点(即不包含开始点和结束点), 关联到position.xml.
+                            这些路径点是以子弹的射击方向所在的坐标系为基准进行计算的(初始up=0,1,0)。
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="up" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            指定用于计算子弹坐标系的UP方向，格式"x,y,z", 该方向用于计
+                            算出子弹的坐标系。默认"0,1,0"
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
     
     <xs:complexType name="bulletPathBase">
         <xs:annotation>

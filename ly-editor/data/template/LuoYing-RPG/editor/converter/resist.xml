@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://editor.huliqing.name'
+    xsi:schemaLocation='http://editor.huliqing.name meta.xsd'>
+    
+    <data name="resistBase" extends="base">
+        <field name="icon" converter="FileConverter">
+            <feature name="filters" value="Images|*.jpg|*.jpeg|*.png,All Files|*.*" />
+        </field>
+        <field name="value" converter="FloatTextConverter" />
+    </data>
+
+    <data name="resistSimple" extends="resistBase">
+        <field name="states" converter="TextConverter" />
+    </data>
+
+    <data name="resistAll" extends="resistBase">
+        <field name="excepts" converter="TextConverter" />
+    </data>
+
+    <data name="resistGroup" extends="resistBase">
+        <field name="resists" converter="TextConverter" />
+    </data>
+    
+</root>

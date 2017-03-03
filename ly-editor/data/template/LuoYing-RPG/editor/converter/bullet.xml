@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://editor.huliqing.name'
+    xsi:schemaLocation='http://editor.huliqing.name meta.xsd'>
+    
+    <data name="bulletBase" extends="entityModelBase">
+        <field name="debug" converter="CheckBoxConverter" />
+        <field name="shape" converter="TextConverter" />
+        <field name="shapeOffset" converter="Vector3fConverter" />
+        <field name="timeout" converter="FloatTextConverter" />
+        <field name="effects" converter="ListDataFieldConverter" />
+        <field name="hitEffects" converter="ListDataFieldConverter" />
+        <field name="sounds" converter="ListDataFieldConverter" />
+        <field name="hitSounds" converter="ListDataFieldConverter" />
+    </data>
+    
+    <data name="bulletPathBase" extends="bulletBase">
+        <field name="baseSpeed" converter="FloatTextConverter" />
+        <field name="facing" converter="CheckBoxConverter" />
+        <field name="trace" converter="CheckBoxConverter" />
+    </data>
+    
+    <data name="bulletCurveBase" extends="bulletPathBase">
+        <field name="tension" converter="FloatTextConverter" />
+        <field name="positions" converter="ListDataFieldConverter" />
+        <field name="up" converter="Vector3fConverter" />
+    </data>
+
+    <data name="bulletSimple" extends="bulletBase" />
+
+    <data name="bulletStraight" extends="bulletPathBase"/>
+
+    <data name="bulletCurve" extends="bulletCurveBase"/>
+
+    <data name="bulletCurveTrail" extends="bulletCurveBase">
+        <field name="mask" converter="FileConverter">
+            <feature name="filters" value="Images|*.jpg|*.jpeg|*.png,All Files|*.*" />
+        </field>
+        <field name="tex" converter="FileConverter">
+            <feature name="filters" value="Images|*.jpg|*.jpeg|*.png,All Files|*.*" />
+        </field>
+        <field name="texScale" converter="FloatTextConverter" />
+        <field name="color" converter="ColorConverter" />
+        <field name="width" converter="FloatTextConverter" />
+        <field name="dimension" converter="IntegerTextConverter" />
+        <field name="segments" converter="IntegerTextConverter" />
+    </data>
+    
+</root>
