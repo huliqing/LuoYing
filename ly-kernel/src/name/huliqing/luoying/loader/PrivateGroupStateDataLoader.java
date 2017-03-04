@@ -17,32 +17,31 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with LuoYing.  If not, see <http://www.gnu.org/licenses/>.
  */
-package name.huliqing.luoying.data;
+package name.huliqing.luoying.loader;
 
-import com.jme3.network.serializing.Serializable;
-import name.huliqing.luoying.xml.ObjectData;
+import java.util.ArrayList;
+import java.util.List;
+import name.huliqing.luoying.data.StateData;
+import name.huliqing.luoying.object.Loader;
+import name.huliqing.luoying.xml.DataLoader;
+import name.huliqing.luoying.xml.Proto;
 
 /**
  *
  * @author huliqing
  */
-@Serializable
-public class DelayAnimData extends ObjectData{
-    
-    public AnimData getAnimData() {
-        return getAsObjectData("animData");
-    }
+public class PrivateGroupStateDataLoader implements DataLoader<StateData> {
 
-    public void setAnimData(AnimData animData) {
-        setAttribute("animData", animData);
-    }
-
-    public float getDelayTime() {
-        return getAsFloat("delayTime", 0);
-    }
-
-    public void setDelayTime(float delayTime) {
-        setAttribute("delayTime", delayTime);
+    @Override
+    public void load(Proto proto, StateData data) {
+        String[] stateArr = proto.getAsArray("states");
+        if (stateArr != null) {
+            List<StateData> stateDatas = new ArrayList(stateArr.length);
+            for (int i = 0; i < stateArr.length; i++) {
+                stateDatas.add((StateData) Loader.loadData(stateArr[i]));
+            }
+            data.setAttributeSavableList("states", stateDatas);
+        }
     }
     
 }

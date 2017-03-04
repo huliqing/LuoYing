@@ -38,6 +38,11 @@ public class Vector4fAttribute extends AbstractAttribute<Vector4f> {
             value = new Vector4f();
         }
     }
+    
+    @Override
+    public void updateDatas() {
+        data.setAttribute(ATTR_VALUE, value);
+    }
 
     @Override
     protected boolean doSetValue(Vector4f newValue) {

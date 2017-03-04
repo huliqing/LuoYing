@@ -33,6 +33,10 @@ public class TalentData extends ObjectData {
         return getAsString("icon");
     }
     
+    public void setIcon(String icon) {
+        setAttribute("icon", icon);
+    }
+    
     public int getMaxLevel() {
         return getAsInteger("maxLevel", 10);
     }
@@ -42,7 +46,7 @@ public class TalentData extends ObjectData {
     }
     
     public int getLevel() {
-        return getAsInteger("level", 0);
+        return getAsInteger("level", 1);
     }
 
     public void setLevel(int level) {

@@ -23,7 +23,6 @@ import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;
 import com.jme3.export.OutputCapsule;
-import com.jme3.export.Savable;
 import com.jme3.network.serializing.Serializable;
 import java.io.IOException;
 import name.huliqing.luoying.LuoYingException;
@@ -35,7 +34,7 @@ import name.huliqing.luoying.LuoYingException;
  * @see BinaryInputCapsule#readString(byte[])
  */
 @Serializable
-public final class SavableString implements Savable, Cloneable{
+public final class SavableString extends SavableWrap<String> {
 
     private String value;
     
@@ -45,6 +44,7 @@ public final class SavableString implements Savable, Cloneable{
         this.value = value;
     }
     
+    @Override
     public String getValue() {
         return value;
     }

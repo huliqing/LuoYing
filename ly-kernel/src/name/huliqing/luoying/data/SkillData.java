@@ -36,20 +36,11 @@ import name.huliqing.luoying.xml.SimpleCloner;
 @Serializable
 public class SkillData extends ObjectData {
     
-    // 技能的冷却时间,单位秒
-    private float cooldown;
-    
     // 武器状态限制
     private long[] weaponStateLimit;
     
     // 定义当前技能需要消耗的角色的属性值
     private List<AttributeUse> useAttributes;
-    
-    // 技能等级
-    private int level;
-    
-    // 技能允许的最高等级
-    private int maxLevel;
     
     // 技能类型
     private long types;
@@ -57,37 +48,113 @@ public class SkillData extends ObjectData {
     private long overlapTypes;
     // 例外的，在排除优先级比较的前提下，如果一个技能可以打断另一个技能，则不需要比较优先级。
     private long interruptTypes;
-    // 技能的优先级,优先级高的可以打断优先级低的技能
-    private int prior;
-    
-    // 技能点数（技能熟练度），每次执行技能该值会递增，并经验公式来判断是否升级技能。
-    private int playCount;
-    
-    // 最近一次使用技能的时间,用于判断技能冷却限制
-    private long lastPlayTime;
     
     public String getIcon() {
         return getAsString("icon");
+    }
+    
+    public void setIcon(String icon) {
+        setAttribute("icon", icon);
     }
     
     public float getUseTime() {
         return getAsFloat("useTime", 1.0f);
     }
 
+    /**
+     * 设置技能的使用时间
+     * @param useTime 
+     */
     public void setUseTime(float useTime) {
         setAttribute("useTime", useTime);
     }
 
+    public float getCooldown() {
+        return getAsFloat("cooldown", 0);
+    }
+    
     /**
-     * 获取技能的冷却时间，单位秒
+     * 设置技能的冷却时间，单位秒
+     * @param cooldown 
+     */
+    public void setCooldown(float cooldown) {
+        setAttribute("cooldown", cooldown);
+    }
+    
+     /**
+     * 获取技能的当前等级
      * @return 
      */
-    public float getCooldown() {
-        return cooldown;
+    public int getLevel() {
+        return getAsInteger("level", 1);
     }
 
-    public void setCooldown(float cooldown) {
-        this.cooldown = cooldown;
+    /**
+     * 设置技能的当前等级
+     * @param level 
+     */
+    public void setLevel(int level) {
+        setAttribute("level", level);
+    }
+
+    /**
+     * 获取技能可以升级的最高等级限制
+     * @return 
+     */
+    public int getMaxLevel() {
+        return getAsInteger("maxLevel", 1);
+    }
+
+    /**
+     * 设置技能可以升级的最高等级限制
+     * @param maxLevel 
+     */
+    public void setMaxLevel(int maxLevel) {
+        setAttribute("maxLevel", maxLevel);
+    }
+    
+    /**
+     * 获取技能的执行次数
+     * @return 
+     */
+    public int getPlayCount() {
+        return getAsInteger("playCount", 0);
+    }
+
+    /**
+     * 设置技能的执行次数
+     * @param playCount 
+     */
+    public void setPlayCount(int playCount) {
+        setAttribute("playCount", playCount);
+    }
+    
+    /**
+     * 获取技能的优先级
+     * @return 
+     */
+    public int getPrior() {
+        return getAsInteger("prior", 0);
+    }
+
+    /**
+     * 技能的优先级,优先级高的可以打断优先级低的技能
+     * @param prior 
+     */
+    public void setPrior(int prior) {
+        setAttribute("prior", prior);
+    }
+    
+    public long getLastPlayTime() {
+        return getAsLong("lastPlayTime", 0);
+    }
+
+    /**
+     * 记录技能的最近一次使用时间。
+     * @param lastPlayTime 
+     */
+    public void setLastPlayTime(long lastPlayTime) {
+        setAttribute("lastPlayTime", lastPlayTime);
     }
 
     /**
@@ -122,62 +189,6 @@ public class SkillData extends ObjectData {
         this.useAttributes = useAttributes;
     }
 
-    public long getLastPlayTime() {
-        return lastPlayTime;
-    }
-
-    public void setLastPlayTime(long lastPlayTime) {
-        this.lastPlayTime = lastPlayTime;
-    }
-
-    /**
-     * 获取技能的当前等级
-     * @return 
-     */
-    public int getLevel() {
-        return level;
-    }
-
-    /**
-     * 设置技能的当前等级
-     * @param level 
-     */
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
-    /**
-     * 获取技能可以升级的最高等级限制
-     * @return 
-     */
-    public int getMaxLevel() {
-        return maxLevel;
-    }
-
-    /**
-     * 设置技能可以升级的最高等级限制
-     * @param maxLevel 
-     */
-    public void setMaxLevel(int maxLevel) {
-        this.maxLevel = maxLevel;
-    }
-    
-    /**
-     * 获取技能的执行次数
-     * @return 
-     */
-    public int getPlayCount() {
-        return playCount;
-    }
-
-    /**
-     * 设置技能的执行次数
-     * @param playCount 
-     */
-    public void setPlayCount(int playCount) {
-        this.playCount = playCount;
-    }
-        
     /**
      * 获取技能标记
      * @return 
@@ -229,21 +240,6 @@ public class SkillData extends ObjectData {
         this.interruptTypes = interruptTypes;
     }
 
-    /**
-     * 获取技能的优先级
-     * @return 
-     */
-    public int getPrior() {
-        return prior;
-    }
-
-    /**
-     * 设置技能优先级
-     * @param prior 
-     */
-    public void setPrior(int prior) {
-        this.prior = prior;
-    }
     
     @Override
     public SkillData clone() {
@@ -258,37 +254,23 @@ public class SkillData extends ObjectData {
     public void write(JmeExporter ex) throws IOException {
         super.write(ex);
         OutputCapsule oc = ex.getCapsule(this);
-//        oc.write(useTime, "useTime", 1);
-        oc.write(cooldown, "cooldown", 0);
         oc.write(weaponStateLimit, "weaponStateLimit", null);
         if (useAttributes != null) {
             oc.writeSavableArrayList(new ArrayList<AttributeUse>(useAttributes), "useAttributes", null);
         }
-        oc.write(level, "level", 1);
-        oc.write(maxLevel, "maxLevel", 1);
-        oc.write(playCount, "playCount", 0);
-        oc.write(lastPlayTime, "lastPlayTime", 0);
         oc.write(types, "types", 0);
         oc.write(overlapTypes, "overlapTypes", 0);
         oc.write(interruptTypes, "interruptTypes", 0);
-        oc.write(prior, "prior", 0);
     }
 
     @Override
     public void read(JmeImporter im) throws IOException {
         super.read(im);
         InputCapsule ic = im.getCapsule(this);
-//        useTime = ic.readFloat("useTime", 1);
-        cooldown = ic.readFloat("cooldown", 0);
         weaponStateLimit = ic.readLongArray("weaponStateLimit", null);
         useAttributes = ic.readSavableArrayList("useAttributes", null);
-        level = ic.readInt("level", 1);
-        maxLevel = ic.readInt("maxLevel", 1);
-        playCount = ic.readInt("playCount", 0);
-        lastPlayTime = ic.readLong("lastPlayTime", 0);
         types = ic.readLong("types", 0);
         overlapTypes = ic.readLong("overlapTypes", 0);
         interruptTypes = ic.readLong("interruptTypes", 0);
-        prior = ic.readInt("prior", 0);
     }
 }

@@ -26,7 +26,7 @@ import name.huliqing.luoying.object.attribute.NumberAttribute;
 
 /**
  * 改变角色属性的逻辑,一般可用来恢复角色的生命，魔法，能量之类的
- * @author huliqing
+ * @author huliqing 
  */
 public class AttributeChangeLogic extends AbstractLogic {
     

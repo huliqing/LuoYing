@@ -5,6 +5,11 @@
  */
 package game;
 
+import com.jme3.scene.UserData;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  *
  * @author huliqing
@@ -12,7 +17,12 @@ package game;
 public class Test {
     
     public static void main(String[] args) {
-        String ss = "abc";
-        System.out.println(ss == "abc");
+        String[] aa = new String[] {""};
+        Object[] bb = (Object[]) aa;
+        
+//        String[] bb = new String[] {"1s", "2s", "3s"};
+//        List aaList = Arrays.asList(aa);
+//        List bbList = Arrays.asList(bb);
+ 
     }
 }

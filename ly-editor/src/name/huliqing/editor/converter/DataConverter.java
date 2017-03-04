@@ -5,6 +5,7 @@
  */
 package name.huliqing.editor.converter;
 
+import com.jme3.export.Savable;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,7 +58,83 @@ public abstract class DataConverter<E extends JfxAbstractEdit, T extends ObjectD
     }
 
     public void updateAttribute(String property, Object value) {
-        data.setAttribute(property, value);
+        if (value == null) {
+            data.setAttribute(property, (Savable) value); // 清除掉参数值. (Savable)用于调用特定的函数
+            notifyChanged();
+            return;
+        }
+        
+        if (value instanceof Byte) {
+            data.setAttribute(property, (Byte) value);
+            
+        } else if (value instanceof Short) {
+            data.setAttribute(property, (Short) value);
+            
+        } else if (value instanceof Integer) {
+            data.setAttribute(property, (Integer) value);
+            
+        } else if (value instanceof Float) {
+            data.setAttribute(property, (Float) value);
+            
+        } else if (value instanceof Long) {
+            data.setAttribute(property, (Long) value);
+            
+        } else if (value instanceof Double) {
+            data.setAttribute(property, (Double) value);
+            
+        } else if (value instanceof Boolean) {
+            data.setAttribute(property, (Boolean) value);
+            
+        } else if (value instanceof byte[]) {
+            data.setAttribute(property, (byte[]) value);
+            
+        } else if (value instanceof short[]) {
+            data.setAttribute(property, (short[]) value);
+            
+        } else if (value instanceof int[]) {
+            data.setAttribute(property, (int[]) value);
+            
+        } else if (value instanceof float[]) {
+            data.setAttribute(property, (float[]) value);
+            
+        } else if (value instanceof long[]) {
+            data.setAttribute(property, (long[]) value);
+            
+        } else if (value instanceof double[]) {
+            data.setAttribute(property, (double[]) value);
+            
+        } else if (value instanceof boolean[]) {
+            data.setAttribute(property, (boolean[]) value);
+            
+        } else if (value instanceof Savable) {
+            data.setAttribute(property, (Savable) value);
+            
+        } else if (value instanceof String) {
+            data.setAttribute(property, (String) value);
+            
+        } else if (value instanceof String[]) {
+            data.setAttributeStringArray(property, (String[]) value);
+            
+        } else if (value instanceof List) {
+            // 列表类型目前只支持 List<String>和List<Savable>
+            List listValue = (List) value;
+            if (listValue.isEmpty()) {
+                data.setAttribute(property, (Savable) null); // 清除
+            } else {
+                Object itemObject = listValue.get(0);
+                if (itemObject instanceof String) {
+                    data.setAttributeStringList(property, listValue);
+                } else if (itemObject instanceof Savable) {
+                    data.setAttributeSavableList(property, listValue);
+                } else {
+                    throw new UnsupportedOperationException("Unsupport data type of the list! object=" + itemObject);
+                }
+            }
+            
+        } else {
+            throw new UnsupportedOperationException("Unsupport data type=" + value.getClass());
+        }
+        
         notifyChanged();
     }
 

@@ -33,6 +33,11 @@ public class StringAttribute extends SimpleAttribute<String> {
         value = data.getAsString(ATTR_VALUE, "");
     }
     
+    @Override
+    public void updateDatas() {
+        data.setAttribute(ATTR_VALUE, value);
+    }
+    
     /**
      * 设置字符串的值
      * @param newValue 不能为null.

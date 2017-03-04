@@ -28,9 +28,6 @@ import com.jme3.network.serializing.Serializable;
 @Serializable
 public class MagicData extends ModelEntityData {
     
-    // 释放魔法的源的id
-    private long source;
-    
     // 魔法所针对的特定目标
     private long[] targets;
 
@@ -39,7 +36,7 @@ public class MagicData extends ModelEntityData {
      * @return 
      */
     public long getSource() {
-        return source;
+        return getAsLong("source");
     }
 
     /**
@@ -47,7 +44,7 @@ public class MagicData extends ModelEntityData {
      * @param source 
      */
     public void setSource(long source) {
-        this.source = source;
+        setAttribute("source", source);
     }
     
     /**
@@ -66,6 +63,7 @@ public class MagicData extends ModelEntityData {
         this.targets = targets;
     }
     
+    // remove
 //    /**
 //     * 获取魔法使用的效果组，如果没有设置则返回null.
 //     * @return 

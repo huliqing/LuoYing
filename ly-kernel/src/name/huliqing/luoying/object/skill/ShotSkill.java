@@ -97,7 +97,9 @@ public class ShotSkill extends HitSkill {
         super.setData(data); 
         bullets = data.getAsArray("bullets");
         shotTimes = data.getAsFloatArray("shotTimes");
-        trueShotTimes = new float[shotTimes.length];
+        if (shotTimes != null) {
+            trueShotTimes = new float[shotTimes.length];
+        }
         // 格式, "x|y|z,x|y|z,x|y|z,..."
         String[] tempShotOffsets = data.getAsArray("shotOffsets");
         if (tempShotOffsets != null) {

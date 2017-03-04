@@ -23,54 +23,48 @@ import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;
 import com.jme3.export.OutputCapsule;
-import com.jme3.export.Savable;
 import com.jme3.network.serializing.Serializable;
 import java.io.IOException;
 import name.huliqing.luoying.LuoYingException;
-import name.huliqing.luoying.xml.SimpleCloner;
 
 /**
- * @param <T>
+ * 包装基本类型
  */
 @Serializable
-public class SavableArray<T extends Savable> extends SavableWrap<T[]> {
-    
-    private T[] list;
-    
-    public SavableArray() {}
-    
-    public SavableArray(T[] list) {
-        this.list = list;
-    }
-    
-    @Override
-    public T[] getValue() {
-        return list;
-    }
+public final class SavableInteger extends SavableWrap<Integer> {
 
+    private int value;
+    
+    public SavableInteger() {}
+
+    public SavableInteger(int value) {
+        this.value = value;
+    }
+    
     @Override
-    public SavableArray clone() {
-        try {
-            SavableArray clone = (SavableArray) super.clone();
-            clone.list = SimpleCloner.deepClone(list);
-            return clone;
-        } catch (CloneNotSupportedException e) {
-            throw new LuoYingException(e);
-        }
+    public Integer getValue() {
+        return value;
     }
     
     @Override
     public void write(JmeExporter ex) throws IOException {
         OutputCapsule oc = ex.getCapsule(this);
-        if (list != null) {
-            oc.write(list, "val", null);
-        }
+        oc.write(value, "v", 0);
     }
     
     @Override
     public void read(JmeImporter im) throws IOException {
         InputCapsule ic = im.getCapsule(this);
-        list = (T[]) ic.readSavableArray("val", null);
+        value = ic.readInt("v", 0);
     }
-
+    
+    @Override
+    public SavableInteger clone() {
+        try {
+            SavableInteger clone = (SavableInteger) super.clone();
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new LuoYingException(e);
+        }
+    }
 }

@@ -140,7 +140,7 @@ public class ShortcutManager {
             cma.setTarget(shortcut.getView());
             cma.setUseTime(0.3f);
             cma.setMotionType(AbstractAnim.MotionType.Bezier);
-            cma.setBezierFactor(new float[]{0,0,1f,1f});
+            cma.setBezierFactor(new float[]{0F,0F,1F,1F});
             cma.start();
 
             AnimNode animNode = new AnimNode(cma, true);

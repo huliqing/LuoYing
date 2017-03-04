@@ -31,8 +31,6 @@ import com.jme3.network.serializing.Serializable;
 @Serializable
 public class EmitterData extends ObjectData {
  
-    public EmitterData() {}
-
     public Integer getNumParticles() {
         return getAsInteger("numParticles");
     }

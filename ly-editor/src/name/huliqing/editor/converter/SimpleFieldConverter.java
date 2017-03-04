@@ -91,13 +91,13 @@ public abstract class SimpleFieldConverter<E extends JfxAbstractEdit, T extends 
      */
     protected abstract void updateUI();
     
-    private class JfxEditUndoRedo implements UndoRedo {
+    private class JfxEditUndoRedo<T> implements UndoRedo {
 
         private final String property;
-        private final Object before;
-        private final Object after;
+        private final T before;
+        private final T after;
         
-        public JfxEditUndoRedo(String property, Object before, Object after) {
+        public JfxEditUndoRedo(String property, T before, T after) {
             this.property = property;
             this.before = before;
             this.after = after;
@@ -105,8 +105,9 @@ public abstract class SimpleFieldConverter<E extends JfxAbstractEdit, T extends 
         
         @Override
         public void undo() {
-            data.setAttribute(property, before);
+//            data.setAttribute(property, before);
             Jfx.runOnJfx(() -> {
+                parent.updateAttribute(property, before);
                 notifyChanged();
                 updateView();
             });
@@ -114,8 +115,9 @@ public abstract class SimpleFieldConverter<E extends JfxAbstractEdit, T extends 
         
         @Override
         public void redo() {
-            data.setAttribute(property, after);
+//            data.setAttribute(property, after);
             Jfx.runOnJfx(() -> {
+                parent.updateAttribute(property, before);
                 notifyChanged();
                 updateView();
             });

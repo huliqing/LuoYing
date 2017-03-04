@@ -55,7 +55,7 @@ public class LevelModule extends AbstractModule implements ValueChangeListener{
     private String effect;
 
     // 绑定角色的等级属性，这个属性用于存放角色的等级值,当角色的等级变化后会存取在这个属性中。
-    private String bindLevelAttribute;
+    private String bindLevelAttribute; 
     // 绑定角色的经验值属性
     private String bindXpAttribute;
     // 到达下一个等级角色需要的经验值（xp）属性名称，模块在运行时会自动把下一等级需要的经验值计算后放在这个属性上。

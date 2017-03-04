@@ -46,6 +46,10 @@ public class StateData extends ObjectData {
         return getAsString("icon");
     }
     
+    public void setIcon(String icon) {
+        setAttribute("icon", icon);
+    }
+    
     /**
      * 状态的产生者，也就是说，这个状态是哪一个角色发出的, 可能为null.
      * @return 

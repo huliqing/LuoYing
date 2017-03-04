@@ -20,10 +20,9 @@
 package name.huliqing.luoying.object.state;
 
 import com.jme3.util.SafeArrayList;
-import name.huliqing.luoying.data.SavableArrayList;
+import java.util.List;
 import name.huliqing.luoying.data.StateData;
 import name.huliqing.luoying.object.Loader;
-import name.huliqing.luoying.xml.DataFactory;
 
 /**
  * 私有状态组，这个状态可以自己持有一些子状态，这些子状态由当前私自持有，并且和当前状态一起结束,对外部不可见。
@@ -32,26 +31,12 @@ import name.huliqing.luoying.xml.DataFactory;
  * @author huliqing
  */
 public class PrivateGroupState extends AbstractState {
-
-    private SavableArrayList<StateData> childStateDatas;
     
     private final SafeArrayList<State> states = new SafeArrayList<State>(State.class);
     
     @Override
     public void setData(StateData data) {
         super.setData(data);
-        // 必须先从data中获取childStateDatas，因为data有可能是从存档中读取的。
-        childStateDatas = (SavableArrayList) data.getAttribute("childStateDatas");
-        if (childStateDatas == null) {
-            String[] stateArr = data.getAsArray("states");
-            if (stateArr != null) {
-                childStateDatas = new SavableArrayList<StateData>(stateArr.length);
-                for (int i = 0; i < stateArr.length; i++) {
-                    childStateDatas.add((StateData) DataFactory.createData(stateArr[i]));
-                }
-                data.setAttribute("childStateDatas", childStateDatas);
-            }
-        }
     }
 
     @Override
@@ -65,8 +50,9 @@ public class PrivateGroupState extends AbstractState {
     @Override
     public void initialize() {
         super.initialize();
+        List<StateData> childStateDatas = data.getAsObjectDataList("states");
         if (childStateDatas != null) {
-            for (StateData stateData : childStateDatas.getList()) {
+            for (StateData stateData : childStateDatas) {
                 stateData.setResist(data.getResist());
                 stateData.setSourceActor(data.getSourceActor());
                 State state = Loader.load(stateData);

@@ -42,7 +42,7 @@ public class TaskData extends ObjectData {
      * @param completion 
      */
     public void setCompletion(boolean completion) {
-        this.setAttribute("completion", completion);
+        setAttribute("completion", completion);
     }
     
 }

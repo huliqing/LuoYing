@@ -31,9 +31,13 @@ public class LongAttribute extends NumberAttribute {
     public void setData(AttributeData data) {
         super.setData(data);
         value = data.getAsLong(ATTR_VALUE, 0L); // 0L,确保无论如何返回的值都是Long类型
-        assert value instanceof Long;
-    }    
+    }
 
+    @Override
+    public void updateDatas() {
+        data.setAttribute(ATTR_VALUE, value.longValue());
+    }
+    
     @Override
     protected boolean doSetSimpleValue(Number newValue) {
         if (value.longValue() != newValue.longValue()) {

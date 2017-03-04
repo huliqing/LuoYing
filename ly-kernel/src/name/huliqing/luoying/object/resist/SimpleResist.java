@@ -43,7 +43,7 @@ public class SimpleResist extends AbstractResist {
     @Override
     public void updateDatas() {
         if (statesChanged && states != null && states.size() > 0) {
-            data.setAttribute("states", states);
+            data.setAttributeStringList("states", states);
         }
     }
     

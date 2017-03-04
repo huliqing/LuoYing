@@ -18,7 +18,7 @@
  * along with LuoYing.  If not, see <http://www.gnu.org/licenses/>.
  */
 package name.huliqing.luoying.object.module;
-
+ 
 import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.Animation;

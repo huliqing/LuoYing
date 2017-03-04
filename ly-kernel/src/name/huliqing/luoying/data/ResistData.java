@@ -33,6 +33,10 @@ public class ResistData extends ObjectData {
         return getAsString("icon");
     }
     
+    public void setIcon(String icon) {
+        setAttribute("icon", icon);
+    }
+    
     /**
      * 获取抗性值
      * @return 

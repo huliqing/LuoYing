@@ -30,14 +30,25 @@ import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.math.Vector4f;
 import com.jme3.network.serializing.Serializable;
-import com.jme3.scene.UserData;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map.Entry;
 import name.huliqing.luoying.LuoYingException;
 import name.huliqing.luoying.data.SavableArray;
+import name.huliqing.luoying.data.SavablePrimitiveArray;
+import name.huliqing.luoying.data.SavableList;
+import name.huliqing.luoying.data.SavableBoolean;
+import name.huliqing.luoying.data.SavableByte;
+import name.huliqing.luoying.data.SavableDouble;
+import name.huliqing.luoying.data.SavableFloat;
+import name.huliqing.luoying.data.SavableInteger;
+import name.huliqing.luoying.data.SavableLong;
+import name.huliqing.luoying.data.SavableShort;
 import name.huliqing.luoying.data.SavableString;
+import name.huliqing.luoying.data.SavableStringArray;
+import name.huliqing.luoying.data.SavableStringList;
+import name.huliqing.luoying.data.SavableWrap;
 
 /**
  * 物品基类,对于运行时，所有可动态改变的参数都需要封装在Data内。
@@ -134,15 +145,8 @@ public class ObjectData implements Savable, Cloneable {
             return null;
         }
         
-        if (s instanceof UserData) {
-            return ((UserData) s).getValue();
-            
-        } else if (s instanceof SavableString) {
-            return ((SavableString)s).getValue();
-            
-        } else if (s instanceof SavableArray) {
-            return ((SavableArray)s).getValue();
-            
+        if (s instanceof SavableWrap) {
+            return ((SavableWrap)s).getValue();
         } else {
             return s;
         }
@@ -153,32 +157,81 @@ public class ObjectData implements Savable, Cloneable {
      * @param key
      * @param value 
      */
-    public void setAttribute(String key, Object value) {
-        if (value == null || value.equals("")) {
+    public void setAttribute(String key, Savable value) {
+        if (value == null) {
             if (localData != null) {
                 localData.remove(key);
                 if (localData.isEmpty()) {
                     localData = null;
                 }
             }
-        } else {
-            if (localData == null) {
-                localData = new HashMap<String, Savable>();
-            }
-            
-            if (value instanceof String) {
-                localData.put(key, new SavableString((String) value));
-                
-            } else if (value.getClass().isArray()) {
-                localData.put(key, new SavableArray(value));
-                
-            } else if (value instanceof Savable) {
-                localData.put(key, (Savable) value);
-                
-            } else {
-                localData.put(key, new UserData(UserData.getObjectType(value), value));
-            }
+            return;
+        } 
+        
+        if (localData == null) {
+            localData = new HashMap<String, Savable>();
         }
+        
+        localData.put(key, value);
+
+    }
+    
+    public void setAttribute(String key, byte value) {
+        setAttribute(key, new SavableByte(value));
+    }
+    public void setAttribute(String key, short value) {
+        setAttribute(key, new SavableShort(value));
+    }
+    public void setAttribute(String key, int value) {
+        setAttribute(key, new SavableInteger(value));
+    }
+    public void setAttribute(String key, float value) {
+        setAttribute(key, new SavableFloat(value));
+    }
+    public void setAttribute(String key, long value) {
+        setAttribute(key, new SavableLong(value));
+    }
+    public void setAttribute(String key, double value) {
+        setAttribute(key, new SavableDouble(value));
+    }
+    public void setAttribute(String key, boolean value) {
+        setAttribute(key, new SavableBoolean(value));
+    }
+    public void setAttribute(String key, byte[] value) {
+        setAttribute(key, new SavablePrimitiveArray(SavablePrimitiveArray.ARRAY_BYTE, value));
+    }
+    public void setAttribute(String key, short[] value) {
+        setAttribute(key, new SavablePrimitiveArray(SavablePrimitiveArray.ARRAY_SHORT, value));
+    }
+    public void setAttribute(String key, int[] value) {
+        setAttribute(key, new SavablePrimitiveArray(SavablePrimitiveArray.ARRAY_INTEGER, value));
+    }
+    public void setAttribute(String key, float[] value) {
+        setAttribute(key, new SavablePrimitiveArray(SavablePrimitiveArray.ARRAY_FLOAT, value));
+    }
+    public void setAttribute(String key, long[] value) {
+        setAttribute(key, new SavablePrimitiveArray(SavablePrimitiveArray.ARRAY_LONG, value));
+    }
+    public void setAttribute(String key, double[] value) {
+        setAttribute(key, new SavablePrimitiveArray(SavablePrimitiveArray.ARRAY_DOUBLE, value));
+    }
+    public void setAttribute(String key, boolean[] value) {
+        setAttribute(key, new SavablePrimitiveArray(SavablePrimitiveArray.ARRAY_BOOLEAN, value));
+    }
+    public void setAttribute(String key, String value) {
+        setAttribute(key, new SavableString(value));
+    }
+    public void setAttributeStringArray(String key, String[] value) {
+        setAttribute(key, new SavableStringArray(value));
+    }
+    public void setAttributeStringList(String key, List<String> value) {
+        setAttribute(key, new SavableStringList(value));
+    }
+    public void setAttributeSavableArray(String key, Savable[] value) {
+        setAttribute(key, new SavableArray(value));
+    }
+    public void setAttributeSavableList(String key, List<? extends Savable> value) {
+        setAttribute(key, new SavableList(value));
     }
     
     /**
@@ -262,13 +315,13 @@ public class ObjectData implements Savable, Cloneable {
      * 把参数获取为整形数组，如果没有设置该参数则返回null.
      * @param key
      * @return 
-     */
+     */ 
     public final int[] getAsIntegerArray(String key) {
         Object localValue = getAttributeFromLocal(key);
         if (localValue != null) {
             return Converter.getAsIntegerArray(localValue);
         }
-        return getProto().getAsIntegerArray(key);
+        return getProto().getAsIntegerArray(key); 
     }
     
     /**
@@ -514,12 +567,20 @@ public class ObjectData implements Savable, Cloneable {
         return getProto().getAsSavable(key);
     }
     
-    public final <T extends ObjectData> T getAsObjectData(String key) {
+    public final <T extends Savable> List<T> getAsSavableList(String key) {
         Object value = getAttributeFromLocal(key);
         if (value != null) {
-            return (T) value;
+            return (List<T>) value;
         }
-        return getProto().getAsObjectData(key);
+        return getProto().getAsSavableList(key);
+    }
+    
+    public final <T extends ObjectData> T getAsObjectData(String key) {
+        return getAsSavable(key);
+    }
+    
+    public final <T extends ObjectData> List<T> getAsObjectDataList(String key) {
+        return getAsSavableList(key);
     }
     
     /**
@@ -536,18 +597,31 @@ public class ObjectData implements Savable, Cloneable {
             // 非常重要: 这引起过一个BUG，买卖物品时,买家和卖家引用了同一个"物品数量"
             clone.localData = null; 
             
+            // remove20170305
+//            if (localData != null && !localData.isEmpty()) {
+//                Set<String> keys = localData.keySet();
+//                for (String key : keys) {
+//                    // 注：不要直接从localData中获取，因为localData中的数据是进行了包装过的。
+//                    // 调用getAttributeFromLocal可以进行自动解包,并通过setAttribute来自动再打包。
+//                    Object value = getAttributeFromLocal(key);
+//                    if (value instanceof Cloneable) {
+//                        clone.setAttribute(key, SimpleCloner.deepClone(value));
+////                        LOG.log(Level.INFO, "----=={0}, type={1}", new Object[] {value, value.getClass().getSimpleName()});
+//                    } else {
+//                        clone.setAttribute(key, value);
+////                        LOG.log(Level.INFO, "xxxx=={0}, type={1}", new Object[] {value, value.getClass().getSimpleName()});
+//                    }
+//                }
+//            }
+
             if (localData != null && !localData.isEmpty()) {
-                Set<String> keys = localData.keySet();
-                for (String key : keys) {
-                    // 注：不要直接从localData中获取，因为localData中的数据是进行了包装过的。
-                    // 调用getAttributeFromLocal可以进行自动解包,并通过setAttribute来自动再打包。
-                    Object value = getAttributeFromLocal(key);
+                clone.localData = new HashMap<String, Savable>(localData.size());
+                for (Entry<String, Savable> ks : localData.entrySet()) {
+                    Savable value = ks.getValue();
                     if (value instanceof Cloneable) {
-                        clone.setAttribute(key, SimpleCloner.deepClone(value));
-//                        LOG.log(Level.INFO, "----=={0}, type={1}", new Object[] {value, value.getClass().getSimpleName()});
+                        clone.localData.put(ks.getKey(), SimpleCloner.deepClone(value));
                     } else {
-                        clone.setAttribute(key, value);
-//                        LOG.log(Level.INFO, "xxxx=={0}, type={1}", new Object[] {value, value.getClass().getSimpleName()});
+                        clone.localData.put(ks.getKey(), ks.getValue());
                     }
                 }
             }

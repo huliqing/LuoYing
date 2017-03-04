@@ -75,7 +75,7 @@ public class StoryTreasureTask2 extends AbstractTaskStep {
     private final SkillService skillService = Factory.get(SkillService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final GameService gameService = Factory.get(GameService.class);
-    private final SceneService sceneService = Factory.get(SceneService.class);
+    private final SceneService sceneService = Factory.get(SceneService.class); 
     private final EntityService entityService = Factory.get(EntityService.class);
     
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);

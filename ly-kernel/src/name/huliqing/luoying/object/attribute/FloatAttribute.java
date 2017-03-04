@@ -37,6 +37,11 @@ public class FloatAttribute extends NumberAttribute {
     }
     
     @Override
+    public void updateDatas() {
+        data.setAttribute(ATTR_VALUE, value.floatValue());
+    }
+    
+    @Override
     protected boolean doSetSimpleValue(Number newValue) {
         if (Float.compare(value.floatValue(), newValue.floatValue()) != 0) {
             value = newValue.floatValue(); // 一定要转化为float类型。

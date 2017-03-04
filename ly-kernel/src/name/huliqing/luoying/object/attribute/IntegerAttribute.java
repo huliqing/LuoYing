@@ -32,7 +32,11 @@ public class IntegerAttribute extends NumberAttribute {
     public void setData(AttributeData data) {
         super.setData(data);
         value = data.getAsInteger(ATTR_VALUE, 0);
-        assert value instanceof Integer;
+    }
+    
+    @Override
+    public void updateDatas() {
+        data.setAttribute(ATTR_VALUE, value.intValue());
     }
     
     @Override

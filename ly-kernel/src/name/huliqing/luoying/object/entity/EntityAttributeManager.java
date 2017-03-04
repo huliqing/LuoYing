@@ -54,11 +54,7 @@ public class EntityAttributeManager extends AttributeManagerImpl {
     }
     
     public void cleanup() {
-        // 清理的时候只从store中清理即可，不要从entity.getData()中清理掉，因为
-        List<Attribute> attributes = store.getAttributes();
-        for (Attribute attr : attributes) {
-            attr.cleanup();
-        }
+        // 直接清理掉store即可
         store.clear();
     }
     

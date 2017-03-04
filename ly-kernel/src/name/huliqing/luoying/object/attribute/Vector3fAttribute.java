@@ -40,6 +40,11 @@ public class Vector3fAttribute extends AbstractAttribute<Vector3f> {
     }
     
     @Override
+    public void updateDatas() {
+        data.setAttribute(ATTR_VALUE, value);
+    }
+    
+    @Override
     protected boolean doSetValue(Vector3f newValue) {
         boolean changed = (Float.compare(value.x, newValue.x) != 0 
                 || Float.compare(value.y, newValue.y) != 0

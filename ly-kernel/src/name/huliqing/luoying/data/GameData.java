@@ -37,10 +37,6 @@ import name.huliqing.luoying.xml.SimpleCloner;
 @Serializable
 public class GameData extends ObjectData {
     
-    // 场景ID
-    private SceneData sceneData;
-    // GUI场景
-    private SceneData guiSceneData;
     // 游戏的逻辑列表
     private List<GameLogicData> gameLogicDatas;
     
@@ -54,13 +50,17 @@ public class GameData extends ObjectData {
     public String getIcon() {
         return getAsString("icon");
     }
+    
+    public void setIcon(String icon) {
+        setAttribute("icon", icon);
+    }
 
     /**
      * 获取场景数据
      * @return 
      */
     public SceneData getSceneData() {
-        return sceneData;
+        return getAsObjectData("sceneData");
     }
 
     /**
@@ -68,15 +68,15 @@ public class GameData extends ObjectData {
      * @param sceneData 
      */
     public void setSceneData(SceneData sceneData) {
-        this.sceneData = sceneData;
+        setAttribute("sceneData", sceneData);
     }
 
     public SceneData getGuiSceneData() {
-        return guiSceneData;
+        return getAsObjectData("guiSceneData");
     }
 
     public void setGuiSceneData(SceneData guiSceneData) {
-        this.guiSceneData = guiSceneData;
+        setAttribute("guiSceneData", guiSceneData);
     }
 
     /**
@@ -138,8 +138,6 @@ public class GameData extends ObjectData {
     public ObjectData clone() {
         SimpleCloner cloner = new SimpleCloner();
         GameData clone = (GameData) super.clone();
-        clone.sceneData = cloner.clone(sceneData);
-        clone.guiSceneData = cloner.clone(guiSceneData);
         clone.gameLogicDatas = cloner.clone(gameLogicDatas);
         
         if (availableActors != null) {
@@ -153,8 +151,6 @@ public class GameData extends ObjectData {
     public void write(JmeExporter ex) throws IOException {
         super.write(ex);
         OutputCapsule oc = ex.getCapsule(this);
-        oc.write(sceneData, "sceneData", null);
-        oc.write(guiSceneData, "guiSceneData", null);
         if (gameLogicDatas != null) {
             oc.writeSavableArrayList(new ArrayList<GameLogicData>(gameLogicDatas), "gameLogicDatas", null);
         }
@@ -164,8 +160,6 @@ public class GameData extends ObjectData {
     public void read(JmeImporter im) throws IOException {
         super.read(im);
         InputCapsule ic = im.getCapsule(this);
-        sceneData = (SceneData) ic.readSavable("sceneData", null);
-        guiSceneData = (SceneData) ic.readSavable("guiSceneData", null);
         gameLogicDatas = ic.readSavableArrayList("gameLogicDatas", null);
     }
 }

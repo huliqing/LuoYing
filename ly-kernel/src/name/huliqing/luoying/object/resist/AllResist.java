@@ -46,7 +46,7 @@ public class AllResist extends AbstractResist {
     @Override
     public void updateDatas() {
         if (statesChanged && excepts != null && excepts.size() > 0) {
-            data.setAttribute("excepts", excepts);
+            data.setAttributeStringList("excepts", excepts);
         }
     }
 

@@ -455,9 +455,17 @@ public class Data implements Savable {
         return (T) value;
     }
     
-    public final <T extends ObjectData> T getAsObjectData(String key) {
+    public final <T extends Savable> List<T> getAsSavableList(String key) {
         Object value = getAttribute(key);
-        return (T) value;
+        return (List<T>) value;
+    }
+    
+    public final <T extends ObjectData> T getAsObjectData(String key) {
+        return getAsSavable(key);
+    }
+    
+    public final <T extends ObjectData> List<T> getAsObjectDataList(String key) {
+        return getAsSavableList(key);
     }
     
     @Override

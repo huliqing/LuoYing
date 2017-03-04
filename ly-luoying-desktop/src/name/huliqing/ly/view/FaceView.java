@@ -429,7 +429,7 @@ public final class FaceView extends LinearLayout implements EntityDataListener{
         }
         
         public void update(float tpf) {
-            if (actor == null) return;
+            if (actor == null || !actor.isInitialized()) return;
             
             // 1.update position
             Vector3f pos = actor.getSpatial().getWorldTranslation();

@@ -19,30 +19,18 @@
  */
 package name.huliqing.luoying.data;
 
-import com.jme3.network.serializing.Serializable;
-import name.huliqing.luoying.xml.ObjectData;
+import com.jme3.export.Savable;
 
 /**
- *
- * @author huliqing
+ * 用于包装数据类型,将数据包装为Savable类型，以便进行保存.
+ * @param <T>
  */
-@Serializable
-public class DelayAnimData extends ObjectData{
+public abstract class SavableWrap<T> implements Savable, Cloneable {
     
-    public AnimData getAnimData() {
-        return getAsObjectData("animData");
-    }
-
-    public void setAnimData(AnimData animData) {
-        setAttribute("animData", animData);
-    }
-
-    public float getDelayTime() {
-        return getAsFloat("delayTime", 0);
-    }
-
-    public void setDelayTime(float delayTime) {
-        setAttribute("delayTime", delayTime);
-    }
+    /**
+     * 获取包装的值。
+     * @return 
+     */
+    public abstract T getValue();
     
 }

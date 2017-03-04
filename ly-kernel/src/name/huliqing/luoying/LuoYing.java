@@ -73,11 +73,21 @@ import name.huliqing.luoying.data.MagicData;
 import name.huliqing.luoying.data.ModelEntityData;
 import name.huliqing.luoying.data.PositionData;
 import name.huliqing.luoying.data.ResistData;
-import name.huliqing.luoying.data.SavableArrayList;
+import name.huliqing.luoying.data.SavableList;
 import name.huliqing.luoying.data.SceneData;
 import name.huliqing.luoying.data.ProgressData;
 import name.huliqing.luoying.data.SavableArray;
+import name.huliqing.luoying.data.SavablePrimitiveArray;
+import name.huliqing.luoying.data.SavableBoolean;
+import name.huliqing.luoying.data.SavableByte;
+import name.huliqing.luoying.data.SavableDouble;
+import name.huliqing.luoying.data.SavableFloat;
+import name.huliqing.luoying.data.SavableInteger;
+import name.huliqing.luoying.data.SavableLong;
+import name.huliqing.luoying.data.SavableShort;
 import name.huliqing.luoying.data.SavableString;
+import name.huliqing.luoying.data.SavableStringArray;
+import name.huliqing.luoying.data.SavableStringList;
 import name.huliqing.luoying.data.ShapeData;
 import name.huliqing.luoying.data.ShortcutData;
 import name.huliqing.luoying.data.SkillData;
@@ -241,6 +251,7 @@ import name.huliqing.luoying.loader.TalentDataLoader;
 import name.huliqing.luoying.object.task.CollectTask;
 import name.huliqing.luoying.loader.TaskDataLoader;
 import name.huliqing.luoying.loader.PlantEnvLoader;
+import name.huliqing.luoying.loader.PrivateGroupStateDataLoader;
 import name.huliqing.luoying.loader.RandomSceneDataLoader;
 import name.huliqing.luoying.log.LogFactory;
 import name.huliqing.luoying.manager.ResManager;
@@ -487,9 +498,21 @@ public class LuoYing {
         Serializer.registerClass(PositionData.class);
         Serializer.registerClass(ProgressData.class);
         Serializer.registerClass(ResistData.class);
+        
         Serializer.registerClass(SavableArray.class);
-        Serializer.registerClass(SavableArrayList.class);
+        Serializer.registerClass(SavableBoolean.class);
+        Serializer.registerClass(SavableByte.class);
+        Serializer.registerClass(SavableDouble.class);
+        Serializer.registerClass(SavableFloat.class);
+        Serializer.registerClass(SavableInteger.class);
+        Serializer.registerClass(SavableList.class);
+        Serializer.registerClass(SavableLong.class);
+        Serializer.registerClass(SavablePrimitiveArray.class);
+        Serializer.registerClass(SavableShort.class);
         Serializer.registerClass(SavableString.class);
+        Serializer.registerClass(SavableStringArray.class);
+        Serializer.registerClass(SavableStringList.class);
+        
         Serializer.registerClass(SceneData.class);
         Serializer.registerClass(ShapeData.class);
         Serializer.registerClass(ShortcutData.class);
@@ -784,7 +807,7 @@ public class LuoYing {
         DataFactory.register("stateSkillLocked", StateData.class, StateDataLoader.class, SkillLockedState.class);
         DataFactory.register("stateClean", StateData.class, StateDataLoader.class, CleanState.class);
         DataFactory.register("stateGroup", StateData.class, StateDataLoader.class, GroupState.class);
-        DataFactory.register("statePrivateGroup", StateData.class, StateDataLoader.class, PrivateGroupState.class);
+        DataFactory.register("statePrivateGroup", StateData.class, PrivateGroupStateDataLoader.class, PrivateGroupState.class);
         DataFactory.register("stateBooleanAttribute", StateData.class, StateDataLoader.class, BooleanAttributeState.class);
         
         // Talent

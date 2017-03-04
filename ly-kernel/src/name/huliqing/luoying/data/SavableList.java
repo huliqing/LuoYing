@@ -27,95 +27,33 @@ import com.jme3.export.Savable;
 import com.jme3.network.serializing.Serializable;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import name.huliqing.luoying.LuoYingException;
 import name.huliqing.luoying.xml.SimpleCloner;
 
 /**
- * SavableArrayList主要用于封装集合类型的数据为一个<b>单独的</b>Savable对象，
- * 避免ObjectData去直接设置一个集合类型的对象(由于直接向objectData设置集合类型数据时容易出现一些异常现象)<br>
- * 使用示例：
- * <code>
- * <pre>
- * SavableArrayList&lt;Savable&gt; list = new SavableArrayList&lt;Savable&gt;();
- * list.add(savable1);
- * list.add(savable2);
- * ...
- * ObjectData objectData = Loader.loadData("xxx");
- * objectData.setAttribute("savableList", list);
- * </pre>
- * </code>
- * @author huliqing
- * @param <T>
+ * SavableArrayList主要用于封装集合类型的数据为一个<b>单独的</b>Savable对象
  */
 @Serializable
-public class SavableArrayList<T extends Savable> implements Savable, Cloneable{
+public class SavableList<T extends Savable> extends SavableWrap<List<T>> {
     
     private List<T> list;
     
-    public SavableArrayList() {}
+    public SavableList() {}
     
-    public SavableArrayList(int initialCapacity) {
-        list = new ArrayList<T>(initialCapacity);
+    public SavableList(List<T> list) {
+        this.list = list;
     }
     
-    public SavableArrayList(Collection<T> c) {
-        this(c.size());
-        list.addAll(c);
-    }
-    
-    /**
-     * 向列表中添加一个数据
-     * @param object 
-     */
-    public void add(T object) {
-        if (list == null) {
-            list = new ArrayList<T>();
-        }
-        if (!list.contains(object)) {
-            list.add(object);
-        }
-    }
-    
-    /**
-     * 从列表中移除一个数据
-     * @param object
-     * @return 
-     */
-    public boolean remove(T object) {
-        return list != null && list.remove(object);
-    }
-    
-    /**
-     * 清空列表
-     */
-    public void clear() {
-        if (list != null) {
-            list.clear();
-        }
-    }
-    
-    /**
-     * 获取数据列表，可能返回null.
-     * @return 
-     */
-    public List<T> getList() {
+    @Override
+    public List<T> getValue() {
         return list;
-    }
-    
-    /**
-     * 判断列表是否为Null或者为空
-     * @return 
-     */
-    public boolean isEmpty() {
-        return list == null || list.isEmpty();
     }
 
     @Override
-    public SavableArrayList clone() {
+    public SavableList clone() {
         try {
-            SavableArrayList clone = (SavableArrayList) super.clone();
+            SavableList clone = (SavableList) super.clone();
             clone.list = SimpleCloner.deepClone(list);
             return clone;
         } catch (CloneNotSupportedException e) {
@@ -136,4 +74,5 @@ public class SavableArrayList<T extends Savable> implements Savable, Cloneable{
         InputCapsule ic = im.getCapsule(this);
         list = ic.readSavableArrayList("list", null);
     }
+
 }

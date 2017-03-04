@@ -42,4 +42,9 @@ public class BooleanAttribute extends SimpleAttribute<Boolean> {
         return false;
     }
 
+    @Override
+    public void updateDatas() {
+        data.setAttribute(ATTR_VALUE, value);
+    }
+
 }

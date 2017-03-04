@@ -45,6 +45,11 @@ public class StringListAttribute extends AbstractAttribute<List<String>> impleme
         duplication = data.getAsBoolean("duplication", duplication);
     }
     
+    @Override
+    public void updateDatas() {
+        data.setAttributeStringList(ATTR_VALUE, value);
+    }
+    
     /**
      * 设置集合，注意：新设置的集合的值将直接作为属性的新值，直接引用，并且不管集合中的元素是否发生变化。
      * 每次调用这个方法都将直接触发值变侦听器。

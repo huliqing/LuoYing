@@ -65,6 +65,14 @@ public class SkinData extends ObjectData implements TradeObject, MatObject {
     }
     
     /**
+     * 设置图标，如果没有设置则返回null.
+     * @param icon 
+     */
+    public void setIcon(String icon) {
+        setAttribute("icon", icon);
+    }
+    
+    /**
      * 获取武器类型，如果该方法返回不为null,则说明这是一把武器。
      * @return 
      * @see DefineFactory#getWeaponTypeDefine() 

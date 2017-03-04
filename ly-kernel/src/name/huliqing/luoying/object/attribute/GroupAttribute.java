@@ -55,7 +55,6 @@ public class GroupAttribute extends AbstractAttribute<Void> {
     
     @Override
     public void updateDatas() {
-        super.updateDatas();
         data.setAttribute("_attributesApplied", attributesApplied);
         data.setAttribute("_attributeAppliedIds", attributeAppliedIds);
     }  
