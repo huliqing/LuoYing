@@ -105,20 +105,16 @@ public abstract class SimpleFieldConverter<E extends JfxAbstractEdit, T extends 
         
         @Override
         public void undo() {
-//            data.setAttribute(property, before);
             Jfx.runOnJfx(() -> {
                 parent.updateAttribute(property, before);
-                notifyChanged();
                 updateView();
             });
         }
         
         @Override
         public void redo() {
-//            data.setAttribute(property, after);
             Jfx.runOnJfx(() -> {
-                parent.updateAttribute(property, before);
-                notifyChanged();
+                parent.updateAttribute(property, after);
                 updateView();
             });
         }
