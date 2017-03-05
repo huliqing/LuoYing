@@ -29,9 +29,12 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
 import com.jme3.util.TempVars;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.Config;
@@ -455,8 +458,7 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
 
         // wait,walk,run,jump,idle,hurt,dead,reset,defend,duck,fight,attack,trick,magic,skin
         // 过滤掉的，不需要显示的技能消息
-        private final long filterSkillType = skillService.convertSkillTypes(
-                "wait", "walk", "run", "jump", "idle", "hurt", "dead", "reset", "defend", "duck", "attack", "skin");
+        private final Set<String> filters = new HashSet(Arrays.asList("wait", "walk", "run", "jump", "idle", "hurt", "dead", "reset", "defend", "duck", "attack", "skin"));
         
         @Override
         public void handle(Message message) {
@@ -474,8 +476,11 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
             ObjectData objectData = mess.getObjectData();
             // 特殊技能的获得不需要提示
             if (objectData instanceof SkillData) {
-                if ((filterSkillType & ((SkillData) objectData).getTypes()) != 0) {
-                    return;
+                SkillData skillData = (SkillData) objectData;
+                for (String type : skillData.getTypes()) {
+                    if (filters.contains(type)) {
+                        return;
+                    }
                 }
             }
             // 获得物品或装备时给一个提示音
@@ -506,8 +511,11 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
         @Override
         protected void handleSkillUseMessage(EntitySkillUseMessage message) {
             // 过滤掉一些特定的技能消息
-            if ((filterSkillType & message.getSkillData().getTypes()) != 0) {
-                return;
+            SkillData skillData = message.getSkillData();
+            for (String type : skillData.getTypes()) {
+                if (filters.contains(type)) {
+                    return;
+                }
             }
             super.handleSkillUseMessage(message);
         }

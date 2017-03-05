@@ -339,7 +339,7 @@ public class DynamicFightAction extends PathFollowAction implements FightAction,
     private List<Skill> loadFightSkill(long skillTypes, List<Skill> store) {
         List<Skill> allSkills = skillModule.getSkills();
         for (Skill fightSkill : allSkills) {
-            if ((skillTypes & fightSkill.getData().getTypes()) != 0) {
+            if ((skillTypes & fightSkill.getTypes()) != 0) {
                 // 武器类型的过滤,只有技能与当前武器相容才能添加
                 if (fightSkill.isPlayableByWeapon()) {
                     store.add(fightSkill);

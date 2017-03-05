@@ -28,7 +28,6 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.LogicData;
 import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.layer.network.EntityNetwork;
-import name.huliqing.luoying.layer.network.SkillNetwork;
 import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.object.actor.Actor;
@@ -53,7 +52,6 @@ public class DefendLogic extends AbstractLogic implements EntityDataListener, Sk
     
     private final SkillService skillService = Factory.get(SkillService.class);
     private final EntityService entityService = Factory.get(EntityService.class);
-    private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
     private ActorModule actorModule;
     private SkillModule skillModule;
@@ -232,7 +230,7 @@ public class DefendLogic extends AbstractLogic implements EntityDataListener, Sk
             return;
         
         // 不是所侦听的技能(只有listenSkillTypes所指定的技能类型才需要防守或躲闪 )
-        if ((listenSkillTypes & skill.getData().getTypes()) == 0) 
+        if ((listenSkillTypes & skill.getTypes()) == 0) 
             return;
         
         // 2.正常防守,只有普通攻击技能才允许防守

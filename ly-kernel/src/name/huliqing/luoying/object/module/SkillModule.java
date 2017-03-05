@@ -185,9 +185,9 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
                 playingSkillTypes = 0;
                 playingPriorMax = Integer.MIN_VALUE;
                 for (Skill playSkill : playingSkills.getArray()) {
-                    playingSkillTypes |= playSkill.getData().getTypes();
-                    if (playSkill.getData().getPrior() > playingPriorMax) {
-                        playingPriorMax = playSkill.getData().getPrior();
+                    playingSkillTypes |= playSkill.getTypes();
+                    if (playSkill.getPrior() > playingPriorMax) {
+                        playingPriorMax = playSkill.getPrior();
                     }
                     playSkill.restoreAnimation();
                 }
@@ -270,10 +270,8 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
             skill.setActor(entity);
         }
         
-        SkillData skillData = skill.getData();
-        
         // 如果技能被锁定中，则不能执行
-        if (isLockedSkillTypes(skillData.getTypes())) {
+        if (isLockedSkillTypes(skill.getTypes())) {
             return StateCode.SKILL_USE_FAILURE_LOCKED;
         }
         
@@ -294,7 +292,7 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
         }
         
         // 技能优先级较高可以直接运行
-        if (skillData.getPrior() > playingPriorMax) {
+        if (skill.getPrior() > playingPriorMax) {
             return StateCode.SKILL_USE_OK;
         }
         
@@ -302,10 +300,10 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
         // 则不需要再判断技能优先级如果其中有任何一个即不能被覆盖，并且也不能被打断，
         // 则需要判断技能优先级
         boolean allCanOverlapOrInterrupt = true;
-        long overlaps = skillData.getOverlapTypes();
-        long interrupts = skillData.getInterruptTypes();
+        long overlaps = skill.getOverlapTypes();
+        long interrupts = skill.getInterruptTypes();
         for (Skill runSkill : playingSkills.getArray()) {
-            if ((overlaps & runSkill.getData().getTypes()) == 0 && (interrupts & runSkill.getData().getTypes()) == 0) {
+            if ((overlaps & runSkill.getTypes()) == 0 && (interrupts & runSkill.getTypes()) == 0) {
                 allCanOverlapOrInterrupt = false;
                 break;
             }
@@ -360,15 +358,15 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
         }
         
         // 这个方法是强制执行的
-        long overlaps = newSkill.getData().getOverlapTypes();
-        long interrupts = newSkill.getData().getInterruptTypes();
+        long overlaps = newSkill.getOverlapTypes();
+        long interrupts = newSkill.getInterruptTypes();
         for (Skill playSkill : playingSkills.getArray()) {
             // 1.由newSkill指定的要覆盖的，则优先使用覆盖，即不要中断。
-            if ((overlaps & playSkill.getData().getTypes()) != 0) {
+            if ((overlaps & playSkill.getTypes()) != 0) {
                 continue;
             }
             // 2.由newSkill指定的要强制中断的，一定要中断
-            if ((interrupts & playSkill.getData().getTypes()) != 0) {
+            if ((interrupts & playSkill.getTypes()) != 0) {
                 playSkill.cleanup();
                 continue;
             }
@@ -393,10 +391,10 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
         // 记录当前正在运行的所有技能类型
         if (!playingSkills.contains(lastSkill)) {
             playingSkills.add(lastSkill);
-            playingSkillTypes |= lastSkill.getData().getTypes();
+            playingSkillTypes |= lastSkill.getTypes();
             // 更新当前playing中所有技能的最高优先级的值。
-            if (newSkill.getData().getPrior() > playingPriorMax) {
-                playingPriorMax = newSkill.getData().getPrior();
+            if (newSkill.getPrior() > playingPriorMax) {
+                playingPriorMax = newSkill.getPrior();
             }
         }
         
@@ -439,7 +437,7 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
      */
     private Skill getSkillByTypes(long skillTypes) {
         for (Skill s : skills) {
-            if ((s.getData().getTypes() & skillTypes) != 0) {
+            if ((s.getTypes() & skillTypes) != 0) {
                 return s;
             }
         }
@@ -460,7 +458,7 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
             return store;
         }
         for (Skill s : skills) {
-            if ((s.getData().getTypes() & skillTypes) != 0) {
+            if ((s.getTypes() & skillTypes) != 0) {
                 store.add(s);
             }
         }
@@ -617,7 +615,7 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
      */
     public boolean isWaiting() {
         return lastSkill == null
-                || (lastSkill.getData().getTypes() & waitSkillTypes) != 0
+                || (lastSkill.getTypes() & waitSkillTypes) != 0
                 || (playingSkillTypes & waitSkillTypes) != 0;
     }
     

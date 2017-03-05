@@ -20,6 +20,7 @@
 package name.huliqing.luoying.object.define;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -96,6 +97,13 @@ public class SkillTypeDefine extends Define {
      * @return 
      */
     public long convert(String... skillTypes) {
+        if (skillTypes == null) {
+            return 0;
+        }
+        return convert(Arrays.asList(skillTypes));
+    }
+    
+    public long convert(List<String> skillTypes) {
         long result = 0;
         if (skillTypes != null) {
             SkillType st;

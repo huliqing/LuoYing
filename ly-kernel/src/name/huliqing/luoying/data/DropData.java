@@ -41,6 +41,8 @@ public class DropData extends ObjectData {
     // 可随机掉落的物品列表
     private List<DropItem> randomItems;
 
+    public DropData() {}
+    
     @Override
     public void write(JmeExporter ex) throws IOException {
         super.write(ex);
@@ -58,8 +60,6 @@ public class DropData extends ObjectData {
         baseItems = ic.readSavableArrayList("baseItems", null);
         randomItems = ic.readSavableArrayList("randomItems", null);
     }
-    
-    public DropData() {}
 
     public List<DropItem> getBaseItems() {
         return baseItems;

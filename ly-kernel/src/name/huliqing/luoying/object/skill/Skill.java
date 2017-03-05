@@ -66,6 +66,31 @@ public interface Skill extends DataProcessor<SkillData>{
     Entity getActor();
     
     /**
+     * 技能的优先级,优先级高的可以打断优先级低的技能
+     * @return 
+     */
+    int getPrior();
+    
+    /**
+     * 获取技能类型
+     * @return 
+     */
+    long getTypes();
+    
+    /**
+     * 获取当前技能类型可以覆盖的其它技能的类型，以二进制位表示，返回的整形中每个位代表一个技能类型。
+     * @return 
+     */
+    long getOverlapTypes();
+    
+    /**
+     * 获取当前技能类型可以打断的其它技能的类型，以二进制位表示，返回的整形中
+     * 每个位代表一个技能类型。
+     * @return 
+     */
+    long getInterruptTypes();
+    
+    /**
      * 重新修复被其它技能重置的动画
      */
     void restoreAnimation();

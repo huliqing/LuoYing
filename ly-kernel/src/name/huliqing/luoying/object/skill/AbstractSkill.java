@@ -31,12 +31,14 @@ import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.data.AttributeUse;
 import name.huliqing.luoying.data.MagicData;
 import name.huliqing.luoying.data.SkillData;
+import name.huliqing.luoying.layer.service.DefineService;
 import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.manager.RandomManager;
 import name.huliqing.luoying.message.StateCode;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.actoranim.ActorAnim;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
+import name.huliqing.luoying.object.define.WeaponTypeDefine;
 import name.huliqing.luoying.object.effect.Effect;
 import name.huliqing.luoying.object.el.LNumberEl;
 import name.huliqing.luoying.object.el.SBooleanEl;
@@ -69,7 +71,9 @@ import name.huliqing.luoying.utils.MathUtils;
  */
 public abstract class AbstractSkill implements Skill {
     private static final Logger LOG = Logger.getLogger(AbstractSkill.class.getName());
+    
     private final ElService elService = Factory.get(ElService.class);
+    private final DefineService defineService = Factory.get(DefineService.class);
     private ChannelModule channelModule;
     private SkinModule skinModule;
     
@@ -89,6 +93,46 @@ public abstract class AbstractSkill implements Skill {
     
     /** 角色动画 */
     protected ActorAnimWrap[] actorAnims;
+
+    /** 技能的优先级,优先级高的可以打断优先级低的技能 */
+    private int prior;
+    
+    /** 技能类型*/
+    private long types;
+    
+    /** 例外的，在排除优先级比较的前提下，如果一个技能可以覆盖另一个技能，则不需要比较优先级。*/
+    private long overlapTypes;
+    
+    /** 例外的，在排除优先级比较的前提下，如果一个技能可以打断另一个技能，则不需要比较优先级。*/
+    private long interruptTypes;
+    
+    /** 武器类型限制：数组中的每一个值代表一组武器限制类型。 */
+    protected long[] weaponStateLimit;
+    
+    /** 让技能循环执行 */
+    protected boolean loop;
+    
+    /** 技能的等级公式，该公式与技能等级（level）可以计算出当前技能的一个等级值。*/
+    protected LNumberEl levelEl;
+    
+    /** 技能升级等级公式，该公式中的每一个等级值表示每次技能升级时需要的sp数(skill points)*/
+    protected LNumberEl levelUpEl;
+    
+    /** checkEl用于检查角色是否可以使用这个技能 */
+    protected SBooleanEl checkEl;
+    
+    /**
+     * 绑定一个角色属性，这个属性将直接控制技能的执行速度，默认技能的执行速度为1。
+     */
+    protected String bindSpeedAttribute;
+    
+    /** 绑定一个防止技能被中断的“概率”属性。*/
+    protected String bindInterruptRateAttribute;
+
+    /** 用于剪裁cutTimeEndMax的角色属性。*/
+    protected String bindCutTimeEndAttribute;
+    
+    // ---- TODO:以下参数考虑重构到: AnimationSkill.java
     
     /** 技能动画名称 */
     protected String animation;
@@ -108,20 +152,6 @@ public abstract class AbstractSkill implements Skill {
      */
     protected String[] channelLocks;
     
-    /** 让技能循环执行 */
-    protected boolean loop;
-    
-    /**
-     * 绑定一个角色属性，这个属性将直接控制技能的执行速度，默认技能的执行速度为1。
-     */
-    protected String bindSpeedAttribute;
-    
-    /** 绑定一个防止技能被中断的“概率”属性。*/
-    protected String bindInterruptRateAttribute;
-
-    /** 用于剪裁cutTimeEndMax的角色属性。*/
-    protected String bindCutTimeEndAttribute;
-    
     // 这两个参数标记useTime中可以剔除掉的<b>最高</b>时间比率.
     // 分别标记可剔除的前面和后面的时间.比如: useTime=5秒,
     // cutTimeStartMax=0.1,cutTimeEndMax=0.1, 则最高允许剔除的时间 = 5 * (0.1 + 0.1) = 1秒
@@ -132,15 +162,6 @@ public abstract class AbstractSkill implements Skill {
     // 这两个值加起来不应该超过1.0
     protected float cutTimeStartMax;
     protected float cutTimeEndMax;
-    
-    /** 技能的等级公式，该公式与技能等级（level）可以计算出当前技能的一个等级值。*/
-    protected LNumberEl levelEl;
-    
-    /** 技能升级等级公式，该公式中的每一个等级值表示每次技能升级时需要的sp数(skill points)*/
-    protected LNumberEl levelUpEl;
-    
-    /** checkEl用于检查角色是否可以使用这个技能 */
-    protected SBooleanEl checkEl;
     
     // ---- 内部参数 ----
     
@@ -245,6 +266,22 @@ public abstract class AbstractSkill implements Skill {
                 actorAnims[i] = aaw;
             }
         }
+        
+        // 格式： weaponStateLimit="rightSword,leftSword|rightSword|..." 
+        String[] wslArr = data.getAsArray("weaponStateLimit");
+        if (wslArr != null && wslArr.length > 0) {
+            weaponStateLimit = new long[wslArr.length];
+            WeaponTypeDefine wtDefine = defineService.getWeaponTypeDefine();
+            for (int i = 0; i < wslArr.length; i++) {
+                weaponStateLimit[i] = wtDefine.convert(wslArr[i].split("\\|"));
+            }
+        }
+        
+        prior = data.getAsInteger("prior", 0);
+        types = defineService.getSkillTypeDefine().convert(data.getTypes());
+        overlapTypes = defineService.getSkillTypeDefine().convert(data.getAsArray("overlapTypes"));
+        interruptTypes = defineService.getSkillTypeDefine().convert(data.getAsArray("interruptTypes"));
+        
         animation = data.getAsString("animation");
         channels = data.getAsArray("channels");
         channelLockAll = data.getAsBoolean("channelLockAll", false);
@@ -511,6 +548,26 @@ public abstract class AbstractSkill implements Skill {
         time = 0;
         initialized = false;
     }
+
+    @Override
+    public int getPrior() {
+        return prior;
+    }
+
+    @Override
+    public long getTypes() {
+        return types;
+    }
+
+    @Override
+    public long getOverlapTypes() {
+        return overlapTypes;
+    }
+
+    @Override
+    public long getInterruptTypes() {
+        return interruptTypes;
+    }
     
     @Override
     public boolean isEnd() {
@@ -571,7 +628,7 @@ public abstract class AbstractSkill implements Skill {
     @Override
     public int checkState() {
         // 武器必须取出
-        if (data.getWeaponStateLimit() != null) {
+        if (weaponStateLimit != null) {
             if (!skinModule.isWeaponTakeOn()) {
                 return StateCode.SKILL_USE_FAILURE_WEAPON_NEED_TAKE_ON;
             }            
@@ -621,11 +678,11 @@ public abstract class AbstractSkill implements Skill {
     
     @Override
     public boolean isPlayableByWeapon() {
-        if (data.getWeaponStateLimit() == null)
+        if (weaponStateLimit == null)
             return true;
         
         long weaponState = skinModule.getWeaponState();
-        for (long ws : data.getWeaponStateLimit()) {
+        for (long ws : weaponStateLimit) {
             if (ws == weaponState) {
                 return true;
             }

@@ -276,7 +276,7 @@ public class PathFollowAction extends AbstractAction implements FollowAction {
         
         // 转换到下一个路径点
         if (tempPoint != current || 
-                !skillModule.isPlayingSkill(runSkill.getData().getTypes())
+                !skillModule.isPlayingSkill(runSkill.getTypes())
                 ) {
             current = tempPoint;
             skillNetwork.playWalk(actor

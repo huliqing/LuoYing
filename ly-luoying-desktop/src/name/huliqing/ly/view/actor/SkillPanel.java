@@ -79,7 +79,7 @@ public class SkillPanel extends ListView<Skill> implements ActorPanel {
         List<Skill> allSkills = skillService.getSkills(actor);
         if (allSkills != null && !allSkills.isEmpty()) {
             for (Skill s : allSkills) {
-                if ((s.getData().getTypes() & filterSkillTypes) != 0) {
+                if ((s.getTypes() & filterSkillTypes) != 0) {
                     continue;
                 }
                 datas.add(s);
