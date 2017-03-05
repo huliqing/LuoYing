@@ -19,18 +19,11 @@
  */
 package name.huliqing.luoying.data;
 
-import com.jme3.export.InputCapsule;
-import com.jme3.export.JmeExporter;
-import com.jme3.export.JmeImporter;
-import com.jme3.export.OutputCapsule;
 import com.jme3.network.serializing.Serializable;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.data.define.MatObject;
 import name.huliqing.luoying.data.define.TradeInfo;
 import name.huliqing.luoying.data.define.TradeObject;
-import name.huliqing.luoying.xml.SimpleCloner;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
@@ -39,12 +32,6 @@ import name.huliqing.luoying.xml.ObjectData;
  */
 @Serializable
 public class SkinData extends ObjectData implements TradeObject, MatObject {
-    
-    // 物品的价值信息
-    private List<TradeInfo> tradeInfos;
-    
-    // 装备应用到目标身上时对目标属性的影响
-    private List<AttributeApply> applyAttributes;
     
     @Override
     public int getTotal() {
@@ -160,48 +147,26 @@ public class SkinData extends ObjectData implements TradeObject, MatObject {
     
     @Override
     public List<TradeInfo> getTradeInfos() {
-        return tradeInfos;
+        return getAsSavableList("tradeInfos");
     }
 
     @Override
     public void setTradeInfos(List<TradeInfo> tradeInfos) {
-        this.tradeInfos = tradeInfos;
+        setAttributeSavableList("tradeInfos", tradeInfos);
     }
     
     public List<AttributeApply> getApplyAttributes() {
-        return applyAttributes;
+        return getAsSavableList("applyAttributes");
     }
     
-    public void setApplyAttributes(ArrayList<AttributeApply> applyAttributes) {
-        this.applyAttributes = applyAttributes;
+    public void setApplyAttributes(List<AttributeApply> applyAttributes) {
+        setAttributeSavableList("applyAttributes", applyAttributes);
     }
 
     @Override
     public SkinData clone() {
         SkinData clone = (SkinData) super.clone(); 
-        SimpleCloner cloner = new SimpleCloner();
-        clone.tradeInfos = cloner.clone(tradeInfos);
-        clone.applyAttributes  = cloner.clone(applyAttributes);
         return clone;
     }
     
-    @Override
-    public void write(JmeExporter ex) throws IOException {
-        super.write(ex);
-        OutputCapsule oc = ex.getCapsule(this);
-        if (tradeInfos != null) {
-            oc.writeSavableArrayList(new ArrayList<TradeInfo>(tradeInfos), "tradeInfos", null);
-        }
-        if (applyAttributes != null) {
-            oc.writeSavableArrayList(new ArrayList<AttributeApply>(applyAttributes), "applyAttributes", null);
-        }
-    }
-    
-    @Override
-    public void read(JmeImporter im) throws IOException {
-        super.read(im);
-        InputCapsule ic = im.getCapsule(this);
-        tradeInfos = ic.readSavableArrayList("tradeInfos", null);
-        applyAttributes = ic.readSavableArrayList("applyAttributes", null);
-    }
 }

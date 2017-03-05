@@ -60,7 +60,6 @@ import name.huliqing.luoying.data.DefineData;
 import name.huliqing.luoying.data.DelayAnimData;
 import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.data.DropData;
-import name.huliqing.luoying.data.DropItem;
 import name.huliqing.luoying.data.ElData;
 import name.huliqing.luoying.data.EmitterData;
 import name.huliqing.luoying.data.EffectData;
@@ -97,7 +96,6 @@ import name.huliqing.luoying.data.SoundData;
 import name.huliqing.luoying.data.StateData;
 import name.huliqing.luoying.data.TalentData;
 import name.huliqing.luoying.data.TaskData;
-import name.huliqing.luoying.data.TradeObjectData;
 import name.huliqing.luoying.data.define.TradeInfo;
 import name.huliqing.luoying.layer.service.DefineService;
 import name.huliqing.luoying.mess.ActorPhysicsMess;
@@ -471,7 +469,6 @@ public class LuoYing {
         Serializer.registerClass(AttributeApply.class);
         Serializer.registerClass(AttributeUse.class);
         Serializer.registerClass(Data.class);
-        Serializer.registerClass(DropItem.class);
         
         Serializer.registerClass(ActionData.class);
         Serializer.registerClass(ActorData.class);
@@ -523,7 +520,6 @@ public class LuoYing {
         Serializer.registerClass(StateData.class);
         Serializer.registerClass(TalentData.class);
         Serializer.registerClass(TaskData.class);
-        Serializer.registerClass(TradeObjectData.class);
         
         // ======== 模块相关
         

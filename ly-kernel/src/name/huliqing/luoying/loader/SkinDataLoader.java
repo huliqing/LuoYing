@@ -39,6 +39,7 @@ public class SkinDataLoader implements DataLoader<SkinData> {
     public void load(Proto proto, SkinData data) {
         // 交易信息
         data.setTradeInfos(TradeObjectLoaderHelper.loadTradeInfos(proto));
+        
         // 装备属性
         String[] aaStr = proto.getAsArray("applyAttributes");
         if (aaStr != null) {

@@ -19,13 +19,7 @@
  */
 package name.huliqing.luoying.data;
 
-import com.jme3.export.InputCapsule;
-import com.jme3.export.JmeExporter;
-import com.jme3.export.JmeImporter;
-import com.jme3.export.OutputCapsule;
 import com.jme3.network.serializing.Serializable;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.data.define.TradeInfo;
 import name.huliqing.luoying.data.define.TradeObject;
@@ -37,8 +31,6 @@ import name.huliqing.luoying.xml.ObjectData;
  */
 @Serializable
 public class ItemData extends ObjectData implements TradeObject{
-    
-    private List<TradeInfo> tradeInfos;
     
     @Override
     public int getTotal() {
@@ -92,40 +84,12 @@ public class ItemData extends ObjectData implements TradeObject{
     
     @Override
     public List<TradeInfo> getTradeInfos() {
-        return tradeInfos;
+        return getAsSavableList("tradeInfos");
     }
 
     @Override
     public void setTradeInfos(List<TradeInfo> tradeInfos) {
-        this.tradeInfos = tradeInfos;
-    }
-    
-    @Override
-    public void write(JmeExporter ex) throws IOException {
-        super.write(ex);
-        OutputCapsule oc = ex.getCapsule(this);
-        if (tradeInfos != null) {
-            oc.writeSavableArrayList(new ArrayList<TradeInfo>(tradeInfos), "tradeInfos", null);
-        }
-    }
-    
-    @Override
-    public void read(JmeImporter im) throws IOException {
-        super.read(im);
-        InputCapsule ic = im.getCapsule(this);
-        tradeInfos = ic.readSavableArrayList("tradeInfos", null);
-    }
-
-    @Override
-    public ObjectData clone() {
-        ItemData newObject = (ItemData) super.clone(); 
-        if (tradeInfos != null && !tradeInfos.isEmpty()) {
-            newObject.tradeInfos = new ArrayList<TradeInfo>(tradeInfos.size());
-            for (TradeInfo ti : tradeInfos) {
-                newObject.tradeInfos.add(ti.clone());
-            }
-        }
-        return newObject;
+        setAttributeSavableList("tradeInfos", tradeInfos);
     }
     
 }

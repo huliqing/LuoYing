@@ -30,6 +30,7 @@ import name.huliqing.luoying.LuoYingException;
 import name.huliqing.luoying.xml.SimpleCloner;
 
 /**
+ * 封装Savable类型的数组
  * @param <T>
  */
 @Serializable
