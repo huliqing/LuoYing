@@ -25,6 +25,8 @@ import com.jme3.export.JmeImporter;
 import com.jme3.export.OutputCapsule;
 import com.jme3.network.serializing.Serializable;
 import java.io.IOException;
+import name.huliqing.luoying.LuoYingException;
+import name.huliqing.luoying.xml.SimpleCloner;
 
 /**
  * 默认情况下ObjectData不能直接放基本数据类型的数组，
@@ -150,5 +152,26 @@ public class SavablePrimitiveArray extends SavableWrap {
                 throw new UnsupportedOperationException("Unknown type of stored data: " + type);
         }
     }
+
+    @Override
+    public SavablePrimitiveArray clone() {
+        try {
+            SavablePrimitiveArray clone = (SavablePrimitiveArray) super.clone(); 
+            clone.value = new SimpleCloner().clone(value);
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new LuoYingException(e);
+        }
+    }
     
+    
+//    @Override
+//    public SavableShort clone() {
+//        try {
+//            SavableShort clone = (SavableShort) super.clone();
+//            return clone;
+//        } catch (CloneNotSupportedException e) {
+//            throw new LuoYingException(e);
+//        }
+//    }
 }

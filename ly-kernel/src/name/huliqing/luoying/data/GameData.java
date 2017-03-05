@@ -20,15 +20,9 @@
 package name.huliqing.luoying.data;
 
 import name.huliqing.luoying.xml.ObjectData;
-import com.jme3.export.InputCapsule;
-import com.jme3.export.JmeExporter;
-import com.jme3.export.JmeImporter;
-import com.jme3.export.OutputCapsule;
 import com.jme3.network.serializing.Serializable;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.luoying.xml.SimpleCloner;
 
 /**
  * 定义游戏的数据
@@ -36,12 +30,6 @@ import name.huliqing.luoying.xml.SimpleCloner;
  */
 @Serializable
 public class GameData extends ObjectData {
-    
-    // 游戏的逻辑列表
-    private List<GameLogicData> gameLogicDatas;
-    
-    // 游戏可选的角色列表
-    private List<String> availableActors;
     
     /**
      * 获取游戏图标，如果没有设置则返回null.
@@ -84,7 +72,7 @@ public class GameData extends ObjectData {
      * @return 
      */
     public List<GameLogicData> getGameLogicDatas() {
-        return gameLogicDatas;
+        return getAsObjectDataList("gameLogicDatas");
     }
 
     /**
@@ -92,7 +80,7 @@ public class GameData extends ObjectData {
      * @param gameLogics 
      */
     public void setGameLogicDatas(List<GameLogicData> gameLogics) {
-        this.gameLogicDatas = gameLogics;
+        setAttributeSavableList("gameLogicDatas", gameLogics);
     }
     
     /**
@@ -100,11 +88,13 @@ public class GameData extends ObjectData {
      * @param gameLogicData 
      */
     public void addGameLogicData(GameLogicData gameLogicData) {
+        List<GameLogicData> gameLogicDatas = getGameLogicDatas();
         if (gameLogicDatas == null) {
             gameLogicDatas = new ArrayList<GameLogicData>();
+            setGameLogicDatas(gameLogicDatas);
         }
         // 这里要注意：不能把null添加到gameLogicData中，这会造成在网络序列化传送过程中报NPE
-        if (gameLogicData != null && !gameLogicDatas.contains(gameLogicData)) {
+        if (!gameLogicDatas.contains(gameLogicData)) {
             gameLogicDatas.add(gameLogicData);
         }
     }
@@ -115,6 +105,7 @@ public class GameData extends ObjectData {
      * @return 
      */
     public boolean removeGameLogicData(GameLogicData gameLogicData) {
+        List<GameLogicData> gameLogicDatas = getGameLogicDatas();
         return gameLogicDatas != null && gameLogicDatas.remove(gameLogicData);
     }
 
@@ -123,7 +114,7 @@ public class GameData extends ObjectData {
      * @return 
      */
     public List<String> getAvailableActors() {
-        return availableActors;
+        return getAsStringList("availableActors");
     }
 
     /**
@@ -131,35 +122,13 @@ public class GameData extends ObjectData {
      * @param availableActors 
      */
     public void setAvailableActors(List<String> availableActors) {
-        this.availableActors = availableActors;
+        setAttributeStringList("availableActors", availableActors);
     }
 
     @Override
     public ObjectData clone() {
-        SimpleCloner cloner = new SimpleCloner();
         GameData clone = (GameData) super.clone();
-        clone.gameLogicDatas = cloner.clone(gameLogicDatas);
-        
-        if (availableActors != null) {
-            clone.availableActors = new ArrayList<String>(availableActors.size());
-            clone.availableActors.addAll(availableActors);
-        }
         return clone;
     }
     
-    @Override
-    public void write(JmeExporter ex) throws IOException {
-        super.write(ex);
-        OutputCapsule oc = ex.getCapsule(this);
-        if (gameLogicDatas != null) {
-            oc.writeSavableArrayList(new ArrayList<GameLogicData>(gameLogicDatas), "gameLogicDatas", null);
-        }
-    }
-    
-    @Override
-    public void read(JmeImporter im) throws IOException {
-        super.read(im);
-        InputCapsule ic = im.getCapsule(this);
-        gameLogicDatas = ic.readSavableArrayList("gameLogicDatas", null);
-    }
 }
