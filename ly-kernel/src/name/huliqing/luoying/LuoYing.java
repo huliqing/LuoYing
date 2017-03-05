@@ -329,6 +329,7 @@ import name.huliqing.luoying.object.state.GroupState;
 import name.huliqing.luoying.object.state.PrivateGroupState;
 import name.huliqing.luoying.serializer.ColorRGBASerializer;
 import name.huliqing.luoying.serializer.QuaternionSerializer;
+import name.huliqing.luoying.serializer.SavablePrimitiveArraySerializer;
 import name.huliqing.luoying.serializer.UserDataSerializer;
 import name.huliqing.luoying.serializer.Vector2fSerializer;
 import name.huliqing.luoying.serializer.Vector4fSerializer;
@@ -461,6 +462,7 @@ public class LuoYing {
         Serializer.registerClass(ColorRGBA.class,  new ColorRGBASerializer());
         Serializer.registerClass(UserData.class,  new UserDataSerializer());
         Serializer.registerClass(LinkedHashMap.class, new MapSerializer());
+        Serializer.registerClass(SavablePrimitiveArray.class, new SavablePrimitiveArraySerializer());
         
         // ======== 数据类型
         
@@ -504,7 +506,6 @@ public class LuoYing {
         Serializer.registerClass(SavableInteger.class);
         Serializer.registerClass(SavableList.class);
         Serializer.registerClass(SavableLong.class);
-        Serializer.registerClass(SavablePrimitiveArray.class);
         Serializer.registerClass(SavableShort.class);
         Serializer.registerClass(SavableString.class);
         Serializer.registerClass(SavableStringArray.class);

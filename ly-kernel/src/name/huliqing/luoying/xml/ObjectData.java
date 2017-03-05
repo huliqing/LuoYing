@@ -583,6 +583,10 @@ public class ObjectData implements Savable, Cloneable {
         return getAsSavableList(key);
     }
     
+    public final <T extends ObjectData> T cloneData() {
+        return (T) clone();
+    }
+    
     /**
      * 克隆ObjectData。
      * 注意：除物体的uniqueId之外，其它字段都尽量进行深度克隆。

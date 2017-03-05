@@ -38,9 +38,7 @@ public class ListDataFieldConverter extends SimpleFieldConverter {
 
     private static final Logger LOG = Logger.getLogger(ListDataFieldConverter.class.getName());
     
-    private final static String FEATURE_DATA_TYPE = "dataType";
     private final static String FEATURE_COMPONENT_TYPE = "componentType";
-    private Class<? extends ObjectData> dataType;
     private String componentType;
 
     protected ComponentSearch<ComponentDefine> componentList = new ComponentSearch();
@@ -124,15 +122,17 @@ public class ListDataFieldConverter extends SimpleFieldConverter {
     public void initialize() {
         super.initialize();
         
-        String tempDataType = featureHelper.getAsString(FEATURE_DATA_TYPE);
-        try {
-            dataType = (Class<? extends ObjectData>) Class.forName(tempDataType);
-        } catch (Exception ex) {
-            dataType = ObjectData.class;
-            LOG.log(Level.WARNING
-                    , "Unknow dataType! dataType=" + tempDataType + ", field=" + field + ", data=" + data.getId()
-                    , ex);
-        }
+        // remove
+//        String tempDataType = featureHelper.getAsString(FEATURE_DATA_TYPE);
+//        try {
+//            dataType = (Class<? extends ObjectData>) Class.forName(tempDataType);
+//        } catch (Exception ex) {
+//            dataType = ObjectData.class;
+//            LOG.log(Level.WARNING
+//                    , "Unknow dataType! dataType=" + tempDataType + ", field=" + field + ", data=" + data.getId()
+//                    , ex);
+//        }
+
         componentType = featureHelper.getAsString(FEATURE_COMPONENT_TYPE);
         if (componentType != null) {
             componentList.setComponents(ComponentManager.getComponentsByType(componentType));
@@ -148,14 +148,11 @@ public class ListDataFieldConverter extends SimpleFieldConverter {
 
     @Override
     protected void updateUI() {
-        
-        throw new UnsupportedOperationException();
-        
-//        List dataList = new ArrayList();
-//        data.setAttribute(field, data);
-//        data.getObjectDatas(dataType, dataList);
-//        listView.getItems().clear();
-//        listView.getItems().addAll(dataList);
+        List<ObjectData> listData = data.getAsObjectDataList(field);
+        listView.getItems().clear();
+        if (listData != null) {
+            listView.getItems().addAll(listData);
+        }
     }
     
     private class ObjectDataAddedUndoRedo implements UndoRedo {
@@ -165,21 +162,27 @@ public class ListDataFieldConverter extends SimpleFieldConverter {
         }
         @Override
         public void undo() {
-            throw new UnsupportedOperationException();
-//            data.removeObjectData(added);
-//            Jfx.runOnJfx(() -> {
-//                listView.getItems().remove(added);
-//                notifyChanged();
-//            });
+            List<ObjectData> listData = data.getAsObjectDataList(field);
+            if (listData != null) {
+                listData.remove(added);
+            }
+            Jfx.runOnJfx(() -> {
+                listView.getItems().remove(added);
+                notifyChanged();
+            });
         }
         @Override
         public void redo() {
-            throw new UnsupportedOperationException();
-//            data.addObjectData(added);
-//            Jfx.runOnJfx(() -> {
-//                listView.getItems().add(added);
-//                notifyChanged();
-//            });
+            List<ObjectData> listData = data.getAsObjectDataList(field);
+            if (listData == null) {
+                listData = new ArrayList();
+                data.setAttributeSavableList(field, listData);
+            }
+            listData.add(added);
+            Jfx.runOnJfx(() -> {
+                listView.getItems().add(added);
+                notifyChanged();
+            });
         }
     }
     
@@ -190,21 +193,27 @@ public class ListDataFieldConverter extends SimpleFieldConverter {
         }
         @Override
         public void undo() {
-            throw new UnsupportedOperationException();
-//            data.addObjectData(removed);
-//            Jfx.runOnJfx(() -> {
-//                listView.getItems().add(removed);
-//                notifyChanged();
-//            });
+            List<ObjectData> listData = data.getAsObjectDataList(field);
+            if (listData == null) {
+                listData = new ArrayList();
+                data.setAttributeSavableList(field, listData);
+            }
+            listData.add(removed);
+            Jfx.runOnJfx(() -> {
+                listView.getItems().add(removed);
+                notifyChanged();
+            });
         }
         @Override
         public void redo() {
-            throw new UnsupportedOperationException();
-//            data.removeObjectData(removed);
-//            Jfx.runOnJfx(() -> {
-//                listView.getItems().remove(removed);
-//                notifyChanged();
-//            });
+            List<ObjectData> listData = data.getAsObjectDataList(field);
+            if (listData != null) {
+                listData.remove(removed);
+                Jfx.runOnJfx(() -> {
+                    listView.getItems().remove(removed);
+                    notifyChanged();
+                });
+            }
         }
     }
 }

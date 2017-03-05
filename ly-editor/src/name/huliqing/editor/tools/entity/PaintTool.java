@@ -116,7 +116,7 @@ public class PaintTool extends AbstractAdjustEntityBrushTool {
             }
             
             EntityData source = sourceList.get(FastMath.nextRandomInt(0, sourceSize - 1));
-            EntityData cloneData = source.clone();
+            EntityData cloneData = source.cloneData();
             cloneData.setUniqueId(DataFactory.generateUniqueId());
             
             // location

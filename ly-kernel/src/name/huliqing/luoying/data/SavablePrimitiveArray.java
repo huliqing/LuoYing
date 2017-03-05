@@ -23,7 +23,6 @@ import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;
 import com.jme3.export.OutputCapsule;
-import com.jme3.network.serializing.Serializable;
 import java.io.IOException;
 import name.huliqing.luoying.LuoYingException;
 import name.huliqing.luoying.xml.SimpleCloner;
@@ -33,7 +32,6 @@ import name.huliqing.luoying.xml.SimpleCloner;
  * 这个类用于封装基本类型的数组为Savable，以便让ObjectData支持基本类型数组。
  * @author huliqing
  */
-@Serializable
 public class SavablePrimitiveArray extends SavableWrap {
     
     public final static byte ARRAY_BYTE = 0;
@@ -164,14 +162,4 @@ public class SavablePrimitiveArray extends SavableWrap {
         }
     }
     
-    
-//    @Override
-//    public SavableShort clone() {
-//        try {
-//            SavableShort clone = (SavableShort) super.clone();
-//            return clone;
-//        } catch (CloneNotSupportedException e) {
-//            throw new LuoYingException(e);
-//        }
-//    }
 }

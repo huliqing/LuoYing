@@ -102,7 +102,7 @@ public class SceneEdit extends SimpleJmeEdit implements SceneListener {
                 Entity source = (Entity) selectObj.getTarget();
                 source.updateDatas();
                 
-                EntityData cloneData = source.getData().clone();
+                EntityData cloneData = source.getData().cloneData();
                 cloneData.setUniqueId(DataFactory.generateUniqueId()); // 需要生成一个新的唯一ID
                 
                 EntityControlTile ectCloned = ControlTileManager.createEntityControlTile(cloneData);

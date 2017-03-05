@@ -138,7 +138,7 @@ public class EntityServiceImpl implements EntityService {
         // 注：克隆后的实体的唯一ID必须改变，否则放到场景的时候会冲突。
         // 实体内的其它物体则没有关系.
         entity.updateDatas();
-        EntityData cloneData = entity.getData().clone();
+        EntityData cloneData = (EntityData) entity.getData().clone();
         cloneData.setUniqueId(DataFactory.generateUniqueId());
         Entity clone = Loader.load(cloneData);
         return clone;

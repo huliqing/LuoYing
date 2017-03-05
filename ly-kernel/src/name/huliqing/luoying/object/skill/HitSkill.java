@@ -252,7 +252,7 @@ public abstract class HitSkill extends AbstractSkill {
         for (String mId : hitMagics) {
             MagicData md = Loader.loadData(mId);
             md.setSource(actor.getEntityId());
-            md.setTargets(target.getData().getUniqueId());
+            md.setTargets(new long[]{target.getData().getUniqueId()});
             md.setLocation(target.getSpatial().getWorldTranslation());
             Magic magic = Loader.load(md);
             target.getScene().addEntity(magic);

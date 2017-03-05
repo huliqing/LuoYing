@@ -31,7 +31,10 @@
         <field name="modules" converter="ModulesFieldConverter">
             <feature name="collapsed" value="true" />
         </field>
-        <field name="objectDatas" converter="ObjectDatasFieldConverter">
+<!--        <field name="objectDatas" converter="ObjectDatasFieldConverter">
+            <feature name="collapsed" value="true" />
+        </field>-->
+        <field name="objectDatas" converter="ListDataFieldConverter">
             <feature name="collapsed" value="true" />
         </field>
     </data>
@@ -49,9 +52,9 @@
             <feature name="items" value="Opaque,Transparent,Sky,Translucent,Gui,Inherit" />
             <feature name="collapsed" value="true" />
         </field>
-        <field name="preferUnshaded" converter="CheckBoxConverter">
+<!--        <field name="preferUnshaded" converter="CheckBoxConverter">
             <feature name="collapsed" value="true" />
-        </field>
+        </field>-->
     </data>
     
     <data name="entityPlantBase" extends="entityModelBase">

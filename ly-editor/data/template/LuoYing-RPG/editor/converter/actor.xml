@@ -32,22 +32,7 @@
             <feature name="componentType" value="logic" />
             <feature name="collapsed" value="true" />
         </field>
-        <field name="skinBase" converter="EntityObjectDatasFieldConverter">
-            <feature name="dataType" value="name.huliqing.luoying.data.SkinData" />
-            <feature name="componentType" value="skin" />
-            <feature name="collapsed" value="true" />
-        </field>
         <field name="skins" converter="EntityObjectDatasFieldConverter">
-            <feature name="dataType" value="name.huliqing.luoying.data.SkinData" />
-            <feature name="componentType" value="skin" />
-            <feature name="collapsed" value="true" />
-        </field>
-        <field name="skinOutfit" converter="EntityObjectDatasFieldConverter">
-            <feature name="dataType" value="name.huliqing.luoying.data.SkinData" />
-            <feature name="componentType" value="skin" />
-            <feature name="collapsed" value="true" />
-        </field>
-        <field name="skinWeapon" converter="EntityObjectDatasFieldConverter">
             <feature name="dataType" value="name.huliqing.luoying.data.SkinData" />
             <feature name="componentType" value="skin" />
             <feature name="collapsed" value="true" />
