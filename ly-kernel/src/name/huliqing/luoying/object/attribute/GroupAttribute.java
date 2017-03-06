@@ -19,7 +19,6 @@
  */
 package name.huliqing.luoying.object.attribute;
 
-import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.data.AttributeData;
 import name.huliqing.luoying.object.Loader;
@@ -32,31 +31,23 @@ public class GroupAttribute extends AbstractAttribute<Void> {
 
     private AttributeManager module;
     
-    // 初始配置的属性（id )
-    private String[] attributeIds;
+    // 属性组所管理的属性列表，这些属性是直接添加到实体上去的。在属性组移除时这些属性也要一起移除，需要注意的是：
+    // 属性是可以动态替换的，所以在属性组移除时需要通过唯一ID来判断哪些属性是由当前属性组管理的，只要移除这些属性就可以。
+    private List<AttributeData> attributes;
     
     // ---- inner
     // 标记着子属性是否已经添加到module上。
     private boolean attributesApplied;
     
-    // 这个参数用于记住由GroupAttribute打包并添加到module上的所有属性的唯一id.
-    // 在清理时只清理这些指定id的属性就可以。不应该使用属性id或名称，因为属性是可以在运行时替换的。
-    // GroupAttribute添加上去的属性有可能在运行时被其它相同名称的属性替换掉，对于这些则GroupAttribute不应该在退出时清理。
-    // 即只清理那些”明确的“由自己添加到模块上的属性”实例“就可以。
-    private long[] attributeAppliedIds;
-    
     @Override
     public void setData(AttributeData data) {
         super.setData(data); 
-        this.attributeIds = data.getAsArray("attributes");
-        this.attributesApplied = data.getAsBoolean("_attributesApplied", attributesApplied);
-        this.attributeAppliedIds = data.getAsLongArray("_attributeAppliedIds");
+        this.attributes = data.getAsObjectDataList("attributes");
     }
     
     @Override
     public void updateDatas() {
-        data.setAttribute("_attributesApplied", attributesApplied);
-        data.setAttribute("_attributeAppliedIds", attributeAppliedIds);
+        // ignore
     }  
     
     @Override
@@ -77,50 +68,39 @@ public class GroupAttribute extends AbstractAttribute<Void> {
         
         // 添加属性到attributeModule,注意要标记attributesApplied=true,并更新到data中去, 那么当下次从存档中载入时，
         // 就不再需要在这里载入到module中去了，因为会从attributeModule中直接载入。
-        List<Attribute> attributes = getAttributes();
-        attributeAppliedIds = new long[attributes.size()];
-        for (int i = 0; i < attributes.size(); i++) {
-            Attribute attr = attributes.get(i);
-            module.addAttribute(attr);
-            attributeAppliedIds[i] = attr.getData().getUniqueId();
+        if (attributes != null) {
+            for (AttributeData ad : attributes) {
+                if (ad.getId().equals(getId())) {
+                    continue; // 不能包含自己,以免死循环
+                }
+                Attribute attr = Loader.load(ad);
+                module.addAttribute(attr);
+            }
         }
+        
         attributesApplied = true;
     }
     
     @Override
     public void cleanup() {
         if (attributesApplied) {
-            if (attributeAppliedIds != null) {
-               Attribute attr;
-                for (long attrId : attributeAppliedIds) {
-                    attr = module.getAttribute(attrId);
-                    // 属性有可能在运行时被替换，所以当GroupAttribute清理时，
-                    // 这些由GroupAttribute添加上去的属性并不能绝对保存还存在着。
+            // 属性组移除时要一同移除组内属性，注意：只能通过唯一ID来查找(也<b>不</b>能通过相同实例比较来查找，因为attributes中的数据有可能是从存档中读取的)
+            // 属性有可能在运行时被替换，所以当GroupAttribute清理时，
+            // 这些由GroupAttribute添加上去的属性并不能绝对保存还存在着。
+            if (attributes != null) {
+                for (AttributeData ad : attributes) {
+                    Attribute attr = module.getAttribute(ad.getUniqueId());
                     if (attr != null)  {
                         module.removeAttribute(attr);
                     }
                 }
+                attributes = null;
             }
-            attributeAppliedIds = null;
             attributesApplied = false;
         }
         super.cleanup();
     }
     
-    // 载入属性并进行代换
-    public List<Attribute> getAttributes() {
-        // 载入初始配置
-        // 注：map key 是属性的名称
-        List<Attribute> tempList = new ArrayList<Attribute>(attributeIds.length);
-        for (String attrId : attributeIds) {
-            if (attrId.equals(getId())) {
-                continue; // 不能包含自己,以免死循环
-            }
-            tempList.add((Attribute)Loader.load(attrId));
-        }
-        return tempList;
-    }
-
     @Override
     protected boolean doSetValue(Void newValue) {
         return false; // ignore

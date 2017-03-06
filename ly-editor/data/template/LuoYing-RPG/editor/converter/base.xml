@@ -26,6 +26,10 @@
     <converter name="ListDataFieldConverter" value="name.huliqing.editor.converter.field.ListDataFieldConverter" />
     
     <data name="base" extends="" converter="SimpleDataConverter">
+        <field name="tagName" converter="TextConverter">
+            <feature name="disabled" value="true" />
+            <feature name="collapsed" value="true" />
+        </field>
         <field name="id" converter="TextConverter">
             <feature name="disabled" value="true" />
             <feature name="collapsed" value="true" />
@@ -36,6 +40,9 @@
         </field>
         <field name="extends" converter="TextConverter">
             <feature name="disabled" value="true" />
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="name" converter="TextConverter">
             <feature name="collapsed" value="true" />
         </field>
     </data>

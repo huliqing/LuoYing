@@ -4,10 +4,13 @@
     xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
     xmlns='http://editor.huliqing.name'
     xsi:schemaLocation='http://editor.huliqing.name meta.xsd'>
+
+    <converter name="EntityObjectDatasFieldConverter" value="name.huliqing.editor.converter.field.EntityObjectDatasFieldConverter" />
+    <converter name="ActorSkillsFieldConverter" value="name.huliqing.editor.converter.field.ActorSkillsFieldConverter" />
     
     <data name="actor" extends="entityModelBase">
         <field name="file" converter="FileConverter">
-            <feature name="filters" value="Images|*.jpg|*.jpeg|*.png,All Files|*.*" />
+            <feature name="filters" value="Model Files|*.j3o,All Files|*.*" />
         </field>
         <field name="icon" converter="FileConverter">
             <feature name="filters" value="Images|*.jpg|*.jpeg|*.png,All Files|*.*" />
@@ -62,8 +65,12 @@
             <feature name="componentType" value="effect" />
             <feature name="collapsed" value="true" />
         </field>
-        <field name="localForward" converter="TextConverter" />
-        <field name="chat" converter="TextConverter" />
+        <field name="localForward" converter="TextConverter">
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="chat" converter="TextConverter">
+            <feature name="collapsed" value="true" />
+        </field>
     </data>
     
 </root>

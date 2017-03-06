@@ -46,21 +46,31 @@ class ProtoUtils {
             LOG.log(Level.WARNING, "Could not find object={0}", objectId);
             return null;
         }
-        
-        String extendId = proto.getAsString(Proto.ATTRIBUTE_EXTENDS);
-        if (extendId == null) {
-            // 如果extId不存在，则说明该Proto没有继承关系，或者说继承关系已经处理过了。
-            // 这个时候dataLoader和dataProcessor必须已经存在（通过自身tag配置或是继承自父tag），如果这个时候不存在，则
-            // 需要确定一个 
+
+        boolean extendsResolved = proto.getAsBoolean(Proto.ATTRIBUTE_EXTENDS_RESOLVED, false);
+        if (extendsResolved) {
+            // 如果已经处理完成了继承链或者extendsId不存在，则不需要再重复处理继承关系。
+            // 这个时候dataLoader和dataProcessor必须已经存在（通过自身tag配置或是继承自父tag）
+            // ，如果这个时候不存在，则需要确定一个 .
             checkLoaderAndProcessor(proto);
             return proto;
-        } else {
-            // checker用于记录“继承链”
-            List<String> checker = new ArrayList<String>(3);
-            checker.add(proto.getId());
-            proto = extendsProto(dataStore, proto, dataStore.getProto(extendId), checker);
+        }
+        
+        String extendsId = proto.getAsString(Proto.ATTRIBUTE_EXTENDS);
+        if (extendsId == null) {
+            checkLoaderAndProcessor(proto);
+            proto.setAttribute(Proto.ATTRIBUTE_EXTENDS_RESOLVED, true);
             return proto;
         }
+        
+        // 处理Proto的继承链。
+        // checker用于记录并检查“继承链”是否存在循环继承问题。
+        List<String> checker = new ArrayList<String>();
+        checker.add(proto.getId());
+        proto = extendsProto(dataStore, proto, dataStore.getProto(extendsId), checker);
+        
+        return proto;
+        
     }
     
     /**
@@ -73,37 +83,36 @@ class ProtoUtils {
      * @return 
      */
     private static Proto extendsProto(DataStore dataStore, Proto proto, Proto parent, List<String> checker) {
-//        LOG.log(Level.INFO, "====processor extends: {0} extends {1}", new Object[] {proto, parent});
+        LOG.log(Level.INFO, "====processor extends: {0} extends {1}", new Object[] {proto, parent});
         
         // 防止自继承
         if (proto == parent) {
             throw new IllegalStateException("Proto could not extends self! proto=" + proto + ", extends parent=" + parent);
         }
-            
-        // remove201608xx, 以后不再有DataType.
-//        // 限制不同DataType类型的继承，以减少复杂性,以防止死继承
-//        if (proto.getDataType() != parent.getDataType()) {
-//            throw new UnsupportedOperationException("Unsupported difference DataType extends! proto={0}" + proto + ", parentProto=" + parent);
-//        }
 
         // 继承方式是这样的：从父类向下逐层继承
-        String extendId=  parent.getAsString(Proto.ATTRIBUTE_EXTENDS);
-        if (extendId != null) {
-            // 检查是否存在无尽继承
-            checker.add(parent.getId());
-            if (checker.contains(extendId)) {
-                throw new UnsupportedOperationException("Unsupported endless loop extends => " + checker + ", extId=" + extendId);
+        boolean extendsResolved = parent.getAsBoolean(Proto.ATTRIBUTE_EXTENDS_RESOLVED, false);
+        if (!extendsResolved) {
+            String extendsId=  parent.getAsString(Proto.ATTRIBUTE_EXTENDS);
+            if (extendsId != null) {
+                // 检查是否存在无尽继承
+                checker.add(parent.getId());
+                if (checker.contains(extendsId)) {
+                    throw new UnsupportedOperationException("Unsupported endless loop extends => " + checker + ", extId=" + extendsId);
+                }
+                // 检查被继承的对象是否存在
+                Proto extProto = dataStore.getProto(extendsId);
+                if (extProto == null) {
+                    throw new RuntimeException("Could not find extends object, extendId=" + extendsId + ", extends=" + checker);
+                }
+                parent = extendsProto(dataStore, parent, extProto, checker);
             }
-
-            // 检查被继承的对象是否存在
-            Proto extProto = dataStore.getProto(extendId);
-            if (extProto == null) {
-                throw new RuntimeException("Could not find extends object, extendId=" + extendId + ", extends=" + checker);
-            }
-            parent = extendsProto(dataStore, parent, extProto, checker);
+            // 标记继承关系已经处理完毕，这样下次就不需要再去处理继承链了，以节省性能。
+            parent.setAttribute(Proto.ATTRIBUTE_EXTENDS_RESOLVED, true);
         }
         
-        // 继承父类参数
+        // 继承父类参数,注：这里会把父类的ATTRIBUTE_EXTENDS_RESOLVED属性也继承了，但是不会有关系。因子proto也会同
+        // 时设置一样的值。
         Map<String, Object> merger = new HashMap<String, Object>();
         merger.putAll(parent.getOriginAttributes());
         merger.putAll(proto.getOriginAttributes());
@@ -111,14 +120,14 @@ class ProtoUtils {
         Map<String, Object> protoMap = proto.getOriginAttributes();
         protoMap.clear();
         protoMap.putAll(merger);
-        
-        // 移除掉这个参数，这样下次就不需要再去递归继承了，以节省性能。
-        protoMap.remove(Proto.ATTRIBUTE_EXTENDS); 
+        // 这里可以不需要再设置这个参数，因为merger中已经继承了parent的ATTRIBUTE_EXTENDS_RESOLVED设置。
+        // 这里只是明确的标记一下。
+        proto.setAttribute(Proto.ATTRIBUTE_EXTENDS_RESOLVED, true);
         
         // 检查dataLoader和dataProcessor,如果没有的话则应该动态确定一个。
         checkLoaderAndProcessor(proto);
         
-//        LOG.log(Level.INFO, "processor extends result => {0}", proto);
+        LOG.log(Level.INFO, "processor extends result => {0}", proto);
         return proto;
     }
     

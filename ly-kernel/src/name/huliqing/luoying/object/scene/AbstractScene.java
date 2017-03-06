@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.LuoYing;
+import name.huliqing.luoying.data.ProgressData;
 import name.huliqing.luoying.data.SceneData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
@@ -124,9 +125,9 @@ public abstract class AbstractScene implements Scene, SceneLoader.Listener {
         // 载入场景
         SceneLoader sl = new SceneLoader();
         sl.addListener(this);
-        String progressId = data.getProgress();
-        if (progressId != null) {
-            sl.setProgress((Progress) Loader.load(progressId));
+        ProgressData pd = data.getProgress();
+        if (pd != null) {
+            sl.setProgress((Progress) Loader.load(pd));
         }
         sl.load(this);
     }

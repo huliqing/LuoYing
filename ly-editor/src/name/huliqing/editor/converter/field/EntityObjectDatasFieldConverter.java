@@ -33,7 +33,8 @@ import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
- * 用于转换Entity的objectDatas字段,可以指定DataType和ComponentType
+ * 用于转换Entity的objectDatas字段,可以指定DataType和ComponentType.
+ * 所有包含在EntityData的objectDatas字段中的列表数据都需要继承自这个类, 例如：SkillData,ChannelData,EffectData,LogicDatas...等等
  * @author huliqing
  */
 public class EntityObjectDatasFieldConverter extends SimpleFieldConverter<JfxSceneEdit, EntityData>{
@@ -97,7 +98,12 @@ public class EntityObjectDatasFieldConverter extends SimpleFieldConverter<JfxSce
                 setText(null);
                 setGraphic(null);
                 if (!empty) {
-                    setText(item.getId());
+                    String name = item.getName();
+                    if (name != null) {
+                        setText(item.getId() + "(" + name + ")");
+                    } else {
+                        setText(item.getId());
+                    }
                 }
             }
         });
@@ -120,6 +126,12 @@ public class EntityObjectDatasFieldConverter extends SimpleFieldConverter<JfxSce
         toolbar.getItems().addAll(add, remove);
         layout.getStyleClass().add(StyleConstants.CLASS_HVBOX);
         layout.getChildren().addAll(toolbar, listView);
+    }
+
+    @Override
+    public void notifyChanged() {
+        listView.refresh();// 这一句允许刷新列表中的物体名称。
+        super.notifyChanged();
     }
 
     @Override

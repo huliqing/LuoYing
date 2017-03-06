@@ -27,7 +27,8 @@ public abstract class FieldConverter<E extends JfxAbstractEdit, T extends Object
     /** 让字段折叠 */
     public final static String FEATURE_COLLAPSED = "collapsed";
     
-    protected String field; 
+    // 转换的字段
+    protected String field;
     
     protected final TitledPane root = new TitledPane();
     

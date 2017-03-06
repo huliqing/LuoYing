@@ -8,7 +8,9 @@
     <converter name="SkillAnimationFieldConverter" value="name.huliqing.editor.converter.field.SkillAnimationFieldConverter" />
     
     <data name="skillBase" extends="base" >
-        <field name="icon" converter="FileConverter" />
+        <field name="icon" converter="FileConverter">
+            <feature name="filters" value="Images|*.jpg|*.jpeg|*.png,All Files|*.*" />
+        </field>
         <field name="useTime" converter="FloatTextConverter" />
         <field name="types" converter="TextConverter" />
         <field name="overlapTypes" converter="TextConverter" />
@@ -26,7 +28,6 @@
         <field name="boneEffects" converter="TextConverter" />
         <field name="magics" converter="TextConverter" />
         <field name="actorAnims" converter="TextConverter" />
-        <field name="bindCutTimeEndAttribute" converter="TextConverter" />
         <field name="cutTimeStartMax" converter="FloatTextConverter" />
         <field name="cutTimeEndMax" converter="FloatTextConverter" />
         <field name="checkEl" converter="TextConverter" />
@@ -36,6 +37,7 @@
         <field name="levelUpEl" converter="TextConverter" />
         <field name="playCount" converter="IntegerTextConverter" />
         <field name="useAttributes" converter="TextConverter" />
+        <field name="bindCutTimeEndAttribute" converter="TextConverter" />
         <field name="bindSpeedAttribute" converter="TextConverter" />
         <field name="bindAvoidInterruptAttribute" converter="TextConverter" />
     </data>

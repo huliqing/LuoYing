@@ -26,7 +26,7 @@ public class FieldDefine {
      * 获取转换的属性名称
      * @return 
      */
-    public String getName() {
+    public String getField() {
         return attributes.get("name");
     }
     

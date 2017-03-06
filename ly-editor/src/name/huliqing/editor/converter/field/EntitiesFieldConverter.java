@@ -111,6 +111,12 @@ public class EntitiesFieldConverter extends FieldConverter<JfxSceneEdit, EntityD
     }
     
     @Override
+    public void notifyChanged() {
+        listView.refresh();// 这一句允许刷新列表中的物体名称。
+        super.notifyChanged();
+    }
+    
+    @Override
     public void initialize() {
         super.initialize();
         
@@ -212,11 +218,15 @@ public class EntitiesFieldConverter extends FieldConverter<JfxSceneEdit, EntityD
                 @Override
                 protected void updateItem(EntityData item, boolean empty) {
                     super.updateItem(item, empty);
+                    setText(null);
                     setGraphic(null);
                     if (!empty && item != null) {
-                        setText(item.getId());
-                    } else {
-                        setText(null); // 必须设置为null,否则会有重复数据可能(在动态添加item的时候)
+                        String name = item.getName();
+                        if (name != null) {
+                            setText(item.getId() + "(" + name + ")");
+                        } else {
+                            setText(item.getId());
+                        }
                     }
                 }
             };

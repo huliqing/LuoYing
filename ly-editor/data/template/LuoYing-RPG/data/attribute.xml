@@ -5,6 +5,20 @@
     xmlns='http://luoying.huliqing.name'
     xsi:schemaLocation='http://luoying.huliqing.name meta/attribute.xsd'>
     
+    <attributeBoolean id="attributeBoolean" name="attributeBoolean" value="0" />
+    <attributeFloat id="attributeFloat" name="attributeFloat" value="0" />
+    <attributeInteger id="attributeInteger" name="attributeInteger" value="0" />
+    <attributeLevelFloat id="attributeLevelFloat" name="attributeLevelFloat" value="0" />
+    <attributeLevelInteger id="attributeLevelInteger" name="attributeLevelInteger" value="0" />
+    <attributeLimitInteger id="attributeLimitInteger" name="attributeLimitInteger" value="0" />
+    <attributeLong id="attributeLong" name="attributeLong" value="0" />
+    <attributeRelateBoolean id="attributeRelateBoolean" name="attributeRelateBoolean" value="0" />
+    <attributeString id="attributeString" name="attributeString" value="" />
+    <attributeStringList id="attributeStringList" name="attributeStringList" value="" />
+    <attributeVector2f id="attributeVector2f" name="attributeVector2f" value="0,0" />
+    <attributeVector3f id="attributeVector3f" name="attributeVector3f" value="0,0,0" />
+    <attributeVector4f id="attributeVector4f" name="attributeVector4f" value="0,0,0,0" />
+    
     <!--==========================================================================-->
     <!--标准属性
     属性用于配置到角色身上，一个角色可以同时拥有多个属性，这些属性可以绑定到任何其它模块或处理器上。

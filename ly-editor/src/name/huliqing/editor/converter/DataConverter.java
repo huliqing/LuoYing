@@ -151,7 +151,7 @@ public abstract class DataConverter<E extends JfxAbstractEdit, T extends ObjectD
                 pc.initialize();
                 pc.updateView();
                 fieldPanel.getChildren().add(pc.getLayout());
-                fieldConverters.put(t.getName(), pc);
+                fieldConverters.put(t.getField(), pc);
             });
         }
 

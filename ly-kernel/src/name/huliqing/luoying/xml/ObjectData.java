@@ -113,7 +113,7 @@ public class ObjectData implements Savable, Cloneable {
     public final long getUniqueId() {
         return uniqueId;
     }
-
+    
     /**
      * 设置唯一id, 这个ID是物体在创建的时候自动生成的，不要直接在运行时改变。
      * @param uniqueId 
@@ -122,6 +122,22 @@ public class ObjectData implements Savable, Cloneable {
         this.uniqueId = uniqueId;
     }
 
+    /**
+     * 获取物体名称,如果没有设置则返回null
+     * @return 
+     */
+    public String getName() {
+        return getAsString("name");
+    }
+    
+    /**
+     * 设置物体名称
+     * @param name 
+     */
+    public void setName(String name) {
+        setAttribute("name", name);
+    }
+    
     /**
      * 获取本地变量
      * @return 

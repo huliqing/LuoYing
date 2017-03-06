@@ -20,15 +20,9 @@
 package name.huliqing.luoying.data;
 
 import name.huliqing.luoying.xml.ObjectData;
-import com.jme3.export.InputCapsule;
-import com.jme3.export.JmeExporter;
-import com.jme3.export.JmeImporter;
-import com.jme3.export.OutputCapsule;
 import com.jme3.network.serializing.Serializable;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.luoying.xml.SimpleCloner;
 
 /**
  * 定义场景数据
@@ -36,17 +30,13 @@ import name.huliqing.luoying.xml.SimpleCloner;
  */
 @Serializable
 public class SceneData extends ObjectData {
-    
-    // 场景中的物体数据列表.
-    // 注：场景中的实体数据不会
-    private List<EntityData> entityDatas;
-    
+
     /**
      * 获取场景中的物体数据列表，如果没有定义任何物体则返回null.
      * @return 
      */
     public List<EntityData> getEntityDatas() {
-        return entityDatas;
+        return getAsObjectDataList("entityDatas");
     }
 
     /**
@@ -54,7 +44,7 @@ public class SceneData extends ObjectData {
      * @param entityDatas 
      */
     public void setEntityDatas(List<EntityData> entityDatas) {
-        this.entityDatas = entityDatas;
+        setAttributeSavableList("entityDatas", entityDatas);
     }
     
     /**
@@ -62,11 +52,13 @@ public class SceneData extends ObjectData {
      * @param entityData 
      */
     public void addEntityData(EntityData entityData) {
-        if (entityDatas == null) {
-            entityDatas = new ArrayList<EntityData>();
+        List<EntityData> eds = getEntityDatas();
+        if (eds == null) {
+            eds = new ArrayList<EntityData>();
+            setEntityDatas(eds);
         }
-        if (!entityDatas.contains(entityData)) {
-            entityDatas.add(entityData);
+        if (!eds.contains(entityData)) {
+            eds.add(entityData);
         }
     }
     
@@ -76,47 +68,24 @@ public class SceneData extends ObjectData {
      * @return 
      */
     public boolean removeEntityData(EntityData entityData) {
+        List<EntityData> entityDatas = getEntityDatas();
         return entityDatas != null && entityDatas.remove(entityData);
     }
     
     /**
-     * 获取场景载入时的进度指示器id，如果没有指定，则返回null.
+     * 获取场景载入时的进度指示器，如果没有指定，则返回null.
      * @return 
      */
-    public String getProgress() {
-        return getAsString("progress");
+    public ProgressData getProgress() {
+        return getAsObjectData("progress");
     }
     
     /**
      * 设置场景载入时的进度指示器
      * @param progress 
      */
-    public void setProgress(String progress) {
+    public void setProgress(ProgressData progress) {
         setAttribute("progress", progress);
     }
-    
-    @Override
-    public SceneData clone() {
-        SceneData clone = (SceneData) super.clone(); 
-        clone.entityDatas = SimpleCloner.deepClone(entityDatas);
-        return clone;
-    }
-    
-    @Override
-    public void write(JmeExporter ex) throws IOException {
-        super.write(ex);
-        OutputCapsule oc = ex.getCapsule(this);
-        if (entityDatas != null) {
-            oc.writeSavableArrayList(new ArrayList<EntityData>(entityDatas), "entityDatas", null);
-        }
-    }
-    
-    @Override
-    public void read(JmeImporter im) throws IOException {
-        super.read(im);
-        InputCapsule ic = im.getCapsule(this);
-        entityDatas = ic.readSavableArrayList("entityDatas", null);
-    }
-
     
 }

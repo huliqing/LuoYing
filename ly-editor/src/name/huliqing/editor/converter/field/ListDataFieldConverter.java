@@ -21,6 +21,7 @@ import name.huliqing.editor.constants.AssetConstants;
 import name.huliqing.editor.constants.StyleConstants;
 import name.huliqing.editor.converter.DataConverter;
 import name.huliqing.editor.converter.SimpleFieldConverter;
+import name.huliqing.editor.edit.JfxAbstractEdit;
 import name.huliqing.editor.edit.UndoRedo;
 import name.huliqing.editor.manager.ComponentManager;
 import name.huliqing.editor.manager.ConverterManager;
@@ -31,12 +32,16 @@ import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
- * 用于转换Entity的objectDatas字段,可以指定DataType和ComponentType
+ * 默认的列表数据类型转换器，主要用于转换所有字段类型为
+ * List&lt;T extends ObjectData&gt;
+ * 的字段。可以指定DataType和ComponentType
  * @author huliqing
+ * @param <E>
+ * @param <T>
  */
-public class ListDataFieldConverter extends SimpleFieldConverter {
+public class ListDataFieldConverter<E extends JfxAbstractEdit, T extends ObjectData> extends SimpleFieldConverter<E, T> {
 
-    private static final Logger LOG = Logger.getLogger(ListDataFieldConverter.class.getName());
+//    private static final Logger LOG = Logger.getLogger(ListDataFieldConverter.class.getName());
     
     private final static String FEATURE_COMPONENT_TYPE = "componentType";
     private String componentType;
@@ -93,7 +98,11 @@ public class ListDataFieldConverter extends SimpleFieldConverter {
                 setText(null);
                 setGraphic(null);
                 if (!empty) {
-                    setText(item.getId());
+                    if (item.getName() != null) {
+                        setText(item.getId() + "(" + item.getName() + ")");
+                    } else {
+                        setText(item.getId());
+                    }
                 }
             }
         });
@@ -121,18 +130,6 @@ public class ListDataFieldConverter extends SimpleFieldConverter {
     @Override
     public void initialize() {
         super.initialize();
-        
-        // remove
-//        String tempDataType = featureHelper.getAsString(FEATURE_DATA_TYPE);
-//        try {
-//            dataType = (Class<? extends ObjectData>) Class.forName(tempDataType);
-//        } catch (Exception ex) {
-//            dataType = ObjectData.class;
-//            LOG.log(Level.WARNING
-//                    , "Unknow dataType! dataType=" + tempDataType + ", field=" + field + ", data=" + data.getId()
-//                    , ex);
-//        }
-
         componentType = featureHelper.getAsString(FEATURE_COMPONENT_TYPE);
         if (componentType != null) {
             componentList.setComponents(ComponentManager.getComponentsByType(componentType));
@@ -145,10 +142,16 @@ public class ListDataFieldConverter extends SimpleFieldConverter {
     protected Node createLayout() {
         return layout;
     }
+    
+    @Override
+    public void notifyChanged() {
+        listView.refresh(); // 这一句允许刷新列表中的物体名称。
+        super.notifyChanged();
+    }
 
     @Override
     protected void updateUI() {
-        List<ObjectData> listData = data.getAsObjectDataList(field);
+        List listData = data.getAsObjectDataList(field);
         listView.getItems().clear();
         if (listData != null) {
             listView.getItems().addAll(listData);

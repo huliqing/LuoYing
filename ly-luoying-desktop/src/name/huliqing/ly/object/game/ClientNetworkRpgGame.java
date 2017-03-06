@@ -27,6 +27,7 @@ import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.ConnData;
 import name.huliqing.luoying.data.EntityData;
+import name.huliqing.luoying.data.ProgressData;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.layer.service.SaveService;
 import name.huliqing.luoying.manager.ResManager;
@@ -106,9 +107,9 @@ public class ClientNetworkRpgGame extends NetworkRpgGame implements PingListener
         pingLabel.setToCorner(Corner.RB);
         UIState.getInstance().addUI(pingLabel);
         
-        String progressId = scene.getData().getProgress();
-        if (progressId != null) {
-            progress = Loader.load(progressId);
+        ProgressData pd = scene.getData().getProgress();
+        if (pd != null) {
+            progress = Loader.load(pd);
             progress.initialize(guiScene.getRoot());
         }
     }

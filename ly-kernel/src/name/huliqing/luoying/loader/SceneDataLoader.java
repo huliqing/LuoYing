@@ -22,8 +22,10 @@ package name.huliqing.luoying.loader;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.data.EntityData;
+import name.huliqing.luoying.data.ProgressData;
 import name.huliqing.luoying.xml.Proto;
 import name.huliqing.luoying.data.SceneData;
+import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.xml.DataFactory;
 import name.huliqing.luoying.xml.DataLoader;
 
@@ -48,6 +50,12 @@ public class SceneDataLoader<T extends SceneData> implements DataLoader<T> {
                 EntityData ed = DataFactory.createData(eid);
                 edStore.add(ed);
             }
+        }
+        
+        String progress = proto.getAsString("progress");
+        if (progress != null) {
+            ProgressData pd = Loader.loadData(progress);
+            store.setProgress(pd);
         }
     }
     

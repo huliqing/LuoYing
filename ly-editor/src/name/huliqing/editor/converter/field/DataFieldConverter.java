@@ -26,7 +26,7 @@ import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
- * 用于转换所有直接关联到一个ObjectData的字段
+ * 用于转换所有属性值为单个ObjectData的字段.
  * @author huliqing
  */
 public class DataFieldConverter extends SimpleFieldConverter {
@@ -81,7 +81,7 @@ public class DataFieldConverter extends SimpleFieldConverter {
             dataConverter = ConverterManager.createDataConverter(jfxEdit, lastObjectData, this);
             dataConverter.initialize();
         }
-        if (dataConverter != null) {
+        if (dataConverter != null && lastObjectData != null) {
             getParent().setChildContent(lastObjectData.getId(), dataConverter.getLayout());
         }
     }

@@ -100,7 +100,12 @@
                 <xs:extension base="base">
                     <xs:attribute name="name" type="xs:string" use="required" >
                         <xs:annotation>
-                            <xs:documentation>转换字段名称</xs:documentation>
+                            <xs:documentation>指定要转换的字段名称</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="displayName" type="xs:string" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>指定要显示的字段名称，如果没有指定则直接使用name属性的值作为显示名称</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
                     <xs:attribute name="converter" type="xs:string" use="required" >

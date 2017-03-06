@@ -29,9 +29,11 @@
     <component id="sysEntityLightScatteringFilter" type="entityFilter" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
     <component id="sysEntitySSAOFilter" type="entityFilter" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
     
-    <component id="sysModulePhysics" type="module" />
+    <!--Progress-->
+    <component id="sysProgressSimple" type="progress" />
     
     <!--Module-->
+    <component id="sysModulePhysics" type="module" />
     <component id="moduleChannel" type="module" />
     <component id="moduleItem" type="module" />
     <component id="moduleActor" type="module" />
@@ -93,8 +95,7 @@
     <component id="attributeLocation" type="attribute" />
     <component id="attributeColor" type="attribute" />
     <component id="attributeMessage" type="attribute" />
-    
-    <component id="attributeGroupBase" type="attribute" />
+   <component id="attributeGroupBase" type="attribute" />
     <component id="attributeDynamicBuildingGroup" type="attribute" />
     <component id="attributeStaticBuildingGroup" type="attribute" />
     <component id="attributeCreatureGroup" type="attribute" />

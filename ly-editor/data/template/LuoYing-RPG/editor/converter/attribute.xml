@@ -5,41 +5,42 @@
     xmlns='http://editor.huliqing.name'
     xsi:schemaLocation='http://editor.huliqing.name meta.xsd'>
     
-    <data name="attributeBoolean" extends="base">
+    <data name="attributeBase" extends="base">
+        <field name="name" converter="TextConverter" />
+    </data>
+    
+    <data name="attributeBoolean" extends="attributeBase">
         <field name="value" converter="CheckBoxConverter" />
     </data>
     
-    <data name="attributeFloat" extends="base">
+    <data name="attributeFloat" extends="attributeBase">
         <field name="value" converter="FloatTextConverter" />
     </data>
     
-    <data name="attributeGroup" extends="base">
-<!--        <field name="attributes" converter="ListDataFieldConverter">
-            <feature name="dataType" value="name.huliqing.luoying.data.AttributeData" />
+    <data name="attributeGroup" extends="attributeBase">
+        <field name="attributes" converter="ListDataFieldConverter">
             <feature name="componentType" value="attribute" />
             <feature name="collapsed" value="false" />
-        </field>-->
-        <field name="attributes" converter="TextConverter">
         </field>
     </data>
     
-    <data name="attributeInteger" extends="base">
+    <data name="attributeInteger" extends="attributeBase">
         <field name="value" converter="IntegerTextConverter" />
     </data>
     
-    <data name="attributeLevelFloat" extends="base">
+    <data name="attributeLevelFloat" extends="attributeBase">
         <field name="value" converter="FloatTextConverter" />
         <field name="level" converter="IntegerTextConverter" />
         <field name="levelEl" converter="TextConverter"/>
     </data>
     
-    <data name="attributeLevelInteger" extends="base">
+    <data name="attributeLevelInteger" extends="attributeBase">
         <field name="value" converter="IntegerTextConverter" />
         <field name="level" converter="IntegerTextConverter" />
         <field name="levelEl" converter="TextConverter"/>
     </data>
     
-    <data name="attributeLimitInteger" extends="base">
+    <data name="attributeLimitInteger" extends="attributeBase">
         <field name="value" converter="IntegerTextConverter" />
         <field name="minValue" converter="IntegerTextConverter" />
         <field name="maxValue" converter="IntegerTextConverter" />
@@ -47,34 +48,34 @@
         <field name="bindMaxLimitAttribute" converter="TextConverter"/>
     </data>
     
-    <data name="attributeLong" extends="base">
+    <data name="attributeLong" extends="attributeBase">
         <field name="value" converter="LongTextConverter" />
     </data>
     
-    <data name="attributeRelateBoolean" extends="base">
+    <data name="attributeRelateBoolean" extends="attributeBase">
         <field name="value" converter="CheckBoxConverter" />
         <field name="refVars" converter="TextConverter" />
         <field name="valueEl" converter="TextConverter" />
     </data>
     
-    <data name="attributeString" extends="base">
+    <data name="attributeString" extends="attributeBase">
         <field name="value" converter="TextConverter" />
     </data>
     
-    <data name="attributeStringList" extends="base">
+    <data name="attributeStringList" extends="attributeBase">
         <field name="value" converter="TextConverter" />
         <field name="duplication" converter="CheckBoxConverter" />
     </data>
     
-    <data name="attributeVector2f" extends="base">
+    <data name="attributeVector2f" extends="attributeBase">
         <field name="value" converter="Vector2fConverter" />
     </data>
     
-    <data name="attributeVector3f" extends="base">
+    <data name="attributeVector3f" extends="attributeBase">
         <field name="value" converter="Vector3fConverter" />
     </data>
     
-    <data name="attributeVector4f" extends="base">
+    <data name="attributeVector4f" extends="attributeBase">
         <field name="value" converter="Vector4fConverter" />
     </data>
 

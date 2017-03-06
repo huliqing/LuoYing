@@ -198,6 +198,7 @@ import name.huliqing.luoying.object.entity.impl.TreeEntity;
 import name.huliqing.luoying.object.entity.impl.AdvanceWaterEntity;
 import name.huliqing.luoying.object.entity.impl.SimpleWaterEntity;
 import name.huliqing.luoying.loader.GameDataLoader;
+import name.huliqing.luoying.loader.GroupAttributeDataLoader;
 import name.huliqing.luoying.object.gamelogic.ActorCleanGameLogic;
 import name.huliqing.luoying.object.gamelogic.AttributeChangeGameLogic;
 import name.huliqing.luoying.loader.ItemDataLoader;
@@ -611,7 +612,6 @@ public class LuoYing {
         // Attribute
         DataFactory.register("attributeBoolean",  AttributeData.class, null, BooleanAttribute.class);
         DataFactory.register("attributeFloat",  AttributeData.class, null, FloatAttribute.class);
-        DataFactory.register("attributeGroup",  AttributeData.class, null, GroupAttribute.class);
         DataFactory.register("attributeInteger",  AttributeData.class, null, IntegerAttribute.class);
         DataFactory.register("attributeLevelFloat",  AttributeData.class, null, LevelFloatAttribute.class);
         DataFactory.register("attributeLevelInteger",  AttributeData.class, null, LevelIntegerAttribute.class);
@@ -623,6 +623,7 @@ public class LuoYing {
         DataFactory.register("attributeVector2f",  AttributeData.class, null, Vector2fAttribute.class);
         DataFactory.register("attributeVector3f",  AttributeData.class, null, Vector3fAttribute.class);
         DataFactory.register("attributeVector4f",  AttributeData.class, null, Vector4fAttribute.class);
+        DataFactory.register("attributeGroup",  AttributeData.class, GroupAttributeDataLoader.class, GroupAttribute.class);
         
         // Bullet
         DataFactory.register("bulletSimple",  BulletData.class, BulletDataLoader.class, SimpleBullet.class);

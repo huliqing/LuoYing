@@ -31,6 +31,7 @@ public class Proto extends Data {
     
     public final static String ATTRIBUTE_ID = "id";
     public final static String ATTRIBUTE_EXTENDS = "extends";
+    public final static String ATTRIBUTE_EXTENDS_RESOLVED = "_extendsResolved_";
     public final static String DATA_CLASS = "dataClass";
     public final static String DATA_LOADER_CLASS = "dataLoaderClass";
     public final static String DATA_PROCESSOR_CLASS = "dataProcessorClass";
@@ -50,11 +51,6 @@ public class Proto extends Data {
         this.tagName = tagName;
         this.id = attributes.get(ATTRIBUTE_ID);
     }
-//    public Proto(String tagName, String id, Map<String, String> attributes) {
-//        super(attributes);
-//        this.tagName = tagName;
-//        this.id = id;
-//    }
     
     public String getId() {
         return id;

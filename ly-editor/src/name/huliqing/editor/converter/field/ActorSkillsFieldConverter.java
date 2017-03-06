@@ -26,7 +26,8 @@ import name.huliqing.luoying.object.skill.WalkSkill;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
- * 角色Actor的Skills字段转换器
+ * 角色Actor的Skills字段转换器, 特别为工具栏添加了一个Play按钮，以便执行技能。角色的技能数据SkillDatas存放于
+ * EntityData的objectData字段中，所以需要继承自EntityObjectDatasFieldConverter
  * @author huliqing
  */
 public class ActorSkillsFieldConverter extends EntityObjectDatasFieldConverter {
@@ -102,12 +103,6 @@ public class ActorSkillsFieldConverter extends EntityObjectDatasFieldConverter {
             return findEntityData(c.getParent());
         }
         return null;
-    }
-
-    @Override
-    public void initialize() {
-        super.initialize();
-       
     }
     
     @Override
