@@ -3,7 +3,7 @@
 <root
     xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
     xmlns='http://luoying.huliqing.name'
-    xsi:schemaLocation='http://luoying.huliqing.name ../../../../ly-kernel/src/LuoYing/Data/meta/attribute.xsd'>
+    xsi:schemaLocation='http://luoying.huliqing.name ../../../../ly-kernel/src/LuoYingSys/Data/meta/attribute.xsd'>
     
     <!--==========================================================================-->
     <!--标准属性
@@ -139,7 +139,7 @@
     <attributeVector3f id="attributeLocation" name="attributeLocation" value="0,0,0" />
 
     <!--角色颜色-->
-    <attributeVector4f id="attributeColor" name="attributeColor" value="1,1,1,1" />
+    <attributeColor id="attributeColor" name="attributeColor" value="1,1,1,1" />
     
     <!--用于控制角色的游戏消息的开关：当角色执行技能、使用物品等操作时会向游戏消息控制台发送消息。-->
     <attributeBoolean id="attributeMessage" name="attributeMessage" value="0" />

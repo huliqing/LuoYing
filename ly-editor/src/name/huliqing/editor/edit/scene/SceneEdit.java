@@ -38,6 +38,7 @@ import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.manager.PickManager;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.entity.impl.PhysicsEntity;
 import name.huliqing.luoying.object.game.Game;
 import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.object.scene.SceneListener;
@@ -67,6 +68,10 @@ public class SceneEdit extends SimpleJmeEdit implements SceneListener {
     
     // 保存路径，绝对路径,包含文件名和后缀，如：c:\....\xxxScene.ying
     private String savePath;
+    
+    // 缓存物理空间实体，因为一些实体在reload的时候会从物理空间中移除，
+    // 而reload后不会重新加入到物理空间，需要手动加入。
+    private PhysicsEntity physicsEntity;
     
     public SceneEdit(JfxSceneEdit jfxEdit) {
         this.jfxEdit = jfxEdit;
@@ -203,7 +208,12 @@ public class SceneEdit extends SimpleJmeEdit implements SceneListener {
     }
 
     @Override
-    public void onSceneEntityAdded(Scene scene, Entity entityAdded) {}
+    public void onSceneEntityAdded(Scene scene, Entity entityAdded) {
+        // 记住物理空间实体,以便在场景中的物理实体在重载的时候可以重新加入到这个空间中。
+        if (entityAdded instanceof PhysicsEntity) {
+            physicsEntity = (PhysicsEntity) entityAdded;
+        }
+    }
     
     @Override
     public void onSceneEntityRemoved(Scene scene, Entity entityRemoved) {}
@@ -223,6 +233,11 @@ public class SceneEdit extends SimpleJmeEdit implements SceneListener {
         EntityControlTile<Entity> ect = controlTileMap.get(entityData);
         if (ect != null) {
             ect.reloadEntity(scene);
+            // 当EntityControlTile重新载入的时候会进行cleanup，导致实体会从物理空间中移除。
+            // 这里需要重新把它加进去。
+            if (physicsEntity != null && physicsEntity.isInitialized()) {
+                physicsEntity.onSceneEntityAdded(scene, ect.getTarget());
+            }
         }
     }
 

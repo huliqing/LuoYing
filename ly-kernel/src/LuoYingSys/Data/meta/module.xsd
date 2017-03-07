@@ -65,6 +65,12 @@ xs:time
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="moduleBase">
+                    <xs:attribute name="radius" type="xs:decimal" use="required">
+                        <xs:annotation><xs:documentation>radius</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="height" type="xs:decimal" use="required">
+                        <xs:annotation><xs:documentation>radius</xs:documentation></xs:annotation>
+                    </xs:attribute>
                     <xs:attribute name="bindDeadAttribute" type="xs:string" use="required">
                         <xs:annotation><xs:documentation>BooleanAttribute, 判断角色属性，这个属性用于判断角色是否“死亡”</xs:documentation></xs:annotation>
                     </xs:attribute>
@@ -260,6 +266,51 @@ xs:time
                     </xs:attribute>
                     <xs:attribute name="kinematic" type="bool" use="optional">
                         <xs:annotation><xs:documentation>kinematic</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="physicsShape" type="xs:string" use="optional">
+                        <xs:annotation><xs:documentation>关联一个物理碰撞网格</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="angularDamping" type="xs:decimal" use="optional">
+                        <xs:annotation><xs:documentation></xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="angularFactor" type="xs:decimal" use="optional">
+                        <xs:annotation><xs:documentation></xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="angularSleepingThreshold" type="xs:decimal" use="optional">
+                        <xs:annotation><xs:documentation></xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="angularVelocity" type="xs:string" use="optional">
+                        <xs:annotation><xs:documentation></xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="applyPhysicsLocal" type="bool" use="optional">
+                        <xs:annotation><xs:documentation></xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="ccdMotionThreshold" type="xs:decimal" use="optional">
+                        <xs:annotation><xs:documentation></xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="ccdSweptSphereRadius" type="xs:decimal" use="optional">
+                        <xs:annotation><xs:documentation></xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="collideWithGroups" type="xs:integer" use="optional">
+                        <xs:annotation><xs:documentation></xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="collisionGroup" type="xs:integer" use="optional">
+                        <xs:annotation><xs:documentation></xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="kinematicSpatial" type="bool" use="optional">
+                        <xs:annotation><xs:documentation></xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="linearDamping" type="xs:decimal" use="optional">
+                        <xs:annotation><xs:documentation></xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="linearSleepingThreshold" type="xs:decimal" use="optional">
+                        <xs:annotation><xs:documentation></xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="linearFactor" type="xs:string" use="optional">
+                        <xs:annotation><xs:documentation></xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="linearVelocity" type="xs:string" use="optional">
+                        <xs:annotation><xs:documentation></xs:documentation></xs:annotation>
                     </xs:attribute>
                 </xs:extension>
             </xs:complexContent>

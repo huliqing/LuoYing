@@ -24,9 +24,10 @@
     <converter name="FileConverter" value="name.huliqing.editor.converter.field.FileConverter" />
     <converter name="DataFieldConverter" value="name.huliqing.editor.converter.field.DataFieldConverter" />
     <converter name="ListDataFieldConverter" value="name.huliqing.editor.converter.field.ListDataFieldConverter" />
+    <converter name="TagNameConverter" value="name.huliqing.editor.converter.field.TagNameConverter" />
     
     <data name="base" extends="" converter="SimpleDataConverter">
-        <field name="tagName" converter="TextConverter">
+        <field name="tagName" converter="TagNameConverter">
             <feature name="disabled" value="true" />
             <feature name="collapsed" value="true" />
         </field>

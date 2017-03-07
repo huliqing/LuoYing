@@ -82,7 +82,8 @@ public class DataFieldConverter extends SimpleFieldConverter {
             dataConverter.initialize();
         }
         if (dataConverter != null && lastObjectData != null) {
-            getParent().setChildContent(lastObjectData.getId(), dataConverter.getLayout());
+//            getParent().setChildContent(lastObjectData.getId(), dataConverter.getLayout());
+            getParent().setChildLayout(lastObjectData.getId(), dataConverter);
         }
     }
     
@@ -123,7 +124,9 @@ public class DataFieldConverter extends SimpleFieldConverter {
     @Override
     public void cleanup() {
         if (dataConverter != null) {
-            dataConverter.cleanup();
+            if (dataConverter.isInitialized()) {
+                dataConverter.cleanup();
+            }
             dataConverter = null;
         }
         super.cleanup(); 

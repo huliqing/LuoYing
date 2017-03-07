@@ -21,12 +21,11 @@ package name.huliqing.luoying.object.module;
 
 import com.jme3.material.MatParamOverride;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.Vector4f;
 import com.jme3.shader.VarType;
 import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.object.attribute.Attribute;
+import name.huliqing.luoying.object.attribute.ColorAttribute;
 import name.huliqing.luoying.object.attribute.ValueChangeListener;
-import name.huliqing.luoying.object.attribute.Vector4fAttribute;
 import name.huliqing.luoying.object.entity.Entity;
 
 /**
@@ -41,7 +40,7 @@ public class ColorModule extends AbstractModule implements ValueChangeListener{
     private String bindColorAttribute;
     
     // ---- inner
-    private Vector4fAttribute colorAttribute;
+    private ColorAttribute colorAttribute;
     // 用于Unshaded.jm3d
     private final MatParamOverride colorOverride = new MatParamOverride(VarType.Vector4, "Color", ColorRGBA.White.clone());
     // 用于Lighting.j3md
@@ -65,7 +64,7 @@ public class ColorModule extends AbstractModule implements ValueChangeListener{
     @Override
     public void initialize(Entity entity) {
         super.initialize(entity);
-        colorAttribute = getAttribute(bindColorAttribute, Vector4fAttribute.class);
+        colorAttribute = getAttribute(bindColorAttribute, ColorAttribute.class);
         if (colorAttribute != null) {
             colorAttribute.addListener(this);
             changeColor(colorAttribute.getValue());
@@ -81,6 +80,7 @@ public class ColorModule extends AbstractModule implements ValueChangeListener{
             entity.getSpatial().removeMatParamOverride(useMaterialColorOverride);
             entity.getSpatial().removeMatParamOverride(ambientOverride);
             entity.getSpatial().removeMatParamOverride(diffuseOverride);
+            colorInitialized = false;
         }
         super.cleanup(); 
     }
@@ -92,7 +92,7 @@ public class ColorModule extends AbstractModule implements ValueChangeListener{
         }
     }
     
-    private void changeColor(Vector4f vec4) {
+    private void changeColor(ColorRGBA color) {
         if (!colorInitialized) {
             entity.getSpatial().addMatParamOverride(colorOverride);
             entity.getSpatial().addMatParamOverride(useMaterialColorOverride);
@@ -100,8 +100,8 @@ public class ColorModule extends AbstractModule implements ValueChangeListener{
             entity.getSpatial().addMatParamOverride(diffuseOverride);
             colorInitialized = true;
         }
-        ((ColorRGBA)colorOverride.getValue()).set(vec4.x, vec4.y, vec4.z, vec4.w);
-        ((ColorRGBA)ambientOverride.getValue()).set(vec4.x, vec4.y, vec4.z, vec4.w);
-        ((ColorRGBA)diffuseOverride.getValue()).set(vec4.x, vec4.y, vec4.z, vec4.w);
+        ((ColorRGBA)colorOverride.getValue()).set(color.r, color.g, color.b, color.a);
+        ((ColorRGBA)ambientOverride.getValue()).set(color.r, color.g, color.b, color.a);
+        ((ColorRGBA)diffuseOverride.getValue()).set(color.r, color.g, color.b, color.a);
     }
 }

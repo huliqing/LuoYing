@@ -87,7 +87,7 @@ xs:time
                 </xs:attribute>
                 <xs:attribute name="gravity" type="xs:string" use="optional">
                     <xs:annotation>
-                        <xs:documentation>e.g. "0, 0, 0"</xs:documentation>
+                        <xs:documentation>e.g. "0,0,0"</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
                 <xs:attribute name="initialVelocity" type="xs:string" use="required">

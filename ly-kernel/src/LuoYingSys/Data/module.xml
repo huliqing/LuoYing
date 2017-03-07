@@ -9,20 +9,26 @@
     <!-- 基本配置 -->
     <!--==========================================================================-->
     
-   <modulePhysics id="sysModuleEnvPhysicsBase" moduleOrder="0" mass="0" friction="0" kinematic="0" restitution="0" />
+   <modulePhysics id="sysModulePhysicsBase" moduleOrder="0" 
+                   angularDamping="0" angularFactor="1" angularSleepingThreshold="1.0" angularVelocity="" applyPhysicsLocal="0" 
+                   ccdMotionThreshold="0" ccdSweptSphereRadius="0" 
+                   collideWithGroups="1" collisionGroup="1" 
+                   friction="0.5" kinematic="0" kinematicSpatial="1"
+                    linearDamping="0" linearFactor="" linearSleepingThreshold="0.8" linearVelocity="" 
+                   mass="0" physicsShape="" restitution="0"
+   />
 
    <!-- 普通物理模块 -->    
-    <modulePhysics id="sysModulePhysics" extends="sysModuleEnvPhysicsBase" />
+    <modulePhysics id="sysModulePhysics" extends="sysModulePhysicsBase" mass="1.0" />
 
     <!--地形的物理模块-->
-    <modulePhysics id="sysModuleTerrainPhysics" extends="sysModuleEnvPhysicsBase" />
+    <modulePhysics id="sysModuleTerrainPhysics" extends="sysModulePhysicsBase" mass="0" physicsShape="sysPhysicsShapeStaticMesh" />
     
     <!--静态树的物理模块-->
-    <modulePhysics id="sysModuleTreePhysics" extends="sysModuleEnvPhysicsBase" />
+    <modulePhysics id="sysModuleTreePhysics" extends="sysModulePhysicsBase" mass="0" />
 
     <!--包围盒的物理模块-->
-    <modulePhysics id="sysModuleBoundaryPhysics" extends="sysModuleEnvPhysicsBase" />
-    
+    <modulePhysics id="sysModuleBoundaryPhysics" extends="sysModulePhysicsBase" mass="0" physicsShape="sysPhysicsShapeStaticMesh" />
     
 
     <!--==========================================================================-->

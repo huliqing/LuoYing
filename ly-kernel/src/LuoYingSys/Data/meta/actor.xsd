@@ -38,13 +38,13 @@ xs:time
                             <xs:documentation>为角色指定一个图标(64x64), 如：Interface/item/face/female.jpg</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="attributes" type="xs:string" use="required">
+<!--                    <xs:attribute name="attributes" type="xs:string" use="required">
                         <xs:annotation>
                             <xs:documentation>
                                 定义角色的所有属性值,格式如："attribute1,attribute2,attribute3,..."
                             </xs:documentation>
                         </xs:annotation>
-                    </xs:attribute>
+                    </xs:attribute>-->
                     <xs:attribute name="channels" type="xs:string" use="optional">
                         <xs:annotation>
                             <xs:documentation>

@@ -135,6 +135,12 @@ public class EntitiesFieldConverter extends FieldConverter<JfxSceneEdit, EntityD
     
     @Override
     public void cleanup() {
+        if (dataConverter != null) {
+            if (dataConverter.isInitialized()) {
+                dataConverter.cleanup();
+            }
+            dataConverter = null;
+        }
         jfxEdit.removeListener(this);
         super.cleanup(); 
     }
@@ -202,7 +208,8 @@ public class EntitiesFieldConverter extends FieldConverter<JfxSceneEdit, EntityD
         }
         dataConverter = dc;
         dataConverter.initialize();
-        getParent().setChildContent(entityData.getId(), dataConverter.getLayout());
+//        getParent().setChildContent(entityData.getId(), dataConverter.getLayout());
+        getParent().setChildLayout(entityData.getId(), dataConverter);
     }
 
     @Override
@@ -222,7 +229,7 @@ public class EntitiesFieldConverter extends FieldConverter<JfxSceneEdit, EntityD
                     setGraphic(null);
                     if (!empty && item != null) {
                         String name = item.getName();
-                        if (name != null) {
+                        if (name != null && !name.isEmpty()) {
                             setText(item.getId() + "(" + name + ")");
                         } else {
                             setText(item.getId());

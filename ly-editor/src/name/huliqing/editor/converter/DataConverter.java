@@ -40,12 +40,16 @@ public abstract class DataConverter<E extends JfxAbstractEdit, T extends ObjectD
     protected final ScrollPane dataScroll = new ScrollPane();
     protected final VBox fieldPanel = new VBox();
 
+    // 子面板，显示子联系的物体
     protected final TitledPane childPane = new TitledPane();
+    protected DataConverter childDataConverter;
 
     public DataConverter() {
         dataScroll.setId(StyleConstants.ID_PROPERTY_PANEL);
         dataScroll.setContent(fieldPanel);
         childPane.managedProperty().bind(childPane.visibleProperty());
+        // for debug
+//        childPane.setStyle("-fx-border-style: solid inside;-fx-border-color:red;"); 
     }
 
     @Override
@@ -119,7 +123,8 @@ public abstract class DataConverter<E extends JfxAbstractEdit, T extends ObjectD
             // 列表类型目前只支持 List<String>和List<Savable>
             List listValue = (List) value;
             if (listValue.isEmpty()) {
-                data.setAttribute(property, (Savable) null); // 清除
+//                data.setAttribute(property, (Savable) null); // 清除
+                data.setAttributeStringList(property, listValue);
             } else {
                 Object itemObject = listValue.get(0);
                 if (itemObject instanceof String) {
@@ -142,7 +147,7 @@ public abstract class DataConverter<E extends JfxAbstractEdit, T extends ObjectD
     public void initialize() {
         super.initialize();
 
-        jfxEdit.getEditPanel().getChildren().addAll(childPane);
+        jfxEdit.getEditPanel().getChildren().add(childPane);
         childPane.setVisible(false);
 
         if (fieldDefines != null && !fieldDefines.isEmpty()) {
@@ -172,6 +177,13 @@ public abstract class DataConverter<E extends JfxAbstractEdit, T extends ObjectD
 
     @Override
     public void cleanup() {
+        if (childDataConverter != null) {
+            if (childDataConverter.isInitialized()) {
+                childDataConverter.cleanup();
+            }
+            childDataConverter = null;
+        }
+        
         fieldConverters.values().stream().filter(t -> t.isInitialized()).forEach(
                 t -> {
                     t.cleanup();
@@ -180,13 +192,21 @@ public abstract class DataConverter<E extends JfxAbstractEdit, T extends ObjectD
         fieldConverters.clear();
         fieldPanel.getChildren().clear();
 
-        jfxEdit.getEditPanel().getChildren().removeAll(childPane);
+        jfxEdit.getEditPanel().getChildren().remove(childPane);
         super.cleanup();
     }
-
-    public void setChildContent(String childTitle, Node childContent) {
+    
+    public void setChildLayout(String childTitle, DataConverter childConverter) {
+        if (childDataConverter != null && childDataConverter != childConverter) {
+            if (childDataConverter.isInitialized()) {
+                childDataConverter.cleanup();
+            }
+        }
+        childDataConverter = childConverter;
         childPane.setText(childTitle);
-        childPane.setContent(childContent);
+        childPane.setContent(childDataConverter.getLayout());
         childPane.setVisible(true);
     }
+    
+    
 }

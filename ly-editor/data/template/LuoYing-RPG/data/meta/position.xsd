@@ -34,7 +34,7 @@ xs:time
         </xs:annotation>
         <xs:complexType>
             <xs:complexContent>
-                <xs:extension base="base">
+                <xs:extension base="positionBase">
                     <xs:attribute name="corner" use="required" >
                         <xs:annotation>
                             <xs:documentation>角落位置，支持: LB,LC,LT,CB,CC,CT,RB,RC,RT</xs:documentation>
@@ -73,7 +73,7 @@ xs:time
         </xs:annotation>
         <xs:complexType>
             <xs:complexContent>
-                <xs:extension base="base">
+                <xs:extension base="positionBase">
                     <xs:attribute name="point" type="xs:string" use="required">
                         <xs:annotation>
                             <xs:documentation>e.g. "0,0,0"</xs:documentation>
@@ -90,11 +90,18 @@ xs:time
         </xs:annotation>
         <xs:complexType>
             <xs:complexContent>
-                <xs:extension base="base">
-                    <xs:attribute name="plane" type="plane" use="required">
+                <xs:extension base="positionBase">
+                    <xs:attribute name="plane" use="required">
                         <xs:annotation>
                             <xs:documentation>shape所在的原始面</xs:documentation>
                         </xs:annotation>
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="xy" />
+                                <xs:enumeration value="xz" />
+                                <xs:enumeration value="yz" />
+                            </xs:restriction>
+                        </xs:simpleType>
                     </xs:attribute>
                     <xs:attribute name="minRadius" type="xs:decimal" use="required">
                         <xs:annotation>
@@ -127,6 +134,13 @@ xs:time
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
+                    <xs:attribute name="orderInvert" type="bool" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                当order=true时，默认为逆时针顺序产生粒子位置，使用orderInvert来反转顺序
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
                     <xs:attribute name="orderSize" type="xs:integer" use="optional">
                         <xs:annotation>
                             <xs:documentation>
@@ -138,14 +152,7 @@ xs:time
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="orderInvert" type="bool" use="optional">
-                        <xs:annotation>
-                            <xs:documentation>
-                                当order=true时，默认为逆时针顺序产生粒子位置，使用orderInvert来反转顺序
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
-                    <xs:attribute name="orderStartDegree" type="bool" use="optional">
+                    <xs:attribute name="orderStartDegree" type="xs:decimal" use="optional">
                         <xs:annotation>
                             <xs:documentation>
                                 当order=true时，可指定一个开始角度(默认0),注:是角度,非弧度
@@ -163,7 +170,7 @@ xs:time
         </xs:annotation>
         <xs:complexType>
             <xs:complexContent>
-                <xs:extension base="base">
+                <xs:extension base="positionBase">
                     <xs:attribute name="min" type="xs:string" use="required">
                         <xs:annotation>
                             <xs:documentation>e.g. "-1,-1,-1"</xs:documentation>
@@ -185,7 +192,7 @@ xs:time
         </xs:annotation>
         <xs:complexType>
             <xs:complexContent>
-                <xs:extension base="base">
+                <xs:extension base="positionBase">
                     <xs:attribute name="center" type="xs:string" use="required">
                         <xs:annotation>
                             <xs:documentation>e.g. "0,0,0"</xs:documentation>
@@ -200,5 +207,12 @@ xs:time
             </xs:complexContent>
         </xs:complexType>
     </xs:element>
+    
+    <xs:complexType name="positionBase">
+        <xs:complexContent>
+            <xs:extension base="base"> 
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
     
 </xs:schema>

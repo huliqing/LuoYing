@@ -824,6 +824,9 @@ xs:time
         <xs:complexContent>
             <xs:extension base="entityModelBase">
                 <xs:attribute ref="file" />
+                <xs:attribute name="makeOnTerrain" type="bool" use="optional">
+                    <xs:annotation><xs:documentation>当树木放入到场景时是否自动将树木移动到地面上。</xs:documentation></xs:annotation>
+                </xs:attribute>
                 <xs:attribute name="sway" type="bool" use="optional">
                     <xs:annotation><xs:documentation>打开树叶、草叶摇摆功能</xs:documentation></xs:annotation>
                 </xs:attribute>

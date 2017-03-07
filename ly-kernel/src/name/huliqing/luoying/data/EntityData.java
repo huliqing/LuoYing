@@ -85,16 +85,16 @@ public class EntityData extends ObjectData {
      * 获取角色的所有模块
      * @return 
      */
-    public List<ModuleData> getModuleDatas() {
-        return getAsObjectDataList("moduleDatas");
+    public List<ModuleData> getModules() {
+        return getAsObjectDataList("modules");
     }
 
     /**
      * 设置模块数据列表
-     * @param moduleDatas 
+     * @param modules 
      */
-    public void setModuleDatas(List<ModuleData> moduleDatas) {
-        setAttributeSavableList("moduleDatas", moduleDatas);
+    public void setModules(List<ModuleData> modules) {
+        setAttributeSavableList("modules", modules);
     }
     
     /**
@@ -115,10 +115,10 @@ public class EntityData extends ObjectData {
 
     
     public synchronized void addModuleData(ModuleData moduleData) {
-        List<ModuleData> moduleDatas = getModuleDatas();
+        List<ModuleData> moduleDatas = getModules();
         if (moduleDatas == null) {
             moduleDatas = new ArrayList<ModuleData>();
-            setModuleDatas(moduleDatas);
+            setModules(moduleDatas);
         }
         if (!moduleDatas.contains(moduleData)) {
             moduleDatas.add(moduleData);
@@ -126,7 +126,7 @@ public class EntityData extends ObjectData {
     }
     
     public synchronized boolean removeModuleData(ModuleData moduleData) {
-        List<ModuleData> moduleDatas = getModuleDatas();
+        List<ModuleData> moduleDatas = getModules();
         return moduleDatas != null && moduleDatas.remove(moduleData);
     }
     

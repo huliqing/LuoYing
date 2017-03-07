@@ -98,13 +98,19 @@ public abstract class AbstractModule implements Module<ModuleData> {
      * @return 
      */
     protected <T extends Attribute> T getAttribute(String attributeName, Class<T> type) {
-        if (attributeName == null) {
+        if (attributeName == null || attributeName.equals("")) {
             return null;
         }
         T attribute = entity.getAttributeManager().getAttribute(attributeName, type);
         if (attribute == null) {
-            LOG.log(Level.WARNING, "Attribute not found by attributeName={0}, attributeType={1}, entity={2}, entityUniqueId={3}"
-                    , new Object[] {attributeName, type.getName(), entity.getData().getId(), entity.getData().getUniqueId()});
+            LOG.log(Level.WARNING
+                    , "Attribute not found by attributeName={0}, attributeType={1}, entity={2}, entityUniqueId={3}, logClass={4}"
+                    , new Object[] {attributeName
+                            , type.getName()
+                            , entity.getData().getId()
+                            , entity.getData().getUniqueId()
+                            , getClass().getName()
+                    });
         }
         return attribute;
     }
@@ -168,62 +174,6 @@ public abstract class AbstractModule implements Module<ModuleData> {
         String message = entity.getData().getId() + " use data " + objectData.getId();
         messageService.addMessage(new EntityDataUseMessage(stateCode, message, entity, objectData));
     }
-    
-//    /**
-//     * 添加实体消息，用于向控制台输出关于当前实体的行为消息，例如：实体添加、使用或删除了一个物体。
-//     * @param stateCode 消息状态码,具体参考：{@link StateCode}
-//     * @param objectData Entity消息的物体对象,这表示这个物品被添加、使用或删除
-//     * @see #addEntityMessage(name.huliqing.luoying.xml.ObjectData, int, java.lang.String) 
-//     */
-//    protected void addEntityMessage(ObjectData objectData, int stateCode) {
-//        // 使用物品时的游戏消息
-//        if (!isMessageEnabled()) {
-//            return;
-//        }
-//        String resKey;
-//        switch (stateCode) {
-//            case StateCode.DATA_ADD:
-//                resKey = ResConstants.DATA_ADD;
-//                break;
-//            case StateCode.DATA_REMOVE:
-//                resKey = ResConstants.DATA_REMOVE;
-//                break;
-//            case StateCode.DATA_REMOVE_FAILURE:
-//            case StateCode.DATA_REMOVE_FAILURE_NOT_FOUND:
-//            case StateCode.DATA_REMOVE_FAILURE_UN_DELETABLE:
-//                resKey = ResConstants.DATA_REMOVE_FAILURE;
-//                break;
-//            case StateCode.DATA_USE:
-//                resKey = ResConstants.DATA_USE;
-//                break;
-//            case StateCode.DATA_USE_FAILURE:
-//            case StateCode.DATA_USE_FAILURE_CHECK_EL:
-//            case StateCode.DATA_USE_FAILURE_NOT_ENOUGH:
-//            case StateCode.DATA_USE_FAILURE_SKILL_EXISTS:
-//                resKey = ResConstants.DATA_USE_FAILURE;
-//                break;
-//            default:
-//                resKey = null;
-//        }
-//        String message = resKey != null ? ResManager.get(resKey, ResManager.get(objectData.getId() + ".name"))
-//                : "Unknow state code!";
-//        messageService.addMessage(new EntityMessage(stateCode, message, entity, objectData));
-//    }
-//    
-//    /**
-//     * 添加实体消息，用于向控制台输出关于当前实体的行为消息，例如：实体添加、使用或删除了一个物体。
-//     * @param objectData 物体目标
-//     * @param stateCode 消息状态码
-//     * @param message 消息内容
-//     * @see #addEntityMessage(name.huliqing.luoying.xml.ObjectData, int) 
-//     */
-//    protected void addEntityMessage(ObjectData objectData, int stateCode, String message) {
-//        // 使用物品时的游戏消息
-//        if (!isMessageEnabled()) {
-//            return;
-//        }
-//        messageService.addMessage(new EntityMessage(stateCode, message, entity, objectData));
-//    }
     
     
 }

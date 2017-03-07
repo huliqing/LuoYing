@@ -49,11 +49,6 @@ public abstract class AbstractAttribute<T> implements Attribute<T> {
         this.data = data;
         name = data.getAsString("name");
     }
-    
-//    @Override
-//    public void updateDatas() {
-//        data.setAttribute(ATTR_VALUE, value);
-//    }
 
     @Override
     public void initialize(AttributeManager attributeManager) {

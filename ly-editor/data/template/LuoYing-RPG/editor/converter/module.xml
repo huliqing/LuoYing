@@ -11,6 +11,8 @@
     </data>
 
     <data name="moduleActor" extends="moduleBase">
+        <field name="radius" converter="FloatTextConverter" />
+        <field name="height" converter="FloatTextConverter" />
         <field name="bindDeadAttribute" converter="TextConverter" />
         <field name="bindTargetAttribute" converter="TextConverter" />
         <field name="bindMassAttribute" converter="TextConverter" />
@@ -58,6 +60,51 @@
         <field name="friction" converter="FloatTextConverter" />
         <field name="restitution" converter="FloatTextConverter" />
         <field name="kinematic" converter="CheckBoxConverter" />
+        <field name="physicsShape" converter="DataFieldConverter">
+            <feature name="componentType" value="physicsShape" />
+        </field>
+        <field name="angularDamping" converter="FloatTextConverter">
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="angularFactor" converter="FloatTextConverter">
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="angularSleepingThreshold" converter="FloatTextConverter">
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="angularVelocity" converter="Vector3fConverter">
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="applyPhysicsLocal" converter="CheckBoxConverter">
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="ccdMotionThreshold" converter="FloatTextConverter">
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="ccdSweptSphereRadius" converter="FloatTextConverter">
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="collideWithGroups" converter="IntegerTextConverter">
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="collisionGroup" converter="IntegerTextConverter">
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="kinematicSpatial" converter="CheckBoxConverter">
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="linearDamping" converter="FloatTextConverter">
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="linearSleepingThreshold" converter="FloatTextConverter">
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="linearFactor" converter="Vector3fConverter">
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="linearVelocity" converter="Vector3fConverter">
+            <feature name="collapsed" value="true" />
+        </field>
     </data>
 
     <data name="moduleResist" extends="moduleBase">

@@ -24,6 +24,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
+import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
@@ -38,6 +39,7 @@ import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.object.shape.Shape;
 import name.huliqing.luoying.object.sound.SoundManager;
 import name.huliqing.luoying.utils.DebugDynamicUtils;
+import name.huliqing.luoying.utils.MaterialUtils;
 
 /**
  * 子弹基类
@@ -133,7 +135,7 @@ public abstract class AbstractBullet extends ModelEntity<BulletData> implements 
     public void initEntity() {
         super.initEntity();
         // 用于碰撞
-        hitChecker = shape.getGeometry();
+        hitChecker = createHitCheckGeometry(shape.getMesh());
         hitChecker.setCullHint(debug ? CullHint.Never : CullHint.Always);
         if (shapeOffset != null) {
             hitChecker.setLocalTranslation(shapeOffset);
@@ -141,6 +143,12 @@ public abstract class AbstractBullet extends ModelEntity<BulletData> implements 
         bulletNode.attachChild(hitChecker);
     }
 
+    private Geometry createHitCheckGeometry(Mesh mesh) {
+        Geometry geometry = new Geometry("bullet", mesh);
+        geometry.setMaterial(MaterialUtils.createWireFrame());
+        return geometry;
+    }
+    
     @Override
     public void onInitScene(Scene scene) {
         super.onInitScene(scene);

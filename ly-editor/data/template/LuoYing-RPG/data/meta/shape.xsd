@@ -20,6 +20,8 @@ xs:time
         <xs:complexType>
             <xs:all>
                 <xs:element ref="shapeBox" />
+                <xs:element ref="shapeCustom" />
+                <xs:element ref="shapeSphere" />
             </xs:all>
         </xs:complexType>
     </xs:element>
@@ -34,6 +36,50 @@ xs:time
                     <xs:attribute name="extents" type="xs:string" use="required">
                         <xs:annotation>
                             <xs:documentation>box在各个方向的延伸，格式："x,y,z"</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="shapeCustom" >
+        <xs:annotation>
+            <xs:documentation>Box类型的Shape</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="shapeBase">
+                    <xs:attribute name="file" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>关联一个模型文件，shapeCustom将使用这个文件作为网格</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="shapeSphere" >
+        <xs:annotation>
+            <xs:documentation>Box类型的Shape</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="shapeBase">
+                    <xs:attribute name="radius" type="xs:decimal" use="required">
+                        <xs:annotation>
+                            <xs:documentation></xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="zSamples" type="xs:integer" use="optional">
+                        <xs:annotation>
+                            <xs:documentation></xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="radialSamples" type="xs:integer" use="optional">
+                        <xs:annotation>
+                            <xs:documentation></xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
                 </xs:extension>

@@ -19,9 +19,7 @@
  */
 package name.huliqing.luoying.object.shape;
 
-import com.jme3.scene.Geometry;
 import name.huliqing.luoying.data.ShapeData;
-import name.huliqing.luoying.utils.MaterialUtils;
 
 /**
  *
@@ -31,7 +29,11 @@ import name.huliqing.luoying.utils.MaterialUtils;
 public abstract class AbstractShape<T extends ShapeData> implements Shape<T> {
 
     protected T data;
-    protected Geometry geometry;
+    
+    @Override
+    public void updateDatas() {
+        // ignore
+    }
 
     @Override
     public void setData(T data) {
@@ -42,19 +44,4 @@ public abstract class AbstractShape<T extends ShapeData> implements Shape<T> {
     public T getData() {
         return data;
     }
-
-    @Override
-    public void updateDatas() {
-        // ignore
-    }
-
-    @Override
-    public Geometry getGeometry() {
-        if (geometry == null) {
-            geometry = new Geometry("AbstractShape", getMesh());
-            geometry.setMaterial(MaterialUtils.createWireFrame());
-        }
-        return geometry;
-    }
-    
 }

@@ -406,6 +406,15 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
+                <xs:attribute name="endImmediate" type="bool" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>判断特效是否可以立即结束，默认false, 大部分情况下特效都应该”自然结束“，
+                            但是存在一些特殊特效，这些特效需要在被依赖的目标（如技能）结束的时候立即也一起结束。</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute ref="location" />
+                <xs:attribute ref="rotation" />
+                <xs:attribute ref="scale" />
                 <xs:attribute ref="queueBucket" />
                 <xs:attribute ref="cullHint" />
                 <xs:attribute ref="shadowMode" />
@@ -462,12 +471,6 @@
                         <xs:documentation>
                            效果在跟随时的旋转偏移, 格式:"x,y,z"
                         </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="endImmediate" type="bool" use="optional">
-                    <xs:annotation>
-                        <xs:documentation>判断特效是否可以立即结束，默认false, 大部分情况下特效都应该”自然结束“，
-                            但是存在一些特殊特效，这些特效需要在被依赖的目标（如技能）结束的时候立即也一起结束。</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
             </xs:extension>

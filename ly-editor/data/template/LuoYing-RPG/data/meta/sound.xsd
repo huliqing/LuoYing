@@ -42,14 +42,14 @@ xs:time
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:attribute>
-                <xs:attribute name="direction" type="xs:string" use="optional">
-                    <xs:annotation>
-                        <xs:documentation>default:"0,0,1"</xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
                 <xs:attribute name="directional" type="bool" use="optional">
                     <xs:annotation>
                         <xs:documentation>default: "0"</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="direction" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>default:"0,0,1"</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
                 <xs:attribute name="positional" type="bool" use="optional">
@@ -112,8 +112,6 @@ xs:time
                         <xs:documentation>default: "1.0"</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                
-                
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>

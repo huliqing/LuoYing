@@ -15,11 +15,6 @@
         <field name="icon" converter="FileConverter">
             <feature name="filters" value="Images|*.jpg|*.jpeg|*.png,All Files|*.*" />
         </field>
-        <field name="attributes" converter="EntityObjectDatasFieldConverter">
-            <feature name="dataType" value="name.huliqing.luoying.data.AttributeData" />
-            <feature name="componentType" value="attribute" />
-            <feature name="collapsed" value="true" />
-        </field>
         <field name="channels" converter="EntityObjectDatasFieldConverter">
             <feature name="dataType" value="name.huliqing.luoying.data.ChannelData" />
             <feature name="componentType" value="channel" />

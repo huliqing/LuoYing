@@ -237,7 +237,7 @@ public class GameServiceImpl implements GameService {
     
     @Override
     public void setColor(Entity entity, ColorRGBA color) {
-        entityService.hitAttribute(entity, AttrConstants.COLOR, new Vector4f(color.r, color.g, color.b, color.a), null);
+        entityService.hitAttribute(entity, AttrConstants.COLOR, color, null);
     }
     
     @Override

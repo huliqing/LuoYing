@@ -74,6 +74,7 @@ public class SimpleModelEntityControlTile extends EntityControlTile<Entity> impl
         }
         // 在清理之前先把spatial取出,这样不会在entity清理的时候被一同清理掉
         Spatial terrainSpatial = target.getSpatial();
+        
          // 判断地形贴图是否有修改
         Boolean terrainAlphaModified = terrainSpatial.getUserData(UserDataConstants.EDIT_TERRAIN_MODIFIED_ALPHA);
         // 判断地形是否有修改
@@ -144,6 +145,9 @@ public class SimpleModelEntityControlTile extends EntityControlTile<Entity> impl
         RigidBodyControl control = target.getSpatial().getControl(RigidBodyControl.class);
         if (control != null) {
             control.setPhysicsLocation(location);
+            // 重新激活物理特性，当物体不再运动时物理引擎会让它进入睡眠，以节省性能。
+            // 这里要确保重新激活，以便在编辑的时候可以重新看到物理效果的影响
+            control.activate();
         }
         BetterCharacterControl character = target.getSpatial().getControl(BetterCharacterControl.class);
         if (character != null) {
@@ -159,6 +163,7 @@ public class SimpleModelEntityControlTile extends EntityControlTile<Entity> impl
         RigidBodyControl control = target.getSpatial().getControl(RigidBodyControl.class);
         if (control != null) {
             control.setPhysicsRotation(rotation);
+            control.activate();
         }
         // 角色类型使用的不是普通的RigidBodyControl来控制旋转。
         // 需要通过ActorModule来旋转

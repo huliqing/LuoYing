@@ -48,6 +48,8 @@ public abstract class PlantEntity extends ModelEntity {
     
     private SceneListener sceneListener;
     
+    // 当树木放入到场景时自动将树木移动到地面上。
+    private boolean makeOnTerrain;
     // 树叶、草叶摇摆
     private boolean sway;
     // 摇动的频率
@@ -64,6 +66,7 @@ public abstract class PlantEntity extends ModelEntity {
     @Override
     public void setData(ModelEntityData data) {
         super.setData(data);
+        makeOnTerrain = data.getAsBoolean("makeOnTerrain", makeOnTerrain);
         sway = data.getAsBoolean("sway", sway);
         swayFrequency = data.getAsFloat("swayFrequency", swayFrequency);
         swayVariation = data.getAsFloat("swayVariation", swayVariation);
@@ -90,20 +93,23 @@ public abstract class PlantEntity extends ModelEntity {
     @Override
     public void onInitScene(Scene scene) {
         super.onInitScene(scene);
-        if (scene.isInitialized()) {
-            // 把植皮移到地形上面
-            makePlantOnTerrain(scene);
-        } else {
-            sceneListener = new SceneListenerAdapter() {
-                @Override
-                public void onSceneLoaded(Scene scene) {
-                    // 把植皮移到地形上面
-                    makePlantOnTerrain(scene);
-                    // 在处理完位置点之后就可以不再需要侦听了
-                    scene.removeSceneListener(this);
-                }
-            };
-            scene.addSceneListener(sceneListener);
+        if (makeOnTerrain) {
+            if (scene.isInitialized()) {
+                // 把植皮移到地形上面
+                makePlantOnTerrain(scene);
+            } else {
+                sceneListener = new SceneListenerAdapter() {
+                    @Override
+                    public void onSceneLoaded(Scene scene) {
+                        // 把植皮移到地形上面
+                        makePlantOnTerrain(scene);
+                        // 在处理完位置点之后就可以不再需要侦听了
+                        scene.removeSceneListener(sceneListener);
+                        sceneListener = null;
+                    }
+                };
+                scene.addSceneListener(sceneListener);
+            }
         }
     }
     
@@ -111,6 +117,7 @@ public abstract class PlantEntity extends ModelEntity {
     public void cleanup() {
         if (sceneListener != null) {
             scene.removeSceneListener(sceneListener);
+            sceneListener = null;
         }
         super.cleanup();
     }

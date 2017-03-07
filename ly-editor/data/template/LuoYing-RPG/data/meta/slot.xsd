@@ -32,7 +32,7 @@ xs:time
         </xs:annotation>
         <xs:complexType>
             <xs:complexContent>
-                <xs:extension base="baseSlot">
+                <xs:extension base="slotBase">
                     <xs:attribute name="bindBone" type="xs:string" use="required" >
                         <xs:annotation><xs:documentation>武器所绑定的骨头</xs:documentation></xs:annotation>
                     </xs:attribute>
@@ -52,18 +52,12 @@ xs:time
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-<!--                    <xs:attribute name="leftHandSkinSkill" type="xs:stirng" use="required">
-                        <xs:annotation><xs:documentation>绑定一个左手拿该槽位武器的Skin类型的技能</xs:documentation></xs:annotation>
-                    </xs:attribute>
-                    <xs:attribute name="rightHandSkinSkill" type="xs:stirng" use="required">
-                        <xs:annotation><xs:documentation>绑定一个右手拿该槽位武器的Skin类型的技能</xs:documentation></xs:annotation>
-                    </xs:attribute>-->
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
     </xs:element>
     
-    <xs:complexType name="baseSlot">
+    <xs:complexType name="slotBase">
         <xs:complexContent>
             <xs:extension base="base">
             </xs:extension>

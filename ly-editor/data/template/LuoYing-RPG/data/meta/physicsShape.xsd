@@ -1,0 +1,156 @@
+<?xml version="1.0"?>
+<!--
+xs:string
+xs:decimal
+xs:integer
+xs:boolean
+xs:date
+xs:time
+-->
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://luoying.huliqing.name"
+           xmlns="http://luoying.huliqing.name"
+           elementFormDefault="qualified">
+    
+    <xs:include schemaLocation="./base.xsd" />
+    
+    <xs:element name="root">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="physicsShapeBox" />
+                <xs:element ref="physicsShapeCapsule" />
+                <xs:element ref="physicsShapeDynamicMesh" />
+                <xs:element ref="physicsShapeSphere" />
+                <xs:element ref="physicsShapeStaticCustomMesh" />
+                <xs:element ref="physicsShapeStaticMesh" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="physicsShapeBox">
+        <xs:annotation>
+            <xs:documentation>使用物体的包围盒来创建碰撞网格。</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="physicsShapeBase">
+                    <xs:attribute name="extents" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>Box大小，格式："x,y,z", 默认"0.5,0.5,0.5"(单位立方体)</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="physicsShapeCapsule">
+        <xs:annotation>
+            <xs:documentation>胶囊型的碰撞网格，适合质量大于0的可移动物体，特别是直立行走的生物角色，如人物.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="physicsShapeBase">
+                    <xs:attribute name="radius" type="xs:decimal" use="required">
+                        <xs:annotation>
+                            <xs:documentation></xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="height" type="xs:decimal" use="required">
+                        <xs:annotation>
+                            <xs:documentation></xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="axis" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>轴向: 0=X, 1=Y, 2=Z;  默认: 1</xs:documentation>
+                        </xs:annotation>
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="0" />
+                                <xs:enumeration value="1" />
+                                <xs:enumeration value="2" />
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+        
+    <xs:element name="physicsShapeDynamicMesh">
+        <xs:annotation>
+            <xs:documentation>
+                动态碰撞网格(hull collision shape), 适合于质量大于0的可移动的角色或物体，如：人物、生物、坦克等.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="physicsShapeBase">
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+        
+    <xs:element name="physicsShapeSphere">
+        <xs:annotation>
+            <xs:documentation>
+                球形的动态碰撞网格
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="physicsShapeBase">
+                    <xs:attribute name="radius" type="xs:decimal" use="required">
+                        <xs:annotation>
+                            <xs:documentation>半径,默认1.0</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="physicsShapeStaticCustomMesh">
+        <xs:annotation>
+            <xs:documentation>
+                 自定义的静态网格碰撞物体，这个物体会关联到一个Shape物体，由这个Shape的网格来定义碰撞，
+ * 和{@link StaticMeshPhysicsShape }一样，只能用于质量为0的不可移动的物体，如，如地形，房屋，树木等。
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="physicsShapeBase">
+                    <xs:attribute name="shape" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>关联到一个Shape物体,这个物体用于定义碰撞网格。</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    
+    <xs:element name="physicsShapeStaticMesh">
+        <xs:annotation>
+            <xs:documentation>静态类型的碰撞网格，只能用于质量为0的不可移动的物体，如，如地形，房屋，树木等。</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="physicsShapeBase">
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:complexType name="physicsShapeBase">
+        <xs:complexContent>
+            <xs:extension base="base">
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+</xs:schema>

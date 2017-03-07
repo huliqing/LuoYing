@@ -7,7 +7,7 @@
     
     <!--Entity FieldConverter-->
     <converter name="EntityDataConverter" value="name.huliqing.editor.converter.data.EntityDataConverter" />
-    <converter name="ModulesFieldConverter" value="name.huliqing.editor.converter.field.ModulesFieldConverter" />
+    <converter name="SwayGeometriesFieldConverter" value="name.huliqing.editor.converter.field.SwayGeometriesFieldConverter" />
 
     <data name="entityBase" extends="base" converter="EntityDataConverter">
         <field name="name" converter="TextConverter">
@@ -25,10 +25,16 @@
         <field name="mat" converter="TextConverter">
             <feature name="collapsed" value="true" />
         </field>
-        <field name="modules" converter="ModulesFieldConverter">
+        <field name="objectDatas" converter="ListDataFieldConverter">
             <feature name="collapsed" value="true" />
         </field>
-        <field name="objectDatas" converter="ListDataFieldConverter">
+        <field name="modules" converter="ListDataFieldConverter">
+            <feature name="componentType" value="module" />
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="attributes" converter="EntityObjectDatasFieldConverter">
+            <feature name="dataType" value="name.huliqing.luoying.data.AttributeData" />
+            <feature name="componentType" value="attribute" />
             <feature name="collapsed" value="true" />
         </field>
     </data>
@@ -62,7 +68,7 @@
         <field name="swayWind" converter="Vector2fConverter">
             <feature name="collapsed" value="true" />
         </field>
-        <field name="swayGeometries" converter="TextConverter" />
+        <field name="swayGeometries" converter="SwayGeometriesFieldConverter" />
 <!--        <field name="randomScale" converter="CheckBoxConverter" />
         <field name="minScale" converter="TextConverter" />
         <field name="maxScale" converter="TextConverter" />-->
@@ -171,7 +177,7 @@
     </data>
 
     <data name="entitySimpleWater" extends="entityModelBase">
-        <feature name="hideFields" value="mat,modules,objectDatas,shadowMode,cullHint,queueBucket,preferUnshaded" />
+        <feature name="hideFields" value="mat,shadowMode,cullHint,queueBucket,preferUnshaded" />
         <field name="waterModel" converter="FileConverter">
             <feature name="filters" value="Model Files|*.j3o,All Files|*.*" />
         </field>
@@ -195,7 +201,7 @@
     </data>
     
     <data name="entityAdvanceWater" extends="entityModelBase">
-        <feature name="hideFields" value="mat,modules,objectDatas,rotation,scale,shadowMode,cullHint,queueBucket,preferUnshaded" />
+        <feature name="hideFields" value="mat,rotation,scale,shadowMode,cullHint,queueBucket,preferUnshaded" />
         <field name="center" converter="Vector3fConverter">
             <feature name="collapsed" value="true" />
         </field>
@@ -267,7 +273,7 @@
     </data>
     
     <data name="entitySkyBox" extends="entityModelBase">
-        <feature name="hideFields" value="location,rotation,scale,mat,modules,objectDatas,shadowMode,cullHint,queueBucket,preferUnshaded" />
+        <feature name="hideFields" value="location,rotation,scale,mat,shadowMode,cullHint,queueBucket,preferUnshaded" />
         <field name="west" converter="FileConverter">
             <feature name="filters" value="Images|*.jpg|*.jpeg|*.png,All Files|*.*" />
         </field>

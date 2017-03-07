@@ -44,15 +44,15 @@ public class EntityDataLoader<T extends EntityData> implements DataLoader<T>{
         // 载入模块配置,并根据ModuleOrder进行排序
         String[] moduleArr = proto.getAsArray("modules");
         if (moduleArr != null) {
-            data.setModuleDatas(new ArrayList<ModuleData>(moduleArr.length));
+            data.setModules(new ArrayList<ModuleData>(moduleArr.length));
             for (String mid : moduleArr) {
                 try {
-                    data.getModuleDatas().add((ModuleData) DataFactory.createData(mid));
+                    data.getModules().add((ModuleData) DataFactory.createData(mid));
                 } catch (Exception e) {
                     throw new LuoYingException("Could not load moduleData, moduleId=" + mid + ", entityId=" + proto.getId(), e);
                 }
             }
-            Collections.sort(data.getModuleDatas(), new Comparator<ModuleData>() {
+            Collections.sort(data.getModules(), new Comparator<ModuleData>() {
                 @Override
                 public int compare(ModuleData o1, ModuleData o2) {
                     return o1.getModuleOrder() - o2.getModuleOrder();

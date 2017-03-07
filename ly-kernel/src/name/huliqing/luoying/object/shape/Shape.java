@@ -19,7 +19,6 @@
  */
 package name.huliqing.luoying.object.shape;
 
-import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import name.huliqing.luoying.data.ShapeData;
 import name.huliqing.luoying.xml.DataProcessor;
@@ -36,5 +35,4 @@ public interface Shape<T extends ShapeData> extends DataProcessor<T> {
      */
     Mesh getMesh();
     
-    Geometry getGeometry();
 }

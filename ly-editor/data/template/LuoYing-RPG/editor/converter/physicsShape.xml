@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://editor.huliqing.name'
+    xsi:schemaLocation='http://editor.huliqing.name meta.xsd'>
+    
+    <data name="physicsShapeBase" extends="base">
+    </data>
+    
+    <data name="physicsShapeBox" extends="physicsShapeBase">
+        <field name="extents" converter="Vector3fConverter" />
+    </data>
+    
+    <data name="physicsShapeCapsule" extends="physicsShapeBase">
+        <field name="radius" converter="FloatTextConverter" />
+        <field name="height" converter="FloatTextConverter" />
+        <field name="axis" converter="ChoiceConverter" >
+            <feature name="items" value="0,1,2" />
+        </field>
+    </data>
+    
+    <data name="physicsShapeDynamicMesh" extends="physicsShapeBase"/>
+    
+    <data name="physicsShapeSphere" extends="physicsShapeBase">
+        <field name="radius" converter="FloatTextConverter" />
+    </data>
+    
+    <data name="physicsShapeStaticCustomMesh" extends="physicsShapeBase">
+        <field name="shape" converter="DataFieldConverter">
+            <feature name="componentType" value="shape" />
+        </field>
+    </data>
+    
+    <data name="physicsShapeStaticMesh" extends="physicsShapeBase"/>
+    
+    
+</root>

@@ -98,8 +98,9 @@ public class ListDataFieldConverter<E extends JfxAbstractEdit, T extends ObjectD
                 setText(null);
                 setGraphic(null);
                 if (!empty) {
-                    if (item.getName() != null) {
-                        setText(item.getId() + "(" + item.getName() + ")");
+                    String name = item.getName();
+                    if (name != null && !name.isEmpty()) {
+                        setText(item.getId() + "(" + name + ")");
                     } else {
                         setText(item.getId());
                     }
@@ -118,7 +119,8 @@ public class ListDataFieldConverter<E extends JfxAbstractEdit, T extends ObjectD
             }
             dataConverter = ConverterManager.createDataConverter(jfxEdit, newValue, ListDataFieldConverter.this);
             dataConverter.initialize();
-            getParent().setChildContent(newValue.getId(), dataConverter.getLayout());
+//            getParent().setChildContent(newValue.getId(), dataConverter.getLayout());
+            getParent().setChildLayout(newValue.getId(), dataConverter);
         });
         listView.setPrefHeight(160);
         
@@ -136,6 +138,17 @@ public class ListDataFieldConverter<E extends JfxAbstractEdit, T extends ObjectD
         } else {
             componentList.setComponents(ComponentManager.getComponents(null));
         }
+    }
+
+    @Override
+    public void cleanup() {
+        if (dataConverter != null) {
+            if (dataConverter.isInitialized()) {
+                dataConverter.cleanup();
+            }
+            dataConverter = null;
+        }
+        super.cleanup(); 
     }
     
     @Override

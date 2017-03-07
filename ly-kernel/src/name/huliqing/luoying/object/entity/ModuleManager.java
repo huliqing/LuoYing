@@ -69,9 +69,9 @@ public class ModuleManager {
         // 第一步先添加;
         // 第二步再初始化;
         // 因为一些module在初始化的时候可能会引用到另一些module
-        if (entity.getData().getModuleDatas() != null) {
+        if (entity.getData().getModules() != null) {
             // 添加module
-            List<ModuleData> tempMDS= new ArrayList<ModuleData>(entity.getData().getModuleDatas());
+            List<ModuleData> tempMDS= new ArrayList<ModuleData>(entity.getData().getModules());
             for (ModuleData cd : tempMDS) {
                 Module module = Loader.load(cd);
                 modules.add(module);

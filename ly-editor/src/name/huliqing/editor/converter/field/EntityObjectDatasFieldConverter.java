@@ -99,7 +99,7 @@ public class EntityObjectDatasFieldConverter extends SimpleFieldConverter<JfxSce
                 setGraphic(null);
                 if (!empty) {
                     String name = item.getName();
-                    if (name != null) {
+                    if (name != null && !name.isEmpty()) {
                         setText(item.getId() + "(" + name + ")");
                     } else {
                         setText(item.getId());
@@ -119,7 +119,8 @@ public class EntityObjectDatasFieldConverter extends SimpleFieldConverter<JfxSce
             }
             dataConverter = ConverterManager.createDataConverter(jfxEdit, newValue, EntityObjectDatasFieldConverter.this);
             dataConverter.initialize();
-            getParent().setChildContent(newValue.getId(), dataConverter.getLayout());
+//            getParent().setChildContent(newValue.getId(), dataConverter.getLayout());
+            getParent().setChildLayout(newValue.getId(), dataConverter);
         });
         listView.setPrefHeight(160);
         
@@ -153,6 +154,17 @@ public class EntityObjectDatasFieldConverter extends SimpleFieldConverter<JfxSce
         } else {
             componentList.setComponents(ComponentManager.getComponents(null));
         }
+    }
+
+    @Override
+    public void cleanup() {
+        if (dataConverter != null) {
+            if (dataConverter.isInitialized()) {
+                dataConverter.cleanup();
+            }
+            dataConverter = null;
+        }
+        super.cleanup(); 
     }
     
     @Override

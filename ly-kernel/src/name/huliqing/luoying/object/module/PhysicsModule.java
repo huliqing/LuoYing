@@ -20,12 +20,18 @@
 package name.huliqing.luoying.object.module;
 
 import com.jme3.bullet.PhysicsSpace;
+import com.jme3.bullet.collision.shapes.CollisionShape;
+import com.jme3.bullet.collision.shapes.MeshCollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.data.ModuleData;
+import name.huliqing.luoying.data.PhysicsShapeData;
+import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.physicsshape.PhysicsShape;
 
 /**
  * 物理模块，给物体添加物理控制器
@@ -35,15 +41,58 @@ public class PhysicsModule extends AbstractModule {
     private static final Logger LOG = Logger.getLogger(PhysicsModule.class.getName());
     private RigidBodyControl control;
     
+    private float mass;
+    private float friction = 0.5f;
+    private float restitution;
+    private boolean kinematic;
+    
+    private float angularDamping;
+    private float angularFactor = 1;
+    private float angularSleepingThreshold = 1.0f;
+    private Vector3f angularVelocity;
+    private boolean applyPhysicsLocal;
+    private float ccdMotionThreshold;
+    private float ccdSweptSphereRadius;
+    private int collideWithGroups = 1;
+    private int collisionGroup = 1;
+    private boolean kinematicSpatial = true;
+    private float linearDamping;
+    private Vector3f linearFactor;
+    private float linearSleepingThreshold = 0.8f;
+    private Vector3f linearVelocity;
+    
+    private PhysicsShapeData physicsShapeData;
+    
     @Override
     public void setData(ModuleData data) {
         super.setData(data); 
+        mass = data.getAsFloat("mass", mass);
+        friction = data.getAsFloat("friction", friction);
+        restitution = data.getAsFloat("restitution", restitution);
+        kinematic = data.getAsBoolean("kinematic", kinematic);
+        
+        angularDamping = data.getAsFloat("angularDamping", angularDamping);
+        angularFactor = data.getAsFloat("angularFactor", angularFactor);
+        angularSleepingThreshold = data.getAsFloat("angularSleepingThreshold", angularSleepingThreshold);
+        angularVelocity = data.getAsVector3f("angularVelocity");
+        applyPhysicsLocal = data.getAsBoolean("applyPhysicsLocal", applyPhysicsLocal);
+        ccdMotionThreshold = data.getAsFloat("ccdMotionThreshold", ccdMotionThreshold);
+        ccdSweptSphereRadius = data.getAsFloat("ccdSweptSphereRadius", ccdSweptSphereRadius);
+        collideWithGroups = data.getAsInteger("collideWithGroups", collideWithGroups);
+        collisionGroup = data.getAsInteger("collisionGroup", collisionGroup);
+        kinematicSpatial = data.getAsBoolean("kinematicSpatial", kinematicSpatial);
+        linearDamping = data.getAsFloat("linearDamping", linearDamping);
+        linearSleepingThreshold = data.getAsFloat("linearSleepingThreshold", linearSleepingThreshold);
+        linearFactor = data.getAsVector3f("linearFactor");
+        linearVelocity = data.getAsVector3f("linearVelocity");
+        
+        physicsShapeData = data.getAsObjectData("physicsShape");
     }
     
     @Override
     public void updateDatas() {
         if (control != null) {
-            // 注：control可能会被外部引用并更改，所以这里要更新一下。see TreeEnv or PlantEnv
+            // 注：control可能会被外部引用并更改，所以这里要更新一下
             data.setAttribute("mass", control.getMass());
             data.setAttribute("friction", control.getFriction());
             data.setAttribute("restitution", control.getRestitution());
@@ -64,11 +113,44 @@ public class PhysicsModule extends AbstractModule {
             return;
         }
         
-        control = new RigidBodyControl(data.getAsFloat("mass", 0));
+        if (physicsShapeData != null) {
+            PhysicsShape ps = Loader.load(physicsShapeData);
+            CollisionShape csMesh = ps.getCollisionShape(spatial);
+            // MeshCollisionShape类型的碰撞网格只能用于静态物体
+            if ((csMesh instanceof MeshCollisionShape) && mass != 0) {
+                LOG.log(Level.WARNING, "Dynamic rigidbody can not have mesh collision shape! Now use default CollisionShape instead!");
+                control = new RigidBodyControl(mass);
+            } else {
+                control = new RigidBodyControl(ps.getCollisionShape(spatial), mass);
+            }
+        } else {
+            control = new RigidBodyControl(mass);
+        }
         spatial.addControl(control);
-        control.setFriction(data.getAsFloat("friction", 0));
-        control.setRestitution(data.getAsFloat("restitution", 0));
-        control.setKinematic(data.getAsBoolean("kinematic", false));
+        control.setFriction(friction);
+        control.setRestitution(restitution);
+        control.setKinematic(kinematic);
+        
+        control.setAngularDamping(angularDamping);
+        control.setAngularFactor(angularFactor);
+        control.setAngularSleepingThreshold(angularSleepingThreshold);
+        if (angularVelocity != null) {
+            control.setAngularVelocity(angularVelocity);
+        }
+        control.setApplyPhysicsLocal(applyPhysicsLocal);
+        control.setCcdMotionThreshold(ccdMotionThreshold);
+        control.setCcdSweptSphereRadius(ccdSweptSphereRadius);
+        control.setCollideWithGroups(collideWithGroups);
+        control.setCollisionGroup(collisionGroup);
+        control.setKinematicSpatial(kinematicSpatial);
+        control.setLinearDamping(linearDamping);
+        if (linearFactor != null) {
+            control.setLinearFactor(linearFactor);
+        }
+        control.setLinearSleepingThreshold(linearSleepingThreshold);
+        if (linearVelocity != null) {
+            control.setLinearVelocity(linearVelocity);
+        }
     }
 
     @Override

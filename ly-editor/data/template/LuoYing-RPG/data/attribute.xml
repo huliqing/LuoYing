@@ -153,7 +153,7 @@
     <attributeVector3f id="attributeLocation" name="attributeLocation" value="0,0,0" />
 
     <!--角色颜色-->
-    <attributeVector4f id="attributeColor" name="attributeColor" value="1,1,1,1" />
+    <attributeColor id="attributeColor" name="attributeColor" value="1,1,1,1" />
     
     <!--用于控制角色的游戏消息的开关：当角色执行技能、使用物品等操作时会向游戏消息控制台发送消息。-->
     <attributeBoolean id="attributeMessage" name="attributeMessage" value="0" />

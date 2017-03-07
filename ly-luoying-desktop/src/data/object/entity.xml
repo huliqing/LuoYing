@@ -3,7 +3,7 @@
 <root
     xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
     xmlns='http://luoying.huliqing.name'
-    xsi:schemaLocation='http://luoying.huliqing.name ../../../../ly-kernel/src/LuoYing/Data/meta/entity.xsd'>
+    xsi:schemaLocation='http://luoying.huliqing.name ../../../../ly-kernel/src/LuoYingSys/Data/meta/entity.xsd'>
     
     <!-- ========================================================================= -->
     <!-- 环境物体的基本配置：有一部分直接继承自系统的基本配置. -->
@@ -17,10 +17,10 @@
     <entitySimpleTerrain id="entityTerrainBase" extends="sysEntityTerrainBase"  />
 
     <!--植被：继承自系统配置-->
-    <entityTree id="entityTreeBase" extends="sysEntityTreeBase" />
+    <entityTree id="entityTreeBase" extends="sysEntityTreeBase" makeOnTerrain="1" />
     
     <!--植被：草丛、花朵,继承自系统配置-->
-    <entityGrass id="entityGrassBase" extends="sysEntityGrassBase" />
+    <entityGrass id="entityGrassBase" extends="sysEntityGrassBase" makeOnTerrain="1" />
     
     <!--场景阴影基本配置:在移动平台关闭阴影功能-->
     <entityDirectionalLightFilterShadow id="entityShadowBase" extends="sysEntityShadowBase" disabledOnPlatforms="iOS_X86,iOS_ARM,Android_ARM5,Android_ARM6,Android_ARM7,Android_ARM8,Android_X86,Android_Other" />

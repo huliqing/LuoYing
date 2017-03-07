@@ -33,7 +33,7 @@
     <component id="sysProgressSimple" type="progress" />
     
     <!--Module-->
-    <component id="sysModulePhysics" type="module" />
+    <component id="modulePhysics" type="module" />
     <component id="moduleChannel" type="module" />
     <component id="moduleItem" type="module" />
     <component id="moduleActor" type="module" />
@@ -132,4 +132,17 @@
     <component id="skillFightTrickAttackShotBow" type="skill" />
     <component id="skillSummon" type="skill" />
     <component id="skillSummonCreature" type="skill" />
+    
+    <!--shape-->
+    <component id="sysShapeBox" type="shape" />
+    <component id="sysShapeSphere" type="shape" />
+    <component id="sysShapeCustom" type="shape" />
+
+    <!--physicsShape-->
+    <component id="sysPhysicsShapeBox" type="physicsShape" />
+    <component id="sysPhysicsShapeCapsule" type="physicsShape" />
+    <component id="sysPhysicsShapeDynamicMesh" type="physicsShape" />
+    <component id="sysPhysicsShapeSphere" type="physicsShape" />
+    <component id="sysPhysicsShapeStaticCustomMesh" type="physicsShape" />
+    <component id="sysPhysicsShapeStaticMesh" type="physicsShape" />
 </root>

@@ -20,6 +20,15 @@
     <!--==========================================================================-->
     <!-- 基本模块 -->
     <!--==========================================================================-->
+    
+    <modulePhysics id="modulePhysics" extends="moduleBase" moduleOrder="0" 
+                   angularDamping="0" angularFactor="1" angularSleepingThreshold="1.0" angularVelocity="" applyPhysicsLocal="0" 
+                    ccdMotionThreshold="0" ccdSweptSphereRadius="0" 
+                   collideWithGroups="1" collisionGroup="1" 
+                   friction="0.5" kinematic="0" kinematicSpatial="1"
+                    linearDamping="0" linearFactor="" linearSleepingThreshold="0.8" linearVelocity="" 
+                   mass="0" physicsShape="" restitution="0"
+    />
    
     <!--动画通道管理模块: 不直接依赖其它模块 -->
     <moduleChannel id="moduleChannel" extends="moduleBase" moduleOrder="10" extAnimDir="Models/actor/ext_anim" />
@@ -28,7 +37,7 @@
     <moduleItem id="moduleItem" extends="moduleBase" moduleOrder="10" />
     
     <!--基本角色管理模块: 依赖 -->
-    <moduleActor id="moduleActor" extends="moduleBase" moduleOrder="10" 
+    <moduleActor id="moduleActor" extends="moduleBase" radius="0.4" height="3.2" moduleOrder="10" 
                 bindDeadAttribute="attributeDead"
                 bindTargetAttribute="attributeTarget" 
                 bindMassAttribute="attributeMass"

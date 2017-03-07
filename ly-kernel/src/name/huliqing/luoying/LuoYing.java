@@ -70,6 +70,7 @@ import name.huliqing.luoying.data.GameLogicData;
 import name.huliqing.luoying.data.ItemData;
 import name.huliqing.luoying.data.MagicData;
 import name.huliqing.luoying.data.ModelEntityData;
+import name.huliqing.luoying.data.PhysicsShapeData;
 import name.huliqing.luoying.data.PositionData;
 import name.huliqing.luoying.data.ResistData;
 import name.huliqing.luoying.data.SavableList;
@@ -185,6 +186,7 @@ import name.huliqing.luoying.object.entity.impl.AmbientLightEntity;
 import name.huliqing.luoying.object.entity.impl.DirectionalLightEntity;
 import name.huliqing.luoying.loader.ActorDataLoader;
 import name.huliqing.luoying.loader.AudioEntityDataLoader;
+import name.huliqing.luoying.loader.CustomMeshPhysicsShapeDataLoader;
 import name.huliqing.luoying.loader.DefineDataLoader;
 import name.huliqing.luoying.loader.EffectDataLoader;
 import name.huliqing.luoying.loader.EffectEntityDataLoader;
@@ -205,6 +207,7 @@ import name.huliqing.luoying.loader.ItemDataLoader;
 import name.huliqing.luoying.object.magic.AttributeHitMagic;
 import name.huliqing.luoying.loader.MagicDataLoader;
 import name.huliqing.luoying.loader.ParticleEffectDataLoader;
+import name.huliqing.luoying.loader.PhysicsModuleDataLoader;
 import name.huliqing.luoying.object.magic.StateMagic;
 import name.huliqing.luoying.object.position.FixedPosition;
 import name.huliqing.luoying.loader.PositionDataLoader;
@@ -269,6 +272,7 @@ import name.huliqing.luoying.mess.network.RequestGameInitStartMess;
 import name.huliqing.luoying.object.anim.DelayAnim;
 import name.huliqing.luoying.object.anim.InterpolateRotationAnim;
 import name.huliqing.luoying.object.attribute.BooleanAttribute;
+import name.huliqing.luoying.object.attribute.ColorAttribute;
 import name.huliqing.luoying.object.attribute.FloatAttribute;
 import name.huliqing.luoying.object.attribute.GroupAttribute;
 import name.huliqing.luoying.object.attribute.IntegerAttribute;
@@ -320,10 +324,18 @@ import name.huliqing.luoying.object.module.DropModule;
 import name.huliqing.luoying.object.module.LevelModule;
 import name.huliqing.luoying.object.module.PhysicsModule;
 import name.huliqing.luoying.object.module.ResistModule;
+import name.huliqing.luoying.object.physicsshape.BoxPhysicsShape;
+import name.huliqing.luoying.object.physicsshape.CapsulePhysicsShape;
+import name.huliqing.luoying.object.physicsshape.StaticCustomMeshPhysicsShape;
+import name.huliqing.luoying.object.physicsshape.DynamicMeshPhysicsShape;
+import name.huliqing.luoying.object.physicsshape.SpherePhysicsShape;
+import name.huliqing.luoying.object.physicsshape.StaticMeshPhysicsShape;
 import name.huliqing.luoying.object.scene.SimpleScene;
 import name.huliqing.luoying.object.progress.SimpleProgress;
 import name.huliqing.luoying.object.resist.AllResist;
 import name.huliqing.luoying.object.resist.GroupResist;
+import name.huliqing.luoying.object.shape.CustomShape;
+import name.huliqing.luoying.object.shape.SphereShape;
 import name.huliqing.luoying.object.slot.Slot;
 import name.huliqing.luoying.object.state.BooleanAttributeState;
 import name.huliqing.luoying.object.state.GroupState;
@@ -415,15 +427,17 @@ public class LuoYing {
     private static void loadSysData() throws LuoYingException {
         loadData("LuoYingSys/Data/action.xml");
         loadData("LuoYingSys/Data/actor.xml");
+        loadData("LuoYingSys/Data/anim.xml");
         loadData("LuoYingSys/Data/channel.xml");
         loadData("LuoYingSys/Data/effect.xml");
         loadData("LuoYingSys/Data/el.xml");
         loadData("LuoYingSys/Data/entity.xml");
         loadData("LuoYingSys/Data/game.xml");
         loadData("LuoYingSys/Data/module.xml");
-        loadData("LuoYingSys/Data/scene.xml");
+        loadData("LuoYingSys/Data/physicsShape.xml");
         loadData("LuoYingSys/Data/progress.xml");
-        loadData("LuoYingSys/Data/anim.xml");
+        loadData("LuoYingSys/Data/scene.xml");
+        loadData("LuoYingSys/Data/shape.xml");
         loadData("LuoYingSys/Data/sound.xml");
     }
     
@@ -495,6 +509,7 @@ public class LuoYing {
         Serializer.registerClass(MagicData.class);
         Serializer.registerClass(ModelEntityData.class);
         Serializer.registerClass(ModuleData.class);
+        Serializer.registerClass(PhysicsShapeData.class);
         Serializer.registerClass(PositionData.class);
         Serializer.registerClass(ProgressData.class);
         Serializer.registerClass(ResistData.class);
@@ -611,6 +626,7 @@ public class LuoYing {
         
         // Attribute
         DataFactory.register("attributeBoolean",  AttributeData.class, null, BooleanAttribute.class);
+        DataFactory.register("attributeColor",  AttributeData.class, null, ColorAttribute.class);
         DataFactory.register("attributeFloat",  AttributeData.class, null, FloatAttribute.class);
         DataFactory.register("attributeInteger",  AttributeData.class, null, IntegerAttribute.class);
         DataFactory.register("attributeLevelFloat",  AttributeData.class, null, LevelFloatAttribute.class);
@@ -740,13 +756,21 @@ public class LuoYing {
         DataFactory.register("moduleItem",  ModuleData.class, null, ItemModule.class);
         DataFactory.register("moduleLevel",  ModuleData.class, null, LevelModule.class);
         DataFactory.register("moduleLogic",  ModuleData.class, null, LogicModule.class);
-        DataFactory.register("modulePhysics",  ModuleData.class, null, PhysicsModule.class);
+        DataFactory.register("modulePhysics",  ModuleData.class, PhysicsModuleDataLoader.class, PhysicsModule.class);
         DataFactory.register("moduleResist",  ModuleData.class, null, ResistModule.class);
         DataFactory.register("moduleSkill",  ModuleData.class, null, SkillModule.class);
         DataFactory.register("moduleSkin",  ModuleData.class, null, SkinModule.class);
         DataFactory.register("moduleState",  ModuleData.class, null, StateModule.class);
         DataFactory.register("moduleTalent",  ModuleData.class, null, TalentModule.class);
         DataFactory.register("moduleTask",  ModuleData.class, null, TaskModule.class);
+        
+        // PhysicsShape
+        DataFactory.register("physicsShapeBox",  PhysicsShapeData.class, null, BoxPhysicsShape.class);
+        DataFactory.register("physicsShapeCapsule",  PhysicsShapeData.class, null, CapsulePhysicsShape.class);
+        DataFactory.register("physicsShapeDynamicMesh",  PhysicsShapeData.class, null, DynamicMeshPhysicsShape.class);
+        DataFactory.register("physicsShapeSphere",  PhysicsShapeData.class, null, SpherePhysicsShape.class);
+        DataFactory.register("physicsShapeStaticCustomMesh",  PhysicsShapeData.class, CustomMeshPhysicsShapeDataLoader.class, StaticCustomMeshPhysicsShape.class);
+        DataFactory.register("physicsShapeStaticMesh",  PhysicsShapeData.class, null, StaticMeshPhysicsShape.class);
         
         // Position
         DataFactory.register("positionRandomSphere",  PositionData.class, PositionDataLoader.class, RandomSpherePosition.class);
@@ -769,6 +793,8 @@ public class LuoYing {
         
         // Shape
         DataFactory.register("shapeBox",  ShapeData.class, ShapeDataLoader.class, BoxShape.class);
+        DataFactory.register("shapeCustom",  ShapeData.class, ShapeDataLoader.class, CustomShape.class);
+        DataFactory.register("shapeSphere",  ShapeData.class, ShapeDataLoader.class, SphereShape.class);
          
         // Skill
         DataFactory.register("skillWalk",  SkillData.class, SkillDataLoader.class, WalkSkill.class);

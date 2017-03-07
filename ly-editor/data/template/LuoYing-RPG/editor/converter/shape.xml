@@ -11,6 +11,18 @@
     <data name="shapeBox" extends="shapeBase">
         <field name="extents" converter="Vector3fConverter" />
     </data>
+
+    <data name="shapeCustom" extends="shapeBase">
+        <field name="file" converter="FileConverter">
+            <feature name="filters" value="Model Files|*.j3o,All Files|*.*" />
+        </field>
+    </data>
+
+    <data name="shapeSphere" extends="shapeBase">
+        <field name="radius" converter="FloatTextConverter" />
+        <field name="zSamples" converter="IntegerTextConverter" />
+        <field name="radialSamples" converter="IntegerTextConverter" />
+    </data>
     
     
     
