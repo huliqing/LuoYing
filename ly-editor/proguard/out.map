@@ -46,6 +46,7 @@ com.jme3.gde.terraineditor.tools.PaintTerrainToolAction$1 -> com.jme3.gde.terrai
     int[] $SwitchMap$com$jme3$texture$Image$Format -> $SwitchMap$com$jme3$texture$Image$Format
     void <clinit>() -> <clinit>
 com.jme3.gde.terraineditor.tools.RaiseTerrainToolAction -> com.jme3.gde.terraineditor.tools.RaiseTerrainToolAction:
+    java.util.logging.Logger LOG -> LOG
     name.huliqing.editor.edit.controls.entity.EntityControlTile selectObj -> selectObj
     com.jme3.math.Vector3f worldLoc -> worldLoc
     float radius -> radius
@@ -55,6 +56,7 @@ com.jme3.gde.terraineditor.tools.RaiseTerrainToolAction -> com.jme3.gde.terraine
     void undo() -> undo
     void redo() -> redo
     void modifyHeight(name.huliqing.editor.edit.controls.entity.EntityControlTile,com.jme3.math.Vector3f,float,float) -> modifyHeight
+    void <clinit>() -> <clinit>
 com.jme3.gde.terraineditor.tools.RoughExtraToolParams -> com.jme3.gde.terraineditor.tools.RoughExtraToolParams:
     float roughness -> roughness
     float frequency -> frequency
@@ -135,6 +137,12 @@ com.jme3.gde.terraineditor.tools.ToolUtils -> com.jme3.gde.terraineditor.tools.T
     boolean floatEquals(float,float,float) -> floatEquals
     boolean floatLessThan(float,float,float) -> floatLessThan
     boolean floatGreaterThan(float,float,float) -> floatGreaterThan
+name.huliqing.editor.EditAssetLocator -> name.huliqing.editor.c:
+    java.util.logging.Logger LOG -> a
+    void <init>() -> <init>
+    void setRootPath(java.lang.String) -> setRootPath
+    com.jme3.asset.AssetInfo locate(com.jme3.asset.AssetManager,com.jme3.asset.AssetKey) -> locate
+    void <clinit>() -> <clinit>
 name.huliqing.editor.Editor -> name.huliqing.editor.a:
     java.util.List listeners -> a
     name.huliqing.editor.edit.JfxEdit jfxEdit -> b
@@ -159,22 +167,13 @@ name.huliqing.editor.Editor -> name.huliqing.editor.a:
     void lambda$simpleInitApp$0(name.huliqing.editor.events.Event) -> c
 name.huliqing.editor.EditorListener -> name.huliqing.editor.b:
     void onReshape(int,int) -> a
-name.huliqing.editor.EditorStatsAppState -> name.huliqing.editor.c:
-    com.jme3.renderer.Statistics stat -> a
-    java.lang.String[] labels -> b
-    int[] datas -> c
-    java.lang.StringBuilder sb -> d
-    javafx.scene.control.Label label -> e
-    javafx.scene.control.ToggleButton statisticsIcon -> f
+name.huliqing.editor.FpsAppState -> name.huliqing.editor.e:
+    javafx.scene.control.ToggleButton statisticsIcon -> a
     void <init>() -> <init>
     void initialize(com.jme3.app.state.AppStateManager,com.jme3.app.Application) -> initialize
-    void cleanup() -> cleanup
-    void setEnabled(boolean) -> setEnabled
-    void update(float) -> update
-    void lambda$update$3(java.lang.String) -> a
-    void lambda$cleanup$2() -> a
-    void lambda$initialize$1() -> b
-    void lambda$null$0(javafx.beans.value.ObservableValue,java.lang.Boolean,java.lang.Boolean) -> a
+    void lambda$initialize$2() -> a
+    void lambda$null$1(javafx.beans.value.ObservableValue,java.lang.Boolean,java.lang.Boolean) -> a
+    void lambda$null$0(java.lang.Boolean) -> a
 name.huliqing.editor.Starter -> name.huliqing.editor.Starter:
     void <init>() -> <init>
     void main(java.lang.String[]) -> main
@@ -211,31 +210,37 @@ name.huliqing.editor.action.Picker -> name.huliqing.editor.a.a:
 name.huliqing.editor.action.Picker$1 -> name.huliqing.editor.a.b:
     int[] $SwitchMap$name$huliqing$editor$edit$Mode -> a
     void <clinit>() -> <clinit>
-name.huliqing.editor.components.BaseComponent -> name.huliqing.editor.b.a:
-    java.lang.String id -> a
-    java.lang.String name -> b
-    java.lang.String icon -> c
-    void <init>(java.lang.String,java.lang.String) -> <init>
-    void <init>(java.lang.String,java.lang.String,java.lang.String) -> <init>
-    java.lang.String getName() -> a
-name.huliqing.editor.components.Component -> name.huliqing.editor.b.b:
-    java.lang.String getName() -> a
-    void create(name.huliqing.editor.edit.JfxEdit) -> a
-name.huliqing.editor.components.EntityComponent -> name.huliqing.editor.b.c:
-    void <init>(java.lang.String,java.lang.String) -> <init>
-    void create(name.huliqing.editor.edit.scene.JfxSceneEdit) -> a
-    void create(name.huliqing.editor.edit.JfxEdit) -> a
-name.huliqing.editor.components.TerrainEntityComponent -> name.huliqing.editor.b.d:
-    java.lang.String modelDir -> d
-    java.lang.String alphaTextureDir -> e
-    void <init>(java.lang.String,java.lang.String) -> <init>
-    void create(name.huliqing.editor.edit.scene.JfxSceneEdit) -> a
-    void createTerrain(name.huliqing.editor.edit.scene.JfxSceneEdit,com.jme3.app.Application,java.lang.String,int,int,int,java.lang.String,float[]) -> a
-    void create(name.huliqing.editor.edit.JfxEdit) -> a
-    void lambda$createTerrain$3(name.huliqing.editor.edit.scene.JfxSceneEdit,name.huliqing.luoying.data.EntityData) -> a
-    void lambda$create$2(name.huliqing.editor.ui.CustomDialog,javafx.event.ActionEvent) -> a
-    void lambda$create$1(name.huliqing.editor.ui.CustomDialog,name.huliqing.editor.edit.terrain.BasePanel,name.huliqing.editor.edit.terrain.TerrainCreateForm,name.huliqing.editor.edit.scene.JfxSceneEdit,javafx.event.ActionEvent) -> a
-    void lambda$null$0(name.huliqing.editor.edit.terrain.TerrainCreateForm,name.huliqing.editor.edit.scene.JfxSceneEdit,java.lang.String,int,int,int,java.lang.String) -> a
+name.huliqing.editor.component.AbstractComponentConverter -> name.huliqing.editor.component.AbstractComponentConverter:
+    void <init>() -> <init>
+name.huliqing.editor.component.ComponentConverter -> name.huliqing.editor.component.ComponentConverter:
+    void create(name.huliqing.editor.component.ComponentDefine,name.huliqing.editor.edit.JfxEdit) -> create
+name.huliqing.editor.component.ComponentDefine -> name.huliqing.editor.component.ComponentDefine:
+    java.lang.String id -> id
+    java.lang.String type -> type
+    java.lang.String icon -> icon
+    java.lang.String converterClass -> converterClass
+    void <init>() -> <init>
+    void <init>(java.lang.String,java.lang.String,java.lang.String,java.lang.String) -> <init>
+    java.lang.String getId() -> getId
+    java.lang.String getIcon() -> getIcon
+    java.lang.String getType() -> getType
+    java.lang.String getConverterClass() -> getConverterClass
+    java.lang.String toString() -> toString
+name.huliqing.editor.component.EntityComponentConverter -> name.huliqing.editor.component.EntityComponentConverter:
+    void <init>() -> <init>
+    void create(name.huliqing.editor.component.ComponentDefine,name.huliqing.editor.edit.scene.JfxSceneEdit) -> create
+    void create(name.huliqing.editor.component.ComponentDefine,name.huliqing.editor.edit.JfxEdit) -> create
+name.huliqing.editor.component.TerrainEntityComponentConverter -> name.huliqing.editor.component.TerrainEntityComponentConverter:
+    java.lang.String modelDir -> modelDir
+    java.lang.String alphaTextureDir -> alphaTextureDir
+    void <init>() -> <init>
+    void create(name.huliqing.editor.component.ComponentDefine,name.huliqing.editor.edit.scene.JfxSceneEdit) -> create
+    void createTerrain(name.huliqing.editor.component.ComponentDefine,name.huliqing.editor.edit.scene.JfxSceneEdit,com.jme3.app.Application,java.lang.String,int,int,int,java.lang.String,float[]) -> createTerrain
+    void create(name.huliqing.editor.component.ComponentDefine,name.huliqing.editor.edit.JfxEdit) -> create
+    void lambda$createTerrain$3(name.huliqing.editor.edit.scene.JfxSceneEdit,name.huliqing.luoying.data.EntityData) -> lambda$createTerrain$3
+    void lambda$create$2(name.huliqing.editor.ui.CustomDialog,javafx.event.ActionEvent) -> lambda$create$2
+    void lambda$create$1(name.huliqing.editor.ui.CustomDialog,name.huliqing.editor.edit.terrain.BasePanel,name.huliqing.editor.edit.terrain.TerrainCreateForm,name.huliqing.editor.component.ComponentDefine,name.huliqing.editor.edit.scene.JfxSceneEdit,javafx.event.ActionEvent) -> lambda$create$1
+    void lambda$null$0(name.huliqing.editor.edit.terrain.TerrainCreateForm,name.huliqing.editor.component.ComponentDefine,name.huliqing.editor.edit.scene.JfxSceneEdit,java.lang.String,int,int,int,java.lang.String) -> lambda$null$0
 name.huliqing.editor.constants.DataFormatConstants -> name.huliqing.editor.c.a:
     javafx.scene.input.DataFormat COMPONENT_ENTITY -> a
     void <clinit>() -> <clinit>
@@ -244,18 +249,25 @@ name.huliqing.editor.converter.AbstractConverter -> name.huliqing.editor.convert
     name.huliqing.editor.converter.FeatureHelper featureHelper -> featureHelper
     boolean initialized -> initialized
     name.huliqing.editor.edit.JfxAbstractEdit jfxEdit -> jfxEdit
+    name.huliqing.luoying.xml.ObjectData data -> data
     void <init>() -> <init>
+    void setData(name.huliqing.luoying.xml.ObjectData) -> setData
+    name.huliqing.luoying.xml.ObjectData getData() -> getData
     void setFeatures(java.util.Map) -> setFeatures
     void setParent(name.huliqing.editor.converter.Converter) -> setParent
+    name.huliqing.editor.converter.Converter getParent() -> getParent
     void setEdit(name.huliqing.editor.edit.JfxAbstractEdit) -> setEdit
     void notifyChanged() -> notifyChanged
     void initialize() -> initialize
     boolean isInitialized() -> isInitialized
     void cleanup() -> cleanup
 name.huliqing.editor.converter.Converter -> name.huliqing.editor.converter.Converter:
+    void setData(name.huliqing.luoying.xml.ObjectData) -> setData
+    name.huliqing.luoying.xml.ObjectData getData() -> getData
     void setFeatures(java.util.Map) -> setFeatures
     void setParent(name.huliqing.editor.converter.Converter) -> setParent
-    javafx.scene.Node getLayout() -> getLayout
+    name.huliqing.editor.converter.Converter getParent() -> getParent
+    javafx.scene.layout.Region getLayout() -> getLayout
     void initialize() -> initialize
     boolean isInitialized() -> isInitialized
     void cleanup() -> cleanup
@@ -263,35 +275,26 @@ name.huliqing.editor.converter.Converter -> name.huliqing.editor.converter.Conve
 name.huliqing.editor.converter.DataConverter -> name.huliqing.editor.converter.DataConverter:
     java.lang.String FEATURE_HIDE_FIELDS -> FEATURE_HIDE_FIELDS
     java.util.Map fieldDefines -> fieldDefines
-    name.huliqing.luoying.xml.ObjectData data -> data
     java.util.Map fieldConverters -> fieldConverters
     javafx.scene.control.ScrollPane dataScroll -> dataScroll
     javafx.scene.layout.VBox fieldPanel -> fieldPanel
+    javafx.scene.control.TitledPane childPane -> childPane
+    name.huliqing.editor.converter.DataConverter childDataConverter -> childDataConverter
     void <init>() -> <init>
-    javafx.scene.Node getLayout() -> getLayout
+    javafx.scene.layout.Region getLayout() -> getLayout
     void setFieldDefines(java.util.Map) -> setFieldDefines
     void updateAttribute(java.lang.String,java.lang.Object) -> updateAttribute
-    void setData(name.huliqing.luoying.xml.ObjectData) -> setData
     void initialize() -> initialize
     void cleanup() -> cleanup
-    void addUndoRedo(java.lang.String,java.lang.Object,java.lang.Object) -> addUndoRedo
+    void setChildLayout(java.lang.String,name.huliqing.editor.converter.DataConverter) -> setChildLayout
     void lambda$cleanup$3(name.huliqing.editor.converter.FieldConverter) -> lambda$cleanup$3
     boolean lambda$cleanup$2(name.huliqing.editor.converter.FieldConverter) -> lambda$cleanup$2
     void lambda$initialize$1(java.lang.String) -> lambda$initialize$1
     void lambda$initialize$0(name.huliqing.editor.converter.define.FieldDefine) -> lambda$initialize$0
-name.huliqing.editor.converter.DataConverter$JfxEditUndoRedo -> name.huliqing.editor.converter.DataConverter$JfxEditUndoRedo:
-    java.lang.String property -> property
-    java.lang.Object before -> before
-    java.lang.Object after -> after
-    name.huliqing.editor.converter.DataConverter this$0 -> this$0
-    void <init>(name.huliqing.editor.converter.DataConverter,java.lang.String,java.lang.Object,java.lang.Object) -> <init>
-    void undo() -> undo
-    void redo() -> redo
-    void lambda$redo$1() -> lambda$redo$1
-    void lambda$undo$0() -> lambda$undo$0
 name.huliqing.editor.converter.FeatureHelper -> name.huliqing.editor.converter.FeatureHelper:
     java.util.Map features -> features
     void <init>(java.util.Map) -> <init>
+    java.lang.String getAsString(java.lang.String) -> getAsString
     boolean getAsBoolean(java.lang.String) -> getAsBoolean
     java.lang.String[] getAsArray(java.lang.String) -> getAsArray
     java.util.List getAsList(java.lang.String) -> getAsList
@@ -300,18 +303,36 @@ name.huliqing.editor.converter.FieldConverter -> name.huliqing.editor.converter.
     java.lang.String FEATURE_COLLAPSED -> FEATURE_COLLAPSED
     java.lang.String field -> field
     javafx.scene.control.TitledPane root -> root
-    boolean ignoreChangedEvent -> ignoreChangedEvent
     void <init>() -> <init>
     java.lang.String getField() -> getField
     void setField(java.lang.String) -> setField
-    javafx.scene.Node getLayout() -> getLayout
+    javafx.scene.layout.Region getLayout() -> getLayout
+    name.huliqing.editor.converter.DataConverter getParent() -> getParent
+    void initialize() -> initialize
+    void cleanup() -> cleanup
+    javafx.scene.Node createLayout() -> createLayout
+    void updateView() -> updateView
+    name.huliqing.editor.converter.Converter getParent() -> getParent
+name.huliqing.editor.converter.SimpleFieldConverter -> name.huliqing.editor.converter.SimpleFieldConverter:
+    boolean ignoreChangedEvent -> ignoreChangedEvent
+    void <init>() -> <init>
     void initialize() -> initialize
     void cleanup() -> cleanup
     void updateAttribute(java.lang.Object) -> updateAttribute
-    void updateView(java.lang.Object) -> updateView
+    void updateView() -> updateView
+    void addUndoRedo(name.huliqing.editor.edit.UndoRedo) -> addUndoRedo
     void addUndoRedo(java.lang.Object,java.lang.Object) -> addUndoRedo
-    javafx.scene.Node createLayout() -> createLayout
-    void updateUI(java.lang.Object) -> updateUI
+    void updateUI() -> updateUI
+name.huliqing.editor.converter.SimpleFieldConverter$JfxEditUndoRedo -> name.huliqing.editor.converter.SimpleFieldConverter$JfxEditUndoRedo:
+    java.lang.String property -> property
+    java.lang.Object before -> before
+    java.lang.Object after -> after
+    name.huliqing.editor.converter.SimpleFieldConverter this$0 -> this$0
+    void <init>(name.huliqing.editor.converter.SimpleFieldConverter,java.lang.String,java.lang.Object,java.lang.Object) -> <init>
+    void undo() -> undo
+    void redo() -> redo
+    void lambda$redo$1() -> lambda$redo$1
+    void lambda$undo$0() -> lambda$undo$0
 name.huliqing.editor.converter.data.EntityDataConverter -> name.huliqing.editor.converter.data.EntityDataConverter:
     name.huliqing.editor.edit.controls.entity.EntityControlTile selectObj -> selectObj
     void <init>() -> <init>
@@ -323,7 +344,7 @@ name.huliqing.editor.converter.data.EntityDataConverter -> name.huliqing.editor.
     void onEntityAdded(name.huliqing.luoying.data.EntityData) -> onEntityAdded
     void onEntityRemoved(name.huliqing.luoying.data.EntityData) -> onEntityRemoved
     void onPropertyChanged(name.huliqing.luoying.data.EntityData,java.lang.String,java.lang.Object) -> onPropertyChanged
-    void lambda$onPropertyChanged$0(java.lang.String,java.lang.Object) -> lambda$onPropertyChanged$0
+    void lambda$onPropertyChanged$0(java.lang.String) -> lambda$onPropertyChanged$0
 name.huliqing.editor.converter.data.SimpleDataConverter -> name.huliqing.editor.converter.data.SimpleDataConverter:
     void <init>() -> <init>
 name.huliqing.editor.converter.define.ConverterDefine -> name.huliqing.editor.converter.define.ConverterDefine:
@@ -362,16 +383,27 @@ name.huliqing.editor.converter.define.FieldDefine -> name.huliqing.editor.conver
     java.util.Map attributes -> attributes
     java.util.Map features -> features
     void <init>(java.util.Map,java.util.Map) -> <init>
-    java.lang.String getName() -> getName
+    java.lang.String getField() -> getField
     java.lang.String getConverter() -> getConverter
     java.util.Map getFeatures() -> getFeatures
+name.huliqing.editor.converter.field.ActorSkillsFieldConverter -> name.huliqing.editor.converter.field.ActorSkillsFieldConverter:
+    java.util.logging.Logger LOG -> LOG
+    void <init>() -> <init>
+    void playSkill() -> playSkill
+    name.huliqing.luoying.object.skill.Skill findSkill(name.huliqing.luoying.object.module.SkillModule,name.huliqing.luoying.data.SkillData) -> findSkill
+    name.huliqing.luoying.data.EntityData findEntityData(name.huliqing.editor.converter.Converter) -> findEntityData
+    javafx.scene.Node createLayout() -> createLayout
+    void lambda$playSkill$2(name.huliqing.luoying.data.EntityData,name.huliqing.luoying.xml.ObjectData) -> lambda$playSkill$2
+    void lambda$new$1(javafx.scene.input.MouseEvent) -> lambda$new$1
+    void lambda$new$0(javafx.event.ActionEvent) -> lambda$new$0
+    void <clinit>() -> <clinit>
 name.huliqing.editor.converter.field.CheckBoxConverter -> name.huliqing.editor.converter.field.CheckBoxConverter:
     javafx.scene.control.CheckBox checkBox -> checkBox
     java.lang.Boolean lastValue -> lastValue
     void <init>() -> <init>
     javafx.scene.Node createLayout() -> createLayout
     void updateAndSave(java.lang.Boolean) -> updateAndSave
-    void updateUI(java.lang.Object) -> updateUI
+    void updateUI() -> updateUI
     void lambda$new$0(javafx.beans.value.ObservableValue,java.lang.Boolean,java.lang.Boolean) -> lambda$new$0
 name.huliqing.editor.converter.field.ChoiceConverter -> name.huliqing.editor.converter.field.ChoiceConverter:
     java.lang.String FEATURE_ITEMS -> FEATURE_ITEMS
@@ -380,7 +412,7 @@ name.huliqing.editor.converter.field.ChoiceConverter -> name.huliqing.editor.con
     void <init>() -> <init>
     javafx.scene.Node createLayout() -> createLayout
     void initialize() -> initialize
-    void updateUI(java.lang.Object) -> updateUI
+    void updateUI() -> updateUI
     void updateChangedAndSave() -> updateChangedAndSave
     void lambda$new$0(javafx.beans.value.ObservableValue,java.lang.String,java.lang.String) -> lambda$new$0
 name.huliqing.editor.converter.field.ColorConverter -> name.huliqing.editor.converter.field.ColorConverter:
@@ -393,7 +425,7 @@ name.huliqing.editor.converter.field.ColorConverter -> name.huliqing.editor.conv
     void cleanup() -> cleanup
     void updateColor(javafx.scene.paint.Color) -> updateColor
     void updateColorAndSave(javafx.scene.paint.Color) -> updateColorAndSave
-    void updateUI(java.lang.Object) -> updateUI
+    void updateUI() -> updateUI
     boolean checkColorDiff(javafx.scene.paint.Color,javafx.scene.paint.Color) -> checkColorDiff
     javafx.scene.paint.Color toJfxColor(com.jme3.math.ColorRGBA) -> toJfxColor
     com.jme3.math.ColorRGBA toJmeColor(javafx.scene.paint.Color) -> toJmeColor
@@ -402,27 +434,38 @@ name.huliqing.editor.converter.field.ColorConverter -> name.huliqing.editor.conv
     void lambda$new$0(javafx.beans.value.ObservableValue,javafx.scene.paint.Color,javafx.scene.paint.Color) -> lambda$new$0
     void <clinit>() -> <clinit>
 name.huliqing.editor.converter.field.DataFieldConverter -> name.huliqing.editor.converter.field.DataFieldConverter:
-    javafx.scene.control.TextField content -> content
+    java.util.logging.Logger LOG -> LOG
+    java.lang.String FEATURE_COMPONENT_TYPE -> FEATURE_COMPONENT_TYPE
+    java.lang.String componentType -> componentType
+    javafx.scene.layout.HBox layout -> layout
+    javafx.scene.control.TextField input -> input
+    javafx.scene.control.Button selectButton -> selectButton
+    name.huliqing.editor.ui.ComponentSearch componentList -> componentList
     name.huliqing.luoying.xml.ObjectData lastObjectData -> lastObjectData
-    name.huliqing.editor.converter.DataConverter dc -> dc
-    boolean displayed -> displayed
-    javafx.scene.control.TitledPane bodyPanel -> bodyPanel
+    name.huliqing.editor.converter.DataConverter dataConverter -> dataConverter
     void <init>() -> <init>
+    void refeshDataConverter() -> refeshDataConverter
+    void updateChangedAndSave() -> updateChangedAndSave
     javafx.scene.Node createLayout() -> createLayout
     void initialize() -> initialize
     void cleanup() -> cleanup
-    void updateUI(java.lang.Object) -> updateUI
-    void lambda$new$0(javafx.scene.input.MouseEvent) -> lambda$new$0
+    void updateUI() -> updateUI
+    void lambda$new$3(javafx.scene.input.MouseEvent) -> lambda$new$3
+    void lambda$new$2(javafx.event.ActionEvent) -> lambda$new$2
+    void lambda$new$1(javafx.scene.input.KeyEvent) -> lambda$new$1
+    void lambda$new$0(javafx.beans.value.ObservableValue,java.lang.Boolean,java.lang.Boolean) -> lambda$new$0
+    void <clinit>() -> <clinit>
 name.huliqing.editor.converter.field.EntitiesFieldConverter -> name.huliqing.editor.converter.field.EntitiesFieldConverter:
     javafx.scene.layout.VBox layout -> layout
     javafx.scene.control.ToolBar toolBar -> toolBar
     javafx.scene.control.ListView listView -> listView
     boolean ignoreSelectEvent -> ignoreSelectEvent
-    javafx.scene.control.TitledPane entityPanel -> entityPanel
     java.util.Map entityConverterMaps -> entityConverterMaps
-    name.huliqing.editor.converter.DataConverter currentDisplayConverter -> currentDisplayConverter
+    name.huliqing.editor.converter.DataConverter dataConverter -> dataConverter
+    name.huliqing.editor.ui.ComponentSearch componentSearch -> componentSearch
     void <init>() -> <init>
     javafx.scene.Node createLayout() -> createLayout
+    void notifyChanged() -> notifyChanged
     void initialize() -> initialize
     void cleanup() -> cleanup
     void onJfxSelectChanged(javafx.beans.value.ObservableValue,name.huliqing.luoying.data.EntityData,name.huliqing.luoying.data.EntityData) -> onJfxSelectChanged
@@ -431,8 +474,13 @@ name.huliqing.editor.converter.field.EntitiesFieldConverter -> name.huliqing.edi
     void onEntityRemoved(name.huliqing.luoying.data.EntityData) -> onEntityRemoved
     void onSelectChanged(name.huliqing.editor.edit.controls.ControlTile) -> onSelectChanged
     void doUpdateEntityView(name.huliqing.luoying.data.EntityData) -> doUpdateEntityView
-    void updateUI(java.lang.Object) -> updateUI
-    void lambda$new$0(javafx.event.ActionEvent) -> lambda$new$0
+    void updateView() -> updateView
+    void lambda$new$3(javafx.scene.input.MouseEvent) -> lambda$new$3
+    void lambda$new$2(javafx.event.ActionEvent) -> lambda$new$2
+    void lambda$null$1(java.util.List) -> lambda$null$1
+    void lambda$new$0(javafx.scene.control.Button,javafx.event.ActionEvent) -> lambda$new$0
+    name.huliqing.editor.edit.JfxAbstractEdit access$100(name.huliqing.editor.converter.field.EntitiesFieldConverter) -> access$100
+    name.huliqing.editor.edit.JfxAbstractEdit access$200(name.huliqing.editor.converter.field.EntitiesFieldConverter) -> access$200
 name.huliqing.editor.converter.field.EntitiesFieldConverter$1 -> name.huliqing.editor.converter.field.EntitiesFieldConverter$1:
 name.huliqing.editor.converter.field.EntitiesFieldConverter$CellInner -> name.huliqing.editor.converter.field.EntitiesFieldConverter$CellInner:
     name.huliqing.editor.converter.field.EntitiesFieldConverter this$0 -> this$0
@@ -445,6 +493,62 @@ name.huliqing.editor.converter.field.EntitiesFieldConverter$CellInner$1 -> name.
     void <init>(name.huliqing.editor.converter.field.EntitiesFieldConverter$CellInner) -> <init>
     void updateItem(name.huliqing.luoying.data.EntityData,boolean) -> updateItem
     void updateItem(java.lang.Object,boolean) -> updateItem
+name.huliqing.editor.converter.field.EntitiesFieldConverter$EntityRemovedUndoRedo -> name.huliqing.editor.converter.field.EntitiesFieldConverter$EntityRemovedUndoRedo:
+    java.util.List ectRemoved -> ectRemoved
+    name.huliqing.editor.converter.field.EntitiesFieldConverter this$0 -> this$0
+    void <init>(name.huliqing.editor.converter.field.EntitiesFieldConverter,java.util.List) -> <init>
+    void undo() -> undo
+    void redo() -> redo
+name.huliqing.editor.converter.field.EntityObjectDatasFieldConverter -> name.huliqing.editor.converter.field.EntityObjectDatasFieldConverter:
+    java.util.logging.Logger LOG -> LOG
+    java.lang.String FEATURE_DATA_TYPE -> FEATURE_DATA_TYPE
+    java.lang.String FEATURE_COMPONENT_TYPE -> FEATURE_COMPONENT_TYPE
+    java.lang.Class dataType -> dataType
+    java.lang.String componentType -> componentType
+    name.huliqing.editor.ui.ComponentSearch componentList -> componentList
+    javafx.scene.layout.VBox layout -> layout
+    javafx.scene.control.ToolBar toolbar -> toolbar
+    javafx.scene.control.ListView listView -> listView
+    name.huliqing.editor.converter.DataConverter dataConverter -> dataConverter
+    void <init>() -> <init>
+    void notifyChanged() -> notifyChanged
+    void initialize() -> initialize
+    void cleanup() -> cleanup
+    javafx.scene.Node createLayout() -> createLayout
+    void updateUI() -> updateUI
+    void lambda$new$6(javafx.beans.value.ObservableValue,name.huliqing.luoying.xml.ObjectData,name.huliqing.luoying.xml.ObjectData) -> lambda$new$6
+    javafx.scene.control.ListCell lambda$new$5(javafx.scene.control.ListView) -> lambda$new$5
+    void lambda$new$4(javafx.scene.input.MouseEvent) -> lambda$new$4
+    void lambda$null$3(name.huliqing.editor.component.ComponentDefine) -> lambda$null$3
+    void lambda$new$2(javafx.event.ActionEvent) -> lambda$new$2
+    void lambda$null$1() -> lambda$null$1
+    void lambda$new$0(javafx.scene.control.Button,javafx.event.ActionEvent) -> lambda$new$0
+    name.huliqing.luoying.xml.ObjectData access$000(name.huliqing.editor.converter.field.EntityObjectDatasFieldConverter) -> access$000
+    name.huliqing.luoying.xml.ObjectData access$100(name.huliqing.editor.converter.field.EntityObjectDatasFieldConverter) -> access$100
+    name.huliqing.luoying.xml.ObjectData access$200(name.huliqing.editor.converter.field.EntityObjectDatasFieldConverter) -> access$200
+    name.huliqing.luoying.xml.ObjectData access$300(name.huliqing.editor.converter.field.EntityObjectDatasFieldConverter) -> access$300
+    void <clinit>() -> <clinit>
+name.huliqing.editor.converter.field.EntityObjectDatasFieldConverter$1 -> name.huliqing.editor.converter.field.EntityObjectDatasFieldConverter$1:
+    name.huliqing.editor.converter.field.EntityObjectDatasFieldConverter this$0 -> this$0
+    void <init>(name.huliqing.editor.converter.field.EntityObjectDatasFieldConverter) -> <init>
+    void updateItem(name.huliqing.luoying.xml.ObjectData,boolean) -> updateItem
+    void updateItem(java.lang.Object,boolean) -> updateItem
+name.huliqing.editor.converter.field.EntityObjectDatasFieldConverter$ObjectDataAddedUndoRedo -> name.huliqing.editor.converter.field.EntityObjectDatasFieldConverter$ObjectDataAddedUndoRedo:
+    name.huliqing.luoying.xml.ObjectData added -> added
+    name.huliqing.editor.converter.field.EntityObjectDatasFieldConverter this$0 -> this$0
+    void <init>(name.huliqing.editor.converter.field.EntityObjectDatasFieldConverter,name.huliqing.luoying.xml.ObjectData) -> <init>
+    void undo() -> undo
+    void redo() -> redo
+    void lambda$redo$1() -> lambda$redo$1
+    void lambda$undo$0() -> lambda$undo$0
+name.huliqing.editor.converter.field.EntityObjectDatasFieldConverter$ObjectDataRemovedUndoRedo -> name.huliqing.editor.converter.field.EntityObjectDatasFieldConverter$ObjectDataRemovedUndoRedo:
+    name.huliqing.luoying.xml.ObjectData removed -> removed
+    name.huliqing.editor.converter.field.EntityObjectDatasFieldConverter this$0 -> this$0
+    void <init>(name.huliqing.editor.converter.field.EntityObjectDatasFieldConverter,name.huliqing.luoying.xml.ObjectData) -> <init>
+    void undo() -> undo
+    void redo() -> redo
+    void lambda$redo$1() -> lambda$redo$1
+    void lambda$undo$0() -> lambda$undo$0
 name.huliqing.editor.converter.field.FileConverter -> name.huliqing.editor.converter.field.FileConverter:
     java.lang.String FEATURE_FILTERS -> FEATURE_FILTERS
     javafx.scene.layout.HBox layout -> layout
@@ -455,12 +559,95 @@ name.huliqing.editor.converter.field.FileConverter -> name.huliqing.editor.conve
     void <init>() -> <init>
     javafx.scene.Node createLayout() -> createLayout
     void updateChangedAndSave() -> updateChangedAndSave
-    void updateUI(java.lang.Object) -> updateUI
+    void updateUI() -> updateUI
     void openAssetsChooser() -> openAssetsChooser
     java.util.List getFilters() -> getFilters
     void lambda$new$2(javafx.scene.input.KeyEvent) -> lambda$new$2
     void lambda$new$1(javafx.beans.value.ObservableValue,java.lang.Boolean,java.lang.Boolean) -> lambda$new$1
     void lambda$new$0(javafx.event.ActionEvent) -> lambda$new$0
+name.huliqing.editor.converter.field.FloatTextConverter -> name.huliqing.editor.converter.field.FloatTextConverter:
+    javafx.scene.control.TextField content -> content
+    java.lang.Float lastValueSaved -> lastValueSaved
+    void <init>() -> <init>
+    void updateUI() -> updateUI
+    javafx.scene.Node createLayout() -> createLayout
+    void updateChangedAndSave() -> updateChangedAndSave
+    void lambda$new$1(javafx.scene.input.KeyEvent) -> lambda$new$1
+    void lambda$new$0(javafx.beans.value.ObservableValue,java.lang.Boolean,java.lang.Boolean) -> lambda$new$0
+name.huliqing.editor.converter.field.IntegerTextConverter -> name.huliqing.editor.converter.field.IntegerTextConverter:
+    javafx.scene.control.TextField content -> content
+    java.lang.Integer lastValueSaved -> lastValueSaved
+    void <init>() -> <init>
+    void updateUI() -> updateUI
+    javafx.scene.Node createLayout() -> createLayout
+    void updateChangedAndSave() -> updateChangedAndSave
+    void lambda$new$1(javafx.scene.input.KeyEvent) -> lambda$new$1
+    void lambda$new$0(javafx.beans.value.ObservableValue,java.lang.Boolean,java.lang.Boolean) -> lambda$new$0
+name.huliqing.editor.converter.field.ListDataFieldConverter -> name.huliqing.editor.converter.field.ListDataFieldConverter:
+    java.lang.String FEATURE_COMPONENT_TYPE -> FEATURE_COMPONENT_TYPE
+    java.lang.String componentType -> componentType
+    name.huliqing.editor.ui.ComponentSearch componentList -> componentList
+    javafx.scene.layout.VBox layout -> layout
+    javafx.scene.control.ToolBar toolbar -> toolbar
+    javafx.scene.control.ListView listView -> listView
+    name.huliqing.editor.converter.DataConverter dataConverter -> dataConverter
+    void <init>() -> <init>
+    void initialize() -> initialize
+    void cleanup() -> cleanup
+    javafx.scene.Node createLayout() -> createLayout
+    void notifyChanged() -> notifyChanged
+    void updateUI() -> updateUI
+    void lambda$new$6(javafx.beans.value.ObservableValue,name.huliqing.luoying.xml.ObjectData,name.huliqing.luoying.xml.ObjectData) -> lambda$new$6
+    javafx.scene.control.ListCell lambda$new$5(javafx.scene.control.ListView) -> lambda$new$5
+    void lambda$new$4(javafx.scene.input.MouseEvent) -> lambda$new$4
+    void lambda$null$3(name.huliqing.editor.component.ComponentDefine) -> lambda$null$3
+    void lambda$new$2(javafx.event.ActionEvent) -> lambda$new$2
+    void lambda$null$1() -> lambda$null$1
+    void lambda$new$0(javafx.scene.control.Button,javafx.event.ActionEvent) -> lambda$new$0
+    java.lang.String access$000(name.huliqing.editor.converter.field.ListDataFieldConverter) -> access$000
+    name.huliqing.luoying.xml.ObjectData access$100(name.huliqing.editor.converter.field.ListDataFieldConverter) -> access$100
+    java.lang.String access$200(name.huliqing.editor.converter.field.ListDataFieldConverter) -> access$200
+    name.huliqing.luoying.xml.ObjectData access$300(name.huliqing.editor.converter.field.ListDataFieldConverter) -> access$300
+    java.lang.String access$400(name.huliqing.editor.converter.field.ListDataFieldConverter) -> access$400
+    name.huliqing.luoying.xml.ObjectData access$500(name.huliqing.editor.converter.field.ListDataFieldConverter) -> access$500
+    java.lang.String access$600(name.huliqing.editor.converter.field.ListDataFieldConverter) -> access$600
+    name.huliqing.luoying.xml.ObjectData access$700(name.huliqing.editor.converter.field.ListDataFieldConverter) -> access$700
+    java.lang.String access$800(name.huliqing.editor.converter.field.ListDataFieldConverter) -> access$800
+    name.huliqing.luoying.xml.ObjectData access$900(name.huliqing.editor.converter.field.ListDataFieldConverter) -> access$900
+    java.lang.String access$1000(name.huliqing.editor.converter.field.ListDataFieldConverter) -> access$1000
+    name.huliqing.luoying.xml.ObjectData access$1100(name.huliqing.editor.converter.field.ListDataFieldConverter) -> access$1100
+name.huliqing.editor.converter.field.ListDataFieldConverter$1 -> name.huliqing.editor.converter.field.ListDataFieldConverter$1:
+    name.huliqing.editor.converter.field.ListDataFieldConverter this$0 -> this$0
+    void <init>(name.huliqing.editor.converter.field.ListDataFieldConverter) -> <init>
+    void updateItem(name.huliqing.luoying.xml.ObjectData,boolean) -> updateItem
+    void updateItem(java.lang.Object,boolean) -> updateItem
+name.huliqing.editor.converter.field.ListDataFieldConverter$ObjectDataAddedUndoRedo -> name.huliqing.editor.converter.field.ListDataFieldConverter$ObjectDataAddedUndoRedo:
+    name.huliqing.luoying.xml.ObjectData added -> added
+    name.huliqing.editor.converter.field.ListDataFieldConverter this$0 -> this$0
+    void <init>(name.huliqing.editor.converter.field.ListDataFieldConverter,name.huliqing.luoying.xml.ObjectData) -> <init>
+    void undo() -> undo
+    void redo() -> redo
+    void lambda$redo$1() -> lambda$redo$1
+    void lambda$undo$0() -> lambda$undo$0
+name.huliqing.editor.converter.field.ListDataFieldConverter$ObjectDataRemovedUndoRedo -> name.huliqing.editor.converter.field.ListDataFieldConverter$ObjectDataRemovedUndoRedo:
+    name.huliqing.luoying.xml.ObjectData removed -> removed
+    name.huliqing.editor.converter.field.ListDataFieldConverter this$0 -> this$0
+    void <init>(name.huliqing.editor.converter.field.ListDataFieldConverter,name.huliqing.luoying.xml.ObjectData) -> <init>
+    void undo() -> undo
+    void redo() -> redo
+    void lambda$redo$1() -> lambda$redo$1
+    void lambda$undo$0() -> lambda$undo$0
+name.huliqing.editor.converter.field.ListIdFieldConverter -> name.huliqing.editor.converter.field.ListIdFieldConverter:
+    void <init>() -> <init>
+name.huliqing.editor.converter.field.LongTextConverter -> name.huliqing.editor.converter.field.LongTextConverter:
+    javafx.scene.control.TextField content -> content
+    java.lang.Long lastValueSaved -> lastValueSaved
+    void <init>() -> <init>
+    void updateUI() -> updateUI
+    javafx.scene.Node createLayout() -> createLayout
+    void updateChangedAndSave() -> updateChangedAndSave
+    void lambda$new$1(javafx.scene.input.KeyEvent) -> lambda$new$1
+    void lambda$new$0(javafx.beans.value.ObservableValue,java.lang.Boolean,java.lang.Boolean) -> lambda$new$0
 name.huliqing.editor.converter.field.QuaternionConverter -> name.huliqing.editor.converter.field.QuaternionConverter:
     float[] temp -> temp
     javafx.scene.layout.VBox layout -> layout
@@ -482,7 +669,7 @@ name.huliqing.editor.converter.field.QuaternionConverter -> name.huliqing.editor
     void <init>() -> <init>
     javafx.scene.Node createLayout() -> createLayout
     void updateChanged() -> updateChanged
-    void updateUI(java.lang.Object) -> updateUI
+    void updateUI() -> updateUI
     void lambda$new$0(javafx.beans.value.ObservableValue,java.lang.Boolean,java.lang.Boolean) -> lambda$new$0
     void access$000(name.huliqing.editor.converter.field.QuaternionConverter) -> access$000
 name.huliqing.editor.converter.field.QuaternionConverter$1 -> name.huliqing.editor.converter.field.QuaternionConverter$1:
@@ -490,15 +677,59 @@ name.huliqing.editor.converter.field.QuaternionConverter$1 -> name.huliqing.edit
     void <init>(name.huliqing.editor.converter.field.QuaternionConverter) -> <init>
     void handle(javafx.scene.input.KeyEvent) -> handle
     void handle(javafx.event.Event) -> handle
+name.huliqing.editor.converter.field.SkillAnimationFieldConverter -> name.huliqing.editor.converter.field.SkillAnimationFieldConverter:
+    javafx.scene.control.ComboBox animField -> animField
+    name.huliqing.editor.ui.utils.AutoCompleteComboBoxListener acControl -> acControl
+    java.lang.String lastValueSaved -> lastValueSaved
+    void <init>() -> <init>
+    void updateChangedAndSave() -> updateChangedAndSave
+    void initialize() -> initialize
+    name.huliqing.luoying.data.EntityData findEntityData(name.huliqing.editor.converter.Converter) -> findEntityData
+    void updateUI() -> updateUI
+    javafx.scene.Node createLayout() -> createLayout
+    void lambda$initialize$3() -> lambda$initialize$3
+    void lambda$null$2(java.util.List) -> lambda$null$2
+    void lambda$new$1(javafx.scene.input.KeyEvent) -> lambda$new$1
+    void lambda$new$0(javafx.beans.value.ObservableValue,java.lang.Boolean,java.lang.Boolean) -> lambda$new$0
+name.huliqing.editor.converter.field.SwayGeometriesFieldConverter -> name.huliqing.editor.converter.field.SwayGeometriesFieldConverter:
+    javafx.scene.layout.VBox layout -> layout
+    javafx.scene.control.ToolBar toolbar -> toolbar
+    javafx.scene.control.ListView listView -> listView
+    name.huliqing.editor.ui.ListViewPopup listViewPopup -> listViewPopup
+    java.util.List lastValues -> lastValues
+    void <init>() -> <init>
+    void initialize() -> initialize
+    void updateUI() -> updateUI
+    javafx.scene.Node createLayout() -> createLayout
+    void lambda$initialize$4(name.huliqing.luoying.object.entity.Entity) -> lambda$initialize$4
+    javafx.scene.control.ListCell lambda$new$3(javafx.scene.control.ListView) -> lambda$new$3
+    void lambda$new$2(javafx.scene.input.MouseEvent) -> lambda$new$2
+    void lambda$new$1(javafx.event.ActionEvent) -> lambda$new$1
+    void lambda$new$0(javafx.scene.control.Button,javafx.event.ActionEvent) -> lambda$new$0
+name.huliqing.editor.converter.field.SwayGeometriesFieldConverter$1 -> name.huliqing.editor.converter.field.SwayGeometriesFieldConverter$1:
+    name.huliqing.editor.converter.field.SwayGeometriesFieldConverter this$0 -> this$0
+    void <init>(name.huliqing.editor.converter.field.SwayGeometriesFieldConverter) -> <init>
+    void updateItem(java.lang.String,boolean) -> updateItem
+    void updateItem(java.lang.Object,boolean) -> updateItem
+name.huliqing.editor.converter.field.TagNameConverter -> name.huliqing.editor.converter.field.TagNameConverter:
+    javafx.scene.control.TextField content -> content
+    void <init>() -> <init>
+    javafx.scene.Node createLayout() -> createLayout
+    void updateUI() -> updateUI
 name.huliqing.editor.converter.field.TextConverter -> name.huliqing.editor.converter.field.TextConverter:
     javafx.scene.control.TextField content -> content
     java.lang.String lastValueSaved -> lastValueSaved
     void <init>() -> <init>
     javafx.scene.Node createLayout() -> createLayout
     void updateChangedAndSave() -> updateChangedAndSave
-    void updateUI(java.lang.Object) -> updateUI
+    void updateUI() -> updateUI
     void lambda$new$1(javafx.scene.input.KeyEvent) -> lambda$new$1
     void lambda$new$0(javafx.beans.value.ObservableValue,java.lang.Boolean,java.lang.Boolean) -> lambda$new$0
+name.huliqing.editor.converter.field.UniqueIdConverter -> name.huliqing.editor.converter.field.UniqueIdConverter:
+    javafx.scene.control.TextField layout -> layout
+    void <init>() -> <init>
+    void updateUI() -> updateUI
+    javafx.scene.Node createLayout() -> createLayout
 name.huliqing.editor.converter.field.Vector2fConverter -> name.huliqing.editor.converter.field.Vector2fConverter:
     javafx.scene.layout.VBox layout -> layout
     javafx.scene.layout.HBox xLayout -> xLayout
@@ -515,7 +746,7 @@ name.huliqing.editor.converter.field.Vector2fConverter -> name.huliqing.editor.c
     void <init>() -> <init>
     javafx.scene.Node createLayout() -> createLayout
     void updateAndSave() -> updateAndSave
-    void updateUI(java.lang.Object) -> updateUI
+    void updateUI() -> updateUI
     void lambda$new$0(javafx.beans.value.ObservableValue,java.lang.Boolean,java.lang.Boolean) -> lambda$new$0
     void access$000(name.huliqing.editor.converter.field.Vector2fConverter) -> access$000
 name.huliqing.editor.converter.field.Vector2fConverter$1 -> name.huliqing.editor.converter.field.Vector2fConverter$1:
@@ -543,7 +774,7 @@ name.huliqing.editor.converter.field.Vector3fConverter -> name.huliqing.editor.c
     void <init>() -> <init>
     javafx.scene.Node createLayout() -> createLayout
     void updateAndSave() -> updateAndSave
-    void updateUI(java.lang.Object) -> updateUI
+    void updateUI() -> updateUI
     void lambda$new$0(javafx.beans.value.ObservableValue,java.lang.Boolean,java.lang.Boolean) -> lambda$new$0
     void access$000(name.huliqing.editor.converter.field.Vector3fConverter) -> access$000
 name.huliqing.editor.converter.field.Vector3fConverter$1 -> name.huliqing.editor.converter.field.Vector3fConverter$1:
@@ -575,7 +806,7 @@ name.huliqing.editor.converter.field.Vector4fConverter -> name.huliqing.editor.c
     void <init>() -> <init>
     javafx.scene.Node createLayout() -> createLayout
     void updateAndSave() -> updateAndSave
-    void updateUI(java.lang.Object) -> updateUI
+    void updateUI() -> updateUI
     void lambda$new$0(javafx.beans.value.ObservableValue,java.lang.Boolean,java.lang.Boolean) -> lambda$new$0
     void access$000(name.huliqing.editor.converter.field.Vector4fConverter) -> access$000
 name.huliqing.editor.converter.field.Vector4fConverter$1 -> name.huliqing.editor.converter.field.Vector4fConverter$1:
@@ -589,7 +820,7 @@ name.huliqing.editor.edit.JfxAbstractEdit -> name.huliqing.editor.d.a:
     name.huliqing.editor.edit.JmeEdit jmeEdit -> b
     boolean editInitialized -> c
     boolean jfxInitialized -> d
-    javafx.scene.layout.Pane editRoot -> e
+    javafx.scene.layout.VBox editRoot -> e
     void <init>() -> <init>
     void initialize(name.huliqing.editor.Editor) -> a
     void update(float) -> a
@@ -602,6 +833,7 @@ name.huliqing.editor.edit.JfxAbstractEdit -> name.huliqing.editor.d.a:
     void setModified(boolean) -> a
     void save() -> e
     name.huliqing.editor.Editor getEditor() -> f
+    name.huliqing.editor.edit.JmeEdit getJmeEdit() -> l
     javafx.scene.layout.Pane getEditRoot() -> g
     void jfxOnDragStarted() -> h
     void jfxOnDragEnded() -> i
@@ -625,23 +857,24 @@ name.huliqing.editor.edit.JfxEdit -> name.huliqing.editor.d.b:
     boolean isModified() -> d
     void setModified(boolean) -> a
     void save() -> e
-    javafx.scene.layout.Pane getPropertyPanel() -> l
+    javafx.scene.layout.Pane getEditPanel() -> r
 name.huliqing.editor.edit.JfxExtToolbar -> name.huliqing.editor.d.c:
     javafx.scene.layout.HBox visibleControl -> a
     javafx.scene.image.ImageView arrowR -> b
     javafx.scene.image.ImageView arrowL -> c
     javafx.scene.control.TabPane tabPane -> d
     void <init>() -> <init>
-    void addToolbar(java.lang.String,javafx.scene.Node) -> a
+    void addToolbar(java.lang.String,javafx.scene.layout.Region) -> a
     boolean isToolbarVisible() -> a
     void setToolbarVisible(boolean) -> a
     void lambda$new$0(javafx.scene.input.MouseEvent) -> a
 name.huliqing.editor.edit.JfxSimpleEdit -> name.huliqing.editor.d.d:
     javafx.scene.layout.BorderPane layout -> f
-    javafx.scene.layout.StackPane leftZone -> g
-    javafx.scene.layout.Pane leftPropertyZone -> h
-    javafx.scene.layout.Pane leftEditZone -> i
-    javafx.scene.layout.Pane jfxToolbarPanel -> j
+    javafx.scene.layout.HBox propertyZone -> g
+    javafx.scene.layout.StackPane bodyZone -> h
+    javafx.scene.layout.Pane editPanelBinder -> i
+    javafx.scene.layout.Pane editPanel -> j
+    javafx.scene.layout.HBox jfxToolbarPanel -> z
     name.huliqing.editor.edit.JfxExtToolbar jfxExtToolbarPanel -> k
     name.huliqing.editor.ui.toolbar.JfxToolbar jfxToolbar -> l
     java.util.List jfxExtToolbars -> m
@@ -650,7 +883,7 @@ name.huliqing.editor.edit.JfxSimpleEdit -> name.huliqing.editor.d.d:
     void jfxCleanup() -> k
     void jfxOnDragStarted() -> h
     void jfxOnDragEnded() -> i
-    javafx.scene.layout.Pane getPropertyPanel() -> l
+    javafx.scene.layout.Pane getEditPanel() -> r
     void setJfxToolbar(name.huliqing.editor.ui.toolbar.JfxToolbar) -> a
     void addJfxExtToolbar(name.huliqing.editor.ui.toolbar.JfxToolbar) -> b
     void onDragOver(javafx.scene.input.DragEvent) -> a
@@ -882,16 +1115,16 @@ name.huliqing.editor.edit.scene.JfxSceneEdit -> name.huliqing.editor.d.b.a:
     void onSelected(name.huliqing.editor.edit.controls.ControlTile) -> onSelected
     void setSelected(name.huliqing.luoying.data.EntityData) -> a
     void reloadEntity(name.huliqing.luoying.data.EntityData) -> b
-    void addEntity(name.huliqing.luoying.data.EntityData) -> c
-    void removeEntity(name.huliqing.luoying.data.EntityData) -> d
+    void addEntityUseUndoRedo(name.huliqing.luoying.data.EntityData) -> c
+    void removeEntityUseUndoRedo(name.huliqing.luoying.data.EntityData) -> d
     void onSceneLoaded(name.huliqing.luoying.object.scene.Scene) -> onSceneLoaded
     void onSceneEntityAdded(name.huliqing.luoying.object.scene.Scene,name.huliqing.luoying.object.entity.Entity) -> onSceneEntityAdded
     void onSceneEntityRemoved(name.huliqing.luoying.object.scene.Scene,name.huliqing.luoying.object.entity.Entity) -> onSceneEntityRemoved
     void showDeleteConfirm(float,float,name.huliqing.editor.edit.controls.entity.EntityControlTile) -> a
     void lambda$onSceneEntityRemoved$12(name.huliqing.luoying.object.entity.Entity) -> a
     void lambda$onSceneEntityAdded$11(name.huliqing.luoying.object.entity.Entity) -> b
-    void lambda$removeEntity$10(name.huliqing.luoying.data.EntityData) -> e
-    void lambda$addEntity$9(name.huliqing.luoying.data.EntityData) -> f
+    void lambda$removeEntityUseUndoRedo$10(name.huliqing.luoying.data.EntityData) -> e
+    void lambda$addEntityUseUndoRedo$9(name.huliqing.luoying.data.EntityData) -> f
     void lambda$reloadEntity$8(name.huliqing.luoying.data.EntityData) -> g
     void lambda$setSelected$7(name.huliqing.luoying.data.EntityData) -> h
     void lambda$onSelected$6() -> m
@@ -899,7 +1132,7 @@ name.huliqing.editor.edit.scene.JfxSceneEdit -> name.huliqing.editor.d.b.a:
     void lambda$null$4(name.huliqing.editor.edit.Mode,name.huliqing.editor.edit.scene.JfxSceneEditListener) -> a
     void lambda$loadScene$3(name.huliqing.luoying.data.SceneData,java.lang.String) -> c
     void lambda$null$2(name.huliqing.luoying.object.scene.Scene) -> a
-    void lambda$onDragDropped$1(name.huliqing.editor.components.Component) -> a
+    void lambda$onDragDropped$1(name.huliqing.editor.component.ComponentDefine) -> a
     void lambda$new$0(javafx.event.ActionEvent) -> a
     void <clinit>() -> <clinit>
 name.huliqing.editor.edit.scene.JfxSceneEditListener -> name.huliqing.editor.d.b.b:
@@ -911,45 +1144,49 @@ name.huliqing.editor.edit.scene.SceneEdit -> name.huliqing.editor.d.b.c:
     java.util.logging.Logger LOG -> m
     name.huliqing.luoying.layer.service.PlayService playService -> n
     name.huliqing.editor.edit.scene.JfxSceneEdit jfxEdit -> o
-    name.huliqing.editor.toolbar.Toolbar extTerrainTools -> p
+    name.huliqing.editor.toolbar.Toolbar extTerrainToolbar -> p
+    name.huliqing.editor.toolbar.Toolbar extEntityBrushToolbar -> t
     name.huliqing.luoying.object.game.Game game -> q
     name.huliqing.luoying.object.scene.Scene scene -> r
     boolean sceneLoaded -> s
-    java.util.Map objMap -> t
+    java.util.Map controlTileMap -> x
     name.huliqing.editor.events.JmeEvent delEvent -> u
     name.huliqing.editor.events.JmeEvent duplicateEvent -> v
     java.lang.String savePath -> w
+    name.huliqing.luoying.object.entity.impl.PhysicsEntity physicsEntity -> y
     void <init>(name.huliqing.editor.edit.scene.JfxSceneEdit) -> <init>
     java.util.List createExtToolbars() -> l
     void initialize(name.huliqing.editor.Editor) -> a
     void cleanup() -> b
     void doSaveEdit() -> j
     void setSavePath(java.lang.String) -> a
+    name.huliqing.luoying.object.scene.Scene getScene() -> q
     void setScene(name.huliqing.luoying.object.scene.Scene) -> a
     void onSceneLoaded(name.huliqing.luoying.object.scene.Scene) -> onSceneLoaded
     void onSceneEntityAdded(name.huliqing.luoying.object.scene.Scene,name.huliqing.luoying.object.entity.Entity) -> onSceneEntityAdded
     void onSceneEntityRemoved(name.huliqing.luoying.object.scene.Scene,name.huliqing.luoying.object.entity.Entity) -> onSceneEntityRemoved
     void setSelected(name.huliqing.luoying.data.EntityData) -> a
     void reloadEntity(name.huliqing.luoying.data.EntityData) -> b
-    void addEntity(name.huliqing.luoying.data.EntityData) -> c
-    void addEntityOnCursor(name.huliqing.luoying.data.EntityData,com.jme3.math.Vector2f) -> a
-    boolean removeEntity(name.huliqing.luoying.data.EntityData) -> d
+    void addControlTile(name.huliqing.editor.edit.controls.ControlTile) -> b
+    boolean removeControlTile(name.huliqing.editor.edit.controls.ControlTile) -> c
+    void addEntityUseUndoRedo(name.huliqing.luoying.data.EntityData) -> c
+    void addEntityOnCursorUseUndoRedo(name.huliqing.luoying.data.EntityData,com.jme3.math.Vector2f) -> a
+    boolean removeEntityUseUndoRedo(name.huliqing.luoying.data.EntityData) -> d
+    name.huliqing.editor.edit.controls.entity.EntityControlTile getEntityControlTile(name.huliqing.luoying.data.EntityData) -> e
     void lambda$onSceneLoaded$4(name.huliqing.luoying.object.entity.Entity) -> a
     boolean lambda$onSceneLoaded$3(name.huliqing.luoying.object.entity.Entity) -> b
     void lambda$initialize$2(name.huliqing.editor.events.Event) -> a
     void lambda$initialize$1(name.huliqing.editor.Editor,name.huliqing.editor.events.Event) -> a
     void lambda$null$0(com.jme3.math.Vector2f,name.huliqing.editor.Editor) -> a
-    java.util.Map access$000(name.huliqing.editor.edit.scene.SceneEdit) -> a
-    name.huliqing.luoying.object.scene.Scene access$100(name.huliqing.editor.edit.scene.SceneEdit) -> b
     void <clinit>() -> <clinit>
 name.huliqing.editor.edit.scene.SceneEdit$EntityAddedUndoRedo -> name.huliqing.editor.d.b.c$a:
-    name.huliqing.editor.edit.controls.entity.EntityControlTile eso -> b
+    name.huliqing.editor.edit.controls.entity.EntityControlTile ectAdded -> b
     name.huliqing.editor.edit.scene.SceneEdit this$0 -> a
     void <init>(name.huliqing.editor.edit.scene.SceneEdit,name.huliqing.editor.edit.controls.entity.EntityControlTile) -> <init>
     void undo() -> undo
     void redo() -> redo
 name.huliqing.editor.edit.scene.SceneEdit$EntityRemovedUndoRedo -> name.huliqing.editor.d.b.c$b:
-    name.huliqing.editor.edit.controls.entity.EntityControlTile ect -> b
+    name.huliqing.editor.edit.controls.entity.EntityControlTile ectRemoved -> b
     name.huliqing.editor.edit.scene.SceneEdit this$0 -> a
     void <init>(name.huliqing.editor.edit.scene.SceneEdit,name.huliqing.editor.edit.controls.entity.EntityControlTile) -> <init>
     void undo() -> undo
@@ -1199,18 +1436,23 @@ name.huliqing.editor.log.SimpleLogHandler$HandleBufferedOutputStream -> name.hul
 name.huliqing.editor.log.SimpleLogHandlerWrap -> name.huliqing.editor.log.SimpleLogHandlerWrap:
     void <init>() -> <init>
 name.huliqing.editor.manager.ComponentManager -> name.huliqing.editor.f.a:
-    java.util.Map COMPONENTS -> a
-    void loadComponents() -> a
-    void clearComponents() -> b
-    java.util.List getComponents(java.lang.String) -> a
+    java.util.logging.Logger LOG -> a
+    java.util.Map CONVERTER_CACHE -> b
+    java.util.Map COMPONENT_DEFINES -> c
+    void <init>() -> <init>
+    void reloadComponents(java.io.File) -> a
+    void loadComponentFile(java.io.File) -> b
+    void addComponentDefine(name.huliqing.editor.component.ComponentDefine) -> a
+    void createComponent(name.huliqing.editor.component.ComponentDefine,name.huliqing.editor.edit.JfxEdit) -> a
+    name.huliqing.editor.component.ComponentConverter getConverter(name.huliqing.editor.component.ComponentDefine) -> b
+    java.util.List getComponents(java.util.List) -> a
+    java.util.List getComponentsByType(java.lang.String) -> a
     void <clinit>() -> <clinit>
 name.huliqing.editor.manager.ConfigManager -> name.huliqing.editor.f.b:
-    name.huliqing.editor.manager.ConfigSaver cs -> a
-    java.lang.String configDir -> b
-    java.lang.String configFile -> c
+    java.util.logging.Logger LOG -> a
+    name.huliqing.editor.manager.ConfigSaver configs -> b
     java.util.List listeners -> d
     void <init>() -> <init>
-    java.io.File getDir() -> e
     void loadConfig() -> a
     void saveConfig() -> b
     void addListener(name.huliqing.editor.manager.ConfigManager$ConfigChangedListener) -> a
@@ -1220,7 +1462,9 @@ name.huliqing.editor.manager.ConfigManager -> name.huliqing.editor.f.b:
     void setAssetsDirs(java.util.List) -> a
     java.lang.String getMainAssetDir() -> d
     void setMainAssetDir(java.lang.String) -> a
+    void copyTemplate(java.lang.String) -> d
     void lambda$notifyListeners$0(java.lang.String,name.huliqing.editor.manager.ConfigManager$ConfigChangedListener) -> a
+    void <clinit>() -> <clinit>
 name.huliqing.editor.manager.ConfigManager$ConfigChangedListener -> name.huliqing.editor.f.b$a:
     void onConfigChanged(java.lang.String) -> onConfigChanged
 name.huliqing.editor.manager.ConfigSaver -> name.huliqing.editor.f.c:
@@ -1242,26 +1486,20 @@ name.huliqing.editor.manager.ControlTileManager -> name.huliqing.editor.f.d:
     java.util.logging.Logger LOG -> a
     java.util.Map MAPPING -> b
     void <init>() -> <init>
-    name.huliqing.editor.edit.controls.entity.EntityControlTile createEntityControlTile(java.lang.String) -> a
+    name.huliqing.editor.edit.controls.entity.EntityControlTile createEntityControlTile(name.huliqing.luoying.data.EntityData) -> a
     void <clinit>() -> <clinit>
 name.huliqing.editor.manager.ConverterManager -> name.huliqing.editor.f.e:
     java.util.logging.Logger LOG -> a
     java.util.Map CONVERTER_MAP -> b
     java.util.Map DATA_DEFINES -> c
     void <init>() -> <init>
-    void initialize() -> a
-    void initializeInner(java.lang.String) -> b
+    void reloadConverters(java.io.File) -> a
+    void loadConverterFile(java.io.File) -> b
     java.util.Map loadFieldDefines(org.w3c.dom.Element) -> a
     java.util.Map loadFeatures(org.w3c.dom.Element) -> b
     name.huliqing.editor.converter.define.DataDefine getDataDefine(java.lang.String) -> a
     name.huliqing.editor.converter.DataConverter createDataConverter(name.huliqing.editor.edit.JfxAbstractEdit,name.huliqing.luoying.xml.ObjectData,name.huliqing.editor.converter.FieldConverter) -> a
-    name.huliqing.editor.converter.FieldConverter createPropertyConverter(name.huliqing.editor.edit.JfxAbstractEdit,name.huliqing.editor.converter.define.FieldDefine,name.huliqing.editor.converter.DataConverter) -> a
-    void <clinit>() -> <clinit>
-name.huliqing.editor.manager.EditAssetLocator -> name.huliqing.editor.f.f:
-    java.util.logging.Logger LOG -> a
-    void <init>() -> <init>
-    void setRootPath(java.lang.String) -> setRootPath
-    com.jme3.asset.AssetInfo locate(com.jme3.asset.AssetManager,com.jme3.asset.AssetKey) -> locate
+    name.huliqing.editor.converter.FieldConverter createPropertyConverter(name.huliqing.editor.edit.JfxAbstractEdit,name.huliqing.luoying.xml.ObjectData,name.huliqing.editor.converter.define.FieldDefine,name.huliqing.editor.converter.DataConverter) -> a
     void <clinit>() -> <clinit>
 name.huliqing.editor.manager.EditManager -> name.huliqing.editor.f.g:
     void <init>() -> <init>
@@ -1314,10 +1552,10 @@ name.huliqing.editor.manager.UIManager -> name.huliqing.editor.f.j:
     name.huliqing.editor.ui.OutputForm outputForm -> g
     void initializeLayout(javafx.scene.layout.Pane) -> a
     void displayOutputForm() -> a
-    void output(java.lang.String) -> a
+    void output(java.lang.String,javafx.scene.paint.Color) -> a
     void initMainLayout(javafx.scene.layout.Pane) -> b
     void JfxUndoRedoKeyEventToJme() -> b
-    void lambda$output$1(java.lang.String) -> b
+    void lambda$output$1(java.lang.String,javafx.scene.paint.Color) -> b
     void lambda$initializeLayout$0(javafx.collections.ListChangeListener$Change) -> a
     void <clinit>() -> <clinit>
 name.huliqing.editor.manager.UIManager$1 -> name.huliqing.editor.f.k:
@@ -1470,6 +1708,7 @@ name.huliqing.editor.toolbar.AbstractToolbar -> name.huliqing.editor.h.a:
     void addListener(name.huliqing.editor.toolbar.ToolbarListener) -> a
     boolean removeListener(name.huliqing.editor.toolbar.ToolbarListener) -> b
     java.util.List getTools() -> f
+    name.huliqing.editor.edit.JmeEdit getEdit() -> o
     void lambda$cleanup$0(name.huliqing.editor.tools.Tool) -> d
 name.huliqing.editor.toolbar.BaseEditToolbar -> name.huliqing.editor.h.b:
     name.huliqing.editor.tools.base.UndoRedoTool undoRedoTool -> i
@@ -1501,6 +1740,34 @@ name.huliqing.editor.toolbar.EditToolbar$ToggleMappingEvent -> name.huliqing.edi
     void <init>(name.huliqing.editor.toolbar.EditToolbar,int,name.huliqing.editor.tools.Tool) -> <init>
     name.huliqing.editor.toolbar.EditToolbar$ToggleMappingEvent setConflicts(name.huliqing.editor.tools.Tool[]) -> a
     name.huliqing.editor.toolbar.EditToolbar$ToggleMappingEvent setRelations(name.huliqing.editor.tools.Tool[]) -> b
+name.huliqing.editor.toolbar.EntityBrushToolbar -> name.huliqing.editor.h.g:
+    name.huliqing.editor.tools.NumberValueTool sizeTool -> i
+    name.huliqing.editor.tools.IntegerValueTool densityTool -> j
+    name.huliqing.editor.tools.entity.SourceTool sourceTool -> k
+    name.huliqing.editor.tools.entity.PaintTool paintTool -> l
+    name.huliqing.editor.tools.ParamsTool paintToolParams -> m
+    name.huliqing.editor.tools.NumberValueTool minHeight -> n
+    name.huliqing.editor.tools.BooleanValueTool useNormal -> o
+    name.huliqing.editor.tools.Vector3fValueTool locationOffset -> p
+    name.huliqing.editor.tools.Vector3fValueTool scaleMinAdjust -> q
+    name.huliqing.editor.tools.Vector3fValueTool scaleMaxAdjust -> r
+    name.huliqing.editor.tools.Vector3fValueTool rotationMinAdjust -> s
+    name.huliqing.editor.tools.Vector3fValueTool rotationMaxAdjust -> t
+    name.huliqing.editor.tools.entity.EraseTool eraseTool -> u
+    void <init>(name.huliqing.editor.edit.SimpleJmeEdit) -> <init>
+    java.lang.String getName() -> g
+    void initialize() -> a
+    name.huliqing.editor.tools.NumberValueTool getSizeTool() -> i
+    name.huliqing.editor.tools.IntegerValueTool getDensityTool() -> j
+    name.huliqing.editor.tools.entity.SourceTool getSourceTool() -> k
+    name.huliqing.editor.tools.NumberValueTool getMinHeight() -> l
+    name.huliqing.editor.tools.BooleanValueTool getUseNormal() -> m
+    name.huliqing.editor.tools.Vector3fValueTool getLocationOffset() -> n
+    name.huliqing.editor.tools.Vector3fValueTool getScaleMinAdjust() -> p
+    name.huliqing.editor.tools.Vector3fValueTool getScaleMaxAdjust() -> q
+    name.huliqing.editor.tools.Vector3fValueTool getRotationMinAdjust() -> r
+    name.huliqing.editor.tools.Vector3fValueTool getRotationMaxAdjust() -> s
+    void cleanup() -> d
 name.huliqing.editor.toolbar.TerrainToolbar -> name.huliqing.editor.h.d:
     name.huliqing.editor.tools.NumberValueTool sizeTool -> i
     name.huliqing.editor.tools.NumberValueTool weightTool -> j
@@ -1540,6 +1807,7 @@ name.huliqing.editor.toolbar.Toolbar -> name.huliqing.editor.h.e:
     void addListener(name.huliqing.editor.toolbar.ToolbarListener) -> a
     boolean removeListener(name.huliqing.editor.toolbar.ToolbarListener) -> b
     java.lang.String getName() -> g
+    name.huliqing.editor.edit.JmeEdit getEdit() -> o
 name.huliqing.editor.toolbar.ToolbarListener -> name.huliqing.editor.h.f:
     void onStateChanged(boolean) -> onStateChanged
     void onToolAdded(name.huliqing.editor.tools.Tool) -> onToolAdded
@@ -1609,6 +1877,10 @@ name.huliqing.editor.tools.GroupTool -> name.huliqing.editor.tools.f:
     boolean lambda$cleanup$2(name.huliqing.editor.tools.Tool) -> c
     void lambda$initialize$1(name.huliqing.editor.edit.SimpleJmeEdit,name.huliqing.editor.toolbar.EditToolbar,name.huliqing.editor.tools.Tool) -> a
     boolean lambda$initialize$0(name.huliqing.editor.tools.Tool) -> d
+name.huliqing.editor.tools.IntegerValueTool -> name.huliqing.editor.tools.m:
+    void <init>(java.lang.String,java.lang.String,java.lang.String) -> <init>
+    name.huliqing.editor.tools.ValueTool setValue(java.lang.Number) -> a
+    name.huliqing.editor.tools.ValueTool setValue(java.lang.Object) -> a
 name.huliqing.editor.tools.NumberValueTool -> name.huliqing.editor.tools.g:
     java.lang.Number stepAmount -> c
     java.lang.Number minValue -> d
@@ -1618,7 +1890,7 @@ name.huliqing.editor.tools.NumberValueTool -> name.huliqing.editor.tools.g:
     name.huliqing.editor.tools.NumberValueTool setMinValue(java.lang.Number) -> b
     name.huliqing.editor.events.JmeEvent bindIncreaseEvent() -> b
     name.huliqing.editor.events.JmeEvent bindDecreaseEvent() -> c
-    void setStepAmount(java.lang.Number) -> c
+    name.huliqing.editor.tools.NumberValueTool setStepAmount(java.lang.Number) -> c
     void onToolEvent(name.huliqing.editor.events.Event) -> onToolEvent
     void update(float) -> update
     name.huliqing.editor.tools.ValueTool setValue(java.lang.Object) -> a
@@ -1636,6 +1908,11 @@ name.huliqing.editor.tools.Tool -> name.huliqing.editor.tools.j:
 name.huliqing.editor.tools.ValueChangedListener -> name.huliqing.editor.tools.k:
     void onValueChanged(name.huliqing.editor.tools.ValueTool,java.lang.Object,java.lang.Object) -> onValueChanged
 name.huliqing.editor.tools.ValueTool -> name.huliqing.editor.tools.l:
+name.huliqing.editor.tools.Vector2fValueTool -> name.huliqing.editor.tools.n:
+    void onToolEvent(name.huliqing.editor.events.Event) -> onToolEvent
+name.huliqing.editor.tools.Vector3fValueTool -> name.huliqing.editor.tools.o:
+    void <init>(java.lang.String,java.lang.String,java.lang.String) -> <init>
+    void onToolEvent(name.huliqing.editor.events.Event) -> onToolEvent
 name.huliqing.editor.tools.base.CameraTool -> name.huliqing.editor.tools.a.a:
     java.lang.String EVENT_DRAG -> a
     java.lang.String EVENT_ROTATE -> b
@@ -1846,6 +2123,73 @@ name.huliqing.editor.tools.base.UndoRedoTool -> name.huliqing.editor.tools.a.l:
     void <init>(java.lang.String,java.lang.String,java.lang.String) -> <init>
     name.huliqing.editor.events.JmeEvent bindUndoRedoEvent() -> a
     void onToolEvent(name.huliqing.editor.events.Event) -> onToolEvent
+name.huliqing.editor.tools.entity.AbstractAdjustEntityBrushTool -> name.huliqing.editor.tools.b.a:
+    float baseSize -> d
+    boolean modifying -> e
+    float toolModifyRate -> f
+    float lastModifyTime -> g
+    com.jme3.scene.Geometry controlObj -> a
+    name.huliqing.editor.tools.NumberValueTool sizeTool -> b
+    name.huliqing.editor.tools.IntegerValueTool densityTool -> c
+    void <init>(java.lang.String,java.lang.String,java.lang.String) -> <init>
+    void initialize(name.huliqing.editor.edit.SimpleJmeEdit,name.huliqing.editor.toolbar.EntityBrushToolbar) -> a
+    void cleanup() -> cleanup
+    void update(float) -> update
+    name.huliqing.editor.events.JmeEvent bindActionEvent() -> a
+    void onToolEvent(name.huliqing.editor.events.Event) -> onToolEvent
+    void doAction() -> b
+    void doEndAction() -> c
+    void onValueChanged(name.huliqing.editor.tools.ValueTool,java.lang.Number,java.lang.Number) -> a
+    void updateMarkerSize(float) -> a
+    com.jme3.scene.Geometry createMesh() -> f
+    name.huliqing.luoying.object.entity.TerrainEntity getSelectTerrain() -> d
+    com.jme3.math.Vector3f getTerrainCollisionPoint() -> e
+    void initialize(name.huliqing.editor.edit.SimpleJmeEdit,name.huliqing.editor.toolbar.EditToolbar) -> initialize
+    void initialize(name.huliqing.editor.edit.JmeEdit,name.huliqing.editor.toolbar.Toolbar) -> initialize
+    void onValueChanged(name.huliqing.editor.tools.ValueTool,java.lang.Object,java.lang.Object) -> onValueChanged
+name.huliqing.editor.tools.entity.AbstractEntityBrushTool -> name.huliqing.editor.tools.b.b:
+    void <init>(java.lang.String,java.lang.String,java.lang.String) -> <init>
+name.huliqing.editor.tools.entity.EraseTool -> name.huliqing.editor.tools.b.c:
+    java.util.List ectRemoveList -> d
+    void <init>(java.lang.String,java.lang.String,java.lang.String) -> <init>
+    void initialize(name.huliqing.editor.edit.SimpleJmeEdit,name.huliqing.editor.toolbar.EntityBrushToolbar) -> a
+    void doAction() -> b
+    void erase(name.huliqing.editor.edit.scene.SceneEdit,java.util.List,com.jme3.math.Vector3f,float,int) -> a
+    void doEndAction() -> c
+    void initialize(name.huliqing.editor.edit.JmeEdit,name.huliqing.editor.toolbar.Toolbar) -> initialize
+    void initialize(name.huliqing.editor.edit.SimpleJmeEdit,name.huliqing.editor.toolbar.EditToolbar) -> initialize
+    name.huliqing.editor.edit.SimpleJmeEdit access$000(name.huliqing.editor.tools.entity.EraseTool) -> a
+    name.huliqing.editor.edit.SimpleJmeEdit access$100(name.huliqing.editor.tools.entity.EraseTool) -> b
+name.huliqing.editor.tools.entity.EraseTool$EraseUndoRedo -> name.huliqing.editor.tools.b.c$a:
+    java.util.List ectRemoved -> b
+    name.huliqing.editor.tools.entity.EraseTool this$0 -> a
+    void <init>(name.huliqing.editor.tools.entity.EraseTool,java.util.List) -> <init>
+    void undo() -> undo
+    void redo() -> redo
+name.huliqing.editor.tools.entity.PaintTool -> name.huliqing.editor.tools.b.d:
+    java.util.List ectTemps -> d
+    void <init>(java.lang.String,java.lang.String,java.lang.String) -> <init>
+    void initialize(name.huliqing.editor.edit.SimpleJmeEdit,name.huliqing.editor.toolbar.EntityBrushToolbar) -> a
+    void doAction() -> b
+    void doEndAction() -> c
+    void paint(name.huliqing.editor.edit.scene.SceneEdit,name.huliqing.luoying.object.entity.TerrainEntity,java.util.List,com.jme3.math.Vector3f,float,int,float,boolean,com.jme3.math.Vector3f,com.jme3.math.Vector3f,com.jme3.math.Vector3f,com.jme3.math.Vector3f,com.jme3.math.Vector3f) -> a
+    void initialize(name.huliqing.editor.edit.JmeEdit,name.huliqing.editor.toolbar.Toolbar) -> initialize
+    void initialize(name.huliqing.editor.edit.SimpleJmeEdit,name.huliqing.editor.toolbar.EditToolbar) -> initialize
+    name.huliqing.editor.edit.SimpleJmeEdit access$000(name.huliqing.editor.tools.entity.PaintTool) -> a
+    name.huliqing.editor.edit.SimpleJmeEdit access$100(name.huliqing.editor.tools.entity.PaintTool) -> b
+name.huliqing.editor.tools.entity.PaintTool$PaintUndoRedo -> name.huliqing.editor.tools.b.d$a:
+    java.util.List ectAddeds -> b
+    name.huliqing.editor.tools.entity.PaintTool this$0 -> a
+    void <init>(name.huliqing.editor.tools.entity.PaintTool,java.util.List) -> <init>
+    void undo() -> undo
+    void redo() -> redo
+name.huliqing.editor.tools.entity.SourceTool -> name.huliqing.editor.tools.b.e:
+    java.util.List sources -> a
+    void <init>(java.lang.String,java.lang.String,java.lang.String) -> <init>
+    void onToolEvent(name.huliqing.editor.events.Event) -> onToolEvent
+    void addSource(name.huliqing.luoying.data.EntityData) -> a
+    boolean removeSource(name.huliqing.luoying.data.EntityData) -> b
+    java.util.List getSources() -> a
 name.huliqing.editor.tools.terrain.AbstractTerrainTool -> name.huliqing.editor.tools.terrain.a:
     void <init>(java.lang.String,java.lang.String,java.lang.String) -> <init>
     name.huliqing.editor.edit.controls.entity.EntityControlTile getTerrainControl() -> getTerrainControl
@@ -1853,6 +2197,7 @@ name.huliqing.editor.tools.terrain.AbstractTerrainTool -> name.huliqing.editor.t
     void setModified(boolean) -> setModified
     void setModifiedAlpha(boolean) -> setModifiedAlpha
 name.huliqing.editor.tools.terrain.AdjustTerrainTool -> name.huliqing.editor.tools.terrain.b:
+    java.util.logging.Logger LOG -> i
     float baseSize -> a
     boolean modifying -> b
     float toolModifyRate -> c
@@ -1877,6 +2222,7 @@ name.huliqing.editor.tools.terrain.AdjustTerrainTool -> name.huliqing.editor.too
     void initialize(name.huliqing.editor.edit.SimpleJmeEdit,name.huliqing.editor.toolbar.EditToolbar) -> initialize
     void initialize(name.huliqing.editor.edit.JmeEdit,name.huliqing.editor.toolbar.Toolbar) -> initialize
     void onValueChanged(name.huliqing.editor.tools.ValueTool,java.lang.Object,java.lang.Object) -> onValueChanged
+    void <clinit>() -> <clinit>
 name.huliqing.editor.tools.terrain.AdjustTerrainTool$ToolActionUndoRedo -> name.huliqing.editor.tools.terrain.b$a:
     java.util.List actionList -> b
     name.huliqing.editor.tools.terrain.AdjustTerrainTool this$0 -> a
@@ -2004,7 +2350,6 @@ name.huliqing.editor.tools.terrain.TexLayerTool -> name.huliqing.editor.tools.te
 name.huliqing.editor.tools.terrain.TexLayerTool$LayerChangedListener -> name.huliqing.editor.tools.terrain.TexLayerTool$a:
     void onLayerChanged(name.huliqing.editor.tools.terrain.TexLayerTool) -> onLayerChanged
 name.huliqing.editor.ui.AssetsForm -> name.huliqing.editor.ui.AssetsForm:
-    java.util.logging.Logger LOG -> LOG
     name.huliqing.editor.ui.FileTree assetTree -> assetTree
     java.lang.String currentAssetDir -> currentAssetDir
     javafx.scene.control.ContextMenu filePopup -> filePopup
@@ -2022,17 +2367,62 @@ name.huliqing.editor.ui.AssetsForm -> name.huliqing.editor.ui.AssetsForm:
     boolean lambda$doDragDetected$2(javafx.scene.control.TreeItem) -> lambda$doDragDetected$2
     void lambda$onConfigChanged$1() -> lambda$onConfigChanged$1
     void lambda$new$0(javafx.scene.input.MouseEvent) -> lambda$new$0
-    void <clinit>() -> <clinit>
+name.huliqing.editor.ui.ComponentComboBoxSearch -> name.huliqing.editor.ui.ComponentComboBoxSearch:
+    name.huliqing.editor.ui.utils.AutoCompleteComboBoxListener ac -> ac
+    javafx.scene.control.ComboBox componentBox -> componentBox
+    javafx.scene.control.Button addBtn -> addBtn
+    javafx.scene.control.Button removeBtn -> removeBtn
+    void <init>() -> <init>
+    void setComponentDefines(java.util.List) -> setComponentDefines
+    name.huliqing.editor.component.ComponentDefine getValue() -> getValue
+    javafx.scene.control.Button getAddBtn() -> getAddBtn
+    javafx.scene.control.Button getRemoveBtn() -> getRemoveBtn
+    javafx.scene.control.ListCell lambda$new$0(javafx.scene.control.ListView) -> lambda$new$0
+    javafx.scene.control.ComboBox access$000(name.huliqing.editor.ui.ComponentComboBoxSearch) -> access$000
+name.huliqing.editor.ui.ComponentComboBoxSearch$1 -> name.huliqing.editor.ui.ComponentComboBoxSearch$1:
+    name.huliqing.editor.ui.ComponentComboBoxSearch this$0 -> this$0
+    void <init>(name.huliqing.editor.ui.ComponentComboBoxSearch) -> <init>
+    void updateItem(name.huliqing.editor.component.ComponentDefine,boolean) -> updateItem
+    void updateItem(java.lang.Object,boolean) -> updateItem
+name.huliqing.editor.ui.ComponentComboBoxSearch$2 -> name.huliqing.editor.ui.ComponentComboBoxSearch$2:
+    name.huliqing.editor.ui.ComponentComboBoxSearch this$0 -> this$0
+    void <init>(name.huliqing.editor.ui.ComponentComboBoxSearch) -> <init>
+    java.lang.String toString(name.huliqing.editor.component.ComponentDefine) -> toString
+    name.huliqing.editor.component.ComponentDefine fromString(java.lang.String) -> fromString
+    java.lang.Object fromString(java.lang.String) -> fromString
+    java.lang.String toString(java.lang.Object) -> toString
+name.huliqing.editor.ui.ComponentSearch -> name.huliqing.editor.ui.ComponentSearch:
+    javafx.stage.Popup popup -> popup
+    name.huliqing.editor.ui.utils.SearchListView componentView -> componentView
+    void <init>() -> <init>
+    void <init>(java.util.List) -> <init>
+    void setComponents(java.util.List) -> setComponents
+    name.huliqing.editor.ui.utils.SearchListView getView() -> getView
+    javafx.scene.control.ListView getListView() -> getListView
+    void show(javafx.scene.layout.Region,double,double) -> show
+    void hide() -> hide
+    java.lang.String lambda$new$1(name.huliqing.editor.component.ComponentDefine) -> lambda$new$1
+    javafx.scene.control.ListCell lambda$new$0(javafx.scene.control.ListView) -> lambda$new$0
+name.huliqing.editor.ui.ComponentSearch$1 -> name.huliqing.editor.ui.ComponentSearch$1:
+    name.huliqing.editor.ui.ComponentSearch this$0 -> this$0
+    void <init>(name.huliqing.editor.ui.ComponentSearch) -> <init>
+    void updateItem(name.huliqing.editor.component.ComponentDefine,boolean) -> updateItem
+    void updateItem(java.lang.Object,boolean) -> updateItem
 name.huliqing.editor.ui.ComponentsForm -> name.huliqing.editor.ui.ComponentsForm:
-    void <init>(java.lang.String,java.util.List) -> <init>
-    name.huliqing.editor.components.Component getMainSelectItem() -> getMainSelectItem
+    java.util.logging.Logger LOG -> LOG
+    void <init>() -> <init>
+    void onConfigChanged(java.lang.String) -> onConfigChanged
+    void updateAassetDir() -> updateAassetDir
+    name.huliqing.editor.component.ComponentDefine getMainSelectItem() -> getMainSelectItem
     void doDragDetected(javafx.scene.input.MouseEvent) -> doDragDetected
     void doDragDone(javafx.scene.input.DragEvent) -> doDragDone
+    void lambda$onConfigChanged$1() -> lambda$onConfigChanged$1
     javafx.scene.control.ListCell lambda$new$0(javafx.scene.control.ListView) -> lambda$new$0
+    void <clinit>() -> <clinit>
 name.huliqing.editor.ui.ComponentsForm$1 -> name.huliqing.editor.ui.ComponentsForm$1:
     name.huliqing.editor.ui.ComponentsForm this$0 -> this$0
     void <init>(name.huliqing.editor.ui.ComponentsForm) -> <init>
-    void updateItem(name.huliqing.editor.components.Component,boolean) -> updateItem
+    void updateItem(name.huliqing.editor.component.ComponentDefine,boolean) -> updateItem
     void updateItem(java.lang.Object,boolean) -> updateItem
 name.huliqing.editor.ui.CustomDialog -> name.huliqing.editor.ui.CustomDialog:
     javafx.scene.control.PopupControl popupControl -> popupControl
@@ -2100,6 +2490,22 @@ name.huliqing.editor.ui.FileTree$FileTreeItem -> name.huliqing.editor.ui.FileTre
     javafx.collections.ObservableList getChildren() -> getChildren
     boolean isLeaf() -> isLeaf
     javafx.collections.ObservableList buildChildren(javafx.scene.control.TreeItem) -> buildChildren
+name.huliqing.editor.ui.ListViewPopup -> name.huliqing.editor.ui.ListViewPopup:
+    javafx.stage.Popup popup -> popup
+    name.huliqing.editor.ui.utils.SearchListView searchListView -> searchListView
+    void <init>() -> <init>
+    void <init>(java.util.List) -> <init>
+    void setItems(java.util.List) -> setItems
+    void setConverter(name.huliqing.editor.ui.utils.SearchListView$Converter) -> setConverter
+    name.huliqing.editor.ui.utils.SearchListView getView() -> getView
+    javafx.scene.control.ListView getListView() -> getListView
+    void show(javafx.scene.layout.Region,double,double) -> show
+    void hide() -> hide
+    javafx.scene.control.ListCell lambda$new$0(javafx.scene.control.ListView) -> lambda$new$0
+name.huliqing.editor.ui.ListViewPopup$1 -> name.huliqing.editor.ui.ListViewPopup$1:
+    name.huliqing.editor.ui.ListViewPopup this$0 -> this$0
+    void <init>(name.huliqing.editor.ui.ListViewPopup) -> <init>
+    void updateItem(java.lang.Object,boolean) -> updateItem
 name.huliqing.editor.ui.MainLayout -> name.huliqing.editor.ui.MainLayout:
     javafx.scene.layout.Region menuZone -> menuZone
     javafx.scene.layout.Region resourceZone -> resourceZone
@@ -2144,7 +2550,16 @@ name.huliqing.editor.ui.MenuForm -> name.huliqing.editor.ui.MenuForm:
     void lambda$new$1(javafx.event.ActionEvent) -> lambda$new$1
     void lambda$new$0(javafx.event.ActionEvent) -> lambda$new$0
 name.huliqing.editor.ui.OutputForm -> name.huliqing.editor.ui.OutputForm:
+    javafx.scene.web.WebView webView -> webView
+    javafx.scene.web.WebEngine engine -> engine
+    javafx.scene.control.ContextMenu cm -> cm
+    java.lang.String defaultContent -> defaultContent
     void <init>() -> <init>
+    void addText(java.lang.String,javafx.scene.paint.Color) -> addText
+    void scrollToBottom() -> scrollToBottom
+    void append(java.lang.String,javafx.scene.paint.Color) -> append
+    java.lang.String toRGBCode(javafx.scene.paint.Color) -> toRGBCode
+    void lambda$new$1(javafx.scene.input.MouseEvent) -> lambda$new$1
     void lambda$new$0(javafx.event.ActionEvent) -> lambda$new$0
 name.huliqing.editor.ui.Quit -> name.huliqing.editor.ui.Quit:
     void <init>() -> <init>
@@ -2224,13 +2639,13 @@ name.huliqing.editor.ui.tool.JfxAbstractTool -> name.huliqing.editor.ui.tool.Jfx
     void setToolbar(name.huliqing.editor.toolbar.Toolbar) -> setToolbar
     name.huliqing.editor.tools.Tool getTool() -> getTool
     void setTool(name.huliqing.editor.tools.Tool) -> setTool
-    javafx.scene.Node getView() -> getView
+    javafx.scene.layout.Region getView() -> getView
     void initialize() -> initialize
     boolean isInitialized() -> isInitialized
     void cleanup() -> cleanup
     void setEnabled(boolean) -> setEnabled
     void setViewEnabled(boolean) -> setViewEnabled
-    javafx.scene.Node createView() -> createView
+    javafx.scene.layout.Region createView() -> createView
     name.huliqing.editor.toolbar.Toolbar lambda$setEnabled$0(boolean) -> lambda$setEnabled$0
 name.huliqing.editor.ui.tool.JfxBooleanValueTool -> name.huliqing.editor.ui.tool.JfxBooleanValueTool:
     javafx.scene.layout.HBox layout -> layout
@@ -2238,7 +2653,7 @@ name.huliqing.editor.ui.tool.JfxBooleanValueTool -> name.huliqing.editor.ui.tool
     javafx.scene.control.CheckBox checkBox -> checkBox
     boolean ignoreViewUpdate -> ignoreViewUpdate
     void <init>() -> <init>
-    javafx.scene.Node createView() -> createView
+    javafx.scene.layout.Region createView() -> createView
     void onValueChanged(name.huliqing.editor.tools.ValueTool,java.lang.Boolean,java.lang.Boolean) -> onValueChanged
     void initialize() -> initialize
     void onValueChanged(name.huliqing.editor.tools.ValueTool,java.lang.Object,java.lang.Object) -> onValueChanged
@@ -2248,7 +2663,7 @@ name.huliqing.editor.ui.tool.JfxBooleanValueTool -> name.huliqing.editor.ui.tool
 name.huliqing.editor.ui.tool.JfxCameraTool -> name.huliqing.editor.ui.tool.JfxCameraTool:
     javafx.scene.control.MenuButton view -> view
     void <init>() -> <init>
-    javafx.scene.Node createView() -> createView
+    javafx.scene.layout.Region createView() -> createView
     void initialize() -> initialize
     void lambda$initialize$9(javafx.event.ActionEvent) -> lambda$initialize$9
     void lambda$initialize$8(javafx.event.ActionEvent) -> lambda$initialize$8
@@ -2265,7 +2680,7 @@ name.huliqing.editor.ui.tool.JfxModeTool -> name.huliqing.editor.ui.tool.JfxMode
     name.huliqing.editor.tools.base.ModeTool modeTool -> modeTool
     boolean ignoreEvent -> ignoreEvent
     void <init>() -> <init>
-    javafx.scene.Node createView() -> createView
+    javafx.scene.layout.Region createView() -> createView
     void onModeChanged(name.huliqing.editor.edit.Mode) -> onModeChanged
     void initialize() -> initialize
     void lambda$initialize$2(javafx.beans.value.ObservableValue,name.huliqing.editor.edit.Mode,name.huliqing.editor.edit.Mode) -> lambda$initialize$2
@@ -2277,7 +2692,7 @@ name.huliqing.editor.ui.tool.JfxNumberValueTool -> name.huliqing.editor.ui.tool.
     javafx.scene.control.TextField value -> value
     boolean ignoreUpdateView -> ignoreUpdateView
     void <init>() -> <init>
-    javafx.scene.Node createView() -> createView
+    javafx.scene.layout.Region createView() -> createView
     void initialize() -> initialize
     void onValueChanged(name.huliqing.editor.tools.ValueTool,java.lang.Number,java.lang.Number) -> onValueChanged
     void updateValueToEdit() -> updateValueToEdit
@@ -2288,25 +2703,62 @@ name.huliqing.editor.ui.tool.JfxNumberValueTool -> name.huliqing.editor.ui.tool.
     void lambda$new$1(javafx.scene.input.KeyEvent) -> lambda$new$1
     void lambda$new$0(javafx.beans.value.ObservableValue,java.lang.Boolean,java.lang.Boolean) -> lambda$new$0
 name.huliqing.editor.ui.tool.JfxParamsTool -> name.huliqing.editor.ui.tool.JfxParamsTool:
-    javafx.scene.layout.GridPane layout -> layout
+    javafx.scene.layout.VBox layout -> layout
     void <init>() -> <init>
-    javafx.scene.Node createView() -> createView
+    javafx.scene.layout.Region createView() -> createView
     void setViewEnabled(boolean) -> setViewEnabled
     void initialize() -> initialize
     void lambda$initialize$1() -> lambda$initialize$1
     void lambda$null$0(java.util.List) -> lambda$null$0
+name.huliqing.editor.ui.tool.JfxSourceTool -> name.huliqing.editor.ui.tool.JfxSourceTool:
+    javafx.scene.layout.VBox view -> view
+    javafx.scene.control.Label title -> title
+    javafx.scene.control.ToolBar btnPanel -> btnPanel
+    javafx.scene.control.Button add -> add
+    javafx.scene.control.Button remove -> remove
+    javafx.scene.control.ListView content -> content
+    void <init>() -> <init>
+    javafx.scene.layout.Region createView() -> createView
+    void initialize() -> initialize
+    void updateView() -> updateView
+    javafx.scene.control.ListCell lambda$new$4(javafx.scene.control.ListView) -> lambda$new$4
+    void lambda$new$3(javafx.event.ActionEvent) -> lambda$new$3
+    void lambda$null$2(name.huliqing.luoying.data.EntityData) -> lambda$null$2
+    void lambda$new$1(javafx.event.ActionEvent) -> lambda$new$1
+    void lambda$null$0() -> lambda$null$0
+    void access$000(name.huliqing.editor.ui.tool.JfxSourceTool) -> access$000
+name.huliqing.editor.ui.tool.JfxSourceTool$1 -> name.huliqing.editor.ui.tool.JfxSourceTool$1:
+    name.huliqing.editor.ui.tool.JfxSourceTool this$0 -> this$0
+    void <init>(name.huliqing.editor.ui.tool.JfxSourceTool) -> <init>
+    void updateItem(name.huliqing.luoying.data.EntityData,boolean) -> updateItem
+    void updateItem(java.lang.Object,boolean) -> updateItem
+name.huliqing.editor.ui.tool.JfxSourceTool$AddSourceUndoRedo -> name.huliqing.editor.ui.tool.JfxSourceTool$AddSourceUndoRedo:
+    name.huliqing.luoying.data.EntityData sourceAdded -> sourceAdded
+    name.huliqing.editor.ui.tool.JfxSourceTool this$0 -> this$0
+    void <init>(name.huliqing.editor.ui.tool.JfxSourceTool,name.huliqing.luoying.data.EntityData) -> <init>
+    void undo() -> undo
+    void redo() -> redo
+    void lambda$redo$1() -> lambda$redo$1
+    void lambda$undo$0() -> lambda$undo$0
+name.huliqing.editor.ui.tool.JfxSourceTool$RemoveSourceUndoRedo -> name.huliqing.editor.ui.tool.JfxSourceTool$RemoveSourceUndoRedo:
+    name.huliqing.luoying.data.EntityData sourceRemoved -> sourceRemoved
+    name.huliqing.editor.ui.tool.JfxSourceTool this$0 -> this$0
+    void <init>(name.huliqing.editor.ui.tool.JfxSourceTool,name.huliqing.luoying.data.EntityData) -> <init>
+    void undo() -> undo
+    void redo() -> redo
+    void lambda$redo$1() -> lambda$redo$1
+    void lambda$undo$0() -> lambda$undo$0
 name.huliqing.editor.ui.tool.JfxTerrainTexLayerTool -> name.huliqing.editor.ui.tool.JfxTerrainTexLayerTool:
-    javafx.scene.layout.GridPane btnLayout -> btnLayout
+    javafx.scene.layout.VBox view -> view
+    javafx.scene.control.ToolBar btnPanel -> btnPanel
     javafx.scene.control.Button addLayer -> addLayer
     javafx.scene.control.Button removeLayer -> removeLayer
     javafx.scene.control.Button removeNormal -> removeNormal
-    javafx.scene.layout.VBox layout -> layout
-    javafx.scene.control.TableView layerPanel -> layerPanel
+    javafx.scene.control.TableView content -> content
     int lastSelectRowIndex -> lastSelectRowIndex
     void <init>() -> <init>
     void initTableModel() -> initTableModel
-    javafx.scene.image.ImageView createImageView(java.lang.String) -> createImageView
-    javafx.scene.Node createView() -> createView
+    javafx.scene.layout.Region createView() -> createView
     void initialize() -> initialize
     void onLayerChanged(name.huliqing.editor.tools.terrain.TexLayerTool) -> onLayerChanged
     void reloadLayers(java.util.List) -> reloadLayers
@@ -2359,7 +2811,7 @@ name.huliqing.editor.ui.tool.JfxTerrainTexLayerTool$3 -> name.huliqing.editor.ui
 name.huliqing.editor.ui.tool.JfxToggleTool -> name.huliqing.editor.ui.tool.JfxToggleTool:
     javafx.scene.control.ToggleButton view -> view
     void <init>() -> <init>
-    javafx.scene.Node createView() -> createView
+    javafx.scene.layout.Region createView() -> createView
     void setViewEnabled(boolean) -> setViewEnabled
     void initialize() -> initialize
     void lambda$initialize$0(javafx.beans.value.ObservableValue,java.lang.Boolean,java.lang.Boolean) -> lambda$initialize$0
@@ -2368,7 +2820,7 @@ name.huliqing.editor.ui.tool.JfxTool -> name.huliqing.editor.ui.tool.JfxTool:
     void setToolbar(name.huliqing.editor.toolbar.Toolbar) -> setToolbar
     name.huliqing.editor.tools.Tool getTool() -> getTool
     void setTool(name.huliqing.editor.tools.Tool) -> setTool
-    javafx.scene.Node getView() -> getView
+    javafx.scene.layout.Region getView() -> getView
     void setEnabled(boolean) -> setEnabled
     void initialize() -> initialize
     boolean isInitialized() -> isInitialized
@@ -2379,6 +2831,54 @@ name.huliqing.editor.ui.tool.JfxToolFactory -> name.huliqing.editor.ui.tool.JfxT
     void <init>() -> <init>
     name.huliqing.editor.ui.tool.JfxTool createJfxTool(name.huliqing.editor.tools.Tool,name.huliqing.editor.toolbar.Toolbar) -> createJfxTool
     void <clinit>() -> <clinit>
+name.huliqing.editor.ui.tool.JfxVector2fValueTool -> name.huliqing.editor.ui.tool.JfxVector2fValueTool:
+    javafx.scene.layout.VBox view -> view
+    javafx.scene.control.Label label -> label
+    javafx.scene.layout.HBox content -> content
+    javafx.scene.control.Label xLabel -> xLabel
+    javafx.scene.control.Label yLabel -> yLabel
+    javafx.scene.control.TextField xValue -> xValue
+    javafx.scene.control.TextField yValue -> yValue
+    boolean ignoreUpdateView -> ignoreUpdateView
+    void <init>() -> <init>
+    javafx.scene.layout.Region createView() -> createView
+    void initialize() -> initialize
+    void onValueChanged(name.huliqing.editor.tools.ValueTool,com.jme3.math.Vector2f,com.jme3.math.Vector2f) -> onValueChanged
+    void updateValueToEdit() -> updateValueToEdit
+    void updateValueToView(com.jme3.math.Vector2f) -> updateValueToView
+    void onValueChanged(name.huliqing.editor.tools.ValueTool,java.lang.Object,java.lang.Object) -> onValueChanged
+    void lambda$updateValueToEdit$5(float,float) -> lambda$updateValueToEdit$5
+    void lambda$onValueChanged$4(com.jme3.math.Vector2f) -> lambda$onValueChanged$4
+    void lambda$new$3(javafx.scene.input.KeyEvent) -> lambda$new$3
+    void lambda$new$2(javafx.beans.value.ObservableValue,java.lang.Boolean,java.lang.Boolean) -> lambda$new$2
+    void lambda$new$1(javafx.scene.input.KeyEvent) -> lambda$new$1
+    void lambda$new$0(javafx.beans.value.ObservableValue,java.lang.Boolean,java.lang.Boolean) -> lambda$new$0
+name.huliqing.editor.ui.tool.JfxVector3fValueTool -> name.huliqing.editor.ui.tool.JfxVector3fValueTool:
+    javafx.scene.layout.VBox view -> view
+    javafx.scene.control.Label label -> label
+    javafx.scene.layout.HBox content -> content
+    javafx.scene.control.Label xLabel -> xLabel
+    javafx.scene.control.Label yLabel -> yLabel
+    javafx.scene.control.Label zLabel -> zLabel
+    javafx.scene.control.TextField xValue -> xValue
+    javafx.scene.control.TextField yValue -> yValue
+    javafx.scene.control.TextField zValue -> zValue
+    boolean ignoreUpdateView -> ignoreUpdateView
+    void <init>() -> <init>
+    javafx.scene.layout.Region createView() -> createView
+    void initialize() -> initialize
+    void onValueChanged(name.huliqing.editor.tools.ValueTool,com.jme3.math.Vector3f,com.jme3.math.Vector3f) -> onValueChanged
+    void updateValueToEdit() -> updateValueToEdit
+    void updateValueToView(com.jme3.math.Vector3f) -> updateValueToView
+    void onValueChanged(name.huliqing.editor.tools.ValueTool,java.lang.Object,java.lang.Object) -> onValueChanged
+    void lambda$updateValueToEdit$7(float,float,float) -> lambda$updateValueToEdit$7
+    void lambda$onValueChanged$6(com.jme3.math.Vector3f) -> lambda$onValueChanged$6
+    void lambda$new$5(javafx.scene.input.KeyEvent) -> lambda$new$5
+    void lambda$new$4(javafx.beans.value.ObservableValue,java.lang.Boolean,java.lang.Boolean) -> lambda$new$4
+    void lambda$new$3(javafx.scene.input.KeyEvent) -> lambda$new$3
+    void lambda$new$2(javafx.beans.value.ObservableValue,java.lang.Boolean,java.lang.Boolean) -> lambda$new$2
+    void lambda$new$1(javafx.scene.input.KeyEvent) -> lambda$new$1
+    void lambda$new$0(javafx.beans.value.ObservableValue,java.lang.Boolean,java.lang.Boolean) -> lambda$new$0
 name.huliqing.editor.ui.toolbar.JfxEditToolbar -> name.huliqing.editor.ui.toolbar.JfxEditToolbar:
     java.util.logging.Logger LOG -> LOG
     javafx.scene.control.ScrollPane root -> root
@@ -2437,6 +2937,99 @@ name.huliqing.editor.ui.toolbar.JfxToolbarFactory -> name.huliqing.editor.ui.too
     void <init>() -> <init>
     name.huliqing.editor.ui.toolbar.JfxToolbar createJfxToolbar(name.huliqing.editor.toolbar.Toolbar) -> createJfxToolbar
     void <clinit>() -> <clinit>
+name.huliqing.editor.ui.utils.AutoCompleteComboBoxListener -> name.huliqing.editor.ui.utils.AutoCompleteComboBoxListener:
+    javafx.scene.control.ComboBox comboBox -> comboBox
+    javafx.collections.ObservableList items -> items
+    javafx.collections.ObservableList filterItems -> filterItems
+    boolean moveCaretToPos -> moveCaretToPos
+    int caretPos -> caretPos
+    java.lang.String lastInputText -> lastInputText
+    void <init>(javafx.scene.control.ComboBox) -> <init>
+    void setItems(java.util.List) -> setItems
+    void handle(javafx.scene.input.KeyEvent) -> handle
+    void moveCaret(int) -> moveCaret
+    void setStringConverter(javafx.util.StringConverter) -> setStringConverter
+    void handle(javafx.event.Event) -> handle
+    void lambda$handle$2(java.lang.Object) -> lambda$handle$2
+    boolean lambda$handle$1(java.lang.String,java.lang.Object) -> lambda$handle$1
+    void lambda$new$0(javafx.scene.control.ComboBox,javafx.scene.input.KeyEvent) -> lambda$new$0
+name.huliqing.editor.ui.utils.DragResizer -> name.huliqing.editor.ui.utils.DragResizer:
+    int RESIZE_MARGIN -> RESIZE_MARGIN
+    javafx.scene.layout.Region region -> region
+    double y -> y
+    double x -> x
+    boolean initMinHeight -> initMinHeight
+    short dragging -> dragging
+    short NOTDRAGGING -> NOTDRAGGING
+    short NORTH -> NORTH
+    short SOUTH -> SOUTH
+    short EAST -> EAST
+    short WEST -> WEST
+    void <init>(javafx.scene.layout.Region) -> <init>
+    void makeResizable(javafx.scene.layout.Region) -> makeResizable
+    void mouseReleased(javafx.scene.input.MouseEvent) -> mouseReleased
+    void mouseOver(javafx.scene.input.MouseEvent) -> mouseOver
+    boolean isInDraggableZoneN(javafx.scene.input.MouseEvent) -> isInDraggableZoneN
+    boolean isInDraggableZoneW(javafx.scene.input.MouseEvent) -> isInDraggableZoneW
+    boolean isInDraggableZoneS(javafx.scene.input.MouseEvent) -> isInDraggableZoneS
+    boolean isInDraggableZoneE(javafx.scene.input.MouseEvent) -> isInDraggableZoneE
+    void mouseDragged(javafx.scene.input.MouseEvent) -> mouseDragged
+    void mousePressed(javafx.scene.input.MouseEvent) -> mousePressed
+    void access$000(name.huliqing.editor.ui.utils.DragResizer,javafx.scene.input.MouseEvent) -> access$000
+    void access$100(name.huliqing.editor.ui.utils.DragResizer,javafx.scene.input.MouseEvent) -> access$100
+name.huliqing.editor.ui.utils.DragResizer$1 -> name.huliqing.editor.ui.utils.DragResizer$1:
+    name.huliqing.editor.ui.utils.DragResizer val$resizer -> val$resizer
+    void <init>(name.huliqing.editor.ui.utils.DragResizer) -> <init>
+    void handle(javafx.scene.input.MouseEvent) -> handle
+    void handle(javafx.event.Event) -> handle
+name.huliqing.editor.ui.utils.DragResizer$2 -> name.huliqing.editor.ui.utils.DragResizer$2:
+    name.huliqing.editor.ui.utils.DragResizer val$resizer -> val$resizer
+    void <init>(name.huliqing.editor.ui.utils.DragResizer) -> <init>
+    void handle(javafx.scene.input.MouseEvent) -> handle
+    void handle(javafx.event.Event) -> handle
+name.huliqing.editor.ui.utils.DragResizer$3 -> name.huliqing.editor.ui.utils.DragResizer$3:
+    name.huliqing.editor.ui.utils.DragResizer val$resizer -> val$resizer
+    void <init>(name.huliqing.editor.ui.utils.DragResizer) -> <init>
+    void handle(javafx.scene.input.MouseEvent) -> handle
+    void handle(javafx.event.Event) -> handle
+name.huliqing.editor.ui.utils.DragResizer$4 -> name.huliqing.editor.ui.utils.DragResizer$4:
+    name.huliqing.editor.ui.utils.DragResizer val$resizer -> val$resizer
+    void <init>(name.huliqing.editor.ui.utils.DragResizer) -> <init>
+    void handle(javafx.scene.input.MouseEvent) -> handle
+    void handle(javafx.event.Event) -> handle
+name.huliqing.editor.ui.utils.JfxUtils -> name.huliqing.editor.ui.utils.JfxUtils:
+    void <init>() -> <init>
+    javafx.scene.image.ImageView createImage(java.lang.String) -> createImage
+    javafx.scene.image.ImageView createImage(java.lang.String,float,float) -> createImage
+    javafx.scene.image.ImageView createIcon(java.lang.String) -> createIcon
+    javafx.geometry.Point2D getScreenPosition(javafx.scene.Node) -> getScreenPosition
+name.huliqing.editor.ui.utils.SearchListView -> name.huliqing.editor.ui.utils.SearchListView:
+    java.util.List allItems -> allItems
+    javafx.collections.ObservableList filterItems -> filterItems
+    javafx.scene.control.ListView listView -> listView
+    javafx.scene.layout.StackPane filterPane -> filterPane
+    javafx.scene.layout.HBox imageView -> imageView
+    javafx.scene.control.TextField inputFilter -> inputFilter
+    name.huliqing.editor.ui.utils.SearchListView$Converter converter -> converter
+    name.huliqing.editor.ui.utils.SearchListView$SelectListener selectListener -> selectListener
+    void <init>(javafx.scene.control.ListView) -> <init>
+    void updateList() -> updateList
+    void setAllItems(java.util.List) -> setAllItems
+    void setConverter(name.huliqing.editor.ui.utils.SearchListView$Converter) -> setConverter
+    void setSelectListener(name.huliqing.editor.ui.utils.SearchListView$SelectListener) -> setSelectListener
+    javafx.scene.control.ListView getListView() -> getListView
+    void lambda$new$1(javafx.beans.value.ObservableValue,java.lang.String,java.lang.String) -> lambda$new$1
+    void lambda$new$0(javafx.scene.control.ListView,javafx.scene.input.MouseEvent) -> lambda$new$0
+    javafx.scene.control.ListView access$000(name.huliqing.editor.ui.utils.SearchListView) -> access$000
+name.huliqing.editor.ui.utils.SearchListView$1 -> name.huliqing.editor.ui.utils.SearchListView$1:
+    name.huliqing.editor.ui.utils.SearchListView this$0 -> this$0
+    void <init>(name.huliqing.editor.ui.utils.SearchListView) -> <init>
+    void handle(javafx.scene.input.KeyEvent) -> handle
+    void handle(javafx.event.Event) -> handle
+name.huliqing.editor.ui.utils.SearchListView$Converter -> name.huliqing.editor.ui.utils.SearchListView$Converter:
+    java.lang.String convertToString(java.lang.Object) -> convertToString
+name.huliqing.editor.ui.utils.SearchListView$SelectListener -> name.huliqing.editor.ui.utils.SearchListView$SelectListener:
+    void onSelected(java.lang.Object) -> onSelected
 name.huliqing.editor.utils.BestEditCamera -> name.huliqing.editor.i.a:
     com.jme3.input.InputManager inputManager -> a
     com.jme3.renderer.Camera cam -> b
@@ -2484,10 +3077,6 @@ name.huliqing.editor.utils.BestEditCamera$View -> name.huliqing.editor.i.a$a:
     name.huliqing.editor.utils.BestEditCamera$View valueOf(java.lang.String) -> valueOf
     void <init>(java.lang.String,int) -> <init>
     void <clinit>() -> <clinit>
-name.huliqing.editor.utils.JfxUtils -> name.huliqing.editor.i.c:
-    void <init>() -> <init>
-    javafx.scene.image.ImageView createImage(java.lang.String) -> a
-    javafx.scene.image.ImageView createImage(java.lang.String,float,float) -> a
 name.huliqing.editor.utils.TerrainUtils -> name.huliqing.editor.i.d:
     java.util.logging.Logger LOG -> a
     void <init>() -> <init>
@@ -2505,6 +3094,10 @@ name.huliqing.editor.utils.TerrainUtils -> name.huliqing.editor.i.d:
     void setNormalTexture(com.jme3.terrain.Terrain,int,com.jme3.texture.Texture) -> b
     void saveTerrain(com.jme3.scene.Spatial,java.io.File) -> a
     void <clinit>() -> <clinit>
+name.huliqing.editor.utils.Validator -> name.huliqing.editor.i.c:
+    boolean isFloat(java.lang.Object) -> a
+    boolean isInteger(java.lang.Object) -> b
+    boolean isLong(java.lang.Object) -> c
 name.huliqing.fxjme.JfxAppState -> name.huliqing.fxjme.JfxAppState:
     java.util.logging.Logger LOG -> LOG
     com.jme3.app.Application app -> app

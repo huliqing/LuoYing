@@ -40,9 +40,6 @@ name.huliqing.ly.Start -> name.huliqing.ly.Start:
     void <init>() -> <init>
     void main(java.lang.String[]) -> main
     java.lang.Object[] createIcons() -> createIcons
-    void start(com.jme3.system.JmeContext$Type,boolean) -> start
-    void startCanvas(boolean) -> startCanvas
-    void startInit() -> startInit
     void simpleInitApp() -> simpleInitApp
     void simpleRender(com.jme3.renderer.RenderManager) -> simpleRender
     void changeStartState() -> changeStartState
@@ -761,8 +758,7 @@ name.huliqing.ly.object.game.SimpleRpgGame -> name.huliqing.ly.g.b.l:
     name.huliqing.luoying.object.scene.Scene access$400(name.huliqing.ly.object.game.SimpleRpgGame) -> c
     com.jme3.app.SimpleApplication access$500(name.huliqing.ly.object.game.SimpleRpgGame) -> e
     com.jme3.app.SimpleApplication access$600(name.huliqing.ly.object.game.SimpleRpgGame) -> d
-    name.huliqing.luoying.layer.service.SkillService access$700(name.huliqing.ly.object.game.SimpleRpgGame) -> f
-    name.huliqing.luoying.layer.service.SoundService access$800(name.huliqing.ly.object.game.SimpleRpgGame) -> g
+    name.huliqing.luoying.layer.service.SoundService access$700(name.huliqing.ly.object.game.SimpleRpgGame) -> f
     void <clinit>() -> <clinit>
 name.huliqing.ly.object.game.SimpleRpgGame$1 -> name.huliqing.ly.g.b.m:
     name.huliqing.ly.object.game.SimpleRpgGame this$0 -> a
@@ -775,7 +771,7 @@ name.huliqing.ly.object.game.SimpleRpgGame$2 -> name.huliqing.ly.g.b.n:
     int compare(name.huliqing.luoying.object.entity.Entity,name.huliqing.luoying.object.entity.Entity) -> a
     int compare(java.lang.Object,java.lang.Object) -> compare
 name.huliqing.ly.object.game.SimpleRpgGame$RpgMessageHandler -> name.huliqing.ly.g.b.p:
-    long filterSkillType -> b
+    java.util.Set filters -> b
     name.huliqing.ly.object.game.SimpleRpgGame this$0 -> a
     void <init>(name.huliqing.ly.object.game.SimpleRpgGame) -> <init>
     void handle(name.huliqing.luoying.message.Message) -> handle
