@@ -2999,6 +2999,7 @@ name.huliqing.editor.ui.utils.DragResizer$4 -> name.huliqing.editor.ui.utils.Dra
     void handle(javafx.event.Event) -> handle
 name.huliqing.editor.ui.utils.JfxUtils -> name.huliqing.editor.ui.utils.JfxUtils:
     void <init>() -> <init>
+    javafx.scene.image.ImageView createImage(java.io.InputStream) -> createImage
     javafx.scene.image.ImageView createImage(java.lang.String) -> createImage
     javafx.scene.image.ImageView createImage(java.lang.String,float,float) -> createImage
     javafx.scene.image.ImageView createIcon(java.lang.String) -> createIcon

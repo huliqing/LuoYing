@@ -20,8 +20,8 @@ import name.huliqing.editor.edit.terrain.TerrainCreateForm;
 import name.huliqing.editor.manager.Manager;
 import name.huliqing.editor.ui.CustomDialog;
 import name.huliqing.editor.utils.TerrainUtils;
+import static name.huliqing.editor.utils.TerrainUtils.TERRAIN_DIRT;
 import name.huliqing.fxswing.Jfx;
-import name.huliqing.luoying.constants.AssetConstants;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.object.Loader;
 
@@ -76,14 +76,14 @@ public class TerrainEntityComponentConverter extends EntityComponentConverter {
         try {
             // 创建地形
             Terrain terrain = TerrainUtils.doCreateTerrain(application, assetFolder
-                    , alphaTextureDir, terrainName, totalSize, patchSize, alphaTextureSize, heightMap, AssetConstants.TEXTURES_TERRAIN_DIRT);
+                    , alphaTextureDir, terrainName, totalSize, patchSize, alphaTextureSize, heightMap, TERRAIN_DIRT);
             Spatial terrainSpatial = (Spatial) terrain;
-
+            
             // 保存地形文件
             String terrainFullName = modelDir + "/" + terrainName + ".j3o";
             File terrainFile = new File(assetFolder, terrainFullName);
             BinaryExporter.getInstance().save(terrainSpatial, terrainFile);
-
+            
             // 添加到3D场景编辑
             EntityData ed = Loader.loadData(cd.getId());
             ed.setAttribute("file", terrainFullName.substring(1)); // 去掉"/"

@@ -16,7 +16,6 @@ import name.huliqing.editor.events.Event;
 import name.huliqing.editor.toolbar.TerrainToolbar;
 import name.huliqing.editor.edit.SimpleEditListener;
 import name.huliqing.editor.utils.TerrainUtils;
-import name.huliqing.luoying.constants.AssetConstants;
 
 /**
  * 地形图层工具,,注意：地形在载入的时候需要重新设置材质，使用地形中的所有分块指定同一个材质实例，否则指定刷到特定的材质上。
@@ -127,7 +126,7 @@ public class TexLayerTool extends AbstractTerrainTool implements SimpleEditListe
         if (terrain == null)
             return;
         TerrainUtils.setDiffuseTextureScale(terrain, layer, TerrainUtils.DEFAULT_TEXTURE_SCALE);
-        Texture tex = editor.getAssetManager().loadTexture(AssetConstants.TEXTURES_TERRAIN_DIRT);
+        Texture tex = editor.getAssetManager().loadTexture(TerrainUtils.TERRAIN_DIRT);
         TerrainUtils.setDiffuseTexture(terrain, layer, tex);
         setModified(true);
         texLayerListener.forEach(t -> {t.onLayerChanged(this);});

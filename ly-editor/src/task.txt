@@ -42,6 +42,7 @@ ok.增加FogFilterEntity,...
 ok.要增加FloatTextFieldConverter, IntegerTextFieldConverter...
 ok.实体刷工具栏开发
 
+.编辑器载入场景或模型发生异常时应该弹出警告而不是漰溃
 .地形缩放后生成的物理碰撞网格(DEBUG)显示大小不正常，但运行状态是正常的。
 .需要把状态表显示在3D界面上
 .Entity默认配置需要预设好所有默认参数，以便转换器可以有默认值。

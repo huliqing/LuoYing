@@ -111,6 +111,7 @@ public class SlopeTerrainToolAction extends AbstractTerrainToolAction {
         }
 
         Vector3f subtract = point2.subtract(point1);
+        Vector3f subtractNor = subtract.normalize();
 
         int radiusStepsX = (int) (radius / ((Node) terrain).getLocalScale().x);
         int radiusStepsZ = (int) (radius / ((Node) terrain).getLocalScale().z);
@@ -135,12 +136,15 @@ public class SlopeTerrainToolAction extends AbstractTerrainToolAction {
 
                 if (ToolUtils.isInRadius(locX - current.x, locZ - current.z, radius)) { // see if it is in the radius of the tool
                     Vector2f terrainLoc = new Vector2f(locX, locZ);
-
+                    
                     // adjust height based on radius of the tool
                     float terrainHeightAtLoc = terrain.getHeightmapHeight(terrainLoc) * ((Node) terrain).getWorldScale().y;
                     float distance = point1.distance(new Vector3f(locX, terrainHeightAtLoc, locZ).subtractLocal(point1).project(subtract).addLocal(point1));
-                    float desiredHeight = point1.y + (point2.y - point1.y) * distance;
-                    if (!lock || (lock && p1.whichSide(new Vector3f(locX, 0f, locZ)) != p2.whichSide(new Vector3f(locX, 0f, locZ))))
+                    
+//                    float desiredHeight = point1.y + (point2.y - point1.y) * distance; // remove
+                    float desiredHeight = subtractNor.mult(distance).addLocal(point1).y;
+                    
+                    if (!lock || (lock && p1.whichSide(new Vector3f(locX, 0f, locZ)) != p2.whichSide(new Vector3f(locX, 0f, locZ)))) {
                         if (!precise) {
                             float epsilon = 0.1f * weight; // rounding error for snapping
 
@@ -170,6 +174,7 @@ public class SlopeTerrainToolAction extends AbstractTerrainToolAction {
                             heights.add(desiredHeight / ((Node) terrain).getLocalScale().y);
                             undoHeights.add(terrainHeightAtLoc / ((Node) terrain).getLocalScale().y);
                         }
+                    }
                 }
             }
         undoLocs = locs;
@@ -184,6 +189,91 @@ public class SlopeTerrainToolAction extends AbstractTerrainToolAction {
 
         ((Node) terrain).updateModelBound(); // or else we won't collide with it where we just edited
     }
+    
+    // remove20170314, 这个方法在JME3.1.0-stable-FINAL的时候有BUG，具体表现在计算desiredHeight的时候错误,比期望的高出很多。
+//    private void modifyHeight(Terrain terrain, Vector3f point1, Vector3f point2, Vector3f current, float radius, float weight, boolean precise, boolean lock) {
+//        // Make sure we go for the right direction, or we could be creating a slope to the oposite side
+//        if (point1.y > point2.y) {
+//            Vector3f temp = point1;
+//            point1 = point2;
+//            point2 = temp;
+//        }
+//
+//        Vector3f subtract = point2.subtract(point1);
+//
+//        int radiusStepsX = (int) (radius / ((Node) terrain).getLocalScale().x);
+//        int radiusStepsZ = (int) (radius / ((Node) terrain).getLocalScale().z);
+//
+//        float xStepAmount = ((Node) terrain).getLocalScale().x;
+//        float zStepAmount = ((Node) terrain).getLocalScale().z;
+//
+//        List<Vector2f> locs = new ArrayList<Vector2f>();
+//        List<Float> heights = new ArrayList<Float>();
+//        undoHeights = new ArrayList<Float>();
+//
+//        Plane p1 = new Plane();
+//        Plane p2 = new Plane();
+//        p1.setOriginNormal(point1, point1.subtract(point2).normalize());
+//        p2.setOriginNormal(point2, point1.subtract(point2).normalize());
+//
+//        for (int z = -radiusStepsZ; z < radiusStepsZ; z++)
+//            for (int x = -radiusStepsX; x < radiusStepsX; x++) {
+//
+//                float locX = current.x + (x * xStepAmount);
+//                float locZ = current.z + (z * zStepAmount);
+//
+//                if (ToolUtils.isInRadius(locX - current.x, locZ - current.z, radius)) { // see if it is in the radius of the tool
+//                    Vector2f terrainLoc = new Vector2f(locX, locZ);
+//
+//                    // adjust height based on radius of the tool
+//                    float terrainHeightAtLoc = terrain.getHeightmapHeight(terrainLoc) * ((Node) terrain).getWorldScale().y;
+//                    float distance = point1.distance(new Vector3f(locX, terrainHeightAtLoc, locZ).subtractLocal(point1).project(subtract).addLocal(point1));
+//                    float desiredHeight = point1.y + (point2.y - point1.y) * distance;
+//                    if (!lock || (lock && p1.whichSide(new Vector3f(locX, 0f, locZ)) != p2.whichSide(new Vector3f(locX, 0f, locZ)))) {
+//                        if (!precise) {
+//                            float epsilon = 0.1f * weight; // rounding error for snapping
+//
+//                            float adj = 0;
+//                            if (terrainHeightAtLoc < desiredHeight)
+//                                adj = 1;
+//                            else if (terrainHeightAtLoc > desiredHeight)
+//                                adj = -1;
+//
+//                            adj *= weight;
+//                            
+//                            adj *= ToolUtils.calculateRadiusPercent(radius, locX - current.x, locZ - current.z);
+//                            
+//                            // test if adjusting too far and then cap it
+//                            if (adj > 0 && ToolUtils.floatGreaterThan((terrainHeightAtLoc + adj), desiredHeight, epsilon))
+//                                adj = desiredHeight - terrainHeightAtLoc;
+//                            else
+//                                if (adj < 0 && ToolUtils.floatLessThan((terrainHeightAtLoc + adj), desiredHeight, epsilon))
+//                                    adj = terrainHeightAtLoc - desiredHeight;
+//
+//                            if (!ToolUtils.floatEquals(adj, 0, 0.001f)) {
+//                                locs.add(terrainLoc);
+//                                heights.add(adj);
+//                            }
+//                        } else {
+//                            locs.add(terrainLoc);
+//                            heights.add(desiredHeight / ((Node) terrain).getLocalScale().y);
+//                            undoHeights.add(terrainHeightAtLoc / ((Node) terrain).getLocalScale().y);
+//                        }
+//                    }
+//                }
+//            }
+//        undoLocs = locs;
+//        if (!precise)
+//            undoHeights = heights;
+//
+//        // do the actual height adjustment
+//        if (precise)
+//            terrain.setHeight(locs, heights);
+//        else
+//            terrain.adjustHeight(locs, heights);
+//
+//        ((Node) terrain).updateModelBound(); // or else we won't collide with it where we just edited
+//    }
 
     private void resetHeight(Terrain terrain, List<Vector2f> undoLocs, List<Float> undoHeights, boolean precise) {
         if (precise)

@@ -43,6 +43,8 @@ public class TerrainUtils {
     public final static float DEFAULT_TEXTURE_SCALE = 16.0625f;
     public final static int NUM_ALPHA_TEXTURES = 3;
     public final static int MAX_TEXTURES = 16 - NUM_ALPHA_TEXTURES; // 16 max (diffuse and normal), minus the ones we are reserving
+    /** 默认的地形贴图路径在asset的LuoYing/assets/Textures/目录下 */
+    public final static String TERRAIN_DIRT = "LuoYing/assets/Textures/dirt.jpg";
     
     /**
      * @param app

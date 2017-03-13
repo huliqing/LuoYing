@@ -5,6 +5,8 @@
  */
 package name.huliqing.editor.ui.utils;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
@@ -16,16 +18,20 @@ import name.huliqing.editor.constants.AssetConstants;
  * @author huliqing
  */
 public class JfxUtils {
-    
-    public final static ImageView createImage(String path) {
-        String truePath = path.startsWith("/") ? path : "/" + path;
+
+    public final static ImageView createImage(InputStream is) {
         Image image;
         try {
-            image = new Image(JfxUtils.class.getResourceAsStream(truePath));
+            image = new Image(is);
         } catch (Exception e) {
             image = new Image(AssetConstants.TEXTURES_MISS);
         }
         return new ImageView(image);
+    }
+    
+    public final static ImageView createImage(String fileInClassPath) {
+        String truePath = fileInClassPath.startsWith("/") ? fileInClassPath : "/" + fileInClassPath;
+        return createImage(JfxUtils.class.getResourceAsStream(truePath));
     }
     
     /**

@@ -6,7 +6,11 @@
 package name.huliqing.editor.ui.tool;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -19,6 +23,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -290,7 +295,16 @@ public class JfxTerrainTexLayerTool extends JfxAbstractTool<TexLayerTool> implem
     private ImageView createImage(String texPath) {
         if (texPath == null || texPath.isEmpty())
             return null;
-        ImageView imageView = JfxUtils.createImage(texPath, 30, 30);
-        return imageView;
+        File file = new File(Manager.getConfigManager().getMainAssetDir(), texPath);
+        ImageView imageView;
+        try {
+            imageView = JfxUtils.createImage(new FileInputStream(file));
+            imageView.setFitWidth(30);
+            imageView.setFitHeight(30);
+            return imageView;
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(JfxTerrainTexLayerTool.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 }
