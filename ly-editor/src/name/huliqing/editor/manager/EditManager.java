@@ -31,6 +31,7 @@ import name.huliqing.luoying.xml.ObjectData;
  * @author huliqing 
  */
 public class EditManager {
+    private static final Logger LOG = Logger.getLogger(EditManager.class.getName());
      
 //    private static Pane jfxEditZone;
 //    
@@ -44,7 +45,11 @@ public class EditManager {
     
     public final static void openEdit(String fileAbsolutePath) {
         doCheckSave(p -> {
-            openEditInner(fileAbsolutePath);
+            try {
+                openEditInner(fileAbsolutePath);
+            } catch (Exception e) {
+                LOG.log(Level.SEVERE, "Could not open editor, file={0}", fileAbsolutePath);
+            }
             return null;
         });
     }
@@ -52,20 +57,16 @@ public class EditManager {
     private static void openEditInner(String fileAbsolutePath) {
         String fullPath = fileAbsolutePath;
         Editor editor = (Editor) Jfx.getJmeApp();
+        // open j3o
         if (fullPath.endsWith(".j3o")) {
             JfxSpatialEdit newEv = new JfxSpatialEdit();
             newEv.setFilePath(fileAbsolutePath);
             editor.setJfxEdit(newEv);
-        } else if (fullPath.endsWith(".lyo")) {
-            
-            // remove20170314
-//                Savable savable = BinaryImporter.getInstance().load(new File(path));
-//                if (savable instanceof SceneData) {
-//                    JfxSceneEdit jfxSceneEdit = new JfxSceneEdit();
-//                    jfxSceneEdit.setSceneData((SceneData) savable, path);
-//                    editor.setJfxEdit(jfxSceneEdit);
-//                }
-
+            return;
+        } 
+        
+        // open lyo
+        if (fullPath.endsWith(".lyo")) {
             String pathInAssets = toAssetsPath(fileAbsolutePath);
             ObjectData od = Loader.loadDataByPath(pathInAssets);
             if (od instanceof SceneData) {

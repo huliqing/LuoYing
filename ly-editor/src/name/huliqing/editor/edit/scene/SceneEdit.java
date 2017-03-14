@@ -158,7 +158,7 @@ public class SceneEdit extends SimpleJmeEdit implements SceneListener {
             // 场景保存
             scene.updateDatas();
             BinaryExporter.getInstance().save(scene.getData(), new File(savePath));
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);
         }
     }

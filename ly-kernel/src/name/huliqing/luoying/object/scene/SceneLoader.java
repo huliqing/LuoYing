@@ -19,10 +19,15 @@
  */
 package name.huliqing.luoying.object.scene;
 
+import com.jme3.app.Application;
+import com.jme3.app.SimpleApplication;
 import com.jme3.scene.control.Control;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.service.PlayService;
@@ -36,6 +41,9 @@ import name.huliqing.luoying.object.progress.Progress;
  * @author huliqing
  */
 public class SceneLoader {
+
+    private static final Logger LOG = Logger.getLogger(SceneLoader.class.getName());
+    
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final PlayService playService = Factory.get(PlayService.class);
     
@@ -96,7 +104,12 @@ public class SceneLoader {
         
         // 进度条初始化
         if (progress != null) {
-            progress.initialize(playService.getGame().getGuiScene().getRoot());
+            Application app = LuoYing.getApp();
+            if (app instanceof SimpleApplication) {
+                progress.initialize(((SimpleApplication) app).getGuiNode());
+            } else {
+                LOG.log(Level.WARNING, "Could not display progress, only supported SimpleApplication, but found: {0}", app.getClass());
+            }
         }
         
         // 控制器，用于载入场景实体，并更新进度条
@@ -104,6 +117,14 @@ public class SceneLoader {
             @Override
             public void update(float tpf) {
                 updateLoader(tpf);
+                
+    //        // test
+    //        try {
+    //            Thread.sleep(100);
+    //        } catch (InterruptedException ex) {
+    ////            Logger.getLogger(SceneLoader.class.getName()).log(Level.SEVERE, null, ex);
+    //        }
+    
             }
         };
         scene.getRoot().addControl(loadControl);
@@ -116,22 +137,23 @@ public class SceneLoader {
         }
         
         // 载入实体。
-        EntityData ed = entityDatas.get(count);
-        Entity entity = Loader.load(ed);
-        playNetwork.addEntity(scene, entity);
-        count++;
+        EntityData ed = null;
+        try {
+            ed = entityDatas.get(count);
+            playNetwork.addEntity(scene, (Entity)Loader.load(ed));
+        } catch (Exception e) {
+            String id = ed != null ? ed.getId() : "";
+            long uniqueId = ed != null ? ed.getUniqueId() : -1;
+            LOG.log(Level.WARNING, "Could not load entity, id=" + id + ", uniqueId=" + uniqueId, e);
+        } finally {
+            count++;
+        }
         
         // 更新进度条
         if (progress != null) {
             progress.display((float) count / entityDatas.size());
         }
-   
-//        // test
-//        try {
-//            Thread.sleep(100);
-//        } catch (InterruptedException ex) {
-////            Logger.getLogger(SceneLoader.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+
     }
     
     private void notifyLoadedOK() {
