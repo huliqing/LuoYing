@@ -49,7 +49,7 @@ public class CreateSceneMenuItem extends MenuItem {
         
         Jfx.runOnJme(() -> {
             try {
-                File saveFile = makeSaveFile(dir, "scene", ".ying", 0);
+                File saveFile = makeSaveFile(dir, "scene", ".lyo", 0);
                 BinaryExporter.getInstance().save(sceneData, saveFile);
                 Jfx.runOnJfx(() -> {
                     fileTree.refreshItem(item);

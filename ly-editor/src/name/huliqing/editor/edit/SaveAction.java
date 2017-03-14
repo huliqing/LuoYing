@@ -14,7 +14,7 @@ import com.jme3.app.Application;
 public interface SaveAction {
     
     /**
-     * 保存存档
+     * 这个方法会在编辑器保存的时候执行，如：结束编辑器或者编辑过程中按“保存”操作都会调用这个方法.
      * @param application
      */
     void doSave(Application application);

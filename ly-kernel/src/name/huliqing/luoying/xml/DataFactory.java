@@ -125,7 +125,7 @@ public class DataFactory {
      * @throws LuoYingException 如果无法为id创建Data
      */
     @SuppressWarnings("UseSpecificCatch")
-    public static <T extends ObjectData> T createData(String id) {
+    public static <T extends ObjectData> T createData(String id) throws LuoYingException {
         Proto proto = ProtoUtils.getProto(DATA_STORE, id);
         if (proto == null) {
             LOG.log(Level.WARNING, "Could not find object, id={0}", id);
@@ -159,7 +159,7 @@ public class DataFactory {
      * @throws LuoYingException 如果无法为data创建Processor
      */
     @SuppressWarnings("UseSpecificCatch")
-    public static <T extends DataProcessor> T createProcessor(ObjectData data) {
+    public static <T extends DataProcessor> T createProcessor(ObjectData data) throws LuoYingException {
         if (data == null) {
             LOG.log(Level.WARNING, "Data could not be null");
             return null;

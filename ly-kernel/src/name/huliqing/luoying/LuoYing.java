@@ -375,6 +375,8 @@ public class LuoYing {
         
         // 注册载入器，用于载入"*.ini"和 "*.xml"配置文件
         app.getAssetManager().registerLoader(TextFileLoader.class, "ini", "xml");
+        // 用于载入".lyo"后,LuoYing内置的物体数据
+        app.getAssetManager().registerLoader(LyoFileLoader.class, "lyo");
         
         // 注册需要序列化的数据，对于网络版进行序列化时需要用到。
         registerSysBaseSerializer();

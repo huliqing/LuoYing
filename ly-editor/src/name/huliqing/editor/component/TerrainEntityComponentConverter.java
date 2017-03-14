@@ -22,6 +22,7 @@ import name.huliqing.editor.ui.CustomDialog;
 import name.huliqing.editor.utils.TerrainUtils;
 import static name.huliqing.editor.utils.TerrainUtils.TERRAIN_DIRT;
 import name.huliqing.fxswing.Jfx;
+import name.huliqing.luoying.UncacheAssetEventListener;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.object.Loader;
 
@@ -80,13 +81,15 @@ public class TerrainEntityComponentConverter extends EntityComponentConverter {
             Spatial terrainSpatial = (Spatial) terrain;
             
             // 保存地形文件
-            String terrainFullName = modelDir + "/" + terrainName + ".j3o";
+            String terrainFullName = modelDir.substring(1) + "/" + terrainName + ".j3o";
             File terrainFile = new File(assetFolder, terrainFullName);
             BinaryExporter.getInstance().save(terrainSpatial, terrainFile);
             
+            UncacheAssetEventListener.getInstance().addUncache(terrainFullName);
+            
             // 添加到3D场景编辑
             EntityData ed = Loader.loadData(cd.getId());
-            ed.setAttribute("file", terrainFullName.substring(1)); // 去掉"/"
+            ed.setAttribute("file", terrainFullName); // 去掉"/"
             Jfx.runOnJfx(() -> {
                 jfxEdit.addEntityUseUndoRedo(ed);
             });

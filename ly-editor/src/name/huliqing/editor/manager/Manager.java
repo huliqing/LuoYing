@@ -11,6 +11,7 @@ import com.jme3.font.BitmapFont;
 import name.huliqing.editor.log.LogFactory;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.TextFileLoader;
+import name.huliqing.luoying.UncacheAssetEventListener;
 
 /**
  * 全局管理器
@@ -31,6 +32,7 @@ public class Manager {
         // 资源路径，及资源载入器实始化
         app.getAssetManager().registerLoader(TextFileLoader.class, "ini", "xml");
         app.getAssetManager().registerLocator("", EditAssetLocator.class);
+        app.getAssetManager().addAssetEventListener(UncacheAssetEventListener.getInstance());
         
         // 日志初始化
         LogFactory.initialize();

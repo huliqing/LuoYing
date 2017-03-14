@@ -23,6 +23,8 @@ import name.huliqing.editor.edit.scene.JfxSceneEdit;
 import name.huliqing.editor.edit.spatial.JfxSpatialEdit;
 import name.huliqing.fxswing.Jfx;
 import name.huliqing.luoying.data.SceneData;
+import name.huliqing.luoying.object.Loader;
+import name.huliqing.luoying.xml.ObjectData;
 
 /**
  *
@@ -48,22 +50,28 @@ public class EditManager {
     }
     
     private static void openEditInner(String fileAbsolutePath) {
+        String fullPath = fileAbsolutePath;
         Editor editor = (Editor) Jfx.getJmeApp();
-        String path = fileAbsolutePath;
-        if (path.endsWith(".j3o")) {
+        if (fullPath.endsWith(".j3o")) {
             JfxSpatialEdit newEv = new JfxSpatialEdit();
             newEv.setFilePath(fileAbsolutePath);
             editor.setJfxEdit(newEv);
-        } else if (path.endsWith(".ying")) {
-            try {
-                Savable savable = BinaryImporter.getInstance().load(new File(path));
-                if (savable instanceof SceneData) {
-                    JfxSceneEdit jfxSceneEdit = new JfxSceneEdit();
-                    jfxSceneEdit.setSceneData((SceneData) savable, path);
-                    editor.setJfxEdit(jfxSceneEdit);
-                }
-            } catch (IOException ex) {
-                Logger.getLogger(EditManager.class.getName()).log(Level.SEVERE, null, ex);
+        } else if (fullPath.endsWith(".lyo")) {
+            
+            // remove20170314
+//                Savable savable = BinaryImporter.getInstance().load(new File(path));
+//                if (savable instanceof SceneData) {
+//                    JfxSceneEdit jfxSceneEdit = new JfxSceneEdit();
+//                    jfxSceneEdit.setSceneData((SceneData) savable, path);
+//                    editor.setJfxEdit(jfxSceneEdit);
+//                }
+
+            String pathInAssets = toAssetsPath(fileAbsolutePath);
+            ObjectData od = Loader.loadDataByPath(pathInAssets);
+            if (od instanceof SceneData) {
+                JfxSceneEdit jfxSceneEdit = new JfxSceneEdit();
+                jfxSceneEdit.setSceneData((SceneData) od, fullPath);
+                editor.setJfxEdit(jfxSceneEdit);
             }
         }
     }
@@ -91,28 +99,9 @@ public class EditManager {
         });
     }
     
-    // remove20170210
-//    public static void openSpatialEditor(String fileAbsolutePath) {
-//        Editor editor = (Editor) Jfx.getJmeApp();
-//        JfxEdit ev = editor.getJfxEdit();
-//        if (ev instanceof JfxSpatialEdit) {
-//            ((JfxSpatialEdit) ev).setFilePath(fileAbsolutePath);
-//        } else {
-//            JfxSpatialEdit newEv = new JfxSpatialEdit();
-//            newEv.setFilePath(fileAbsolutePath);
-//            editor.setJfxEdit(newEv);
-//        }
-//    }
-    
-    // remove20170210
-//    public static void openTestFormView() {
-//        openSceneEditor(IdConstants.SYS_SCENE_TEST);
-//    }
-//    public static void openSceneEditor(String sceneId) {
-//        Editor editor = (Editor) Jfx.getJmeApp();
-//        JfxSceneEdit jfxEdit = new JfxSceneEdit();
-//        jfxEdit.setScene(sceneId);
-//        editor.setJfxEdit(jfxEdit);
-//    }
-    
+    private static String toAssetsPath(String absolutePath) {
+        String assetPath = Manager.getConfigManager().getMainAssetDir();
+        String fileInAssets = absolutePath.replace(assetPath, "").replace("\\", "/");
+        return fileInAssets;
+    }
 }

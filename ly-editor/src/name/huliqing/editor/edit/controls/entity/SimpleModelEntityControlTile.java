@@ -19,6 +19,7 @@ import name.huliqing.editor.edit.SaveAction;
 import name.huliqing.editor.edit.SimpleJmeEdit;
 import name.huliqing.editor.manager.Manager;
 import name.huliqing.editor.utils.TerrainUtils;
+import name.huliqing.luoying.UncacheAssetEventListener;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.entity.TerrainEntity;
@@ -31,7 +32,6 @@ import name.huliqing.luoying.object.scene.Scene;
  * @author huliqing
  */
 public class SimpleModelEntityControlTile extends EntityControlTile<Entity> implements SaveAction {
-
 //    private static final Logger LOG = Logger.getLogger(SimpleModelEntityControlTile.class.getName());
 
     private SimpleJmeEdit edit;
@@ -74,17 +74,20 @@ public class SimpleModelEntityControlTile extends EntityControlTile<Entity> impl
         }
         // 在清理之前先把spatial取出,这样不会在entity清理的时候被一同清理掉
         Spatial terrainSpatial = target.getSpatial();
-        
+        // 地形文件的路径，在assets中
+        String terrainFilePathInAssets = target.getData().getAsString("file");
          // 判断地形贴图是否有修改
         Boolean terrainAlphaModified = terrainSpatial.getUserData(UserDataConstants.EDIT_TERRAIN_MODIFIED_ALPHA);
         // 判断地形是否有修改
         Boolean terrainModified = terrainSpatial.getUserData(UserDataConstants.EDIT_TERRAIN_MODIFIED);
         // 没有任何修改
         if ((terrainAlphaModified == null || !terrainAlphaModified) && (terrainModified == null || !terrainModified)) {
+            UncacheAssetEventListener.getInstance().removeUncache(terrainFilePathInAssets); // 从缓存过滤中移除，以便可以进行缓存
             return;
         }
         
-        String terrainFilePathInAssets = target.getData().getAsString("file");
+        // 地形在有修改的时候不能被缓存
+        UncacheAssetEventListener.getInstance().addUncache(terrainFilePathInAssets);
         
         // 对Entity进行清理，需要优先执行，这样可以清理掉各Module给Spatial添加的Control,这样不会在保存地形的时候
         // 把Module所添加的各种Control也保存进去。因为这些Control在Module初始化的时候会重新添加。
@@ -96,18 +99,8 @@ public class SimpleModelEntityControlTile extends EntityControlTile<Entity> impl
             isCleanup = true;
         }
 
-        // 以下是针对地形(Terrain)实体的特别保存操作，这个方法需要在EntityControl重载入的时候进行保存。
         String assetFolder = Manager.getConfigManager().getMainAssetDir();
-
-        // 重新把terrainSpatial更新到缓存(或者删除也可以)，必须的，否则地形的材质不会更新,特别是贴图图层没有更新，
-        // 因为缓存中存的仍是旧的,Entity在重新载入的时候会去缓存中获取
-        // 注：直接更新缓存比删除性能要好，因删除后再重新载入会导致一次轻微的视觉闪烁。
-        // 注：这里必须强制更新一下变换，否则缩放后的地形没有实时更新，导致点选的时候无法正确选择到。
-//        terrainSpatial.updateGeometricState();
-//        edit.getEditor().getAssetManager().addToCache(new ModelKey(terrainFilePathInAssets), terrainSpatial); 
-
-        edit.getEditor().getAssetManager().deleteFromCache(new ModelKey(terrainFilePathInAssets));
-
+        
         // 保存贴图修改，然后清除标记,这样下次就不会再需要处理
         if (terrainAlphaModified != null && terrainAlphaModified) {
             terrainSpatial.setUserData(UserDataConstants.EDIT_TERRAIN_MODIFIED_ALPHA, null); 
@@ -185,7 +178,13 @@ public class SimpleModelEntityControlTile extends EntityControlTile<Entity> impl
 
     @Override
     public void doSave(Application application) {
+        // 当保存的时候要确保地形编辑后的文件有进行保存
         checkToSaveTerrain();
+        
+        // 更新一次状态，重要：这确保如果是地形模型的话，当地形在重新载入的时候需要重新设置地形的材质，使它们
+        // 重新指向一个材质实例，否则在编辑地形，刷地形的时候会有问题。
+        // 因为地形在编辑、保存后(地形编辑时不缓存)再重新读取时，地形中的材质不会指向同一个实例。
+        updateState();
     }
     
 }

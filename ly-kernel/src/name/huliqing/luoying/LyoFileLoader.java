@@ -21,23 +21,24 @@ package name.huliqing.luoying;
 
 import com.jme3.asset.AssetInfo;
 import com.jme3.asset.AssetLoader;
+import com.jme3.export.binary.BinaryImporter;
 import java.io.IOException;
 import name.huliqing.luoying.utils.FileUtils;
+import name.huliqing.luoying.xml.ObjectData;
 
 /**
- * 这个载入器用于载入文本文件，将文件用UTF8载入为字符串形式
+ * 载入Lyo物体文件作为ObjectData
  * @author huliqing
  */
-public class TextFileLoader implements AssetLoader{
+public class LyoFileLoader implements AssetLoader {
 
     @Override
-    public String load(AssetInfo assetInfo) throws IOException {
+    public ObjectData load(AssetInfo assetInfo) throws IOException {
         if (assetInfo == null) {
             return null;
         }
-        
-        String result = FileUtils.readFile(assetInfo.openStream(), "utf-8");
-        return result;
+        byte[] datas = FileUtils.readFile(assetInfo.openStream());
+        return (ObjectData) BinaryImporter.getInstance().load(datas);
     }
     
 }
