@@ -13,6 +13,7 @@ import name.huliqing.editor.constants.ResConstants;
 import name.huliqing.editor.manager.Manager;
 import name.huliqing.editor.tools.base.CameraTool;
 import name.huliqing.editor.utils.BestEditCamera;
+import name.huliqing.fxswing.Jfx;
 
 /**
  *
@@ -53,16 +54,16 @@ public class JfxCameraTool extends JfxAbstractTool<CameraTool> {
         MenuItem viewOrtho = new MenuItem(Manager.getRes(ResConstants.VIEW_ORTHO));
         MenuItem viewPersp = new MenuItem(Manager.getRes(ResConstants.VIEW_PERSP));
         
-        focusOrigin.setOnAction(t -> tool.doChaseOrigin());
-        focusTarget.setOnAction(t -> tool.doChaseSelected());
-        viewBack.setOnAction(t -> tool.doSwitchView(BestEditCamera.View.back));
-        viewBottom.setOnAction(t -> tool.doSwitchView(BestEditCamera.View.bottom));
-        viewFront.setOnAction(t -> tool.doSwitchView(BestEditCamera.View.front));
-        viewLeft.setOnAction(t -> tool.doSwitchView(BestEditCamera.View.left));
-        viewRight.setOnAction(t -> tool.doSwitchView(BestEditCamera.View.right));
-        viewTop.setOnAction(t -> tool.doSwitchView(BestEditCamera.View.top));
-        viewOrtho.setOnAction(t -> tool.doOrthoView());
-        viewPersp.setOnAction(t -> tool.doPerspView());
+        focusOrigin.setOnAction(t -> {Jfx.runOnJme(() -> tool.doChaseOrigin());});
+        focusTarget.setOnAction(t -> {Jfx.runOnJme(() ->tool.doChaseSelected());});
+        viewBack.setOnAction(t -> {Jfx.runOnJme(() ->tool.doSwitchView(BestEditCamera.View.back));});
+        viewBottom.setOnAction(t -> {Jfx.runOnJme(() ->tool.doSwitchView(BestEditCamera.View.bottom));});
+        viewFront.setOnAction(t -> {Jfx.runOnJme(() ->tool.doSwitchView(BestEditCamera.View.front));});
+        viewLeft.setOnAction(t -> {Jfx.runOnJme(() ->tool.doSwitchView(BestEditCamera.View.left));});
+        viewRight.setOnAction(t -> {Jfx.runOnJme(() ->tool.doSwitchView(BestEditCamera.View.right));});
+        viewTop.setOnAction(t -> {Jfx.runOnJme(() ->tool.doSwitchView(BestEditCamera.View.top));});
+        viewOrtho.setOnAction(t -> {Jfx.runOnJme(() ->tool.doOrthoView());});
+        viewPersp.setOnAction(t -> {Jfx.runOnJme(() ->tool.doPerspView());});
         
         view.getItems().addAll(focusOrigin, focusTarget
                 , viewBack, viewBottom, viewFront, viewLeft, viewRight, viewTop, viewOrtho, viewPersp);

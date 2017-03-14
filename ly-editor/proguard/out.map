@@ -1502,12 +1502,15 @@ name.huliqing.editor.manager.ConverterManager -> name.huliqing.editor.f.e:
     name.huliqing.editor.converter.FieldConverter createPropertyConverter(name.huliqing.editor.edit.JfxAbstractEdit,name.huliqing.luoying.xml.ObjectData,name.huliqing.editor.converter.define.FieldDefine,name.huliqing.editor.converter.DataConverter) -> a
     void <clinit>() -> <clinit>
 name.huliqing.editor.manager.EditManager -> name.huliqing.editor.f.g:
+    java.util.logging.Logger LOG -> a
     void <init>() -> <init>
     void openEdit(java.lang.String) -> a
     void openEditInner(java.lang.String) -> b
     void doCheckSave(javafx.util.Callback) -> a
+    java.lang.String toAssetsPath(java.lang.String) -> c
     void lambda$doCheckSave$1(name.huliqing.editor.Editor,javafx.util.Callback) -> a
     java.lang.Object lambda$openEdit$0(java.lang.String,java.lang.Object) -> a
+    void <clinit>() -> <clinit>
 name.huliqing.editor.manager.Manager -> name.huliqing.editor.f.h:
     com.jme3.font.BitmapFont font -> a
     name.huliqing.editor.manager.ResManager RES_MANAGER -> b
