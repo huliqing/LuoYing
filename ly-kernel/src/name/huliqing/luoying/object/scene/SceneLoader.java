@@ -29,7 +29,7 @@ import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.data.EntityData;
-import name.huliqing.luoying.layer.network.PlayNetwork;
+//import name.huliqing.luoying.layer.network.PlayNetwork;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
@@ -44,7 +44,7 @@ public class SceneLoader {
 
     private static final Logger LOG = Logger.getLogger(SceneLoader.class.getName());
     
-    private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
+//    private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
     private final PlayService playService = Factory.get(PlayService.class);
     
     /**
@@ -140,7 +140,8 @@ public class SceneLoader {
         EntityData ed = null;
         try {
             ed = entityDatas.get(count);
-            playNetwork.addEntity(scene, (Entity)Loader.load(ed));
+//            playNetwork.addEntity(scene, (Entity)Loader.load(ed));
+            playService.addEntity(scene, (Entity)Loader.load(ed));
         } catch (Exception e) {
             String id = ed != null ? ed.getId() : "";
             long uniqueId = ed != null ? ed.getUniqueId() : -1;

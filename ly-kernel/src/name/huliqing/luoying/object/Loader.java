@@ -50,7 +50,7 @@ public class Loader {
     }
     
     /**
-     * 通过文件路径载入物体数据
+     * 通过文件路径载入物体数据,例如: "Scenes/scene.lyo"
      * @param <T>
      * @param path
      * @return 
@@ -106,7 +106,7 @@ public class Loader {
      * @param path
      * @return 
      */
-    public static <T extends DataProcessor> T loadObject(String path) {
+    public static <T extends DataProcessor> T loadLyo(String path) {
         ObjectData od = (ObjectData) LuoYing.getAssetManager().loadAsset(path);
         return load(od);
     }

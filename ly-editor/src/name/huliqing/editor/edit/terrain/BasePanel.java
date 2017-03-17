@@ -7,15 +7,11 @@ package name.huliqing.editor.edit.terrain;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
@@ -38,9 +34,9 @@ public class BasePanel extends VBox {
     private final Label alphaTextureSizeLabel = new Label(Manager.getRes(ResConstants.FORM_CREATE_TERRAIN_ALPHA_SIZE));
     
     public final TextField nameField = new TextField();
-    public final TextField totalSizeField = new TextField("256");
+    public final TextField totalSizeField = new TextField("512");
     public final TextField patchSizeField = new TextField("64");
-    public final TextField alphaTextureSizeField = new TextField("256");
+    public final TextField alphaTextureSizeField = new TextField("512");
     
     public BasePanel() {
         getChildren().addAll(grid);

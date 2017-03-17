@@ -10,8 +10,8 @@ common.statistics=显示统计信息
 
 menu.file=文件
 menu.file.quick=退出
-menu.file.assets=打开文件夹
-menu.file.assetsRecent=打开最近使用的文件夹
+menu.file.assets=打开资源文件夹
+menu.file.assetsRecent=打开最近使用的资源文件夹
 menu.file.assetsRecent.clean=清除记录
 menu.file.save=保存
 menu.help=帮助

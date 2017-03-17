@@ -51,7 +51,9 @@ public class Manager {
         
         // 重新设置一次资源文件夹，以便触发资源的重新载入。
         String mainAssetDir = CONFIG_MANAGER.getMainAssetDir();
-        CONFIG_MANAGER.setMainAssetDir(mainAssetDir);
+        if (mainAssetDir != null && !mainAssetDir.isEmpty()) {
+            CONFIG_MANAGER.setMainAssetDir(mainAssetDir);
+        } 
         
     }
     

@@ -112,6 +112,12 @@ public abstract class AbstractScene implements Scene, SceneLoader.Listener {
         if (initialized) {
             throw new IllegalStateException("Scene is already initialized! sceneId=" + data.getId());
         }
+        
+        // 如果没有设置ViewPort则使用默认场景的ViewPort
+        if (processorViewPorts == null) {
+            processorViewPorts = new ViewPort[]{LuoYing.getApp().getViewPort()};
+        }
+        
         translucentBucketFilter = new TranslucentBucketFilter();
         
         // 主要用于防止阴影、天空盒、特效粒子的BUG。查看上面说明:
