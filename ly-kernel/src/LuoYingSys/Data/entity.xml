@@ -9,25 +9,25 @@
     <!--基本配置：这些作为内置配置，统一定义不同类型环境物体的基本属性，外部应用可以直接继承后使用，也可以自己另起配置 -->
     <!-- ========================================================================= -->
     <!--普通模型的基类-->
-    <entitySimpleModel id="sysEntityModelBase" cullHint="Never" queueBucket="Opaque" shadowMode="Cast" />
+    <entitySimpleModel id="sysEntityModelBase" cullHint="Dynamic" queueBucket="Opaque" shadowMode="Cast" />
     
     <!--基本天空-->
-    <entitySkyBox id="sysEntitySkyBase" 
+    <entitySkyBox id="sysEntitySkyBase" cullHint="Never"
             west="LuoYingSys/Assets/Textures/Sky/west.jpg" east="LuoYingSys/Assets/Textures/Sky/east.jpg" 
                   north="LuoYingSys/Assets/Textures/Sky/north.jpg" south="LuoYingSys/Assets/Textures/Sky/south.jpg" 
                   up="LuoYingSys/Assets/Textures/Sky/up.jpg" down="LuoYingSys/Assets/Textures/Sky/down.jpg" />
     
     <!--地形基本配置：需要接收投影，需要静态物理-->
-    <entitySimpleTerrain id="sysEntityTerrainBase" shadowMode="Receive" modules="sysModuleTerrainPhysics" />
+    <entitySimpleTerrain id="sysEntityTerrainBase" shadowMode="Receive" cullHint="Dynamic" modules="sysModuleTerrainPhysics" />
 
     <!--树木基本配置： 需要投影，需要静态物理-->
-    <entityTree id="sysEntityTreeBase" shadowMode="Cast" cullHint="Never" queueBucket="Opaque" modules="sysModuleTreePhysics" />
+    <entityTree id="sysEntityTreeBase" shadowMode="Cast" cullHint="Dynamic" queueBucket="Opaque" modules="sysModuleTreePhysics" />
     
     <!--花草植被的基本配置: 不需要投影，不需要物理-->
-    <entityGrass id="sysEntityGrassBase" shadowMode="Off" cullHint="Never" queueBucket="Opaque" />
+    <entityGrass id="sysEntityGrassBase" shadowMode="Off" cullHint="Dynamic" queueBucket="Opaque" />
     
     <!--简单水体，可适用移动平台-->
-    <entitySimpleWater id="sysEntitySimpleWaterBase" waterModel="LuoYingSys/Assets/MatDefs/SimpleWater/water.mesh.j3o" scale="300,1,300" 
+    <entitySimpleWater id="sysEntitySimpleWaterBase" cullHint="Dynamic" waterModel="LuoYingSys/Assets/MatDefs/SimpleWater/water.mesh.j3o" scale="300,1,300" 
         location="0,-2.5,0" rotation="0,0,0" waterColor="0.6, 0.8, 0.9, 1" texScale="10" waveSpeed="0.003" 
         distortionMix="0.5" distortionScale="0.4"
         foamMap="LuoYingSys/Assets/MatDefs/SimpleWater/foam.jpg" foamScale="1,1" 
@@ -43,7 +43,7 @@
                      waterHeight="0" sunScale="3.0" radius="0" 
                      lightColor="1,1,1,1" lightDirection="0, -1, 0" normalScale="3.0" shapeType="Circular" shininess="0.7"
                      shoreHardness="0.1" speed="1.0" useCaustics="1" useFoam="1" useHQShoreline="1" useRefraction="1"
-                     useRipples="1" useSpecular="1" windDirection="0.0, -1.0" 
+                    useRipples="1" useSpecular="1" windDirection="0.0, -1.0" 
                     causticsTexture="Common/MatDefs/Water/Textures/caustics.jpg"
                     foamTexture="Common/MatDefs/Water/Textures/foam.jpg"
                     heightTexture="Common/MatDefs/Water/Textures/heightmap.jpg"
