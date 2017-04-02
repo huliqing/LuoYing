@@ -6,10 +6,9 @@
 这个项目的主要目的用于更高效方便的创建3D游戏，落樱采用完全开放式的配置设计，并且内置了大量的游戏组件，只要通过对各种配置文件的灵活设置并写少量的逻辑代码就可以非常自由方便的构建自己的3D游戏，同时也允许灵活的扩展自己的各种组件。
 使用落樱编辑器还可以使用更直观的可视化方式轻松构建3D场景及配置各种组件。
 
-<iframe height=498 width=510 src='http://player.youku.com/embed/XMjY0MTM3NjQyOA==' frameborder=0 'allowfullscreen'></iframe><br/>
+
 编辑器演示一:  [http://v.youku.com/v_show/id_XMjY0MTM3NjQyOA==.html](http://v.youku.com/v_show/id_XMjY0MTM3NjQyOA==.html "http://v.youku.com/v_show/id_XMjY0MTM3NjQyOA==.html")
 
-<iframe height=498 width=510 src='http://player.youku.com/embed/XMjY0NDIxMzQyMA==' frameborder=0 'allowfullscreen'></iframe><br/>
 编辑器演示二:  [http://v.youku.com/v_show/id_XMjY0NDIxMzQyMA==.html](http://v.youku.com/v_show/id_XMjY0NDIxMzQyMA==.html "http://v.youku.com/v_show/id_XMjY0NDIxMzQyMA==.html")
 
 ![Android版游戏截图](https://cloud.githubusercontent.com/assets/6734333/21417595/a3161a16-c856-11e6-8784-1eb2e31c2e07.jpg)
