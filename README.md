@@ -1,24 +1,25 @@
 
 ##落樱RPG##
 
-落樱(LuoYing)是一个用于简化3D角色扮演游戏（3D RPG)开发的游戏框架,该项目基于JME3.1(JMonkeyEngine)开发，兼容JME。
+落樱(LuoYing)是一个用于简化3D角色扮演游戏开发的游戏框架,该项目基于Java及JME3(JMonkeyEngine)进行开发，兼容JME，创建的游戏可以蹖多个平台发布（Window\Linux\Mac\Android\IOS）等。
 
-##项目当前由三个部分组成：
+这个项目的主要目的用于更高效方便的创建3D游戏，落樱采用完全开放式的配置设计，并且内置了大量的游戏组件，只要通过对各种配置文件的灵活设置并写少量的逻辑代码就可以非常自由方便的构建自己的3D游戏，同时也允许灵活的扩展自己的各种组件。
+使用落樱编辑器还可以使用更直观的可视化方式轻松构建3D场景及配置各种组件。
+
+编辑器演示一:  [http://v.youku.com/v_show/id_XMjY0MTM3NjQyOA==.html](http://v.youku.com/v_show/id_XMjY0MTM3NjQyOA==.html "http://v.youku.com/v_show/id_XMjY0MTM3NjQyOA==.html")
+
+编辑器演示二:  [http://v.youku.com/v_show/id_XMjY0NDIxMzQyMA==.html](http://v.youku.com/v_show/id_XMjY0NDIxMzQyMA==.html "http://v.youku.com/v_show/id_XMjY0NDIxMzQyMA==.html")
+
+![Android版游戏截图](https://cloud.githubusercontent.com/assets/6734333/21417595/a3161a16-c856-11e6-8784-1eb2e31c2e07.jpg)
+
+![Android版游戏截图2](https://cloud.githubusercontent.com/assets/6734333/21417607/b247c76e-c856-11e6-979b-5c83fdcc9e21.jpg)
+
+项目当前还在开发中，项目主要由以下几个部分组成.
 
 - ly-kernel 落樱核心框架
-- ly-luoying-desktop 游戏实例“落樱之剑”桌面版
+- ly-editor 落樱编辑器,用于可视化编辑场景、特效、角色、技能等等
+- ly-luoying-desktop 游戏实例“落樱之剑”桌面版,可发布到Windows\Linux\Mac等平台
 - ly-luoying-android 游戏实例“落樱之剑”安卓版
-
-###ly-kernel 
-落樱RPG核心框架,这个项目开放在LGPL3(GNU Lesser General Public License)的开源协议下,
-当前项目仍处于开发状态，未发布正式版本，在开发到一定阶段，并确定项目及代码比较稳定之后我会正式发布版本并完善相关文档，当前仅作为学习3D游戏开发之用。
-
-###ly-luoying-desktop
-这个项目是一个游戏实例“落樱之剑”，使用落樱RPG开发，用于演示框架的使用示例,仅用于学习交流使用，未供许可请不要直接用于任何商业目的。
-
-###ly-luoying-android
-这个项目是游戏实例“落樱之剑”的安桌(Android)版本，依赖于落樱之剑的桌面版，仅用于学习交流使用，
-未供许可请不要直接用于任何商业目的。
 
 ### 版权所有
 Copyright (c) 2014-2016 Huliqing <31703299@qq.com>
