@@ -104,6 +104,11 @@ public class UnshadedEntity extends NonModelEntity implements SceneListener {
         // ignore
     }
     
+    @Override
+    public void onSceneEntityStateChanged(Scene scene, Entity entity) {
+        unshadedEntity(entity);
+    }
+    
     private void unshadedEntity(Entity entity) {
         // 这一句是必须要的，因为data有可能在不同平台上传输，有可能从PC平台到移动平台，而preferEnabled的设置不一样。
         // 所以，当一个entity从PC到移动平台时，这里需要重新设置prefer参数。
@@ -127,5 +132,6 @@ public class UnshadedEntity extends NonModelEntity implements SceneListener {
             }
         }
     }
+
    
 }

@@ -45,6 +45,14 @@ public abstract class ProxyEntity extends NonModelEntity {
             proxyEntity.updateDatas();
         }
     }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        if (proxyEntity != null) {
+            proxyEntity.setEnabled(enabled);
+        }
+    }
     
 //    @Override
 //    public Spatial getSpatial() {
@@ -58,6 +66,7 @@ public abstract class ProxyEntity extends NonModelEntity {
         if (proxyEntity == this) {
             throw new IllegalStateException("ProxyEntity could not point to self, entityId=" + data.getId());
         }
+        proxyEntity.setEnabled(isEnabled());
         proxyEntity.onInitScene(scene);
         
         // 找出实际代理的entity

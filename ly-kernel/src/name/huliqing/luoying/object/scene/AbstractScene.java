@@ -204,7 +204,7 @@ public abstract class AbstractScene implements Scene, SceneLoader.Listener {
         // 2.设置对场景的引用
         entity.onInitScene(this);
         if (listeners != null) {
-            for (SceneListener ecl : listeners) {
+            for (SceneListener ecl : listeners.getArray()) {
                 ecl.onSceneEntityAdded(this, entity);
             }
         }
@@ -218,8 +218,17 @@ public abstract class AbstractScene implements Scene, SceneLoader.Listener {
             entity.cleanup();
         }
         if (listeners != null && removed) {
-            for (SceneListener ecl : listeners) {
+            for (SceneListener ecl : listeners.getArray()) {
                 ecl.onSceneEntityRemoved(this, entity);
+            }
+        }
+    }
+
+    @Override
+    public void notifyEntityStateChanged(Entity entity) {
+        if (listeners != null) {
+            for (SceneListener ecl : listeners.getArray()) {
+                ecl.onSceneEntityStateChanged(this, entity);
             }
         }
     }
@@ -338,5 +347,6 @@ public abstract class AbstractScene implements Scene, SceneLoader.Listener {
     public boolean removeSceneListener(SceneListener listener) {
         return listeners != null && listeners.remove(listener);
     }
+
     
 }

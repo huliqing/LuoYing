@@ -17,13 +17,12 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with LuoYing.  If not, see <http://www.gnu.org/licenses/>.
  */
-package name.huliqing.luoying.object.entity.impl;
+package name.huliqing.luoying.object.entity;
 
 import java.util.List;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.layer.service.SystemService;
-import name.huliqing.luoying.object.entity.NonModelEntity;
 import name.huliqing.luoying.object.scene.Scene;
 
 /**
@@ -37,8 +36,6 @@ public abstract class ShadowEntity extends NonModelEntity {
     protected List<String> disabledOnPlatforms;
     
     // ---- 
-    /** 判断Shadow功能是否打开 */
-    protected boolean enabled = true;
 
     @Override
     public void setData(EntityData data) {
@@ -51,25 +48,9 @@ public abstract class ShadowEntity extends NonModelEntity {
         super.onInitScene(scene);
         String platform = systemService.getPlatformName();
         if (disabledOnPlatforms != null && disabledOnPlatforms.contains(platform)) {
-            enabled = false;
+            setEnabled(false);
         }
-        setShadowEnabled(enabled);
     }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-    
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-        setShadowEnabled(enabled);
-    }
-    
-    /**
-     * 初始化Shadow功能
-     * @param enabled
-     */
-    protected abstract void setShadowEnabled(boolean enabled);
     
     /**
      * 获取阴影的强度,返回值为0.0~1.0f

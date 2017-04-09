@@ -26,7 +26,6 @@ import com.jme3.texture.Texture2D;
 import com.jme3.water.WaterFilter;
 import com.jme3.water.WaterFilter.AreaShape;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.data.EntityData;
@@ -64,16 +63,23 @@ public class AdvanceWaterEntity extends NonModelEntity implements WaterEntity, S
     @Override
     public void updateDatas() {
         super.updateDatas();
-        if (isInitialized()) {
-            data.setAttribute("center", water.getCenter());
-            data.setAttribute("radius", water.getRadius());
-            data.setAttribute("waterHeight", water.getWaterHeight());
+        data.setAttribute("center", water.getCenter());
+        data.setAttribute("radius", water.getRadius());
+        data.setAttribute("waterHeight", water.getWaterHeight());
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        if (water != null) {
+            water.setEnabled(enabled);
         }
     }
 
     @Override
     public void initEntity() {
         water = new WaterFilter();
+        water.setEnabled(isEnabled());
         water.setCausticsIntensity(data.getAsFloat("causticsIntensity", water.getCausticsIntensity()));
         Vector3f center = data.getAsVector3f("center");
         if (center != null) {
@@ -93,6 +99,7 @@ public class AdvanceWaterEntity extends NonModelEntity implements WaterEntity, S
         water.setReflectionMapSize(data.getAsInteger("reflectionMapSize", water.getReflectionMapSize()));
         water.setRefractionConstant(data.getAsFloat("refractionConstant", water.getRefractionConstant()));
         water.setRefractionStrength(data.getAsFloat("refractionStrength", water.getRefractionStrength()));
+        
         
         String shapeType = data.getAsString("shapeType");
         if (AreaShape.Square.name().equals(shapeType)) {
@@ -243,13 +250,18 @@ public class AdvanceWaterEntity extends NonModelEntity implements WaterEntity, S
             }
         }
     }
-
+    
     @Override
     public void onSceneEntityRemoved(Scene scene, Entity entityRemoved) {
         // 当场景中移除了灯光时重新查找新的灯光。
         if (entityRemoved instanceof LightEntity) {
             findAndSetLight();
         }
+    }
+    
+    @Override
+    public void onSceneEntityStateChanged(Scene scene, Entity entity) {
+        // ignore
     }
     
     private void findAndSetLight() {
@@ -300,6 +312,8 @@ public class AdvanceWaterEntity extends NonModelEntity implements WaterEntity, S
 //        protected void controlRender(RenderManager rm, ViewPort vp) {}
 //        
 //    }
+
+
 
 
 

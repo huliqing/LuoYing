@@ -38,8 +38,8 @@ import name.huliqing.luoying.xml.ObjectData;
 public abstract class AbstractEntity implements Entity {
     
     protected EntityData data;
-    protected Scene scene;
     protected boolean initialized;
+    protected boolean enabled = true;
      
     /** 属性管理器 */
     protected final EntityAttributeManager attributeManager = new EntityAttributeManager(this);
@@ -56,12 +56,16 @@ public abstract class AbstractEntity implements Entity {
     /** 实体空间 */
     protected Spatial spatial;
     
+    /** 实体所在的场景 */
+    protected Scene scene;
+    
     @Override
     public void setData(EntityData data) {
         if (this.data != null && this.data != data) {
             throw new IllegalStateException("Data is already set! could not change the data!");
         }
         this.data = data;
+        this.enabled = data.getAsBoolean("enabled", enabled);
     }
     
     @Override
@@ -76,6 +80,7 @@ public abstract class AbstractEntity implements Entity {
             data.setRotation(spatial.getLocalRotation());
             data.setScale(spatial.getLocalScale());
         }
+        data.setAttribute("enabled", enabled);
         // 更新属性值
         attributeManager.updateDatas();
         // 更新所有模块内容
@@ -120,6 +125,27 @@ public abstract class AbstractEntity implements Entity {
     }
 
     @Override
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+        if (spatial == null || scene == null) {
+            return;
+        }
+        if (enabled) {
+            scene.getRoot().attachChild(spatial);
+        } else {
+            spatial.removeFromParent();
+        }
+        if (scene != null) {
+            scene.notifyEntityStateChanged(this);
+        }
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    @Override
     public void cleanup() {
         // 清理模块，因为modules是有依赖顺序的,可能存在一些module，这些module在清理的时候会依赖于
         moduleManager.cleanup();
@@ -137,6 +163,14 @@ public abstract class AbstractEntity implements Entity {
         scene = null;
         initialized = false;
     }
+    
+    @Override
+    public void onInitScene(Scene scene) {
+        this.scene = scene;
+        if (isEnabled()) {
+            scene.getRoot().attachChild(spatial);
+        }
+    }
 
     @Override
     public Spatial getSpatial() {
@@ -151,13 +185,6 @@ public abstract class AbstractEntity implements Entity {
     @Override
     public Scene getScene() {
         return scene;
-    }
-    
-    @Override
-    public void onInitScene(Scene scene) {
-        this.scene = scene;
-        // 当Entity被添加到场景的时候把Spatial放到场景中。
-        scene.getRoot().attachChild(spatial);
     }
     
     @Override

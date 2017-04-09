@@ -272,10 +272,17 @@ public class JfxSceneEdit extends JfxSimpleEdit<SceneEdit>
         });
     }
     
+    @Override
+    public void onSceneEntityStateChanged(Scene scene, Entity entity) {
+        // ignore
+    }
+    
     public void showDeleteConfirm(float x, float y, EntityControlTile entityObj) {
         delTarget = entityObj;
         delPop.show(editPanelBinder, Side.TOP, x - delPop.getWidth() * 0.25, y + delPop.getHeight() * 0.25);
         Jfx.requestFocus(delPop);
     }
+
+
 
 }

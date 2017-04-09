@@ -19,6 +19,7 @@
  */
 package name.huliqing.luoying.object.entity.impl;
 
+import name.huliqing.luoying.object.entity.ShadowEntity;
 import com.jme3.light.DirectionalLight;
 import com.jme3.shadow.CompareMode;
 import com.jme3.shadow.DirectionalLightShadowFilter;
@@ -56,12 +57,12 @@ public class DirectionalLightFilterShadowEntity extends ShadowEntity {
     private final SceneListener sceneListener = new SceneListenerAdapter() {
         @Override
         public void onSceneLoaded(Scene scene) {
-            if (enabled) {
+            if (isEnabled()) {
                 filter.setLight(findDirectionalLight());
+                scene.addFilter(filter);
             }
         }
     };
-    private boolean filterAdded;
     
     @Override
     public void setData(EntityData data) {
@@ -106,6 +107,14 @@ public class DirectionalLightFilterShadowEntity extends ShadowEntity {
             data.setAttribute("shadowIntensity", filter.getShadowIntensity());
         }
     }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        if (filter != null) {
+            filter.setEnabled(enabled);
+        }
+    }
     
     @Override
     public void initEntity() {
@@ -119,6 +128,7 @@ public class DirectionalLightFilterShadowEntity extends ShadowEntity {
         filter.setShadowIntensity(shadowIntensity);
         filter.setShadowZExtend(shadowZExtend);
         filter.setShadowZFadeLength(shadowZFadeLength);
+        filter.setEnabled(isEnabled());
     }
     
     @Override
@@ -126,24 +136,9 @@ public class DirectionalLightFilterShadowEntity extends ShadowEntity {
         super.onInitScene(scene);
         if (scene.isInitialized()) {
             filter.setLight(findDirectionalLight());
+            scene.addFilter(filter);
         }
         scene.addSceneListener(sceneListener);
-    }
-    
-    @Override
-    protected void setShadowEnabled(boolean enabled) {
-        if (enabled) {
-            if (!filterAdded) {
-                filter.setLight(findDirectionalLight());
-                scene.addFilter(filter);
-                filterAdded = true;
-            }
-        } else {
-            if (filterAdded) {
-                scene.removeFilter(filter);
-                filterAdded = false;
-            }
-        }
     }
     
     @Override
@@ -157,7 +152,6 @@ public class DirectionalLightFilterShadowEntity extends ShadowEntity {
         // 占用内存(从stateAppState的debug中可以看到FrameBuffers(M)一下在增加)。
         // 这是一个特殊的情况，在其它Filter还没有发现这个问题。
         filter = null;
-        filterAdded = false;
         super.cleanup();
     }
     

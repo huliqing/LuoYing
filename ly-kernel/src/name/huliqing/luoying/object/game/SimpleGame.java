@@ -145,12 +145,17 @@ public class SimpleGame implements Game<GameData>, SceneListener {
     public void onSceneEntityAdded(Scene scene, Entity entityAdded) {
         // 可由子类实现覆盖
     }
-
+    
     @Override
     public void onSceneEntityRemoved(Scene scene, Entity entityRemoved) {
         // 可由子类实现覆盖
     }
-
+    
+    @Override
+    public void onSceneEntityStateChanged(Scene scene, Entity entity) {
+        // 可由子类实现覆盖
+    }
+    
     @Override
     public boolean isInitialized() {
         return initialized;
@@ -292,6 +297,7 @@ public class SimpleGame implements Game<GameData>, SceneListener {
     public boolean removeListener(GameListener listener) {
         return listeners.remove(listener);
     }
+
 
     
 }

@@ -61,6 +61,16 @@ public class AudioEntity extends ModelEntity {
             sound.updateDatas();
         }
     }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        if (enabled) {
+            SoundManager.getInstance().addAndPlay(sound);
+        } else {
+            SoundManager.getInstance().removeAndStopDirectly(sound);
+        }
+    }
     
     @Override
     protected Spatial loadModel() {
@@ -87,7 +97,9 @@ public class AudioEntity extends ModelEntity {
             debugInnerNode.setMaterial(createDebugMaterial(ColorRGBA.Red));
             sound.attachChild(debugInnerNode);
         }
-        SoundManager.getInstance().addAndPlay(sound);
+        if (isEnabled()) {
+            SoundManager.getInstance().addAndPlay(sound);
+        }
     }
     
     private Material createDebugMaterial(ColorRGBA color) {

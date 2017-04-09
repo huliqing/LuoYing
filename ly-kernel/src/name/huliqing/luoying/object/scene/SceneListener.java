@@ -47,4 +47,10 @@ public interface SceneListener {
      */
     void onSceneEntityRemoved(Scene scene, Entity entityRemoved);
     
+    /**
+     * 当场景中的实体的某些状态发生变化时该方法被调用（例如：实体的开关状态(Enabled)），
+     * @param scene
+     * @param entity 
+     */
+    void onSceneEntityStateChanged(Scene scene, Entity entity);
 }

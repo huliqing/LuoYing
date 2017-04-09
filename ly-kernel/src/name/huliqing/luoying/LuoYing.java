@@ -298,7 +298,7 @@ import name.huliqing.luoying.object.el.STNumberEl;
 import name.huliqing.luoying.object.el.LNumberEl;
 import name.huliqing.luoying.object.el.SBooleanEl;
 import name.huliqing.luoying.object.el.SkillHitNumberEl;
-import name.huliqing.luoying.object.entity.EffectEntity;
+import name.huliqing.luoying.object.entity.impl.EffectEntity;
 import name.huliqing.luoying.object.entity.filter.BloomFilterEntity;
 import name.huliqing.luoying.object.entity.filter.FXAAFilterEntity;
 import name.huliqing.luoying.object.entity.filter.FogFilterEntity;

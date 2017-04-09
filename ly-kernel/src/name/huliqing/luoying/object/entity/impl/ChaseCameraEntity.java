@@ -47,6 +47,20 @@ public class ChaseCameraEntity extends NonModelEntity  implements SceneListener 
     }
     
     @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        ccc.setEnabled(enabled);
+    }
+    
+    /**
+     * 是否打开旋转镜头功能。
+     * @param bool 
+     */
+    public void setEnabledRotation(boolean bool) {
+        ccc.setEnabledRotation(bool);
+    }
+    
+    @Override
     public void initEntity() {
         ccc = new CollisionChaseCamera(LuoYing.getApp().getCamera(), LuoYing.getApp().getInputManager());
          // 开启镜头跟随可能让部分人容易犯头晕
@@ -64,8 +78,7 @@ public class ChaseCameraEntity extends NonModelEntity  implements SceneListener 
         ccc.setDownRotateOnCloseViewOnly(data.getAsBoolean("downRotateOnCloseViewOnly", ccc.getDownRotateOnCloseViewOnly())); 
         ccc.setUpVector(data.getAsVector3f("upVector", ccc.getUpVector()));
         ccc.setHideCursorOnRotate(data.getAsBoolean("hideCursorOnRotate", ccc.isHideCursorOnRotate()));
-        // 默认要关闭，以避免冲突。
-        ccc.setEnabled(false);
+        ccc.setEnabled(isEnabled());
     }
 
     @Override
@@ -104,18 +117,6 @@ public class ChaseCameraEntity extends NonModelEntity  implements SceneListener 
     }
     
     /**
-     * 是否打开旋转镜头功能。
-     * @param bool 
-     */
-    public void setEnabledRotation(boolean bool) {
-        ccc.setEnabledRotation(bool);
-    }
-    
-    public void setEnabled(boolean enabled) {
-        ccc.setEnabled(enabled);
-    }
-    
-    /**
      * 计算出相机的跟随位置，但是不立即改变相机的位置。
      * @param locStore
      * @param rotationStore 
@@ -145,6 +146,11 @@ public class ChaseCameraEntity extends NonModelEntity  implements SceneListener 
             ccc.setPhysicsSpace(null);
             physicsEnv = null;
         }
+    }
+
+    @Override
+    public void onSceneEntityStateChanged(Scene scene, Entity entity) {
+        // ignore
     }
 
 

@@ -189,4 +189,11 @@ public interface Scene extends DataProcessor<SceneData> {
      */
     void setProcessorViewPorts(ViewPort... viewPorts);
     
+    /**
+     * 当实体发生了某些状态变化时，可以调用这个方法来通知场景，这样允许某些监听器确认是否需要重新处理该实体。
+     * 例如：当某个模型实体的开关（Enabled）状态发生变化时，可以调用这个方法,以便场景中的物体实体可以知道，并确认是否
+     * 需要重新处理该实体，例如移除模型的物理特性控制器之类。
+     * @param entity 
+     */
+    void notifyEntityStateChanged(Entity entity);
 }

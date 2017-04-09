@@ -3,14 +3,14 @@
 <root
     xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
     xmlns='http://luoying.huliqing.name'
-    xsi:schemaLocation='http://luoying.huliqing.name ../../../../ly-kernel/src/LuoYing/Data/meta/actor.xsd'>
+    xsi:schemaLocation='http://luoying.huliqing.name ../../../../ly-kernel/src/LuoYingSys/Data/meta/actor.xsd'>
     
     <!--==========================================================================-->
     <!--角色基本配置-->
     <!--==========================================================================-->
     
     <!--所有角色基类-->
-    <actor id="actorBase" objectDatas="chatSimple"
+    <actor id="actorBase" objectDatas="chatSimple" shadowMode="Cast"
         modules="moduleActor,moduleAction,moduleChannel,moduleChat,moduleItem,moduleLogic
 ,moduleSkill,moduleSkin,moduleState,moduleTalent,moduleTask,moduleLevel,moduleDrop,moduleColor,moduleResist"
     />

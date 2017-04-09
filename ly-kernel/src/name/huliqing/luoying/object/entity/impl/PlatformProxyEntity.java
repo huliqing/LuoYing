@@ -66,12 +66,21 @@ public class PlatformProxyEntity extends ProxyEntity {
             }
         }
     }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        if (proxyEntity != null) {
+            proxyEntity.setEnabled(enabled);
+        }
+    }
     
     @Override
     public void initEntity() {
         EntityMatcher matcher = findMatcher(systemService.getPlatformName());
         String proxyId = matcher != null ? matcher.entityId : defaultEntityId;
         proxyEntity = Loader.load(proxyId);
+        proxyEntity.setEnabled(isEnabled());
     }
 
     @Override

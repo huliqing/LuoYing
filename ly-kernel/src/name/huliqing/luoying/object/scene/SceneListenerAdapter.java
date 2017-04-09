@@ -41,5 +41,10 @@ public class SceneListenerAdapter implements SceneListener {
     public void onSceneEntityRemoved(Scene scene, Entity objectRemoved) {
         // 子类覆盖
     }
+
+    @Override
+    public void onSceneEntityStateChanged(Scene scene, Entity entity) {
+        // 子类覆盖
+    }
     
 }

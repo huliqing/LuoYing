@@ -42,6 +42,25 @@ public interface Entity extends DataProcessor<EntityData> {
      * @see #onInitScene(Scene) 
      */
     void initialize();
+        
+    /**
+     * 判断是否已经初始化
+     * @return 
+     */
+    boolean isInitialized();
+
+    /**
+     * 设置是否开启Entity
+     * @param enabled 
+     */
+    void setEnabled(boolean enabled);
+    
+    /**
+     * 判断Entity是否开启
+     * @return 
+     */
+    boolean isEnabled();
+    
     
     /**
      * 这个方法会在物体被添加到场景的时候被调用, 如果一个物体没有被直接被放到场景中，则这个方法
@@ -49,12 +68,6 @@ public interface Entity extends DataProcessor<EntityData> {
      * @param scene 
      */
     void onInitScene(Scene scene);
-        
-    /**
-     * 判断是否已经初始化
-     * @return 
-     */
-    boolean isInitialized();
     
     /**
      * 清理并释放资源

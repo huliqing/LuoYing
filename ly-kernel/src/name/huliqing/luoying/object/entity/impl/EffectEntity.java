@@ -17,14 +17,14 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with LuoYing.  If not, see <http://www.gnu.org/licenses/>.
  */
-package name.huliqing.luoying.object.entity;
+package name.huliqing.luoying.object.entity.impl;
 
 import com.jme3.scene.Spatial;
 import name.huliqing.luoying.data.EffectData;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.effect.Effect;
-import name.huliqing.luoying.object.scene.Scene;
+import name.huliqing.luoying.object.entity.ModelEntity;
 
 /**
  * @author huliqing
@@ -60,24 +60,15 @@ public class EffectEntity extends ModelEntity {
     @Override
     public void initEntity() {
         super.initEntity();
-    }
-
-    @Override
-    public void onInitScene(Scene scene) {
-        super.onInitScene(scene);
         if (!effect.isInitialized()) {
             effect.initialize();
         }
-        scene.getRoot().attachChild(effect);
     }
 
     @Override
     public void cleanup() {
-        if (effect != null) {
-            if (effect.isInitialized()) {
-                effect.cleanup();
-            }
-            effect.removeFromParent();
+        if (effect != null && effect.isInitialized()) {
+            effect.cleanup();
         }
         super.cleanup(); 
     }

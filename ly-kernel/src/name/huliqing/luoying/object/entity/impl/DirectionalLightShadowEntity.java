@@ -19,6 +19,7 @@
  */
 package name.huliqing.luoying.object.entity.impl;
 
+import name.huliqing.luoying.object.entity.ShadowEntity;
 import com.jme3.light.DirectionalLight;
 import com.jme3.shadow.DirectionalLightShadowRenderer;
 import java.util.List;
@@ -65,31 +66,10 @@ public class DirectionalLightShadowEntity extends ShadowEntity {
         super.updateDatas();
         data.setAttribute("shadowIntensity", shadowProcessor.getShadowIntensity());
     }
-    
-    @Override
-    protected void initEntity() {
-        shadowProcessor = new DirectionalLightShadowRenderer(LuoYing.getAssetManager(), shadowMapSize, shadowMaps);
-        shadowProcessor.setShadowIntensity(shadowIntensity);
-//        shadowProcessor.setShadowZExtend(500f);
-    }
-    
-    @Override
-    public void onInitScene(Scene scene) {
-        super.onInitScene(scene);
-        scene.addSceneListener(sceneListener);
-    }
 
     @Override
-    public void cleanup() {
-        scene.removeProcessor(shadowProcessor);
-        scene.removeSceneListener(sceneListener);
-        shadowProcessor = null;
-        processorAdded = false;
-        super.cleanup(); 
-    }
-
-    @Override
-    protected void setShadowEnabled(boolean enabled) {
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
         if (enabled) {
             if (!processorAdded) {
                 shadowProcessor.setLight(findDirectionalLight());
@@ -104,6 +84,33 @@ public class DirectionalLightShadowEntity extends ShadowEntity {
         }
     }
     
+    @Override
+    protected void initEntity() {
+        shadowProcessor = new DirectionalLightShadowRenderer(LuoYing.getAssetManager(), shadowMapSize, shadowMaps);
+        shadowProcessor.setShadowIntensity(shadowIntensity);
+//        shadowProcessor.setShadowZExtend(500f);
+    }
+    
+    @Override
+    public void onInitScene(Scene scene) {
+        super.onInitScene(scene);
+        if (isEnabled()) {
+            shadowProcessor.setLight(findDirectionalLight());
+            scene.addProcessor(shadowProcessor);
+            processorAdded = true;
+        }
+        scene.addSceneListener(sceneListener);
+    }
+
+    @Override
+    public void cleanup() {
+        scene.removeProcessor(shadowProcessor);
+        scene.removeSceneListener(sceneListener);
+        shadowProcessor = null;
+        processorAdded = false;
+        super.cleanup(); 
+    }
+
     @Override
     public float getShadowIntensity() {
         return shadowProcessor.getShadowIntensity();

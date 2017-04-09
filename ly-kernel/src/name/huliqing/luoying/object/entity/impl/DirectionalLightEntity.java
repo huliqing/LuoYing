@@ -50,9 +50,17 @@ public class DirectionalLightEntity extends NonModelEntity implements LightEntit
         data.setAttribute("color", light.getColor());
         data.setAttribute("direction", light.getDirection());
     }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        light.setEnabled(enabled);
+    }
     
     @Override
-    public void initEntity() {}
+    public void initEntity() {
+        light.setEnabled(isEnabled());
+    }
 
     @Override
     public void onInitScene(Scene scene) {

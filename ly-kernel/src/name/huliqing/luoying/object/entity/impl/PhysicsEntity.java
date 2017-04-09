@@ -186,5 +186,17 @@ public class PhysicsEntity extends NonModelEntity implements SceneListener {
         }
     }
 
+    @Override
+    public void onSceneEntityStateChanged(Scene scene, Entity entity) {
+        if (entity.getSpatial() == null)
+            return;
+        
+        if (entity.isEnabled()) {
+            bulletAppState.getPhysicsSpace().addAll(entity.getSpatial());
+        } else {
+            bulletAppState.getPhysicsSpace().removeAll(entity.getSpatial());
+        }
+    }
+
 
 }

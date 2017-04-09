@@ -200,17 +200,17 @@ public class TeamView extends LinearLayout implements SceneListener, ValueChange
         }
     }
     
-    /**
-     * 当游戏场景中移除了实体时该方法被调用。
-     * @param scene
-     * @param entityRemoved 
-     */
     @Override
     public void onSceneEntityRemoved(Scene scene, Entity entityRemoved) {
         if (mainFace.getActor() == null || !(entityRemoved instanceof Actor)) {
             return;
         }
         removeActor(entityRemoved);
+    }
+    
+    @Override
+    public void onSceneEntityStateChanged(Scene scene, Entity entity) {
+        // ignore
     }
 
     /**
@@ -237,7 +237,7 @@ public class TeamView extends LinearLayout implements SceneListener, ValueChange
             }
         }
     }
-    
+
     // ---- Partner Panel ------------------------------------------------------
     
     private class PartnerPanel extends ListView<Entity> {
