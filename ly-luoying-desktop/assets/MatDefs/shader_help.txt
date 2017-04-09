@@ -1,41 +1,57 @@
+https://en.wikipedia.org/wiki/OpenGL
+https://en.wikipedia.org/wiki/OpenGL_Shading_Language
+https://en.wikipedia.org/w/index.php?title=OpenGL_ES&oldid=763141788
 https://wiki.jmonkeyengine.org/doku.php/jme3:advanced:jme3_shaders
 
 在android下常见的shader错误：
-
 1.注意小数不要加"f"， 如: "1.0f"是错误的
-
 2.不要在vert和frag中同时定义“相同名称”的uniform,这在android会错误
-
 3.注意float不能和int进行比较，如 if (texCoord.x > 0) 是错误的，应该是 if (texCoord.x > 0.0)
 
-4.不能在fragment中修改varying变量的值
-
-
-==== Android & OpenGL ES & GLSL ES
-Android1.0(2007)    -> OpenGL ES 1.0    -> None
-Android2.2(2009)    -> OpenGL ES 2.0    -> GLSL ES 100
-Android4.3(2013)    -> OpenGL ES 3.0    -> GLSL ES 300
+==== Android & OpenGL ES
+Android1.6		    	-> OpenGL ES 1.1
+Android2.0~2.2(2009)    -> OpenGL ES 2.0(GLSL ES 100)
+Android4.3(2013)    	-> OpenGL ES 3.0(GLSL ES 300)
+Android5.0(2014.10)		-> OpenGL ES 3.1
+Android6.0(2015.9)		-> OpenGL ES 3.2
+Android7.0(2016.3)		-> xxxx
 
 ==== OpenGL ES 和 GLSL ES 版本匹配
 OpenGL ES   GLSL ES
 2.0         100
 3.0         300
 
-==== OpenGL ES 和 OpenGL 版本匹配
-OpenGL ES           OpenGL
-OpenGL ES 1.0       OpenGL 1.3 (2003)
-OpenGL ES 1.1       OpenGL 1.5 (2004)
-OpenGL ES 2.0       OpenGL 2.0 (2007)
+==== OpenGL ES,OpenGL,WebGL兼容关系
+OpenGL ES           OpenGL			WebGL
+OpenGL ES 1.0       OpenGL 1.3 
+OpenGL ES 1.1       OpenGL 1.5
+OpenGL ES 2.0       OpenGL 2.0
+OpenGL ES 3.0       OpenGL 4.3		WebGL2.0(Based on OpenGL ES 3.0)
 
-==== OpenGL 和 OpenGL 版本匹配
-OpenGL  GLSL
-2.0     110
-2.1     120
-3.0     130
-3.1     140
-3.2     150
-3.3     330
-4.0     400
-4.1     410
-4.2     420
-4.3     430
+==== OpenGL
+GLSL Version	OpenGL Version	Date	Shader Preprocessor
+1.10.59[1]		2.0	April 2004			#version 110
+1.20.8[2]		2.1	September 2006		#version 120
+1.30.10[3]		3.0	August 2008			#version 130
+1.40.08[4]		3.1	March 2009			#version 140
+1.50.11[5]		3.2	August 2009			#version 150
+3.30.6[6]		3.3	February 2010		#version 330
+4.00.9[7]		4.0	March 2010			#version 400
+4.10.6[8]		4.1	July 2010			#version 410
+4.20.11[9]		4.2	August 2011			#version 420
+4.30.8[10]		4.3	August 2012			#version 430
+4.40[11]		4.4	July 2013			#version 440
+4.50[12]		4.5	August 2014			#version 450
+
+==== OpenGL ES
+GLSL ES		OpenGL ES					Shader Preprocessor
+			1.0(2003.7.28)
+100			2.0(2007.3)					#version 100
+300			3.0(2012.8)					#version 300
+			3.1(2014.3)
+			3.2(2015.8)								
+							
+==== WebGL
+1.0(2011.3, support:Firefox4,Chrome9,Opera11/12,Safari5.1/6.0,IE11)
+2.0(2017.1, based on OpenGL ES 3.0,support:Firefox51,Chrome56,Opera43)							
+	
