@@ -85,7 +85,7 @@ public class SkinModule extends AbstractModule implements DataHandler<SkinData> 
         super.initialize(entity); 
         
         if (bindWeaponSlotAttribute != null) {
-            weaponSlotAttribute = entity.getAttributeManager().getAttribute(bindWeaponSlotAttribute);
+            weaponSlotAttribute = entity.getAttribute(bindWeaponSlotAttribute);
         }
         
         // 穿上普通装备

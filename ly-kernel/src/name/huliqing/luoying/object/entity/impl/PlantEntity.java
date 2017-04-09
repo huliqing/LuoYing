@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.constants.AssetConstants;
-import name.huliqing.luoying.data.ModelEntityData;
+import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.object.entity.ModelEntity;
 import name.huliqing.luoying.object.entity.TerrainEntity;
 import name.huliqing.luoying.object.scene.Scene;
@@ -50,7 +50,7 @@ public abstract class PlantEntity extends ModelEntity {
     
     // 当树木放入到场景时自动将树木移动到地面上。
     private boolean makeOnTerrain;
-    // 树叶、草叶摇摆
+    // 树叶、草叶摇摆 
     private boolean sway;
     // 摇动的频率
     private float swayFrequency = 1.5f;
@@ -64,7 +64,7 @@ public abstract class PlantEntity extends ModelEntity {
     private List<String> swayGeometries;
 
     @Override
-    public void setData(ModelEntityData data) {
+    public void setData(EntityData data) {
         super.setData(data);
         makeOnTerrain = data.getAsBoolean("makeOnTerrain", makeOnTerrain);
         sway = data.getAsBoolean("sway", sway);

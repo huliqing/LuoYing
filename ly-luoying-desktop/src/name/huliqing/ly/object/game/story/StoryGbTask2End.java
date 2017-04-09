@@ -30,7 +30,6 @@ import name.huliqing.ly.view.talk.Talk;
 import name.huliqing.ly.view.talk.TalkImpl;
 import name.huliqing.ly.view.talk.TalkListener;
 import name.huliqing.luoying.layer.network.PlayNetwork;
-import name.huliqing.luoying.layer.network.SkillNetwork;
 import name.huliqing.luoying.layer.service.ActionService;
 import name.huliqing.luoying.layer.service.ActorService;
 import name.huliqing.luoying.layer.service.SkillService;
@@ -182,7 +181,7 @@ public class StoryGbTask2End extends AbstractGameLogic {
                 _game.removeLogic(taskPanel);
                 // 保存关卡完成状态
                 gameService.saveCompleteStage(StoryConstants.STORY_NUM_GB);
-                // 提示
+                // 提示 
                 gameNetwork.addMessage(ResourceManager.get(ResConstants.TASK_SUCCESS), MessageType.item);
                 playNetwork.addEntity((View)Loader.load(IdConstants.VIEW_TEXT_SUCCESS));
             }

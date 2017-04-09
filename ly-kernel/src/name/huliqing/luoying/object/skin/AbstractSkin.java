@@ -157,7 +157,7 @@ public abstract class AbstractSkin implements Skin {
         if (skinNode == null) {
             skinNode = AssetLoader.loadModel(data.getFile());
             // 如果模型希望以unshaded的方式展示，则需要在attach之前转化模型为unshaded
-            if (actor instanceof ModelEntity && ((ModelEntity)actor).getData().isPreferUnshaded()) {
+            if (actor instanceof ModelEntity && ((ModelEntity)actor).isPreferUnshaded()) {
                 GeometryUtils.makeUnshaded(skinNode);
             }
         }

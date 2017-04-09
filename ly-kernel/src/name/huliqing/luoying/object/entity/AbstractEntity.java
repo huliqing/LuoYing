@@ -23,20 +23,21 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import com.jme3.util.SafeArrayList;
+import java.util.List;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.attribute.AttributeManager;
+import name.huliqing.luoying.object.module.Module;
 import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
  * Entity的基类
  * @author huliqing
- * @param <T>
  */
-public abstract class AbstractEntity<T extends EntityData> implements Entity<T> {
+public abstract class AbstractEntity implements Entity {
     
-    protected T data;
+    protected EntityData data;
     protected Scene scene;
     protected boolean initialized;
      
@@ -56,7 +57,7 @@ public abstract class AbstractEntity<T extends EntityData> implements Entity<T> 
     protected Spatial spatial;
     
     @Override
-    public void setData(T data) {
+    public void setData(EntityData data) {
         if (this.data != null && this.data != data) {
             throw new IllegalStateException("Data is already set! could not change the data!");
         }
@@ -64,7 +65,7 @@ public abstract class AbstractEntity<T extends EntityData> implements Entity<T> 
     }
     
     @Override
-    public T getData() {
+    public EntityData getData() {
         return data;
     }
     
@@ -169,13 +170,53 @@ public abstract class AbstractEntity<T extends EntityData> implements Entity<T> 
     }
 
     @Override
-    public AttributeManager getAttributeManager() {
-        return attributeManager;
+    public void addAttribute(Attribute attribute) {
+        attributeManager.addAttribute(attribute);
     }
 
     @Override
-    public ModuleManager getModuleManager() {
-        return moduleManager;
+    public boolean removeAttribute(Attribute attribute) {
+        return attributeManager.removeAttribute(attribute);
+    }
+
+    @Override
+    public List<Attribute> getAttributes() {
+        return attributeManager.getAttributes();
+    }
+    
+    @Override
+    public <T extends Attribute> T getAttribute(String attrName) {
+        return attributeManager.getAttribute(attrName);
+    }
+    
+    @Override
+    public <T extends Attribute> T getAttribute(String attrName, Class<T> type) {
+        return attributeManager.getAttribute(attrName, type);
+    }
+
+    @Override
+    public AttributeManager getAttributeManager() {
+        return attributeManager;
+    }
+    
+    @Override
+    public void addModule(Module module) {
+        moduleManager.addModule(module);
+    }
+
+    @Override
+    public boolean removeModule(Module module) {
+        return moduleManager.removeModule(module);
+    }
+
+    @Override
+    public List<Module> getModules() {
+        return moduleManager.getModules();
+    }
+    
+    @Override
+    public <T extends Module> T getModule(Class<T> moduleType) {
+        return moduleManager.getModule(moduleType);
     }
     
     @Override

@@ -89,7 +89,7 @@ public class ShotBowSkill extends ShotSkill {
     @Override
     public void setActor(Entity actor) {
         super.setActor(actor);
-        skinModule = actor.getModuleManager().getModule(SkinModule.class);        
+        skinModule = actor.getModule(SkinModule.class);        
     }
 
     @Override
@@ -102,7 +102,7 @@ public class ShotBowSkill extends ShotSkill {
         // 载入箭模型, 该箭模型(arrow)主要用于“取箭”及“拉弓上弦”动画。
         if (arrowNode == null && arrow != null) {
             arrowNode = Loader.loadModel(arrow);
-            if (actor instanceof ModelEntity && ((ModelEntity) actor).getData().isPreferUnshaded()) {
+            if (actor instanceof ModelEntity && ((ModelEntity) actor).isPreferUnshaded()) {
                 GeometryUtils.makeUnshaded(arrowNode);
             }
         }

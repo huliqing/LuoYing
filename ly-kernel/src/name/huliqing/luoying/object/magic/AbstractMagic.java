@@ -24,7 +24,7 @@ import com.jme3.scene.Spatial;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.data.MagicData;
+import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.object.ControlAdapter;
 import name.huliqing.luoying.object.Loader;
@@ -37,8 +37,11 @@ import name.huliqing.luoying.object.scene.Scene;
 /**
  * @author huliqing
  */
-public abstract class AbstractMagic extends ModelEntity<MagicData> implements Magic<MagicData> {
+public abstract class AbstractMagic extends ModelEntity implements Magic {
     private final ElService elService = Factory.get(ElService.class);
+    
+    private long source;
+    private long[] targets;
     
     protected float useTime = 1.0f;
     protected float timeUsed;
@@ -52,12 +55,12 @@ public abstract class AbstractMagic extends ModelEntity<MagicData> implements Ma
     /**
      * 魔法的施放者，有可能为null.
      */
-    protected Entity source;
+    protected Entity sourceEntity;
     
     /**
      * 魔法针对的特定目标,如果没有特定的目标，则有可能为null
      */
-    protected List<Entity> targets;
+    protected List<Entity> targetEntities;
     
     // 保持对效果的引用，在结束时清理
     protected List<Effect> tempEffects;
@@ -72,8 +75,10 @@ public abstract class AbstractMagic extends ModelEntity<MagicData> implements Ma
     }
     
     @Override
-    public void setData(MagicData data) {
+    public void setData(EntityData data) {
         super.setData(data);
+        source = data.getAsLong("source");
+        targets = data.getAsLongArray("targets");
         useTime = data.getAsFloat("useTime", useTime);
         timeUsed = data.getAsFloat("timeUsed", timeUsed);
         effects = data.getAsArray("effects");
@@ -81,13 +86,12 @@ public abstract class AbstractMagic extends ModelEntity<MagicData> implements Ma
     }
     
     @Override
-    public MagicData getData() {
-        return super.getData(); 
-    }
-    
-    @Override
     public void updateDatas() {
         super.updateDatas();
+        
+        data.setAttribute("source", source);
+        data.setAttribute("targets", targets);
+        
         // 有可能发生状态变化的字段才需要更新到Data.
         if (tempEffects != null) {
             for (Effect effect : tempEffects) {
@@ -116,17 +120,17 @@ public abstract class AbstractMagic extends ModelEntity<MagicData> implements Ma
     @Override
     public void onInitScene(Scene scene) {
         super.onInitScene(scene);
-        if (data.getSource() > 0) {
-            source = scene.getEntity(data.getSource());
+        if (source > 0) {
+            sourceEntity = scene.getEntity(source);
         }
-        if (data.getTargets() != null && data.getTargets().length > 0) {
-            if (targets == null) {
-                targets = new ArrayList<Entity>(data.getTargets().length);
+        if (targets != null && targets.length > 0) {
+            if (targetEntities == null) {
+                targetEntities = new ArrayList<Entity>(targets.length);
             }
-            for (long tid : data.getTargets()) {
+            for (long tid : targets) {
                 Entity target = scene.getEntity(tid);
                 if (target != null) {
-                    targets.add(target);
+                    targetEntities.add(target);
                 }
             }
         }
@@ -161,11 +165,11 @@ public abstract class AbstractMagic extends ModelEntity<MagicData> implements Ma
             }
             tempEffects.clear();
         }
-        if (targets != null) {
-            targets.clear();
+        if (targetEntities != null) {
+            targetEntities.clear();
         }
         timeUsed = 0;
-        source = null;
+        sourceEntity = null;
         super.cleanup();
     }
     

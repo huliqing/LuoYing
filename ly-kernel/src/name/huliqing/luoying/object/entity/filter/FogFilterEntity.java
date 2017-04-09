@@ -21,7 +21,6 @@ package name.huliqing.luoying.object.entity.filter;
 
 import com.jme3.math.ColorRGBA;
 import com.jme3.post.filters.FogFilter;
-import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.object.entity.NonModelEntity;
 import name.huliqing.luoying.object.scene.Scene;
 
@@ -29,7 +28,7 @@ import name.huliqing.luoying.object.scene.Scene;
  *
  * @author huliqing
  */
-public class FogFilterEntity extends NonModelEntity<EntityData>{
+public class FogFilterEntity extends NonModelEntity{
 
     private final FogFilter filter = new FogFilter();
     

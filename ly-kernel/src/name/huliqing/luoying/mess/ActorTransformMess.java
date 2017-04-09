@@ -82,7 +82,7 @@ public class ActorTransformMess extends GameMess {
         if (actor == null || !actor.isInitialized()) {
             return;
         }
-        ActorModule actorModule = actor.getModuleManager().getModule(ActorModule.class);
+        ActorModule actorModule = actor.getModule(ActorModule.class);
         if (actorModule == null) 
             return;
         

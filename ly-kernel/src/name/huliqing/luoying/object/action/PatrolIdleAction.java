@@ -140,7 +140,7 @@ public class PatrolIdleAction extends AbstractAction implements IdleAction, Enti
     @Override
     public void initialize() {
         super.initialize();
-        skillModule = actor.getModuleManager().getModule(SkillModule.class);
+        skillModule = actor.getModule(SkillModule.class);
         
         // 初始化巡逻点坐标,如果没有指别设置角色的出生地点则将当前世界位置作为巡逻
         // 的原点,并在这个原点上向四周生成几个巡逻坐标点。

@@ -251,8 +251,8 @@ public class SummonSkill extends SimpleAnimationSkill {
                 // 同步属性
                 if (copyAttributesFromSource != null) {
                     for (String attr : copyAttributesFromSource) {
-                        Attribute summonAttr = summonActor.getAttributeManager().getAttribute(attr);
-                        Attribute sourceAttr = actor.getAttributeManager().getAttribute(attr);
+                        Attribute summonAttr = summonActor.getAttribute(attr);
+                        Attribute sourceAttr = actor.getAttribute(attr);
                         if (summonAttr != null && sourceAttr != null) {
                             summonAttr.setValue(sourceAttr.getValue());
                         }
@@ -260,7 +260,7 @@ public class SummonSkill extends SimpleAnimationSkill {
                 }
                 if (linkAttributesToSource != null) {
                     for (String attr : linkAttributesToSource) {
-                        NumberAttribute summonAttr = summonActor.getAttributeManager().getAttribute(attr, NumberAttribute.class);
+                        NumberAttribute summonAttr = summonActor.getAttribute(attr, NumberAttribute.class);
                         if (summonAttr != null) {
                             summonAttr.setValue(actor.getEntityId());
                         }

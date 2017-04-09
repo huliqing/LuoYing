@@ -28,9 +28,5 @@ import name.huliqing.luoying.data.EntityData;
  */
 @Serializable
 public class ChatData extends EntityData {
-    
-    public ChatData(){
-        super();
-    }
 
 }

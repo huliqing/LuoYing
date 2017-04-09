@@ -24,6 +24,6 @@ package name.huliqing.luoying.object.entity.impl;
  * 计算。
  * @author huliqing
  */
-public class GrassEntity extends PlantEntity {
+public class GrassEntity extends PlantEntity { 
     
 }

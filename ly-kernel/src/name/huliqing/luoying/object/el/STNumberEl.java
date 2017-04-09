@@ -19,6 +19,7 @@
  */
 package name.huliqing.luoying.object.el;
 
+import java.util.logging.Logger;
 import javax.el.ELContext;
 import name.huliqing.luoying.object.attribute.AttributeManager;
 
@@ -33,6 +34,8 @@ import name.huliqing.luoying.object.attribute.AttributeManager;
  * @author huliqing
  */
 public class STNumberEl extends AbstractEl<Number> {
+
+    private static final Logger LOG = Logger.getLogger(STNumberEl.class.getName());
 
     private final AttributeElContext elContext = new AttributeElContext(this);
 
@@ -61,9 +64,5 @@ public class STNumberEl extends AbstractEl<Number> {
         return this;
     }
 
-    @Override
-    public Number getValue() {
-        return super.getValue(); 
-    }
     
 }

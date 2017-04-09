@@ -49,7 +49,7 @@ public class MoveSpeedState extends AttributeState {
     @Override
     public void initialize() {
         super.initialize();
-        skillModule = entity.getModuleManager().getModule(SkillModule.class);
+        skillModule = entity.getModule(SkillModule.class);
         
         // 查找"run"技能
         List<Skill> runSkills = skillModule.getSkillRun(null);

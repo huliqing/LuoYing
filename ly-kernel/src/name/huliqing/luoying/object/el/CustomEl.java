@@ -36,11 +36,6 @@ public class CustomEl<T> extends AbstractEl<T> {
         return elContext;
     }
     
-    @Override
-    public T getValue() {
-        return super.getValue(); 
-    }
-    
     /**
      * 设置基本参数.
      * @param prop 参数名称

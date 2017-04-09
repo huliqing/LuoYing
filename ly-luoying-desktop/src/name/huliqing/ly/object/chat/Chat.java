@@ -21,9 +21,9 @@ package name.huliqing.ly.object.chat;
 
 import com.jme3.scene.Spatial;
 import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.data.EntityData;
 import name.huliqing.ly.constants.ResConstants;
 import name.huliqing.luoying.layer.service.ElService;
-import name.huliqing.ly.data.ChatData;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.object.Loader;
@@ -40,9 +40,8 @@ import name.huliqing.ly.layer.service.GameService;
 /**
  * 对话功能。
  * @author huliqing
- * @param <T>
  */
-public abstract class Chat<T extends ChatData> extends AbstractEntity<T> {
+public abstract class Chat extends AbstractEntity {
     private final PlayService playService = Factory.get(PlayService.class);
     private final GameService gameService = Factory.get(GameService.class);
     private final ElService elService = Factory.get(ElService.class);
@@ -80,7 +79,7 @@ public abstract class Chat<T extends ChatData> extends AbstractEntity<T> {
     };
 
     @Override
-    public void setData(T data) {
+    public void setData(EntityData data) {
         this.data = data;
         this.width = data.getAsFloat("widthWeight", 0.3f) * playService.getScreenWidth();
         this.height = data.getAsFloat("heightWeight", 0.5f) * playService.getScreenHeight();
@@ -96,11 +95,6 @@ public abstract class Chat<T extends ChatData> extends AbstractEntity<T> {
             }
         }
         hitCheckEl = elService.createSTBooleanEl(data.getAsString("hitCheckEl", "#{true}"));
-    }
-
-    @Override
-    public T getData() {
-        return data;
     }
 
     @Override

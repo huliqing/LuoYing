@@ -69,7 +69,7 @@ public abstract class Detour {
     
     public void setActor(Entity actor) {
         this.actor = actor;
-        skillModule = actor.getModuleManager().getModule(SkillModule.class);
+        skillModule = actor.getModule(SkillModule.class);
 
         if (walkSkill == null) {
             List<Skill> walkSkills = skillModule.getSkillWalk(null);

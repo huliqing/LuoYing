@@ -35,7 +35,7 @@ import com.jme3.texture.Texture;
 import com.jme3.util.TempVars;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.constants.AssetConstants;
-import name.huliqing.luoying.data.BulletData;
+import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.shape.SplineSurface;
 import name.huliqing.luoying.utils.MathUtils;
@@ -63,7 +63,7 @@ public class CurveTrailBullet extends CurveBullet {
     private final Node surface = new Node();
 
     @Override
-    public void setData(BulletData data) {
+    public void setData(EntityData data) { 
         super.setData(data);
         this.mask = data.getAsString("mask", null);
         this.tex = data.getAsString("tex", null);
@@ -80,7 +80,8 @@ public class CurveTrailBullet extends CurveBullet {
         surface.detachAllChildren();
         
         // 因为surface是直接放在场景根节点的，bucket无法受到bullet父节点的影响,所以必须自己设置。
-        Bucket bucket = data.getQueueBucket();
+//        Bucket bucket = data.getQueueBucket();
+        Bucket bucket = getSpatial().getQueueBucket();
         if (bucket != null) {
             surface.setQueueBucket(bucket);
         } else {

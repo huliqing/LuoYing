@@ -79,8 +79,8 @@ public class FollowLogic extends AbstractLogic implements ValueChangeListener {
     @Override
     public void initialize() {
         super.initialize();
-        actionModule = actor.getModuleManager().getModule(ActionModule.class);
-        followAttribute = actor.getAttributeManager().getAttribute(bindFollowAttribute);
+        actionModule = actor.getModule(ActionModule.class);
+        followAttribute = actor.getAttribute(bindFollowAttribute);
         // 不监听followAttribute也可以，但是因为逻辑功能可能会有间隔和延迟的可能，监听可以让跟随对象发生变化时立即
         // 触发跟随行为的变化。
         if (followAttribute != null) {

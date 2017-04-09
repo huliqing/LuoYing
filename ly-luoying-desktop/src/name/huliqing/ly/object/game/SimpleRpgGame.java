@@ -93,7 +93,7 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
     private final SoundService soundService = Factory.get(SoundService.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);
-    
+     
     // 基本界面
     protected RpgMainUI ui;
     

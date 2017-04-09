@@ -264,7 +264,7 @@ public abstract class AbstractSkill implements Skill {
     @Override
     public void setActor(Entity actor) {
         this.actor = actor;
-        skinModule = actor.getModuleManager().getModule(SkinModule.class);
+        skinModule = actor.getModule(SkinModule.class);
         if (checkEl != null) {
             checkEl.setSource(actor.getAttributeManager());
         }

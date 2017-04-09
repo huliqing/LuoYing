@@ -22,7 +22,7 @@ package name.huliqing.ly.object.view;
 import com.jme3.font.BitmapFont.Align;
 import com.jme3.font.BitmapFont.VAlign;
 import com.jme3.math.ColorRGBA;
-import name.huliqing.ly.data.ViewData;
+import name.huliqing.luoying.data.EntityData;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.ui.Text;
 import name.huliqing.luoying.ui.UIFactory;
@@ -30,14 +30,13 @@ import name.huliqing.luoying.ui.UIFactory;
 /**
  * 用于显示文字信息的界面组件
  * @author huliqing
- * @param <T>
  */
-public class TextView<T extends ViewData> extends AbstractView<T> {
+public class TextView extends AbstractView {
     
     protected Text textUI;
 
     @Override
-    public void setData(T data) {
+    public void setData(EntityData data) {
         super.setData(data); 
         String text = data.getAsString("text");
         String textKey = data.getAsString("textKey");

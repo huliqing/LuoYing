@@ -42,7 +42,7 @@ import name.huliqing.luoying.object.entity.WaterEntity;
  * @author huliqing
  */
 public class AdvanceWaterEntity extends NonModelEntity implements WaterEntity, SceneListener {
-
+ 
     private static final Logger LOG = Logger.getLogger(AdvanceWaterEntity.class.getName());
 
 //    // 是否使用场景中的直射光源，打开这个选项后Water会从场景中找到第一个可用的直射光源作为水体渲染时使用的光源。

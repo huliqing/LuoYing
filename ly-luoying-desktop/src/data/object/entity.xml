@@ -98,7 +98,7 @@
     <!--简单水体:移动平台-->
     <entitySimpleWater id="entitySakuraIslandSimpleWater" extends="entitySimpleWaterBase" />
     <!--默认海水:桌面平台-->
-    <entityAdvanceWater id="entitySakuraIslandAdvanceWater" extends="entityAdvanceWaterBase" />
+    <entityAdvanceWater id="entitySakuraIslandAdvanceWater" extends="entityAdvanceWaterBase" waterHeight="-5" />
     <!--海水环境代理：根据平台在桌面环境下使用高级水体效果，在其它平台（主要是移动平台）下使用简单水体效果-->
     <entityPlatformProxy id="entitySakuraIslandWater" defaultEntity="entitySakuraIslandSimpleWater" mapping="entitySakuraIslandAdvanceWater|Windows32|Windows64|Linux32|Linux64|MacOSX32|MacOSX64|MacOSX_PPC32|MacOSX_PPC64" />
     <!--海边环境音效-->

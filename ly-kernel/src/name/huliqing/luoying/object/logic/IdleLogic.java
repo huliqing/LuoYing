@@ -59,7 +59,7 @@ public class IdleLogic extends AbstractLogic {
     @Override
     public void initialize() {
         super.initialize();
-        actionModule = actor.getModuleManager().getModule(ActionModule.class);
+        actionModule = actor.getModule(ActionModule.class);
         if (patrolCheckEl != null) {
             patrolCheckEl.setSource(actor.getAttributeManager());
         }

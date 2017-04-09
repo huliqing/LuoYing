@@ -24,7 +24,6 @@ import com.jme3.util.TempVars;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.data.EntityData;
-import name.huliqing.luoying.data.ModelEntityData;
 import name.huliqing.luoying.xml.Proto;
 import name.huliqing.luoying.data.SceneData;
 import name.huliqing.luoying.xml.DataFactory;
@@ -84,17 +83,13 @@ public class RandomSceneDataLoader<T extends SceneData> extends SceneDataLoader<
                 for (int j = 0; j < size; j++) {
                     EntityData ed = DataFactory.createData(envId);
                     entityDatas.add(ed);
-                    
-                    if (ed instanceof ModelEntityData) {
-                        // 生成随机位置（但需要防止生成的位置与空白区域冲突）
-                        ModelEntityData ped = (ModelEntityData) ed;
-                        Vector3f randomLoc = new Vector3f();
-                        do {
-                            MathUtils.getRandomPosition(xExt, zExt, randomLoc);
-                        } while (checkInEmptyZone(randomLoc.x, randomLoc.z, emptyZones));
-                        
-                        ped.setLocation(randomLoc);
-                    } 
+                    // 生成随机位置（但需要防止生成的位置与空白区域冲突）
+                    Vector3f randomLoc = new Vector3f();
+                    do {
+                        MathUtils.getRandomPosition(xExt, zExt, randomLoc);
+                    } while (checkInEmptyZone(randomLoc.x, randomLoc.z, emptyZones));
+
+                    ed.setLocation(randomLoc);
                 }
             }
         }

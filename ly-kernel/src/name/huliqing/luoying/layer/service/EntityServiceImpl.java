@@ -48,7 +48,7 @@ public class EntityServiceImpl implements EntityService {
     
     @Override
     public void hitNumberAttribute(Entity entity, String attribute, float addValue, Entity hitter) {
-        NumberAttribute nattr = entity.getAttributeManager().getAttribute(attribute, NumberAttribute.class);
+        NumberAttribute nattr = entity.getAttribute(attribute, NumberAttribute.class);
         if (nattr != null) {
             entity.hitAttribute(attribute, nattr.getValue().floatValue() + addValue, hitter);
         } 
@@ -56,7 +56,7 @@ public class EntityServiceImpl implements EntityService {
     
     @Override
     public Number getNumberAttributeValue(Entity entity, String attributeName, Number defValue) {
-        NumberAttribute nattr = entity.getAttributeManager().getAttribute(attributeName, NumberAttribute.class);
+        NumberAttribute nattr = entity.getAttribute(attributeName, NumberAttribute.class);
         if (nattr != null) {
             return nattr.getValue();
         }
@@ -65,7 +65,7 @@ public class EntityServiceImpl implements EntityService {
 
     @Override
     public boolean getBooleanAttributeValue(Entity entity, String attributeName, boolean defValue) {
-        BooleanAttribute attr = entity.getAttributeManager().getAttribute(attributeName, BooleanAttribute.class);
+        BooleanAttribute attr = entity.getAttribute(attributeName, BooleanAttribute.class);
         if (attr != null) {
             return attr.getValue();
         }
@@ -74,7 +74,7 @@ public class EntityServiceImpl implements EntityService {
 
     @Override
     public <T> T getAttributeValue(Entity entity, String attributeName, T defValue) {
-        Attribute attribute = entity.getAttributeManager().getAttribute(attributeName);
+        Attribute attribute = entity.getAttribute(attributeName);
         if (attribute != null) {
             return (T) attribute.getValue();
         }

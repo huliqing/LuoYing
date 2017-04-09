@@ -74,8 +74,8 @@ public class ActorSkillsFieldConverter extends EntityObjectDatasFieldConverter {
         }
         Jfx.runOnJme(() -> {
             Entity entity = jfxEdit.getJmeEdit().getScene().getEntity(ed.getUniqueId());
-            ActorModule am = entity.getModuleManager().getModule(ActorModule.class);
-            SkillModule sm = entity.getModuleManager().getModule(SkillModule.class);
+            ActorModule am = entity.getModule(ActorModule.class);
+            SkillModule sm = entity.getModule(SkillModule.class);
             if (sm == null) {
                 LOG.log(Level.WARNING, "Could not find SkillModule! entity={0}", new Object[]{entity.getData().getId()});
                 return;

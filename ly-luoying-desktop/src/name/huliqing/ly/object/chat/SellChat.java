@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.data.EntityData;
 import name.huliqing.ly.constants.InterfaceConstants;
 import name.huliqing.ly.constants.ResConstants;
 import name.huliqing.luoying.data.ItemData;
@@ -58,9 +59,8 @@ import name.huliqing.ly.constants.IdConstants;
 /**
  * 出售物品到商店类角色
  * @author huliqing
- * @param <T>
  */
-public class SellChat<T extends ChatData> extends Chat<T> {
+public class SellChat extends Chat {
     private final GameService gameService = Factory.get(GameService.class);
     private final ChatNetwork chatNetwork = Factory.get(ChatNetwork.class);
 
@@ -79,7 +79,7 @@ public class SellChat<T extends ChatData> extends Chat<T> {
     private Entity seller;
 
     @Override
-    public void setData(T data) {
+    public void setData(EntityData data) {
         super.setData(data); 
         discount = data.getAsFloat("discount", discount);
     }

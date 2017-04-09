@@ -22,7 +22,7 @@ package name.huliqing.luoying.object.magic;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.data.MagicData;
+import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.entity.Entity;
@@ -47,8 +47,8 @@ public class AttributeHitMagic extends AbstractMagic {
     private final List<Actor> tempStore = new ArrayList<Actor>();
     
     @Override
-    public void setData(MagicData data) {
-        super.setData(data); 
+    public void setData(EntityData data) {
+        super.setData(data);
         // attributes 格式："attribute|value,attribute|value,..."
         String[] attributesArr = data.getAsArray("attributes");
         attributes = new AttributeWrap[attributesArr.length];
@@ -84,13 +84,13 @@ public class AttributeHitMagic extends AbstractMagic {
         if (actors.isEmpty()) 
             return;
         
-        if (source != null) {
-            hitCheckEl.setSource(source.getAttributeManager());
+        if (sourceEntity != null) {
+            hitCheckEl.setSource(sourceEntity.getAttributeManager());
         }
         for (Entity hitTarget : actors) {
             if (hitCheckEl.setTarget(hitTarget.getAttributeManager()).getValue()) {
                 for (AttributeWrap aw : attributes) {
-                    entityNetwork.hitNumberAttribute(hitTarget, aw.attribute, aw.amount, source);
+                    entityNetwork.hitNumberAttribute(hitTarget, aw.attribute, aw.amount, sourceEntity);
                 }
             }
         }

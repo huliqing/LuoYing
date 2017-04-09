@@ -41,16 +41,13 @@ public class AttributeStore {
     // 使用attrName -> attribute方式存放属性列表
     private final Map<String, Attribute> attrNameMap = new HashMap<String, Attribute>();
     
-    // attrUniqueId -> attribute
-    private final Map<Long, Attribute> attrUniqueIdMap = new HashMap<Long, Attribute>();
-    
     /**
      * 添加一个属性到属性列表，属性ID和属性名称必须唯一，如果指定的属性的id或名称已经存在于属性列表中，
      * 则抛出AttributeConflictException异常。
      * @param attribute 
      * @throws name.huliqing.luoying.object.attribute.AttributeStore.AttributeConflictException 
      */
-    public void addAttribute(Attribute attribute) throws AttributeConflictException{
+    public synchronized void addAttribute(Attribute attribute) throws AttributeConflictException{
         if (attributes.contains(attribute) 
                 || attrIdMap.containsKey(attribute.getId())
                 || attrNameMap.containsKey(attribute.getName())) {
@@ -61,7 +58,6 @@ public class AttributeStore {
         attributes.add(attribute);
         attrIdMap.put(attribute.getId(), attribute);
         attrNameMap.put(attribute.getName(), attribute);
-        attrUniqueIdMap.put(attribute.getData().getUniqueId(), attribute);
     }
     
     /**
@@ -69,25 +65,23 @@ public class AttributeStore {
      * @param attribute
      * @return 
      */
-    public boolean removeAttribute(Attribute attribute) {
+    public synchronized boolean removeAttribute(Attribute attribute) {
         if (!attributes.contains(attribute)) {
             return false;
         }
         attributes.remove(attribute);
         attrIdMap.remove(attribute.getId());
         attrNameMap.remove(attribute.getName());
-        attrUniqueIdMap.remove(attribute.getData().getUniqueId());
         return true;
     }
     
     /**
      * 清空属性列表
      */
-    public void clear() {
+    public synchronized void clear() {
         attributes.clear();
         attrIdMap.clear();
         attrNameMap.clear();
-        attrUniqueIdMap.clear();
     }
     
     /**
@@ -106,15 +100,6 @@ public class AttributeStore {
      */
     public Attribute getAttributeByName(String attrName) {
         return attrNameMap.get(attrName);
-    }
-    
-    /**
-     * 通过属性的唯一id来获取属性
-     * @param attrUniqueId
-     * @return 
-     */
-    public Attribute getAttributeByUniqueId(long attrUniqueId) {
-        return attrUniqueIdMap.get(attrUniqueId);
     }
     
     /**

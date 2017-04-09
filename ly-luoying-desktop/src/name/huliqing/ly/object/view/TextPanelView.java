@@ -19,22 +19,21 @@
  */
 package name.huliqing.ly.object.view;
 
-import name.huliqing.ly.data.ViewData;
+import name.huliqing.luoying.data.EntityData;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.ui.Window;
 
 /**
  * 用于显示文字信息的界面组件
  * @author huliqing
- * @param <T>
  */
-public class TextPanelView<T extends ViewData> extends TextView<T> {
+public class TextPanelView extends TextView {
     
     private String title;
     private Window win;
 
     @Override
-    public void setData(T data) {
+    public void setData(EntityData data) {
         super.setData(data); 
         title = data.getAsString("title");
         if (title == null) {

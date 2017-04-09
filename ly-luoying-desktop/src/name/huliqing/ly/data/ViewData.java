@@ -28,9 +28,5 @@ import name.huliqing.luoying.data.EntityData;
  */
 @Serializable
 public class ViewData extends EntityData {
-    
-    public ViewData(){
-        super();
-    }
 
 }

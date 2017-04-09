@@ -69,14 +69,5 @@ public class SkillHitNumberEl extends AbstractEl<Number>{
         elContext.setBaseValue("skillHitValue", skillValue);
         return this;
     }
-
-    /**
-     * 计算出技能最终的输出值。
-     * @return 
-     */
-    @Override
-    public Number getValue() {
-        return super.getValue(); 
-    }
     
 }

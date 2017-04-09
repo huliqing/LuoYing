@@ -136,7 +136,7 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
         
         // 监听角色是否死亡或复活
         if (bindDeadAttribute != null) {
-            deadAttribute = entity.getAttributeManager().getAttribute(bindDeadAttribute, BooleanAttribute.class);
+            deadAttribute = entity.getAttribute(bindDeadAttribute, BooleanAttribute.class);
             if (deadAttribute != null) {
                 deadAttribute.addListener(this);
             }

@@ -71,14 +71,13 @@ public abstract class AbstractEl<T> implements El<T>{
     
     @Override
     public T getValue() {
+        ELContext elc = getELContext();
         if (!valid) {
-            ve = ElFactory.createValueExpression(getELContext(), expression, Object.class);
+            ve = ElFactory.createValueExpression(elc, expression, Object.class);
             valid = true;
         }
+        
         T result = (T) ve.getValue(getELContext());
-//        if (Config.debug) {
-//            LOG.log(Level.INFO, "El getValue, result={0}, expression={1}, el={2}", new Object[] {result, expression, getData().getId()});
-//        }
         return result;
     }
     
@@ -87,4 +86,5 @@ public abstract class AbstractEl<T> implements El<T>{
      * @return 
      */
     protected abstract ELContext getELContext();
+    
 }

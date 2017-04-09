@@ -93,8 +93,8 @@ public class SummonItem extends AbstractItem {
         // 同步属性
         if (copyAttributesFromSource != null) {
             for (String attr : copyAttributesFromSource) {
-                Attribute summonAttr = bcc.getAttributeManager().getAttribute(attr);
-                Attribute sourceAttr = actor.getAttributeManager().getAttribute(attr);
+                Attribute summonAttr = bcc.getAttribute(attr);
+                Attribute sourceAttr = actor.getAttribute(attr);
                 if (summonAttr != null && sourceAttr != null) {
                     summonAttr.setValue(sourceAttr.getValue());
                 }
@@ -102,7 +102,7 @@ public class SummonItem extends AbstractItem {
         }
         if (linkAttributesToSource != null) {
             for (String attr : linkAttributesToSource) {
-                NumberAttribute summonAttr = bcc.getAttributeManager().getAttribute(attr, NumberAttribute.class);
+                NumberAttribute summonAttr = bcc.getAttribute(attr, NumberAttribute.class);
                 if (summonAttr != null) {
                     summonAttr.setValue(actor.getEntityId());
                 }

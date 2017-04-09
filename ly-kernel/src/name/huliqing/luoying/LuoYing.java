@@ -63,13 +63,11 @@ import name.huliqing.luoying.data.DropData;
 import name.huliqing.luoying.data.ElData;
 import name.huliqing.luoying.data.EmitterData;
 import name.huliqing.luoying.data.EffectData;
-import name.huliqing.luoying.data.EffectEntityData;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.data.GameData;
 import name.huliqing.luoying.data.GameLogicData;
 import name.huliqing.luoying.data.ItemData;
 import name.huliqing.luoying.data.MagicData;
-import name.huliqing.luoying.data.ModelEntityData;
 import name.huliqing.luoying.data.PhysicsShapeData;
 import name.huliqing.luoying.data.PositionData;
 import name.huliqing.luoying.data.ResistData;
@@ -500,7 +498,6 @@ public class LuoYing {
         Serializer.registerClass(DefineData.class);
         Serializer.registerClass(DropData.class);
         Serializer.registerClass(EffectData.class);
-        Serializer.registerClass(EffectEntityData.class);
         Serializer.registerClass(ElData.class);
         Serializer.registerClass(EmitterData.class);
         Serializer.registerClass(EntityData.class);
@@ -509,7 +506,6 @@ public class LuoYing {
         Serializer.registerClass(ItemData.class);
         Serializer.registerClass(LogicData.class);
         Serializer.registerClass(MagicData.class);
-        Serializer.registerClass(ModelEntityData.class);
         Serializer.registerClass(ModuleData.class);
         Serializer.registerClass(PhysicsShapeData.class);
         Serializer.registerClass(PositionData.class);
@@ -694,21 +690,21 @@ public class LuoYing {
         // Entity
         DataFactory.register("entityAdvanceWater", EntityData.class, EntityDataLoader.class, AdvanceWaterEntity.class);
         DataFactory.register("entityAmbientLight", EntityData.class, EntityDataLoader.class, AmbientLightEntity.class);
-        DataFactory.register("entityAudio", ModelEntityData.class, AudioEntityDataLoader.class, AudioEntity.class);
+        DataFactory.register("entityAudio", EntityData.class, AudioEntityDataLoader.class, AudioEntity.class);
         DataFactory.register("entityChaseCamera", EntityData.class, EntityDataLoader.class, ChaseCameraEntity.class);
         DataFactory.register("entityDirectionalLight", EntityData.class, EntityDataLoader.class, DirectionalLightEntity.class);
         DataFactory.register("entityDirectionalLightFilterShadow", EntityData.class, EntityDataLoader.class, DirectionalLightFilterShadowEntity.class);
         DataFactory.register("entityDirectionalLightShadow", EntityData.class, EntityDataLoader.class, DirectionalLightShadowEntity.class);
-        DataFactory.register("entityGrass", ModelEntityData.class, PlantEnvLoader.class, GrassEntity.class);
+        DataFactory.register("entityGrass", EntityData.class, PlantEnvLoader.class, GrassEntity.class);
         DataFactory.register("entityPhysics", EntityData.class, EntityDataLoader.class, PhysicsEntity.class);
         DataFactory.register("entityPlatformProxy", EntityData.class, EntityDataLoader.class, PlatformProxyEntity.class);
-        DataFactory.register("entitySimpleModel", ModelEntityData.class, EntityDataLoader.class, SimpleModelEntity.class);
-        DataFactory.register("entitySimpleTerrain", ModelEntityData.class, EntityDataLoader.class, SimpleTerrainEntity.class);
-        DataFactory.register("entitySimpleWater", ModelEntityData.class, EntityDataLoader.class, SimpleWaterEntity.class);
-        DataFactory.register("entitySkyBox", ModelEntityData.class, EntityDataLoader.class, SkyBoxEntity.class);
-        DataFactory.register("entityTree", ModelEntityData.class, PlantEnvLoader.class, TreeEntity.class);
+        DataFactory.register("entitySimpleModel", EntityData.class, EntityDataLoader.class, SimpleModelEntity.class);
+        DataFactory.register("entitySimpleTerrain", EntityData.class, EntityDataLoader.class, SimpleTerrainEntity.class);
+        DataFactory.register("entitySimpleWater", EntityData.class, EntityDataLoader.class, SimpleWaterEntity.class);
+        DataFactory.register("entitySkyBox", EntityData.class, EntityDataLoader.class, SkyBoxEntity.class);
+        DataFactory.register("entityTree", EntityData.class, PlantEnvLoader.class, TreeEntity.class);
         DataFactory.register("entityUnshaded", EntityData.class, EntityDataLoader.class, UnshadedEntity.class);
-        DataFactory.register("entityEffect", EffectEntityData.class, EffectEntityDataLoader.class, EffectEntity.class);
+        DataFactory.register("entityEffect", EntityData.class, EffectEntityDataLoader.class, EffectEntity.class);
         
         // 各种Filter
         DataFactory.register("entityBloomFilter", EntityData.class, EntityDataLoader.class, BloomFilterEntity.class);

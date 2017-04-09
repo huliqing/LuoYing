@@ -29,7 +29,7 @@ import name.huliqing.luoying.object.Loader;
  */
 public class GroupAttribute extends AbstractAttribute<Void> {
 
-    private AttributeManager module;
+    private AttributeManager attributeManager;
     
     // 属性组所管理的属性列表，这些属性是直接添加到实体上去的。在属性组移除时这些属性也要一起移除，需要注意的是：
     // 属性是可以动态替换的，所以在属性组移除时需要通过唯一ID来判断哪些属性是由当前属性组管理的，只要移除这些属性就可以。
@@ -58,7 +58,7 @@ public class GroupAttribute extends AbstractAttribute<Void> {
     @Override
     public void initialize(AttributeManager module) {
         super.initialize(module);
-        this.module = module;
+        this.attributeManager = module;
         
         // 当属性是从存档中载入时，attributesApplied会为true,这时就不再需要去载入属性。因子属性已经在上次载入到
         // AttributeModule中去了，AttributeModule在重新载入时会自动去载入这些子属性,不需要再在这里载入
@@ -84,14 +84,14 @@ public class GroupAttribute extends AbstractAttribute<Void> {
     @Override
     public void cleanup() {
         if (attributesApplied) {
-            // 属性组移除时要一同移除组内属性，注意：只能通过唯一ID来查找(也<b>不</b>能通过相同实例比较来查找，因为attributes中的数据有可能是从存档中读取的)
+            // 属性组移除时要一同移除组内属性，注意：只能通过名称来查找(<b>不</b>能通过相同实例比较来查找，因为attributes中的数据有可能是从存档中读取的)
             // 属性有可能在运行时被替换，所以当GroupAttribute清理时，
             // 这些由GroupAttribute添加上去的属性并不能绝对保存还存在着。
             if (attributes != null) {
                 for (AttributeData ad : attributes) {
-                    Attribute attr = module.getAttribute(ad.getUniqueId());
+                    Attribute attr = attributeManager.getAttribute(ad.getName());
                     if (attr != null)  {
-                        module.removeAttribute(attr);
+                        attributeManager.removeAttribute(attr);
                     }
                 }
                 attributes = null;

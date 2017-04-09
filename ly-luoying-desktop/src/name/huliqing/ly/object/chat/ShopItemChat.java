@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.data.EntityData;
 import name.huliqing.ly.constants.InterfaceConstants;
 import name.huliqing.ly.constants.ResConstants;
 import name.huliqing.luoying.data.ItemData;
@@ -58,9 +59,8 @@ import name.huliqing.ly.layer.service.GameService;
 /**
  * 杂物商店,用于玩家向商店角色购买物品
  * @author huliqing
- * @param <T>
  */
-public class ShopItemChat<T extends ChatData> extends Chat<T> implements EntityDataListener {
+public class ShopItemChat extends Chat implements EntityDataListener {
 //    private final PlayService playService = Factory.get(PlayService.class);
     private final GameService gameService = Factory.get(GameService.class);
 //    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
@@ -78,7 +78,7 @@ public class ShopItemChat<T extends ChatData> extends Chat<T> implements EntityD
     private Footer footerPanel;
 
     @Override
-    public void setData(T data) {
+    public void setData(EntityData data) {
         super.setData(data); 
         discount = data.getAsFloat("discount", discount);
     }

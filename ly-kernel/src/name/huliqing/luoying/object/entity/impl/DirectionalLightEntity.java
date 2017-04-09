@@ -31,7 +31,7 @@ import name.huliqing.luoying.object.scene.Scene;
  * @author huliqing
  */
 public class DirectionalLightEntity extends NonModelEntity implements LightEntity{
-
+ 
     private final DirectionalLight light = new DirectionalLight();
     
     @Override

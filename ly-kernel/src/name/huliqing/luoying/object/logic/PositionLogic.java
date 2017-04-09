@@ -58,7 +58,7 @@ public class PositionLogic extends AbstractLogic {
     @Override
     public void initialize() {
         super.initialize();
-        actionModule = actor.getModuleManager().getModule(ActionModule.class);
+        actionModule = actor.getModule(ActionModule.class);
         runAction.setActor(actor);
     }
     

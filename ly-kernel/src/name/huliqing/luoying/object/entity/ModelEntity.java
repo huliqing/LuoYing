@@ -23,46 +23,89 @@ import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
-import name.huliqing.luoying.data.ModelEntityData;
+import name.huliqing.luoying.data.EntityData;
 
 /**
  * 模型类的场景物体.
  * @author huliqing
- * @param <T>
  */
-public abstract class ModelEntity<T extends ModelEntityData> extends AbstractEntity<T> {
+public abstract class ModelEntity extends AbstractEntity {
     
-    @Override
-    public void setData(T data) {
-        super.setData(data);
-    }
+    private final static String ATTR_SHADOW_MODE = "shadowMode";
+    private final static String ATTR_CULL_HINT = "cullHint";
+    private final static String ATTR_QUEUE_BUCKET = "queueBucket";
+    private final static String ATTR_PREFER_UNSHADED = "preferUnshaded";
+    
+    private ShadowMode shadowMode;
+    private CullHint cullHint;
+    private Bucket bucket;
+    
+    // Will deprecate
+    private boolean preferUnshaded;
 
     @Override
-    public T getData() {
-        return super.getData();
+    public void setData(EntityData data) {
+        super.setData(data);
+        String tempSM= data.getAsString(ATTR_SHADOW_MODE);
+        if (tempSM != null) {
+            for (ShadowMode sm : ShadowMode.values()) {
+                if (sm.name().equals(tempSM)) {
+                    shadowMode = sm;
+                    break;
+                }
+            }
+        }
+        
+        String tempCH = data.getAsString(ATTR_CULL_HINT);
+        if (tempCH != null) {
+            for (CullHint ch : CullHint.values()) {
+                if (ch.name().equals(tempCH)) {
+                    cullHint = ch;
+                    break;
+                }
+            }
+        }
+        
+        String tempBK = data.getAsString(ATTR_QUEUE_BUCKET);
+        if (tempBK != null) {
+            for (Bucket b : Bucket.values()) {
+                if (b.name().equals(tempBK)) {
+                    bucket = b;
+                    break;
+                }
+            }
+        }
+        
+        preferUnshaded = data.getAsBoolean(ATTR_PREFER_UNSHADED, false);
     }
     
     @Override
     public void updateDatas() {
         super.updateDatas();
-        data.setShadowMode(spatial.getShadowMode());
-        data.setCullHint(spatial.getCullHint());
-        data.setQueueBucket(spatial.getQueueBucket());
+        data.setAttribute(ATTR_SHADOW_MODE, spatial.getShadowMode().name());
+        data.setAttribute(ATTR_CULL_HINT, spatial.getCullHint().name());
+        data.setAttribute(ATTR_QUEUE_BUCKET, spatial.getQueueBucket().name());
+        data.setAttribute(ATTR_PREFER_UNSHADED, preferUnshaded);
+    }
+    
+    public boolean isPreferUnshaded() {
+        return preferUnshaded;
+    }
+    
+    public void setPreferUnshaded(boolean preferUnshaded) {
+        this.preferUnshaded = preferUnshaded;
     }
     
     @Override
     public void initEntity() {
-        ShadowMode sm = data.getShadowMode();
-        if (sm != null) {
-            spatial.setShadowMode(sm);
+        if (shadowMode != null) {
+            spatial.setShadowMode(shadowMode);
         }
-        CullHint ch = data.getCullHint();
-        if (ch != null) {
-            spatial.setCullHint(ch);
+        if (cullHint != null) {
+            spatial.setCullHint(cullHint);
         }
-        Bucket qb = data.getQueueBucket();
-        if (qb != null) {
-            spatial.setQueueBucket(qb);
+        if (bucket != null) {
+            spatial.setQueueBucket(bucket);
         }
     }
 

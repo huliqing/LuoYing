@@ -95,8 +95,8 @@ public class DefendLogic extends AbstractLogic implements EntityDataListener, Sk
     @Override
     public void setActor(Entity self) {
         super.setActor(self); 
-        actorModule = actor.getModuleManager().getModule(ActorModule.class);
-        skillModule = actor.getModuleManager().getModule(SkillModule.class);
+        actorModule = actor.getModule(ActorModule.class);
+        skillModule = actor.getModule(SkillModule.class);
     }
     
     @Override
@@ -319,7 +319,7 @@ public class DefendLogic extends AbstractLogic implements EntityDataListener, Sk
 
     private SkillModule getSkillModule() {
         if (skillModule == null) {
-            skillModule = actor.getModuleManager().getModule(SkillModule.class);
+            skillModule = actor.getModule(SkillModule.class);
         }
         return skillModule;
     }

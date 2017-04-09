@@ -20,7 +20,7 @@
 package name.huliqing.luoying.object.magic;
 
 import com.jme3.util.SafeArrayList;
-import name.huliqing.luoying.data.MagicData;
+import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.data.StateData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.actoranim.ActorAnim;
@@ -42,7 +42,7 @@ public class StateMagic extends AbstractMagic {
     private SafeArrayList<ActorAnimWrap> actorAnims;
 
     @Override
-    public void setData(MagicData data) {
+    public void setData(EntityData data) {
         super.setData(data);
         // 状态格式:stateId|timePoint,stateId|timePoint,stateId|timePoint...
         String[] tempStates = data.getAsArray("states");
@@ -130,11 +130,11 @@ public class StateMagic extends AbstractMagic {
         void update(float interpolation) {
             if (started) return;
             if (interpolation >= timePoint) {
-                if (targets != null) {
-                    if (source != null) {
-                        hitCheckEl.setSource(source.getAttributeManager());
+                if (targetEntities != null) {
+                    if (sourceEntity != null) {
+                        hitCheckEl.setSource(sourceEntity.getAttributeManager());
                     }
-                    for (Entity target : targets) {
+                    for (Entity target : targetEntities) {
                         if (hitCheckEl.setTarget(target.getAttributeManager()).getValue()) {
                             StateData od = Loader.loadData(stateId);
                             target.addObjectData(od, 1);
@@ -165,9 +165,9 @@ public class StateMagic extends AbstractMagic {
                 return;
             }
             if (interpolation >= timePoint) {
-                if (targets != null) {
-                    hitCheckEl.setSource(source.getAttributeManager());
-                    for (Entity target : targets) {
+                if (targetEntities != null) {
+                    hitCheckEl.setSource(sourceEntity.getAttributeManager());
+                    for (Entity target : targetEntities) {
                         if (hitCheckEl.setTarget(target.getAttributeManager()).getValue()) {
                             actorAnim = Loader.load(actorAnimId);
                             actorAnim.setTarget(target);

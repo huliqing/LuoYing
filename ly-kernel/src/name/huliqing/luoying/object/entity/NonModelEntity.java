@@ -21,15 +21,13 @@ package name.huliqing.luoying.object.entity;
 
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import name.huliqing.luoying.data.EntityData;
 
 /**
  * 非模型类型的场景实体，这类实体一般不需要有实际存在于场景中的可视模型，一般如各类环境效果：灯光、水体（Filter)、
  * 物理环境、天空、相机、阴影渲染及各类Filter\Scene Processor
  * @author huliqing
- * @param <T>
  */
-public abstract class NonModelEntity <T extends EntityData> extends AbstractEntity<T> {
+public abstract class NonModelEntity  extends AbstractEntity {
 
     /** 
      * 这个物体作为所有不需要实际存在的Entity的Spatial用于

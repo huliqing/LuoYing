@@ -173,7 +173,7 @@ public class SimpleModelEntityControlTile extends EntityControlTile<Entity> impl
         }
         // 角色类型使用的不是普通的RigidBodyControl来控制旋转。
         // 需要通过ActorModule来旋转
-        ActorModule actorModule = target.getModuleManager().getModule(ActorModule.class);
+        ActorModule actorModule = target.getModule(ActorModule.class);
         if (actorModule != null) {
             actorModule.setRotation(rotation);
         }

@@ -83,7 +83,7 @@ public class SkillWalkMess extends GameMess {
         SkillService skillService = Factory.get(SkillService.class);
         Entity actor = playService.getEntity(actorId);
         if (actor == null) return;
-        skillService.playWalk(actor, actor.getModuleManager().getModule(SkillModule.class).getSkill(skillId), dir, face, true);
+        skillService.playWalk(actor, actor.getModule(SkillModule.class).getSkill(skillId), dir, face, true);
     }
     
     

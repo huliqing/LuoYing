@@ -140,6 +140,10 @@ public class ModuleManager {
         return true;
     }
     
+    public List<Module> getModules() {
+        return modules;
+    }
+    
     /**
      * 从角色身上获取指定类型的模块, 这个方法返回第一个符合类型的实例，如果找不到符合类型的实例则返回null.
      * @param <T>

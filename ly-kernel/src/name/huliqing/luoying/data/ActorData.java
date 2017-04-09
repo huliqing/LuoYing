@@ -19,7 +19,6 @@
  */
 package name.huliqing.luoying.data;
 
-import com.jme3.math.Vector3f;
 import com.jme3.network.serializing.Serializable;
 import name.huliqing.luoying.data.define.MatObject;
 
@@ -27,30 +26,6 @@ import name.huliqing.luoying.data.define.MatObject;
  * @author huliqing
  */
 @Serializable
-public class ActorData extends ModelEntityData implements MatObject {
-    
-    /**
-     * 获取文件模型
-     * @return 
-     */
-    public String getFile() {
-        return getAsString("file");
-    }
-    
-    /**
-     * 获取图标。
-     * @return 
-     */
-    public String getIcon() {
-        return getAsString("icon");
-    }
-    
-    /**
-     * 指定角色原始视角方向,默认情况下为(0,0,1),如果模型默认不是该方向,则需要使用该方向指定模型的正视角方向。
-     * @return 
-     */
-    public Vector3f getLocalForward() {
-        return getAsVector3f("localForward");
-    }
+public class ActorData extends EntityData implements MatObject {
     
 }

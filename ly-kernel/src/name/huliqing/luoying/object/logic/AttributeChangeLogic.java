@@ -51,7 +51,7 @@ public class AttributeChangeLogic extends AbstractLogic {
     @Override
     public void initialize() {
         super.initialize();
-        factorAttribute = actor.getAttributeManager().getAttribute(bindFactorAttribute, NumberAttribute.class);
+        factorAttribute = actor.getAttribute(bindFactorAttribute, NumberAttribute.class);
     }
     
     @Override

@@ -35,13 +35,13 @@ public class SkinServiceImpl implements SkinService {
 
     @Override
     public boolean isWeaponTakeOn(Entity actor) {
-        SkinModule module = actor.getModuleManager().getModule(SkinModule.class);
+        SkinModule module = actor.getModule(SkinModule.class);
         return module != null && module.isWeaponTakeOn();
     }
 
     @Override
     public void takeOnWeapon(Entity actor) {
-        SkinModule control = actor.getModuleManager().getModule(SkinModule.class);
+        SkinModule control = actor.getModule(SkinModule.class);
         if (control != null) {
             control.takeOnWeapon();
         }
@@ -49,7 +49,7 @@ public class SkinServiceImpl implements SkinService {
     
     @Override
     public void takeOffWeapon(Entity actor) {
-        SkinModule module = actor.getModuleManager().getModule(SkinModule.class);
+        SkinModule module = actor.getModule(SkinModule.class);
         if (module != null) {
             module.takeOffWeapon();
         }
@@ -57,7 +57,7 @@ public class SkinServiceImpl implements SkinService {
 
     @Override
     public long getWeaponState(Entity actor) {
-        SkinModule module = actor.getModuleManager().getModule(SkinModule.class);
+        SkinModule module = actor.getModule(SkinModule.class);
         if (module != null) {
             return module.getWeaponState();
         }
@@ -66,7 +66,7 @@ public class SkinServiceImpl implements SkinService {
 
     @Override
     public void addSkinListener(Entity actor, SkinListener skinListener) {
-        SkinModule module = actor.getModuleManager().getModule(SkinModule.class);
+        SkinModule module = actor.getModule(SkinModule.class);
         if (module != null) {
             module.addSkinListener(skinListener);
         }
@@ -74,7 +74,7 @@ public class SkinServiceImpl implements SkinService {
 
     @Override
     public boolean removeSkinListener(Entity actor, SkinListener skinListener) {
-        SkinModule module = actor.getModuleManager().getModule(SkinModule.class);
+        SkinModule module = actor.getModule(SkinModule.class);
         if (module != null) {
             return module.removeSkinListener(skinListener);
         }

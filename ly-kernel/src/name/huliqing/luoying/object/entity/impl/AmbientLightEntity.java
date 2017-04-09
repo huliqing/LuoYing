@@ -30,7 +30,7 @@ import name.huliqing.luoying.object.scene.Scene;
  * @author huliqing
  */
 public class AmbientLightEntity extends NonModelEntity implements LightEntity {
-
+ 
     private final AmbientLight light = new AmbientLight();
     
     @Override

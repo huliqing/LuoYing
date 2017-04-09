@@ -113,7 +113,7 @@ public class SurvivalBoss extends AbstractGameLogic {
                 gameNetwork.addMessage(ResConstants.TASK_SUCCESS, MessageType.item);
                 bossDead = true;
             }
-        }
+        } 
         
         if (levelLogic.getLevel() >= bossLevel) {
             if (!bossAdded) {

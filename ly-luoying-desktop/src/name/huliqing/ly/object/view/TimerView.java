@@ -21,15 +21,15 @@ package name.huliqing.ly.object.view;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import name.huliqing.luoying.data.EntityData;
 import name.huliqing.ly.data.ViewData;
 import name.huliqing.luoying.ui.Text;
 import name.huliqing.luoying.ui.Window;
 
 /**
  * @author huliqing
- * @param <T>
  */
-public class TimerView<T extends ViewData> extends AbstractView<T> {
+public class TimerView extends AbstractView {
 
     private String title;
     private float startTime;
@@ -47,7 +47,7 @@ public class TimerView<T extends ViewData> extends AbstractView<T> {
     protected float syncTimeUsed;
 
     @Override
-    public void setData(T data) {
+    public void setData(EntityData data) {
         super.setData(data);
         title = data.getAsString("title", "");
         startTime = data.getAsFloat("startTime", 0);

@@ -20,6 +20,7 @@
 package name.huliqing.luoying.object.entity;
 
 import com.jme3.math.Vector3f;
+import name.huliqing.luoying.data.EntityData;
 
 /**
  * 定义水体环境

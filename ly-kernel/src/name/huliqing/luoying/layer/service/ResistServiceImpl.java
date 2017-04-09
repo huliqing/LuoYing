@@ -29,12 +29,12 @@ import name.huliqing.luoying.object.module.ResistModule;
 public class ResistServiceImpl implements ResistService {
 
     @Override
-    public void inject() {
+    public void inject() { 
     }
     
     @Override
     public float getResist(Entity entity, String state) {
-        ResistModule module = entity.getModuleManager().getModule(ResistModule.class);
+        ResistModule module = entity.getModule(ResistModule.class);
         return module != null ? module.getResist(state) : 0;
     }
     

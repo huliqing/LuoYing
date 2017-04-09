@@ -25,7 +25,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.texture.Texture;
 import com.jme3.util.SkyFactory;
 import name.huliqing.luoying.LuoYing;
-import name.huliqing.luoying.data.ModelEntityData;
+import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.object.entity.ModelEntity;
 
 /**
@@ -49,7 +49,7 @@ public class SkyBoxEntity extends ModelEntity {
     private Spatial sky;
 
     @Override
-    public void setData(ModelEntityData data) {
+    public void setData(EntityData data) {
         super.setData(data);
         baseDir = data.getAsString("baseDir");
         west = data.getAsString("west");

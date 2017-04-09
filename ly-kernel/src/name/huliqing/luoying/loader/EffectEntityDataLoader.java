@@ -20,24 +20,22 @@
 package name.huliqing.luoying.loader;
 
 import name.huliqing.luoying.data.EffectData;
-import name.huliqing.luoying.data.EffectEntityData;
+import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.xml.Proto;
 
 /**
- *
  * @author huliqing
- * @param <T>
  */
-public class EffectEntityDataLoader<T extends EffectEntityData> extends EntityDataLoader<T> {
+public class EffectEntityDataLoader extends EntityDataLoader {
 
     @Override
-    public void load(Proto proto, T store) {
+    public void load(Proto proto, EntityData store) {
         super.load(proto, store);
         String effect = proto.getAsString("effect");
         if (effect != null) {
             EffectData ed = Loader.loadData(effect);
-            store.setEffectData(ed);
+            store.setAttribute("effect", ed);
         }
     }
     

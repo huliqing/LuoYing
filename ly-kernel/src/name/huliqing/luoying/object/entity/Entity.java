@@ -20,8 +20,11 @@
 package name.huliqing.luoying.object.entity;
 
 import com.jme3.scene.Spatial;
+import java.util.List;
 import name.huliqing.luoying.data.EntityData;
+import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.attribute.AttributeManager;
+import name.huliqing.luoying.object.module.Module;
 import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.xml.DataProcessor;
 import name.huliqing.luoying.xml.ObjectData;
@@ -30,15 +33,8 @@ import name.huliqing.luoying.xml.ObjectData;
  * Entity定义一种可以直接存放在Scene中的存在，这类<b>存在</b>包含任何可能性的有形物体或无形物体,
  * 如：水、天空、重力、阴影、模型、阳光、相机等...
  * @author huliqing
- * @param <T>
  */
-public interface Entity<T extends EntityData> extends DataProcessor<T>{
-
-    @Override
-    public void setData(T data);
-
-    @Override
-    public T getData();
+public interface Entity extends DataProcessor<EntityData> {
     
     /**
      * 初始化实体，这个方法在实体载入的时候将被立即调用。<br>
@@ -72,16 +68,74 @@ public interface Entity<T extends EntityData> extends DataProcessor<T>{
     long getEntityId();
     
     /**
+     * 添加新的属性，注：如果已经存在相同id或名称的属性，则旧的属性会被替换掉。
+     * @param attribute 
+     */
+    void addAttribute(Attribute attribute);
+    
+    /**
+     * 移除指定的属性。
+     * @param attribute
+     * @return 
+     */
+    boolean removeAttribute(Attribute attribute);
+    
+    /**
+     * 获取角色当前的所有属性，注：返回的列表只能只读，否则报错。
+     * @return 
+     */
+    List<Attribute>getAttributes();
+    
+    /**
+     * 获取指定名称的属性,如果不存在则返回null.
+     * @param <T>
+     * @param attrName
+     * @return 
+     */
+    <T extends Attribute> T getAttribute(String attrName);
+    
+    /**
+     * 查找指定的属性，如果找不到或者指定的属性类型不匹配则返回null.
+     * @param <T>
+     * @param attrName 属性名称，<b>不</b>是属性ID(<b>Not</b>id)
+     * @param type 如果不为null, 则找到的属性必须符合这个类型，否则返回null.
+     * @return 
+     * @see #getAttribute(java.lang.String) 
+     */
+    <T extends Attribute> T getAttribute(String attrName, Class<T> type);
+    
+    /**
      * 获取属性管理器
      * @return 
      */
     AttributeManager getAttributeManager();
     
     /**
-     * 获取模块管理器
+     * 给实体添加模块
+     * @param module 
+     */
+    void addModule(Module module);
+    
+    /**
+     * 移除指定的角色模块
+     * @param module
      * @return 
      */
-    ModuleManager getModuleManager();
+    boolean removeModule(Module module);
+    
+    /**
+     * 获取实体的所有模块
+     * @return 
+     */
+    List<Module> getModules();
+    
+    /**
+     * 获取指定类型的模块,如果不存在指定类型的模块则返回null.
+     * @param <T>
+     * @param moduleType
+     * @return 
+     */
+    <T extends Module> T getModule(Class<T> moduleType);
     
     /**
      * 获得当前物体所在的场景,当一个Entity存在于场景中时这个方法应该返回对当前角色所在场景的引用，

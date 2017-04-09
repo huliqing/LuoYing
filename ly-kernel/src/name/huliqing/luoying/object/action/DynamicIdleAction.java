@@ -71,7 +71,7 @@ public class DynamicIdleAction extends AbstractAction implements IdleAction, Ent
     @Override
     public void initialize() {
         super.initialize();
-        skillModule = actor.getModuleManager().getModule(SkillModule.class);
+        skillModule = actor.getModule(SkillModule.class);
         actor.addEntityDataListener(this);
         if (waitSkill == null) {
             List<Skill> waitSkills = skillModule.getSkillWait(null);

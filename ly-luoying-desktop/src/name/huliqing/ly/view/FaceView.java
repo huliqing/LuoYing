@@ -267,7 +267,7 @@ public final class FaceView extends LinearLayout implements EntityDataListener{
         public void setActor(Entity actor) {
             String icon = InterfaceConstants.UI_MISS;
             if (actor instanceof Actor) {
-                icon = ((Actor) actor).getData().getIcon();
+                icon = ((Actor)actor).getIcon();
             }
             Texture tex;
             try {

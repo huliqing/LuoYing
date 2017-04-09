@@ -51,9 +51,8 @@ import name.huliqing.ly.layer.service.GameService;
 /**
  * 出售物品到商店类角色
  * @author huliqing
- * @param <T>
  */
-public class SendChat<T extends ChatData> extends Chat<T> {
+public class SendChat extends Chat {
     private final GameService gameService = Factory.get(GameService.class);
     private final ChatNetwork chatNetwork = Factory.get(ChatNetwork.class);
 

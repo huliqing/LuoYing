@@ -33,7 +33,7 @@ import name.huliqing.luoying.data.AnimData;
  */
 public abstract class AbstractAnim<E> implements Anim<E> {
     private final static Logger LOG = Logger.getLogger(AbstractAnim.class.getName());
-    
+     
     // 默认的bezier参数: {p0,p1,p2,p3}
     private final static float[] DEFAULT_BEZIER_FACTOR = new float[] {0, 0, 0, 1};
     // 默认的catmullRom参数: {T, p0,p1,p2,p3}

@@ -43,7 +43,7 @@ public class SkillItem extends AbstractItem {
     protected void doUse(Entity actor) {
         Skill skill = Loader.load(skillId);
         if (skill != null) {
-            SkillModule skillModule = actor.getModuleManager().getModule(SkillModule.class);
+            SkillModule skillModule = actor.getModule(SkillModule.class);
             if (skillModule != null) {
                 skill.setActor(actor);
                 if (skillModule.playSkill(skill, false)) {

@@ -19,18 +19,17 @@
  */
 package name.huliqing.luoying.loader;
 
-import name.huliqing.luoying.data.BulletData;
+import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.xml.Proto;
-import name.huliqing.luoying.xml.DataLoader;
 
 /**
  *
  * @author huliqing
  */
-public class BulletDataLoader implements DataLoader<BulletData> {
+public class BulletDataLoader extends EntityDataLoader {
 
     @Override
-    public void load(Proto proto, BulletData store) {
+    public void load(Proto proto, EntityData store) {
         // ignore
     }
     

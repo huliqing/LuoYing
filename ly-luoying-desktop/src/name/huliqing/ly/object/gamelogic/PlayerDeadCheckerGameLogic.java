@@ -37,7 +37,7 @@ import name.huliqing.ly.layer.service.GameService;
 
 /**
  * 用于检查主角是否已经死亡
- * @author huliqing
+ * @author huliqing 
  */
 public class PlayerDeadCheckerGameLogic extends AbstractGameLogic {
     private final GameService gameService = Factory.get(GameService.class);

@@ -44,7 +44,7 @@ public class ResetSkill extends SimpleAnimationSkill {
     @Override
     public void setActor(Entity actor) {
         super.setActor(actor); 
-        channelModule = actor.getModuleManager().getModule(ChannelModule.class);
+        channelModule = actor.getModule(ChannelModule.class);
     }
 
     @Override

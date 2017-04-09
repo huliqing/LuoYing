@@ -25,7 +25,7 @@ import com.jme3.network.serializing.Serializable;
  * @author huliqing
  */
 @Serializable
-public class BulletData extends ModelEntityData {
+public class BulletData extends EntityData {
     
     
 }

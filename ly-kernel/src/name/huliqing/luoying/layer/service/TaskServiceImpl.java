@@ -36,7 +36,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public boolean checkCompletion(Entity actor, String taskId) {
-        TaskModule module = actor.getModuleManager().getModule(TaskModule.class);
+        TaskModule module = actor.getModule(TaskModule.class);
         if (module != null) {
             Task task = module.getTask(taskId);
             return task != null && task.checkCompletion();
@@ -46,7 +46,7 @@ public class TaskServiceImpl implements TaskService {
     
     @Override
     public void completeTask(Entity actor, String taskId) {
-        TaskModule control = actor.getModuleManager().getModule(TaskModule.class);
+        TaskModule control = actor.getModule(TaskModule.class);
         if (control != null) {
             control.completeTask(taskId);
         }
@@ -54,7 +54,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public void addTaskListener(Entity actor, TaskListener taskListener) {
-        TaskModule control = actor.getModuleManager().getModule(TaskModule.class);
+        TaskModule control = actor.getModule(TaskModule.class);
         if (control != null) {
             control.addTaskListener(taskListener);
         }
@@ -62,7 +62,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public boolean removeTaskListener(Entity actor, TaskListener taskListener) {
-        TaskModule control = actor.getModuleManager().getModule(TaskModule.class);
+        TaskModule control = actor.getModule(TaskModule.class);
         return control != null && control.removeTaskListener(taskListener);
     }
     

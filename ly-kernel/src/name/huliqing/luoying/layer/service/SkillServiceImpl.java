@@ -43,7 +43,7 @@ public class SkillServiceImpl implements SkillService {
     
     @Override
     public Skill getSkill(Entity actor, String skillId) {
-        SkillModule module = actor.getModuleManager().getModule(SkillModule.class);
+        SkillModule module = actor.getModule(SkillModule.class);
         if (module != null) {
             return module.getSkill(skillId);
         }
@@ -52,7 +52,7 @@ public class SkillServiceImpl implements SkillService {
 
     @Override
     public Skill getSkillWaitDefault(Entity actor) {
-        SkillModule module = actor.getModuleManager().getModule(SkillModule.class);
+        SkillModule module = actor.getModule(SkillModule.class);
         if (module != null) {
             List<Skill> waitSkills = module.getSkillWait(null);
             if (waitSkills != null && !waitSkills.isEmpty()) {
@@ -64,7 +64,7 @@ public class SkillServiceImpl implements SkillService {
 
     @Override
     public Skill getSkillHurtDefault(Entity actor) {
-        SkillModule module = actor.getModuleManager().getModule(SkillModule.class);
+        SkillModule module = actor.getModule(SkillModule.class);
         if (module != null) {
             List<Skill> hurtSkills = module.getSkillHurt(null);
             if (hurtSkills != null && !hurtSkills.isEmpty()) {
@@ -76,7 +76,7 @@ public class SkillServiceImpl implements SkillService {
 
     @Override
     public Skill getSkillDeadDefault(Entity actor) {
-        SkillModule module = actor.getModuleManager().getModule(SkillModule.class);
+        SkillModule module = actor.getModule(SkillModule.class);
         if (module != null) {
             List<Skill> deadSkills = module.getSkillDead(null);
             if (deadSkills != null && !deadSkills.isEmpty()) {
@@ -88,7 +88,7 @@ public class SkillServiceImpl implements SkillService {
 
     @Override
     public List<Skill> getSkillWait(Entity actor) {
-        SkillModule module = actor.getModuleManager().getModule(SkillModule.class);
+        SkillModule module = actor.getModule(SkillModule.class);
         if (module != null) {
             return module.getSkillWait(null);
         }
@@ -97,7 +97,7 @@ public class SkillServiceImpl implements SkillService {
 
     @Override
     public List<Skill> getSkillHurt(Entity actor) {
-        SkillModule module = actor.getModuleManager().getModule(SkillModule.class);
+        SkillModule module = actor.getModule(SkillModule.class);
         if (module != null) {
             return module.getSkillHurt(null);
         }
@@ -106,7 +106,7 @@ public class SkillServiceImpl implements SkillService {
 
     @Override
     public List<Skill> getSkillDead(Entity actor) {
-        SkillModule module = actor.getModuleManager().getModule(SkillModule.class);
+        SkillModule module = actor.getModule(SkillModule.class);
         if (module != null) {
             return module.getSkillDead(null);
         }
@@ -115,7 +115,7 @@ public class SkillServiceImpl implements SkillService {
     
     @Override
     public List<Skill> getSkillByTypes(Entity actor, long skillTypes) {
-        SkillModule module = actor.getModuleManager().getModule(SkillModule.class);
+        SkillModule module = actor.getModule(SkillModule.class);
         if (module != null) {
             return module.getSkillByTypes(skillTypes, null);
         }
@@ -124,7 +124,7 @@ public class SkillServiceImpl implements SkillService {
 
     @Override
     public List<Skill> getSkills(Entity actor) {
-        SkillModule module = actor.getModuleManager().getModule(SkillModule.class);
+        SkillModule module = actor.getModule(SkillModule.class);
         if (module != null) {
             return module.getSkills();
         }
@@ -133,7 +133,7 @@ public class SkillServiceImpl implements SkillService {
 
     @Override
     public void addListener(Entity actor, SkillListener skillPlayListener) {
-        SkillModule module = actor.getModuleManager().getModule(SkillModule.class);
+        SkillModule module = actor.getModule(SkillModule.class);
         if (module != null) {
             module.addListener(skillPlayListener);
         }
@@ -141,7 +141,7 @@ public class SkillServiceImpl implements SkillService {
 
     @Override
     public boolean removeListener(Entity actor, SkillListener skillPlayListener) {
-        SkillModule module = actor.getModuleManager().getModule(SkillModule.class);
+        SkillModule module = actor.getModule(SkillModule.class);
         return module != null && module.removeListener(skillPlayListener);
     }
     
@@ -152,7 +152,7 @@ public class SkillServiceImpl implements SkillService {
     
     @Override
     public int checkStateCode(Entity actor, Skill skill) {
-        SkillModule module = actor.getModuleManager().getModule(SkillModule.class);
+        SkillModule module = actor.getModule(SkillModule.class);
         if (module != null) {
             return module.checkStateCode(skill);
         }
@@ -161,7 +161,7 @@ public class SkillServiceImpl implements SkillService {
 
     @Override
     public boolean hasSkill(Entity actor, String skillId) {
-        SkillModule module = actor.getModuleManager().getModule(SkillModule.class);
+        SkillModule module = actor.getModule(SkillModule.class);
         return module != null && module.getSkill(skillId) != null;
     }
 
@@ -175,7 +175,7 @@ public class SkillServiceImpl implements SkillService {
     
 //    @Override
 //    public boolean playSkill(Entity actor, Skill skill, boolean force) {
-//        SkillModule c = actor.getModuleManager().getModule(SkillModule.class);
+//        SkillModule c = actor.getModule(SkillModule.class);
 //        if (c != null) {
 //            return playSkill(c, skill, force);
 //        }
@@ -184,7 +184,7 @@ public class SkillServiceImpl implements SkillService {
     
     @Override
     public boolean playWalk(Entity actor, Skill walkSkill, Vector3f dir, boolean faceToDir, boolean force) {
-        SkillModule module = actor.getModuleManager().getModule(SkillModule.class);
+        SkillModule module = actor.getModule(SkillModule.class);
         if (module == null) {
             return false;
         }
@@ -200,7 +200,7 @@ public class SkillServiceImpl implements SkillService {
     
     @Override
     public boolean isPlayingSkill(Entity actor) {
-        SkillModule module = actor.getModuleManager().getModule(SkillModule.class);
+        SkillModule module = actor.getModule(SkillModule.class);
         if (module != null) {
             return module.getPlayingSkills().size() > 0;
         }
@@ -209,7 +209,7 @@ public class SkillServiceImpl implements SkillService {
     
     @Override
     public boolean isPlayingSkill(Entity actor, long skillTypes) {
-        SkillModule module = actor.getModuleManager().getModule(SkillModule.class);
+        SkillModule module = actor.getModule(SkillModule.class);
         if (module != null) {
             return (module.getPlayingSkillTypes() & skillTypes) != 0;
         }
@@ -218,7 +218,7 @@ public class SkillServiceImpl implements SkillService {
     
     @Override
     public long getPlayingSkillTypes(Entity actor) {
-        SkillModule module = actor.getModuleManager().getModule(SkillModule.class);
+        SkillModule module = actor.getModule(SkillModule.class);
         if (module != null) {
             return module.getPlayingSkillTypes();
         }
@@ -227,7 +227,7 @@ public class SkillServiceImpl implements SkillService {
     
     @Override
     public void lockSkillTypes(Entity actor, long skillTypes) {
-        SkillModule module = actor.getModuleManager().getModule(SkillModule.class);
+        SkillModule module = actor.getModule(SkillModule.class);
         if (module != null) {
             module.lockSkillTypes(skillTypes);
         }
@@ -235,7 +235,7 @@ public class SkillServiceImpl implements SkillService {
 
     @Override
     public void unlockSkillTypes(Entity actor, long skillTypes) {
-        SkillModule module = actor.getModuleManager().getModule(SkillModule.class);
+        SkillModule module = actor.getModule(SkillModule.class);
         if (module != null) {
             module.unlockSkillTypes(skillTypes);
         }

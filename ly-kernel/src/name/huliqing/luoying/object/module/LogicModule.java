@@ -92,7 +92,7 @@ public class LogicModule extends AbstractModule implements DataHandler<LogicData
         this.entity.getSpatial().addControl(updateControl);
         
         // 绑定“自动AI”属性
-        enabledAttribute = entity.getAttributeManager().getAttribute(bindEnabledAttribute);
+        enabledAttribute = entity.getAttribute(bindEnabledAttribute);
         
         // 载入逻辑
         List<LogicData> logicDatas = entity.getData().getObjectDatas(LogicData.class, new ArrayList<LogicData>());

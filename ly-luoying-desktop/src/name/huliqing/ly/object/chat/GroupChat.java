@@ -24,6 +24,7 @@ import com.jme3.math.ColorRGBA;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.data.EntityData;
 import name.huliqing.ly.constants.InterfaceConstants;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.ly.data.ChatData;
@@ -58,7 +59,7 @@ public class GroupChat extends Chat {
     private ChatList chatList;
 
     @Override
-    public void setData(ChatData data) {
+    public void setData(EntityData data) {
         super.setData(data);
         String[] tempChats = data.getAsArray("chats");
         chats = new ArrayList<Chat>(tempChats.length);

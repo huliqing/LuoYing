@@ -38,7 +38,7 @@ public interface DataProcessor<T extends ObjectData> {
      * @return 
      */
     T getData();
-
+    
     /**
      * 更新实时状态数据到data中去,保持data的数据为当前的实时状态. <br>
      * 也就是说DataProcessor在运行时状态可能发生各种各样的变化，但是不需要实时更新到data中去，

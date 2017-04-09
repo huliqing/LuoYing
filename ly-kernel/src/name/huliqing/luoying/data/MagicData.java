@@ -26,7 +26,7 @@ import com.jme3.network.serializing.Serializable;
  * @author huliqing
  */
 @Serializable
-public class MagicData extends ModelEntityData {
+public class MagicData extends EntityData {
     
     /**
      * 获取魔法的释放源，这个方法返回的是一个entity的唯一id.

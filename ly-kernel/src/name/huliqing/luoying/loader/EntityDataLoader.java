@@ -34,12 +34,11 @@ import name.huliqing.luoying.xml.Proto;
 
 /**
  * @author huliqing
- * @param <T>
  */
-public class EntityDataLoader<T extends EntityData> implements DataLoader<T>{
+public class EntityDataLoader implements DataLoader<EntityData>{
 
     @Override
-    public void load(Proto proto, T data) {
+    public void load(Proto proto, EntityData data) {
         
         // 载入模块配置,并根据ModuleOrder进行排序
         String[] moduleArr = proto.getAsArray("modules");

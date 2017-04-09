@@ -186,7 +186,7 @@ public class ActorModule extends AbstractModule implements SimpleValueChangeList
             // 通知旧目标被释放
             Entity oldTarget = entity.getScene().getEntity(((Number) oldValue).longValue());
             if (oldTarget != null) {
-                ActorModule oldTargetAM = oldTarget.getModuleManager().getModule(ActorModule.class);
+                ActorModule oldTargetAM = oldTarget.getModule(ActorModule.class);
                 if (oldTargetAM != null) {
                     oldTargetAM.notifyActorReleased(entity);
                 }
@@ -194,7 +194,7 @@ public class ActorModule extends AbstractModule implements SimpleValueChangeList
             // 通知新目标被锁定
             Entity newTarget = entity.getScene().getEntity(targetAttribute.getValue().longValue());
             if (newTarget != null) {
-                ActorModule newTargetAM = newTarget.getModuleManager().getModule(ActorModule.class);
+                ActorModule newTargetAM = newTarget.getModule(ActorModule.class);
                 if (newTargetAM != null) {
                     newTargetAM.notifyActorLocked(entity);
                 }
@@ -375,7 +375,7 @@ public class ActorModule extends AbstractModule implements SimpleValueChangeList
 
             // 通知hitter：你已经击中了一个目标
             if (hitter != null) {
-                ActorModule hitterAM = hitter.getModuleManager().getModule(ActorModule.class);
+                ActorModule hitterAM = hitter.getModule(ActorModule.class);
                 if (hitterAM != null) {
                     hitterAM.notifyHitTarget(entity, attribute, hitValue, oldValue, killed);
                 }

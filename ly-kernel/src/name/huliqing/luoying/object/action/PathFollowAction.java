@@ -117,7 +117,7 @@ public class PathFollowAction extends AbstractAction implements FollowAction {
     @Override
     public void setActor(Entity actor) {
         super.setActor(actor);
-        skillModule = actor.getModuleManager().getModule(SkillModule.class);
+        skillModule = actor.getModule(SkillModule.class);
     }
     
     @Override

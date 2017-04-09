@@ -25,14 +25,14 @@ import com.jme3.math.Vector3f;
 import com.jme3.util.TempVars;
 import java.util.ArrayList;
 import java.util.List;
-import name.huliqing.luoying.data.BulletData;
+import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.anim.CurveMoveAnim;
 import name.huliqing.luoying.object.position.Position;
 import name.huliqing.luoying.object.scene.Scene;
 
 /**
- * 曲线类型的子弹。
+ * 曲线类型的子弹。 
  * @author huliqing
  */
 public class CurveBullet extends StraightBullet {
@@ -55,7 +55,7 @@ public class CurveBullet extends StraightBullet {
     private List<Vector3f> tempCenterPositions;
 
     @Override
-    public void setData(BulletData data) {
+    public void setData(EntityData data) {
         super.setData(data);
         tension = data.getAsFloat("tension", tension);
         

@@ -56,9 +56,9 @@ public class FightLogic extends AbstractLogic {
     @Override
     public void initialize() {
         super.initialize();
-        actionModule = actor.getModuleManager().getModule(ActionModule.class);
+        actionModule = actor.getModule(ActionModule.class);
         if (bindAiAttribute != null) {
-            aiAttribute = actor.getAttributeManager().getAttribute(bindAiAttribute, BooleanAttribute.class);
+            aiAttribute = actor.getAttribute(bindAiAttribute, BooleanAttribute.class);
             if (aiAttribute == null) {
                 LOG.log(Level.WARNING, "Could not find AiAttribute(BooleanAttribute)"
                         + ", bindAiAttribute={0}, actor={1}, logic={2}"

@@ -84,7 +84,7 @@ public class CollectTask<T extends TaskData> extends AbstractTask<T> implements 
         // 给角色掉落任务物品
         // 不要使用与普通掉落物品一样的方式去掉落任务物品，因为任务物品只有在接
         // 受了任务之后才会对任务执行者掉落物品.
-        actorModule = actor.getModuleManager().getModule(ActorModule.class);
+        actorModule = actor.getModule(ActorModule.class);
         if (actorModule != null) {
             actorModule.addActorListener(this);
         } 

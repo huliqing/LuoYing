@@ -88,7 +88,7 @@ public class AttributeElContext extends ELContext{
                 context.setPropertyResolved(true);
                 Attribute attribute = am.getAttribute(property.toString());
                 if (attribute == null) {
-                    throw new NullPointerException("Attribute not found from AttributeManager, AttributeManager=" + am 
+                    throw new AttributeNotFoundException("Attribute not found from AttributeManager, AttributeManager=" + am 
                             + ", attribute=" + property 
                             + ", expression=" + el.getExpression() 
                             + ", el=" + el.getData().getId()); 
@@ -104,6 +104,28 @@ public class AttributeElContext extends ELContext{
             }
             return value;
         }
+    }
+    
+    public class AttributeNotFoundException extends RuntimeException {
+
+        public AttributeNotFoundException() {}
+
+        public AttributeNotFoundException(String message) {
+            super(message);
+        }
+
+        public AttributeNotFoundException(String message, Throwable cause) {
+            super(message, cause);
+        }
+
+        public AttributeNotFoundException(Throwable cause) {
+            super(cause);
+        }
+
+        public AttributeNotFoundException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+            super(message, cause, enableSuppression, writableStackTrace);
+        }
+       
     }
     
 }

@@ -167,7 +167,7 @@ public class ActorCurveMove extends ActorAnim {
         actorService.setKinematic(target, true);
         
         if (bindTargetAttribute != null) {
-            targetAttribute = target.getAttributeManager().getAttribute(bindTargetAttribute, NumberAttribute.class);
+            targetAttribute = target.getAttribute(bindTargetAttribute, NumberAttribute.class);
         }
     }
     

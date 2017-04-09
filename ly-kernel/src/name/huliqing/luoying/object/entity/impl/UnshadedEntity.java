@@ -36,7 +36,7 @@ import name.huliqing.luoying.utils.GeometryUtils;
  * 这个实体用于将场景中指定类型的物体转化为unshaded方式的
  * @author huliqing
  */
-public class UnshadedEntity extends NonModelEntity<EntityData> implements SceneListener {
+public class UnshadedEntity extends NonModelEntity implements SceneListener {
     private final SystemService systemService = Factory.get(SystemService.class);
 
     // 是否转化地形为unshaded
@@ -108,7 +108,7 @@ public class UnshadedEntity extends NonModelEntity<EntityData> implements SceneL
         // 这一句是必须要的，因为data有可能在不同平台上传输，有可能从PC平台到移动平台，而preferEnabled的设置不一样。
         // 所以，当一个entity从PC到移动平台时，这里需要重新设置prefer参数。
         if (entity instanceof ModelEntity) {
-            ((ModelEntity)entity).getData().setPreferUnshaded(preferEnabled);
+            ((ModelEntity)entity).setPreferUnshaded(preferEnabled);
         }
         
         if (preferEnabled) {

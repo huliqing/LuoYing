@@ -166,7 +166,7 @@ public class LevelModule extends AbstractModule implements ValueChangeListener{
         lastLevelUp = newLevel;
         
         // 2.升级其它等级属性,注：只有等级属性(LevelAttribute)才可以升级
-        List<Attribute> attributes = entity.getAttributeManager().getAttributes();
+        List<Attribute> attributes = entity.getAttributes(); 
         for (Attribute attr : attributes) {
             if (attr == levelAttribute || attr == xpAttribute) {
                 continue;

@@ -53,19 +53,19 @@ public class LogicServiceImpl implements LogicService {
 
     @Override
     public void addLogic(Entity actor, Logic logic) {
-        LogicModule module = actor.getModuleManager().getModule(LogicModule.class);
+        LogicModule module = actor.getModule(LogicModule.class);
         module.addLogic(logic);
     }
 
     @Override
     public boolean removeLogic(Entity actor, Logic logic) {
-        LogicModule module = actor.getModuleManager().getModule(LogicModule.class);
+        LogicModule module = actor.getModule(LogicModule.class);
         return module != null && module.removeLogic(logic);
     }
 
     @Override
     public void clearLogics(Entity actor) {
-        LogicModule module = actor.getModuleManager().getModule(LogicModule.class);
+        LogicModule module = actor.getModule(LogicModule.class);
         if (module == null)
             return;
         
@@ -78,39 +78,4 @@ public class LogicServiceImpl implements LogicService {
         }
     }
 
-//    @Override
-//    public void resetPlayerLogic(Entity actor) {
-//        clearLogics(actor);
-//        for (String logic : IdConstants.LOGIC_PLAYER) {
-//            addLogic(actor, logic);
-//        }
-//    }
-//
-//    @Override
-//    public boolean isAutoLogic(Entity actor) {
-//        LogicModule module = actor.getModuleManager().getModule(LogicModule.class);
-//        return module != null && module.isAutoLogic();
-//    }
-//
-//    @Override
-//    public void setAutoLogic(Entity actor, boolean enabled) {
-//        LogicModule module = actor.getModuleManager().getModule(LogicModule.class);
-//        if (module != null) {
-//            module.setAutoLogic(enabled);
-//        }
-//    }
-//    
-//    @Override
-//    public boolean isAutoDetect(Entity actor) {
-//        LogicModule module = actor.getModuleManager().getModule(LogicModule.class);
-//        return module != null && module.isAutoDetect();
-//    }
-//    
-//    @Override
-//    public void setAutoDetect(Entity actor, boolean autoDetect) {
-//        LogicModule module = actor.getModuleManager().getModule(LogicModule.class);
-//        if (module != null) {
-//            module.setAutoDetect(autoDetect);
-//        }
-//    }
 }

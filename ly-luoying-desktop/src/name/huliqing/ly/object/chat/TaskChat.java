@@ -21,6 +21,7 @@ package name.huliqing.ly.object.chat;
 
 import com.jme3.math.FastMath;
 import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.data.TaskData;
 import name.huliqing.ly.constants.ResConstants;
 import name.huliqing.luoying.layer.network.EntityNetwork;
@@ -79,7 +80,7 @@ public class TaskChat extends Chat {
     private TaskData taskData;
 
     @Override
-    public void setData(ChatData data) {
+    public void setData(EntityData data) {
         super.setData(data); 
         this.taskId = data.getAsString("task");
         this.role = Role.identify(data.getAsString("role", Role.both.name()));

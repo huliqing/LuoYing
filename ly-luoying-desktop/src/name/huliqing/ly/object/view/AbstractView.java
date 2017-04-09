@@ -24,6 +24,7 @@ import com.jme3.scene.Spatial;
 import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.Factory;
+import name.huliqing.luoying.data.EntityData;
 import name.huliqing.ly.data.ViewData;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.object.ControlAdapter;
@@ -39,9 +40,8 @@ import name.huliqing.luoying.utils.ConvertUtils;
 /**
  * View的基类
  * @author huliqing
- * @param <T>
  */
-public abstract class AbstractView<T extends ViewData> extends AbstractEntity<T> implements View<T> {
+public abstract class AbstractView extends AbstractEntity implements View {
     private final PlayService playService = Factory.get(PlayService.class);
     
     // View的展示时间,如果为小于或等于0的值则永不停止。
@@ -71,7 +71,7 @@ public abstract class AbstractView<T extends ViewData> extends AbstractEntity<T>
     };
     
     @Override
-    public void setData(T data) {
+    public void setData(EntityData data) {
         this.data = data;
         float sw = playService.getScreenWidth();
         float sh = playService.getScreenHeight();
@@ -124,7 +124,7 @@ public abstract class AbstractView<T extends ViewData> extends AbstractEntity<T>
     }
     
     @Override
-    public T getData() {
+    public EntityData getData() {
         return data;
     }
     

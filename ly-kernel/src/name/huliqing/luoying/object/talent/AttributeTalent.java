@@ -76,7 +76,7 @@ public class AttributeTalent<T extends TalentData> extends AbstractTalent<T> {
             return;
         }
 
-        NumberAttribute attr = actor.getAttributeManager().getAttribute(bindAttribute, NumberAttribute.class);
+        NumberAttribute attr = actor.getAttribute(bindAttribute, NumberAttribute.class);
         if (attr == null) {
             return;
         }

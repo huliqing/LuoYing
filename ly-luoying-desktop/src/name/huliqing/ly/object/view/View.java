@@ -19,15 +19,13 @@
  */
 package name.huliqing.ly.object.view;
 
-import name.huliqing.ly.data.ViewData;
 import name.huliqing.luoying.object.entity.Entity;
 
 /**
  *
  * @author huliqing
- * @param <T>
  */
-public interface View<T extends ViewData> extends Entity<T> {
+public interface View extends Entity {
 
     /**
      * 设置View的运行时间

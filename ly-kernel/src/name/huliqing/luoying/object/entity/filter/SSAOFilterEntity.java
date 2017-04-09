@@ -20,7 +20,6 @@
 package name.huliqing.luoying.object.entity.filter;
 
 import com.jme3.post.ssao.SSAOFilter;
-import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.object.entity.NonModelEntity;
 import name.huliqing.luoying.object.scene.Scene;
 
@@ -28,7 +27,7 @@ import name.huliqing.luoying.object.scene.Scene;
  *
  * @author huliqing
  */
-public class SSAOFilterEntity extends NonModelEntity<EntityData> {
+public class SSAOFilterEntity extends NonModelEntity {
     
     private final SSAOFilter filter = new SSAOFilter();
 

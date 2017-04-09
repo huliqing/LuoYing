@@ -79,9 +79,9 @@ public class SkillLockedState extends AbstractState implements SkillListener {
     @Override
     public void initialize() {
         super.initialize();
-        actorModule = entity.getModuleManager().getModule(ActorModule.class);
-        channelModule = entity.getModuleManager().getModule(ChannelModule.class);
-        skillModule = entity.getModuleManager().getModule(SkillModule.class);
+        actorModule = entity.getModule(ActorModule.class);
+        channelModule = entity.getModule(ChannelModule.class);
+        skillModule = entity.getModule(SkillModule.class);
         
         // 锁定在特定标记的技能上
         if (lockAtSkillTypes > 0) {
