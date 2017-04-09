@@ -2668,16 +2668,26 @@ name.huliqing.editor.ui.tool.JfxCameraTool -> name.huliqing.editor.ui.tool.JfxCa
     void <init>() -> <init>
     javafx.scene.layout.Region createView() -> createView
     void initialize() -> initialize
+    void lambda$initialize$19(javafx.event.ActionEvent) -> lambda$initialize$19
+    void lambda$null$18() -> lambda$null$18
+    void lambda$initialize$17(javafx.event.ActionEvent) -> lambda$initialize$17
+    void lambda$null$16() -> lambda$null$16
+    void lambda$initialize$15(javafx.event.ActionEvent) -> lambda$initialize$15
+    void lambda$null$14() -> lambda$null$14
+    void lambda$initialize$13(javafx.event.ActionEvent) -> lambda$initialize$13
+    void lambda$null$12() -> lambda$null$12
+    void lambda$initialize$11(javafx.event.ActionEvent) -> lambda$initialize$11
+    void lambda$null$10() -> lambda$null$10
     void lambda$initialize$9(javafx.event.ActionEvent) -> lambda$initialize$9
-    void lambda$initialize$8(javafx.event.ActionEvent) -> lambda$initialize$8
+    void lambda$null$8() -> lambda$null$8
     void lambda$initialize$7(javafx.event.ActionEvent) -> lambda$initialize$7
-    void lambda$initialize$6(javafx.event.ActionEvent) -> lambda$initialize$6
+    void lambda$null$6() -> lambda$null$6
     void lambda$initialize$5(javafx.event.ActionEvent) -> lambda$initialize$5
-    void lambda$initialize$4(javafx.event.ActionEvent) -> lambda$initialize$4
+    void lambda$null$4() -> lambda$null$4
     void lambda$initialize$3(javafx.event.ActionEvent) -> lambda$initialize$3
-    void lambda$initialize$2(javafx.event.ActionEvent) -> lambda$initialize$2
+    void lambda$null$2() -> lambda$null$2
     void lambda$initialize$1(javafx.event.ActionEvent) -> lambda$initialize$1
-    void lambda$initialize$0(javafx.event.ActionEvent) -> lambda$initialize$0
+    void lambda$null$0() -> lambda$null$0
 name.huliqing.editor.ui.tool.JfxModeTool -> name.huliqing.editor.ui.tool.JfxModeTool:
     javafx.scene.control.ChoiceBox view -> view
     name.huliqing.editor.tools.base.ModeTool modeTool -> modeTool
