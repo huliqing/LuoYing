@@ -52,7 +52,7 @@ import name.huliqing.luoying.utils.ThreadHelper;
  * 召唤技
  * @author huliqing
  */
-public class SummonSkill extends AbstractSkill {
+public class SummonSkill extends SimpleAnimationSkill {
     private final static Logger LOG = Logger.getLogger(SummonSkill.class.getName());
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final PlayNetwork playNetwork = Factory.get(PlayNetwork.class);

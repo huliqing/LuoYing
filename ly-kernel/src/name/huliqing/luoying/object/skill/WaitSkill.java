@@ -26,7 +26,7 @@ import name.huliqing.luoying.object.module.ChannelModule;
  * 让角色“等待”的技能
  * @author huliqing
  */
-public class WaitSkill extends AbstractSkill {
+public class WaitSkill extends SimpleAnimationSkill {
     private ChannelModule channelModule;
 
     @Override

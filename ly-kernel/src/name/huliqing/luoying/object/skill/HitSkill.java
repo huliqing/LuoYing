@@ -48,7 +48,7 @@ import name.huliqing.luoying.utils.ConvertUtils;
  * Hit技能，可与目标角色进行交互的技能。例如攻击技能，BUFF技能，射击技能。
  * @author huliqing
  */
-public abstract class HitSkill extends AbstractSkill {
+public abstract class HitSkill extends SimpleAnimationSkill {
     private static final Logger LOG = Logger.getLogger(HitSkill.class.getName());
     
     private final ActorService actorService = Factory.get(ActorService.class);

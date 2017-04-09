@@ -34,7 +34,7 @@ import name.huliqing.luoying.object.scene.Scene;
  * 回城、瞬移技能
  * @author huliqing
  */
-public class BackSkill extends AbstractSkill {
+public class BackSkill extends SimpleAnimationSkill {
     private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     
     // 人物消失的时间插值点

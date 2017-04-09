@@ -42,7 +42,7 @@ import name.huliqing.luoying.object.sound.SoundManager;
  * 普通攻击技能,会根据damagePoint计算任害值等.主要用于近战类攻击
  * @author huliqing
  */
-public class AttackSkill extends HitSkill {
+public class AttackSkill extends HitSkill { 
     private final DefineService defineService = Factory.get(DefineService.class);
     private final ActorService actorService = Factory.get(ActorService.class);
     private final SkillService skillService = Factory.get(SkillService.class);

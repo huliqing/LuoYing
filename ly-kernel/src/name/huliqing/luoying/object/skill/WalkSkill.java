@@ -33,7 +33,7 @@ import name.huliqing.luoying.object.module.ChannelModule;
  * @see RunSkill
  * @author huliqing
  */
-public class WalkSkill extends AbstractSkill implements Walk{
+public class WalkSkill extends SimpleAnimationSkill implements Walk{
     private final ActorService actorService = Factory.get(ActorService.class);
     private ChannelModule channelModule;
     

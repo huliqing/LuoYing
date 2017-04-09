@@ -26,7 +26,7 @@ import name.huliqing.luoying.object.module.ChannelModule;
  * 执行角色受伤技能.
  * @author huliqing
  */
-public class HurtSkill extends AbstractSkill {
+public class HurtSkill extends SimpleAnimationSkill {
     private ChannelModule channelModule;
 
     @Override

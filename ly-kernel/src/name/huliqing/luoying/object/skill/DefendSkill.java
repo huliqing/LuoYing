@@ -23,7 +23,7 @@ package name.huliqing.luoying.object.skill;
  * 防守技能
  * @author huliqing
  */
-public class DefendSkill extends AbstractSkill {
+public class DefendSkill extends SimpleAnimationSkill {
     
     @Override
     protected void doSkillUpdate(float tpf) {

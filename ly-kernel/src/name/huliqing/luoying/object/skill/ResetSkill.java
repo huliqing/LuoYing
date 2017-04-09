@@ -29,7 +29,7 @@ import name.huliqing.luoying.object.module.ChannelModule;
  * 没有可用的reset动画时可以使用这个技能来代替．
  * @author huliqing
  */
-public class ResetSkill extends AbstractSkill {
+public class ResetSkill extends SimpleAnimationSkill {
     private ChannelModule channelModule;
     
     // 指定要把角色动画定格在animation动画的哪一帧上， 这是一个插值点。

@@ -38,7 +38,7 @@ import name.huliqing.luoying.utils.MathUtils;
  * 远程技能
  * @author huliqing
  */
-public class ShotSkill extends HitSkill {
+public class ShotSkill extends HitSkill { 
 
     private final ActorService actorService = Factory.get(ActorService.class);
     
@@ -242,7 +242,10 @@ public class ShotSkill extends HitSkill {
         switch (shotTargetType) {
             case bound:
             case center:
-                return target.getSpatial().getWorldBound().getCenter();
+                if (target.getSpatial().getWorldBound() != null) {
+                    return target.getSpatial().getWorldBound().getCenter();
+                }
+                return target.getSpatial().getWorldTranslation();
             case origin:
             default:
                 return target.getSpatial().getWorldTranslation();

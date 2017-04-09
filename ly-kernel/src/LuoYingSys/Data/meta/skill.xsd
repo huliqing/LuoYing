@@ -694,6 +694,72 @@ xs:time
         </xs:complexType>
     </xs:element>
     
+    <xs:complexType name="skillSimpleAnimationBase">
+        <xs:complexContent>
+            <xs:extension base="skillBase">
+                <xs:attribute name="animation" type="xs:string" use="required" >
+                    <xs:annotation>
+                        <xs:documentation>技能的model动画名称，角色必须有该动画，否则报错。</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="channels" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>
+                            执行动画的通道名称，格式："animChannel1,animChannel2,..."
+                            注：拥有该技能的角色必须配置有这些动画通道才可以执行，配置不存在的通道会被忽略，如果不设置该参数，
+                            则技能执行时将使用默认全部可能存在的通道。
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="channelLockAll" type="bool" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>
+                            执行动画时是否锁定全部动画通道，注：这个参数可以让技能在执行时锁定角色本身"所有"的动画通道，
+                            如果希望只锁定特定的通道可以设置:channelLocks参数。
+                            锁定动画通道可以避免当多个可交互重叠的技能同时执行时动画通道被覆盖的问题。
+                            示例如：换武器技能和走路技能是互相兼容和可重叠的。
+                            当在走路的情况下换武器时（先走路后换武器），“走路”技能
+                            的部分动画通道会被“换武器”技能的部分通道覆盖，这很自然并且没有问题。
+                            但是当在“换武器”的情况下“走路”时（先换武器再走路，换武器动作未结束的情况）。
+                            “走路”技能的手部动画通道可能覆盖掉“换武器”技能的动画通道，这会出现换
+                            武器技能的动画未完整执行完的问题。这个时候可以把“换武器”技能的动画通道锁定。
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="channelLocks" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>指定要锁定那些特定的动画通道, 如果指定了不存在的通道则该通道会被忽略。格式："channel1,channel2,..."</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="bindCutTimeEndAttribute" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>
+                            FloatAttribute, 绑定角色的属性,取值范围为[0.0~1.0]，超出范围将会被截取。
+                            这个属性的值将用于剪裁当前技能的结尾处的时间，0.1表示剪裁掉结束处10%的时间，0.5表示剪裁50%时间，
+                            依次类推。剪裁时间与直接设置技能的时间存在不同的地方，剪裁时间不影响技能动画的执行速度。
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="cutTimeStartMax" type="xs:decimal" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            时间、动画最高剪裁比率"开始",取值必须在[0.0~1.0)之间，
+                            注：cutTimeStartMax和cutTimeEndMax的值之和也必须在 [0.0~1.0)之间
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="cutTimeEndMax" type="xs:decimal" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            时间、动画最高剪裁比率"结束",取值必须在[0.0~1.0)之间，这个值是从后往前算起的
+                            注：cutTimeStartMax和cutTimeEndMax的值之和也必须在 [0.0~1.0)之间
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
     <xs:complexType name="skillBase">
         <xs:complexContent>
             <xs:extension base="base">
@@ -732,40 +798,6 @@ xs:time
                             技能的优先级,默认值0. 值越高优先级越高，默认情况下优先级高的技能执行时会打断优先级低的技能。
                             对于一些特殊情况，可以通过参数overlapTypes，interruptTypes来进行例外配置。
                         </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="animation" type="xs:string" use="required" >
-                    <xs:annotation>
-                        <xs:documentation>技能的model动画名称，角色必须有该动画，否则报错。</xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="channels" type="xs:string" use="optional" >
-                    <xs:annotation>
-                        <xs:documentation>
-                            执行动画的通道名称，格式："animChannel1,animChannel2,..."
-                            注：拥有该技能的角色必须配置有这些动画通道才可以执行，配置不存在的通道会被忽略，如果不设置该参数，
-                            则技能执行时将使用默认全部可能存在的通道。
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="channelLockAll" type="bool" use="optional" >
-                    <xs:annotation>
-                        <xs:documentation>
-                            执行动画时是否锁定全部动画通道，注：这个参数可以让技能在执行时锁定角色本身"所有"的动画通道，
-                            如果希望只锁定特定的通道可以设置:channelLocks参数。
-                            锁定动画通道可以避免当多个可交互重叠的技能同时执行时动画通道被覆盖的问题。
-                            示例如：换武器技能和走路技能是互相兼容和可重叠的。
-                            当在走路的情况下换武器时（先走路后换武器），“走路”技能
-                            的部分动画通道会被“换武器”技能的部分通道覆盖，这很自然并且没有问题。
-                            但是当在“换武器”的情况下“走路”时（先换武器再走路，换武器动作未结束的情况）。
-                            “走路”技能的手部动画通道可能覆盖掉“换武器”技能的动画通道，这会出现换
-                            武器技能的动画未完整执行完的问题。这个时候可以把“换武器”技能的动画通道锁定。
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="channelLocks" type="xs:string" use="optional" >
-                    <xs:annotation>
-                        <xs:documentation>指定要锁定那些特定的动画通道, 如果指定了不存在的通道则该通道会被忽略。格式："channel1,channel2,..."</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
                 <xs:attribute name="cooldown" type="xs:decimal" use="optional" >
@@ -830,31 +862,6 @@ xs:time
                         <xs:documentation>
                             角色运动动画，格式：actorAnimId|timeStart|timeEnd,actorAnimId|timeStart|timeEnd...
                             timeStart,timeEnd为useTime的时间插值点。取值[0.0~1.0],可省略timeEnd,也可同时省略
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="bindCutTimeEndAttribute" type="xs:string" use="optional" >
-                    <xs:annotation>
-                        <xs:documentation>
-                            FloatAttribute, 绑定角色的属性,取值范围为[0.0~1.0]，超出范围将会被截取。
-                            这个属性的值将用于剪裁当前技能的结尾处的时间，0.1表示剪裁掉结束处10%的时间，0.5表示剪裁50%时间，
-                            依次类推。剪裁时间与直接设置技能的时间存在不同的地方，剪裁时间不影响技能动画的执行速度。
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="cutTimeStartMax" type="xs:decimal" use="optional">
-                    <xs:annotation>
-                        <xs:documentation>
-                            时间、动画最高剪裁比率"开始",取值必须在[0.0~1.0)之间，
-                            注：cutTimeStartMax和cutTimeEndMax的值之和也必须在 [0.0~1.0)之间
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="cutTimeEndMax" type="xs:decimal" use="optional">
-                    <xs:annotation>
-                        <xs:documentation>
-                            时间、动画最高剪裁比率"结束",取值必须在[0.0~1.0)之间，这个值是从后往前算起的
-                            注：cutTimeStartMax和cutTimeEndMax的值之和也必须在 [0.0~1.0)之间
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>

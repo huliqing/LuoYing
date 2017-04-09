@@ -27,7 +27,7 @@ import name.huliqing.luoying.object.module.ChannelModule;
  * 执行死亡技能,简单的死亡效果
  * @author huliqing
  */
-public class DeadSkill extends AbstractSkill {
+public class DeadSkill extends SimpleAnimationSkill {
     private ChannelModule channelModule;
     
     // 是否死亡后立即移出场景

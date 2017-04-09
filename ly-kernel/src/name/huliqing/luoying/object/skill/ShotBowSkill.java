@@ -44,7 +44,7 @@ import name.huliqing.luoying.utils.GeometryUtils;
  * 弓箭的射击技能
  * @author huliqing
  */
-public class ShotBowSkill extends ShotSkill {
+public class ShotBowSkill extends ShotSkill { 
     private SkinModule skinModule;
     
     private String weaponAnim;

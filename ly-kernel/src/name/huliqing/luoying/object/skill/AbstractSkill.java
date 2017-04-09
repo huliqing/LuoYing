@@ -19,7 +19,6 @@
  */
 package name.huliqing.luoying.object.skill;
 
-import com.jme3.animation.LoopMode;
 import com.jme3.animation.SkeletonControl;
 import com.jme3.math.FastMath;
 import com.jme3.scene.Spatial;
@@ -44,29 +43,12 @@ import name.huliqing.luoying.object.el.LNumberEl;
 import name.huliqing.luoying.object.el.SBooleanEl;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.magic.Magic;
-import name.huliqing.luoying.object.module.ChannelModule;
 import name.huliqing.luoying.object.module.SkinModule;
 import name.huliqing.luoying.object.sound.SoundManager;
 import name.huliqing.luoying.utils.ConvertUtils;
-import name.huliqing.luoying.utils.MathUtils;
  
 /**
- * 技能的基类。
- * 
- * 注意：影响技能执行时间和速度的三个重要因素：
- * 1.useTime
- * 2.speed;
- * 3.cutTimeStart,cutTimeEnd
- * 默认情况下：useTime开放给外部进行固定配置，而speed和cutTimeStart,cutTimeEnd
- * 作为动态参数进行设置，即在执行技能过程中可动态设置speed和cutTime.
- * 这要求在设置speed和cutTime的时候不应该影响其它时间插值点的协调运行，如：
- * 技能检测点、特效时间点等。
- * 所以，配置技能的时候应该在标准设置(speed=1,cutTimeStart=0,cutTimeEnd=0)下进行.
- * 否则最终可能会产生不协调的现象.
- * 
- * 关于useTime：会影响技能时间、技能速度、动画时间、动画速度
- * 关于speed: 会影响技能时间、技能速度、动画时间、动画速度
- * 关于cutTime: 影响技能时间、动画时间,但不影响技能速度和动画速度
+ * 技能的基本实现类，技能由技能模块控制(SkillModule)和执行
  * @author huliqing
  */
 public abstract class AbstractSkill implements Skill {
@@ -74,7 +56,7 @@ public abstract class AbstractSkill implements Skill {
     
     private final ElService elService = Factory.get(ElService.class);
     private final DefineService defineService = Factory.get(DefineService.class);
-    private ChannelModule channelModule;
+    
     private SkinModule skinModule;
     
     protected SkillData data;
@@ -129,40 +111,6 @@ public abstract class AbstractSkill implements Skill {
     /** 绑定一个防止技能被中断的“概率”属性。*/
     protected String bindInterruptRateAttribute;
 
-    /** 用于剪裁cutTimeEndMax的角色属性。*/
-    protected String bindCutTimeEndAttribute;
-    
-    // ---- TODO:以下参数考虑重构到: AnimationSkill.java
-    
-    /** 技能动画名称 */
-    protected String animation;
-    
-    /** 执行这个技能的角色动画通道名称，角色必须配置有这些动画骨骼通道才有用。*/
-    protected String[] channels;
-    
-    /**
-     * 当执行动画时是否锁定动画通道，这可以避免当技能交叉重叠执行时动画通道被互相覆盖。
-     * 比如在执行取武器的动画时，这时的手部通道的动画不能被重新执行的“跑路”动画的相关通道覆盖。
-     * 被锁定的通道应该在退出技能时(cleanup时)重新解锁，避免其它技能无法使用。
-     */
-    protected boolean channelLockAll;
-    
-    /**
-     * 指定要锁定那些特定的动画通道,如果指定了channelLockAll则这个参数会被忽略
-     */
-    protected String[] channelLocks;
-    
-    // 这两个参数标记useTime中可以剔除掉的<b>最高</b>时间比率.
-    // 分别标记可剔除的前面和后面的时间.比如: useTime=5秒,
-    // cutTimeStartMax=0.1,cutTimeEndMax=0.1, 则最高允许剔除的时间 = 5 * (0.1 + 0.1) = 1秒
-    // cutTime的影响不只是技能的实际使用时间,与speed作用不同的地方在于:speed只会影响动画的
-    // 播放速度,但是cutTime除了影响动画速度之外还影响动画长度.cutTimeStart和cutTimeEnd同时会剪裁
-    // 掉动画的前面和后面一部分的片段,这可以用于在一些"攻击"招式上去除掉"起招"和"收招"动作,实现"连招"
-    // 的效果.
-    // 这两个值加起来不应该超过1.0
-    protected float cutTimeStartMax;
-    protected float cutTimeEndMax;
-    
     // ---- 内部参数 ----
     
     // 当前执行技能的角色
@@ -282,18 +230,11 @@ public abstract class AbstractSkill implements Skill {
         overlapTypes = defineService.getSkillTypeDefine().convert(data.getAsArray("overlapTypes"));
         interruptTypes = defineService.getSkillTypeDefine().convert(data.getAsArray("interruptTypes"));
         
-        animation = data.getAsString("animation");
-        channels = data.getAsArray("channels");
-        channelLockAll = data.getAsBoolean("channelLockAll", false);
-        channelLocks = data.getAsArray("channelLocks");
+
         loop = data.getAsBoolean("loop", false);
         bindSpeedAttribute = data.getAsString("bindSpeedAttribute");
         bindInterruptRateAttribute = data.getAsString("bindInterruptRateAttribute");
-        // CutTimeEnd的剪裁
-        bindCutTimeEndAttribute = data.getAsString("bindCutTimeEndAttribute");
-        // 时间\动画剪裁参数
-        cutTimeStartMax = data.getAsFloat("cutTimeStartMax", 0);
-        cutTimeEndMax = data.getAsFloat("cutTimeEndMax", 0);
+
         // 等级公式
         String levelElStr = data.getAsString("levelEl");
         if (levelElStr != null) {
@@ -323,7 +264,6 @@ public abstract class AbstractSkill implements Skill {
     @Override
     public void setActor(Entity actor) {
         this.actor = actor;
-        channelModule = actor.getModuleManager().getModule(ChannelModule.class);
         skinModule = actor.getModuleManager().getModule(SkinModule.class);
         if (checkEl != null) {
             checkEl.setSource(actor.getAttributeManager());
@@ -370,20 +310,6 @@ public abstract class AbstractSkill implements Skill {
                 aaw.trueTimePointStart = fixTimePointByCutTime(aaw.timePointStart);
                 aaw.trueTimePointEnd = fixTimePointByCutTime(aaw.timePointEnd);
             }
-        }
-        
-        // 1.start animation
-        // 注B：cutTime只影响动画的开始时间点，动画的结束时间点不需要设置。
-        // 结束时间点只受“是否有后续技能”的影响，
-        // 1.如果有后续技能，则当前技能时间结束后
-        // 会立即执行后续技能，所以当前动画会被立即停止（切换到新技能动画）。所以无需手动设置
-        // 2.如果没有后续技能，则让当前技能动画自行结束，这也是比较合理的。如武功中的“收式”，如果
-        // 没有后续连招，则应该让当前技能动画的“收式”正常播放。
-        if (animation != null) {
-            doUpdateAnimation(animation
-                    , loop
-                    , getAnimFullTime()
-                    , 0);
         }
         
         // --技能消耗
@@ -485,28 +411,6 @@ public abstract class AbstractSkill implements Skill {
         }
     }
     
-    /**
-     * 执行动画
-     * @param animation 动画名称
-     * @param loop
-     * @param animFullTime 动画的完整执行时间
-     * @param animStartTime 指定动画的起始执行时间 
-     */
-    protected void doUpdateAnimation(String animation, boolean loop
-            , float animFullTime, float animStartTime) {
-        channelModule.playAnim(animation
-                , channels
-                , loop ? LoopMode.Loop : LoopMode.DontLoop
-                , animFullTime
-                , animStartTime
-        );
-        if (channelLockAll) {
-            channelModule.setChannelLock(true, null);
-        } else if (channelLocks != null) {
-            channelModule.setChannelLock(true, channelLocks);
-        }
-    }
-    
     @Override
     public void cleanup() {
         // 清理声效播放标记,让声效可以重新播放
@@ -535,13 +439,6 @@ public abstract class AbstractSkill implements Skill {
             for (ActorAnimWrap aaw : actorAnims) {
                 aaw.cleanup();
             }
-        }
-        
-        // 如果有锁定过动画通道则必须解锁，否则角色的动画通道将不能被其它技能使用。
-        if (channelLockAll) {
-            channelModule.setChannelLock(false, null);
-        } else if (channelLocks != null) {
-            channelModule.setChannelLock(false, channelLocks);
         }
         
         // 重置
@@ -604,15 +501,6 @@ public abstract class AbstractSkill implements Skill {
         return result;
     }
 
-    @Override
-    public void restoreAnimation() {
-        if (animation != null) {
-            channelModule.restoreAnimation(animation, channels
-                    , loop ? LoopMode.Loop : LoopMode.DontLoop
-                    , getAnimFullTime(), 0);
-        }
-    }
-    
     /**
      * 获取技能的等级值,由等级公式计算出来，这个方法返回的是当前等级下技能的等级值，
      * 如果技能没有配置等级公式 ，则该方法将返回null.
@@ -854,23 +742,6 @@ public abstract class AbstractSkill implements Skill {
     }
     
     /**
-     * 获取技能的CutTimeEndRate,这个值是对技能执行时间的剪裁，即对技能的结束阶段
-     * 的时间进行剪裁，这个值受角色属性影响，并且不会大于CutTimeEndMax.
-     * 如果技能没有指定影响该值的角色属性，或者角色没有指定的属性值，则这个值应
-     * 返回0.<br >
-     * 注：这个值返回的是一个比率，取值为[0.0,1.0]之间，即表示要剪裁掉的技能总时间
-     * 的比率。例如：当返回值为0.5时，即表示技能的总执行时间要剪裁掉一半（时间的后半部分）
-     * @return 
-     */
-    private float getCutTimeEndRate() {
-        float cutTime = 0;
-        if (bindCutTimeEndAttribute != null) {
-            cutTime = (cutTimeEndMax * MathUtils.clamp(getNumberAttributeValue(actor, bindCutTimeEndAttribute, 0), 0, 1.0f));
-        }
-        return cutTime;
-    }
-    
-    /**
      * 获取技能的执行速度,技能的执行速度受角色属性的影响，当技能指定了speedAttribute
      * 后，角色的这个属性值将影响技能的执行速度。如果技能没有指定这个属性或
      * 者角色没有这个属性，则这个方法应该返回1.0,即原始速度。
@@ -892,9 +763,12 @@ public abstract class AbstractSkill implements Skill {
         // 最终的实际运行时间是cutTime后的时间。
         float tempTime = data.getUseTime() / getSpeed();
         
-        // 注：因为暂不开放cutTimeStart，所以cutTimeStart目前为0
-//        return tempTime - tempTime * (cutTimeStart + getCutTimeEndRate(actor, skillData));
-        return tempTime - tempTime * (0 + getCutTimeEndRate());
+        // remove20170409
+//        // 注：因为暂不开放cutTimeStart，所以cutTimeStart目前为0
+////        return tempTime - tempTime * (cutTimeStart + getCutTimeEndRate(actor, skillData));
+//        return tempTime - tempTime * (0 + getCutTimeEndRate());
+
+        return tempTime;
     }
     
     /**

@@ -22,7 +22,7 @@ package name.huliqing.luoying.object.skill;
 /**
  * @author huliqing
  */
-public class ReadySkill extends AbstractSkill {
+public class ReadySkill extends SimpleAnimationSkill {
 
 
     @Override
