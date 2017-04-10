@@ -33,7 +33,6 @@ import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.object.actor.Actor;
 import name.huliqing.luoying.object.attribute.Attribute; 
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.entity.EntityDataListener;
 import name.huliqing.luoying.object.module.ActorListener;
 import name.huliqing.luoying.object.module.ActorModule;
 import name.huliqing.luoying.object.module.SkillModule;
@@ -42,12 +41,13 @@ import name.huliqing.luoying.object.skill.AttackSkill;
 import name.huliqing.luoying.object.skill.ShotSkill;
 import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.object.module.SkillListener;
+import name.huliqing.luoying.object.entity.DataListener;
 
 /**
  * 防守逻辑
  * @author huliqing
  */
-public class DefendLogic extends AbstractLogic implements EntityDataListener, SkillListener, ActorListener {
+public class DefendLogic extends AbstractLogic implements DataListener, SkillListener, ActorListener {
 //    private static final Logger LOG = Logger.getLogger(DefendLogic.class.getName());
     
     private final SkillService skillService = Factory.get(SkillService.class);
@@ -103,7 +103,7 @@ public class DefendLogic extends AbstractLogic implements EntityDataListener, Sk
     public void initialize() {
         super.initialize();
         actorModule.addActorListener(this);
-        actor.addEntityDataListener(this);
+        actor.addDataListener(this);
         recacheSkill();
     }
     
@@ -111,7 +111,7 @@ public class DefendLogic extends AbstractLogic implements EntityDataListener, Sk
     public void cleanup() {
         // 清理当前角色的侦听器
         actorModule.removeActorListener(this);
-        actor.removeEntityDataListener(this);
+        actor.removeDataListener(this);
         
         // 清理其它被当前逻辑侦听的角色
         if (listenersActors != null) {

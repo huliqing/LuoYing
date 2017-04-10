@@ -29,7 +29,7 @@ import com.jme3.input.InputManager;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
-import com.jme3.math.Vector4f;
+import com.jme3.math.Vector4f; 
 import com.jme3.network.serializing.Serializer;
 import com.jme3.network.serializing.serializers.MapSerializer;
 import com.jme3.renderer.RenderManager;

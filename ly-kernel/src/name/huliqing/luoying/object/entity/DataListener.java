@@ -26,7 +26,7 @@ import name.huliqing.luoying.xml.ObjectData;
  * 外部应用可以通过给实体添加EntityDataListener来监听数据的变化。
  * @author huliqing
  */
-public interface EntityDataListener {
+public interface DataListener {
     
     /**
      * 当实体添加了数据时该方法被调用。

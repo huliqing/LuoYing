@@ -22,27 +22,27 @@ package name.huliqing.ly.view.shortcut;
 import com.jme3.math.ColorRGBA;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.SkinData;
-import name.huliqing.luoying.object.entity.EntityDataListener;
 import name.huliqing.luoying.ui.UIFactory;
 import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.ly.layer.network.GameNetwork;
+import name.huliqing.luoying.object.entity.DataListener;
 
 /**
  * 用于皮肤(Skin)的快捷方式
  * @author huliqing
  */
-public class SkinShortcut extends BaseUIShortcut<SkinData> implements EntityDataListener {
+public class SkinShortcut extends BaseUIShortcut<SkinData> implements DataListener {
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
 
     @Override
     public void initialize() {
         super.initialize();
-        entity.addEntityDataListener(this);
+        entity.addDataListener(this);
     }
 
     @Override
     public void cleanup() {
-        entity.removeEntityDataListener(this);
+        entity.removeDataListener(this);
         super.cleanup(); 
     }
 

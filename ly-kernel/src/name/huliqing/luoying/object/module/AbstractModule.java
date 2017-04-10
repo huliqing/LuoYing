@@ -37,7 +37,7 @@ import name.huliqing.luoying.xml.ObjectData;
  * Module的抽象类,所有角色模块可以直接继承自这个基类
  * @author huliqing
  */
-public abstract class AbstractModule implements Module {
+public abstract class AbstractModule implements Module { 
     private static final Logger LOG = Logger.getLogger(AbstractModule.class.getName());
     private final MessageService messageService = Factory.get(MessageService.class);
 
@@ -118,7 +118,7 @@ public abstract class AbstractModule implements Module {
      * @param type
      * @return 
      */
-    protected <T extends Attribute> T getAttribute(String attributeName, Class<T> type) {
+    protected <T extends Attribute> T getAttribute(String attributeName, Class<T> type) { 
         if (attributeName == null || attributeName.equals("")) {
             return null;
         }

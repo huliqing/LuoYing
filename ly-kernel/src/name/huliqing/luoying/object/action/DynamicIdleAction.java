@@ -28,17 +28,17 @@ import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.layer.network.SkillNetwork;
 import name.huliqing.luoying.layer.service.SkillService;
-import name.huliqing.luoying.object.entity.EntityDataListener;
 import name.huliqing.luoying.object.module.SkillModule;
 import name.huliqing.luoying.object.skill.Skill;
 import name.huliqing.luoying.xml.ObjectData;
+import name.huliqing.luoying.object.entity.DataListener;
 
 /**
  * 适合于生物角色的空闲行为，角色每隔一段时间就会随机执行一个idle动作,在idle动作执行
  * 完毕的间隔期则执行wait循环动作。在此期间角色不会移动位置。
  * @author huliqing
  */
-public class DynamicIdleAction extends AbstractAction implements IdleAction, EntityDataListener {
+public class DynamicIdleAction extends AbstractAction implements IdleAction, DataListener {
 //    private final ActorNetwork actorNetwork = Factory.get(ActorNetwork.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
     private final SkillService skillService = Factory.get(SkillService.class);
@@ -72,7 +72,7 @@ public class DynamicIdleAction extends AbstractAction implements IdleAction, Ent
     public void initialize() {
         super.initialize();
         skillModule = actor.getModule(SkillModule.class);
-        actor.addEntityDataListener(this);
+        actor.addDataListener(this);
         if (waitSkill == null) {
             List<Skill> waitSkills = skillModule.getSkillWait(null);
             if (waitSkills != null && !waitSkills.isEmpty()) {
@@ -85,7 +85,7 @@ public class DynamicIdleAction extends AbstractAction implements IdleAction, Ent
 
     @Override
     public void cleanup() {
-        actor.removeEntityDataListener(this);
+        actor.removeDataListener(this);
         super.cleanup();
     }
     

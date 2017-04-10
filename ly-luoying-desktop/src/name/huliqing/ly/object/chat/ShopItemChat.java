@@ -34,7 +34,6 @@ import name.huliqing.ly.data.ChatData;
 import name.huliqing.ly.manager.ResourceManager;
 import name.huliqing.luoying.xml.DataFactory;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.entity.EntityDataListener;
 import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.ui.Button;
 import name.huliqing.luoying.ui.Icon;
@@ -55,12 +54,13 @@ import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.ly.constants.IdConstants;
 import name.huliqing.ly.layer.network.ChatNetwork;
 import name.huliqing.ly.layer.service.GameService;
+import name.huliqing.luoying.object.entity.DataListener;
 
 /**
  * 杂物商店,用于玩家向商店角色购买物品
  * @author huliqing
  */
-public class ShopItemChat extends Chat implements EntityDataListener {
+public class ShopItemChat extends Chat implements DataListener {
 //    private final PlayService playService = Factory.get(PlayService.class);
     private final GameService gameService = Factory.get(GameService.class);
 //    private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
@@ -113,9 +113,9 @@ public class ShopItemChat extends Chat implements EntityDataListener {
     public void setActor(Entity actor) {
         // 移除旧的角色的侦听器（如果存在）
         if (this.actor != null) {
-            this.actor.removeEntityDataListener(this);
+            this.actor.removeDataListener(this);
         }
-        actor.addEntityDataListener(this);
+        actor.addDataListener(this);
         super.setActor(actor); 
     }
     
@@ -123,7 +123,7 @@ public class ShopItemChat extends Chat implements EntityDataListener {
     public void cleanup() {
         productPanel.datas.clear();
         if (actor != null) {
-            actor.removeEntityDataListener(this);
+            actor.removeDataListener(this);
         }
         super.cleanup(); 
     }

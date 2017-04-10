@@ -45,7 +45,6 @@ import name.huliqing.luoying.object.anim.ColorAnim;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.attribute.StringAttribute;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.entity.EntityDataListener;
 import name.huliqing.ly.object.chat.Chat;
 import name.huliqing.luoying.ui.Icon;
 import name.huliqing.luoying.ui.LinearLayout;
@@ -55,12 +54,13 @@ import name.huliqing.luoying.ui.UI;
 import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.ly.constants.AttrConstants;
 import name.huliqing.ly.layer.service.GameService;
+import name.huliqing.luoying.object.entity.DataListener;
 
 /**
  * 显示角色头像
  * @author huliqing
  */
-public final class FaceView extends LinearLayout implements EntityDataListener{
+public final class FaceView extends LinearLayout implements DataListener{
     private final PlayService playService = Factory.get(PlayService.class);
     private final ChatService chatService = Factory.get(ChatService.class);
     private final GameService gameService = Factory.get(GameService.class);
@@ -151,12 +151,12 @@ public final class FaceView extends LinearLayout implements EntityDataListener{
     
     public void setActor(Entity newActor) {
         if (this.actor != null) {
-            this.actor.removeEntityDataListener(this);
+            this.actor.removeDataListener(this);
         }
         statePanel.needRefreshStates = newActor != this.actor;
         
         this.actor = newActor;
-        this.actor.addEntityDataListener(this);
+        this.actor.addDataListener(this);
         
         nameAttribute = newActor.getAttributeManager().getAttribute(AttrConstants.NAME, StringAttribute.class);
         

@@ -30,18 +30,18 @@ import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.attribute.BooleanAttribute;
 import name.huliqing.luoying.object.drop.Drop;
-import name.huliqing.luoying.object.entity.DataHandler;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.entity.EntityAttributeListener;
 import name.huliqing.luoying.utils.FastStack;
+import name.huliqing.luoying.xml.ObjectData;
+import name.huliqing.luoying.object.entity.HitAttributeListener;
 
 /**
  * DropModule用于处理物品、经验掉落，给实体增加这个模块之后，当实体被攻击致死的时候，
  * 会给目标攻击者掉落物品、属性
  * @author huliqing
  */
-public class DropModule extends AbstractModule implements DataHandler<DropData> {
-
+public class DropModule extends AbstractModule {
+ 
     private static final Logger LOG = Logger.getLogger(DropModule.class.getName());
 
     // 绑定角色的“死亡”属性
@@ -56,7 +56,7 @@ public class DropModule extends AbstractModule implements DataHandler<DropData> 
     private BooleanAttribute deadAttribute;
     
     // 用于监听Entity受到攻击致死事件,并处理物品掉落
-    private final EntityAttributeListener hitDeadEntityListener = new KilledEntityAttributeListener();
+    private final HitAttributeListener hitDeadEntityListener = new KilledEntityAttributeListener();
 
     @Override
     public void setData(ModuleData data) {
@@ -68,7 +68,7 @@ public class DropModule extends AbstractModule implements DataHandler<DropData> 
     @Override
     public void initialize() {
         super.initialize(); 
-        if (bindDeadAttribute != null) {
+        if (bindDeadAttribute != null) { 
             deadAttribute = getAttribute(bindDeadAttribute, BooleanAttribute.class);
         }
         
@@ -78,7 +78,7 @@ public class DropModule extends AbstractModule implements DataHandler<DropData> 
                 addDrop((Drop) Loader.load(id));
             }
         }
-        entity.addEntityAttributeListener(hitDeadEntityListener);
+        entity.addHitAttributeListener(hitDeadEntityListener);
     }
 
     @Override
@@ -86,7 +86,7 @@ public class DropModule extends AbstractModule implements DataHandler<DropData> 
         if (drops != null) {
             drops.clear();
         }
-        entity.removeEntityAttributeListener(hitDeadEntityListener);
+        entity.removeHitAttributeListener(hitDeadEntityListener);
         super.cleanup(); 
     }
     
@@ -108,24 +108,13 @@ public class DropModule extends AbstractModule implements DataHandler<DropData> 
     }
     
     /**
-     * 移除一个掉落设置
-     * @param drop
-     * @return 
-     */
-    private boolean removeDrop(Drop drop) {
-        if (drops == null || !drops.contains(drop)) 
-            return false;
-        
-        drops.remove(drop);
-        entity.getData().removeObjectData(drop.getData());
-        return true;
-    }
-    
-    /**
      * 处理掉落物品给指定角色, 注：物品是从当前角色掉落到指定角色(target)身上。
      * @param target
      */
     public void doDrop(Entity target) {
+        if (!isEnabled()) 
+            return;
+        
         if (drops == null) {
             return;
         }
@@ -135,15 +124,13 @@ public class DropModule extends AbstractModule implements DataHandler<DropData> 
     }
 
     @Override
-    public Class<DropData> getHandleType() {
-        return DropData.class;
-    }
-
-    @Override
-    public boolean handleDataAdd(DropData data, int amount) {
+    public boolean handleDataAdd(ObjectData handleData, int amount) {
+        if (!(handleData instanceof DropData))
+            return false;
+        
         if (drops != null) {
             for (Drop d : drops) {
-                if (d.getData() == data || d.getData().getId().equals(data.getId())) {
+                if (d.getData() == handleData || d.getData().getId().equals(handleData.getId())) {
                     return false; // 已经存在
                 }
             }
@@ -152,13 +139,16 @@ public class DropModule extends AbstractModule implements DataHandler<DropData> 
     }
 
     @Override
-    public boolean handleDataRemove(DropData data, int amount) {
+    public boolean handleDataRemove(ObjectData handleData, int amount) {
+        if (!(handleData instanceof DropData))
+            return false;
+        
         if (drops == null) {
             return false;
         }
         Drop found = null;
         for (Drop d : drops) {
-            if (d.getData() == data) {
+            if (d.getData() == handleData) {
                 found = d;
                 break;
             }
@@ -166,17 +156,22 @@ public class DropModule extends AbstractModule implements DataHandler<DropData> 
         if (found == null) {
             return false;
         }
-        return removeDrop(found);
+        drops.remove(found);
+        entity.getData().removeObjectData(found.getData());
+        return true;
     }
 
     @Override
-    public boolean handleDataUse(DropData data) {
-        Drop drop = Loader.load(data);
+    public boolean handleDataUse(ObjectData handleData) {
+        if (!(handleData instanceof DropData))
+            return false;
+        
+        Drop drop = Loader.load(handleData);
         drop.doDrop(entity, null);
         return true;
     }
     
-    private class KilledEntityAttributeListener implements EntityAttributeListener{
+    private class KilledEntityAttributeListener implements HitAttributeListener{
         // 这里必须用Stack方式，因为onHitAttributeBefore，onHitAttributeAfter随然是成对出现的，
         // 但是不能保证他们是连续调用的。
         private final FastStack<Boolean> deadStack = new FastStack<Boolean>(2);

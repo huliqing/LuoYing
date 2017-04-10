@@ -31,7 +31,6 @@ import name.huliqing.luoying.layer.service.SkinService;
 import name.huliqing.luoying.layer.service.TalentService;
 import name.huliqing.luoying.layer.service.TaskService;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.entity.EntityDataListener;
 import name.huliqing.luoying.object.module.TalentListener;
 import name.huliqing.luoying.object.module.TaskListener;
 import name.huliqing.luoying.object.talent.Talent;
@@ -45,12 +44,13 @@ import name.huliqing.luoying.ui.Window;
 import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.ly.constants.ResConstants;
 import name.huliqing.ly.layer.service.GameService;
+import name.huliqing.luoying.object.entity.DataListener;
 
 /**
  * 角色主面板，这个面板包含角色所有的“属性","武器","装备","天赋"...等面板
  * @author huliqing
  */
-public class ActorMainPanel extends Window implements EntityDataListener, TalentListener, TaskListener {
+public class ActorMainPanel extends Window implements DataListener, TalentListener, TaskListener {
     private final SkinService skinService = Factory.get(SkinService.class);
     private final TalentService talentService = Factory.get(TalentService.class);
     private final TaskService taskService = Factory.get(TaskService.class);
@@ -194,7 +194,7 @@ public class ActorMainPanel extends Window implements EntityDataListener, Talent
         
         // 1.先清理上一个角色的侦听
         if (actor != null) {
-            actor.removeEntityDataListener(this);
+            actor.removeDataListener(this);
             talentService.removeTalentListener(actor, this);
             taskService.removeTaskListener(actor, this);
         }
@@ -207,14 +207,14 @@ public class ActorMainPanel extends Window implements EntityDataListener, Talent
         showTab(index);
         
         // 5.为新的角色添加侦听器以便实时更新面板内容
-        actor.addEntityDataListener(this);
+        actor.addDataListener(this);
         talentService.addTalentListener(actor, this);
         taskService.addTaskListener(actor, this);
     }
     
     public void cleanup() {
         if (actor != null) {
-            actor.removeEntityDataListener(this);
+            actor.removeDataListener(this);
             talentService.removeTalentListener(actor, this);
             taskService.removeTaskListener(actor, this);
         }

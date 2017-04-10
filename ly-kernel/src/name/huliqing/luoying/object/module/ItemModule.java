@@ -24,20 +24,19 @@ import java.util.List;
 import name.huliqing.luoying.data.ItemData;
 import name.huliqing.luoying.message.StateCode;
 import name.huliqing.luoying.object.Loader;
-import name.huliqing.luoying.object.entity.DataHandler;
 import name.huliqing.luoying.object.item.Item;
+import name.huliqing.luoying.xml.ObjectData;
 
 /**
  * @author huliqing
  */
-public class ItemModule extends AbstractModule implements DataHandler<ItemData> {
+public class ItemModule extends AbstractModule {
     
     private List<ItemData> items;
     
     @Override
     public void initialize() {
         super.initialize();
-        
          // 从角色身上取出ItemData类型数据（不取出也可以，但是把数据拿出来放在这里比较高效。）
         List<ItemData> tempDatas = entity.getData().getObjectDatas(ItemData.class, new ArrayList<ItemData>());
         if (tempDatas != null && !tempDatas.isEmpty()) {
@@ -56,19 +55,18 @@ public class ItemModule extends AbstractModule implements DataHandler<ItemData> 
         super.cleanup();
     }
     
-    @Override
-    public final Class<ItemData> getHandleType() {
-        return ItemData.class;
-    }
     
     @Override
-    public boolean handleDataAdd(ItemData data, int count) {
+    public boolean handleDataAdd(ObjectData handleData, int count) {
+        if (!(handleData instanceof ItemData)) 
+            return false;
+        
         if (count <= 0) 
             return false;
         
-        ItemData item = find(data.getId());
+        ItemData item = find(handleData.getId());
         if (item == null) {
-            item = data;
+            item = (ItemData) handleData;
             item.setTotal(count);
             if (items == null) {
                 items = new ArrayList<ItemData>();
@@ -78,24 +76,27 @@ public class ItemModule extends AbstractModule implements DataHandler<ItemData> 
         } else {
             item.setTotal(item.getTotal() + count);
         }
-        addEntityDataAddMessage(StateCode.DATA_ADD, data, count);
+        addEntityDataAddMessage(StateCode.DATA_ADD, handleData, count);
         return true;
     }
     
     @Override
-    public boolean handleDataRemove(ItemData data, int count) {
+    public boolean handleDataRemove(ObjectData handleData, int count) {
+        if (!(handleData instanceof ItemData)) 
+            return false;
+        
         if (count <= 0)
             return false;
         
-        ItemData item = find(data.getId());
+        ItemData item = find(handleData.getId());
         
         if (item == null) {
-            addEntityDataRemoveMessage(StateCode.DATA_REMOVE_FAILURE_NOT_FOUND, data, count);
+            addEntityDataRemoveMessage(StateCode.DATA_REMOVE_FAILURE_NOT_FOUND, handleData, count);
             return false;
         }
         
         if (!item.isDeletable()) {
-            addEntityDataRemoveMessage(StateCode.DATA_REMOVE_FAILURE_UN_DELETABLE, data, count);
+            addEntityDataRemoveMessage(StateCode.DATA_REMOVE_FAILURE_UN_DELETABLE, handleData, count);
             return false;
         }
         
@@ -104,18 +105,21 @@ public class ItemModule extends AbstractModule implements DataHandler<ItemData> 
             items.remove(item);
             entity.getData().getObjectDatas().remove(item);
         }
-        addEntityDataRemoveMessage(StateCode.DATA_REMOVE, data, count);
+        addEntityDataRemoveMessage(StateCode.DATA_REMOVE, handleData, count);
         return true;
     }
 
     @Override
-    public boolean handleDataUse(ItemData data) {
-        Item item = Loader.load(data);
+    public boolean handleDataUse(ObjectData handleData) {
+        if (!(handleData instanceof ItemData)) 
+            return false;
+        
+        Item item = Loader.load(handleData);
         
         int stateCode = item.checkStateCode(entity);
         
         // 输出消息,不管物品使用是否成功都应该会有一个状态码
-        addEntityDataUseMessage(stateCode, data);
+        addEntityDataUseMessage(stateCode, handleData);
         
         if (stateCode == StateCode.DATA_USE) {
             item.use(entity);
@@ -134,5 +138,7 @@ public class ItemModule extends AbstractModule implements DataHandler<ItemData> 
         }
         return null;
     }
+ 
+
    
 }

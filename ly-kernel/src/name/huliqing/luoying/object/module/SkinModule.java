@@ -27,22 +27,22 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.Config;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.data.SkinData;
 import name.huliqing.luoying.data.ModuleData;
+import name.huliqing.luoying.data.SkinData;
 import name.huliqing.luoying.layer.service.DefineService;
 import name.huliqing.luoying.message.StateCode;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.attribute.CollectionAttribute;
-import name.huliqing.luoying.object.entity.DataHandler;
 import name.huliqing.luoying.object.skin.Skin;
 import name.huliqing.luoying.object.skin.Weapon;
 import name.huliqing.luoying.object.skin.WeaponSkin;
+import name.huliqing.luoying.xml.ObjectData;
 
 /**
  * 角色的换装控制器
  * @author huliqing
  */
-public class SkinModule extends AbstractModule implements DataHandler<SkinData> {
+public class SkinModule extends AbstractModule {
     private static final Logger LOG = Logger.getLogger(SkinModule.class.getName());
     private final DefineService defineService = Factory.get(DefineService.class);
     
@@ -83,7 +83,6 @@ public class SkinModule extends AbstractModule implements DataHandler<SkinData> 
     @Override
     public void initialize() {
         super.initialize(); 
-        
         if (bindWeaponSlotAttribute != null) {
             weaponSlotAttribute = entity.getAttribute(bindWeaponSlotAttribute);
         }
@@ -102,6 +101,11 @@ public class SkinModule extends AbstractModule implements DataHandler<SkinData> 
         }
         
         attachBaseSkin();
+    }
+
+    @Override
+    public void cleanup() {
+        super.cleanup();
     }
     
     /**
@@ -383,20 +387,18 @@ public class SkinModule extends AbstractModule implements DataHandler<SkinData> 
     }
     
     @Override
-    public Class<SkinData> getHandleType() {
-        return SkinData.class;
-    }
-    
-    @Override
-    public boolean handleDataAdd(SkinData data, int amount) {
+    public boolean handleDataAdd(ObjectData hData, int amount) {
+        if (!(hData instanceof SkinData)) 
+            return false;
+            
          if (amount <= 0)
             return false;
 
-        Skin skin = getSkin(data);
+        Skin skin = getSkin((SkinData)hData);
         if (skin != null) {
             skin.getData().setTotal(skin.getData().getTotal() + amount);
         } else {
-            skin = Loader.load(data);
+            skin = Loader.load(hData);
             skin.getData().setTotal(amount);
             if (skinAll == null) {
                 skinAll = new SafeArrayList<Skin>(Skin.class);
@@ -411,21 +413,24 @@ public class SkinModule extends AbstractModule implements DataHandler<SkinData> 
             }
         }
         
-        addEntityDataAddMessage(StateCode.DATA_ADD, data, amount);
+        addEntityDataAddMessage(StateCode.DATA_ADD, hData, amount);
         
         return true;
     }
 
     @Override
-    public boolean handleDataRemove(SkinData data, int amount) {
-        Skin skin = getSkin(data);
+    public boolean handleDataRemove(ObjectData hData, int amount) {
+        if (!(hData instanceof SkinData)) 
+            return false;
+            
+        Skin skin = getSkin((SkinData) hData);
         if (skin == null) {
-            addEntityDataRemoveMessage(StateCode.DATA_REMOVE_FAILURE_NOT_FOUND, data, amount);
+            addEntityDataRemoveMessage(StateCode.DATA_REMOVE_FAILURE_NOT_FOUND, hData, amount);
             return false;
         }
         // 正在使用中的装备不能删除
         if (skinUsed != null && skinUsed.contains(skin)) {
-            addEntityDataRemoveMessage(StateCode.DATA_REMOVE_FAILURE_IN_USING, data, amount);
+            addEntityDataRemoveMessage(StateCode.DATA_REMOVE_FAILURE_IN_USING, hData, amount);
             return false;
         }
         
@@ -440,16 +445,19 @@ public class SkinModule extends AbstractModule implements DataHandler<SkinData> 
                 skinListeners.get(i).onSkinRemoved(entity, skin);
             }
         }
-        addEntityDataRemoveMessage(StateCode.DATA_REMOVE, data, amount);
+        addEntityDataRemoveMessage(StateCode.DATA_REMOVE, hData, amount);
         return true;
     }
 
     @Override
-    public boolean handleDataUse(SkinData data) {
+    public boolean handleDataUse(ObjectData hData) {
+        if (!(hData instanceof SkinData)) 
+            return false;
+            
         // 使用一件装备之前必须先拥有这件装备（use Entity.addObjectData()）
-        Skin skin = getSkin(data);
+        Skin skin = getSkin((SkinData) hData);
         if (skin == null) {
-            addEntityDataUseMessage(StateCode.DATA_USE_FAILURE_NOT_FOUND, data);
+            addEntityDataUseMessage(StateCode.DATA_USE_FAILURE_NOT_FOUND, hData);
             return false;
         }
         
@@ -460,7 +468,7 @@ public class SkinModule extends AbstractModule implements DataHandler<SkinData> 
             } else {
                 attachSkin(skin);
             }
-            addEntityDataUseMessage(StateCode.DATA_USE, data);
+            addEntityDataUseMessage(StateCode.DATA_USE, hData);
             return true;
         }
         
@@ -474,7 +482,7 @@ public class SkinModule extends AbstractModule implements DataHandler<SkinData> 
         } else {
             attachSkin(skin);
         }
-        addEntityDataUseMessage(StateCode.DATA_USE, data);
+        addEntityDataUseMessage(StateCode.DATA_USE, hData);
         return true;
     }
     

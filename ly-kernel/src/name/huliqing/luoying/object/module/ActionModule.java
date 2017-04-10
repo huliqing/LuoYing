@@ -25,6 +25,7 @@ import name.huliqing.luoying.object.action.Action;
 import name.huliqing.luoying.object.action.FightAction;
 import name.huliqing.luoying.object.action.RunAction;
 import name.huliqing.luoying.object.attribute.BooleanAttribute;
+import name.huliqing.luoying.xml.ObjectData;
 
 /**
  * 角色行为控制器
@@ -70,6 +71,9 @@ public class ActionModule extends AbstractModule {
     
     // 更新action逻辑
     private void actionUpdate(float tpf) {
+        if (!isEnabled()) 
+            return;
+        
         if (deadAttribute != null && deadAttribute.getValue()) {
             return;
         }
@@ -142,6 +146,21 @@ public class ActionModule extends AbstractModule {
 
     public void setDefFightAction(FightAction defFightAction) {
         this.defFightAction = defFightAction;
+    }
+
+    @Override
+    public boolean handleDataAdd(ObjectData data, int amount) {
+        return false;
+    }
+
+    @Override
+    public boolean handleDataRemove(ObjectData data, int amount) {
+        return false;
+    }
+
+    @Override
+    public boolean handleDataUse(ObjectData data) {
+        return false;
     }
     
 }

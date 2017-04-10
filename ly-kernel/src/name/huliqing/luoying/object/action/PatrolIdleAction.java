@@ -31,16 +31,16 @@ import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.layer.network.SkillNetwork;
 import name.huliqing.luoying.layer.service.ActorService;
-import name.huliqing.luoying.object.entity.EntityDataListener;
 import name.huliqing.luoying.object.module.SkillModule;
 import name.huliqing.luoying.object.skill.Skill;
 import name.huliqing.luoying.xml.ObjectData;
+import name.huliqing.luoying.object.entity.DataListener;
 
 /**
  * 简单的IDLE行为，巡逻，会在一个地点来回走动
  * @author huliqing
  */
-public class PatrolIdleAction extends AbstractAction implements IdleAction, EntityDataListener {
+public class PatrolIdleAction extends AbstractAction implements IdleAction, DataListener {
     private final ActorService actorService = Factory.get(ActorService.class);
 //    private final SkillService skillService = Factory.get(SkillService.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
@@ -189,12 +189,12 @@ public class PatrolIdleAction extends AbstractAction implements IdleAction, Enti
         // 缓存IDLE技能并添加侦听器
         recacheIdleSkill();
         
-        actor.addEntityDataListener(this);
+        actor.addDataListener(this);
     }
 
     @Override
     public void cleanup() {
-        actor.removeEntityDataListener(this);
+        actor.removeDataListener(this);
         super.cleanup(); 
     }
 

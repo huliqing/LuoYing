@@ -24,6 +24,7 @@ import name.huliqing.ly.data.ChatData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.ly.object.chat.Chat;
 import name.huliqing.luoying.object.module.AbstractModule;
+import name.huliqing.luoying.xml.ObjectData;
 
 /**
  * 角色对话模块
@@ -62,6 +63,21 @@ public class ChatModule extends AbstractModule {
      */
     public Chat getChat() {
         return chat;
+    }
+
+    @Override
+    public boolean handleDataAdd(ObjectData hData, int amount) {
+        return false;
+    }
+
+    @Override
+    public boolean handleDataRemove(ObjectData hData, int amount) {
+        return false;
+    }
+
+    @Override
+    public boolean handleDataUse(ObjectData hData) {
+        return false;
     }
 
 

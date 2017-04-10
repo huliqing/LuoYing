@@ -28,15 +28,13 @@ import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.logic.Logic;
 import name.huliqing.luoying.object.attribute.BooleanAttribute;
-import name.huliqing.luoying.object.entity.DataHandler;
+import name.huliqing.luoying.xml.ObjectData;
 
 /**
  * 逻辑控制器，控制角色的所有逻辑的运行。
  * @author huliqing
  */
-public class LogicModule extends AbstractModule implements DataHandler<LogicData>{
-    private Control updateControl;
-    private final SafeArrayList<Logic> logics = new SafeArrayList<Logic>(Logic.class);
+public class LogicModule extends AbstractModule {
     
     // 可以额外绑定一个角色属性(Boolean)来作为逻辑开关， 如果绑定了这个属性，
     // 那么只有enabled和bindEnabledAttribute同为true时逻辑才会运行。
@@ -44,6 +42,11 @@ public class LogicModule extends AbstractModule implements DataHandler<LogicData
     
     // ---- inner
     private BooleanAttribute enabledAttribute;
+    private final SafeArrayList<Logic> logics = new SafeArrayList<Logic>(Logic.class);
+    private final Control updateControl = new AdapterControl() {
+        @Override
+        public void update(float tpf) {logicUpdate(tpf);}
+    };
     
     @Override
     public void setData(ModuleData data) {
@@ -76,11 +79,7 @@ public class LogicModule extends AbstractModule implements DataHandler<LogicData
     @Override
     public void initialize() {
         super.initialize();
-        updateControl = new AdapterControl() {
-            @Override
-            public void update(float tpf) {logicUpdate(tpf);}
-        };
-        this.entity.getSpatial().addControl(updateControl);
+        entity.getSpatial().addControl(updateControl);
         
         // 绑定“自动AI”属性
         enabledAttribute = entity.getAttribute(bindEnabledAttribute);
@@ -147,25 +146,26 @@ public class LogicModule extends AbstractModule implements DataHandler<LogicData
     }
 
     @Override
-    public Class<LogicData> getHandleType() {
-        return LogicData.class;
-    }
-
-    @Override
-    public boolean handleDataAdd(LogicData data, int amount) {
+    public boolean handleDataAdd(ObjectData hData, int amount) {
+        if (!(hData instanceof LogicData))
+            return false;
+        
         for (Logic l : logics) {
-            if (l.getData().getId().equals(data.getId())) {
+            if (l.getData().getId().equals(hData.getId())) {
                 return false;
             }
         }
-        return addLogic((Logic) Loader.load(data));
+        return addLogic((Logic) Loader.load(hData));
     }
     
     @Override
-    public boolean handleDataRemove(LogicData data, int amount) {
+    public boolean handleDataRemove(ObjectData hData, int amount) {
+        if (!(hData instanceof LogicData))
+            return false;
+        
         Logic result = null;
         for (Logic l : logics) {
-            if (l.getData() == data) {
+            if (l.getData() == hData) {
                 result = l;
                 break;
             }
@@ -177,7 +177,8 @@ public class LogicModule extends AbstractModule implements DataHandler<LogicData
     }
 
     @Override
-    public boolean handleDataUse(LogicData data) {
+    public boolean handleDataUse(ObjectData hData) {
         return false;
     }
+
 }

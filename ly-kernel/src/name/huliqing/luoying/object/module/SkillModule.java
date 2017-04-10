@@ -30,8 +30,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.Config;
 import name.huliqing.luoying.Factory;
-import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.data.ModuleData;
+import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.message.EntitySkillUseMessage;
 import name.huliqing.luoying.message.StateCode;
@@ -41,13 +41,13 @@ import name.huliqing.luoying.object.attribute.BooleanAttribute;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.attribute.SimpleValueChangeListener;
 import name.huliqing.luoying.object.attribute.ValueChangeListener;
-import name.huliqing.luoying.object.entity.DataHandler;
 import name.huliqing.luoying.object.skill.Skill;
+import name.huliqing.luoying.xml.ObjectData;
 
 /**
  * @author huliqing 
  */
-public class SkillModule extends AbstractModule implements DataHandler<SkillData>, ValueChangeListener, SimpleValueChangeListener<Number> {
+public class SkillModule extends AbstractModule implements ValueChangeListener, SimpleValueChangeListener<Number> {
     private static final Logger LOG = Logger.getLogger(SkillModule.class.getName());
     private final SkillService skillService = Factory.get(SkillService.class);
     
@@ -122,9 +122,8 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
     @Override
     public void initialize() {
         super.initialize();
-        
         // 技能的更新支持
-        this.entity.getSpatial().addControl(updateControl);
+        entity.getSpatial().addControl(updateControl);
         
         // 载入技能
         List<SkillData> skillDatas = entity.getData().getObjectDatas(SkillData.class, new ArrayList<SkillData>());
@@ -158,6 +157,9 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
     }
     
     private void skillUpdate(float tpf) {
+        if (!isEnabled())
+            return;
+        
         // 更新并尝试移除已经结束的技能
         if (!playingSkills.isEmpty()) {
 
@@ -636,27 +638,28 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
     }
 
     @Override
-    public Class<SkillData> getHandleType() {
-        return SkillData.class;
-    }
-
-    @Override
-    public boolean handleDataAdd(SkillData data, int amount) {
+    public boolean handleDataAdd(ObjectData hData, int amount) {
+        if (!(hData instanceof SkillData)) 
+            return false;
+            
         // 技能不能重复
-        if (getSkill(data.getId()) != null) {
-            addEntityDataAddMessage(StateCode.DATA_ADD_FAILURE_DATA_EXISTS, data, amount);
+        if (getSkill(hData.getId()) != null) {
+            addEntityDataAddMessage(StateCode.DATA_ADD_FAILURE_DATA_EXISTS, hData, amount);
             return false; 
         }
-        addSkillInner((Skill) Loader.load(data));
-        addEntityDataAddMessage(StateCode.DATA_ADD, data, 1);
+        addSkillInner((Skill) Loader.load(hData));
+        addEntityDataAddMessage(StateCode.DATA_ADD, hData, 1);
         return true;
     }
     
     @Override
-    public boolean handleDataRemove(SkillData data, int amount) {
-        Skill skill = getSkill(data.getId());
-        if (skill == null || skill.getData() != data) {
-            addEntityDataRemoveMessage(StateCode.DATA_REMOVE_FAILURE_NOT_FOUND, data, amount);
+    public boolean handleDataRemove(ObjectData hData, int amount) {
+        if (!(hData instanceof SkillData)) 
+            return false;
+            
+        Skill skill = getSkill(hData.getId());
+        if (skill == null || skill.getData() != hData) {
+            addEntityDataRemoveMessage(StateCode.DATA_REMOVE_FAILURE_NOT_FOUND, hData, amount);
             return false;
         }
         skills.remove(skill);
@@ -668,10 +671,13 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
     }
     
     @Override
-    public boolean handleDataUse(SkillData data) {
-        Skill skill = getSkill(data.getId());
-        if (skill == null || skill.getData() != data) {
-            skill = Loader.load(data);
+    public boolean handleDataUse(ObjectData hData) {
+        if (!(hData instanceof SkillData)) 
+            return false;
+            
+        Skill skill = getSkill(hData.getId());
+        if (skill == null || skill.getData() != hData) {
+            skill = Loader.load(hData);
         }
         return playSkill(skill, false);
     }

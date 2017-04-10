@@ -23,8 +23,12 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import com.jme3.util.SafeArrayList;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import name.huliqing.luoying.data.EntityData;
+import name.huliqing.luoying.data.ModuleData;
+import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.attribute.AttributeManager;
 import name.huliqing.luoying.object.module.Module;
@@ -45,13 +49,13 @@ public abstract class AbstractEntity implements Entity {
     protected final EntityAttributeManager attributeManager = new EntityAttributeManager(this);
     
     /** 模块管理器 */
-    protected final ModuleManager moduleManager = new ModuleManager(this);
+    protected final SafeArrayList<Module> modules = new SafeArrayList<Module>(Module.class);
     
     /** 属性侦听器列表 */
-    protected SafeArrayList<EntityAttributeListener> attributeListeners;
+    protected SafeArrayList<HitAttributeListener> hitAttributeListeners;
     
     /** 数据侦听器列表 */
-    protected SafeArrayList<EntityDataListener> dataListeners;
+    protected SafeArrayList<DataListener> dataListeners;
     
     /** 实体空间 */
     protected Spatial spatial;
@@ -84,7 +88,9 @@ public abstract class AbstractEntity implements Entity {
         // 更新属性值
         attributeManager.updateDatas();
         // 更新所有模块内容
-        moduleManager.updateDatas();
+        for (Module module : modules.getArray()) {
+            module.updateDatas();
+        }
     }
     
     @Override
@@ -114,7 +120,23 @@ public abstract class AbstractEntity implements Entity {
         
         // 3.物体附加模块的初始化, 注：模块的初始化需要放在”基本初始化“及“属性初始化”之后，
         // 因为模块是控制器，模块的初始化可能会引用物体及属性的配置，需要确保物体自身已经初始化完毕,。
-        moduleManager.initialize();
+        
+        // 载入并初始化所有模块，这里分两步处理:
+        // 第一步先添加; 第二步再初始化;
+        // 因为一些module在初始化的时候可能会引用到另一些module
+        if (data.getModules() != null) {
+            // 添加module
+            List<ModuleData> tempMDS= new ArrayList<ModuleData>(data.getModules());
+            for (ModuleData cd : tempMDS) {
+                Module module = Loader.load(cd);
+                modules.add(module);
+            }
+            // 初始化module
+            for (Module module : modules) {
+                module.setEntity(this);
+                module.initialize();
+            }
+        }
         
         initialized = true;
     }
@@ -147,8 +169,12 @@ public abstract class AbstractEntity implements Entity {
 
     @Override
     public void cleanup() {
-        // 清理模块，因为modules是有依赖顺序的,可能存在一些module，这些module在清理的时候会依赖于
-        moduleManager.cleanup();
+        // 这里要注意反向清理，因为modules是有依赖顺序的,可能存在一些module，这些module在清理的时候会依赖于
+        // 其它module.
+        for (int i = modules.size() - 1; i >= 0; i--) {
+            modules.get(i).cleanup();
+        }
+        modules.clear();
         
         // 属性清理
         attributeManager.cleanup();
@@ -173,13 +199,13 @@ public abstract class AbstractEntity implements Entity {
     }
 
     @Override
-    public Spatial getSpatial() {
-        return spatial;
+    public long getEntityId() {
+        return data.getUniqueId();
     }
     
     @Override
-    public long getEntityId() {
-        return data.getUniqueId();
+    public Spatial getSpatial() {
+        return spatial;
     }
     
     @Override
@@ -222,31 +248,6 @@ public abstract class AbstractEntity implements Entity {
     }
 
     @Override
-    public AttributeManager getAttributeManager() {
-        return attributeManager;
-    }
-    
-    @Override
-    public void addModule(Module module) {
-        moduleManager.addModule(module);
-    }
-
-    @Override
-    public boolean removeModule(Module module) {
-        return moduleManager.removeModule(module);
-    }
-
-    @Override
-    public List<Module> getModules() {
-        return moduleManager.getModules();
-    }
-    
-    @Override
-    public <T extends Module> T getModule(Class<T> moduleType) {
-        return moduleManager.getModule(moduleType);
-    }
-    
-    @Override
     public void hitAttribute(String attribute, Object hitValue, Entity hitter) {
         Attribute attr = attributeManager.getAttribute(attribute);
         if (attr == null) {
@@ -254,8 +255,8 @@ public abstract class AbstractEntity implements Entity {
         }
         
         // 在击中属性之前先通知侦听器
-        if (attributeListeners != null && !attributeListeners.isEmpty()) {
-            for (EntityAttributeListener lis : attributeListeners.getArray()) {
+        if (hitAttributeListeners != null && !hitAttributeListeners.isEmpty()) {
+            for (HitAttributeListener lis : hitAttributeListeners.getArray()) {
                 lis.onHitAttributeBefore(attr, hitValue, hitter);
             }
         }
@@ -265,8 +266,8 @@ public abstract class AbstractEntity implements Entity {
         attr.setValue(hitValue);
         
         // 击中后再通知侦听器一次。
-        if (attributeListeners != null && !attributeListeners.isEmpty()) {
-            for (EntityAttributeListener lis : attributeListeners.getArray()) {
+        if (hitAttributeListeners != null && !hitAttributeListeners.isEmpty()) {
+            for (HitAttributeListener lis : hitAttributeListeners.getArray()) {
                 lis.onHitAttributeAfter(attr, hitValue, hitter, oldValue);
             }
         }
@@ -274,57 +275,125 @@ public abstract class AbstractEntity implements Entity {
     }
 
     @Override
-    public boolean addObjectData(ObjectData data, int count) {
-        boolean added = moduleManager.addData(data, count);
-        if (added && dataListeners != null && !dataListeners.isEmpty()) {
-            for (EntityDataListener lis : dataListeners.getArray()) {
-                lis.onDataAdded(data, count);
+    public void addHitAttributeListener(HitAttributeListener listener) {
+        if (hitAttributeListeners == null) {
+            hitAttributeListeners = new SafeArrayList<HitAttributeListener>(HitAttributeListener.class);
+        }
+        if (!hitAttributeListeners.contains(listener)) {
+            hitAttributeListeners.add(listener);
+        }
+    }
+    
+    @Override
+    public boolean removeHitAttributeListener(HitAttributeListener listener) {
+        return hitAttributeListeners != null && hitAttributeListeners.remove(listener);
+    }
+    
+    @Override
+    public AttributeManager getAttributeManager() {
+        return attributeManager;
+    }
+    
+    @Override
+    public void addModule(Module module) {
+        if (modules.contains(module)) {
+            return;
+        }
+        modules.add(module);
+        data.addModuleData(module.getData());
+        module.setEntity(this);
+        module.initialize();
+    }
+
+    @Override
+    public boolean removeModule(Module module) {
+        if (!modules.contains(module)) {
+            return false;
+        }
+        modules.remove(module);
+        data.removeModuleData(module.getData());
+        module.cleanup();
+        return true;
+    }
+
+    /**
+     * 返回所有的模块，返回的列表只能只读，不能直接修改。
+     * @return 
+     */
+    @Override
+    public List<Module> getModules() {
+        return Collections.unmodifiableList(modules);
+    }
+    
+    @Override
+    public <T extends Module> T getModule(Class<T> moduleType) {
+        for (Module m : modules.getArray()) {
+            if (moduleType.isAssignableFrom(m.getClass())) {
+                return (T) m;
+            } 
+        }
+        return null;
+    }
+    
+    @Override
+    public boolean addObjectData(ObjectData dataAdd, int count) {
+        boolean added = false;
+        for (Module m : modules.getArray()) {
+            if (!m.isEnabled()) 
+                continue;
+            added = added || m.handleDataAdd(dataAdd, count);
+        }
+        
+        if (added && dataListeners != null) {
+            for (DataListener lis : dataListeners.getArray()) {
+                lis.onDataAdded(dataAdd, count);
             }
         }
+        
         return added;
     }
     
     @Override
-    public boolean removeObjectData(ObjectData data, int count) {
-        boolean removed = moduleManager.removeData(data, count);
-        if (removed && dataListeners != null && !dataListeners.isEmpty()) {
-            for (EntityDataListener lis : dataListeners.getArray()) {
-                lis.onDataRemoved(data, count);
+    public boolean removeObjectData(ObjectData dataRemove, int count) {
+        // 如果有任何一个模块移除了物体，则认为物体是成功移除了的.
+        boolean removed = false;
+        for (Module m : modules.getArray()) {
+            if (!m.isEnabled()) 
+                continue;
+            removed = removed || m.handleDataRemove(dataRemove, count);
+        }
+        
+        if (removed && dataListeners != null) {
+            for (DataListener lis : dataListeners.getArray()) {
+                lis.onDataRemoved(dataRemove, count);
             }
         }
+        
         return removed;
     }
     
     @Override
-    public boolean useObjectData(ObjectData data) {
-        boolean used = moduleManager.useData(data);
-        if (used && dataListeners != null && !dataListeners.isEmpty()) {
-            for (EntityDataListener lis : dataListeners.getArray()) {
-                lis.onDataUsed(data);
+    public boolean useObjectData(ObjectData dataUse) {
+        // 如果有任何一个模块使用了物体，则认为物体是成功使用了的.
+        boolean used = false;
+        for (Module m : modules.getArray()) {
+            if (!m.isEnabled()) 
+                continue;
+            used = used || m.handleDataUse(dataUse);
+        }
+        
+        if (used && dataListeners != null) {
+            for (DataListener lis : dataListeners.getArray()) {
+                lis.onDataUsed(dataUse);
             }
         }
         return used;
     }
-    
+
     @Override
-    public void addEntityAttributeListener(EntityAttributeListener listener) {
-        if (attributeListeners == null) {
-            attributeListeners = new SafeArrayList<EntityAttributeListener>(EntityAttributeListener.class);
-        }
-        if (!attributeListeners.contains(listener)) {
-            attributeListeners.add(listener);
-        }
-    }
-    
-    @Override
-    public boolean removeEntityAttributeListener(EntityAttributeListener listener) {
-        return attributeListeners != null && attributeListeners.remove(listener);
-    }
-    
-    @Override
-    public void addEntityDataListener(EntityDataListener listener) {
+    public void addDataListener(DataListener listener) {
         if (dataListeners == null) {
-            dataListeners = new SafeArrayList<EntityDataListener>(EntityDataListener.class);
+            dataListeners = new SafeArrayList<DataListener>(DataListener.class);
         }
         if (!dataListeners.contains(listener)) {
             dataListeners.add(listener);
@@ -332,7 +401,7 @@ public abstract class AbstractEntity implements Entity {
     }
     
     @Override
-    public boolean removeEntityDataListener(EntityDataListener listener) {
+    public boolean removeDataListener(DataListener listener) {
         return dataListeners != null && dataListeners.remove(listener);
     }
     

@@ -36,8 +36,9 @@ import name.huliqing.luoying.object.attribute.StringAttribute;
 import name.huliqing.luoying.object.attribute.ValueChangeListener;
 import name.huliqing.luoying.object.attribute.Vector3fAttribute;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.entity.EntityAttributeListener;
 import name.huliqing.luoying.utils.FastStack;
+import name.huliqing.luoying.xml.ObjectData;
+import name.huliqing.luoying.object.entity.HitAttributeListener;
 /**
  * 角色的基本控制器
  * @author huliqing
@@ -83,7 +84,7 @@ public class ActorModule extends AbstractModule implements SimpleValueChangeList
     private boolean locationChangedEventEnabled = true;
     
     // 用于监听Entity被击中某个属性时的侦听器
-    private final EntityAttributeListener actorEntityListener = new ActorEntityListener();
+    private final HitAttributeListener actorEntityListener = new ActorEntityListener();
     
     @Override
     public void setData(ModuleData data) {
@@ -116,7 +117,7 @@ public class ActorModule extends AbstractModule implements SimpleValueChangeList
     @Override
     public void initialize() {
         super.initialize();
-        entity.addEntityAttributeListener(actorEntityListener);
+        entity.addHitAttributeListener(actorEntityListener);
         
         deadAttribute = getAttribute(bindDeadAttribute, BooleanAttribute.class);
         targetAttribute = getAttribute(bindTargetAttribute, NumberAttribute.class);
@@ -147,7 +148,8 @@ public class ActorModule extends AbstractModule implements SimpleValueChangeList
         }
         
         // 控制器
-        this.innerControl = new BetterCharacterControlWrap(radius, height, massAttribute != null ? massAttribute.floatValue() : 60);
+        innerControl = new BetterCharacterControlWrap(radius, height, massAttribute != null ? massAttribute.floatValue() : 60);
+        innerControl.setEnabled(isEnabled());
         Vector3f localForward = entity.getData().getAsVector3f("localForward");
         if (localForward != null) {
             this.innerControl.setLocalForward(localForward);
@@ -166,7 +168,7 @@ public class ActorModule extends AbstractModule implements SimpleValueChangeList
     
     @Override
     public void cleanup() {
-        entity.removeEntityAttributeListener(actorEntityListener);
+        entity.removeHitAttributeListener(actorEntityListener);
         if (innerControl != null) {
             // 注意要从PhysicsSpace中清理掉，否则角色看起来移除了，但是实际上物理物体还在场景中占资源。
             // 使用PhysicsSpace中的debug可以看到。
@@ -302,12 +304,10 @@ public class ActorModule extends AbstractModule implements SimpleValueChangeList
         tv.release();
     }
     
+    @Override
     public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
         innerControl.setEnabled(enabled);
-    }
-    
-    public boolean isEnabled() {
-        return innerControl.isEnabled();
     }
     
     public boolean isKinematic() {
@@ -341,9 +341,24 @@ public class ActorModule extends AbstractModule implements SimpleValueChangeList
     public boolean removeActorListener(ActorListener actorListener) {
         return actorListeners != null && actorListeners.remove(actorListener);
     }
+
+    @Override
+    public boolean handleDataAdd(ObjectData data, int amount) {
+        return false;
+    }
+
+    @Override
+    public boolean handleDataRemove(ObjectData data, int amount) {
+        return false;
+    }
+
+    @Override
+    public boolean handleDataUse(ObjectData data) {
+        return false;
+    }
     
     // 这个侦听器用于侦听Entity属性被击中, 并将普通的属性击中转换为更高级一点事件响应：ActorListener, 
-    private class ActorEntityListener implements EntityAttributeListener {
+    private class ActorEntityListener implements HitAttributeListener {
         
         // 这个状态用于记住被击中之前角色的死亡状态。
         // 这里必须用Stack方式，因为onHitAttributeBefore，onHitAttributeAfter随然是成对出现的，

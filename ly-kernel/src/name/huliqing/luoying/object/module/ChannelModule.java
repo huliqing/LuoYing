@@ -39,6 +39,7 @@ import name.huliqing.luoying.object.channel.ChannelControl;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.utils.GeometryUtils;
 import name.huliqing.luoying.utils.Temp;
+import name.huliqing.luoying.xml.ObjectData;
 
 /**
  * 用于控制角色动画通道的“通道控制器”
@@ -341,5 +342,18 @@ public class ChannelModule extends AbstractModule implements ChannelControl {
         tp.release();
     }
 
-    
+    @Override
+    public boolean handleDataAdd(ObjectData data, int amount) {
+        return false;
+    }
+
+    @Override
+    public boolean handleDataRemove(ObjectData data, int amount) {
+        return false;
+    }
+
+    @Override
+    public boolean handleDataUse(ObjectData data) {
+        return false;
+    }
 }

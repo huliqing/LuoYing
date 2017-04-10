@@ -30,7 +30,9 @@ import java.util.logging.Logger;
 import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.data.PhysicsShapeData;
 import name.huliqing.luoying.object.Loader;
+import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.physicsshape.PhysicsShape;
+import name.huliqing.luoying.xml.ObjectData;
 
 /**
  * 物理模块，给物体添加物理控制器
@@ -127,6 +129,7 @@ public class PhysicsModule extends AbstractModule {
             control = new RigidBodyControl(mass);
         }
         spatial.addControl(control);
+        control.setEnabled(isEnabled());
         control.setFriction(friction);
         control.setRestitution(restitution);
         control.setKinematic(kinematic);
@@ -154,6 +157,12 @@ public class PhysicsModule extends AbstractModule {
     }
 
     @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        control.setEnabled(enabled);
+    }
+
+    @Override
     public void cleanup() {
         if (control != null) {
             PhysicsSpace ps = control.getPhysicsSpace();
@@ -164,5 +173,19 @@ public class PhysicsModule extends AbstractModule {
         }
         super.cleanup(); 
     }
-    
+
+    @Override
+    public boolean handleDataAdd(ObjectData hData, int amount) {
+        return false;
+    }
+
+    @Override
+    public boolean handleDataRemove(ObjectData hData, int amount) {
+        return false;
+    }
+
+    @Override
+    public boolean handleDataUse(ObjectData hData) {
+        return false;
+    }
 }

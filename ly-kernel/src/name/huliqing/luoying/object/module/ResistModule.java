@@ -24,14 +24,14 @@ import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.data.ResistData;
 import name.huliqing.luoying.object.Loader;
-import name.huliqing.luoying.object.entity.DataHandler;
 import name.huliqing.luoying.object.resist.Resist;
+import name.huliqing.luoying.xml.ObjectData;
 
 /**
  *
  * @author huliqing
  */
-public class ResistModule extends AbstractModule implements DataHandler<ResistData> {
+public class ResistModule extends AbstractModule {
 
     private SafeArrayList<Resist> resists;
     
@@ -64,29 +64,30 @@ public class ResistModule extends AbstractModule implements DataHandler<ResistDa
         }
         super.cleanup(); 
     }
-    
-    @Override
-    public Class<ResistData> getHandleType() {
-        return ResistData.class;
-    }
 
     @Override
-    public boolean handleDataAdd(ResistData data, int amount) {
+    public boolean handleDataAdd(ObjectData hData, int amount) {
+        if (!(hData instanceof ResistData)) 
+            return false;
+            
         // 移除旧的,抗性不允许重复。
-        removeResistInner(data);
+        removeResistInner((ResistData) hData);
         
         // 增加新的
-        addResistInner(data);
+        addResistInner((ResistData) hData);
         return true;
     }
     
     @Override
-    public boolean handleDataRemove(ResistData data, int amount) {
-        return removeResistInner(data);
+    public boolean handleDataRemove(ObjectData hData, int amount) {
+        if (!(hData instanceof ResistData)) 
+            return false;
+            
+        return removeResistInner((ResistData) hData);
     }
     
     @Override
-    public boolean handleDataUse(ResistData data) {
+    public boolean handleDataUse(ObjectData hData) {
         return false;
     }
     
@@ -109,18 +110,18 @@ public class ResistModule extends AbstractModule implements DataHandler<ResistDa
         return maxValue;
     }
     
-    /**
-     * 移除对指定状态的抵抗能力,这个方法会从所有的抗性中移除对指定状态的抵抗能力。
-     * @param state 
-     */
-    public void removeResistState(String state) {
-        if (resists == null || resists.isEmpty()) 
-            return;
-        
-        for (Resist r : resists.getArray()) {
-            r.removeState(state);
-        }
-    }
+//    /**
+//     * 移除对指定状态的抵抗能力,这个方法会从所有的抗性中移除对指定状态的抵抗能力。
+//     * @param state 
+//     */
+//    private void removeResistState(String state) {
+//        if (resists == null || resists.isEmpty()) 
+//            return;
+//        
+//        for (Resist r : resists.getArray()) {
+//            r.removeState(state);
+//        }
+//    }
     
     private void addResistInner(ResistData newRd) {
         if (resists == null) {

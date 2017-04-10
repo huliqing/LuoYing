@@ -29,18 +29,22 @@ import name.huliqing.luoying.layer.service.MathService;
 import name.huliqing.luoying.layer.service.ResistService;
 import name.huliqing.luoying.message.StateCode;
 import name.huliqing.luoying.object.Loader;
-import name.huliqing.luoying.object.entity.DataHandler;
 import name.huliqing.luoying.object.state.State;
+import name.huliqing.luoying.xml.ObjectData;
 
 /**
  * @author huliqing
  */
-public class StateModule extends AbstractModule implements DataHandler<StateData> {
+public class StateModule extends AbstractModule {
     private final ResistService resistService = Factory.get(ResistService.class);
     private final MathService mathService = Factory.get(MathService.class);
 
     private final SafeArrayList<State> states = new SafeArrayList<State>(State.class);
-    private Control updateControl;
+    
+    private final Control updateControl = new AdapterControl() {
+        @Override
+        public void update(float tpf) {stateUpdate(tpf);}
+    };
     
     @Override
     public void updateDatas() {
@@ -53,10 +57,6 @@ public class StateModule extends AbstractModule implements DataHandler<StateData
     @Override
     public void initialize() {
         super.initialize(); 
-        updateControl = new AdapterControl() {
-            @Override
-            public void update(float tpf) {stateUpdate(tpf);}
-        };
         this.entity.getSpatial().addControl(updateControl);
         
         // 载入状态,这里不能再计算抵抗及机率，因为这些是从配置中或存档中读取出来的，已经计算好抵抗和机率
@@ -70,6 +70,9 @@ public class StateModule extends AbstractModule implements DataHandler<StateData
     }
     
     private void stateUpdate(float tpf) {
+        if (!isEnabled())
+            return;
+        
         for (State s : states.getArray()) {
             if (s.isEnd()) {
 //                removeState(s);
@@ -98,57 +101,58 @@ public class StateModule extends AbstractModule implements DataHandler<StateData
     }
     
     @Override
-    public Class<StateData> getHandleType() {
-        return StateData.class;
-    }
-    
-    @Override
-    public boolean handleDataAdd(StateData data, int amount) {
+    public boolean handleDataAdd(ObjectData hData, int amount) {
+        if (!(hData instanceof StateData)) 
+            return false;
+            
         // 获取对指定状态的抵抗率
-        float resist = resistService.getResist(entity, data.getId());
+        float resist = resistService.getResist(entity, hData.getId());
         
         // 如果毫无低抗的话，则不计算机率，直接添加状态，优先级比较高
         if (resist <= 0) {
-            removeStateInner(data);
-            data.setResist(0);
-            addStateInner(data);
-            addEntityDataAddMessage(StateCode.DATA_ADD, data, 1);
+            removeStateInner((StateData)hData);
+            ((StateData)hData).setResist(0);
+            addStateInner((StateData)hData);
+            addEntityDataAddMessage(StateCode.DATA_ADD, hData, 1);
             return true;
         }
         
         // 完全低抗，则不添加。
         if (resist >= 1.0f) {
-            addEntityDataAddMessage(StateCode.DATA_ADD_FAILURE, data, 1);
+            addEntityDataAddMessage(StateCode.DATA_ADD_FAILURE, hData, 1);
             return false;
         }
         
         // 给预一定机率实现完全抵抗,只要抵抗率不为0，则有机会产生完全低抗
         if (resist > mathService.getRandom()) {
-            addEntityDataAddMessage(StateCode.DATA_ADD_FAILURE, data, 1);
+            addEntityDataAddMessage(StateCode.DATA_ADD_FAILURE, hData, 1);
             return false;
         }
         
         // 移除旧的并添加新的，注意设置抗性值,抵抗效果由状态自行实现。
-        removeStateInner(data);
-        data.setResist(resist);
-        addStateInner(data);
-        addEntityDataAddMessage(StateCode.DATA_ADD, data, 1);
+        removeStateInner((StateData)hData);
+        ((StateData)hData).setResist(resist);
+        addStateInner((StateData)hData);
+        addEntityDataAddMessage(StateCode.DATA_ADD, hData, 1);
         return true;
     }
 
     @Override
-    public boolean handleDataRemove(StateData data, int amount) {
-        if (removeStateInner(data)) {
-            addEntityDataRemoveMessage(StateCode.DATA_REMOVE, data, amount);
+    public boolean handleDataRemove(ObjectData hData, int amount) {
+        if (!(hData instanceof StateData)) 
+            return false;
+            
+        if (removeStateInner((StateData)hData)) {
+            addEntityDataRemoveMessage(StateCode.DATA_REMOVE, hData, amount);
             return true;
         } else {
-            addEntityDataRemoveMessage(StateCode.DATA_REMOVE_FAILURE_NOT_FOUND, data, amount);
+            addEntityDataRemoveMessage(StateCode.DATA_REMOVE_FAILURE_NOT_FOUND, hData, amount);
             return false;
         }
     }
-
+    
     @Override
-    public boolean handleDataUse(StateData data) {
+    public boolean handleDataUse(ObjectData hData) {
         return false; // ignore
     }
     

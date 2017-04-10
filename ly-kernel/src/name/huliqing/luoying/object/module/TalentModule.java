@@ -35,13 +35,13 @@ import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.attribute.ValueChangeListener;
 import name.huliqing.luoying.object.el.LNumberEl;
-import name.huliqing.luoying.object.entity.DataHandler;
 import name.huliqing.luoying.object.talent.Talent;
+import name.huliqing.luoying.xml.ObjectData;
 
 /**
  * @author huliqing
  */
-public class TalentModule extends AbstractModule implements DataHandler<TalentData>, ValueChangeListener{
+public class TalentModule extends AbstractModule implements ValueChangeListener{
 //    private static final Logger LOG = Logger.getLogger(TalentModule.class.getName());
     private final ElService elService = Factory.get(ElService.class);
     private final MessageService messageService = Factory.get(MessageService.class);
@@ -52,7 +52,7 @@ public class TalentModule extends AbstractModule implements DataHandler<TalentDa
     // 天赋属性名称，这个属性将作为天赋点数的容器，属性类型必须是Number类型。
     // 当角色升级时获得的天赋点数将累加在这个属性上。
     private String bindTalentPointsAttribute;
-
+    
     // 天赋公式ID,如果用于为每个变化等级计算天赋点数的奖励
     private LNumberEl talentPointsLevelEl;
     
@@ -90,7 +90,6 @@ public class TalentModule extends AbstractModule implements DataHandler<TalentDa
     @Override
     public void initialize() {
         super.initialize(); 
-        
         // 绑定并监听角色等级变化
         levelAttribute = getAttribute(bindLevelAttribute, NumberAttribute.class);
         if (levelAttribute != null) {
@@ -251,40 +250,44 @@ public class TalentModule extends AbstractModule implements DataHandler<TalentDa
     }
 
     @Override
-    public Class<TalentData> getHandleType() {
-        return TalentData.class;
-    }
-
-    @Override
-    public boolean handleDataAdd(TalentData data, int amount) {
-        Talent talent = getTalent(data.getId());
+    public boolean handleDataAdd(ObjectData hData, int amount) {
+        if (!(hData instanceof TalentData)) 
+            return false;
+            
+        Talent talent = getTalent(hData.getId());
         if (talent != null) {
-            addEntityDataAddMessage(StateCode.DATA_ADD_FAILURE_DATA_EXISTS, data, amount);
+            addEntityDataAddMessage(StateCode.DATA_ADD_FAILURE_DATA_EXISTS, hData, amount);
             return false;
         }
-        addTalent((Talent) Loader.load(data));
+        addTalent((Talent) Loader.load(hData));
         // message
-        addEntityDataAddMessage(StateCode.DATA_ADD, data, amount);
+        addEntityDataAddMessage(StateCode.DATA_ADD, hData, amount);
         return true;
     }
     
     @Override
-    public boolean handleDataRemove(TalentData data, int amount) {
-        Talent talent = getTalent(data.getId());
-        if (talent == null || talent.getData() != data || !talents.contains(talent))  {
-            addEntityDataRemoveMessage(StateCode.DATA_REMOVE_FAILURE_NOT_FOUND, data, amount);
+    public boolean handleDataRemove(ObjectData hData, int amount) {
+        if (!(hData instanceof TalentData)) 
+            return false;
+            
+        Talent talent = getTalent(hData.getId());
+        if (talent == null || talent.getData() != hData || !talents.contains(talent))  {
+            addEntityDataRemoveMessage(StateCode.DATA_REMOVE_FAILURE_NOT_FOUND, hData, amount);
             return false;
         }
         talents.remove(talent);
         entity.getData().removeObjectData(talent.getData());
         talent.cleanup();
         // message
-        addEntityDataRemoveMessage(StateCode.DATA_REMOVE, data, amount);
+        addEntityDataRemoveMessage(StateCode.DATA_REMOVE, hData, amount);
         return true;
     }
 
     @Override
-    public boolean handleDataUse(TalentData data) {
+    public boolean handleDataUse(ObjectData hData) {
+        if (!(hData instanceof TalentData)) 
+            return false;
+            
         // 天赋不能使用
         return false;
     }

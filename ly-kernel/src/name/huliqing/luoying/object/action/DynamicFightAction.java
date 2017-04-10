@@ -34,19 +34,19 @@ import name.huliqing.luoying.layer.service.EntityService;
 import name.huliqing.luoying.layer.service.SkillService;
 import name.huliqing.luoying.message.StateCode;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.entity.EntityDataListener;
 import name.huliqing.luoying.object.module.SkillModule;
 import name.huliqing.luoying.object.module.SkinModule;
 import name.huliqing.luoying.object.skill.HitSkill;
 import name.huliqing.luoying.object.skill.Skill;
 import name.huliqing.luoying.utils.MathUtils;
 import name.huliqing.luoying.xml.ObjectData;
+import name.huliqing.luoying.object.entity.DataListener;
 
 /**
  * 动态的角色战斗行为，该战斗行为下角色能够移动，转向跟随等。
  * @author huliqing
  */
-public class DynamicFightAction extends PathFollowAction implements FightAction, EntityDataListener {
+public class DynamicFightAction extends PathFollowAction implements FightAction, DataListener {
     private final SkillService skillService = Factory.get(SkillService.class);
     private final EntityService entityService = Factory.get(EntityService.class);
     private final SkillNetwork skillNetwork = Factory.get(SkillNetwork.class);
@@ -134,7 +134,7 @@ public class DynamicFightAction extends PathFollowAction implements FightAction,
     @Override
     public void initialize() {
         super.initialize();
-        actor.addEntityDataListener(this);
+        actor.addDataListener(this);
         
         // 如果角色切换到战斗状态，则强制取出武器
         if (!skinModule.isWeaponTakeOn()) {
@@ -157,7 +157,7 @@ public class DynamicFightAction extends PathFollowAction implements FightAction,
     
     @Override
     public void cleanup() {
-        actor.removeEntityDataListener(this);
+        actor.removeDataListener(this);
         
         // 效果不是太好，不再使用自动收刀。
 //        if (autoTakeOffWeapon && skinService.isWeaponTakeOn(actor)) {

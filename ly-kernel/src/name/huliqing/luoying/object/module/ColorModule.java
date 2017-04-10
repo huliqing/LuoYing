@@ -26,6 +26,7 @@ import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.attribute.ColorAttribute;
 import name.huliqing.luoying.object.attribute.ValueChangeListener;
+import name.huliqing.luoying.xml.ObjectData;
 
 /**
  * 颜色模块, 用于支持动态改变Entity的颜色, 需要给Entity添加一个Vector4Attribute的属性，并绑定到ColorModule上，
@@ -87,6 +88,9 @@ public class ColorModule extends AbstractModule implements ValueChangeListener{
     }
     
     private void changeColor(ColorRGBA color) {
+        if (!isEnabled())
+            return;
+        
         if (!colorInitialized) {
             entity.getSpatial().addMatParamOverride(colorOverride);
             entity.getSpatial().addMatParamOverride(useMaterialColorOverride);
@@ -97,5 +101,20 @@ public class ColorModule extends AbstractModule implements ValueChangeListener{
         ((ColorRGBA)colorOverride.getValue()).set(color.r, color.g, color.b, color.a);
         ((ColorRGBA)ambientOverride.getValue()).set(color.r, color.g, color.b, color.a);
         ((ColorRGBA)diffuseOverride.getValue()).set(color.r, color.g, color.b, color.a);
+    }
+
+    @Override
+    public boolean handleDataAdd(ObjectData data, int amount) {
+        return false;
+    }
+
+    @Override
+    public boolean handleDataRemove(ObjectData data, int amount) {
+        return false;
+    }
+
+    @Override
+    public boolean handleDataUse(ObjectData data) {
+        return false;
     }
 }

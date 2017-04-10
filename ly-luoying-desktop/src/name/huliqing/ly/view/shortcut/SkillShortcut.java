@@ -33,17 +33,17 @@ import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.layer.network.EntityNetwork;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.entity.EntityDataListener;
 import name.huliqing.luoying.utils.MaterialUtils;
 import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.ly.layer.network.GameNetwork;
 import name.huliqing.ly.layer.service.GameService;
+import name.huliqing.luoying.object.entity.DataListener;
 
 /**
  * 用于技能(skill)的快捷方式
  * @author huliqing
  */
-public class SkillShortcut extends BaseUIShortcut<SkillData> implements EntityDataListener {
+public class SkillShortcut extends BaseUIShortcut<SkillData> implements DataListener {
     private final GameService gameService = Factory.get(GameService.class);
     private final GameNetwork gameNetwork = Factory.get(GameNetwork.class);
     private final EntityNetwork entityNetwork = Factory.get(EntityNetwork.class);
@@ -86,7 +86,7 @@ public class SkillShortcut extends BaseUIShortcut<SkillData> implements EntityDa
             entity.getSpatial().addControl(updateControl);
         }
         
-        entity.addEntityDataListener(this);
+        entity.addDataListener(this);
     }
     
     /**
@@ -119,7 +119,7 @@ public class SkillShortcut extends BaseUIShortcut<SkillData> implements EntityDa
         if (updateControl != null) {
             entity.getSpatial().removeControl(updateControl);
         }
-        entity.removeEntityDataListener(this);
+        entity.removeDataListener(this);
         super.cleanup();
     }
 

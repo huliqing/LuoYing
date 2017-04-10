@@ -25,14 +25,14 @@ import java.util.List;
 import name.huliqing.luoying.data.TaskData;
 import name.huliqing.luoying.message.StateCode;
 import name.huliqing.luoying.object.Loader;
-import name.huliqing.luoying.object.entity.DataHandler;
 import name.huliqing.luoying.object.task.Task;
+import name.huliqing.luoying.xml.ObjectData;
 
 /**
  * 任务管理
  * @author huliqing
  */
-public class TaskModule extends AbstractModule implements DataHandler<TaskData> {
+public class TaskModule extends AbstractModule {
 
     private final SafeArrayList<Task> tasks = new SafeArrayList<Task>(Task.class);
     private List<TaskListener> taskListeners;
@@ -110,11 +110,6 @@ public class TaskModule extends AbstractModule implements DataHandler<TaskData> 
         return taskListeners;
     }
 
-    @Override
-    public Class<TaskData> getHandleType() {
-        return TaskData.class;
-    }
-
     /**
      * 添加任务
      * @param task 
@@ -131,33 +126,40 @@ public class TaskModule extends AbstractModule implements DataHandler<TaskData> 
     }
     
     @Override
-    public boolean handleDataAdd(TaskData data, int amount) {
-        Task task = getTask(data.getId());
+    public boolean handleDataAdd(ObjectData hData, int amount) {
+        if (!(hData instanceof TaskData)) 
+            return false;
+            
+        Task task = getTask(hData.getId());
         if (task != null) {
-            addEntityDataAddMessage(StateCode.DATA_ADD_FAILURE_DATA_EXISTS, data, amount);
+            addEntityDataAddMessage(StateCode.DATA_ADD_FAILURE_DATA_EXISTS, hData, amount);
             return false;
         }
-        addTaskInner((Task) Loader.load(data));
-        addEntityDataAddMessage(StateCode.DATA_ADD, data, amount);
+        addTaskInner((Task) Loader.load(hData));
+        addEntityDataAddMessage(StateCode.DATA_ADD, hData, amount);
         return true;
     }
 
     @Override
-    public boolean handleDataRemove(TaskData data, int amount) {
-        Task task = getTask(data.getId());
+    public boolean handleDataRemove(ObjectData hData, int amount) {
+        if (!(hData instanceof TaskData))
+            return false;
+            
+        Task task = getTask(hData.getId());
         if (task == null) {
-            addEntityDataRemoveMessage(StateCode.DATA_REMOVE_FAILURE_NOT_FOUND, data, amount);
+            addEntityDataRemoveMessage(StateCode.DATA_REMOVE_FAILURE_NOT_FOUND, hData, amount);
             return false;
         }
         tasks.remove(task);
         entity.getData().removeObjectData(task.getData());
         task.cleanup();
-        addEntityDataRemoveMessage(StateCode.DATA_REMOVE, data, amount);
+        addEntityDataRemoveMessage(StateCode.DATA_REMOVE, hData, amount);
         return true;
     }
 
     @Override
-    public boolean handleDataUse(TaskData data) {
+    public boolean handleDataUse(ObjectData hData) {
         return false;// ignore
     }
+
 }

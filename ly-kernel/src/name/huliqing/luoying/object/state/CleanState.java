@@ -21,15 +21,15 @@ package name.huliqing.luoying.object.state;
 
 import java.util.List;
 import name.huliqing.luoying.data.StateData;
-import name.huliqing.luoying.object.entity.EntityDataListener;
 import name.huliqing.luoying.xml.ObjectData;
+import name.huliqing.luoying.object.entity.DataListener;
 
 /**
  * 这类状态可以用来清除角色身上的一些其它状态,当状态在运行时会不停的检查角色当前的状态
  * 列表，并偿试清除指定的状态，甚至清除自身状态。可用用来作为一些净化类的技能使用。
  * @author huliqing
  */
-public class CleanState extends AbstractState implements EntityDataListener {
+public class CleanState extends AbstractState implements DataListener {
 //    private static final Logger LOG = Logger.getLogger(CleanState.class.getName());
     
     // 要清理的状态ID列表
@@ -50,12 +50,12 @@ public class CleanState extends AbstractState implements EntityDataListener {
         // 状态效果来说是有意义的,即不需要持续的清理。
         doCleanStates();
         
-        entity.addEntityDataListener(this);
+        entity.addDataListener(this);
     }
 
     @Override
     public void cleanup() {
-        entity.removeEntityDataListener(this);
+        entity.removeDataListener(this);
         super.cleanup(); 
     }
     

@@ -22,6 +22,7 @@ package name.huliqing.luoying.object.module;
 import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.xml.DataProcessor;
+import name.huliqing.luoying.xml.ObjectData;
 
 /**
  * Module是用来控制实体的，一个实体可以拥有一个至多个的模块，模块可以绑定实体属性或数据，通过实体的属性或数据变化
@@ -29,6 +30,12 @@ import name.huliqing.luoying.xml.DataProcessor;
  * @author huliqing
  */
 public interface Module extends DataProcessor<ModuleData>{
+ 
+    @Override
+    public void setData(ModuleData data);
+
+    @Override
+    public ModuleData getData();
     
     /**
      * 设置模块控制的实体目标
@@ -70,5 +77,29 @@ public interface Module extends DataProcessor<ModuleData>{
      */
     void cleanup();
     
-
+    /**
+     * 处理Entity数据的添加，当外部向Entity添加数据时这个方法会被调用，
+     * 实体模块（Entity Module）通过实现这个方法来处理外部进入的数据。
+     * @param hData
+     * @param amount 
+     * @return  返回true,如果成功添加
+     */
+    boolean handleDataAdd(ObjectData hData, int amount);
+    
+    /**
+     * 处理Entity数据的移除，当外部从Entity移除数据时这个方法会被调用，
+     * 实体模块（Entity Module）通过实现这个方法来处理数据的移除。
+     * @param hData
+     * @param amount 
+     * @return 返回true ,如果移除成功。
+     */
+    boolean handleDataRemove(ObjectData hData, int amount);
+    
+    /**
+     * 处理Entity数据的使用，当Entity使用数据时这个方法会被调用。
+     * 实体模块（Entity Module）通过实现这个方法来确定要如何使用指定的数据。
+     * @param hData 
+     * @return 返回true,如果使用了物品。
+     */
+    boolean handleDataUse(ObjectData hData);
 }
