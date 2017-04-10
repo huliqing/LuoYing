@@ -26,7 +26,6 @@ import name.huliqing.luoying.data.TaskData;
 import name.huliqing.luoying.message.StateCode;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.DataHandler;
-import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.task.Task;
 
 /**
@@ -39,10 +38,10 @@ public class TaskModule extends AbstractModule implements DataHandler<TaskData> 
     private List<TaskListener> taskListeners;
 
     @Override
-    public void initialize(Entity actor) {
-        super.initialize(actor); 
+    public void initialize() {
+        super.initialize(); 
 
-        List<TaskData> taskDatas = actor.getData().getObjectDatas(TaskData.class, new ArrayList<TaskData>());
+        List<TaskData> taskDatas = entity.getData().getObjectDatas(TaskData.class, new ArrayList<TaskData>());
         if (taskDatas != null && !taskDatas.isEmpty()) {
             for (TaskData td : taskDatas) {
                 addTaskInner((Task) Loader.load(td));

@@ -36,7 +36,6 @@ import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.attribute.ValueChangeListener;
 import name.huliqing.luoying.object.el.LNumberEl;
 import name.huliqing.luoying.object.entity.DataHandler;
-import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.talent.Talent;
 
 /**
@@ -88,8 +87,8 @@ public class TalentModule extends AbstractModule implements DataHandler<TalentDa
     }
     
     @Override
-    public void initialize(Entity entity) {
-        super.initialize(entity); 
+    public void initialize() {
+        super.initialize(); 
         
         // 绑定并监听角色等级变化
         levelAttribute = getAttribute(bindLevelAttribute, NumberAttribute.class);

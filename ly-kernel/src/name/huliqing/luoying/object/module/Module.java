@@ -24,24 +24,28 @@ import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.xml.DataProcessor;
 
 /**
- * Module是用来扩展角色功能的,一个角色可以拥有一个至无穷多个的扩展模块，所有角色扩展模块都应该实现这个
- * 接口.
+ * Module是用来控制实体的，一个实体可以拥有一个至多个的模块，模块可以绑定实体属性或数据，通过实体的属性或数据变化
+ * 来控制实体。
  * @author huliqing
- * @param <T>
  */
-public interface Module<T extends ModuleData> extends DataProcessor<T>{
+public interface Module extends DataProcessor<ModuleData>{
     
-    @Override
-    public void setData(T data);
-
-    @Override
-    public T getData();
+    /**
+     * 设置模块控制的实体目标
+     * @param entity 
+     */
+    void setEntity(Entity entity);
+    
+    /**
+     * 获取模块关联的实体
+     * @return 
+     */
+    Entity getEntity();
     
     /**
      * 初始化模块
-     * @param entity
      */
-    void initialize(Entity entity);
+    void initialize();
     
     /**
      * 判断模块是否已经初始化
@@ -50,13 +54,21 @@ public interface Module<T extends ModuleData> extends DataProcessor<T>{
     boolean isInitialized();
     
     /**
+     * 设置是否打开或关闭模块功能
+     * @param enabled 
+     */
+    void setEnabled(boolean enabled);
+    
+    /**
+     * 判断模块功能是否开启
+     * @return 
+     */
+    boolean isEnabled();
+    
+    /**
      * 清理模块
      */
     void cleanup();
     
-    /**
-     * 获取模块关联的实体
-     * @return 
-     */
-    Entity getEntity();
+
 }

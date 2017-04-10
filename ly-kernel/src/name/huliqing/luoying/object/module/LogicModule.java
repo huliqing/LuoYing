@@ -29,7 +29,6 @@ import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.logic.Logic;
 import name.huliqing.luoying.object.attribute.BooleanAttribute;
 import name.huliqing.luoying.object.entity.DataHandler;
-import name.huliqing.luoying.object.entity.Entity;
 
 /**
  * 逻辑控制器，控制角色的所有逻辑的运行。
@@ -83,8 +82,8 @@ public class LogicModule extends AbstractModule implements DataHandler<LogicData
     }
     
     @Override
-    public void initialize(Entity entity) {
-        super.initialize(entity);
+    public void initialize() {
+        super.initialize();
         updateControl = new AdapterControl() {
             @Override
             public void update(float tpf) {logicUpdate(tpf);}

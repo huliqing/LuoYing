@@ -115,8 +115,8 @@ public class ActorModule extends AbstractModule implements SimpleValueChangeList
     }
     
     @Override
-    public void initialize(Entity entity) {
-        super.initialize(entity);
+    public void initialize() {
+        super.initialize();
         entity.addEntityAttributeListener(actorEntityListener);
         
         deadAttribute = getAttribute(bindDeadAttribute, BooleanAttribute.class);

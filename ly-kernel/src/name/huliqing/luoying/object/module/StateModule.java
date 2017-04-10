@@ -30,7 +30,6 @@ import name.huliqing.luoying.layer.service.ResistService;
 import name.huliqing.luoying.message.StateCode;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.DataHandler;
-import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.state.State;
 
 /**
@@ -51,8 +50,8 @@ public class StateModule extends AbstractModule implements DataHandler<StateData
     }
     
     @Override
-    public void initialize(Entity actor) {
-        super.initialize(actor); 
+    public void initialize() {
+        super.initialize(); 
         updateControl = new AdapterControl() {
             @Override
             public void update(float tpf) {stateUpdate(tpf);}
@@ -61,7 +60,7 @@ public class StateModule extends AbstractModule implements DataHandler<StateData
         
         // 载入状态,这里不能再计算抵抗及机率，因为这些是从配置中或存档中读取出来的，已经计算好抵抗和机率
         // 所以直接还原状态就可以。
-        List<StateData> stateDatas = actor.getData().getObjectDatas(StateData.class, new ArrayList<StateData>());
+        List<StateData> stateDatas = entity.getData().getObjectDatas(StateData.class, new ArrayList<StateData>());
         if (stateDatas != null) {
             for (StateData sd : stateDatas) {
                 addStateInner(sd);

@@ -34,7 +34,6 @@ import name.huliqing.luoying.message.StateCode;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.attribute.CollectionAttribute;
 import name.huliqing.luoying.object.entity.DataHandler;
-import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.skin.Skin;
 import name.huliqing.luoying.object.skin.Weapon;
 import name.huliqing.luoying.object.skin.WeaponSkin;
@@ -81,8 +80,8 @@ public class SkinModule extends AbstractModule implements DataHandler<SkinData> 
     }
     
     @Override
-    public void initialize(Entity entity) {
-        super.initialize(entity); 
+    public void initialize() {
+        super.initialize(); 
         
         if (bindWeaponSlotAttribute != null) {
             weaponSlotAttribute = entity.getAttribute(bindWeaponSlotAttribute);

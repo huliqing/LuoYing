@@ -83,11 +83,11 @@ public class ChannelModule extends AbstractModule implements ChannelControl {
     }
 
     @Override
-    public void initialize(Entity actor) {
-        super.initialize(actor);
-        animControl = actor.getSpatial().getControl(AnimControl.class);
+    public void initialize() {
+        super.initialize();
+        animControl = entity.getSpatial().getControl(AnimControl.class);
         
-        List<ChannelData> ods = actor.getData().getObjectDatas(ChannelData.class, new ArrayList<ChannelData>());
+        List<ChannelData> ods = entity.getData().getObjectDatas(ChannelData.class, new ArrayList<ChannelData>());
         if (ods != null && !ods.isEmpty()) {
             for (ChannelData od : ods) {
                 addChannel((Channel) Loader.load(od));

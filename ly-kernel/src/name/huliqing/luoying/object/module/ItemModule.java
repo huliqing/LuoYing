@@ -25,7 +25,6 @@ import name.huliqing.luoying.data.ItemData;
 import name.huliqing.luoying.message.StateCode;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.DataHandler;
-import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.item.Item;
 
 /**
@@ -41,11 +40,11 @@ public class ItemModule extends AbstractModule implements DataHandler<ItemData> 
     }
     
     @Override
-    public void initialize(Entity actor) {
-        super.initialize(actor);
+    public void initialize() {
+        super.initialize();
         
          // 从角色身上取出ItemData类型数据（不取出也可以，但是把数据拿出来放在这里比较高效。）
-        List<ItemData> tempDatas = actor.getData().getObjectDatas(ItemData.class, new ArrayList<ItemData>());
+        List<ItemData> tempDatas = entity.getData().getObjectDatas(ItemData.class, new ArrayList<ItemData>());
         if (tempDatas != null && !tempDatas.isEmpty()) {
             items = new ArrayList<ItemData>(tempDatas.size());
             for (ItemData itemData : tempDatas) {

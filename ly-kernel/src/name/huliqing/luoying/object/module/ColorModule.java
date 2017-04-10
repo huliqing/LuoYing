@@ -26,7 +26,6 @@ import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.attribute.ColorAttribute;
 import name.huliqing.luoying.object.attribute.ValueChangeListener;
-import name.huliqing.luoying.object.entity.Entity;
 
 /**
  * 颜色模块, 用于支持动态改变Entity的颜色, 需要给Entity添加一个Vector4Attribute的属性，并绑定到ColorModule上，
@@ -62,8 +61,8 @@ public class ColorModule extends AbstractModule implements ValueChangeListener{
     }
     
     @Override
-    public void initialize(Entity entity) {
-        super.initialize(entity);
+    public void initialize() {
+        super.initialize();
         colorAttribute = getAttribute(bindColorAttribute, ColorAttribute.class);
         if (colorAttribute != null) {
             colorAttribute.addListener(this);

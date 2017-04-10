@@ -38,11 +38,9 @@ public class ModuleManager {
     
     private boolean initialized;
     
-    /**
-     * Entity的模块列表
-     */
+    // Entity的模块列表
     private final SafeArrayList<Module> modules = new SafeArrayList<Module>(Module.class);
-        
+    
     private final SafeArrayList<DataHandler> handlers = new SafeArrayList<DataHandler>(DataHandler.class);
     
     public ModuleManager(Entity entity) {
@@ -82,7 +80,8 @@ public class ModuleManager {
             
             // 初始化module
             for (Module module : modules) {
-                module.initialize(entity);
+                module.setEntity(entity);
+                module.initialize();
             }
         }
         initialized = true;
@@ -119,7 +118,8 @@ public class ModuleManager {
             handlers.add((DataHandler) module);
         }
         entity.getData().addModuleData(module.getData());
-        module.initialize(entity);
+        module.setEntity(entity);
+        module.initialize();
     }
 
     /**

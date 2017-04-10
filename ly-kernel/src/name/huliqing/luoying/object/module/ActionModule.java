@@ -25,7 +25,6 @@ import name.huliqing.luoying.object.action.Action;
 import name.huliqing.luoying.object.action.FightAction;
 import name.huliqing.luoying.object.action.RunAction;
 import name.huliqing.luoying.object.attribute.BooleanAttribute;
-import name.huliqing.luoying.object.entity.Entity;
 
 /**
  * 角色行为控制器
@@ -60,8 +59,8 @@ public class ActionModule extends AbstractModule {
     }
 
     @Override
-    public void initialize(Entity entity) {
-        super.initialize(entity);
+    public void initialize() {
+        super.initialize();
         deadAttribute = getAttribute(bindDeadAttribute, BooleanAttribute.class);
         
         updateControl = new AdapterControl() {

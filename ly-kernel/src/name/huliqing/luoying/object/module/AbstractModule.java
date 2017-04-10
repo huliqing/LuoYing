@@ -37,14 +37,15 @@ import name.huliqing.luoying.xml.ObjectData;
  * Module的抽象类,所有角色模块可以直接继承自这个基类
  * @author huliqing
  */
-public abstract class AbstractModule implements Module<ModuleData> {
+public abstract class AbstractModule implements Module {
     private static final Logger LOG = Logger.getLogger(AbstractModule.class.getName());
     private final MessageService messageService = Factory.get(MessageService.class);
 
+    protected Entity entity;
     protected ModuleData data;
     protected boolean initialized;
+    protected boolean enabled = true;
     protected int moduleOrder;
-    protected Entity entity;
     
     // 绑定一个BooleanAttribute来确定是否打开或关闭模块的Message消息。
     // 具体记录什么游戏消息由各个模块自行决定。
@@ -64,14 +65,23 @@ public abstract class AbstractModule implements Module<ModuleData> {
     public ModuleData getData() {
         return data;
     }
+
+    @Override
+    public void setEntity(Entity entity) {
+        this.entity = entity;
+    }
     
     @Override
-    public void initialize(Entity entity) {
+    public Entity getEntity() {
+        return entity;
+    }
+    
+    @Override
+    public void initialize() {
         if (initialized) {
             throw new IllegalStateException("Module is already initialized! module=" + getClass());
         }
         this.initialized = true;
-        this.entity = entity;
         messageEnabledAttribute = getAttribute(bindMessageEnabledAttribute, BooleanAttribute.class);
     }
 
@@ -81,13 +91,18 @@ public abstract class AbstractModule implements Module<ModuleData> {
     }
 
     @Override
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    @Override
     public void cleanup() {
         initialized = false;
-    }
-    
-    @Override
-    public Entity getEntity() {
-        return entity;
     }
     
     /**

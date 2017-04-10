@@ -25,7 +25,6 @@ import java.util.List;
 import name.huliqing.luoying.data.ResistData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.DataHandler;
-import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.resist.Resist;
 
 /**
@@ -46,8 +45,8 @@ public class ResistModule extends AbstractModule implements DataHandler<ResistDa
     }
 
     @Override
-    public void initialize(Entity entity) {
-        super.initialize(entity);
+    public void initialize() {
+        super.initialize();
         List<ResistData> rds = entity.getData().getObjectDatas(ResistData.class, new ArrayList<ResistData>());
         for (ResistData rd : rds) {
             addResistInner(rd);

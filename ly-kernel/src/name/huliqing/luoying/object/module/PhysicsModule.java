@@ -30,7 +30,6 @@ import java.util.logging.Logger;
 import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.data.PhysicsShapeData;
 import name.huliqing.luoying.object.Loader;
-import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.physicsshape.PhysicsShape;
 
 /**
@@ -101,8 +100,8 @@ public class PhysicsModule extends AbstractModule {
     }
 
     @Override
-    public void initialize(Entity entity) {
-        super.initialize(entity);
+    public void initialize() {
+        super.initialize();
         Spatial spatial = entity.getSpatial();
         if (spatial == null) {
             return;

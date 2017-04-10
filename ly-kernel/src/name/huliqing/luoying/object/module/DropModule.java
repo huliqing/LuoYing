@@ -32,7 +32,6 @@ import name.huliqing.luoying.object.attribute.BooleanAttribute;
 import name.huliqing.luoying.object.drop.Drop;
 import name.huliqing.luoying.object.entity.DataHandler;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.sound.SoundManager;
 import name.huliqing.luoying.object.entity.EntityAttributeListener;
 import name.huliqing.luoying.utils.FastStack;
 
@@ -72,8 +71,8 @@ public class DropModule extends AbstractModule implements DataHandler<DropData> 
     }
     
     @Override
-    public void initialize(Entity entity) {
-        super.initialize(entity); 
+    public void initialize() {
+        super.initialize(); 
         if (bindDeadAttribute != null) {
             deadAttribute = getAttribute(bindDeadAttribute, BooleanAttribute.class);
         }

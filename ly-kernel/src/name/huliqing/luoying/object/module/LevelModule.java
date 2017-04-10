@@ -34,7 +34,6 @@ import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.attribute.ValueChangeListener;
 import name.huliqing.luoying.object.effect.Effect;
 import name.huliqing.luoying.object.el.LNumberEl;
-import name.huliqing.luoying.object.entity.Entity;
 
 /**
  * 可以让角色升级的模块,这个模块的作用是监听角色的经验值属性，并在角色的经验值达到一定程度时改变角色的等级值。
@@ -95,8 +94,8 @@ public class LevelModule extends AbstractModule implements ValueChangeListener{
     }
     
     @Override
-    public void initialize(Entity entity) {
-        super.initialize(entity);
+    public void initialize() {
+        super.initialize();
         // 角色的等级属性
         levelAttribute = getAttribute(bindLevelAttribute, NumberAttribute.class);
         

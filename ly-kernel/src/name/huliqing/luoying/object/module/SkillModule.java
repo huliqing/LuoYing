@@ -42,7 +42,6 @@ import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.attribute.SimpleValueChangeListener;
 import name.huliqing.luoying.object.attribute.ValueChangeListener;
 import name.huliqing.luoying.object.entity.DataHandler;
-import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.skill.Skill;
 
 /**
@@ -120,14 +119,14 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
     }
 
     @Override
-    public void initialize(Entity actor) {
-        super.initialize(actor);
+    public void initialize() {
+        super.initialize();
         
         // 技能的更新支持
         this.entity.getSpatial().addControl(updateControl);
         
         // 载入技能
-        List<SkillData> skillDatas = actor.getData().getObjectDatas(SkillData.class, new ArrayList<SkillData>());
+        List<SkillData> skillDatas = entity.getData().getObjectDatas(SkillData.class, new ArrayList<SkillData>());
         if (skillDatas != null && !skillDatas.isEmpty()) {
             for (SkillData sd : skillDatas) {
                 addSkillInner((Skill) Loader.load(sd));
