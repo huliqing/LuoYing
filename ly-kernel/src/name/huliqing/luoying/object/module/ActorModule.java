@@ -101,17 +101,16 @@ public class ActorModule extends AbstractModule implements SimpleValueChangeList
 
     @Override
     public void updateDatas() {
-        if (initialized) {
-            data.setAttribute(DATA_VIEW_DIRECTION, getViewDirection());
-            if (locationAttribute != null) {
-                locationChangedEventEnabled = false;
-                locationAttribute.setValue(getLocation());
-                locationChangedEventEnabled = true;
-            }
-            // 不保存这个状态，由skill去恢复走路就行。避免移动与动画不同步，
-            // 这发生在当角色在走路过程中存档后，再恢复时会导致角色“不走路”但却在一直移动。
-//            data.setAttribute(DATA_WALK_DIRECTION, getWalkDirection());
+        super.updateDatas();
+        data.setAttribute(DATA_VIEW_DIRECTION, getViewDirection());
+        if (locationAttribute != null) {
+            locationChangedEventEnabled = false;
+            locationAttribute.setValue(getLocation());
+            locationChangedEventEnabled = true;
         }
+        // 不保存这个状态，由skill去恢复走路就行。避免移动与动画不同步，
+        // 这发生在当角色在走路过程中存档后，再恢复时会导致角色“不走路”但却在一直移动。
+//            data.setAttribute(DATA_WALK_DIRECTION, getWalkDirection());
     }
     
     @Override

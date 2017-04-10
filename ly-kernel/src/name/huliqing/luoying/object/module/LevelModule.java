@@ -88,6 +88,7 @@ public class LevelModule extends AbstractModule implements ValueChangeListener{
     
     @Override
     public void updateDatas() {
+        super.updateDatas();
         if (lastLevelUp != null) {
             data.setAttribute("_lastLevelUp", lastLevelUp);
         }

@@ -39,19 +39,13 @@ public class TaskModule extends AbstractModule implements DataHandler<TaskData> 
 
     @Override
     public void initialize() {
-        super.initialize(); 
-
+        super.initialize();
         List<TaskData> taskDatas = entity.getData().getObjectDatas(TaskData.class, new ArrayList<TaskData>());
         if (taskDatas != null && !taskDatas.isEmpty()) {
             for (TaskData td : taskDatas) {
                 addTaskInner((Task) Loader.load(td));
             }
         }
-    }
-
-    @Override
-    public void updateDatas() {
-        // xxx updateDatas.
     }
 
     @Override

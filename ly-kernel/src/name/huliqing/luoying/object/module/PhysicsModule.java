@@ -90,6 +90,7 @@ public class PhysicsModule extends AbstractModule {
     
     @Override
     public void updateDatas() {
+        super.updateDatas();
         if (control != null) {
             // 注：control可能会被外部引用并更改，所以这里要更新一下
             data.setAttribute("mass", control.getMass());

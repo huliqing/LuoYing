@@ -53,10 +53,6 @@ public class ActionModule extends AbstractModule {
         super.setData(data); 
         bindDeadAttribute = data.getAsString("bindDeadAttribute");
     }
-    
-    @Override
-    public void updateDatas() {
-    }
 
     @Override
     public void initialize() {

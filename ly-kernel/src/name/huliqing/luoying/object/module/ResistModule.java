@@ -37,6 +37,7 @@ public class ResistModule extends AbstractModule implements DataHandler<ResistDa
     
     @Override
     public void updateDatas() {
+        super.updateDatas();
         if (resists != null) {
             for (Resist r : resists.getArray()) {
                 r.updateDatas();

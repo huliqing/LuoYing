@@ -38,9 +38,6 @@ public class LogicModule extends AbstractModule implements DataHandler<LogicData
     private Control updateControl;
     private final SafeArrayList<Logic> logics = new SafeArrayList<Logic>(Logic.class);
     
-    // 控制逻辑的内部开关,这个参数可以作为”总开关“
-    private boolean enabled = true;
-    
     // 可以额外绑定一个角色属性(Boolean)来作为逻辑开关， 如果绑定了这个属性，
     // 那么只有enabled和bindEnabledAttribute同为true时逻辑才会运行。
     private String bindEnabledAttribute;
@@ -51,35 +48,30 @@ public class LogicModule extends AbstractModule implements DataHandler<LogicData
     @Override
     public void setData(ModuleData data) {
         super.setData(data);
-        enabled = data.getAsBoolean("enabled", enabled);
         bindEnabledAttribute = data.getAsString("bindEnabledAttribute");
     }
-    
-    @Override
-    public void updateDatas() {
-        data.setAttribute("enabled", enabled);
-    }
 
-    /**
-     * 判断逻辑功能是否打开。 <br>
-     * 注：完整的逻辑功能的开关由两个参数组成：<br>
-     * 1.LogicModule自身的开关(enabled), 这个方法只返回这个参数的开关。<br>
-     * 2.LogicModule所绑定的角色属性：bindEnabledAttribute。<br>
-     * 只有这两个参数<b>都打开</b>时整个逻辑功能才打开。
-     * @return 
-     */
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    /**
-     * 设置是否打开逻辑的自身开关功能, 注：如果绑定了逻辑属性开关bindEnabledAttribute,则同时必须打开这两个开关
-     * 整个逻辑才会运行。一般来说，当在客户端运行时可以直接把这个参数设置为false，来关闭整个逻辑。
-     * @param enabled 
-     */
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
+    // remove20170410
+//    /**
+//     * 判断逻辑功能是否打开。 <br>
+//     * 注：完整的逻辑功能的开关由两个参数组成：<br>
+//     * 1.LogicModule自身的开关(enabled), 这个方法只返回这个参数的开关。<br>
+//     * 2.LogicModule所绑定的角色属性：bindEnabledAttribute。<br>
+//     * 只有这两个参数<b>都打开</b>时整个逻辑功能才打开。
+//     * @return 
+//     */
+//    public boolean isEnabled() {
+//        return enabled;
+//    }
+//
+//    /**
+//     * 设置是否打开逻辑的自身开关功能, 注：如果绑定了逻辑属性开关bindEnabledAttribute,则同时必须打开这两个开关
+//     * 整个逻辑才会运行。一般来说，当在客户端运行时可以直接把这个参数设置为false，来关闭整个逻辑。
+//     * @param enabled 
+//     */
+//    public void setEnabled(boolean enabled) {
+//        this.enabled = enabled;
+//    }
     
     @Override
     public void initialize() {
@@ -103,7 +95,7 @@ public class LogicModule extends AbstractModule implements DataHandler<LogicData
     }
     
     private void logicUpdate(float tpf) {
-        if (!enabled) {
+        if (!isEnabled()) {
             return;
         }
         

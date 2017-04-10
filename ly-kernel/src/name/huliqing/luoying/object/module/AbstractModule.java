@@ -57,6 +57,7 @@ public abstract class AbstractModule implements Module {
     @Override
     public void setData(ModuleData data) {
         this.data = data;
+        this.enabled = data.getAsBoolean("enabled", enabled);
         this.moduleOrder = data.getAsInteger("moduleOrder", moduleOrder);
         this.bindMessageEnabledAttribute = data.getAsString("bindMessageEnabledAttribute");
     }
@@ -64,6 +65,11 @@ public abstract class AbstractModule implements Module {
     @Override
     public ModuleData getData() {
         return data;
+    }
+    
+    @Override
+    public void updateDatas() {
+        data.setAttribute("enabled", enabled);
     }
 
     @Override

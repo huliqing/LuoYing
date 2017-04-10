@@ -61,7 +61,6 @@ public interface Entity extends DataProcessor<EntityData> {
      */
     boolean isEnabled();
     
-    
     /**
      * 这个方法会在物体被添加到场景的时候被调用, 如果一个物体没有被直接被放到场景中，则这个方法
      * 可能不会被调用。

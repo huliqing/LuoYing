@@ -33,11 +33,6 @@ import name.huliqing.luoying.object.item.Item;
 public class ItemModule extends AbstractModule implements DataHandler<ItemData> {
     
     private List<ItemData> items;
-
-    @Override
-    public void updateDatas() {
-        // xxx updateDatas.
-    }
     
     @Override
     public void initialize() {

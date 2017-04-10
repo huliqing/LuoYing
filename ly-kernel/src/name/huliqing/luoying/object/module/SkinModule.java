@@ -76,6 +76,7 @@ public class SkinModule extends AbstractModule implements DataHandler<SkinData> 
      
     @Override
     public void updateDatas() {
+        super.updateDatas();
         data.setAttribute("weaponTakeOn", weaponTakeOn);
     }
     

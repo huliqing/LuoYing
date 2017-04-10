@@ -75,10 +75,9 @@ public class ChannelModule extends AbstractModule implements ChannelControl {
 
     @Override
     public void updateDatas() {
-        if (isInitialized()) {
-            for (Channel c : channels.getArray()) {
-                c.updateDatas();
-            }
+        super.updateDatas();
+        for (Channel c : channels.getArray()) {
+            c.updateDatas();
         }
     }
 

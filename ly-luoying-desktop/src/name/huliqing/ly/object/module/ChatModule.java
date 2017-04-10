@@ -34,11 +34,6 @@ public class ChatModule extends AbstractModule {
     private Chat chat;
 
     @Override
-    public void updateDatas() {
-        // ignore
-    }    
-
-    @Override
     public void initialize() {
         super.initialize();
         // 目标只支持配置一个chat, 如果需要多个chat，则应该包装在GroupChat下面。

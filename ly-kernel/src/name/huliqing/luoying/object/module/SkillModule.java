@@ -112,6 +112,7 @@ public class SkillModule extends AbstractModule implements DataHandler<SkillData
     
     @Override
     public void updateDatas() {
+        super.updateDatas();
         data.setAttribute("lockedSkillTypes", lockedSkillTypes);
         for (Skill s : playingSkills.getArray()) {
             s.updateDatas();

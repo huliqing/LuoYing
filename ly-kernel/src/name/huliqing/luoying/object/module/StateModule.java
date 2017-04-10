@@ -44,6 +44,7 @@ public class StateModule extends AbstractModule implements DataHandler<StateData
     
     @Override
     public void updateDatas() {
+        super.updateDatas();
         for (State s : states.getArray()) {
             s.updateDatas();
         }

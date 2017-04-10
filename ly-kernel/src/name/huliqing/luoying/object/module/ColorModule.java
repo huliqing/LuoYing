@@ -56,11 +56,6 @@ public class ColorModule extends AbstractModule implements ValueChangeListener{
     }
     
     @Override
-    public void updateDatas() {
-        // ignore
-    }
-    
-    @Override
     public void initialize() {
         super.initialize();
         colorAttribute = getAttribute(bindColorAttribute, ColorAttribute.class);

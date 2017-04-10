@@ -83,6 +83,7 @@ public class TalentModule extends AbstractModule implements DataHandler<TalentDa
     
     @Override
     public void updateDatas() {
+        super.updateDatas();
         data.setAttribute("lastApplyTalentPointsLevel", lastApplyTalentPointsLevel);
     }
     

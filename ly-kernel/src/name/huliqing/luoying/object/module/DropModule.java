@@ -64,11 +64,6 @@ public class DropModule extends AbstractModule implements DataHandler<DropData> 
         bindDeadAttribute = data.getAsString("bindDeadAttribute");
 //        sounds = data.getAsArray("sounds");
     }
-
-    @Override
-    public void updateDatas() {
-        // xxx updateDatas.
-    }
     
     @Override
     public void initialize() {
