@@ -121,6 +121,8 @@ public class IdConstants {
     public final static String SYS_ENTITY_AUDIO = "sysEntityAudio";
     /** sysEntityModel */
     public final static String SYS_ENTITY_MODEL = "sysEntityModel";
+    /**  sysEntityEffect, 效果实体，空的，没有任何效果，需要动态设置。 */
+    public final static String SYS_ENTITY_EFFECT = "sysEntityEffect";
     
     // =============================================================================
     // El
@@ -160,5 +162,7 @@ public class IdConstants {
     // =============================================================================
     /** 声音 */
     public final static String SYS_SOUND = "sysSound";
+    
+
     
 }

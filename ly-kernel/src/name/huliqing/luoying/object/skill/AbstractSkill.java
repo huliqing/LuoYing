@@ -19,14 +19,12 @@
  */
 package name.huliqing.luoying.object.skill;
 
-import com.jme3.animation.SkeletonControl;
 import com.jme3.math.FastMath;
-import com.jme3.scene.Spatial;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.LuoYing;
+import name.huliqing.luoying.constants.IdConstants;
 import name.huliqing.luoying.data.AttributeUse;
 import name.huliqing.luoying.data.MagicData;
 import name.huliqing.luoying.data.SkillData;
@@ -39,9 +37,11 @@ import name.huliqing.luoying.object.actoranim.ActorAnim;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.define.WeaponTypeDefine;
 import name.huliqing.luoying.object.effect.Effect;
+import name.huliqing.luoying.object.effect.TraceEffect;
 import name.huliqing.luoying.object.el.LNumberEl;
 import name.huliqing.luoying.object.el.SBooleanEl;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.entity.impl.EffectEntity;
 import name.huliqing.luoying.object.magic.Magic;
 import name.huliqing.luoying.object.module.SkinModule;
 import name.huliqing.luoying.object.sound.SoundManager;
@@ -637,7 +637,7 @@ public abstract class AbstractSkill implements Skill {
         // 标记效果是否已经开始
         boolean started;
         // 保持对特效实例的引用
-        Effect effect;
+        EffectEntity effectEntity;
         
         void update(float interpolation) {
             if (started) return;
@@ -646,33 +646,46 @@ public abstract class AbstractSkill implements Skill {
                 started = true;
             }
         }
-
+        
         void playEffect() {
-            Spatial traceObject = actor.getSpatial();
-            if (boneName != null) {
-                SkeletonControl sc = traceObject.getControl(SkeletonControl.class);
-                if (sc != null) {
-                    try {
-                        traceObject = sc.getAttachmentsNode(boneName);
-                    } catch (Exception e) {
-                        LOG.log(Level.WARNING, "Bone not found, bone name={0}, skill={1}, actor={2}"
-                                , new Object[]{boneName, data.getId(), actor.getData().getId()});
-                        return;
-                    };
-                }
-            }
-            // 效果需要同步与技能相同的执行速度
-            effect = Loader.load(effectId);
-            effect.setSpeed(trueSpeed);
-            effect.setTraceObject(traceObject);
-            effect.initialize();
-            actor.getScene().getRoot().attachChild(effect);
+            effectEntity = Loader.load(IdConstants.SYS_ENTITY_EFFECT);
+            Effect effect = Loader.load(effectId);
+            effect.setSpeed(trueSpeed); // 效果需要同步与技能相同的执行速度
+            effectEntity.setEffect(effect);
+            effectEntity.setTraceEntity(actor);
+            effectEntity.setTraceBone(boneName);
+            actor.getScene().addEntity(effectEntity);
         }
         
+        // remove20170416
+//        void playEffect() {
+//            Spatial traceObject = actor.getSpatial();
+//            if (boneName != null) {
+//                SkeletonControl sc = traceObject.getControl(SkeletonControl.class);
+//                if (sc != null) {
+//                    try {
+//                        traceObject = sc.getAttachmentsNode(boneName);
+//                    } catch (Exception e) {
+//                        LOG.log(Level.WARNING, "Bone not found, bone name={0}, skill={1}, actor={2}"
+//                                , new Object[]{boneName, data.getId(), actor.getData().getId()});
+//                        return;
+//                    };
+//                }
+//            }
+//            // 效果需要同步与技能相同的执行速度
+//            effect = Loader.load(effectId);
+//            effect.setSpeed(trueSpeed);
+//            if (effect instanceof TraceEffect) {
+//                ((TraceEffect) effect).setTraceObject(traceObject);
+//            }
+//            effect.initialize();
+//            actor.getScene().getRoot().attachChild(effect);
+//        }
+        
         void cleanup() {
-            if (effect != null) {
-                effect.requestEnd();
-                effect = null;
+            if (effectEntity != null) {
+                effectEntity.requestEnd();
+                effectEntity = null;
             }
             started = false;
         }

@@ -25,6 +25,7 @@ import name.huliqing.luoying.data.ItemData;
 import name.huliqing.luoying.layer.service.ElService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.effect.Effect;
+import name.huliqing.luoying.object.effect.TraceEffect;
 import name.huliqing.luoying.object.el.SBooleanEl;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.sound.SoundManager;
@@ -76,7 +77,9 @@ public abstract class AbstractItem implements Item {
          if (effects != null) {
             for (String eid : effects) {
                  Effect effect = Loader.load(eid);
-                 effect.setTraceObject(actor.getSpatial());
+                 if (effect instanceof TraceEffect) {
+                    ((TraceEffect)effect).setTraceObject(actor.getSpatial());
+                 }
                  effect.initialize();
                  actor.getScene().getRoot().attachChild(effect);
             }

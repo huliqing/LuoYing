@@ -126,8 +126,10 @@
     <!--内置模型:一个单位立方体-->
     <entitySimpleModel id="sysEntityModel" extends="sysEntityModelBase" file="LuoYingSys/Assets/Models/unitBox.j3o" scale="1,1,1" />
     
-    <!--特效-->
-    <entityEffect id="sysEntityEffect" effect="sysEffectFire" />
+    <!--特效: 默认的空效果实体，无任何特效，需要在程序中运行时设置效果-->
+    <entityEffect id="sysEntityEffect" effect="" traceEntity="" traceBone="" />
+    <!--特效: 内置示例-->
+    <entityEffect id="sysEntityEffectFire" effect="sysEffectFire" />
     
     <!-- ========================================================================= -->
     <!-- 以下为内置过滤器 -->
@@ -138,10 +140,6 @@
     <entityFogFilter id="sysEntityFogFilter" fogColor="1,1,1,1" fogDensity="0.7" fogDistance="1000" />
     <entityLightScatteringFilter id="sysEntityLightScatteringFilter" blurStart="0.02" blurWidth="0.9" lightDensity="1.4" lightPosition="0,0,0" nbSamples="50" />
     <entitySSAOFilter id="sysEntitySSAOFilter" bias="0.1" intensity="1.5" sampleRadius="5.1" ssaoScale="0.2" />
-    
-    <!-- ========================================================================= -->
-    <!-- 一些额外的参考配置，不能直接使用，根据应用和资源环境的不同实际情况，配置参数会有所不同 -->
-    <!-- ========================================================================= -->
 
     
 </root>

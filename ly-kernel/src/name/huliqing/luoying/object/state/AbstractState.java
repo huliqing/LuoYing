@@ -28,6 +28,7 @@ import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.anim.DelayAnim;
 import name.huliqing.luoying.object.attribute.BooleanAttribute;
 import name.huliqing.luoying.object.effect.Effect;
+import name.huliqing.luoying.object.effect.TraceEffect;
 import name.huliqing.luoying.object.entity.Entity;
 
 /**
@@ -123,7 +124,9 @@ public abstract class AbstractState<T extends StateData> implements State<T> {
             if (entity.getScene() != null) {
                 for (String effectId : effects) {
                     Effect effect = Loader.load(effectId);
-                    effect.setTraceObject(entity.getSpatial());
+                    if (effect instanceof TraceEffect) {
+                        ((TraceEffect)effect).setTraceObject(entity.getSpatial());
+                    }
                     entity.getScene().getRoot().attachChild(effect);
                     tempEffects.add(effect);
                     effect.initialize();

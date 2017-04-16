@@ -24,6 +24,7 @@ import java.util.List;
 import name.huliqing.luoying.data.StateData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.effect.Effect;
+import name.huliqing.luoying.object.effect.TraceEffect;
 import name.huliqing.luoying.object.module.SkillModule;
 import name.huliqing.luoying.object.skill.Skill;
 
@@ -64,7 +65,9 @@ public class MoveSpeedState extends AttributeState {
         
         if (moveEffect == null && moveEffectId != null) {
             moveEffect = Loader.load(moveEffectId);
-            moveEffect.setTraceObject(entity.getSpatial());
+            if (moveEffect instanceof TraceEffect) {
+                ((TraceEffect)moveEffect).setTraceObject(entity.getSpatial());
+            }
             moveEffect.initialize();
             if (entity.getScene() != null) {
                 entity.getScene().getRoot().attachChild(moveEffect);

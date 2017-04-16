@@ -17,29 +17,27 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with LuoYing.  If not, see <http://www.gnu.org/licenses/>.
  */
-package name.huliqing.luoying.object.effect;
+package name.huliqing.luoying.loader;
+
+import name.huliqing.luoying.data.EffectData;
+import name.huliqing.luoying.object.Loader;
+import name.huliqing.luoying.xml.Proto;
 
 /**
- * 跟随类型
+ *
  * @author huliqing
  */
-public enum TraceType {
-    
-    /** 不跟随 */
-    no,
-    
-    /** 跟随一次 */
-    once,
-    
-    /** 始终、持续跟随 */
-    always;
-    
-    public static TraceType identity(String name) {
-       for (TraceType tt : values()) {
-           if (tt.name().equals(name)) {
-               return tt;
-           }
-       }
-       throw new UnsupportedOperationException("不支持的TraceType, name=" + name);
+public class TraceEffectDataLoader extends EffectDataLoader{
+
+    @Override
+    public void load(Proto proto, EffectData store) {
+        super.load(proto, store);
+        
+        String effectId = proto.getAsString("effect");
+        if (effectId != null) {
+            EffectData effectData = Loader.loadData(effectId);
+            store.setAttribute("effect", effectData);
+        }
     }
+    
 }

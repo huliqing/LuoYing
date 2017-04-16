@@ -19,33 +19,30 @@
  */
 package name.huliqing.luoying.object.effect;
 
-import com.jme3.bounding.BoundingVolume;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
-import com.jme3.util.TempVars;
+import com.jme3.util.SafeArrayList;
 import java.util.List;
 import name.huliqing.luoying.data.DelayAnimData;
 import name.huliqing.luoying.data.EffectData;
 import name.huliqing.luoying.object.ControlAdapter;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.anim.DelayAnim;
-import name.huliqing.luoying.utils.GeometryUtils;
 import name.huliqing.luoying.xml.DataProcessor;
 
 /**
  * 特效
  * @author huliqing
+ * @version v1.6 20170416 分离trace功能到TraceEffect.java
  * @version v1.5 20170227
  * @version v1.4 20161011
- * @param <T>
  */
-public class Effect<T extends EffectData> extends Node implements DataProcessor<T> {
+public class Effect extends Node implements DataProcessor<EffectData> {
     
-    protected T data;
+    protected EffectData data;
     
     /** 特效的总的使用时间，注：特效的使用时间受特效执行速度的影响。
      * 如果特效速度为2.0则实际执行时间只有useTime的一半，反之也然 */
@@ -70,17 +67,6 @@ public class Effect<T extends EffectData> extends Node implements DataProcessor<
     /** 特效声音 */
     protected SoundWrap[] sounds;
     
-    /** 特效跟随位置的类型 */
-    private TraceType traceLocation;
-    /** 特效跟随旋转的类型  */
-    private TraceType traceRotation;
-    /** 特效的初始偏移位置（跟随时用） */
-    protected Vector3f traceLocationOffset;
-    /** 特效的初始偏移旋转（跟随时用） */
-    protected Quaternion traceRotationOffset;
-    /** 特效跟随位置时的偏移类型 */
-    protected TraceOffsetType traceLocationType;
-    
     // ---------- inner
     
     /**
@@ -88,9 +74,6 @@ public class Effect<T extends EffectData> extends Node implements DataProcessor<
      * animations所执行的动画变换都作用在这个节点上。
      */
     protected final Node animNode = new Node("AnimEffectRoot");
-    
-    /** 跟踪的目标对象,必须必须有一个目标对象才有可能跟随 */
-    protected Spatial traceObject;
     
     /** 实际效果所用的时间,这个实际时间受速度的影响,效果速度越快则效果的实际执行时间越少。*/
     protected float trueTimeTotal;
@@ -104,18 +87,23 @@ public class Effect<T extends EffectData> extends Node implements DataProcessor<
         }
     };
     
-    public Effect() {
-        attachChild(animNode);
-        addControl(control);
+    public interface EffectListener {
+        /**
+         * 当特效结束时该方法被调用。
+         * @param eff 
+         */
+        void onEffectEnd(Effect eff);
     }
     
+    private SafeArrayList<EffectListener> listeners;
+    
     @Override
-    public T getData() {
+    public EffectData getData() {
         return data;
     }
     
     @Override
-    public void setData(T data) {
+    public void setData(EffectData data) {
         this.data = data;
         
         useTime = data.getAsFloat("useTime", useTime);
@@ -148,13 +136,6 @@ public class Effect<T extends EffectData> extends Node implements DataProcessor<
                 animations[i] = da;
             }
         }
-        
-        // 跟随
-        traceLocation = TraceType.identity(data.getAsString("traceLocation", TraceType.no.name()));
-        traceRotation = TraceType.identity(data.getAsString("traceRotation", TraceType.no.name()));
-        traceLocationOffset = data.getAsVector3f("traceLocationOffset");
-        traceRotationOffset = data.getAsQuaternion("traceRotationOffset");
-        traceLocationType = TraceOffsetType.identify(data.getAsString("traceLocationType", TraceOffsetType.origin.name()));
         
         Vector3f location = data.getAsVector3f("location");
         if (location != null) {
@@ -209,17 +190,12 @@ public class Effect<T extends EffectData> extends Node implements DataProcessor<
         }
         initialized = true;
         
+        // 动画根节点和“更新”控制器
+        attachChild(animNode);
+        addControl(control);
+        
         // 计算实际时间
         trueTimeTotal = useTime / speed;
-        
-        if (traceObject != null) {
-            if (traceLocation == TraceType.once || traceLocation == TraceType.always) {
-                doUpdateTracePosition();
-            }
-            if (traceRotation == TraceType.once || traceRotation == TraceType.always) {
-                doUpdateTraceRotation();
-            }
-        }
     }
     
     public boolean isInitialized() {
@@ -236,9 +212,6 @@ public class Effect<T extends EffectData> extends Node implements DataProcessor<
         }
         
         timeUsed += tpf;
-        
-        // 更新位置
-        updateTrace();
         
         // 更新声音
          if (sounds != null) {
@@ -259,6 +232,11 @@ public class Effect<T extends EffectData> extends Node implements DataProcessor<
                 timeUsed = 0;
             } else {
                 doEndEffect();
+                if (listeners != null) {
+                    for (EffectListener el : listeners.getArray()) {
+                        el.onEffectEnd(this);
+                    }
+                }
             }
         }
     }
@@ -296,14 +274,6 @@ public class Effect<T extends EffectData> extends Node implements DataProcessor<
     }
     
     /**
-     * 强制结束效果，当效果运行时间结束时这个方法会被调用，来结束效果，这个方法也可以由子类进行调用，
-     * 当子类需要特殊结束效果时可以直接调用这个方法。
-     */
-    protected void doEndEffect() {
-        cleanup();
-    }
-    
-    /**
      * 判断特效是否已经结束，如果该方法返回true,则特效逻辑将不再执行。
      * @return 
      */
@@ -312,18 +282,7 @@ public class Effect<T extends EffectData> extends Node implements DataProcessor<
             return true;
         }
         
-        if (!loop && timeUsed >= trueTimeTotal) {
-            return true;
-        }
-        return false;
-    }
-    
-    /**
-     * 直接设置要跟随的对象
-     * @param traceObject 
-     */
-    public void setTraceObject(Spatial traceObject) {
-        this.traceObject = traceObject;
+        return !loop && timeUsed >= trueTimeTotal;
     }
     
     /**
@@ -355,64 +314,50 @@ public class Effect<T extends EffectData> extends Node implements DataProcessor<
     }
     
     /**
-     * 更新跟随位置
+     * 添加特效监听器
+     * @param listener 
      */
-    private void updateTrace() {
-        if (traceObject != null) {
-            if (traceLocation == TraceType.always) {
-                doUpdateTracePosition();
-            }
-            if (traceRotation == TraceType.always) {
-                doUpdateTraceRotation();
-            }
+    public void addListener(EffectListener listener) {
+        if (listeners == null) {
+            listeners = new SafeArrayList<EffectListener>(EffectListener.class);
+        }
+        if (!listeners.contains(listener)) {
+            listeners.add(listener);
         }
     }
     
-    private void doUpdateTracePosition() {
-        // add type offset
-        Vector3f pos = getLocalTranslation();
-        
-        if (traceLocationType == TraceOffsetType.origin) {
-            pos.set(traceObject.getWorldTranslation());
-            
-        } else if (traceLocationType == TraceOffsetType.origin_bound_center) {
-            pos.set(traceObject.getWorldTranslation());
-            BoundingVolume bv = traceObject.getWorldBound();
-            if (bv != null) {
-                pos.setY(bv.getCenter().getY());
-            }
-            
-        } else if (traceLocationType == TraceOffsetType.origin_bound_top) {
-            GeometryUtils.getBoundTopPosition(traceObject, pos);
-            pos.setX(traceObject.getWorldTranslation().x);
-            pos.setZ(traceObject.getWorldTranslation().z);
-            
-        } else if (traceLocationType == TraceOffsetType.bound_center) {
-            pos.set(traceObject.getWorldBound().getCenter());
-            
-        } else if (traceLocationType == TraceOffsetType.bound_top) {
-            GeometryUtils.getBoundTopPosition(traceObject, pos);
-            
-        }
-        // 注：tracePositionOffset是以被跟随的目标对象的本地坐标为基准的,
-        // 所以必须mult上目标对象的旋转
-        if (traceLocationOffset != null) {
-            TempVars tv = TempVars.get();
-            traceObject.getWorldRotation().mult(traceLocationOffset, tv.vect2);
-            pos.addLocal(tv.vect2);
-            tv.release();
-        }
-        setLocalTranslation(pos);
-//        LOG.log(Level.INFO, "AbstractEffect doUpdateTracePosition, pos={0}", new Object[] {pos});
+    public boolean removeListener(EffectListener listener) {
+        return listeners != null && listeners.remove(listener);
     }
     
-    private void doUpdateTraceRotation() {
-        Quaternion rot = getLocalRotation();
-        rot.set(traceObject.getWorldRotation());
-        if (traceRotationOffset != null) {
-            rot.multLocal(traceRotationOffset);
-        }
-        setLocalRotation(rot);
+    // remove20170416
+//    /**
+//     * 设置效果要跟随或添加到的目标对象, 如果目标对象为Node，则直接将当前效果添加到该节点下面。
+//     * 否则如果目标为Geometry则偿试将当前效果添加到其父对象中。
+//     * @param traceObject 
+//     */
+//    public void setTraceObject(Spatial traceObject) {
+//        if (traceObject instanceof Node) {
+//            ((Node) traceObject).attachChild(this);
+//            return;
+//        }
+//        if (traceObject instanceof Geometry) {
+//            Node toParent = traceObject.getParent();
+//            if (toParent != null) {
+//                toParent.attachChild(this);
+//                return;
+//            }
+//        }
+//        throw new UnsupportedOperationException("TraceObject need to be a Node or a geometry with a parent!");
+//    }
+    
+    /**
+     * 强制结束效果，当效果运行时间结束时这个方法会被调用，来结束效果，这个方法也可以由子类进行调用，
+     * 当子类需要特殊结束效果时可以直接调用这个方法。
+     */
+    protected void doEndEffect() {
+        cleanup();
     }
+
     
 }

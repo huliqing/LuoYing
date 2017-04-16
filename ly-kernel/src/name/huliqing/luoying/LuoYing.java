@@ -253,6 +253,7 @@ import name.huliqing.luoying.loader.TaskDataLoader;
 import name.huliqing.luoying.loader.PlantEnvLoader;
 import name.huliqing.luoying.loader.PrivateGroupStateDataLoader;
 import name.huliqing.luoying.loader.RandomSceneDataLoader;
+import name.huliqing.luoying.loader.TraceEffectDataLoader;
 import name.huliqing.luoying.log.LogFactory;
 import name.huliqing.luoying.manager.ResManager;
 import name.huliqing.luoying.mess.ActorSetLocationMess;
@@ -292,6 +293,7 @@ import name.huliqing.luoying.object.drop.AttributeDrop;
 import name.huliqing.luoying.object.drop.GroupDrop;
 import name.huliqing.luoying.object.drop.ItemDrop;
 import name.huliqing.luoying.object.drop.SkinDrop;
+import name.huliqing.luoying.object.effect.TraceEffect;
 import name.huliqing.luoying.object.el.CustomEl;
 import name.huliqing.luoying.object.el.STBooleanEl;
 import name.huliqing.luoying.object.el.STNumberEl;
@@ -664,9 +666,9 @@ public class LuoYing {
         DataFactory.register("dropSkin",  DropData.class, DropDataLoader.class, SkinDrop.class);
         
         // Effect
-        DataFactory.register("effectHalo",  EffectData.class, EffectDataLoader.class, HaloEffect.class);
-        DataFactory.register("effectParticle", EffectData.class, ParticleEffectDataLoader.class, ParticleEffect.class);
+        DataFactory.register("effectTrace",  EffectData.class, TraceEffectDataLoader.class, TraceEffect.class);
         DataFactory.register("effectGroup", EffectData.class, EffectDataLoader.class, GroupEffect.class);
+        DataFactory.register("effectParticle", EffectData.class, ParticleEffectDataLoader.class, ParticleEffect.class);
         DataFactory.register("effectEncircleHalo", EffectData.class, EffectDataLoader.class, EncircleHaloEffect.class);
         DataFactory.register("effectTexture", EffectData.class, EffectDataLoader.class, TextureEffect.class);
         DataFactory.register("effectTextureCylinder", EffectData.class, EffectDataLoader.class, TextureCylinderEffect.class);
@@ -675,6 +677,7 @@ public class LuoYing {
         DataFactory.register("effectSlideColorSpline", EffectData.class, EffectDataLoader.class, SlideColorSplineEffect.class);
         DataFactory.register("effectSlideColorIOSpline", EffectData.class, EffectDataLoader.class, SlideColorIOSplineEffect.class);
         DataFactory.register("effectProjection", EffectData.class, EffectDataLoader.class, ProjectionEffect.class);
+        DataFactory.register("effectHalo",  EffectData.class, EffectDataLoader.class, HaloEffect.class);
         
         // El
         DataFactory.registerDataProcessor("elCustom",  CustomEl.class);

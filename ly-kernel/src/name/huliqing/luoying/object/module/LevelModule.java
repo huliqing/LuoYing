@@ -33,6 +33,7 @@ import name.huliqing.luoying.object.attribute.LimitAttribute;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.attribute.ValueChangeListener;
 import name.huliqing.luoying.object.effect.Effect;
+import name.huliqing.luoying.object.effect.TraceEffect;
 import name.huliqing.luoying.object.el.LNumberEl;
 import name.huliqing.luoying.xml.ObjectData;
 
@@ -222,7 +223,9 @@ public class LevelModule extends AbstractModule implements ValueChangeListener{
                 Effect levelUpEffect = Loader.load(effect);
 //                levelUpEffect.setTraceEntity(entity.getEntityId());
 //                this.entity.getScene().addEntity(levelUpEffect);
-                levelUpEffect.setTraceObject(entity.getSpatial());
+                if (levelUpEffect instanceof TraceEffect) {
+                    ((TraceEffect)levelUpEffect).setTraceObject(entity.getSpatial());
+                }
                 levelUpEffect.initialize();
                 this.entity.getScene().getRoot().attachChild(levelUpEffect);
             }

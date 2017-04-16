@@ -33,7 +33,7 @@ public abstract class NonModelEntity  extends AbstractEntity {
      * 这个物体作为所有不需要实际存在的Entity的Spatial用于
      * {@link #getSpatial() } 方法的调用返回, 避免在调用getSpatial的时候返回null.
      */
-    private final Node NULL_ROOT = new Node(getClass().getName());
+    protected final Node NULL_ROOT = new Node(getClass().getName());
 
     @Override
     protected Spatial initSpatial() {

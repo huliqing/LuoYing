@@ -23,6 +23,8 @@ import com.jme3.math.Vector3f;
 import com.jme3.util.TempVars;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.layer.service.ActorService;
@@ -39,6 +41,8 @@ import name.huliqing.luoying.utils.MathUtils;
  * @author huliqing
  */
 public class ShotSkill extends HitSkill { 
+
+    private static final Logger LOG = Logger.getLogger(ShotSkill.class.getName());
 
     private final ActorService actorService = Factory.get(ActorService.class);
     
@@ -185,7 +189,8 @@ public class ShotSkill extends HitSkill {
         Vector3f startPoint = new Vector3f(offset);
         Bullet bb = Loader.load(bullet);
         bb.setStart(convertToWorldPos(startPoint));
-        bb.setEnd(getShotEndPoint(mainTarget));
+        Vector3f endPoint = getShotEndPoint(mainTarget);
+        bb.setEnd(endPoint != null ? endPoint : startPoint.clone());
         bb.setSpeed(shotSpeed);
         
         bb.addListener(new BulletListener() {
@@ -239,6 +244,11 @@ public class ShotSkill extends HitSkill {
      * @return 
      */
     private Vector3f getShotEndPoint(Entity target) {
+        if (target.getSpatial() == null) {
+            LOG.log(Level.WARNING, "Target spatial could not be null! target={0}, entityId={1}"
+                    , new Object[] {target.getData().getId(), target.getEntityId()});
+            return null;
+        }
         switch (shotTargetType) {
             case bound:
             case center:
