@@ -29,14 +29,14 @@ import name.huliqing.luoying.object.effect.Effect;
 import name.huliqing.luoying.object.effect.Effect.EffectListener;
 import name.huliqing.luoying.object.effect.TraceEffect;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.entity.NonModelEntity;
+import name.huliqing.luoying.object.entity.ModelEntity;
 import name.huliqing.luoying.object.scene.Scene;
 
 /**
  * 特效实体，主要用于将特效功能封装为一个可直接放到场景中的实体。
  * @author huliqing
  */
-public class EffectEntity extends NonModelEntity {
+public class EffectEntity extends ModelEntity {
     
     // 设置要跟随的目标
     private long traceEntity;
@@ -67,26 +67,19 @@ public class EffectEntity extends NonModelEntity {
     }
 
     @Override
-    public void updateDatas() {
-        if (effectInstance != null) {
-            effectInstance.updateDatas();
-            NULL_ROOT.setLocalTranslation(effectInstance.getWorldTranslation());
-            NULL_ROOT.setLocalRotation(effectInstance.getWorldRotation());
-            NULL_ROOT.setLocalScale(effectInstance.getWorldScale());
-            data.setAttribute("effect", effectInstance.getData());
+    protected Spatial loadModel() {
+        if (effect != null) {
+            effectInstance = Loader.load(effect);
         }
+        return effectInstance;
+    }
+
+    @Override
+    public void updateDatas() {
         super.updateDatas();
-        data.setAttribute("traceEntityId", traceEntity);
+        data.setAttribute("traceEntity", traceEntity);
         data.setAttribute("traceBone", traceBone);
-    }
-    
-    public void setEffect(Effect effect) {
-        this.effect = effect.getData();
-        this.effectInstance = effect;
-    }
-    
-    public void setEffect(EffectData effectData) {
-        this.effect = effectData;
+        data.setAttribute("effect", effect);
     }
     
     public void setTraceEntity(long entityId) {
@@ -101,6 +94,10 @@ public class EffectEntity extends NonModelEntity {
         this.traceBone = traceBone;
     }
     
+    public Effect getEffect() {
+        return effectInstance;
+    }
+    
     public void requestEnd() {
         if (effectInstance != null) {
             effectInstance.requestEnd();
@@ -108,24 +105,14 @@ public class EffectEntity extends NonModelEntity {
     }
     
     @Override
-    protected void initEntity() {
-        // ignore
-    }
-    
-    @Override
     public void onInitScene(Scene scene) {
         super.onInitScene(scene);
-        if (effectInstance == null && effect != null) {
-            effectInstance = Loader.load(effect);
-            effectInstance.addListener(effectListener); // 在特效结束时，同时将EffectEntity移除出场景
-        }
-        effectInstance.setLocalTranslation(NULL_ROOT.getWorldTranslation());
-        effectInstance.setLocalRotation(NULL_ROOT.getWorldRotation());
-        scene.getRoot().attachChild(effectInstance);
-        
         if (!effectInstance.isInitialized()) {
             effectInstance.initialize();
         }
+        // 在特效结束时，同时将EffectEntity移除出场景
+        effectInstance.addListener(effectListener);
+
         if (traceEntity >= 0) {
             Entity target = scene.getEntity(traceEntity);
             if (target != null) {
@@ -154,11 +141,9 @@ public class EffectEntity extends NonModelEntity {
     public void cleanup() {
         if (effectInstance != null && effectInstance.isInitialized()) {
             effectInstance.cleanup();
-            effectInstance.removeFromParent();
         }
         super.cleanup();
     }
-
 
     
 }

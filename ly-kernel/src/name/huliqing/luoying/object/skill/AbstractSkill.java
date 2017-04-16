@@ -26,6 +26,8 @@ import name.huliqing.luoying.Factory;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.constants.IdConstants;
 import name.huliqing.luoying.data.AttributeUse;
+import name.huliqing.luoying.data.EffectData;
+import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.data.MagicData;
 import name.huliqing.luoying.data.SkillData;
 import name.huliqing.luoying.layer.service.DefineService;
@@ -37,7 +39,6 @@ import name.huliqing.luoying.object.actoranim.ActorAnim;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.define.WeaponTypeDefine;
 import name.huliqing.luoying.object.effect.Effect;
-import name.huliqing.luoying.object.effect.TraceEffect;
 import name.huliqing.luoying.object.el.LNumberEl;
 import name.huliqing.luoying.object.el.SBooleanEl;
 import name.huliqing.luoying.object.entity.Entity;
@@ -648,12 +649,13 @@ public abstract class AbstractSkill implements Skill {
         }
         
         void playEffect() {
-            effectEntity = Loader.load(IdConstants.SYS_ENTITY_EFFECT);
-            Effect effect = Loader.load(effectId);
-            effect.setSpeed(trueSpeed); // 效果需要同步与技能相同的执行速度
-            effectEntity.setEffect(effect);
+            EntityData effectEntityData = Loader.loadData(IdConstants.SYS_ENTITY_EFFECT);
+            EffectData effectData = Loader.loadData(effectId);
+            effectEntityData.setAttribute("effect", effectData);
+            effectEntity = Loader.load(effectEntityData);
             effectEntity.setTraceEntity(actor);
             effectEntity.setTraceBone(boneName);
+            effectEntity.getEffect().setSpeed(trueSpeed); // 效果需要同步与技能相同的执行速度
             actor.getScene().addEntity(effectEntity);
         }
         

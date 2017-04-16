@@ -304,6 +304,10 @@ public class ShotSkill extends HitSkill {
     
     // 判断子弹是否击中指定角色。
     private boolean isBulletHit(Bullet bullet, Entity target) {
+        if (target.getSpatial() == null) {
+            //  这种情况可能发生在目标死亡后刚好被清理出场景的情况，要避免NPE
+            return false;
+        }
         switch (shotTargetType) {
             case bound:
                 return bullet.isHit(target.getSpatial());
