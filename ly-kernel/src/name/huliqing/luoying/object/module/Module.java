@@ -21,6 +21,7 @@ package name.huliqing.luoying.object.module;
 
 import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.xml.DataProcessor;
 import name.huliqing.luoying.xml.ObjectData;
 
@@ -71,6 +72,13 @@ public interface Module extends DataProcessor<ModuleData>{
      * @return 
      */
     boolean isEnabled();
+    
+    /**
+     * 当模块所关联的实体被添加到场景时该方法被调用, 该方法由内部自动调用，不要直接从外部自行调用该方法。
+     * 当某些模块需要知道实体什么时候被添加到场景时，可以覆盖该方法来实现监听。
+     * @param scene
+     */
+    void onInitScene(Scene scene);
     
     /**
      * 清理模块

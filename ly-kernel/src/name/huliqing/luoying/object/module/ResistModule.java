@@ -28,7 +28,8 @@ import name.huliqing.luoying.object.resist.Resist;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
- *
+ * 抗性模块，给实体添加这个模块之后，就可以实体具有抗性功能，可以向实体添加ResistData来设置实体的各种抗性。
+ * 用于抵抗各种状态的影响。
  * @author huliqing
  */
 public class ResistModule extends AbstractModule {

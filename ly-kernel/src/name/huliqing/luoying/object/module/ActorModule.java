@@ -40,7 +40,7 @@ import name.huliqing.luoying.utils.FastStack;
 import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.object.entity.HitAttributeListener;
 /**
- * 角色的基本控制器
+ * 角色模块
  * @author huliqing
  */
 public class ActorModule extends AbstractModule implements SimpleValueChangeListener<Object>, ValueChangeListener {

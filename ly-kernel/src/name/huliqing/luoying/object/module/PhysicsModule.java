@@ -30,12 +30,11 @@ import java.util.logging.Logger;
 import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.data.PhysicsShapeData;
 import name.huliqing.luoying.object.Loader;
-import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.physicsshape.PhysicsShape;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
- * 物理模块，给物体添加物理控制器
+ * 物理模块，给实体添加物理控制器，这样就可以让物体具有物理碰撞功能。
  * @author huliqing
  */
 public class PhysicsModule extends AbstractModule {

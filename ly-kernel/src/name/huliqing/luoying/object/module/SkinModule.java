@@ -39,7 +39,7 @@ import name.huliqing.luoying.object.skin.WeaponSkin;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
- * 角色的换装控制器
+ * 皮肤模块，让实体具有换肤功能，主要处理SkinData这一类物体
  * @author huliqing
  */
 public class SkinModule extends AbstractModule {

@@ -42,7 +42,8 @@ import name.huliqing.luoying.utils.Temp;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
- * 用于控制角色动画通道的“通道控制器”
+ * 动画通道模块，当一个实体为模型类实体，并带有骨骼动画时，可以为实体指定这个模块，使用这个模块来播放角色动画。
+ * 这个模块可以骨骼指定和分配不同的通道，然后可以指定要使用哪些动画通道来播放动画。
  * @author huliqing 
  */
 public class ChannelModule extends AbstractModule implements ChannelControl {

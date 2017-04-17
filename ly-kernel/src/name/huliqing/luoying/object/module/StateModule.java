@@ -33,6 +33,7 @@ import name.huliqing.luoying.object.state.State;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
+ * 状态模块，主要用于让实体具有接受各种状态影响的模块，主要处理StateData这一类数据
  * @author huliqing
  */
 public class StateModule extends AbstractModule {

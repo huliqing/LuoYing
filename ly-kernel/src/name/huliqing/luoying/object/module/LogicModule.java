@@ -31,7 +31,7 @@ import name.huliqing.luoying.object.attribute.BooleanAttribute;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
- * 逻辑控制器，控制角色的所有逻辑的运行。
+ * 逻辑控制器，控制角色的所有逻辑的运行。 主要处理并监听LogicData这一类物体。
  * @author huliqing
  */
 public class LogicModule extends AbstractModule {
@@ -53,28 +53,6 @@ public class LogicModule extends AbstractModule {
         super.setData(data);
         bindEnabledAttribute = data.getAsString("bindEnabledAttribute");
     }
-
-    // remove20170410
-//    /**
-//     * 判断逻辑功能是否打开。 <br>
-//     * 注：完整的逻辑功能的开关由两个参数组成：<br>
-//     * 1.LogicModule自身的开关(enabled), 这个方法只返回这个参数的开关。<br>
-//     * 2.LogicModule所绑定的角色属性：bindEnabledAttribute。<br>
-//     * 只有这两个参数<b>都打开</b>时整个逻辑功能才打开。
-//     * @return 
-//     */
-//    public boolean isEnabled() {
-//        return enabled;
-//    }
-//
-//    /**
-//     * 设置是否打开逻辑的自身开关功能, 注：如果绑定了逻辑属性开关bindEnabledAttribute,则同时必须打开这两个开关
-//     * 整个逻辑才会运行。一般来说，当在客户端运行时可以直接把这个参数设置为false，来关闭整个逻辑。
-//     * @param enabled 
-//     */
-//    public void setEnabled(boolean enabled) {
-//        this.enabled = enabled;
-//    }
     
     @Override
     public void initialize() {

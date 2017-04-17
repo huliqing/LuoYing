@@ -28,7 +28,7 @@ import name.huliqing.luoying.object.attribute.BooleanAttribute;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
- * 角色行为控制器
+ * 角色行为模块，一般主要用于活动角色类型，主要让角色拥有各种各样的行为，如：走路、跟随、战斗、空闲动作等。
  * @author huliqing
  */
 public class ActionModule extends AbstractModule {

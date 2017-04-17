@@ -31,10 +31,11 @@ import name.huliqing.luoying.message.EntityMessage;
 import name.huliqing.luoying.object.attribute.Attribute;
 import name.huliqing.luoying.object.attribute.BooleanAttribute;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
- * Module的抽象类,所有角色模块可以直接继承自这个基类
+ * 模块的抽象类,所有角色模块可以直接继承自这个基类。
  * @author huliqing
  */
 public abstract class AbstractModule implements Module { 
@@ -106,6 +107,15 @@ public abstract class AbstractModule implements Module {
         return enabled;
     }
 
+    /**
+     * 默认情况下，该方法什么也不做，如果子类需要监听实体被添加到场景中的事件时，可以覆盖该该方法。
+     * @param scene 
+     */
+    @Override
+    public void onInitScene(Scene scene) {
+        // 由子类覆盖
+    }
+    
     @Override
     public void cleanup() {
         initialized = false;

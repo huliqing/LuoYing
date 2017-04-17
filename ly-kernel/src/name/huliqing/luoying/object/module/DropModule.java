@@ -36,8 +36,9 @@ import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.object.entity.HitAttributeListener;
 
 /**
- * DropModule用于处理物品、经验掉落，给实体增加这个模块之后，当实体被攻击致死的时候，
- * 会给目标攻击者掉落物品、属性
+ * “掉落模块”， 给实体配置这个模块，这样实体就具有了掉落各种各样物品的功能，通常配置给活动类型的角色。
+ * 这样就可以让角色在死亡的时候可以随机掉落一些物体，
+ * 例如：掉落经验值、杂物（ItemData)、装备等。该模块需要绑定一些参数，用于判断角色是否死亡。
  * @author huliqing
  */
 public class DropModule extends AbstractModule {

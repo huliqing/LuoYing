@@ -29,7 +29,8 @@ import name.huliqing.luoying.object.task.Task;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
- * 任务管理
+ * 任务模块，这个模块可以让实体具有任务功能，例如一个角色类型的实体，
+ * 只有在配置了这个模块之后才可以接受到任务，这个模块主要处理数据为TaskData
  * @author huliqing
  */
 public class TaskModule extends AbstractModule {

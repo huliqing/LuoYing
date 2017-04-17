@@ -45,6 +45,7 @@ import name.huliqing.luoying.object.skill.Skill;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
+ * 技能模块，让实体具有“技能”，这个模块主要管理 SkillData这类物体
  * @author huliqing 
  */
 public class SkillModule extends AbstractModule implements ValueChangeListener, SimpleValueChangeListener<Number> {

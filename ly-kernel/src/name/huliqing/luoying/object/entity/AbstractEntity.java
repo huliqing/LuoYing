@@ -196,6 +196,10 @@ public abstract class AbstractEntity implements Entity {
         if (isEnabled()) {
             scene.getRoot().attachChild(spatial);
         }
+        // 通知所有模块，实体被添加到了场景中
+        for (Module m : modules.getArray()) {
+            m.onInitScene(scene);
+        }
     }
 
     @Override

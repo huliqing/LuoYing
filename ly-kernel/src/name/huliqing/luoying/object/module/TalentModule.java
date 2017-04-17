@@ -39,6 +39,7 @@ import name.huliqing.luoying.object.talent.Talent;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
+ * 天赋模块，这个模块可以让实体具有各种各样的天赋能力，主要处理数据为TalentData
  * @author huliqing
  */
 public class TalentModule extends AbstractModule implements ValueChangeListener{
