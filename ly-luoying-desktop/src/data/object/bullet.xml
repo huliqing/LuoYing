@@ -3,7 +3,7 @@
 <root
     xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
     xmlns='http://luoying.huliqing.name'
-    xsi:schemaLocation='http://luoying.huliqing.name ../../../../ly-kernel/src/LuoYing/Data/meta/bullet.xsd'>
+    xsi:schemaLocation='http://luoying.huliqing.name ../../../../ly-kernel/src/LuoYingSys/Data/meta/bullet.xsd'>
     
     <!--=====================================================================-->
     <!--基本配置-->
@@ -13,7 +13,7 @@
     <bulletBase id="bulletBase" shape="shapeBulletBox" shapeOffset="0,0,-1.9" baseSpeed="30" timeout="6" 
                 debug="0" queueBucket="Translucent" />
     
-    <!--    子弹基本配置-->    
+    <!-- 子弹基本配置-->    
     <bulletStraight id="bulletStraightBase" extends="bulletBase" facing="1" />
     
     <!--快速直线型子弹:不跟随-->
