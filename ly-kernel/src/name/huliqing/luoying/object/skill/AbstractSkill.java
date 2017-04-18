@@ -38,7 +38,6 @@ import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.actoranim.ActorAnim;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.define.WeaponTypeDefine;
-import name.huliqing.luoying.object.effect.Effect;
 import name.huliqing.luoying.object.el.LNumberEl;
 import name.huliqing.luoying.object.el.SBooleanEl;
 import name.huliqing.luoying.object.entity.Entity;
@@ -78,16 +77,16 @@ public abstract class AbstractSkill implements Skill {
     protected ActorAnimWrap[] actorAnims;
 
     /** 技能的优先级,优先级高的可以打断优先级低的技能 */
-    private int prior;
+    protected int prior;
     
     /** 技能类型*/
-    private long types;
+    protected long types;
     
     /** 例外的，在排除优先级比较的前提下，如果一个技能可以覆盖另一个技能，则不需要比较优先级。*/
-    private long overlapTypes;
+    protected long overlapTypes;
     
     /** 例外的，在排除优先级比较的前提下，如果一个技能可以打断另一个技能，则不需要比较优先级。*/
-    private long interruptTypes;
+    protected long interruptTypes;
     
     /** 武器类型限制：数组中的每一个值代表一组武器限制类型。 */
     protected long[] weaponStateLimit;
@@ -121,7 +120,7 @@ public abstract class AbstractSkill implements Skill {
     protected float time;
     
     // 技能是否已经开始运行。
-    private boolean initialized;
+    protected boolean initialized;
     
     // 优化性能,这样就不需要在update中不停的去计算trueUseTime
     // 只在start的时候计算一次，在update中不再去计算
@@ -231,7 +230,6 @@ public abstract class AbstractSkill implements Skill {
         overlapTypes = defineService.getSkillTypeDefine().convert(data.getAsArray("overlapTypes"));
         interruptTypes = defineService.getSkillTypeDefine().convert(data.getAsArray("interruptTypes"));
         
-
         loop = data.getAsBoolean("loop", false);
         bindSpeedAttribute = data.getAsString("bindSpeedAttribute");
         bindInterruptRateAttribute = data.getAsString("bindInterruptRateAttribute");
@@ -402,14 +400,15 @@ public abstract class AbstractSkill implements Skill {
         
         // 6.update logic
         doSkillUpdate(tpf);
-        
-        if (time >= trueUseTime) {
-            if (loop) {
-                time = 0;
-            } else {
-                doSkillEnd();
-            }
-        }
+   
+        // remove20170418
+//        if (time >= trueUseTime) {
+//            if (loop) {
+//                time = 0;
+//            } else {
+////                doSkillEnd();
+//            }
+//        }
     }
     
     @Override
@@ -469,7 +468,12 @@ public abstract class AbstractSkill implements Skill {
     
     @Override
     public boolean isEnd() {
-        return !initialized;
+//        return !initialized; // remove20170418
+        
+        if (loop) {
+            return false;
+        }
+        return time >= trueUseTime;
     }
 
     @Override
@@ -811,12 +815,13 @@ public abstract class AbstractSkill implements Skill {
         }
     }
     
-    /**
-     * 该方法会在技能结束时被自动调用,子类可以直接调用这个方法来提前结束技能。
-     */
-    protected void doSkillEnd() {
-        initialized = false;
-    }
+    // remove20170418
+//    /**
+//     * 该方法会在技能结束时被自动调用,子类可以直接调用这个方法来提前结束技能。
+//     */
+//    protected void doSkillEnd() {
+//        initialized = false;
+//    }
     
     /**
      * 实现技能逻辑

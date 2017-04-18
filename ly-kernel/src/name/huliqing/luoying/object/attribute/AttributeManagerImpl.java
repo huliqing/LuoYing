@@ -107,6 +107,8 @@ public class AttributeManagerImpl implements AttributeManager {
      */
     @Override
     public <T extends Attribute> T getAttribute(String attrName) {
+        if (attrName == null) 
+            return null;
         return (T) store.getAttributeByName(attrName);
     }
     
@@ -125,6 +127,9 @@ public class AttributeManagerImpl implements AttributeManager {
      */
     @Override
     public <T extends Attribute> T getAttribute(String attrName, Class<T> type) {
+        if (attrName == null)
+            return null;
+        
         Attribute attribute = store.getAttributeByName(attrName);
         if (attribute == null) {
             return null;

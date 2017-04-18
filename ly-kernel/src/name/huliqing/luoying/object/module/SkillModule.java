@@ -166,7 +166,11 @@ public class SkillModule extends AbstractModule implements ValueChangeListener, 
 
             int oldSize = playingSkills.size();
             for (Skill skill : playingSkills.getArray()) {
-                if (skill.isEnd()) {
+                // 先update后再判断技能是否结束，确保技能至少执行了一次更新，
+                // 否则那些技能时间为0的技能将永远不会执行update方法。
+                skill.update(tpf); 
+                // 判断技能是否结束
+                if (skill.isEnd() || !skill.isInitialized()) {
                     playingSkills.remove(skill);
                     skill.cleanup();
                     // 执行侦听器
@@ -175,8 +179,6 @@ public class SkillModule extends AbstractModule implements ValueChangeListener, 
                             sl.onSkillEnd(skill);
                         }
                     }
-                } else {
-                    skill.update(tpf);
                 }
             }
             

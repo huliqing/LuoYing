@@ -17,6 +17,8 @@
 ![Android版游戏截图2](https://cloud.githubusercontent.com/assets/6734333/21417607/b247c76e-c856-11e6-979b-5c83fdcc9e21.jpg)
 游戏截图2
 
+游戏演示：[http://v.youku.com/v_show/id_XMTY1MzQxNzQ4MA==.html](http://v.youku.com/v_show/id_XMTY1MzQxNzQ4MA==.html "http://v.youku.com/v_show/id_XMTY1MzQxNzQ4MA==.html")
+
 项目当前还在开发中，项目主要由以下几个部分组成.
 
 - ly-kernel 落樱核心框架

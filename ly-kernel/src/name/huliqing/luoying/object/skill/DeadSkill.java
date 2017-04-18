@@ -33,6 +33,9 @@ public class DeadSkill extends SimpleAnimationSkill {
     // 是否死亡后立即移出场景
     private boolean remove;
     
+    // ---- inner
+    private boolean actorRemoved;
+    
     @Override
     public void setData(SkillData data) {
         super.setData(data); 
@@ -47,27 +50,30 @@ public class DeadSkill extends SimpleAnimationSkill {
 
     @Override
     public void initialize() {
-        super.initialize(); 
-
+        super.initialize();
+        
         // Reset，对于没有“死亡”动画的角色，在死亡时必须让它“静止”
         // 让角色的其它动画停止播放，以防止角色在死亡之后仍然在做其它动作的奇怪现象。
         if (animation == null) {
             channelModule.reset();
         }
     }
+
+    @Override
+    public void cleanup() {
+        actorRemoved = false;
+        super.cleanup();
+    }
     
     @Override
     protected void doSkillUpdate(float tpf) {
-        // ignore
-    }
-
-    @Override
-    protected void doSkillEnd() {
-        super.doSkillEnd();
-        // 不要放在cleanup中移除角色,因为这可能会在场景清理(场景cleanup)的时候冲突，
-        // 可能造成无限递归异常(StackOverflow)
-        if (remove) {
-            actor.removeFromScene();
+        if (time >= trueUseTime) {
+            // 不要放在cleanup中移除角色,因为这可能会在场景清理(场景cleanup)的时候冲突，
+            // 可能造成无限递归异常(StackOverflow)
+            if (remove && !actorRemoved) {
+                actor.removeFromScene();
+                actorRemoved = true;
+            }
         }
     }
     
