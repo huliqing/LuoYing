@@ -272,7 +272,7 @@ public final class FaceView extends LinearLayout implements DataListener{
             Texture tex;
             try {
                 tex = LuoYing.getAssetManager().loadTexture(icon);
-            } catch (AssetNotFoundException e) {
+            } catch (Exception e) {
                 tex = LuoYing.getAssetManager().loadTexture(InterfaceConstants.UI_MISS);
             }
             mat.setTexture("Texture", tex);

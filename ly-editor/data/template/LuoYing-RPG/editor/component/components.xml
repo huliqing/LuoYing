@@ -111,6 +111,7 @@
     <component id="skillWait" type="skill" />
     <component id="skillWalk" type="skill" />
     <component id="skillRun" type="skill" />
+    <component id="skillJump" type="skill" />
     <component id="skillHurt" type="skill" />
     <component id="skillDead" type="skill" />
     <component id="skillReset" type="skill" />

@@ -21,8 +21,10 @@
     <skillBase id="skillWalkTagBase" types="walk" prior="0" overlapTypes="skin" interruptTypes="idle,wait,walk,run" />
     <!--跑步-->
     <skillBase id="skillRunTagBase" types="run" prior="0" overlapTypes="skin" interruptTypes="idle,wait,walk,run" />
+    <!--跳跃-->
+    <skillBase id="skillJumpTagBase" types="jump" prior="0" overlapTypes="skin,walk,run" interruptTypes="idle,wait,walk,run" />
     <!--穿装备-->
-    <skillBase id="skillSkinTagBase" types="skin" prior="0" overlapTypes="idle,wait,walk,run,skin" />
+    <skillBase id="skillSkinTagBase" types="skin" prior="0" overlapTypes="idle,wait,walk,run,jump,skin" />
     
     <!--战斗技能:普通攻击-->
     <skillBase id="skillFightSimpleTagBase" types="fight,attack" prior="10" channelLocks="channelLeftArm,channelLeftHand,channelRightArm,channelRightHand" />
@@ -60,6 +62,9 @@
     
     <!--跑步-->
     <skillRun id="skillRunBase" extends="skillRunTagBase" useTime="1" loop="1" bindSpeedAttribute="attributeMoveSpeed" />
+    
+    <!--跳跃-->
+    <skillJump id="skillJumpBase" extends="skillJumpTagBase" useTime="1" />
     
     <!--穿装备用-->
     <skillSkin id="skillSkinBase" extends="skillSkinTagBase" />

@@ -336,6 +336,7 @@ import name.huliqing.luoying.object.resist.AllResist;
 import name.huliqing.luoying.object.resist.GroupResist;
 import name.huliqing.luoying.object.shape.CustomShape;
 import name.huliqing.luoying.object.shape.SphereShape;
+import name.huliqing.luoying.object.skill.JumpSkill;
 import name.huliqing.luoying.object.slot.Slot;
 import name.huliqing.luoying.object.state.BooleanAttributeState;
 import name.huliqing.luoying.object.state.GroupState;
@@ -802,6 +803,7 @@ public class LuoYing {
         DataFactory.register("skillRun",  SkillData.class, SkillDataLoader.class, RunSkill.class);
         DataFactory.register("skillWait",  SkillData.class, SkillDataLoader.class, WaitSkill.class);
         DataFactory.register("skillIdle",  SkillData.class, SkillDataLoader.class, IdleSkill.class);
+        DataFactory.register("skillJump",  SkillData.class, SkillDataLoader.class, JumpSkill.class);
         DataFactory.register("skillHurt",  SkillData.class, SkillDataLoader.class, HurtSkill.class);
         DataFactory.register("skillDead",  SkillData.class, SkillDataLoader.class, DeadSkill.class);
         DataFactory.register("skillAttack",  SkillData.class, SkillDataLoader.class, AttackSkill.class);

@@ -16,10 +16,6 @@
         <field name="overlapTypes" converter="TextConverter" />
         <field name="interruptTypes" converter="TextConverter" />
         <field name="prior" converter="IntegerTextConverter" />
-        <field name="animation" converter="SkillAnimationFieldConverter" />
-        <field name="channels" converter="TextConverter" />
-        <field name="channelLockAll" converter="CheckBoxConverter" />
-        <field name="channelLocks" converter="TextConverter" />
         <field name="cooldown" converter="FloatTextConverter" />
         <field name="weaponStateLimit" converter="TextConverter" />
         <field name="loop" converter="CheckBoxConverter" />
@@ -28,8 +24,6 @@
         <field name="boneEffects" converter="TextConverter" />
         <field name="magics" converter="TextConverter" />
         <field name="actorAnims" converter="TextConverter" />
-        <field name="cutTimeStartMax" converter="FloatTextConverter" />
-        <field name="cutTimeEndMax" converter="FloatTextConverter" />
         <field name="checkEl" converter="TextConverter" />
         <field name="level" converter="IntegerTextConverter" />
         <field name="maxLevel" converter="IntegerTextConverter" />
@@ -37,46 +31,71 @@
         <field name="levelUpEl" converter="TextConverter" />
         <field name="playCount" converter="IntegerTextConverter" />
         <field name="useAttributes" converter="TextConverter" />
-        <field name="bindCutTimeEndAttribute" converter="TextConverter" />
         <field name="bindSpeedAttribute" converter="TextConverter" />
         <field name="bindAvoidInterruptAttribute" converter="TextConverter" />
     </data>
     
-    <data name="skillWait" extends="skillBase"/>
+    <data name="skillSimpleAnimationBase" extends="skillBase" >
+        <field name="animation" converter="SkillAnimationFieldConverter" />
+        <field name="channels" converter="TextConverter" />
+        <field name="channelLockAll" converter="CheckBoxConverter" />
+        <field name="channelLocks" converter="TextConverter" />
+        <field name="bindCutTimeEndAttribute" converter="TextConverter" />
+        <field name="cutTimeStartMax" converter="FloatTextConverter" />
+        <field name="cutTimeEndMax" converter="FloatTextConverter" />
+    </data>
     
-    <data name="skillWalkBase" extends="skillBase">
+    <data name="skillWait" extends="skillSimpleAnimationBase"/>
+    
+    <data name="skillWalkBase" extends="skillSimpleAnimationBase">
         <field name="animSpeed" converter="FloatTextConverter" />
         <field name="baseSpeed" converter="FloatTextConverter" />
     </data>
     <data name="skillWalk" extends="skillWalkBase" />
     <data name="skillRun" extends="skillWalkBase" />
     
-    <data name="skillIdle" extends="skillBase" />
+    <data name="skillIdle" extends="skillSimpleAnimationBase" />
     
-    <data name="skillHurt" extends="skillBase" >
+    <data name="skillJump" extends="skillBase" >
+        <field name="animStart" converter="SkillAnimationFieldConverter" />
+        <field name="animInAir" converter="SkillAnimationFieldConverter" />
+        <field name="animEnd" converter="SkillAnimationFieldConverter" />
+        <field name="animInAirLoop" converter="ChoiceConverter" >
+            <feature name="items" value="Loop,DontLoop,Cycle" />
+        </field>
+        <field name="useTimeInStart" converter="FloatTextConverter" />
+        <field name="useTimeInAir" converter="FloatTextConverter" />
+        <field name="useTimeInEnd" converter="FloatTextConverter" />
+        <field name="forceApplyTime" converter="FloatTextConverter" />
+        <field name="jumpDir" converter="Vector3fConverter" />
+        <field name="jumpIntensity" converter="FloatTextConverter" />
+        <field name="bindJumpIntensityAttribute" converter="TextConverter" />
+    </data>
+    
+    <data name="skillHurt" extends="skillSimpleAnimationBase" >
         <field name="hurtFace" converter="ChoiceConverter">
             <feature name="items" value="front,back,left,right" />
         </field>
     </data>
     
-    <data name="skillReset" extends="skillBase" >
+    <data name="skillReset" extends="skillSimpleAnimationBase" >
         <field name="timePoint" converter="FloatTextConverter" />
     </data>
     
-    <data name="skillDefend" extends="skillBase">
+    <data name="skillDefend" extends="skillSimpleAnimationBase">
         <field name="defendDir" converter="ChoiceConverter">
             <feature name="items" value="front,back,left,right" />
         </field>
     </data>
     
-    <data name="skillDuck" extends="skillBase" >
+    <data name="skillDuck" extends="skillSimpleAnimationBase" >
         <field name="duckDir" converter="ChoiceConverter">
             <feature name="items" value="front,back,left,right" />
         </field>
         <field name="force" converter="TextConverter" />
     </data>
     
-    <data name="skillDeadRagdoll" extends="skillBase" >
+    <data name="skillDeadRagdoll" extends="skillSimpleAnimationBase" >
         <field name="useRagdoll" converter="CheckBoxConverter" />
         <field name="forceOnly" converter="CheckBoxConverter" />
         <field name="bones" converter="TextConverter" />
@@ -85,11 +104,11 @@
         <field name="lastWords" converter="TextConverter" />
     </data>
     
-    <data name="skillDead" extends="skillBase" >
+    <data name="skillDead" extends="skillSimpleAnimationBase" >
         <field name="remove" converter="CheckBoxConverter" />
     </data>
     
-    <data name="skillHitBase" extends="skillBase" >
+    <data name="skillHitBase" extends="skillSimpleAnimationBase" >
         <field name="bindTargetAttribute" converter="TextConverter" />
         <field name="hitCheckEl" converter="TextConverter" />
         <field name="hitAttribute" converter="TextConverter" />
@@ -137,11 +156,11 @@
         <field name="shotUpOffset" converter="Vector3fConverter" />
     </data>
     
-    <data name="skillBack" extends="skillBase" >
+    <data name="skillBack" extends="skillSimpleAnimationBase" >
         <field name="backPoint" converter="FloatTextConverter" />
     </data>
     
-    <data name="skillSummon" extends="skillBase">
+    <data name="skillSummon" extends="skillSimpleAnimationBase">
         <field name="summonActorId" converter="TextConverter" />
         <field name="copyAttributesFromSource" converter="TextConverter" />
         <field name="linkAttributesToSource" converter="TextConverter" />
@@ -150,7 +169,7 @@
         <field name="summonTime" converter="FloatTextConverter" />
     </data>
     
-    <data name="skillSkin" extends="skillBase">
+    <data name="skillSkin" extends="skillSimpleAnimationBase">
         <field name="hangTimePoint" converter="FloatTextConverter" />
     </data>
 

@@ -12,6 +12,7 @@
         <xs:complexType>
             <xs:all>
                 <xs:element ref="effectBase" />
+                <xs:element ref="effectTrace" />
                 <xs:element ref="effectGroup" />
                 <xs:element ref="effectParticle" />
                 <xs:element ref="effectTexture" />
@@ -371,6 +372,80 @@
         </xs:simpleType>
     </xs:attribute>
     
+    <xs:element name="effectTrace">
+        <xs:annotation>
+            <xs:documentation>
+                TraceEffect主要目的是用于让效果有“跟随”功能， 这个效果本身没有任何可视特效，只是作为一个特效代理，它会代理一个实际存在的特效，并让这个特效拥有跟随功能。
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="effectBase">
+                    <xs:attribute name="effect" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>绑定一个实际的效果。</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="traceLocation" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>是否让效果跟踪目标，默认true,打开该参数后，必须在程序
+                                运行时设置traceObject才有意义，否则将不会跟踪.</xs:documentation>
+                        </xs:annotation>
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string" >
+                                <xs:enumeration value="no" />
+                                <xs:enumeration value="once" />
+                                <xs:enumeration value="always" />
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:attribute>
+                    <xs:attribute name="traceLocationType" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                特效的跟随位置,默认origin,即以原点为跟随位置
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="origin" />
+                                <xs:enumeration value="origin_bound_center" />
+                                <xs:enumeration value="origin_bound_top" />
+                                <xs:enumeration value="bound_center" />
+                                <xs:enumeration value="bound_top" />
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:attribute>
+                    <xs:attribute name="traceLocationOffset" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                效果在跟随时的位置偏移，格式: "x,y,z"
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="traceRotation" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>是否跟随目标的旋转</xs:documentation>
+                        </xs:annotation>
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string" >
+                                <xs:enumeration value="no" />
+                                <xs:enumeration value="once" />
+                                <xs:enumeration value="always" />
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:attribute>
+                    <xs:attribute name="traceRotationOffset" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                               效果在跟随时的旋转偏移, 格式:"x,y,z"
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
     <xs:complexType name="effectBase">
         <xs:complexContent>
             <xs:extension base="base">
@@ -406,71 +481,16 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:attribute name="endImmediate" type="bool" use="optional">
-                    <xs:annotation>
-                        <xs:documentation>判断特效是否可以立即结束，默认false, 大部分情况下特效都应该”自然结束“，
-                            但是存在一些特殊特效，这些特效需要在被依赖的目标（如技能）结束的时候立即也一起结束。</xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
                 <xs:attribute ref="location" />
                 <xs:attribute ref="rotation" />
                 <xs:attribute ref="scale" />
                 <xs:attribute ref="queueBucket" />
                 <xs:attribute ref="cullHint" />
                 <xs:attribute ref="shadowMode" />
-                <xs:attribute name="traceLocation" use="optional" >
+                <xs:attribute name="endImmediate" type="bool" use="optional">
                     <xs:annotation>
-                        <xs:documentation>是否让效果跟踪目标，默认true,打开该参数后，必须在程序
-                            运行时设置traceObject才有意义，否则将不会跟踪.</xs:documentation>
-                    </xs:annotation>
-                    <xs:simpleType>
-                        <xs:restriction base="xs:string" >
-                            <xs:enumeration value="no" />
-                            <xs:enumeration value="once" />
-                            <xs:enumeration value="always" />
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:attribute>
-                <xs:attribute name="traceRotation" use="optional" >
-                    <xs:annotation>
-                        <xs:documentation>是否跟随目标的旋转</xs:documentation>
-                    </xs:annotation>
-                    <xs:simpleType>
-                        <xs:restriction base="xs:string" >
-                            <xs:enumeration value="no" />
-                            <xs:enumeration value="once" />
-                            <xs:enumeration value="always" />
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:attribute>
-                <xs:attribute name="traceLocationType" use="optional">
-                    <xs:annotation>
-                        <xs:documentation>
-                            特效的跟随位置,默认origin,即以原点为跟随位置
-                        </xs:documentation>
-                    </xs:annotation>
-                    <xs:simpleType>
-                        <xs:restriction base="xs:string">
-                            <xs:enumeration value="origin" />
-                            <xs:enumeration value="origin_bound_center" />
-                            <xs:enumeration value="origin_bound_top" />
-                            <xs:enumeration value="bound_center" />
-                            <xs:enumeration value="bound_top" />
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:attribute>
-                <xs:attribute name="traceLocationOffset" type="xs:string" use="optional">
-                    <xs:annotation>
-                        <xs:documentation>
-                            效果在跟随时的位置偏移，格式: "x,y,z"
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="traceRotationOffset" type="xs:string" use="optional">
-                    <xs:annotation>
-                        <xs:documentation>
-                           效果在跟随时的旋转偏移, 格式:"x,y,z"
-                        </xs:documentation>
+                        <xs:documentation>判断特效是否可以立即结束，默认false, 大部分情况下特效都应该”自然结束“，
+                            但是存在一些特殊特效，这些特效需要在被依赖的目标（如技能）结束的时候立即也一起结束。</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
             </xs:extension>

@@ -116,10 +116,10 @@ public abstract class AbstractSkill implements Skill {
     // 当前执行技能的角色
     protected Entity actor;
     
-    // 当前技能已经运行的时间。每一次执行该技能或循环时都重置为0
+    /**  当前技能已经运行的时间 */
     protected float time;
     
-    // 技能是否已经开始运行。
+    /** 技能是否已经开始运行 */
     protected boolean initialized;
     
     // 优化性能,这样就不需要在update中不停的去计算trueUseTime
@@ -225,6 +225,7 @@ public abstract class AbstractSkill implements Skill {
             }
         }
         
+        time = data.getAsFloat("time", time);
         prior = data.getAsInteger("prior", 0);
         types = defineService.getSkillTypeDefine().convert(data.getTypes());
         overlapTypes = defineService.getSkillTypeDefine().convert(data.getAsArray("overlapTypes"));
@@ -257,7 +258,7 @@ public abstract class AbstractSkill implements Skill {
     
     @Override
     public void updateDatas() {
-        // ignore
+        data.setAttribute("time", time);
     }
     
     @Override

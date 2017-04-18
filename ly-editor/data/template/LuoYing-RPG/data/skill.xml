@@ -22,6 +22,8 @@
     <skillBase id="skillWalkTagBase" types="walk" prior="0" overlapTypes="skin" interruptTypes="idle,wait,walk,run" />
     <!--跑步-->
     <skillBase id="skillRunTagBase" types="run" prior="0" overlapTypes="skin" interruptTypes="idle,wait,walk,run" />
+    <!--跳跃-->
+    <skillBase id="skillJumpTagBase" types="jump" prior="0" overlapTypes="skin,walk,run" interruptTypes="idle,wait" />
     <!--穿装备-->
     <skillBase id="skillSkinTagBase" types="skin" prior="0" overlapTypes="idle,wait,walk,run,skin" />
     
@@ -61,6 +63,9 @@
     
     <!--跑步-->
     <skillRun id="skillRunBase" extends="skillRunTagBase" useTime="1" loop="1" bindSpeedAttribute="attributeMoveSpeed" />
+    
+    <!--跳跃-->
+    <skillJump id="skillJumpBase" extends="skillJumpTagBase" useTime="1" />
     
     <!--穿装备用-->
     <skillSkin id="skillSkinBase" extends="skillSkinTagBase" />
@@ -136,6 +141,8 @@
     <skillWalk id="skillWalk" extends="skillWalkBase" useTime="1.0" animation="" />
     <!--跑步技能-->
     <skillRun id="skillRun" extends="skillRunBase" useTime="1.0" animation="" />
+    <!--跳跃技能-->
+    <skillJump id="skillJump" extends="skillJumpBase" useTime="1.0" />
     <!--受伤技能-->
     <skillHurt id="skillHurt" extends="skillHurtBase" useTime="0.3" animation=""  hurtFace="front" />
     <!--死亡技能-->

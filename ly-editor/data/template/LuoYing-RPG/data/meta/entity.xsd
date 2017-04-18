@@ -189,6 +189,12 @@ xs:time
                     <xs:attribute name="effect" type="xs:string" use="required" >
                         <xs:annotation><xs:documentation>关联一个特效id</xs:documentation></xs:annotation>
                     </xs:attribute>
+                    <xs:attribute name="traceEntity" type="xs:integer" use="optional" >
+                        <xs:annotation><xs:documentation>设置一个要跟随的目标实体(唯一id)</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="traceBone" type="xs:string" use="optional" >
+                        <xs:annotation><xs:documentation>设置要跟随的目标实体的骨骼上的骨头名称，如果指定了这个参数，则效果位置会初始化在这个骨头的节点上。</xs:documentation></xs:annotation>
+                    </xs:attribute>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>

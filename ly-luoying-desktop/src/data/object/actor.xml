@@ -62,7 +62,7 @@
     />
         
     <!-- player test -->    
-    <actor id="actorPlayerTest" extends="actorPlayer"
+<!--    <actor id="actorPlayerTest" extends="actorPlayer"
            items="item000|100,itemGold|10000,itemTowerSnow|100,itemScrollLife|10
 ,itemDetoxifyGrass|100,itemTonicRed|5,itemTonicBlue|5,itemHerb|100,itemASTonic|100
 ,itemTowerStone|100,itemTower|100,itemSpiderSpawn|100
@@ -87,10 +87,10 @@
 ,skillDefend1,skillDefend2
 ,skillDuckLeft,skillDuckRight,skillDuckBack,skillDuckLeftRoll,skillDuckRightRoll
 ,skillAttack,skillAttack2,skillAttack3" 
-    />
-    <actor id="actorSinbadTest" extends="actorSinbad" />
+    />-->
+    
+    <actor id="actorPlayerTest" extends="actorSinbad" />
     <actor id="actorSkeletonTest" extends="actorPlayer" />
-
     
     <!--战士-->
     <actor id="actorWarrior" extends="actorHumanFemaleBase" icon="Interface/face/female1.jpg"
@@ -260,9 +260,9 @@
            scale="0.3,0.3,0.3"
            talents="talentSinbadDefence"
            skills="skillSinbadReset,skillSinbadWait,skillSinbadWalk,skillSinbadRun,skillSinbadHurt,skillSinbadDead
-,skillSinbadAttack,skillSinbadAttack2,skillSinbadAttack3,skillSinbadDefence,skillSinbadDefence2" 
+,skillSinbadAttack,skillSinbadAttack2,skillSinbadAttack3,skillSinbadDefence,skillSinbadDefence2,skillSinbadJumpTest" 
            mat="derma" skinWeapon="weaponSinbad" drops="dropSinbad" />
-
+    
     <!--T.Rex-->
     <actor id="actorTrex" extends="actorCreatureBase" file="Models/monster/trex/trex.mesh.j3o" 
            items="itemTonicRed|10,itemTonicBlue|10" icon="Interface/face/dinosaur_trex.jpg"
