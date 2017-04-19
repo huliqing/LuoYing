@@ -19,6 +19,8 @@
  */
 package name.huliqing.luoying.object.skill;
 
+import com.jme3.bullet.control.BetterCharacterControl;
+import com.jme3.math.Vector3f;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.module.ChannelModule;
 
@@ -42,6 +44,11 @@ public class WaitSkill extends SimpleAnimationSkill {
         // 对于一些没有“Wait动画”的角色必须想办法让它静止下来
         if (animation == null) {
             channelModule.reset();
+        }
+        // 清除角色的移动量
+        BetterCharacterControl bcc = actor.getSpatial().getControl(BetterCharacterControl.class);
+        if (bcc != null) {
+            bcc.setWalkDirection(new Vector3f());
         }
     }
     

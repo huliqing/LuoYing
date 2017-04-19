@@ -401,15 +401,6 @@ public abstract class AbstractSkill implements Skill {
         
         // 6.update logic
         doSkillUpdate(tpf);
-   
-        // remove20170418
-//        if (time >= trueUseTime) {
-//            if (loop) {
-//                time = 0;
-//            } else {
-////                doSkillEnd();
-//            }
-//        }
     }
     
     @Override
@@ -523,7 +514,7 @@ public abstract class AbstractSkill implements Skill {
     public int checkState() {
         // 武器必须取出
         if (weaponStateLimit != null) {
-            if (!skinModule.isWeaponTakeOn()) {
+            if (skinModule == null || !skinModule.isWeaponTakeOn()) {
                 return StateCode.SKILL_USE_FAILURE_WEAPON_NEED_TAKE_ON;
             }            
         }
@@ -815,14 +806,6 @@ public abstract class AbstractSkill implements Skill {
             nattr.add(value);
         }
     }
-    
-    // remove20170418
-//    /**
-//     * 该方法会在技能结束时被自动调用,子类可以直接调用这个方法来提前结束技能。
-//     */
-//    protected void doSkillEnd() {
-//        initialized = false;
-//    }
     
     /**
      * 实现技能逻辑

@@ -26,6 +26,7 @@ import com.jme3.util.TempVars;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.luoying.data.SkillData;
+import name.huliqing.luoying.message.StateCode;
 import name.huliqing.luoying.object.attribute.NumberAttribute;
 import name.huliqing.luoying.object.module.ChannelModule;
 
@@ -50,6 +51,8 @@ public class JumpSkill extends AbstractSkill {
     private float useTimeInEnd = 0.3f;
     // 跳跃作用力的开始时间
     private float forceApplyTime = 0.3f;
+    // 一个用于超时结束当前动作的限制,避免当角色卡在空中时无法退出当前技能的BUG
+    private float timeout = 15;
     // 初始的向前跳跃的方向
     private Vector3f jumpDir = new Vector3f(0,1,0);
     // 向前和向上跳的强度
@@ -75,6 +78,7 @@ public class JumpSkill extends AbstractSkill {
     // 角色控制器
     private BetterCharacterControl bcc;
     private final Vector3f tempWalkDirection = new Vector3f();
+    private float tempPhysicsDamping;
 
     @Override
     public void setData(SkillData data) {
@@ -87,8 +91,9 @@ public class JumpSkill extends AbstractSkill {
         useTimeInAir = data.getAsFloat("useTimeInAir", useTimeInAir);
         useTimeInEnd = data.getAsFloat("useTimeInEnd", useTimeInEnd);
         forceApplyTime = data.getAsFloat("forceApplyTime", forceApplyTime);
+        timeout = data.getAsFloat("timeout", timeout);
         
-        jumpDir = data.getAsVector3f("jumpDir", jumpDir).normalizeLocal();
+        jumpDir = data.getAsVector3f("jumpDir", jumpDir);
         jumpIntensity = data.getAsFloat("jumpIntensity", jumpIntensity);
         bindJumpIntensityAttribute = data.getAsString("bindJumpIntensityAttribute");
         
@@ -130,6 +135,7 @@ public class JumpSkill extends AbstractSkill {
         bcc = actor.getSpatial().getControl(BetterCharacterControl.class);
         if (bcc != null) {
             tempWalkDirection.set(bcc.getWalkDirection());
+            tempPhysicsDamping = bcc.getPhysicsDamping();
             bcc.setWalkDirection(new Vector3f());
         }
     }
@@ -142,7 +148,20 @@ public class JumpSkill extends AbstractSkill {
         forceApplied = false;
         timeUsedInAir = 0;
         timeUsedInEnd = 0;
+        if (bcc != null) {
+            bcc.setWalkDirection(tempWalkDirection);
+            bcc.setPhysicsDamping(tempPhysicsDamping);
+        }
         super.cleanup();
+    }
+
+    @Override
+    public int checkState() {
+//        bcc = actor.getSpatial().getControl(BetterCharacterControl.class);
+//        if (bcc == null || !bcc.isOnGround()) {
+//            return StateCode.SKILL_USE_FAILURE;
+//        }
+        return super.checkState();
     }
     
     @Override
@@ -152,15 +171,17 @@ public class JumpSkill extends AbstractSkill {
             forceApplied = true;
             if (bcc != null) {
                 TempVars tv = TempVars.get();
-                Vector3f jumpForce = tv.vect1.set(jumpDir);
+                Vector3f jumpForce = tv.vect1.set(jumpDir).normalizeLocal();
+                actor.getSpatial().getWorldRotation().mult(jumpForce, jumpForce);
+                jumpForce.addLocal(tv.vect2.set(tempWalkDirection).setY(0).normalizeLocal()).normalizeLocal();
                 if (jumpIntensityAttribute != null) {
                     jumpForce.multLocal(jumpIntensityAttribute.floatValue());
                 } else {
                     jumpForce.multLocal(jumpIntensity);
                 }
+                bcc.setPhysicsDamping(0);
                 bcc.setJumpForce(jumpForce);
                 bcc.jump();
-                bcc.setWalkDirection(tempWalkDirection); // 还原walkDirection,这样允许向前跳
                 tv.release();
             } else {
                 LOG.log(Level.WARNING, "Jump failure! BetterCharacterControl not found from Entity, entityId={0}, uniqueId={1}"
@@ -177,20 +198,24 @@ public class JumpSkill extends AbstractSkill {
         }
         
         // timeUsedInAir > 0.1f -> 稍微延迟一下后再判断是否isOnGround()，因为bcc.jump()后角色不会立即离开地面.
-        if (!animEndPlayed && timeUsedInAir > 0.1f) {
+        if (!animEndPlayed && timeUsedInAir > 0.016f) {
 //            LOG.log(Level.INFO, "Is on ground:{0}", bcc.isOnGround());
             if (bcc == null || bcc.isOnGround()) {
                 animEndPlayed = true;
-                bcc.setWalkDirection(new Vector3f()); // 落地动作执行的时候要清理WalkDirection
                 if (animEnd != null) {
                     channelModule.playAnim(animEnd, null, LoopMode.DontLoop, useTimeInEnd, 0);
                 }
+                if (bcc != null) {
+                    bcc.setPhysicsDamping(tempPhysicsDamping);
+                }
+                LOG.log(Level.INFO, "animEndPlayed, bcc.isOnGround={0}", new Object[]{bcc.isOnGround()});
             }
         }
         
         if (animInAirPlayed) {
             timeUsedInAir += tpf;
         }
+        
         if (animEndPlayed) {
             timeUsedInEnd += tpf;
             if (timeUsedInEnd >= useTimeInEnd) {
@@ -205,6 +230,9 @@ public class JumpSkill extends AbstractSkill {
         // 因而技能的整个执行时间也是不确定的。
 //        super.isEnd(); 
 
+        if (time > timeout) {
+            return true;
+        }
         // 当最后一阶段（落地动作）时间执行完毕时，视为跳跃技能技能结束
         if (timeUsedInEnd >= useTimeInEnd) {
             return true;
@@ -214,7 +242,12 @@ public class JumpSkill extends AbstractSkill {
 
     @Override
     public void restoreAnimation() {
-        // ignore
+        // 只恢复空中动画
+        if (animInAirPlayed && !animEndPlayed) {
+            if (animInAir != null) {
+                channelModule.restoreAnimation(animInAir, null, animInAirLoop, useTimeInAir, 0);
+            }
+        }
     }
     
     // 获取loopMode设置，如果找不到匹配，则默认使用loop模式
@@ -226,4 +259,5 @@ public class JumpSkill extends AbstractSkill {
         }
         return LoopMode.Loop;
     }
+
 }

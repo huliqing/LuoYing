@@ -90,7 +90,7 @@ public class ActorSkillsFieldConverter extends EntityObjectDatasFieldConverter {
                         wSkill.setViewDirection(viewDir);
                     }
                 }
-                sm.playSkill(skill, true);
+                sm.playSkill(skill, false);
             }
         });
     }

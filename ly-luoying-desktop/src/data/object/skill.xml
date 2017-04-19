@@ -22,7 +22,7 @@
     <!--跑步-->
     <skillBase id="skillRunTagBase" types="run" prior="0" overlapTypes="skin" interruptTypes="idle,wait,walk,run" />
     <!--跳跃-->
-    <skillBase id="skillJumpTagBase" types="jump" prior="0" overlapTypes="skin,walk,run" interruptTypes="idle,wait,walk,run" />
+    <skillBase id="skillJumpTagBase" types="jump" prior="30" overlapTypes="skin,walk,run" interruptTypes="idle,wait" />
     <!--穿装备-->
     <skillBase id="skillSkinTagBase" types="skin" prior="0" overlapTypes="idle,wait,walk,run,jump,skin" />
     

@@ -22,10 +22,10 @@
     <skillBase id="skillWalkTagBase" types="walk" prior="0" overlapTypes="skin" interruptTypes="idle,wait,walk,run" />
     <!--跑步-->
     <skillBase id="skillRunTagBase" types="run" prior="0" overlapTypes="skin" interruptTypes="idle,wait,walk,run" />
-    <!--跳跃-->
-    <skillBase id="skillJumpTagBase" types="jump" prior="0" overlapTypes="skin,walk,run" interruptTypes="idle,wait" />
     <!--穿装备-->
     <skillBase id="skillSkinTagBase" types="skin" prior="0" overlapTypes="idle,wait,walk,run,skin" />
+    <!--跳跃-->
+    <skillBase id="skillJumpTagBase" types="jump" prior="30" overlapTypes="skin,walk,run" interruptTypes="idle,wait" />
     
     <!--战斗技能:普通攻击-->
     <skillBase id="skillFightSimpleTagBase" types="fight,attack" prior="10" channelLocks="channelLeftArm,channelLeftHand,channelRightArm,channelRightHand" />
@@ -39,7 +39,7 @@
      <!--普通魔法（非战斗类）-->
     <skillBase id="skillMagicTagBase" types="magic" prior="30" />
     <!--受伤-->
-    <skillBase id="skillHurtTagBase" types="hurt" prior="40" />
+    <skillBase id="skillHurtTagBase" types="hurt" prior="40" overlapTypes="jump" />
     <!--重置：主要用于没有配置死亡技能的角色以及被击晕时的状态: reset和dead技能优先级最高-->
     <skillBase id="skillResetTagBase" types="reset" prior="50" interruptTypes="fight" />
     <!--死亡-->
