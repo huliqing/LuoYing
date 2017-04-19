@@ -44,6 +44,8 @@ public class WalkSkill extends SimpleAnimationSkill implements Walk{
     
     protected final Vector3f walkDirection = new Vector3f();
     protected final Vector3f viewDirection = new Vector3f();
+    
+    private final Vector3f usedWalkDirection = new Vector3f();
 
     @Override
     public void setData(SkillData data) {
@@ -88,8 +90,9 @@ public class WalkSkill extends SimpleAnimationSkill implements Walk{
     @Override
     public void initialize() {
         super.initialize();
-        
-        actorService.setWalkDirection(actor, walkDirection.setY(0).normalizeLocal().mult(baseSpeed * getSpeed()));
+        usedWalkDirection.set(walkDirection).setY(0).normalizeLocal().multLocal(baseSpeed * getSpeed());
+//        actorService.setWalkDirection(actor, walkDirection.setY(0).normalizeLocal().mult(baseSpeed * getSpeed())); // remove20170420
+        actorService.setWalkDirection(actor, usedWalkDirection);
         
         if (viewDirection != null) {
             actorService.setViewDirection(actor, viewDirection);
@@ -117,6 +120,8 @@ public class WalkSkill extends SimpleAnimationSkill implements Walk{
                     , getAnimFullTime() / animSpeed
                     , 0);
         }
+        // 需要恢复角色动量
+        actorService.setWalkDirection(actor, usedWalkDirection);
     }
     
     @Override

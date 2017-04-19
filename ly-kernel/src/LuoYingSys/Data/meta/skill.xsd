@@ -101,24 +101,27 @@ xs:time
                             <xs:documentation>跳跃作用力的执行时间,单位秒。一般这个时间设置在起跳动画(animStart)执行完之后</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="timeout" type="xs:decimal" use="optional" >
+                    <xs:attribute name="jumpForce" type="xs:string" use="optional" >
                         <xs:annotation>
-                            <xs:documentation>设置一个用于超时结束跳跃动作的限制,避免当角色卡在空中时无法退出当前技能的BUG，默认15秒。</xs:documentation>
+                            <xs:documentation>跳跃的力，格式："x,y,z", 默认值："0,100,0". 通常来说，如果物体的质量越大，跳跃时需要设置较大的力。</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="jumpDir" type="xs:stirng" use="optional" >
+                    <xs:attribute name="walkForceIntensity" type="xs:decimal" use="optional" >
                         <xs:annotation>
-                            <xs:documentation>跳跃的方向, 默认(0,1,0), 这个值会自动归一化.</xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
-                    <xs:attribute name="jumpIntensity" type="xs:decimal" use="optional" >
-                        <xs:annotation>
-                            <xs:documentation>跳跃的强度，通常来说，如果物体的质量越大，跳跃时需要设置较大的力。</xs:documentation>
+                            <xs:documentation>
+                                如果角色是在向前走动的时候进行跳跃，那么跳跃的时候会有一个向前的冲力，这个参数用于控制这个冲力的大小，
+                                例如，如果不想让角色跳得太远，则要减少这个值，否则增加这个值。默认: 0.3f;
+                            </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
                     <xs:attribute name="bindJumpIntensityAttribute" type="xs:string" use="optional" >
                         <xs:annotation>
-                            <xs:documentation>绑定一个实体属性，这个属性的值决定了向前跳跃的强度,如果绑定了这个值，则忽略jumpIntensity的设置</xs:documentation>
+                            <xs:documentation>绑定一个NumberAttribute实体属性，这个属性的值决定了跳跃强度的倍率, 1.0为原始大小。</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="timeout" type="xs:decimal" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>设置一个用于超时结束跳跃动作的限制,避免当角色卡在空中时无法退出当前技能的BUG，默认15秒。</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
                 </xs:extension>

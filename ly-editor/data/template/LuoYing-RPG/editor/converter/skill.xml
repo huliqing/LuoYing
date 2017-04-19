@@ -67,9 +67,10 @@
         <field name="useTimeInAir" converter="FloatTextConverter" />
         <field name="useTimeInEnd" converter="FloatTextConverter" />
         <field name="forceApplyTime" converter="FloatTextConverter" />
-        <field name="jumpDir" converter="Vector3fConverter" />
-        <field name="jumpIntensity" converter="FloatTextConverter" />
+        <field name="jumpForce" converter="Vector3fConverter" />
+        <field name="walkForceIntensity" converter="FloatTextConverter" />
         <field name="bindJumpIntensityAttribute" converter="TextConverter" />
+        <field name="timeout" converter="FloatTextConverter" />
     </data>
     
     <data name="skillHurt" extends="skillSimpleAnimationBase" >

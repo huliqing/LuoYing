@@ -20,12 +20,12 @@
 package name.huliqing.luoying.object.module;
 
 import com.jme3.bullet.PhysicsSpace;
-import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.util.TempVars;
 import java.util.ArrayList;
 import java.util.List;
+import name.huliqing.luoying.controls.MyBetterCharactorControl;
 import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.manager.ResManager;
 import name.huliqing.luoying.object.attribute.Attribute;
@@ -430,7 +430,7 @@ public class ActorModule extends AbstractModule implements SimpleValueChangeList
         }
     }
     
-    private class BetterCharacterControlWrap extends BetterCharacterControl {
+    private class BetterCharacterControlWrap extends MyBetterCharactorControl {
         public BetterCharacterControlWrap(float radius, float height, float mass) {
             super(radius, height, mass);
         }

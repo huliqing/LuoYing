@@ -183,7 +183,7 @@
     
     <!--Test-->
     <skillJump id="skillSinbadJumpTest" extends="skillJumpBase" animStart="JumpStart" animInAir="JumpLoop" animEnd="JumpEnd" 
-               jumpDir="0,1,0" jumpIntensity="400" useTimeInStart="0.5" useTimeInAir="2" useTimeInEnd="0.5" forceApplyTime="0.3" />
+               jumpForce="0,400,0" useTimeInStart="0.5" useTimeInAir="2" useTimeInEnd="0.5" forceApplyTime="0.3" />
     <skillJump id="skillNinjaJumpTest" extends="skillJumpBase" animStart="JumpNoHeight" animInAir="Idle3" animEnd="Crouch" 
-               jumpDir="0,1,0" jumpIntensity="400" useTimeInStart="0.5" useTimeInAir="2" useTimeInEnd="0.5" forceApplyTime="0.3" />
+               jumpDir="0,400,0" useTimeInStart="0.5" useTimeInAir="2" useTimeInEnd="0.5" forceApplyTime="0.3" />
 </root>

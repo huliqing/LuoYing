@@ -142,6 +142,11 @@ public class ConfigManager {
      * @param assetsDir 
      */
     public void setMainAssetDir(String assetsDir) {
+        File fileCheck = new File(assetsDir);
+        if (!fileCheck.exists() || !fileCheck.isDirectory()) {
+            LOG.log(Level.WARNING, "Assets directory not exists or not a directory! assetsDir={0}", assetsDir);
+            return;
+        }
         configs.set(ConfigConstants.KEY_MAIN_ASSETS, assetsDir);
         // 将资源路径添加到资源列表中
         addAssetsDirs(assetsDir);
