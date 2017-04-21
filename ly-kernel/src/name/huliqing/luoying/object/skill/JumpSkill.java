@@ -79,7 +79,7 @@ public class JumpSkill extends AbstractSkill {
     
     // 角色控制器
     private BetterCharacterControl bcc;
-    private final Vector3f lastWalkDirection = new Vector3f();
+    private Vector3f lastWalkDirection = new Vector3f();
     private float lastPhysicsDamping;
     
     @Override
@@ -107,11 +107,8 @@ public class JumpSkill extends AbstractSkill {
         timeUsedInEnd = data.getAsFloat("timeUsedInEnd", timeUsedInEnd);
         
         // 内部参数
-        Vector3f _lastWalkDirection = data.getAsVector3f("_lastWalkDirection");
-        if (_lastWalkDirection != null) {
-            lastWalkDirection.set(_lastWalkDirection);
-        }
-        lastPhysicsDamping = data.getAsFloat("_lastPhysicsDamping");
+        lastWalkDirection = data.getAsVector3f("_lastWalkDirection", lastWalkDirection);
+        lastPhysicsDamping = data.getAsFloat("_lastPhysicsDamping", lastPhysicsDamping);
     }
 
     @Override

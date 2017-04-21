@@ -179,7 +179,7 @@ public class Jfx {
         
         // 创建主界面，这个界面会包含Canvas，用于渲染游戏。
         mainFrame = createMainFrame(appClass, settings);
-        mainFrame.setTitle("落梅");
+        mainFrame.setTitle("LuoYing RPG");
         
         jmeApp = createAppCanvas(appClass, settings);
         
