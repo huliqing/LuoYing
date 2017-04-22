@@ -53,6 +53,7 @@ public class BackSkill extends SimpleAnimationSkill {
 
     @Override
     protected void doSkillUpdate(float tpf) {
+        super.doSkillUpdate(tpf);
         if (!backed && time >= trueUseTime * backPoint) {
             Vector3f loc = actor.getSpatial().getLocalTranslation();
             

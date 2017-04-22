@@ -11,19 +11,12 @@
         <field name="icon" converter="FileConverter">
             <feature name="filters" value="Images|*.jpg|*.jpeg|*.png,All Files|*.*" />
         </field>
-        <field name="useTime" converter="FloatTextConverter" />
         <field name="types" converter="TextConverter" />
         <field name="overlapTypes" converter="TextConverter" />
         <field name="interruptTypes" converter="TextConverter" />
         <field name="prior" converter="IntegerTextConverter" />
         <field name="cooldown" converter="FloatTextConverter" />
         <field name="weaponStateLimit" converter="TextConverter" />
-        <field name="loop" converter="CheckBoxConverter" />
-        <field name="sounds" converter="TextConverter" />
-        <field name="effects" converter="TextConverter" />
-        <field name="boneEffects" converter="TextConverter" />
-        <field name="magics" converter="TextConverter" />
-        <field name="actorAnims" converter="TextConverter" />
         <field name="checkEl" converter="TextConverter" />
         <field name="level" converter="IntegerTextConverter" />
         <field name="maxLevel" converter="IntegerTextConverter" />
@@ -37,12 +30,19 @@
     
     <data name="skillSimpleAnimationBase" extends="skillBase" >
         <field name="animation" converter="SkillAnimationFieldConverter" />
+        <field name="useTime" converter="FloatTextConverter" />
+        <field name="loop" converter="CheckBoxConverter" />
         <field name="channels" converter="TextConverter" />
         <field name="channelLockAll" converter="CheckBoxConverter" />
         <field name="channelLocks" converter="TextConverter" />
-        <field name="bindCutTimeEndAttribute" converter="TextConverter" />
+        <field name="sounds" converter="TextConverter" />
+        <field name="effects" converter="TextConverter" />
+        <field name="boneEffects" converter="TextConverter" />
+        <field name="magics" converter="TextConverter" />
+        <field name="actorAnims" converter="TextConverter" />
         <field name="cutTimeStartMax" converter="FloatTextConverter" />
         <field name="cutTimeEndMax" converter="FloatTextConverter" />
+        <field name="bindCutTimeEndAttribute" converter="TextConverter" />
     </data>
     
     <data name="skillWait" extends="skillSimpleAnimationBase"/>

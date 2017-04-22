@@ -130,6 +130,7 @@ public class SummonSkill extends SimpleAnimationSkill {
 
     @Override
     protected void doSkillUpdate(float tpf) {
+        super.doSkillUpdate(tpf);
         if (summonId == null) {
             cleanup();
             return;

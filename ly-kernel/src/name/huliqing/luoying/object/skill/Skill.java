@@ -94,12 +94,13 @@ public interface Skill extends DataProcessor<SkillData>{
      * 重新修复被其它技能重置的动画
      */
     void restoreAnimation();
-    
-    /**
-     * 获取技能的实际执行时间.
-     * @return 
-     */
-    float getTrueUseTime();
+   
+    // remove20170422
+//    /**
+//     * 获取技能的实际执行时间.
+//     * @return 
+//     */
+//    float getTrueUseTime();
 
     /**
      * 判断角色在当前状态下是否可以执行这个技能,该方法返回一个状态码{@link StateCode}，<br>

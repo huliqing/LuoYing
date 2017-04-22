@@ -280,7 +280,8 @@ public class WeaponSkin extends AbstractSkin implements Weapon {
             entityService.useObjectData(actor, skinSkill.getData().getUniqueId());
             
             this.actor = actor;
-            this.hangTime = skinSkill.getTrueUseTime() * skinSkill.getHangTimePoint();
+//            this.hangTime = skinSkill.getTrueUseTime() * skinSkill.getHangTimePoint(); // remove
+            this.hangTime = skinSkill.getHangTimePoint();
             this.takeOn = takeOn;
             this.takeOffSlot = takeOffSlot;
             

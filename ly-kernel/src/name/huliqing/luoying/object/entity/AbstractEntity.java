@@ -179,10 +179,11 @@ public abstract class AbstractEntity implements Entity {
         // 属性清理
         attributeManager.cleanup();
         
-        // 将Spatial清理出场景
+        // 将Spatial清理出场景.
+        // 注：Spatial不应该清理为null,这可能会导致bug, 因为getSpatial()方法会被外部大量调用，当Entity被清理后,
+        // 一些外部逻辑还可能在引擎Entity.这就可能会导致NPE(NullPointerException)
         if (spatial != null) {
             spatial.removeFromParent();
-            spatial = null;
         }
 
         // 清理后要取消对场景的引用

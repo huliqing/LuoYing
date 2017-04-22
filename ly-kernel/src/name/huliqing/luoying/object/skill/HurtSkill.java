@@ -43,10 +43,4 @@ public class HurtSkill extends SimpleAnimationSkill {
             channelModule.reset();
         }
     }
-
-    @Override
-    protected void doSkillUpdate(float tpf) {
-        // ignore
-    }
-    
 }

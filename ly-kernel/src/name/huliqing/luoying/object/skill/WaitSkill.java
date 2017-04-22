@@ -52,8 +52,5 @@ public class WaitSkill extends SimpleAnimationSkill {
         }
     }
     
-    @Override
-    protected void doSkillUpdate(float tpf) {}
-
     
 }

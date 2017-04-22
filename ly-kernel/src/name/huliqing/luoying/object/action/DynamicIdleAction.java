@@ -32,6 +32,7 @@ import name.huliqing.luoying.object.module.SkillModule;
 import name.huliqing.luoying.object.skill.Skill;
 import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.object.entity.DataListener;
+import name.huliqing.luoying.object.skill.SimpleAnimationSkill;
 
 /**
  * 适合于生物角色的空闲行为，角色每隔一段时间就会随机执行一个idle动作,在idle动作执行
@@ -98,10 +99,7 @@ public class DynamicIdleAction extends AbstractAction implements IdleAction, Dat
             if (!skillService.isPlayingSkill(actor)) {
                 // 注：wait可能不是循环的，所以需要判断
                 if (!skillModule.isWaiting() && waitSkill != null) {
-                    
-//                    skillNetwork.playSkill(actor, waitSkill, false);
                     entityNetwork.useObjectData(actor, waitSkill.getData().getUniqueId());
-                    
                 }
             }
             return;
@@ -112,12 +110,13 @@ public class DynamicIdleAction extends AbstractAction implements IdleAction, Dat
             return;
         }
         
-//        skillNetwork.playSkill(actor, idle, false);
         entityNetwork.useObjectData(actor, idle.getData().getUniqueId());
         
         intervalUsed = 0;
         interval = (intervalMax - intervalMin) * FastMath.nextRandomFloat() + intervalMin;
-        interval += idle.getTrueUseTime();
+        if (idle instanceof SimpleAnimationSkill) {
+            interval += ((SimpleAnimationSkill)idle).getTrueUseTime();
+        }
     }
     
     private Skill getIdleSkill() {

@@ -67,6 +67,7 @@ public class DeadSkill extends SimpleAnimationSkill {
     
     @Override
     protected void doSkillUpdate(float tpf) {
+        super.doSkillUpdate(tpf);
         if (time >= trueUseTime) {
             // 不要放在cleanup中移除角色,因为这可能会在场景清理(场景cleanup)的时候冲突，
             // 可能造成无限递归异常(StackOverflow)

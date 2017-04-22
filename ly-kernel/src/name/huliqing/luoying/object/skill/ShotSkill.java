@@ -129,8 +129,9 @@ public class ShotSkill extends HitSkill {
     public void initialize() {
         super.initialize();
         
+        float trueSpeed = getSpeed();
         for (int i = 0; i < shotTimes.length; i++) {
-            float shotTime = MathUtils.clamp(fixTimePointByCutTime(shotTimes[i]), 0f, 1f);
+            float shotTime = MathUtils.clamp(shotTimes[i] / trueSpeed, 0f, 1f);
             trueShotTimes[i] = shotTime;
         }
         shotChecker.setMaxTime(trueUseTime);
@@ -163,6 +164,7 @@ public class ShotSkill extends HitSkill {
     
     @Override
     protected void doSkillUpdate(float tpf) {
+        super.doSkillUpdate(tpf);
         checkShot();
     }
 

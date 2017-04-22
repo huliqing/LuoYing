@@ -25,8 +25,5 @@ package name.huliqing.luoying.object.skill;
  */
 public class DefendSkill extends SimpleAnimationSkill {
     
-    @Override
-    protected void doSkillUpdate(float tpf) {
-    }
     
 }

@@ -101,9 +101,6 @@ public class WalkSkill extends SimpleAnimationSkill implements Walk{
         // 添加角色自动位置同步
         Network.getInstance().addSyncEntity(actor);
     }
-    
-    @Override
-    protected void doSkillUpdate(float tpf) {}
 
     @Override
     protected void doUpdateAnimation(String animation, boolean loop

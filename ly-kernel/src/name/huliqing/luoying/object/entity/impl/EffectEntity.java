@@ -107,12 +107,8 @@ public class EffectEntity extends ModelEntity {
     @Override
     public void onInitScene(Scene scene) {
         super.onInitScene(scene);
-        if (!effectInstance.isInitialized()) {
-            effectInstance.initialize();
-        }
-        // 在特效结束时，同时将EffectEntity移除出场景
-        effectInstance.addListener(effectListener);
-
+        
+        //  Trace设置需要放在effectInstance初始化之前
         if (traceEntity >= 0) {
             Entity target = scene.getEntity(traceEntity);
             if (target != null) {
@@ -135,6 +131,13 @@ public class EffectEntity extends ModelEntity {
                 }
             }
         }
+        
+        if (!effectInstance.isInitialized()) {
+            effectInstance.initialize();
+        }
+        // 在特效结束时，同时将EffectEntity移除出场景
+        effectInstance.addListener(effectListener);
+
     }
 
     @Override

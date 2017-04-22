@@ -37,17 +37,17 @@ public class SkillData extends ObjectData {
         setAttribute("icon", icon);
     }
     
-    public float getUseTime() {
-        return getAsFloat("useTime", 1.0f);
-    }
-
-    /**
-     * 设置技能的使用时间
-     * @param useTime 
-     */
-    public void setUseTime(float useTime) {
-        setAttribute("useTime", useTime);
-    }
+//    public float getUseTime() {
+//        return getAsFloat("useTime", 1.0f);
+//    }
+//
+//    /**
+//     * 设置技能的使用时间
+//     * @param useTime 
+//     */
+//    public void setUseTime(float useTime) {
+//        setAttribute("useTime", useTime);
+//    }
     
     public List<String> getTypes() {
         return getAsStringList("types");

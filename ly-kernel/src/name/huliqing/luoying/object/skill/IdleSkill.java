@@ -25,10 +25,10 @@ package name.huliqing.luoying.object.skill;
  */
 public class IdleSkill extends SimpleAnimationSkill {
     
-    @Override
-    protected void doSkillUpdate(float tpf) {
-        // ignore
-    }
+//    @Override
+//    protected void doSkillUpdate(float tpf) {
+//        super.doSkillUpdate(tpf);
+//    }
 
     
 }

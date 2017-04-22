@@ -44,7 +44,7 @@ public class JumpSkill extends AbstractSkill {
     private String animStart;
     private String animInAir;
     private String animEnd;
-    // 清空动画的循环模式
+    // 滞空动画的循环模式
     private LoopMode animInAirLoop = LoopMode.Cycle;
     // 角色的起跳动作、空中动作、落地动作的时间，
     private float useTimeInStart = 0.5f;
@@ -134,7 +134,7 @@ public class JumpSkill extends AbstractSkill {
         channelModule = actor.getModule(ChannelModule.class);
         jumpIntensityAttribute = actor.getAttribute(bindJumpIntensityAttribute, NumberAttribute.class);
         
-        // JumpStart动glb
+        // JumpStart动画
         if (!animStartPlayed) {
             animStartPlayed = true;
             if (animStart != null) {

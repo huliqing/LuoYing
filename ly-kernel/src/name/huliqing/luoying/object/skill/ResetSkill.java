@@ -63,7 +63,4 @@ public class ResetSkill extends SimpleAnimationSkill {
         channelModule.resetToAnimationTime(animation, timePoint);
     }
     
-    @Override
-    protected void doSkillUpdate(float tpf) {}
-    
 }

@@ -94,16 +94,19 @@ public class AttackSkill extends HitSkill {
         super.initialize();
         
         // 计算实际的技能检测点，主要受cutTime影响，要按比例缩放
+        float trueSpeed = getSpeed();
         if (checkPoint != null) {
             if (trueCheckPoint == null) {
                 trueCheckPoint = new float[checkPoint.length];
             }
             // 重新计算时间插值点，这些插值点受cut影响
             for (int i = 0; i < checkPoint.length; i++) {
-                trueCheckPoint[i] = fixTimePointByCutTime(checkPoint[i]);
+//                trueCheckPoint[i] = fixTimePointByCutTime(checkPoint[i]); // remove
+                trueCheckPoint[i] = checkPoint[i] / trueSpeed;
             } 
             pointChecker.setCheckPoint(trueCheckPoint);
         }
+        
         pointChecker.setMaxTime(trueUseTime);
         
         // 将标记已经处理的攻击判定时间点清0
@@ -112,6 +115,7 @@ public class AttackSkill extends HitSkill {
 
     @Override
     protected void doSkillUpdate(float tpf) {
+        super.doSkillUpdate(tpf);
         while (pointChecker.nextPoint(time) != -1) {
             processCheckPoint(pointChecker.getIndex());
         }

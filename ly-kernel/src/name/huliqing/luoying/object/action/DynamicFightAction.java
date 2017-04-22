@@ -41,6 +41,7 @@ import name.huliqing.luoying.object.skill.Skill;
 import name.huliqing.luoying.utils.MathUtils;
 import name.huliqing.luoying.xml.ObjectData;
 import name.huliqing.luoying.object.entity.DataListener;
+import name.huliqing.luoying.object.skill.SimpleAnimationSkill;
 
 /**
  * 动态的角色战斗行为，该战斗行为下角色能够移动，转向跟随等。
@@ -226,7 +227,11 @@ public class DynamicFightAction extends PathFollowAction implements FightAction,
                 attackLimit = attackIntervalMax - attackIntervalMax * entityService.getNumberAttributeValue(actor, attackIntervalAttribute, 0).floatValue();
                 attackLimit = MathUtils.clamp(attackLimit, 0, attackIntervalMax);
             }
-            interval = skill.getTrueUseTime() + attackLimit;
+            if (skill instanceof SimpleAnimationSkill) {
+                interval = ((SimpleAnimationSkill)skill).getTrueUseTime() + attackLimit;
+            } else {
+                interval = attackLimit;
+            }
         }
         
         // 不管攻击是否成功，都要清空技能，以便使用下一个技能。
