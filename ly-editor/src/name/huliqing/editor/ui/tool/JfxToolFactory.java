@@ -38,6 +38,7 @@ import name.huliqing.editor.tools.base.ScaleTool;
 import name.huliqing.editor.tools.Tool;
 import name.huliqing.editor.tools.Vector2fValueTool;
 import name.huliqing.editor.tools.Vector3fValueTool;
+import name.huliqing.editor.tools.entity.InstancedTool;
 import name.huliqing.editor.tools.entity.SourceTool;
 import name.huliqing.editor.tools.terrain.TexLayerTool;
 
@@ -81,9 +82,11 @@ public class JfxToolFactory {
         // 地形贴图图层工具
         TOOL_MAPPING.put(TexLayerTool.class, JfxTerrainTexLayerTool.class);
         
+        // ---- 实体刷工具
         // 实体刷的实体源列表工具
         TOOL_MAPPING.put(SourceTool.class, JfxSourceTool.class);
-        
+        // 实体刷的选择Instanced实例的工具
+        TOOL_MAPPING.put(InstancedTool.class, JfxInstancedTool.class);
     }
     
     public final static JfxTool createJfxTool(Tool tool, Toolbar toolbar) {

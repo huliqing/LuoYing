@@ -33,6 +33,7 @@ import name.huliqing.editor.tools.ParamsTool;
 import name.huliqing.editor.tools.Tool;
 import name.huliqing.editor.tools.Vector3fValueTool;
 import name.huliqing.editor.tools.entity.EraseTool;
+import name.huliqing.editor.tools.entity.InstancedTool;
 import name.huliqing.editor.tools.entity.PaintTool;
 import name.huliqing.editor.tools.entity.SourceTool;
 
@@ -50,7 +51,6 @@ public class EntityBrushToolbar extends EditToolbar<SimpleJmeEdit> {
     private SourceTool sourceTool;
     
     private PaintTool paintTool;
-    
     private ParamsTool paintToolParams;
     // Minimum height
     private NumberValueTool minHeight;
@@ -64,6 +64,9 @@ public class EntityBrushToolbar extends EditToolbar<SimpleJmeEdit> {
     // rotation adjust
     private Vector3fValueTool rotationMinAdjust;
     private Vector3fValueTool rotationMaxAdjust;
+    // Instanced工具,用于实体刷支持instanced功能
+    private InstancedTool instancedTool;
+    
     
     private EraseTool eraseTool;
 
@@ -93,9 +96,11 @@ public class EntityBrushToolbar extends EditToolbar<SimpleJmeEdit> {
         scaleMaxAdjust = new Vector3fValueTool(Manager.getRes(ResConstants.TOOL_ENTITY_BRUSH_SCALE_MAX), Manager.getRes(ResConstants.TOOL_ENTITY_BRUSH_SCALE_MAX_TIP), null);
         rotationMinAdjust = new Vector3fValueTool(Manager.getRes(ResConstants.TOOL_ENTITY_BRUSH_ROTATION_MIN), Manager.getRes(ResConstants.TOOL_ENTITY_BRUSH_ROTATION_MIN_TIP), null); 
         rotationMaxAdjust = new Vector3fValueTool(Manager.getRes(ResConstants.TOOL_ENTITY_BRUSH_ROTATION_MAX), Manager.getRes(ResConstants.TOOL_ENTITY_BRUSH_ROTATION_MAX_TIP), null); 
+        instancedTool = new InstancedTool(Manager.getRes(ResConstants.TOOL_ENTITY_BRUSH_INSTANCED), Manager.getRes(ResConstants.TOOL_ENTITY_BRUSH_INSTANCED_TIP), null);
         paintToolParams = new ParamsTool("", "", null);
         paintToolParams.addChild(minHeight);
         paintToolParams.addChild(useNormal);
+        paintToolParams.addChild(instancedTool);
         paintToolParams.addChild(locationOffset);
         paintToolParams.addChild(scaleMinAdjust);
         paintToolParams.addChild(scaleMaxAdjust);
@@ -186,6 +191,10 @@ public class EntityBrushToolbar extends EditToolbar<SimpleJmeEdit> {
 
     public Vector3fValueTool getRotationMaxAdjust() {
         return rotationMaxAdjust;
+    }
+
+    public InstancedTool getInstancedTool() {
+        return instancedTool;
     }
 
     public EraseTool getEraseTool() {

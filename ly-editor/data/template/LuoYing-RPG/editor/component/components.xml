@@ -21,6 +21,7 @@
     <component id="sysEntityShadow" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
     <component id="sysEntityAudio" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
     <component id="sysEntityEffect" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="sysEntityInstanced" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
     <component id="sysActor" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
     
     <component id="sysEntityBloomFilter" type="entityFilter" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />

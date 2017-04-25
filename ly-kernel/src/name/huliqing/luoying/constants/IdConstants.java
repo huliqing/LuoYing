@@ -92,7 +92,7 @@ public class IdConstants {
     public final static String SYS_PROGRESS_SIMPLE = "sysProgressSimple";
     
     // =============================================================================
-    // Entity: Env
+    // Entity: 
     // =============================================================================
     
     /** 内置的天空盒物体: sysEntitySky */
@@ -123,6 +123,8 @@ public class IdConstants {
     public final static String SYS_ENTITY_MODEL = "sysEntityModel";
     /**  sysEntityEffect, 效果实体，空的，没有任何效果，需要动态设置。 */
     public final static String SYS_ENTITY_EFFECT = "sysEntityEffect";
+    /** sysEntityInstanced*/
+    public final static String SYS_ENTITY_INSTANCED = "sysEntityInstanced";
     
     // =============================================================================
     // El

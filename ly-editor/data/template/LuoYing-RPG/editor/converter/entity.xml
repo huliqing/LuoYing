@@ -305,5 +305,9 @@
         </field>
     </data>
     
+    <data name="entityInstanced" extends="entityModelBase">
+        <feature name="hideFields" value="location,rotation,scale,mat,shadowMode,cullHint,queueBucket,preferUnshaded" />
+    </data>
+    
     
 </root>

@@ -26,32 +26,32 @@ import javafx.scene.control.ListView;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.Region;
 import javafx.stage.Popup;
-import name.huliqing.editor.component.ComponentDefine;
 import name.huliqing.editor.ui.utils.SearchListView;
+import name.huliqing.luoying.xml.DataProcessor;
 
 /**
- * 组件查询器
+ * DataProcessor查询器
  * @author huliqing
  * @param <T>
  */
-public final class ComponentSearch<T extends ComponentDefine> {
+public final class DataProcessorSearch<T extends DataProcessor> {
     
     private final Popup popup = new Popup();
-    private final SearchListView<T> componentView = new SearchListView(new ListView<T>());
+    private final SearchListView<T> searchListView = new SearchListView(new ListView());
 
-    public ComponentSearch() {
+    public DataProcessorSearch() {
         this(null);
     }
     
-    public ComponentSearch(List<T> items) {
+    public DataProcessorSearch(List<T> items) {
         if (items != null) {
-            setComponents(items);
+            setItems(items);
         }
         
-        popup.getContent().add(componentView);
+        popup.getContent().add(searchListView);
         popup.setAutoHide(true);
         
-        componentView.getListView().setCellFactory((ListView<T> param) -> new ListCell<T>() {
+        searchListView.getListView().setCellFactory((ListView<T> param) -> new ListCell<T>() {
             @Override
             protected void updateItem(T item, boolean empty) {
                 super.updateItem(item, empty);
@@ -59,29 +59,29 @@ public final class ComponentSearch<T extends ComponentDefine> {
                     setText(null);
                     setGraphic(null);
                 } else {
-                    setText(item.getId());
+                    setText(item.getData().getId());
                 }
             }
         });
         // 匹配检查的时候要用字符串转换器
-        componentView.setConverter((T t) -> t.getId());
-        componentView.setPrefWidth(250);
-        componentView.setPrefHeight(250);
-        componentView.setEffect(new DropShadow());
+        searchListView.setConverter((T t) -> t.getData().getId());
+        searchListView.setPrefWidth(250);
+        searchListView.setPrefHeight(250);
+        searchListView.setEffect(new DropShadow());
     }
 
-    public void setComponents(List<T> items) {
+    public void setItems(List<T> items) {
         if (items == null) 
             return;
-        componentView.setAllItems(items);
+        searchListView.setAllItems(items);
     }
     
     public SearchListView getView() {
-        return componentView;
+        return searchListView;
     }
     
     public ListView<T> getListView() {
-        return componentView.getListView();
+        return searchListView.getListView();
     }
 
     public void show(Region node, double offsetX, double offsetY) {

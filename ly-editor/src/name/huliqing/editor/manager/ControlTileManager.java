@@ -56,6 +56,7 @@ public class ControlTileManager {
         MAPPING.put("entityDirectionalLightFilterShadow", EmptyEntityControlTile.class);
         MAPPING.put("entityChaseCamera", EmptyEntityControlTile.class);
         MAPPING.put("entityPhysics", EmptyEntityControlTile.class);
+        MAPPING.put("entityInstanced", EmptyEntityControlTile.class);
     }
     
     public final static <T extends EntityControlTile> T createEntityControlTile(EntityData ed) {

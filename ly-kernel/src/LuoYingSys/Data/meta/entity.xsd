@@ -27,6 +27,7 @@ xs:time
                 <xs:element ref="entityDirectionalLightFilterShadow" />
                 <xs:element ref="entityDirectionalLightShadow" />
                 <xs:element ref="entityGrass" />
+                <xs:element ref="entityInstanced" />
                 <xs:element ref="entityPhysics" />
                 <xs:element ref="entityPlatformProxy" />
                 <xs:element ref="entitySimpleModel" />
@@ -801,10 +802,25 @@ xs:time
     </xs:element>
     
     <xs:element name="entitySimpleModel">
+        <xs:annotation>
+            <xs:documentation>普通模型</xs:documentation>
+        </xs:annotation>
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="entityModelBase">
                     <xs:attribute ref="file" />
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="entityInstanced">
+        <xs:annotation>
+            <xs:documentation>Instanced实体</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="entityModelBase">
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>

@@ -33,7 +33,7 @@ import name.huliqing.luoying.object.scene.Scene;
  */
 public abstract class EntityControlTile<T extends Entity> extends ControlTile<T, SimpleJmeEdit> {
      
-    protected final List<EntityControlTileListener> listeners = new ArrayList<EntityControlTileListener>();
+    protected final List<EntityControlTileListener> listeners = new ArrayList<>();
     
     @Override
     public T getTarget() {

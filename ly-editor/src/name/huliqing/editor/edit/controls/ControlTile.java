@@ -40,7 +40,7 @@ public abstract class ControlTile<T, E extends JmeEdit> {
     }
     
     protected ControlTile parent;
-    protected final SafeArrayList<ControlTile> children = new SafeArrayList<ControlTile>(ControlTile.class);
+    protected final SafeArrayList<ControlTile> children = new SafeArrayList<>(ControlTile.class);
     protected boolean initialized;
     
     protected T target;

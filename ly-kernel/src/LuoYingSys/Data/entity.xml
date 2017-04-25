@@ -131,6 +131,9 @@
     <!--特效: 内置示例-->
     <entityEffect id="sysEntityEffectFire" effect="sysEffectFire" />
     
+    <!--内置的Instanced根节点实体-->
+    <entityInstanced id="sysEntityInstanced" extends="sysEntityModelBase" />
+    
     <!-- ========================================================================= -->
     <!-- 以下为内置过滤器 -->
     <!-- ========================================================================= -->

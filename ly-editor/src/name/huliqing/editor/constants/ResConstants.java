@@ -152,6 +152,8 @@ public class ResConstants {
     public final static String TOOL_ENTITY_BRUSH_MIN_HEIGHT_TIP = "tool.entity.brush.min.height.tip";
     public final static String TOOL_ENTITY_BRUSH_FACE_NORMAL = "tool.entity.brush.face.normal";
     public final static String TOOL_ENTITY_BRUSH_FACE_NORMAL_TIP = "tool.entity.brush.face.normal.tip";
+    public final static String TOOL_ENTITY_BRUSH_INSTANCED = "tool.entity.brush.instanced";
+    public final static String TOOL_ENTITY_BRUSH_INSTANCED_TIP = "tool.entity.brush.instanced.tip";
  
     public final static String FORM_ASSETS_TITLE = "form.assets.title";
     public final static String FORM_COMPONENTS_TITLE = "form.components.title";

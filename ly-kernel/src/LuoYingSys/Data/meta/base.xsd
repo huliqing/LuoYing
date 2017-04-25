@@ -85,7 +85,7 @@ xs:time
                         <xs:documentation>物体功能模块列表，格式: "module1,module2,..."</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:attribute name="attributes" type="xs:string" use="required">
+                <xs:attribute name="attributes" type="xs:string" use="optional">
                     <xs:annotation>
                         <xs:documentation>
                             定义角色的所有属性值,格式如："attribute1,attribute2,attribute3,..."

@@ -121,6 +121,9 @@ tool.entity.brush.min.height=最小高度限制
 tool.entity.brush.min.height.tip=限制实体位置不低于这个高度
 tool.entity.brush.face.normal=使用法向量
 tool.entity.brush.face.normal.tip=即让刷到地面上的物体的向上方向与地面的法向量相同。
+tool.entity.brush.instanced=实例节点
+tool.entity.brush.instanced.tip=指定一个InstancedEntity，这允许将实体刷到这个InstancedEntity上，以提升性能
+
 
 form.create.terrain.terrainName=地形名称
 form.create.terrain.terrainName.tip=地形名称

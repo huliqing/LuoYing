@@ -36,7 +36,9 @@ import name.huliqing.editor.manager.ControlTileManager;
 import name.huliqing.editor.toolbar.EntityBrushToolbar;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.object.Loader;
+import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.entity.TerrainEntity;
+import name.huliqing.luoying.object.entity.impl.InstancedEntity;
 import name.huliqing.luoying.utils.MathUtils;
 import name.huliqing.luoying.xml.DataFactory;
 
@@ -85,10 +87,12 @@ public class PaintTool extends AbstractAdjustEntityBrushTool {
         Vector3f rotationAdjustMin = toolbar.getRotationMinAdjust().getValue();
         Vector3f rotationAdjustMax = toolbar.getRotationMaxAdjust().getValue();
         boolean useNormal = toolbar.getUseNormal().getValue();
+        InstancedEntity instancedEntity = toolbar.getInstancedTool().getInstancedEntity();
         
         paint((SceneEdit) edit, terrain, sourceList
                 , paintWorldLoc, radius, density, minHeight, useNormal
-                , locationOffset, scaleAdjustMin, scaleAdjustMax, rotationAdjustMin, rotationAdjustMax);
+                , locationOffset, scaleAdjustMin, scaleAdjustMax, rotationAdjustMin, rotationAdjustMax
+                , instancedEntity);
     }
     
     @Override
@@ -104,7 +108,9 @@ public class PaintTool extends AbstractAdjustEntityBrushTool {
     
     private void paint(SceneEdit sceneEdit, TerrainEntity terrain, List<EntityData> sourceList
             , Vector3f paintWorldLoc, float radius, int density, float minHeight, boolean useNormal
-            , Vector3f locationOffset, Vector3f scaleAdjustMin, Vector3f scaleAdjustMax, Vector3f rotationAdjustMin, Vector3f rotationAdjustMax) {
+            , Vector3f locationOffset, Vector3f scaleAdjustMin, Vector3f scaleAdjustMax
+            , Vector3f rotationAdjustMin, Vector3f rotationAdjustMax
+            , InstancedEntity instancedEntity) {
         int sourceSize = sourceList.size();
         TempVars tv = TempVars.get();
         Vector3f scaleAdjust = tv.vect2;
@@ -161,10 +167,18 @@ public class PaintTool extends AbstractAdjustEntityBrushTool {
             scale.multLocal(scaleAdjust);
             cloneData.setScale(scale);
             
-            // 转化为EntityControlTile, 然后添加到场景，并记录在临时列表ectTemps中，在当次操作完后记录到历史记录中。
+            // 转化为EntityControlTile, 然后添加到场景
             EntityControlTile ect = ControlTileManager.createEntityControlTile(cloneData);
-            ect.setTarget(Loader.load(cloneData));
+            Entity entity = Loader.load(cloneData);
+            ect.setTarget(entity);
             sceneEdit.addControlTile(ect);
+            
+            // 如果指定了一个InstancedEntity节点，则把当前实体添加到这个节点下，进行instancing.
+            if (instancedEntity != null) {
+                instancedEntity.addInstance(entity);
+            }
+            
+            // 记录在临时列表ectTemps中，在当次操作完后记录到历史记录中。
             ectTemps.add(ect);
         }
         tv.release();
