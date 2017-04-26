@@ -35,13 +35,13 @@ import name.huliqing.editor.toolbar.Toolbar;
 public abstract class SimpleJmeEdit<T extends ControlTile> extends JmeAbstractEdit {
     
     // 侦听器
-    protected final List<SimpleEditListener> editFormListeners = new ArrayList<SimpleEditListener>();
+    protected final List<SimpleEditListener> editFormListeners = new ArrayList<>();
     
     // 变换模式
     protected Mode mode = Mode.GLOBAL;
     
     // 当前选择的物体
-    protected final SafeArrayList<ControlTile> controlTiles = new SafeArrayList<ControlTile>(ControlTile.class);
+    protected final SafeArrayList<ControlTile> controlTiles = new SafeArrayList<>(ControlTile.class);
     protected T selectObj;
 
     @Override

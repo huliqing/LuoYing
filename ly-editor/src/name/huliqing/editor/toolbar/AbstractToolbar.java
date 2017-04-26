@@ -33,17 +33,17 @@ import name.huliqing.editor.edit.JmeEdit;
 public abstract class AbstractToolbar<E extends JmeEdit> implements Toolbar<E> {
 //    private static final Logger LOG = Logger.getLogger(AbstractToolbar.class.getName());
 
-    protected final SafeArrayList<ToolbarListener> listeners = new SafeArrayList<ToolbarListener>(ToolbarListener.class);
+    protected final SafeArrayList<ToolbarListener> listeners = new SafeArrayList<>(ToolbarListener.class);
     
     /**
      * 所有添加到工具栏中的工具
      */
-    protected final SafeArrayList<Tool> tools = new SafeArrayList<Tool>(Tool.class);
+    protected final SafeArrayList<Tool> tools = new SafeArrayList<>(Tool.class);
     
     /**
      * 所有可用的工具,是tools的子集
      */
-    protected final SafeArrayList<Tool> toolsEnabled = new SafeArrayList<Tool>(Tool.class);
+    protected final SafeArrayList<Tool> toolsEnabled = new SafeArrayList<>(Tool.class);
     
     protected Editor editor;
     protected E edit;

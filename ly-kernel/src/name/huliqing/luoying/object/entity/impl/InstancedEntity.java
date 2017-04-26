@@ -55,6 +55,7 @@ public class InstancedEntity extends ModelEntity implements SceneListener {
     //  需要被instanced的实体列表
     private final Set<Long> entities = new HashSet<Long>();
     
+    // 判断显卡是否支持instancing功能
     private boolean instancingSupported;
     
     private final Map<Mesh, Material> matMaps = new HashMap<Mesh, Material>();

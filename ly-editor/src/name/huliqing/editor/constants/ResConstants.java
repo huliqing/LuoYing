@@ -81,6 +81,7 @@ public class ResConstants {
     public final static String EDIT_TOOLBAR_BASE = "edit.toolbar.base";
     public final static String EDIT_TOOLBAR_TERRAIN = "edit.toolbar.terrain";
     public final static String EDIT_TOOLBAR_ENTITY_BRUSH = "edit.toolbar.entity.brush";
+    public final static String EDIT_TOOLBAR_ENTITY_BATCH = "edit.toolbar.entity.batch";
     
     // 基本工具
     public final static String TOOL_MODE = "tool.mode";
@@ -154,6 +155,18 @@ public class ResConstants {
     public final static String TOOL_ENTITY_BRUSH_FACE_NORMAL_TIP = "tool.entity.brush.face.normal.tip";
     public final static String TOOL_ENTITY_BRUSH_INSTANCED = "tool.entity.brush.instanced";
     public final static String TOOL_ENTITY_BRUSH_INSTANCED_TIP = "tool.entity.brush.instanced.tip";
+    
+    // 场景Batch工具栏
+    public final static String TOOL_ENTITY_BATCH_ROW = "tool.entity.batch.row";
+    public final static String TOOL_ENTITY_BATCH_ROW_TIP = "tool.entity.batch.row.tip";
+    public final static String TOOL_ENTITY_BATCH_COLUMN = "tool.entity.batch.column";
+    public final static String TOOL_ENTITY_BATCH_COLUMN_TIP = "tool.entity.batch.column.tip";
+    public final static String TOOL_ENTITY_BATCH_EXTENTS = "tool.entity.batch.extents";
+    public final static String TOOL_ENTITY_BATCH_EXTENTS_TIP = "tool.entity.batch.extents.tip";
+//    public final static String TOOL_ENTITY_BATCH_YEXTENT = "tool.entity.batch.yextent";
+//    public final static String TOOL_ENTITY_BATCH_YEXTENT_TIP = "tool.entity.batch.yextent.tip";
+//    public final static String TOOL_ENTITY_BATCH_ZEXTENT = "tool.entity.batch.zextent";
+//    public final static String TOOL_ENTITY_BATCH_ZEXTENT_TIP = "tool.entity.batch.zextent.tip";
  
     public final static String FORM_ASSETS_TITLE = "form.assets.title";
     public final static String FORM_COMPONENTS_TITLE = "form.components.title";

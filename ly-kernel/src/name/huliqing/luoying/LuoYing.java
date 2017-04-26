@@ -306,6 +306,7 @@ import name.huliqing.luoying.object.entity.filter.FXAAFilterEntity;
 import name.huliqing.luoying.object.entity.filter.FogFilterEntity;
 import name.huliqing.luoying.object.entity.filter.LightScatteringFilterEntity;
 import name.huliqing.luoying.object.entity.filter.SSAOFilterEntity;
+import name.huliqing.luoying.object.entity.impl.BatchEntity;
 import name.huliqing.luoying.object.entity.impl.DirectionalLightShadowEntity;
 import name.huliqing.luoying.object.entity.impl.GrassEntity;
 import name.huliqing.luoying.object.entity.impl.InstancedEntity;
@@ -696,6 +697,7 @@ public class LuoYing {
         DataFactory.register("entityAdvanceWater", EntityData.class, EntityDataLoader.class, AdvanceWaterEntity.class);
         DataFactory.register("entityAmbientLight", EntityData.class, EntityDataLoader.class, AmbientLightEntity.class);
         DataFactory.register("entityAudio", EntityData.class, AudioEntityDataLoader.class, AudioEntity.class);
+        DataFactory.register("entityBatch", EntityData.class, EntityDataLoader.class, BatchEntity.class);
         DataFactory.register("entityChaseCamera", EntityData.class, EntityDataLoader.class, ChaseCameraEntity.class);
         DataFactory.register("entityDirectionalLight", EntityData.class, EntityDataLoader.class, DirectionalLightEntity.class);
         DataFactory.register("entityDirectionalLightFilterShadow", EntityData.class, EntityDataLoader.class, DirectionalLightFilterShadowEntity.class);
