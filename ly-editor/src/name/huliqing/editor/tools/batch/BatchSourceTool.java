@@ -19,21 +19,23 @@
  */
 package name.huliqing.editor.tools.batch;
 
+import java.util.ArrayList;
+import java.util.List;
 import name.huliqing.editor.edit.SimpleJmeEdit;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.toolbar.EntityBatchToolbar;
 import name.huliqing.editor.tools.AbstractTool;
+import name.huliqing.luoying.object.entity.Entity;
 
 /**
- * BatchTool,用于将场景中的一些相同类型的实体进行批量Batch到BatchEntity节点中。
- * 该工具会动态的为场景创建BatchEntity.将场景中的指定的实体自动分配到不同的BatchEntity中。
- * 可指定要Batch的区域的大小, 指定要自动创建的BatchEntity的数量
+ * 实体源列表，这个列表中存放所有将要进行Batch的实体
  * @author huliqing
  */
-public class BatchTool extends AbstractTool<SimpleJmeEdit, EntityBatchToolbar> {
+public class BatchSourceTool extends AbstractTool<SimpleJmeEdit, EntityBatchToolbar> {
+    
+    private List<Entity> entities;
 
-
-    public BatchTool(String name, String tips, String icon) {
+    public BatchSourceTool(String name, String tips, String icon) {
         super(name, tips, icon);
     }
 
@@ -42,17 +44,30 @@ public class BatchTool extends AbstractTool<SimpleJmeEdit, EntityBatchToolbar> {
         // ignore
     }
 
-    @Override
-    public void initialize(SimpleJmeEdit edit, EntityBatchToolbar toolbar) {
-        super.initialize(edit, toolbar);
-        
-        
-    }
-
-    @Override
-    public void cleanup() {
-        super.cleanup();
+    public List<Entity> getEntities() {
+        return entities;
     }
     
+    public void setEntities(List<Entity> entities) {
+        this.entities = entities;
+    }
     
+    public void addEntity(Entity entity) {
+        if (entities == null) {
+            entities = new ArrayList<>();
+        }
+        if (!entities.contains(entity)) {
+            entities.add(entity);
+        }
+    }
+    
+    public boolean removeEntity(Entity entity) {
+        return entities != null && entities.remove(entity);
+    }
+    
+    public void clear() {
+        if (entities != null) {
+            entities.clear();
+        }
+    }
 }

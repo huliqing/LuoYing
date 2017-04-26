@@ -38,7 +38,10 @@ import name.huliqing.editor.tools.base.ScaleTool;
 import name.huliqing.editor.tools.Tool;
 import name.huliqing.editor.tools.Vector2fValueTool;
 import name.huliqing.editor.tools.Vector3fValueTool;
-import name.huliqing.editor.tools.batch.AutoBatchTool;
+import name.huliqing.editor.tools.batch.BatchEntityGenTool;
+import name.huliqing.editor.tools.batch.BatchSourceTool;
+import name.huliqing.editor.tools.batch.BatchTargetTool;
+import name.huliqing.editor.tools.batch.BatchTool;
 import name.huliqing.editor.tools.entity.InstancedTool;
 import name.huliqing.editor.tools.entity.SourceTool;
 import name.huliqing.editor.tools.terrain.TexLayerTool;
@@ -90,7 +93,11 @@ public class JfxToolFactory {
         TOOL_MAPPING.put(InstancedTool.class, JfxInstancedTool.class);
         
         // ---- Batch工具栏
-        TOOL_MAPPING.put(AutoBatchTool.class, JfxAutoBatchTool.class);
+        TOOL_MAPPING.put(BatchSourceTool.class, JfxBatchSourceTool.class);
+        TOOL_MAPPING.put(BatchTargetTool.class, JfxBatchTargetTool.class);
+        TOOL_MAPPING.put(BatchTool.class, JfxBatchTool.class);
+        
+        TOOL_MAPPING.put(BatchEntityGenTool.class, JfxBatchEntityGenTool.class);
         
     }
     

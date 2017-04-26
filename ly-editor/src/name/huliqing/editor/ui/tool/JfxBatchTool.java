@@ -20,31 +20,32 @@
 package name.huliqing.editor.ui.tool;
 
 import javafx.beans.value.ObservableValue;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
-import javafx.scene.layout.HBox;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import name.huliqing.editor.tools.batch.AutoBatchTool;
+import name.huliqing.editor.tools.batch.BatchTool;
 import name.huliqing.fxswing.Jfx;
 
 /**
  *
  * @author huliqing
  */
-public class JfxAutoBatchTool extends JfxAbstractTool<AutoBatchTool> {
+public class JfxBatchTool extends JfxAbstractTool<BatchTool> {
 
     private final VBox view = new VBox();
     
-    private final HBox labelBox = new HBox();
+    private Button button = new Button("Batch");
     
-    public JfxAutoBatchTool() {
-        CheckBox cb = new CheckBox("ShowDebug");
-        cb.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldValue, Boolean newValue) -> {
-            Jfx.runOnJme(() -> {tool.setGridVisible(newValue);});
-        });
+    public JfxBatchTool() {
+//        CheckBox cb = new CheckBox();
+//        cb.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldValue, Boolean newValue) -> {
+//            Jfx.runOnJme(() -> {tool.setGridVisible(newValue);});
+//        });
         
-        labelBox.getChildren().add(cb);
-        view.getChildren().add(labelBox);
+//        labelBox.getChildren().addAll(label,cb);
+        view.getChildren().add(button);
     }
     
     @Override

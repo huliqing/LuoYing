@@ -133,6 +133,8 @@
     
     <!--内置的Instanced根节点实体-->
     <entityInstanced id="sysEntityInstanced" extends="sysEntityModelBase" />
+    <!--内置的BatchNode节点-->
+    <entityBatch id="sysEntityBatch" extends="sysEntityModelBase" />
     
     <!-- ========================================================================= -->
     <!-- 以下为内置过滤器 -->

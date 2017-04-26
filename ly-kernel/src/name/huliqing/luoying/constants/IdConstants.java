@@ -125,6 +125,8 @@ public class IdConstants {
     public final static String SYS_ENTITY_EFFECT = "sysEntityEffect";
     /** sysEntityInstanced*/
     public final static String SYS_ENTITY_INSTANCED = "sysEntityInstanced";
+    /** sysEntityBatch */
+    public final static String SYS_ENTITY_BATCH = "sysEntityBatch";
     
     // =============================================================================
     // El

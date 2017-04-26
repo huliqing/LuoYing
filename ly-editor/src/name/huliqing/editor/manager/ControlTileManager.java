@@ -57,6 +57,7 @@ public class ControlTileManager {
         MAPPING.put("entityChaseCamera", EmptyEntityControlTile.class);
         MAPPING.put("entityPhysics", EmptyEntityControlTile.class);
         MAPPING.put("entityInstanced", EmptyEntityControlTile.class);
+        MAPPING.put("entityBatch", EmptyEntityControlTile.class);
     }
     
     public final static <T extends EntityControlTile> T createEntityControlTile(EntityData ed) {
@@ -66,7 +67,7 @@ public class ControlTileManager {
 //            return (T) new EmptyEntityControlTile();
             return (T) new SimpleModelEntityControlTile();
         }
-         
+
         ControlTile obj;
         try {
             obj = clazz.newInstance();
