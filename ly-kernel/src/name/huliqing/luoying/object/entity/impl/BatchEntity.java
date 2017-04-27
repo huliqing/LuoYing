@@ -31,7 +31,7 @@ import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.object.scene.SceneListener;
 
 /**
- *
+ * BatchEntity用于批量合并场景中的实体, 可以将多个相同材质的模型Batch到一个BatchEntity节点中
  * @author huliqing
  */
 public class BatchEntity extends ModelEntity {
@@ -118,6 +118,15 @@ public class BatchEntity extends ModelEntity {
             batchNode.detachChild(entity.getSpatial());
         }
         return result;
+    }
+    
+    /**
+     * 判断一个Entity是否Batch到当前实体中
+     * @param entity
+     * @return 
+     */
+    public boolean isBatch(Entity entity) {
+        return entities.contains(entity.getEntityId());
     }
     
     /**

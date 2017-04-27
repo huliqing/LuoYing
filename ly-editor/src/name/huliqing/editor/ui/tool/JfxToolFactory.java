@@ -26,8 +26,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import name.huliqing.editor.toolbar.Toolbar;
 import name.huliqing.editor.tools.BooleanValueTool;
+import name.huliqing.editor.tools.ButtonTool;
 import name.huliqing.editor.tools.NumberValueTool;
 import name.huliqing.editor.tools.ParamsTool;
+import name.huliqing.editor.tools.StringValueTool;
 import name.huliqing.editor.tools.ToggleTool;
 import name.huliqing.editor.tools.base.CameraTool;
 import name.huliqing.editor.tools.base.GridTool;
@@ -61,8 +63,11 @@ public class JfxToolFactory {
         TOOL_MAPPING.put(ParamsTool.class, JfxParamsTool.class);
         // 通用设置，如无特别指定，则所有ToggleTool类型的工具都渲染为JfxToggleTool
         TOOL_MAPPING.put(ToggleTool.class, JfxToggleTool.class);
+        // 通用设置，如无特别指定，则所有ButtonTool类型的工具都渲染为JfxButtonTool
+        TOOL_MAPPING.put(ButtonTool.class, JfxButtonTool.class);
         // 通用设置，如无特别指定，则所有NumberValueTool类型的工具都渲染为JfxNumberValueTool
         TOOL_MAPPING.put(NumberValueTool.class, JfxNumberValueTool.class);
+        TOOL_MAPPING.put(StringValueTool.class, JfxStringValueTool.class);
         TOOL_MAPPING.put(BooleanValueTool.class, JfxBooleanValueTool.class);
         TOOL_MAPPING.put(Vector2fValueTool.class, JfxVector2fValueTool.class);
         TOOL_MAPPING.put(Vector3fValueTool.class, JfxVector3fValueTool.class);
@@ -95,9 +100,6 @@ public class JfxToolFactory {
         // ---- Batch工具栏
         TOOL_MAPPING.put(BatchSourceTool.class, JfxBatchSourceTool.class);
         TOOL_MAPPING.put(BatchTargetTool.class, JfxBatchTargetTool.class);
-        TOOL_MAPPING.put(BatchTool.class, JfxBatchTool.class);
-        
-        TOOL_MAPPING.put(BatchEntityGenTool.class, JfxBatchEntityGenTool.class);
         
     }
     

@@ -120,7 +120,6 @@ public class ResConstants {
     public final static String TOOL_TERRAIN_ERASE_TIP = "tool.terrain.erase.tip";
     public final static String TOOL_TERRAIN_TEXLAYER = "tool.terrain.texLayer";
     public final static String TOOL_TERRAIN_TEXLAYER_TIP = "tool.terrain.texLayer.tip";
-//    public final static String TOOL_TERRAIN_TEXLAYER_SELECT = "tool.terrain.texLayer.select";
     public final static String TOOL_TERRAIN_TEXLAYER_DIFFUSE = "tool.terrain.texLayer.diffuse";
     public final static String TOOL_TERRAIN_TEXLAYER_NORMAL = "tool.terrain.texLayer.normal";
     public final static String TOOL_TERRAIN_TEXLAYER_SCALE = "tool.terrain.texLayer.scale";
@@ -157,16 +156,29 @@ public class ResConstants {
     public final static String TOOL_ENTITY_BRUSH_INSTANCED_TIP = "tool.entity.brush.instanced.tip";
     
     // 场景Batch工具栏
-    public final static String TOOL_ENTITY_BATCH_ROW = "tool.entity.batch.row";
-    public final static String TOOL_ENTITY_BATCH_ROW_TIP = "tool.entity.batch.row.tip";
-    public final static String TOOL_ENTITY_BATCH_COLUMN = "tool.entity.batch.column";
-    public final static String TOOL_ENTITY_BATCH_COLUMN_TIP = "tool.entity.batch.column.tip";
-    public final static String TOOL_ENTITY_BATCH_EXTENTS = "tool.entity.batch.extents";
-    public final static String TOOL_ENTITY_BATCH_EXTENTS_TIP = "tool.entity.batch.extents.tip";
-//    public final static String TOOL_ENTITY_BATCH_YEXTENT = "tool.entity.batch.yextent";
-//    public final static String TOOL_ENTITY_BATCH_YEXTENT_TIP = "tool.entity.batch.yextent.tip";
-//    public final static String TOOL_ENTITY_BATCH_ZEXTENT = "tool.entity.batch.zextent";
-//    public final static String TOOL_ENTITY_BATCH_ZEXTENT_TIP = "tool.entity.batch.zextent.tip";
+    public final static String TOOL_ENTITY_BATCH_TOGGLE                       = "tool.entity.batch.toggle";
+    public final static String TOOL_ENTITY_BATCH_TOGGLE_TIP                = "tool.entity.batch.toggle.tip";
+    public final static String TOOL_ENTITY_BATCH_SOURCE                       = "tool.entity.batch.source";
+    public final static String TOOL_ENTITY_BATCH_SOURCE_TIP                = "tool.entity.batch.source.tip";
+    public final static String TOOL_ENTITY_BATCH_TARGET                       = "tool.entity.batch.target";
+    public final static String TOOL_ENTITY_BATCH_TARGET_TIP                = "tool.entity.batch.target.tip";
+    public final static String TOOL_ENTITY_BATCH_SUBMIT                       = "tool.entity.batch.submit";
+    public final static String TOOL_ENTITY_BATCH_SUBMIT_TIP                = "tool.entity.batch.submit.tip";
+    public final static String TOOL_ENTITY_BATCH_GEN_TOGGLE              = "tool.entity.batch.gen.toggle";
+    public final static String TOOL_ENTITY_BATCH_GEN_TOGGLE_TIP       = "tool.entity.batch.gen.toggle.tip";
+    
+    public final static String TOOL_ENTITY_BATCH_GEN_NAME                 = "tool.entity.batch.gen.name";
+    public final static String TOOL_ENTITY_BATCH_GEN_NAME_TIP          = "tool.entity.batch.gen.name.tip";
+    public final static String TOOL_ENTITY_BATCH_GEN_ROW                   = "tool.entity.batch.gen.row";
+    public final static String TOOL_ENTITY_BATCH_GEN_ROW_TIP            = "tool.entity.batch.gen.row.tip";
+    public final static String TOOL_ENTITY_BATCH_GEN_COLUMN            = "tool.entity.batch.gen.column";
+    public final static String TOOL_ENTITY_BATCH_GEN_COLUMN_TIP     = "tool.entity.batch.gen.column.tip";
+    public final static String TOOL_ENTITY_BATCH_GEN_EXTENTS            = "tool.entity.batch.gen.extents";
+    public final static String TOOL_ENTITY_BATCH_GEN_EXTENTS_TIP     = "tool.entity.batch.gen.extents.tip";
+    public final static String TOOL_ENTITY_BATCH_GEN_INFO                   = "tool.entity.batch.gen.info";
+    public final static String TOOL_ENTITY_BATCH_GEN_INFO_TIP            = "tool.entity.batch.gen.info.tip";
+    public final static String TOOL_ENTITY_BATCH_GEN_SUBMIT              = "tool.entity.batch.gen.submit";
+    public final static String TOOL_ENTITY_BATCH_GEN_SUBMIT_TIP       = "tool.entity.batch.gen.submit.tip";
  
     public final static String FORM_ASSETS_TITLE = "form.assets.title";
     public final static String FORM_COMPONENTS_TITLE = "form.components.title";

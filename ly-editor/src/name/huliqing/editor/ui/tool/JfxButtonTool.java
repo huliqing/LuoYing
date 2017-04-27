@@ -19,26 +19,29 @@
  */
 package name.huliqing.editor.ui.tool;
 
-import javafx.beans.value.ObservableValue;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Region;
-import name.huliqing.editor.tools.ToggleTool;
+import name.huliqing.editor.tools.ButtonTool;
+import name.huliqing.fxswing.Jfx;
 
 /**
- *
+ * 按钮类型的工具
  * @author huliqing
  */
-public class JfxToggleTool extends JfxAbstractTool<ToggleTool> {
+public class JfxButtonTool extends JfxAbstractTool<ButtonTool> {
 
-    private final ToggleButton view = new ToggleButton();
+    private final Button view = new Button();
     
-    public JfxToggleTool() {
+    public JfxButtonTool() {
         view.setPrefWidth(80);
         view.setPrefHeight(25);
         view.setMaxHeight(25);
+        view.setOnAction(e -> {
+            Jfx.runOnJme(() -> {tool.doAction();});
+        });
     }
     
     @Override
@@ -48,18 +51,13 @@ public class JfxToggleTool extends JfxAbstractTool<ToggleTool> {
 
     @Override
     protected void setViewEnabled(boolean enabled) {
-        view.setSelected(enabled);
+        view.setDisable(!enabled);
     }
 
     @Override
     public void initialize() {
         super.initialize();
         view.setText(tool.getName());
-        view.selectedProperty().addListener((ObservableValue<? extends Boolean> observable
-                    , Boolean oldValue, Boolean newValue) -> {
-            setEnabled(newValue);
-        });
-        
         // tooltip
         if (tool.getTips() != null) {
             view.setTooltip(new Tooltip(tool.getTips()));

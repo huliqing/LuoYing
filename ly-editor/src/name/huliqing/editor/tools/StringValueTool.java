@@ -19,20 +19,22 @@
  */
 package name.huliqing.editor.tools;
 
+import name.huliqing.editor.events.Event;
+
 /**
- * 整数值类型的工具,只取Int值
+ * 字符串工具
  * @author huliqing
  */
-public class IntegerValueTool extends NumberValueTool {
+public class StringValueTool extends AbstractValueTool<String>{
 
-    public IntegerValueTool(String name, String tips, String icon) {
+    public StringValueTool(String name, String tips, String icon) {
         super(name, tips, icon);
-        setValue(0);
+        setValue("");
     }
 
     @Override
-    public final <T extends ValueTool> T setValue(Number newValue) {
-        return super.setValue(newValue.intValue());
+    protected void onToolEvent(Event e) {
+        // ignore
     }
-
+    
 }

@@ -28,7 +28,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
-import name.huliqing.editor.tools.NumberValueTool;
+import name.huliqing.editor.tools.StringValueTool;
 import name.huliqing.editor.tools.ValueChangedListener;
 import name.huliqing.editor.tools.ValueTool;
 import name.huliqing.fxswing.Jfx;
@@ -37,16 +37,16 @@ import name.huliqing.fxswing.Jfx;
  *
  * @author huliqing
  */
-public class JfxNumberValueTool extends JfxAbstractTool<NumberValueTool> 
-        implements ValueChangedListener<Number>{
-    
+public class JfxStringValueTool extends JfxAbstractTool<StringValueTool> 
+        implements ValueChangedListener<String>{
+
     private final GridPane view = new GridPane();
     private final Label label = new Label();
     private final TextField value = new TextField();
     
     private boolean ignoreUpdateView;
     
-    public JfxNumberValueTool() {
+    public JfxStringValueTool() {
         view.setPadding(Insets.EMPTY);
         view.addRow(0, label, value);
     
@@ -92,29 +92,22 @@ public class JfxNumberValueTool extends JfxAbstractTool<NumberValueTool>
 
     // 当3d场景工具值发生变化时更新到JFX组件
     @Override
-    public void onValueChanged(ValueTool<Number> vt, Number oldValue, Number newValue) {
+    public void onValueChanged(ValueTool<String> vt, String oldValue, String newValue) {
         Jfx.runOnJfx(() -> {
             updateValueToView(newValue);
         });
     }
     
     private void updateValueToEdit() {
-        try {
-            double v = Double.parseDouble(value.getText());
-            Jfx.runOnJme(() -> {
-                ignoreUpdateView = true;
-                tool.setValue(v);
-                // 重新获取值，因为NumberValueTool可能会有大小值限制，那么一切以NumberValueTool的值为准
-                value.setText(tool.getValue().toString());
-                ignoreUpdateView = false;
-            });
-        } catch (NumberFormatException nfe) {
-            // ignore
-        }
+        Jfx.runOnJme(() -> {
+            ignoreUpdateView = true;
+            tool.setValue(value.getText());
+            ignoreUpdateView = false;
+        });
     }
     
     // 当Jfx组件值发生变化时更新到编辑场景中
-    private void updateValueToView(Number newValue) {
+    private void updateValueToView(String newValue) {
         if (ignoreUpdateView) {
             return;
         }
@@ -122,7 +115,7 @@ public class JfxNumberValueTool extends JfxAbstractTool<NumberValueTool>
             value.setText("");
             return;
         }
-        value.setText(newValue.doubleValue() + "");
+        value.setText(newValue);
     }
 
 }

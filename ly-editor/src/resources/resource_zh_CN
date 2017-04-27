@@ -53,6 +53,7 @@ view.focus.origin=聚焦复原
 edit.toolbar.base=基本工具
 edit.toolbar.terrain=地形编辑
 edit.toolbar.entity.brush=实体刷
+edit.toolbar.entity.batch=批处理
 
 tool.mode=模式
 tool.mode.tip=切换操作模式(Tab)
@@ -124,6 +125,28 @@ tool.entity.brush.face.normal.tip=即让刷到地面上的物体的向上方向�
 tool.entity.brush.instanced=实例节点
 tool.entity.brush.instanced.tip=指定一个InstancedEntity，这允许将实体刷到这个InstancedEntity上，以提升性能
 
+tool.entity.batch.toggle=批处理工具
+tool.entity.batch.toggle.tip=打开批处理工具
+tool.entity.batch.source=实体源列表
+tool.entity.batch.source.tip=选择要进行批处理的实体源，并添加到列表中
+tool.entity.batch.target=目标批处理实体
+tool.entity.batch.target.tip=选择BatchEntity实体，实体源将会根据区域批处理到这些BatchEntity中
+tool.entity.batch.submit=确定批处理
+tool.entity.batch.submit.tip=点击立即进行批处理
+tool.entity.batch.gen.toggle=批处理区域划分工具
+tool.entity.batch.gen.toggle.tip=这个工具可以为场景划分区域，并为各个区域创建BatchEntity实体。
+tool.entity.batch.gen.name=名称
+tool.entity.batch.gen.name.tip=为所有划分后的BatchEntity指定一个基本名称
+tool.entity.batch.gen.row=行区域数
+tool.entity.batch.gen.row.tip=表示要将场景划分为多少个行区域
+tool.entity.batch.gen.column=列区域数
+tool.entity.batch.gen.column.tip=表示要将区域划分为多少列
+tool.entity.batch.gen.extents=区域大小
+tool.entity.batch.gen.extents.tip=指定区域大小，一般应该和场景区域大小一致
+tool.entity.batch.gen.info=显示区域
+tool.entity.batch.gen.info.tip=显示划分后的区域
+tool.entity.batch.gen.submit=创建批处理区域
+tool.entity.batch.gen.submit.tip=立即创建批处理区域
 
 form.create.terrain.terrainName=地形名称
 form.create.terrain.terrainName.tip=地形名称

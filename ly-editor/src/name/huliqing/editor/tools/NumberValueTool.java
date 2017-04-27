@@ -26,7 +26,7 @@ import name.huliqing.editor.events.JmeEvent;
  * 数值类型的工具
  * @author huliqing
  */
-public class NumberValueTool extends AbstractValueTool<Number> {
+public abstract class NumberValueTool extends AbstractValueTool<Number> {
 
     private final static String EVENT_INCREASE = "increaseEvent";
     private final static String EVENT_DECREASE = "decreaseEvent";
@@ -37,7 +37,6 @@ public class NumberValueTool extends AbstractValueTool<Number> {
 
     public NumberValueTool(String name, String tips, String icon) {
         super(name, tips, icon);
-        setValue(0.0);
     }
 
     @Override

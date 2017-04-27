@@ -19,19 +19,28 @@
  */
 package name.huliqing.editor.ui.tool;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javafx.event.ActionEvent;
+import javafx.geometry.Point2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.ToolBar;
 import javafx.scene.control.Tooltip;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.stage.Popup;
 import name.huliqing.editor.constants.AssetConstants;
+import name.huliqing.editor.edit.scene.SceneEdit;
 import name.huliqing.editor.tools.batch.BatchSourceTool;
 import name.huliqing.editor.ui.utils.JfxUtils;
+import name.huliqing.editor.ui.utils.SearchListView;
 import name.huliqing.fxswing.Jfx;
 import name.huliqing.luoying.object.entity.Entity;
 
@@ -48,6 +57,8 @@ public class JfxBatchSourceTool extends JfxAbstractTool<BatchSourceTool>{
     private final Button add = new Button("", JfxUtils.createIcon(AssetConstants.INTERFACE_ICON_ADD));
     private final Button remove = new Button("", JfxUtils.createIcon(AssetConstants.INTERFACE_ICON_SUBTRACT));
     
+    private final EntitySearch<Entity> entitySearch= new EntitySearch();
+    
     private final ListView<Entity> content = new ListView();
     
     public JfxBatchSourceTool() {
@@ -55,39 +66,20 @@ public class JfxBatchSourceTool extends JfxAbstractTool<BatchSourceTool>{
         view.getChildren().addAll(title, btnPanel, content);
         
         add.setOnAction((ActionEvent event) -> {
-            Jfx.runOnJme(() -> {
-//                SimpleJmeEdit je = (SimpleJmeEdit) toolbar.getEdit();
-//                ControlTile selected = je.getSelected();
-//                if (selected == null) 
-//                    return;
-//                
-//                Object selectObj = selected.getTarget();
-//                if (!(selectObj instanceof Entity)) {
-//                    return;
-//                }
-//                
-//                Entity se = (Entity) selectObj;
-//                if (tool.getSources().contains(se.getData())) {
-//                    return;
-//                }
-//                AddSourceUndoRedo asur = new AddSourceUndoRedo(se.getData());
-//                asur.redo();
-//                toolbar.getEdit().addUndoRedo(asur);
-            });
+            SceneEdit se = (SceneEdit) toolbar.getEdit();
+            if (se == null || se.getScene() == null)
+                return;
+            entitySearch.setItems(se.getScene().getEntities());
+            entitySearch.show(add, -10, -10);
         });
         
         remove.setOnAction((ActionEvent event) -> {
-            Entity entity = content.getSelectionModel().getSelectedItem();
-            if (entity == null) 
+            List<Entity> items = content.getSelectionModel().getSelectedItems();
+            if (items == null)
                 return;
-            
             Jfx.runOnJme(() -> {
-//                if (tool.getEntities() == null || !tool.getEntities().contains(ed)) 
-//                    return;
-//                
-//                RemoveSourceUndoRedo rsur = new RemoveSourceUndoRedo(ed);
-//                rsur.redo();
-//                toolbar.getEdit().addUndoRedo(rsur);
+                tool.removeEntities(items);
+                Jfx.runOnJfx(() -> {updateView();});
             });
         });
         
@@ -102,10 +94,10 @@ public class JfxBatchSourceTool extends JfxAbstractTool<BatchSourceTool>{
                 }
             }
         });
-        
+        content.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         content.prefWidthProperty().bind(view.widthProperty());
         content.prefHeightProperty().bind(view.heightProperty().subtract(btnPanel.heightProperty()));
-        view.setMinHeight(160);
+        view.setMinHeight(256);
     }
     
     @Override
@@ -116,13 +108,10 @@ public class JfxBatchSourceTool extends JfxAbstractTool<BatchSourceTool>{
     @Override
     public void initialize() {
         super.initialize();
-        
         title.setText(tool.getName());
-        
         if (tool.getTips() != null) {
             btnPanel.setTooltip(new Tooltip(tool.getTips()));
         }
-        
         updateView();
     }
     
@@ -134,41 +123,80 @@ public class JfxBatchSourceTool extends JfxAbstractTool<BatchSourceTool>{
         }
     }
     
-//    private class AddSourceUndoRedo implements UndoRedo {
-//        private final EntityData sourceAdded;
-//        public AddSourceUndoRedo(EntityData sourceAdded) {
-//            this.sourceAdded = sourceAdded;
-//        }
-//        
-//        @Override
-//        public void undo() {
-//            tool.removeSource(sourceAdded);
-//            Jfx.runOnJfx(() -> updateView());
-//        }
-//
-//        @Override
-//        public void redo() {
-//            tool.addSource(sourceAdded);
-//            Jfx.runOnJfx(() -> updateView());
-//        }
-//    }
-//    
-//    private class RemoveSourceUndoRedo implements UndoRedo {
-//        private final EntityData sourceRemoved;
-//        public RemoveSourceUndoRedo(EntityData sourceRemoved) {
-//            this.sourceRemoved = sourceRemoved;
-//        }
-//        
-//        @Override
-//        public void undo() { 
-//            tool.addSource(sourceRemoved);
-//            Jfx.runOnJfx(() -> updateView());
-//        }
-//
-//        @Override
-//        public void redo() {
-//            tool.removeSource(sourceRemoved);
-//            Jfx.runOnJfx(() -> updateView());
-//        }
-//    }
+    // ---- 用于查询场景中的实体
+    private final class EntitySearch<T extends Entity> {
+
+        private final Popup popup = new Popup();
+        private final VBox searchViewGroup = new VBox();
+        private final SearchListView<Entity> searchListView = new SearchListView(new ListView());
+        private final Button addAll = new Button("全部添加");
+
+        public EntitySearch() {
+            this(null);
+        }
+
+        public EntitySearch(List<Entity> items) {
+            if (items != null) {
+                setItems(items);
+            }
+            searchListView.getChildren().add(addAll);
+            searchViewGroup.getChildren().addAll(searchListView);
+            popup.getContent().add(searchViewGroup);
+            popup.setAutoHide(true);
+            searchListView.getListView().setCellFactory((ListView<Entity> param) -> new ListCell<Entity>() {
+                @Override
+                protected void updateItem(Entity item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setText(null);
+                        setGraphic(null);
+                    } else {
+                        setText(item.getData().getId() + "(" + item.getData().getName() + ")");
+                    }
+                }
+            });
+            // 匹配检查的时候要用字符串转换器
+            searchListView.setConverter((Entity t) -> t.getData().getId());
+            searchListView.setPrefWidth(250);
+            searchListView.setPrefHeight(250);
+            searchListView.setEffect(new DropShadow());
+            searchListView.setConverter((Entity t) -> t.getData().getId() + "(" + t.getData().getName() + ")" + t.getData().getUniqueId());
+            
+            // 将经过过滤后的所有实体添加到SourceTool列表中。
+            addAll.setOnAction((e) -> {
+                popup.hide();
+                List<Entity> filterItems = searchListView.getListView().getItems();
+                Jfx.runOnJme(() -> {
+                    tool.addEntities(filterItems);
+                    Jfx.runOnJfx(() -> {updateView();});
+                });
+            });
+            
+            searchListView.getListView().setOnMouseClicked(e -> {
+                popup.hide();
+                Entity entity = searchListView.getListView().getSelectionModel().getSelectedItem();
+                if (entity == null)
+                    return;
+                Jfx.runOnJme(() -> {
+                    tool.addEntity(entity);
+                    Jfx.runOnJfx(() -> {updateView();});
+                });
+            });
+        }
+
+        public void setItems(List<Entity> items) {
+            if (items == null) {
+                return;
+            }
+            searchListView.setAllItems(items);
+        }
+
+        public void show(Region node, double offsetX, double offsetY) {
+            Point2D txtCoords = node.localToScene(0.0, 0.0);
+            popup.show(node,
+                    txtCoords.getX() + node.getScene().getX() + node.getScene().getWindow().getX() + offsetX,
+                    txtCoords.getY() + node.getScene().getY() + node.getScene().getWindow().getY() + offsetY + node.heightProperty().getValue());
+        }
+    }
+
 }

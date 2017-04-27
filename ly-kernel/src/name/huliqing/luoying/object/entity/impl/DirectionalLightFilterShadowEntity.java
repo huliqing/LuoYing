@@ -25,6 +25,8 @@ import com.jme3.shadow.CompareMode;
 import com.jme3.shadow.DirectionalLightShadowFilter;
 import com.jme3.shadow.EdgeFilteringMode;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.object.entity.Entity;
@@ -39,6 +41,8 @@ import name.huliqing.luoying.utils.MathUtils;
  * @author huliqing
  */
 public class DirectionalLightFilterShadowEntity extends ShadowEntity {
+
+    private static final Logger LOG = Logger.getLogger(DirectionalLightFilterShadowEntity.class.getName());
 
     private int shadowMapSize = 1024;
     private int shadowMaps = 1;

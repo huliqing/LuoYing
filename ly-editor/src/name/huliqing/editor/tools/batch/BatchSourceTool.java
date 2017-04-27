@@ -20,7 +20,9 @@
 package name.huliqing.editor.tools.batch;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import name.huliqing.editor.edit.SimpleJmeEdit;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.toolbar.EntityBatchToolbar;
@@ -33,7 +35,7 @@ import name.huliqing.luoying.object.entity.Entity;
  */
 public class BatchSourceTool extends AbstractTool<SimpleJmeEdit, EntityBatchToolbar> {
     
-    private List<Entity> entities;
+    private final List<Entity> entities = new ArrayList<>();
 
     public BatchSourceTool(String name, String tips, String icon) {
         super(name, tips, icon);
@@ -48,26 +50,32 @@ public class BatchSourceTool extends AbstractTool<SimpleJmeEdit, EntityBatchTool
         return entities;
     }
     
-    public void setEntities(List<Entity> entities) {
-        this.entities = entities;
+    public void addEntity(Entity entityAdd) {
+        if (!entities.contains(entityAdd)) {
+            entities.add(entityAdd);
+        }
     }
     
-    public void addEntity(Entity entity) {
-        if (entities == null) {
-            entities = new ArrayList<>();
-        }
-        if (!entities.contains(entity)) {
-            entities.add(entity);
-        }
+    public void addEntities(List<Entity> entitiesAdd) {
+        Set<Entity> currItems = new HashSet<>(entities);
+        entitiesAdd.forEach(e -> {
+            if (!currItems.contains(e)) {
+                entities.add(e);
+            }
+        });
     }
     
     public boolean removeEntity(Entity entity) {
-        return entities != null && entities.remove(entity);
+        return entities.remove(entity);
+    }
+    
+    public void removeEntities(List<Entity> entitiesRemove) {
+        if (entities.isEmpty())
+            return;
+        entities.removeAll(entitiesRemove);
     }
     
     public void clear() {
-        if (entities != null) {
-            entities.clear();
-        }
+        entities.clear();
     }
 }

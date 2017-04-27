@@ -20,7 +20,9 @@
 package name.huliqing.editor.tools.batch;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import name.huliqing.editor.edit.SimpleJmeEdit;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.toolbar.EntityBatchToolbar;
@@ -33,7 +35,7 @@ import name.huliqing.luoying.object.entity.impl.BatchEntity;
  */
 public class BatchTargetTool extends AbstractTool<SimpleJmeEdit, EntityBatchToolbar>{
     
-    private List<BatchEntity> batchEntities;
+    private final List<BatchEntity> batchEntities = new ArrayList<>();
 
     public BatchTargetTool(String name, String tips, String icon) {
         super(name, tips, icon);
@@ -48,33 +50,33 @@ public class BatchTargetTool extends AbstractTool<SimpleJmeEdit, EntityBatchTool
         return batchEntities;
     }
     
-    public void setBatchEntities(List<BatchEntity> batchEntities) {
-        this.batchEntities = batchEntities;
-    }
-    
     public void addBatchEntity(BatchEntity entity) {
-        if (batchEntities == null) {
-            batchEntities = new ArrayList<>();
-        }
         if (!batchEntities.contains(entity)) {
             batchEntities.add(entity);
         }
     }
     
+    public void addBatchEntities(List<BatchEntity> entities) {
+        Set<BatchEntity> currItems = new HashSet<>(batchEntities);
+        entities.forEach(e -> {
+            if (!currItems.contains(e)) {
+                batchEntities.add(e);
+            }
+        });
+    }
+    
     public boolean removeBatchEntity(BatchEntity batchEntity) {
-        return batchEntities != null && batchEntities.remove(batchEntity);
+        return batchEntities.remove(batchEntity);
+    }
+    
+    public void removeBatchEntities(List<BatchEntity> entities) {
+        if (batchEntities.isEmpty())
+            return;
+        batchEntities.removeAll(entities);
     }
     
     public void clear() {
-        if (batchEntities != null) {
-            batchEntities.clear();
-        }
+        batchEntities.clear();
     }
     
-    /**
-     * 生成BatchEntity
-     */
-    public void generateBatchEntity() {
-        throw new UnsupportedOperationException();
-    }
 }

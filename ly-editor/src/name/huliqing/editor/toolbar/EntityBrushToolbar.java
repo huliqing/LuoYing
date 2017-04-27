@@ -27,6 +27,7 @@ import name.huliqing.editor.constants.ResConstants;
 import name.huliqing.editor.edit.SimpleJmeEdit;
 import name.huliqing.editor.manager.Manager;
 import name.huliqing.editor.tools.BooleanValueTool;
+import name.huliqing.editor.tools.FloatValueTool;
 import name.huliqing.editor.tools.IntegerValueTool;
 import name.huliqing.editor.tools.NumberValueTool;
 import name.huliqing.editor.tools.ParamsTool;
@@ -44,7 +45,7 @@ import name.huliqing.editor.tools.entity.SourceTool;
 public class EntityBrushToolbar extends EditToolbar<SimpleJmeEdit> {
     
     // 笔刷大小
-    private NumberValueTool sizeTool;
+    private FloatValueTool sizeTool;
     // density 密度int
     private IntegerValueTool densityTool;
     // 实体源
@@ -53,7 +54,7 @@ public class EntityBrushToolbar extends EditToolbar<SimpleJmeEdit> {
     private PaintTool paintTool;
     private ParamsTool paintToolParams;
     // Minimum height
-    private NumberValueTool minHeight;
+    private FloatValueTool minHeight;
     // 保持法向量，即让刷到地面上的物体的向上方向与地面的法向量相同。
     private BooleanValueTool useNormal;
     // 位置偏移
@@ -82,14 +83,14 @@ public class EntityBrushToolbar extends EditToolbar<SimpleJmeEdit> {
     @Override
     public void initialize() {
         super.initialize(); 
-        sizeTool = new NumberValueTool(Manager.getRes(ResConstants.TOOL_ENTITY_BRUSH_SIZE), Manager.getRes(ResConstants.TOOL_ENTITY_BRUSH_SIZE_TIP), null);
+        sizeTool = new FloatValueTool(Manager.getRes(ResConstants.TOOL_ENTITY_BRUSH_SIZE), Manager.getRes(ResConstants.TOOL_ENTITY_BRUSH_SIZE_TIP), null);
         densityTool = new IntegerValueTool(Manager.getRes(ResConstants.TOOL_ENTITY_BRUSH_DENSITY), Manager.getRes(ResConstants.TOOL_ENTITY_BRUSH_DENSITY_TIP), null); 
         sourceTool = new SourceTool(Manager.getRes(ResConstants.TOOL_ENTITY_BRUSH_SOURCE), Manager.getRes(ResConstants.TOOL_ENTITY_BRUSH_SOURCE_TIP), null);
         
         paintTool = new PaintTool(Manager.getRes(ResConstants.TOOL_ENTITY_BRUSH_PAINT)
                 , Manager.getRes(ResConstants.TOOL_ENTITY_BRUSH_PAINT_TIP)
                 , AssetConstants.INTERFACE_ICON_PAINT); 
-        minHeight = new NumberValueTool(Manager.getRes(ResConstants.TOOL_ENTITY_BRUSH_MIN_HEIGHT), Manager.getRes(ResConstants.TOOL_ENTITY_BRUSH_MIN_HEIGHT_TIP), null); 
+        minHeight = new FloatValueTool(Manager.getRes(ResConstants.TOOL_ENTITY_BRUSH_MIN_HEIGHT), Manager.getRes(ResConstants.TOOL_ENTITY_BRUSH_MIN_HEIGHT_TIP), null); 
         useNormal = new BooleanValueTool(Manager.getRes(ResConstants.TOOL_ENTITY_BRUSH_FACE_NORMAL), Manager.getRes(ResConstants.TOOL_ENTITY_BRUSH_FACE_NORMAL_TIP), null); 
         locationOffset = new Vector3fValueTool(Manager.getRes(ResConstants.TOOL_ENTITY_BRUSH_LOCATION_OFFSET), Manager.getRes(ResConstants.TOOL_ENTITY_BRUSH_LOCATION_OFFSET_TIP), null); 
         scaleMinAdjust = new Vector3fValueTool(Manager.getRes(ResConstants.TOOL_ENTITY_BRUSH_SCALE_MIN), Manager.getRes(ResConstants.TOOL_ENTITY_BRUSH_SCALE_MIN_TIP), null); 

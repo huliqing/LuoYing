@@ -37,7 +37,7 @@ import name.huliqing.editor.ui.utils.SearchListView;
 public final class ComponentSearch<T extends ComponentDefine> {
     
     private final Popup popup = new Popup();
-    private final SearchListView<T> componentView = new SearchListView(new ListView<T>());
+    private final SearchListView<T> componentView = new SearchListView(new ListView<>());
 
     public ComponentSearch() {
         this(null);

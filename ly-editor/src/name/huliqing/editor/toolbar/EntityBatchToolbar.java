@@ -19,12 +19,15 @@
  */
 package name.huliqing.editor.toolbar;
 
+import com.jme3.math.Vector3f;
 import name.huliqing.editor.constants.ResConstants;
 import name.huliqing.editor.edit.scene.SceneEdit;
 import name.huliqing.editor.manager.Manager;
+import name.huliqing.editor.tools.BooleanValueTool;
 import name.huliqing.editor.tools.IntegerValueTool;
 import name.huliqing.editor.tools.ParamsTool;
 import name.huliqing.editor.tools.SimpleToggleTool;
+import name.huliqing.editor.tools.StringValueTool;
 import name.huliqing.editor.tools.Vector3fValueTool;
 import name.huliqing.editor.tools.batch.BatchEntityGenTool;
 import name.huliqing.editor.tools.batch.BatchSourceTool;
@@ -47,15 +50,17 @@ public class EntityBatchToolbar extends EditToolbar<SceneEdit> {
     // ---- 创建BatchEntity的工具
     private SimpleToggleTool batchEntityGenToggleTool;
     private ParamsTool batchEntityGenGroupTool;
+    private StringValueTool batchEntityGenNameTool;
     private IntegerValueTool batchEntityGenRowTool;
     private IntegerValueTool batchEntityGenColumnTool;
     private Vector3fValueTool batchEntityGenExtentsTool; // Batch范围大小
+    private BooleanValueTool batchEntityGenInfoTool;
     private BatchEntityGenTool batchEntityGenTool;
     
     public EntityBatchToolbar(SceneEdit edit) {
         super(edit);
     }
-
+    
     @Override
     public String getName() {
         return Manager.getRes(ResConstants.EDIT_TOOLBAR_ENTITY_BATCH);
@@ -63,37 +68,64 @@ public class EntityBatchToolbar extends EditToolbar<SceneEdit> {
     
     @Override
     public void initialize() {
-        super.initialize(); 
-        batchToggleTool = new SimpleToggleTool("AutoBatchTool", "xxx", null);
+        super.initialize();
+        batchToggleTool = new SimpleToggleTool(Manager.getRes(ResConstants.TOOL_ENTITY_BATCH_TOGGLE)
+                , Manager.getRes(ResConstants.TOOL_ENTITY_BATCH_TOGGLE_TIP), null);
         batchGroupTool = new ParamsTool("", "", null);
-        batchSourceTool = new BatchSourceTool("AutoBatchSourceTool", "xxx", null);
-        batchTargetTool = new BatchTargetTool("AutoBatchTargetTool", "xxx", null);
-        batchTool = new BatchTool("BatchTool", "xxx", null);
+        batchSourceTool = new BatchSourceTool(Manager.getRes(ResConstants.TOOL_ENTITY_BATCH_SOURCE)
+                , Manager.getRes(ResConstants.TOOL_ENTITY_BATCH_SOURCE_TIP), null);
+        batchTargetTool = new BatchTargetTool(Manager.getRes(ResConstants.TOOL_ENTITY_BATCH_TARGET)
+                , Manager.getRes(ResConstants.TOOL_ENTITY_BATCH_TARGET_TIP), null);
+        batchTool = new BatchTool(Manager.getRes(ResConstants.TOOL_ENTITY_BATCH_SUBMIT)
+                , Manager.getRes(ResConstants.TOOL_ENTITY_BATCH_SUBMIT_TIP), null);
         batchGroupTool.addChild(batchSourceTool);
         batchGroupTool.addChild(batchTargetTool);
         batchGroupTool.addChild(batchTool);
         
-        batchEntityGenToggleTool = new SimpleToggleTool("BatchEntityGenTool", "xxx", null);
+        batchEntityGenToggleTool = new SimpleToggleTool(
+                Manager.getRes(ResConstants.TOOL_ENTITY_BATCH_GEN_TOGGLE)
+                , Manager.getRes(ResConstants.TOOL_ENTITY_BATCH_GEN_TOGGLE_TIP), null);
         batchEntityGenGroupTool = new ParamsTool("", "", null);
-        batchEntityGenRowTool = new IntegerValueTool(Manager.getRes(ResConstants.TOOL_ENTITY_BATCH_ROW), Manager.getRes(ResConstants.TOOL_ENTITY_BATCH_ROW_TIP), null);
-        batchEntityGenColumnTool = new IntegerValueTool(Manager.getRes(ResConstants.TOOL_ENTITY_BATCH_COLUMN), Manager.getRes(ResConstants.TOOL_ENTITY_BATCH_COLUMN_TIP), null);
-        batchEntityGenExtentsTool = new Vector3fValueTool(Manager.getRes(ResConstants.TOOL_ENTITY_BATCH_EXTENTS), Manager.getRes(ResConstants.TOOL_ENTITY_BATCH_EXTENTS_TIP), null);
-        batchEntityGenTool = new BatchEntityGenTool("BatchEntityGenTool", "", null);
+        batchEntityGenNameTool = new StringValueTool(
+                Manager.getRes(ResConstants.TOOL_ENTITY_BATCH_GEN_NAME)
+                , Manager.getRes(ResConstants.TOOL_ENTITY_BATCH_GEN_NAME_TIP), null);
+        batchEntityGenRowTool = new IntegerValueTool(
+                Manager.getRes(ResConstants.TOOL_ENTITY_BATCH_GEN_ROW)
+                , Manager.getRes(ResConstants.TOOL_ENTITY_BATCH_GEN_ROW_TIP), null);
+        batchEntityGenColumnTool = new IntegerValueTool(
+                Manager.getRes(ResConstants.TOOL_ENTITY_BATCH_GEN_COLUMN)
+                , Manager.getRes(ResConstants.TOOL_ENTITY_BATCH_GEN_COLUMN_TIP), null);
+        batchEntityGenExtentsTool = new Vector3fValueTool(
+                Manager.getRes(ResConstants.TOOL_ENTITY_BATCH_GEN_EXTENTS)
+                , Manager.getRes(ResConstants.TOOL_ENTITY_BATCH_GEN_EXTENTS_TIP), null);
+        batchEntityGenInfoTool = new BooleanValueTool(
+                Manager.getRes(ResConstants.TOOL_ENTITY_BATCH_GEN_INFO)
+                , Manager.getRes(ResConstants.TOOL_ENTITY_BATCH_GEN_INFO_TIP), null);
+        batchEntityGenTool = new BatchEntityGenTool(
+                Manager.getRes(ResConstants.TOOL_ENTITY_BATCH_GEN_SUBMIT)
+                , Manager.getRes(ResConstants.TOOL_ENTITY_BATCH_GEN_SUBMIT_TIP), null);
+        
+        batchEntityGenGroupTool.addChild(batchEntityGenNameTool);
         batchEntityGenGroupTool.addChild(batchEntityGenRowTool);
         batchEntityGenGroupTool.addChild(batchEntityGenColumnTool);
         batchEntityGenGroupTool.addChild(batchEntityGenExtentsTool);
+        batchEntityGenGroupTool.addChild(batchEntityGenInfoTool);
         batchEntityGenGroupTool.addChild(batchEntityGenTool);
-        
-        
+        batchEntityGenNameTool.setValue("batch");
+        batchEntityGenRowTool.setMinValue(1).setValue(8);
+        batchEntityGenColumnTool.setMinValue(1).setValue(8);
+        batchEntityGenExtentsTool.setValue(new Vector3f(256, 128, 256));
+        batchEntityGenInfoTool.setValue(true);
         add(batchToggleTool);
         add(batchGroupTool);
         
         add(batchEntityGenToggleTool);
         add(batchEntityGenGroupTool);
         
-        addToggleMapping(new ToggleMappingEvent(-1, batchToggleTool).setConflicts(batchEntityGenToggleTool, batchEntityGenGroupTool).setRelations(batchGroupTool));
-        addToggleMapping(new ToggleMappingEvent(-1, batchEntityGenToggleTool).setConflicts(batchToggleTool, batchGroupTool).setRelations(batchEntityGenGroupTool));
-
+        addToggleMapping(new ToggleMappingEvent(-1, batchToggleTool)
+                .setConflicts(batchEntityGenToggleTool, batchEntityGenGroupTool).setRelations(batchGroupTool));
+        addToggleMapping(new ToggleMappingEvent(-1, batchEntityGenToggleTool)
+                .setConflicts(batchToggleTool, batchGroupTool).setRelations(batchEntityGenGroupTool));
     }
     
     @Override
@@ -102,7 +134,7 @@ public class EntityBatchToolbar extends EditToolbar<SceneEdit> {
         clearToggleMappings();
         super.cleanup(); 
     }
-
+    
     public SimpleToggleTool getBatchToggleTool() {
         return batchToggleTool;
     }
@@ -131,6 +163,10 @@ public class EntityBatchToolbar extends EditToolbar<SceneEdit> {
         return batchEntityGenGroupTool;
     }
 
+    public StringValueTool getBatchEntityGenNameTool() {
+        return batchEntityGenNameTool;
+    }
+    
     public IntegerValueTool getBatchEntityGenRowTool() {
         return batchEntityGenRowTool;
     }
@@ -142,7 +178,11 @@ public class EntityBatchToolbar extends EditToolbar<SceneEdit> {
     public Vector3fValueTool getBatchEntityGenExtentsTool() {
         return batchEntityGenExtentsTool;
     }
-
+    
+    public BooleanValueTool getBatchEntityGenInfoTool() {
+        return batchEntityGenInfoTool;
+    }
+    
     public BatchEntityGenTool getBatchEntityGenTool() {
         return batchEntityGenTool;
     }

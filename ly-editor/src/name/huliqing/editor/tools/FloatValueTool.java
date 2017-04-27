@@ -20,19 +20,19 @@
 package name.huliqing.editor.tools;
 
 /**
- * 整数值类型的工具,只取Int值
+ * 浮点值类型的工具,只取float值
  * @author huliqing
  */
-public class IntegerValueTool extends NumberValueTool {
+public class FloatValueTool extends NumberValueTool {
 
-    public IntegerValueTool(String name, String tips, String icon) {
+    public FloatValueTool(String name, String tips, String icon) {
         super(name, tips, icon);
-        setValue(0);
+        setValue(0.0f);
     }
 
     @Override
     public final <T extends ValueTool> T setValue(Number newValue) {
-        return super.setValue(newValue.intValue());
+        return super.setValue(newValue.floatValue());
     }
 
 }

@@ -19,20 +19,19 @@
  */
 package name.huliqing.editor.tools;
 
+import name.huliqing.editor.edit.JmeEdit;
+import name.huliqing.editor.toolbar.Toolbar;
+
 /**
- * 整数值类型的工具,只取Int值
+ * 
  * @author huliqing
+ * @param <E>
+ * @param <T>
  */
-public class IntegerValueTool extends NumberValueTool {
-
-    public IntegerValueTool(String name, String tips, String icon) {
-        super(name, tips, icon);
-        setValue(0);
-    }
-
-    @Override
-    public final <T extends ValueTool> T setValue(Number newValue) {
-        return super.setValue(newValue.intValue());
-    }
-
+public interface ButtonTool<E extends JmeEdit, T extends Toolbar> extends Tool<E, T> {
+    
+    /**
+     * 执行行为
+     */
+    void doAction();
 }

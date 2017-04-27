@@ -66,8 +66,8 @@ public class SearchListView<T> extends VBox {
     public SearchListView(ListView<T> lv) {
         this.listView = lv;
         
-        getChildren().add(listView);
         getChildren().add(filterPane);
+        getChildren().add(listView);
         filterPane.getChildren().add(inputFilter);
         filterPane.getChildren().add(imageView);
         filterPane.setAlignment(Pos.CENTER_LEFT);

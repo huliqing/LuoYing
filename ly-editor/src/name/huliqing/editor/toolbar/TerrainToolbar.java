@@ -40,6 +40,7 @@ import name.huliqing.editor.tools.terrain.SlopeTool;
 import name.huliqing.editor.tools.terrain.SmoothTool;
 import name.huliqing.editor.tools.terrain.TexLayerTool;
 import name.huliqing.editor.edit.SimpleEditListener;
+import name.huliqing.editor.tools.FloatValueTool;
 import name.huliqing.editor.tools.terrain.EraseTool;
 import name.huliqing.editor.tools.terrain.LevelParamsTool;
 import name.huliqing.editor.tools.terrain.RoughParamsTool;
@@ -52,8 +53,8 @@ import name.huliqing.editor.tools.terrain.SlopeParamsTool;
 public class TerrainToolbar extends EditToolbar<SimpleJmeEdit> implements SimpleEditListener {
 //    private static final Logger LOG = Logger.getLogger(TerrainToolbar.class.getName());
     
-    private NumberValueTool sizeTool;
-    private NumberValueTool weightTool;
+    private FloatValueTool sizeTool;
+    private FloatValueTool weightTool;
     private RaiseTool raiseTool;
     private LowerTool lowerTool;
     
@@ -84,8 +85,8 @@ public class TerrainToolbar extends EditToolbar<SimpleJmeEdit> implements Simple
     @Override
     public void initialize() {
         super.initialize();
-        sizeTool = new NumberValueTool(Manager.getRes(ResConstants.TOOL_TERRAIN_SIZE), Manager.getRes(ResConstants.TOOL_TERRAIN_SIZE_TIP), null);
-        weightTool = new NumberValueTool(Manager.getRes(ResConstants.TOOL_TERRAIN_WEIGHT), Manager.getRes(ResConstants.TOOL_TERRAIN_WEIGHT_TIP), null);
+        sizeTool = new FloatValueTool(Manager.getRes(ResConstants.TOOL_TERRAIN_SIZE), Manager.getRes(ResConstants.TOOL_TERRAIN_SIZE_TIP), null);
+        weightTool = new FloatValueTool(Manager.getRes(ResConstants.TOOL_TERRAIN_WEIGHT), Manager.getRes(ResConstants.TOOL_TERRAIN_WEIGHT_TIP), null);
         raiseTool = new RaiseTool(Manager.getRes(ResConstants.TOOL_TERRAIN_RAISE), Manager.getRes(ResConstants.TOOL_TERRAIN_RAISE_TIP)
                 , AssetConstants.INTERFACE_TOOL_TERRAIN_RAISE);
         lowerTool = new LowerTool(Manager.getRes(ResConstants.TOOL_TERRAIN_LOWER), Manager.getRes(ResConstants.TOOL_TERRAIN_LOWER_TIP)

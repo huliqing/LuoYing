@@ -40,7 +40,10 @@ import name.huliqing.editor.events.Event;
 import name.huliqing.editor.manager.ControlTileManager;
 import name.huliqing.editor.toolbar.EntityBatchToolbar;
 import name.huliqing.editor.tools.AbstractTool;
+import name.huliqing.editor.tools.BooleanValueTool;
+import name.huliqing.editor.tools.ButtonTool;
 import name.huliqing.editor.tools.IntegerValueTool;
+import name.huliqing.editor.tools.StringValueTool;
 import name.huliqing.editor.tools.ValueChangedListener;
 import name.huliqing.editor.tools.ValueTool;
 import name.huliqing.editor.tools.Vector3fValueTool;
@@ -51,11 +54,12 @@ import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.utils.MaterialUtils;
 
 /**
- * 用于创建BatchEntity的工具, 这个工具会对场景进行区域划分，并为各个区域创建一个BatchEntity.
+ * 用于创建BatchEntity的工具, 这个工具会对场景进行区域划分，并为各个区域创建BatchEntity,然后把这些BatchEntity添加到
+ * 场景中.
  * @author huliqing
  */
 public class BatchEntityGenTool extends AbstractTool<SimpleJmeEdit, EntityBatchToolbar> 
-        implements ValueChangedListener{
+        implements ButtonTool<SimpleJmeEdit, EntityBatchToolbar>, ValueChangedListener{
     private static final Logger LOG = Logger.getLogger(BatchEntityGenTool.class.getName());
     
     public final static String ATTR_BATCH_XEXTENT = "_batch_xextent";
@@ -63,10 +67,12 @@ public class BatchEntityGenTool extends AbstractTool<SimpleJmeEdit, EntityBatchT
     public final static String ATTR_BATCH_ZEXTENT = "_batch_zextent";
     public final static String ATTR_BATCH_CENTER = "_batch_center";
     
-    private Spatial debugInfo;
-    private IntegerValueTool rowTool;
-    private IntegerValueTool columnTool;
-    private Vector3fValueTool extentsTool;
+    private Node debugInfo;
+    private StringValueTool genNameTool;
+    private IntegerValueTool genRowTool;
+    private IntegerValueTool genColumnTool;
+    private Vector3fValueTool genExtentsTool;
+    private BooleanValueTool genInfoTool;
     
     public BatchEntityGenTool(String name, String tips, String icon) {
         super(name, tips, icon);
@@ -80,31 +86,19 @@ public class BatchEntityGenTool extends AbstractTool<SimpleJmeEdit, EntityBatchT
     @Override
     public void initialize(SimpleJmeEdit edit, EntityBatchToolbar toolbar) {
         super.initialize(edit, toolbar);
-        rowTool = this.toolbar.getBatchEntityGenRowTool();
-        columnTool = this.toolbar.getBatchEntityGenColumnTool();
-        extentsTool = this.toolbar.getBatchEntityGenExtentsTool();
+        genNameTool = this.toolbar.getBatchEntityGenNameTool();
+        genRowTool = this.toolbar.getBatchEntityGenRowTool();
+        genColumnTool = this.toolbar.getBatchEntityGenColumnTool();
+        genExtentsTool = this.toolbar.getBatchEntityGenExtentsTool();
+        genInfoTool = this.toolbar.getBatchEntityGenInfoTool();
         
-        if (rowTool.getValue().intValue() <= 0) {
-            rowTool.setValue(8);
-        } 
-        if (columnTool.getValue().intValue() <= 0) {
-            columnTool.setValue(8);
+        genRowTool.addValueChangeListener(this);
+        genColumnTool.addValueChangeListener(this);
+        genExtentsTool.addValueChangeListener(this);
+        genInfoTool.addValueChangeListener(this);
+        if (genInfoTool.getValue() != null && genInfoTool.getValue()) {
+            recreateGrid();
         }
-        Vector3f extentValue = extentsTool.getValue();
-        if (extentValue == null || (extentValue.x <= 0 && extentValue.y <= 0 && extentValue.z <= 0)) {
-            Scene scene = toolbar.getEdit().getScene();
-            if (scene != null) {
-                BoundingBox bv = (BoundingBox) scene.getRoot().getWorldBound();
-                if (bv != null) {
-                    Vector3f extents = new Vector3f();
-                    extents.set(bv.getXExtent(), bv.getYExtent(), bv.getZExtent());
-                    extentsTool.setValue(extents);
-                }                
-            }
-        }
-        rowTool.addValueChangeListener(this);
-        columnTool.addValueChangeListener(this);
-        extentsTool.addValueChangeListener(this);
     }
     
     @Override
@@ -112,45 +106,41 @@ public class BatchEntityGenTool extends AbstractTool<SimpleJmeEdit, EntityBatchT
         if (debugInfo != null) {
             debugInfo.removeFromParent();
         }
+        if (genRowTool != null) {
+            genRowTool.removeValueChangeListener(this);
+        }
+        if (genColumnTool != null) {
+            genColumnTool.removeValueChangeListener(this);
+        }
+        if (genExtentsTool != null) {
+            genExtentsTool.removeValueChangeListener(this);
+        }
+        if (genInfoTool != null) {
+            genInfoTool.removeValueChangeListener(this);
+        }
         super.cleanup();
     }
-    
+
     /**
      * 根据设置生成BatchEntity, 并放到场景中。
-     * @param baseName 指定一个基本名称
      */
-    public void generateBatchEntities(String baseName) {
-        int rows = rowTool.getValue().intValue();
-        int columns = columnTool.getValue().intValue();
-        Vector3f extents = extentsTool.getValue();
-        if (rows < 1 || columns < 1) {
-            LOG.log(Level.WARNING, "Rows and Columns could not less than 1. rows={0}, columns={1}", new Object[] {rows, columns});
-            return;
-        }
-        if (extents.x <= 0 || extents.y <= 0 || extents.z <= 0) {
-            LOG.log(Level.WARNING, "Extents could not less than 0, extents={0}", extents);
-            return;
-        }
-        
-        float xLen = extents.x * 2;
-        float yLen = extents.y * 2;
-        float zLen = extents.z * 2;
-        float colXExtent =  extents.x / columns;
-        float rowZExtent =  extents.z / rows;
-        int batchNodes = rows * columns;
+    @Override
+    public void doAction() {
+        String baseName = genNameTool.getValue();
+        int rows = genRowTool.getValue().intValue();
+        int columns = genColumnTool.getValue().intValue();
+        Vector3f extents = genExtentsTool.getValue();
         
         // 根据划定的区域 ，为每个区域生成一个BatchEntity.
-        List<BatchEntity> bes = new ArrayList<>(rows * columns);
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
-                float xExtent = colXExtent;
-                float yExtent =  extents.y;
-                float zExtent = rowZExtent;
-                Vector3f center = new Vector3f(-xExtent + colXExtent + colXExtent * 2 * j, 0, -zExtent + rowZExtent + rowZExtent * 2 * i);
-                BatchEntity be = createBatchEntity(baseName + i + "_" + j, xExtent, yExtent, zExtent, center);
-                bes.add(be);
-            }
+        List<BatchZone> bzs = createBatchZone(rows, columns, extents.x, extents.y, extents.z);
+        if (bzs == null || bzs.isEmpty()) {
+            return;
         }
+        List<BatchEntity> bes = new ArrayList<>(bzs.size());
+        bzs.forEach(bz -> {
+            BatchEntity be = createBatchEntity(baseName + bz.name, bz.xExtent, bz.yExtent, bz.zExtent, bz.center);
+            bes.add(be);
+        });
         
         // 创建ControlTile(在放到场景中时必须使用ControlTile)
         List<EntityControlTile> ects = new ArrayList<>(bes.size());
@@ -169,62 +159,84 @@ public class BatchEntityGenTool extends AbstractTool<SimpleJmeEdit, EntityBatchT
     private BatchEntity createBatchEntity(String name, float xExtent, float yExtent, float zExtent, Vector3f center) {
         BatchEntity be = Loader.load(IdConstants.SYS_ENTITY_BATCH);
         be.getData().setName(name);
+        be.getData().setAttribute(ATTR_BATCH_CENTER, center);
         be.getData().setAttribute(ATTR_BATCH_XEXTENT, xExtent);
         be.getData().setAttribute(ATTR_BATCH_YEXTENT, yExtent);
         be.getData().setAttribute(ATTR_BATCH_ZEXTENT, zExtent);
-        be.getData().setAttribute(ATTR_BATCH_CENTER, center);
+        LOG.log(Level.INFO, "CreateBatchEntity, name={0}, xExtent={1}, yExtent={2}, zExtent={3}, center={4}"
+                , new Object[]{name, xExtent, yExtent, zExtent, center});
         return be;
-    }
-    
-    public void setGridVisible(boolean visible) {
-        // hide
-        if (!visible) {
-            if (debugInfo != null) {
-                debugInfo.setCullHint(Spatial.CullHint.Always);
-            }
-            return;
-        }
-        
-        // show
-        if (debugInfo == null) {
-            recreateGrid();
-        }
-        debugInfo.setCullHint(Spatial.CullHint.Never);
     }
     
     private Spatial recreateGrid() {
         if (debugInfo != null) {
             debugInfo.removeFromParent();
         }
-        Vector3f extents = extentsTool.getValue();
-        debugInfo = createBatchGrid(rowTool.getValue().intValue(), columnTool.getValue().intValue()
-                , extents.x, extents.y, extents.z);
-        debugInfo.setCullHint(Spatial.CullHint.Never);
+        boolean display = genInfoTool.getValue();
+        int rows = genRowTool.getValue().intValue();
+        int columns = genColumnTool.getValue().intValue();
+        Vector3f extents = genExtentsTool.getValue();
+        if (!display) {
+            return null;
+        }
+        
+        debugInfo = new Node("batchRootDisplay");
         toolbar.getEdit().getEditRoot().attachChild(debugInfo);
+        
+        List<BatchZone> zones = createBatchZone(rows, columns, extents.x, extents.y, extents.z);
+        if (zones != null && !zones.isEmpty()) {
+            zones.forEach(e -> {
+                Spatial zoneBox = createBox(e.xExtent, e.yExtent, e.zExtent, e.center);
+                debugInfo.attachChild(zoneBox);
+            });
+        }
         return debugInfo;
     }
     
-    private Spatial createBatchGrid(int rows, int columns, float xExtent, float yExtent, float zExtent) {
-        float xLen = xExtent * 2;
-        float yLen = yExtent * 2;
-        float zLen = zExtent * 2;
-        float colXExtent = xExtent / columns;
-        float rowZExtent = zExtent / rows;
-        int batchNodes = rows * columns;
-        
-        Node root = new Node("batchRootDisplay");
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
-                Spatial box = createBox(colXExtent, yExtent * 2, rowZExtent);
-                box.setLocalTranslation(-xExtent + colXExtent + colXExtent * 2 * j, 0, -zExtent + rowZExtent + rowZExtent * 2 * i);
-                root.attachChild(box);
-            }
+    /**
+     * 划分Batch区域
+     * @param rows
+     * @param columns
+     * @param fullZoneXExtent
+     * @param fullZoneYExtent
+     * @param fullZoneZExtent
+     * @return 
+     */
+    private List<BatchZone> createBatchZone(int rows, int columns, float fullZoneXExtent, float fullZoneYExtent, float fullZoneZExtent) {
+        if (rows < 1 || columns < 1) {
+            LOG.log(Level.WARNING, "Rows and Columns could not less than 1. rows={0}, columns={1}", new Object[] {rows, columns});
+            return null;
+        }
+        if (fullZoneXExtent <= 0 || fullZoneYExtent <= 0 || fullZoneZExtent <= 0) {
+            LOG.log(Level.WARNING, "Extents could not less than 0, fullZoneXExtent={0}, fullZoneYExtent={1}, fullZoneZExtent={2}"
+                    , new Object[]{fullZoneXExtent, fullZoneYExtent, fullZoneZExtent});
+            return null;
         }
         
-        return root;
+        float batchZoneXExtent = fullZoneXExtent / columns;
+        float batchZoneZExtent = fullZoneZExtent / rows;
+        float batchZoneYExtent = fullZoneYExtent;
+        int batchZones = rows * columns;
+        List<BatchZone> zones = new ArrayList<>(batchZones);
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                BatchZone bz = new BatchZone();
+                bz.name = i + "_" + j;
+                bz.xExtent = batchZoneXExtent;
+                bz.yExtent = batchZoneYExtent;
+                bz.zExtent = batchZoneZExtent;
+                bz.center = new Vector3f(
+                         -fullZoneXExtent + batchZoneXExtent + batchZoneXExtent * 2 * j
+                        , 0
+                        , -fullZoneZExtent + batchZoneZExtent + batchZoneZExtent * 2 * i
+                );
+                zones.add(bz);
+            }
+        }
+        return zones;
     }
     
-    private Spatial createBox(float xExtent, float yExtent, float zExtent) {
+    private Spatial createBox(float xExtent, float yExtent, float zExtent, Vector3f center) {
         Box box = new Box(xExtent, yExtent, zExtent);
         Geometry geo = new Geometry("Box", box);
         Material mat = MaterialUtils.createUnshaded();
@@ -232,19 +244,21 @@ public class BatchEntityGenTool extends AbstractTool<SimpleJmeEdit, EntityBatchT
         mat.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Alpha);
         mat.getAdditionalRenderState().setDepthWrite(false);
         geo.setMaterial(mat);
+        geo.setLocalTranslation(center);
         return geo;
     }
 
     @Override
     public void onValueChanged(ValueTool vt, Object oldValue, Object newValue) {
-        if (debugInfo == null)
-            return;
-        if (debugInfo.getCullHint() == Spatial.CullHint.Always) {
-            debugInfo.removeFromParent();
-            debugInfo = null;
-            return;
-        }
         recreateGrid();
+    }
+    
+    private class BatchZone {
+        String name;
+        Vector3f center;
+        float xExtent;
+        float yExtent;
+        float zExtent;
     }
     
     private class BatchEntityGenUndoRedo implements UndoRedo {

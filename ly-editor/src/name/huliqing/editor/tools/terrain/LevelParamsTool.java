@@ -20,6 +20,7 @@
 package name.huliqing.editor.tools.terrain;
 
 import name.huliqing.editor.tools.BooleanValueTool;
+import name.huliqing.editor.tools.FloatValueTool;
 import name.huliqing.editor.tools.NumberValueTool;
 import name.huliqing.editor.tools.ParamsTool;
 
@@ -28,13 +29,13 @@ import name.huliqing.editor.tools.ParamsTool;
  */
 public class LevelParamsTool extends ParamsTool {
     
-    private final NumberValueTool height;
+    private final FloatValueTool height;
     private final BooleanValueTool absolute;
     private final BooleanValueTool precision;
     
     public LevelParamsTool(String name, String tips, String icon) {
         super(name, tips, icon);
-        height = new NumberValueTool("height", null, null);
+        height = new FloatValueTool("height", null, null);
         absolute = new BooleanValueTool("absolute", null, null);
         precision = new BooleanValueTool("precision", null, null);
         height.setValue(0);

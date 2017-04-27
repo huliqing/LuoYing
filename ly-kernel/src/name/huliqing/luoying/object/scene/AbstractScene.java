@@ -118,6 +118,7 @@ public abstract class AbstractScene implements Scene, SceneLoader.Listener {
             processorViewPorts = new ViewPort[]{LuoYing.getApp().getViewPort()};
         }
         
+        defaultFilterPostProcessor = new FilterPostProcessor(LuoYing.getAssetManager());
         translucentBucketFilter = new TranslucentBucketFilter();
         
         // 主要用于防止阴影、天空盒、特效粒子的BUG。查看上面说明:
@@ -140,12 +141,39 @@ public abstract class AbstractScene implements Scene, SceneLoader.Listener {
     
     @Override
     public void onSceneLoaded() {
-        initialized = true;
         if (listeners != null) {
-            for (SceneListener sl : listeners) {
+            for (SceneListener sl : listeners.getArray()) {
                 sl.onSceneLoaded(this);
             }
         }
+        // 在场景载入后才打开FilterPostProcessor, 否则有可能会导致一些异常
+        // 因为FilterPostProcessor在场景动态载入的过程中，动态载入多个Filter的时候，一些Filter可能会冲突，
+        // 导致FilterPostProcessor异常
+         // 参考异常：
+//                java.lang.UnsupportedOperationException: FrameBuffer already initialized.
+//	at com.jme3.texture.FrameBuffer.setDepthTexture(FrameBuffer.java:448)
+//	at com.jme3.post.FilterPostProcessor.initFilter(FilterPostProcessor.java:171)
+//	at com.jme3.post.FilterPostProcessor.addFilter(FilterPostProcessor.java:112)
+//	at name.huliqing.luoying.object.scene.AbstractScene.addFilter(AbstractScene.java:324)
+//	at name.huliqing.luoying.object.entity.impl.DirectionalLightFilterShadowEntity$1.onSceneLoaded(DirectionalLightFilterShadowEntity.java:62)
+//	at name.huliqing.luoying.object.scene.AbstractScene.onSceneLoaded(AbstractScene.java:146)
+//	at name.huliqing.luoying.object.scene.SceneLoader.notifyLoadedOK(SceneLoader.java:169)
+//	at name.huliqing.luoying.object.scene.SceneLoader.updateLoader(SceneLoader.java:135)
+//	at name.huliqing.luoying.object.scene.SceneLoader.access$000(SceneLoader.java:43)
+//	at name.huliqing.luoying.object.scene.SceneLoader$1.update(SceneLoader.java:119)
+//	at com.jme3.scene.Spatial.runControlUpdate(Spatial.java:737)
+//	at com.jme3.scene.Spatial.updateLogicalState(Spatial.java:880)
+//	at com.jme3.scene.Node.updateLogicalState(Node.java:230)
+//	at com.jme3.scene.Node.updateLogicalState(Node.java:241)
+//	at com.jme3.app.SimpleApplication.update(SimpleApplication.java:242)
+//	at com.jme3.system.lwjgl.LwjglAbstractDisplay.runLoop(LwjglAbstractDisplay.java:151)
+//	at com.jme3.system.lwjgl.LwjglCanvas.runLoop(LwjglCanvas.java:229)
+//	at com.jme3.system.lwjgl.LwjglAbstractDisplay.run(LwjglAbstractDisplay.java:232)
+//	at java.lang.Thread.run(Thread.java:745)
+        if (defaultFilterPostProcessor != null) {
+            addProcessor(defaultFilterPostProcessor);
+        }
+        initialized = true;
     }
     
     @Override
@@ -260,7 +288,7 @@ public abstract class AbstractScene implements Scene, SceneLoader.Listener {
         }
         return store;
     }
-
+    
     @Override
     public <T extends Entity> List<T> getEntities(Class<T> type, Vector3f location, float radius, List<T> store) {
         if (store == null) {
@@ -315,10 +343,6 @@ public abstract class AbstractScene implements Scene, SceneLoader.Listener {
     
     @Override
     public void addFilter(Filter filter) {
-        if (defaultFilterPostProcessor == null) {
-            defaultFilterPostProcessor = new FilterPostProcessor(LuoYing.getAssetManager());
-            addProcessor(defaultFilterPostProcessor);
-        }
         // 需要保证translucentBucketFilter放在FilterPostProcessor的最后面。
         defaultFilterPostProcessor.removeFilter(translucentBucketFilter);
         defaultFilterPostProcessor.addFilter(filter);
@@ -327,9 +351,6 @@ public abstract class AbstractScene implements Scene, SceneLoader.Listener {
 
     @Override
     public void removeFilter(Filter filter) {
-        if (defaultFilterPostProcessor == null) {
-            return;
-        }
         defaultFilterPostProcessor.removeFilter(filter);
     }
     
