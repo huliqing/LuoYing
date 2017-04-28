@@ -40,8 +40,9 @@ public class AssetConstants {
     public final static String INTERFACE_ICON_PLAY = "Interface/icon/play.png";
     /** 太阳、灯光 */
     public final static String INTERFACE_ICON_SUN = "Interface/icon/sun.png";
-    
     public final static String INTERFACE_ICON_STATISTICS = "Interface/icon/statistics.png";
+    public final static String INTERFACE_ICON_MULT_SELECT = "Interface/icon/mult-select.png";
+    public final static String INTERFACE_ICON_EYE = "Interface/icon/eye.png";
     
     
     public final static String INTERFACE_MENU_OPEN_DIR = "Interface/icon/open.png";

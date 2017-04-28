@@ -19,7 +19,6 @@
  */
 package name.huliqing.editor.tools.batch;
 
-import com.jme3.bounding.BoundingBox;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
@@ -50,7 +49,6 @@ import name.huliqing.editor.tools.Vector3fValueTool;
 import name.huliqing.luoying.constants.IdConstants;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.impl.BatchEntity;
-import name.huliqing.luoying.object.scene.Scene;
 import name.huliqing.luoying.utils.MaterialUtils;
 
 /**
@@ -242,7 +240,8 @@ public class BatchEntityGenTool extends AbstractTool<SimpleJmeEdit, EntityBatchT
         Material mat = MaterialUtils.createUnshaded();
         mat.setColor("Color", new ColorRGBA(0f, 0f, 1.0f, 0.3f));
         mat.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Alpha);
-        mat.getAdditionalRenderState().setDepthWrite(false);
+        mat.getAdditionalRenderState().setFaceCullMode(RenderState.FaceCullMode.Off);
+//        mat.getAdditionalRenderState().setDepthWrite(false);
         geo.setMaterial(mat);
         geo.setLocalTranslation(center);
         return geo;

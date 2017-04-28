@@ -23,6 +23,7 @@ import com.jme3.export.binary.BinaryExporter;
 import com.jme3.input.KeyInput;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Spatial;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -206,7 +207,8 @@ public class SceneEdit extends SimpleJmeEdit implements SceneListener {
         
         game.setScene(scene);
         game.initialize(editor);
-        getEditRoot().attachChild(game.getScene().getRoot());
+        getEditRoot().attachChild(scene.getRoot());
+        scene.getRoot().setCullHint(Spatial.CullHint.Always);
     }
 
     @Override
@@ -220,6 +222,7 @@ public class SceneEdit extends SimpleJmeEdit implements SceneListener {
                 addControlTile(eso);
             });
         }
+        scene.getRoot().setCullHint(Spatial.CullHint.Never);
         sceneLoaded = true;
     }
 

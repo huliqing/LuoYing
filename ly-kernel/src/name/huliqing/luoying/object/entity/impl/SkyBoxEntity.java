@@ -84,6 +84,9 @@ public class SkyBoxEntity extends ModelEntity {
         // 这是SKY必须覆盖掉的设置，
         sky.setCullHint(Spatial.CullHint.Never);
         sky.setQueueBucket(RenderQueue.Bucket.Sky);
+        // 对于天空盒来说，位置没有关系，把位置移到一个较远的距离可以避免在用射线检测获取场景物体的时候错误获得天空盒
+        // 特别是在编辑器中拖放物体到场景的时候会导致物体拖放到了空中，而不是在地面上。
+        sky.setLocalTranslation(-100000, -100000, -100000);
     }
     
 }

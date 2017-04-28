@@ -80,6 +80,9 @@
     -fx-background-insets: 0, 0;
     -fx-background-radius: 7;
 }
+.toggle-button:selected {
+    -fx-base: derive(darkgray, 20%);
+}
 
 .menu-button {
     -fx-base: derive(darkgray, 50%);
@@ -103,6 +106,11 @@
     -fx-background-color: darkgray;
 }
 .tool-bar .button {
+    -fx-pref-width: 20;
+    -fx-pref-height: 20;
+    -fx-padding: 3;
+}
+.tool-bar .toggle-button{
     -fx-pref-width: 20;
     -fx-pref-height: 20;
     -fx-padding: 3;

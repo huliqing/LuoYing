@@ -23,12 +23,23 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javafx.beans.Observable;
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToolBar;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import name.huliqing.editor.component.ComponentDefine;
@@ -50,6 +61,8 @@ import name.huliqing.editor.ui.ComponentSearch;
 import name.huliqing.editor.ui.utils.JfxUtils;
 import name.huliqing.fxswing.Jfx;
 import name.huliqing.luoying.data.EntityData;
+import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.scene.Scene;
 
 /**
  * 场景的"entities"字段的转换器, 将entities转换为列表
@@ -59,25 +72,25 @@ public class EntitiesFieldConverter extends FieldConverter<JfxSceneEdit, EntityD
 
     private final VBox layout = new VBox();
     private final ToolBar toolBar = new ToolBar();
-    private final ListView<EntityData> listView = new ListView();
+    
+    private final FilterListView filterListView = new FilterListView();
     private boolean ignoreSelectEvent;
     
     private final Map<EntityData, DataConverter> entityConverterMaps = new HashMap();
     // 当前正在显示的EntityConverter
     private DataConverter dataConverter;
-    
     private final ComponentSearch<ComponentDefine> componentSearch = new ComponentSearch(ComponentManager.getComponentsByType(ComponentConstants.ENTITY));
     
     public EntitiesFieldConverter() {
         // 工具栏
         Button add = new Button("", JfxUtils.createIcon(AssetConstants.INTERFACE_ICON_ADD));
         Button remove = new Button("", JfxUtils.createIcon(AssetConstants.INTERFACE_ICON_SUBTRACT));
-        toolBar.getItems().addAll(add, remove);
+        ToggleButton multSelect = new ToggleButton("", JfxUtils.createIcon(AssetConstants.INTERFACE_ICON_MULT_SELECT));
         add.setOnAction(e -> {
             componentSearch.show(add, -10, -10);
         });
         remove.setOnAction(e -> {
-            List<EntityData> eds = listView.getSelectionModel().getSelectedItems();
+            List<EntityData> eds = filterListView.listView.getSelectionModel().getSelectedItems();
             if (eds == null || eds.isEmpty())
                 return;
             
@@ -98,9 +111,16 @@ public class EntitiesFieldConverter extends FieldConverter<JfxSceneEdit, EntityD
 //                Jfx.runOnJfx(() -> {
 //                    listView.getItems().removeAll(eds);
 //                });
-
             });
         });
+        multSelect.selectedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+            if (newValue) {
+                filterListView.listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+            } else {
+                filterListView.listView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+            }
+        });
+        
         componentSearch.getListView().setOnMouseClicked(e -> {
             ComponentDefine cd = componentSearch.getListView().getSelectionModel().getSelectedItem();
             if (cd != null) {
@@ -110,12 +130,13 @@ public class EntitiesFieldConverter extends FieldConverter<JfxSceneEdit, EntityD
         });
         
         // 列表
-        listView.setCellFactory(new CellInner());
-        listView.getSelectionModel().selectedItemProperty().addListener(this::onJfxSelectChanged);
+        filterListView.listView.setCellFactory(new CellInner());
+        filterListView.listView.getSelectionModel().selectedItemProperty().addListener(this::onJfxSelectChanged);
 //        listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         
         layout.getStyleClass().add(StyleConstants.CLASS_HVBOX);
-        layout.getChildren().addAll(toolBar, listView);
+        toolBar.getItems().addAll(add, remove, multSelect);
+        layout.getChildren().addAll(toolBar, filterListView);
         
     }
         
@@ -126,23 +147,13 @@ public class EntitiesFieldConverter extends FieldConverter<JfxSceneEdit, EntityD
     
     @Override
     public void notifyChanged() {
-        listView.refresh();// 这一句允许刷新列表中的物体名称。
+        filterListView.listView.refresh();// 这一句允许刷新列表中的物体名称。
         super.notifyChanged();
     }
     
     @Override
     public void initialize() {
         super.initialize();
-        
-        // remove20170116不再需要
-//        List<EntityData> eds = parent.getData().getEntityDatas();
-//        if (eds != null) {
-//            listView.getItems().clear();
-//            eds.forEach(t -> {
-//                listView.getItems().add(t);
-//            });
-//        }
-        
         // 用于监听3D场景中选择物体的变化
         jfxEdit.addListener(this);
     }
@@ -178,12 +189,12 @@ public class EntitiesFieldConverter extends FieldConverter<JfxSceneEdit, EntityD
 
     @Override
     public void onEntityAdded(EntityData entityData) {
-        listView.getItems().add(entityData);
+        filterListView.listView.getItems().add(entityData);
     }
 
     @Override
     public void onEntityRemoved(EntityData ed) {
-        listView.getItems().remove(ed);
+        filterListView.listView.getItems().remove(ed);
         entityConverterMaps.remove(ed);
     }
 
@@ -191,7 +202,7 @@ public class EntitiesFieldConverter extends FieldConverter<JfxSceneEdit, EntityD
     public void onSelectChanged(ControlTile selectObj) {
         if (selectObj == null) {
             ignoreSelectEvent = true;
-            listView.getSelectionModel().clearSelection();
+            filterListView.listView.getSelectionModel().clearSelection();
             doUpdateEntityView(null);
             ignoreSelectEvent = false;
             return;
@@ -201,8 +212,7 @@ public class EntitiesFieldConverter extends FieldConverter<JfxSceneEdit, EntityD
         
         ignoreSelectEvent = true;
         EntityData ed = ((EntityControlTile)selectObj).getTarget().getData();
-//        listView.getSelectionModel().clearSelection();
-        listView.getSelectionModel().select(ed);
+        filterListView.listView.getSelectionModel().select(ed);
         doUpdateEntityView(ed);
         ignoreSelectEvent = false;
     }
@@ -222,7 +232,6 @@ public class EntitiesFieldConverter extends FieldConverter<JfxSceneEdit, EntityD
         }
         dataConverter = dc;
         dataConverter.initialize();
-//        getParent().setChildContent(entityData.getId(), dataConverter.getLayout());
         getParent().setChildLayout(entityData.getId(), dataConverter);
     }
 
@@ -242,27 +251,53 @@ public class EntitiesFieldConverter extends FieldConverter<JfxSceneEdit, EntityD
                     setText(null);
                     setGraphic(null);
                     if (!empty && item != null) {
-                        String name = item.getName();
-                        if (name != null && !name.isEmpty()) {
-                            setText(item.getId() + "(" + name + ")");
-                        } else {
-                            setText(item.getId());
-                        }
+                        setGraphic(new ListCellRow(item));
                     }
+                    
                 }
             };
             return lc;
         }
     }
     
+    private class ListCellRow extends GridPane {
+        private final Label nameLabel = new Label("");
+        private final ToggleButton enableBtn = new ToggleButton("", JfxUtils.createIcon(AssetConstants.INTERFACE_ICON_EYE));
+        private final EntityData entityData;
+        public ListCellRow(EntityData item) {
+            entityData = item;
+            String nameStr = item.getId();
+            if (item.getName() != null && !item.getName().isEmpty()) {
+                nameStr += "(" + item.getName() + ")";
+            }
+            nameLabel.setText(nameStr);
+            nameLabel.setAlignment(Pos.CENTER_LEFT);
+            enableBtn.setSelected(item.getAsBoolean("enabled", true));
+            enableBtn.setAlignment(Pos.CENTER_RIGHT);
+            enableBtn.setPrefWidth(16);
+            enableBtn.selectedProperty().addListener((ObservableValue<? extends Boolean> ob, Boolean oldValue, Boolean newValue) -> {
+                Scene scene = jfxEdit.getJmeEdit().getScene();
+                if (scene == null)
+                    return;
+                Jfx.runOnJme(() -> {
+                    Entity entity = scene.getEntity(entityData.getUniqueId());
+                    if (entity != null) {
+                        entity.setEnabled(newValue);
+                    }
+                });
+            });
+            setAlignment(Pos.CENTER_LEFT);
+            addRow(0, nameLabel, enableBtn);
+            GridPane.setHgrow(nameLabel, Priority.ALWAYS);
+            GridPane.setHgrow(enableBtn, Priority.NEVER);
+        }
+    }
+    
     private class EntityRemovedUndoRedo implements UndoRedo {
-        
         private final List<EntityControlTile> ectRemoved = new ArrayList();
-
         public EntityRemovedUndoRedo(List<EntityControlTile> ectRemoved) {
             this.ectRemoved.addAll(ectRemoved);
         }
-        
         @Override
         public void undo() {
             SceneEdit se = jfxEdit.getJmeEdit();
@@ -270,7 +305,6 @@ public class EntitiesFieldConverter extends FieldConverter<JfxSceneEdit, EntityD
                 se.addControlTile(ectRemoved.get(i));
             }
         }
-
         @Override
         public void redo() {
             SceneEdit se = jfxEdit.getJmeEdit();
@@ -278,5 +312,71 @@ public class EntitiesFieldConverter extends FieldConverter<JfxSceneEdit, EntityD
                 se.removeControlTile(ectRemoved.get(i));
             }
         }
+    }
+    
+    // 场景实体列表,包含过滤功能
+    private class FilterListView extends VBox {
+        
+        private final StackPane filterPane = new StackPane();
+        private final HBox imageView = new HBox(JfxUtils.createIcon(AssetConstants.INTERFACE_ICON_SEARCH));
+        private final TextField inputFilter = new TextField();
+        
+        private final ListView<EntityData> listView = new ListView();
+        private final List<EntityData> tempList = new ArrayList();
+        
+        public FilterListView() {
+            imageView.setPadding(new Insets(0, 0, 0, 10));
+            imageView.setMinWidth(16);
+            imageView.setMaxWidth(16);
+            imageView.prefHeightProperty().bind(filterPane.heightProperty());
+            imageView.setAlignment(Pos.CENTER);
+            inputFilter.prefWidthProperty().bind(filterPane.widthProperty());
+            inputFilter.prefHeightProperty().bind(filterPane.heightProperty());
+            inputFilter.setPadding(new Insets(0, 0, 0, 25));
+            filterPane.setMinHeight(25);
+            filterPane.setAlignment(Pos.CENTER_LEFT);
+            
+            filterPane.getChildren().add(inputFilter);
+            filterPane.getChildren().add(imageView);
+            getChildren().add(filterPane);
+            getChildren().add(listView);
+            
+            inputFilter.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+                updateList();
+            });
+            
+            listView.setStyle("-fx-background-radius: 0 0 7 7;");
+            inputFilter.setStyle("-fx-background-radius: 7 7 0 0;");
+        }
+        
+        public void updateList() {
+            Scene scene = jfxEdit.getJmeEdit().getScene();
+            if (scene == null) {
+                listView.getItems().clear();
+                tempList.clear();
+                return;
+            }
+            tempList.clear();
+            listView.getItems().clear();
+            
+            List<Entity> entities = scene.getEntities();
+            String filterText = inputFilter.getText().trim().toLowerCase();
+            String entityStr;
+            for (Entity e : entities) {
+                if (filterText.isEmpty()) {
+                    tempList.add(e.getData());
+                    continue;
+                }
+                entityStr = e.getData().getId();
+                if (e.getData().getName() != null) {
+                    entityStr += "(" + e.getData().getName() + ")";
+                }
+                if (entityStr.toLowerCase().contains(filterText)) {
+                    tempList.add(e.getData());
+                }
+            }
+            listView.getItems().addAll(tempList);
+        }
+        
     }
 }
