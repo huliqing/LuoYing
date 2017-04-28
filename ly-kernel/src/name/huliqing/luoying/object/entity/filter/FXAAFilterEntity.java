@@ -45,6 +45,12 @@ public class FXAAFilterEntity extends NonModelEntity {
         super.onInitScene(scene); 
         scene.addFilter(filter);
     }
+    
+    @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        filter.setEnabled(enabled);
+    }
 
     @Override
     public void cleanup() {

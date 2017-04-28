@@ -40,13 +40,19 @@ public class BloomFilterEntity extends NonModelEntity {
         filter.setExposureCutOff(data.getAsFloat("exposureCutOff", 0));
         filter.setExposurePower(data.getAsFloat("exposurePower", 5.0f));
     }
-
+    
     @Override
     public void onInitScene(Scene scene) {
         super.onInitScene(scene); 
         scene.addFilter(filter);
     }
 
+    @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        filter.setEnabled(enabled);
+    }
+    
     @Override
     public void cleanup() {
         if (scene != null) {

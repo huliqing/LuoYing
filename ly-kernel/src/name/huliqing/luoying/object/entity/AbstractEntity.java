@@ -157,9 +157,7 @@ public abstract class AbstractEntity implements Entity {
         } else {
             spatial.removeFromParent();
         }
-        if (scene != null) {
-            scene.notifyEntityStateChanged(this);
-        }
+        scene.notifyEntityStateChanged(this);
     }
 
     @Override

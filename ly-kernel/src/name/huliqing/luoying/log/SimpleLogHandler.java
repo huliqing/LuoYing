@@ -105,7 +105,7 @@ public class SimpleLogHandler extends StreamHandler {
     }
     
     private OutputStream createOutputStream() {
-        FileOutputStream fos;
+        FileOutputStream fos = null;
         try {
             if (!logDir.exists()) {
                 logDir.mkdirs();
@@ -114,6 +114,11 @@ public class SimpleLogHandler extends StreamHandler {
         } catch (FileNotFoundException ex) {
             Logger.getLogger(DailyLogHandler.class.getName()).log(Level.SEVERE, null, ex);
             loggable = false;
+            try {
+                if (fos != null) {
+                    fos.close();
+                }
+            } catch (Exception e) {}
             return null;
         }
         return new HandleBufferedOutputStream(fos);
