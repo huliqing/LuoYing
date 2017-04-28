@@ -25,7 +25,7 @@ import com.jme3.font.BitmapFont;
 import name.huliqing.editor.log.LogFactory;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.TextFileLoader;
-import name.huliqing.luoying.UncacheAssetEventListener;
+import name.huliqing.editor.UncacheAssetEventListener;
 
 /**
  * 全局管理器

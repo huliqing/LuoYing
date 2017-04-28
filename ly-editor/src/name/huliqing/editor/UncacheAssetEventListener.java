@@ -17,13 +17,14 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with LuoYing.  If not, see <http://www.gnu.org/licenses/>.
  */
-package name.huliqing.luoying;
+package name.huliqing.editor;
 
 import com.jme3.asset.AssetEventListener;
 import com.jme3.asset.AssetKey;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
+import name.huliqing.luoying.LuoYing;
 
 /**
  * 缓存过滤器，这个类用于排除JME对于一些资源的缓存。对于一些特殊的资源，如果不想系统进行缓存时可以使用这个
@@ -57,9 +58,17 @@ public class UncacheAssetEventListener implements AssetEventListener {
     @Override
     public void assetRequested(AssetKey key) {
 //        LOG.log(Level.INFO, "AssetRequested, key={0}", key.getName());
+
         if (uncache.contains(key.getName())) {
+            // LOG.log(Level.INFO, "Delete cache----> {0}", key.getName());
             LuoYing.getAssetManager().deleteFromCache(key);
-//            LOG.log(Level.INFO, "Delete cache----> {0}", key.getName());
+            return;
+        }
+        
+        // 不要缓存lyo文件
+        if (key.getName().endsWith(".lyo")) {
+            // LOG.log(Level.INFO, "Delete cache----> {0}", key.getName());
+            LuoYing.getAssetManager().deleteFromCache(key);
         }
     }
 

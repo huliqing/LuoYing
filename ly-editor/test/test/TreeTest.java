@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with LuoYing.  If not, see <http://www.gnu.org/licenses/>.
  */
-package name.huliqing.editor;
+package test;
 
 import name.huliqing.luoying.utils.modifier.TreeFixUtils;
 
@@ -25,7 +25,7 @@ import name.huliqing.luoying.utils.modifier.TreeFixUtils;
  *
  * @author huliqing
  */
-public class Test {
+public class TreeTest {
     
     public static void main(String[] args) {
         TreeFixUtils.setAlphaFallOff(0.1f);

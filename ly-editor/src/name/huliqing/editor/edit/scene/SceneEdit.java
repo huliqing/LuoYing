@@ -201,14 +201,16 @@ public class SceneEdit extends SimpleJmeEdit implements SceneListener {
         sceneLoaded = false;
         scene = newScene;
         scene.addSceneListener(this);
+        // 在场景载入前不显示场景（不影响进度条），这可以提高载入速度, 注：这一句必须放在game.initialize之前。
+        scene.getRoot().setCullHint(Spatial.CullHint.Always);
         
         game = Loader.load(IdConstants.SYS_GAME);
-        playService.registerGame(game); // game.initialize必须先调用
+        // game.initialize必须先调用
+        playService.registerGame(game);
         
         game.setScene(scene);
         game.initialize(editor);
         getEditRoot().attachChild(scene.getRoot());
-        scene.getRoot().setCullHint(Spatial.CullHint.Always);
     }
 
     @Override
@@ -228,11 +230,7 @@ public class SceneEdit extends SimpleJmeEdit implements SceneListener {
 
     @Override
     public void onSceneEntityAdded(Scene scene, Entity entityAdded) {
-        // remove20170410,后续直接使用 scene.notifyEntityStateChanged(ect.getTarget());就可以
-//        // 记住物理空间实体,以便在场景中的物理实体在重载的时候可以重新加入到这个空间中。
-//        if (entityAdded instanceof PhysicsEntity) {
-//            physicsEntity = (PhysicsEntity) entityAdded;
-//        }
+        // ignore
     }
     
     @Override

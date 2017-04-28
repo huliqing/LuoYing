@@ -36,7 +36,7 @@ import name.huliqing.editor.ui.CustomDialog;
 import name.huliqing.editor.utils.TerrainUtils;
 import static name.huliqing.editor.utils.TerrainUtils.TERRAIN_DIRT;
 import name.huliqing.fxswing.Jfx;
-import name.huliqing.luoying.UncacheAssetEventListener;
+import name.huliqing.editor.UncacheAssetEventListener;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.object.Loader;
 

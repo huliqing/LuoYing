@@ -32,7 +32,7 @@ import name.huliqing.editor.edit.SaveAction;
 import name.huliqing.editor.edit.SimpleJmeEdit;
 import name.huliqing.editor.manager.Manager;
 import name.huliqing.editor.utils.TerrainUtils;
-import name.huliqing.luoying.UncacheAssetEventListener;
+import name.huliqing.editor.UncacheAssetEventListener;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.object.entity.TerrainEntity;

@@ -25,7 +25,7 @@ import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import com.jme3.util.TempVars;
-import name.huliqing.editor.action.Picker;
+import name.huliqing.editor.utils.Picker;
 import name.huliqing.editor.events.Event;
 import name.huliqing.editor.events.JmeEvent;
 import name.huliqing.editor.edit.Mode;

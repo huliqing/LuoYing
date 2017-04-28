@@ -36,7 +36,7 @@ import name.huliqing.editor.ui.utils.JfxUtils;
 import name.huliqing.fxswing.Jfx;
 
 /**
- *
+ * @deprecated 不再使用
  * @author huliqing
  */
 public class EditorStatsAppState extends AbstractAppState {
