@@ -1,7 +1,7 @@
 /build/
 /.gradle/
 /.nb-gradle/
-/doc/
+/docs/private
 *.blend
 *.blend1
 *.blend2
