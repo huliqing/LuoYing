@@ -58,7 +58,7 @@ public class ControlTileManager {
         MAPPING.put("entityAdvanceWater", AdvanceWaterEntityControlTile.class);
         
         MAPPING.put("entitySkyBox", EmptyEntityControlTile.class);
-        MAPPING.put("entityDirectionalLightFilterShadow", EmptyEntityControlTile.class);
+        MAPPING.put("entityDirectionalLightShadowFilter", EmptyEntityControlTile.class);
         MAPPING.put("entityChaseCamera", EmptyEntityControlTile.class);
         MAPPING.put("entityPhysics", EmptyEntityControlTile.class);
         MAPPING.put("entityInstanced", EmptyEntityControlTile.class);
