@@ -14,16 +14,16 @@
             baseDir="Textures/tex/sky/default_min/" />
 
     <!--地形：继承自系统配置-->
-    <entitySimpleTerrain id="entityTerrainBase" extends="sysEntityTerrainBase"  />
+    <entitySimpleTerrain id="entityTerrainBase" extends="sysEntityTerrain"  />
 
     <!--植被：继承自系统配置-->
-    <entityTree id="entityTreeBase" extends="sysEntityTreeBase" makeOnTerrain="1" />
+    <entityTree id="entityTreeBase" extends="sysEntityTree" makeOnTerrain="1" />
     
     <!--植被：草丛、花朵,继承自系统配置-->
-    <entityGrass id="entityGrassBase" extends="sysEntityGrassBase" makeOnTerrain="1" />
+    <entityGrass id="entityGrassBase" extends="sysEntityGrass" makeOnTerrain="1" />
     
     <!--场景阴影基本配置:在移动平台关闭阴影功能-->
-    <entityDirectionalLightFilterShadow id="entityShadowBase" extends="sysEntityShadowBase" disabledOnPlatforms="iOS_X86,iOS_ARM,Android_ARM5,Android_ARM6,Android_ARM7,Android_ARM8,Android_X86,Android_Other" />
+    <entityDirectionalLightShadowFilter id="entityShadowBase" extends="sysEntityShadow" disabledOnPlatforms="iOS_X86,iOS_ARM,Android_ARM5,Android_ARM6,Android_ARM7,Android_ARM8,Android_X86,Android_Other" />
 
     <!--直射光基本配置-->
     <entityDirectionalLight id="entityDirectionalLightBase" direction="-1,-2,-1" color="0.8,0.8,0.8,0.8"  />
@@ -32,16 +32,16 @@
     <entityAmbientLight id="entityAmbientLightBase" color="0.7,0.7,0.7,0.7" />
     
     <!--普通水体：对资源要求不高，支持移动设备-->
-    <entitySimpleWater id="entitySimpleWaterBase" extends="sysEntitySimpleWaterBase" />
+    <entitySimpleWater id="entitySimpleWaterBase" extends="sysEntitySimpleWater" />
     
     <!--高级水体：海水环境，对资源要求较高,目前不支持移动设备-->
-    <entityAdvanceWater id="entityAdvanceWaterBase" extends="sysEntityAdvanceWaterBase" />
+    <entityAdvanceWater id="entityAdvanceWaterBase" extends="sysEntityAdvanceWater" />
     
     <!--物理环境-->
-    <entityPhysics id="entityPhysicsBase" extends="sysEntityPhysicsBase" debug="0" />
+    <entityPhysics id="entityPhysicsBase" extends="sysEntityPhysics" debug="0" />
     
     <!--第三人称镜头跟随视角-->
-    <entityChaseCamera id="entityChaseCameraBase" extends="sysEntityChaseCameraBase" />
+    <entityChaseCamera id="entityChaseCameraBase" extends="sysEntityChaseCamera" />
     
     <!-- ========================================================================= -->
     <!--通用、默认配置-->
@@ -60,7 +60,7 @@
     <entityAmbientLight id="entityAmbientLight" extends="entityAmbientLightBase" />
     
     <!--默认的阴影处理器-->
-    <entityDirectionalLightFilterShadow id="entityShadow" extends="entityShadowBase" />
+    <entityDirectionalLightShadowFilter id="entityShadow" extends="entityShadowBase" />
     <entityDirectionalLightShadow id="entityDirectionalLightShadow" extends="entityShadowBase" shadowMapSize="1024" shadowMaps="1"  />
     
     <!--第三人称视角相机-->
@@ -94,7 +94,7 @@
     <!--地形：落樱小岛-->
     <entitySimpleTerrain id="entitySakuraIslandTerrain" extends="entityTerrainBase" file="Models/env/terrain/scene.j3o" scale="5,5,5" />
     <!--边界盒： 落樱小岛的边界盒-->
-    <entitySimpleModel id="entitySakuraIslandBoundary" extends="sysEntityBoundaryBase" scale="220,80,210" location="0,0,5" />
+    <entitySimpleModel id="entitySakuraIslandBoundary" extends="sysEntityBoundary" scale="220,80,210" location="0,0,5" />
     <!--简单水体:移动平台-->
     <entitySimpleWater id="entitySakuraIslandSimpleWater" extends="entitySimpleWaterBase" />
     <!--默认海水:桌面平台-->

@@ -56,7 +56,7 @@
     />
     
     <!--高级水体, 海水环境，不支持移动设备-->
-    <entityAdvanceWater id="entityAdvanceWater" waterColor="0.6, 0.8, 0.9, 1" 
+    <entityAdvanceWater id="sysEntityAdvanceWater" waterColor="0.6, 0.8, 0.9, 1" 
                         deepWaterColor="0.6, 0.8, 0.9, 1" underWaterFogDistance="80" waterTransparency="0.1" 
                      foamExistence="0.8,8,1" foamHardness="0.3" foamIntensity="0.4"
                      reflectionDisplace="50" reflectionMapSize="512" refractionConstant="0.25" refractionStrength="0.2" 

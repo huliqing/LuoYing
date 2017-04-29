@@ -118,7 +118,7 @@
         <field name="spotRange" converter="FloatTextConverter" />
     </data>
     
-    <data name="entityDirectionalLightFilterShadow" extends="entityBase">
+    <data name="entityDirectionalLightShadowFilter" extends="entityBase">
         <feature name="hideFields" value="location,rotation,scale,mat" />
         <field name="disabledOnPlatforms" converter="TextConverter">
             <feature name="collapsed" value="true" />
