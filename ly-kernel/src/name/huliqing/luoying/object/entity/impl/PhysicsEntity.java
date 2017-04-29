@@ -132,6 +132,14 @@ public class PhysicsEntity extends NonModelEntity implements SceneListener {
         LuoYing.getApp().getStateManager().detach(bulletAppState);
         super.cleanup();
     }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        if (bulletAppState != null) {
+            bulletAppState.setEnabled(enabled);
+        }
+    }
     
     public BulletAppState getBulletAppState() {
         return bulletAppState;
