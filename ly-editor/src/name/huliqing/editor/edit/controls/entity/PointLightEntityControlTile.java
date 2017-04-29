@@ -21,7 +21,6 @@ package name.huliqing.editor.edit.controls.entity;
 
 import com.jme3.material.Material;
 import com.jme3.material.RenderState;
-import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue;
@@ -30,82 +29,82 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.BillboardControl;
 import com.jme3.scene.shape.Box;
-import com.jme3.scene.shape.Line;
 import name.huliqing.editor.constants.AssetConstants;
 import name.huliqing.editor.edit.SimpleJmeEdit;
 import name.huliqing.editor.tiles.AutoScaleControl;
 import name.huliqing.fxswing.Jfx;
-import name.huliqing.luoying.object.entity.impl.DirectionalLightEntity;
+import name.huliqing.luoying.object.entity.impl.PointLightEntity;
 import name.huliqing.luoying.shape.QuadXYC;
 import name.huliqing.luoying.utils.MaterialUtils;
 
 /**
- * DirectionalLightEntity操作物体
+ * PointLightEntity的操作物体
  * @author huliqing
  */
-public class DirectionalLightEntityControlTile extends EntityControlTile<DirectionalLightEntity> {
+public class PointLightEntityControlTile extends EntityControlTile<PointLightEntity> {
 
     private final Node controlSpatial = new Node();
     private final Spatial flag;
-    private final Spatial line;
     
-    public DirectionalLightEntityControlTile() {
-        flag = createSunFlag(AssetConstants.INTERFACE_ICON_LIGHT_SUN);
-        controlSpatial.attachChild(flag);
-        
-        line = createLine();
-        controlSpatial.attachChild(line);
+    public PointLightEntityControlTile() {
+        flag = createSunFlag(AssetConstants.INTERFACE_ICON_LIGHT_POINT);
+        flag.addControl(new AutoScaleControl(0.05f));
         
         // 添加一个box，这样更容易被选中
         controlSpatial.attachChild(createBox()); 
-        
-        AutoScaleControl asc = new AutoScaleControl(0.05f);
-        controlSpatial.addControl(asc);
     }
     
     @Override
     public void initialize(SimpleJmeEdit edit) {
         super.initialize(edit);
         edit.getEditRoot().attachChild(controlSpatial);
+        edit.getEditRoot().attachChild(flag);
         updateState();
     }
     
     @Override
     public void updateState() {
         super.updateState();
-        controlSpatial.setLocalTranslation(target.getSpatial().getLocalTranslation());
-        controlSpatial.setLocalScale(10);
-        
-        Quaternion rot = controlSpatial.getLocalRotation();
-        rot.lookAt(target.getDirection(), Vector3f.UNIT_Y);
-        setLocalRotation(rot);
+        flag.setLocalTranslation(target.getLight().getPosition());
+        controlSpatial.setLocalTranslation(target.getLight().getPosition());
+        controlSpatial.setLocalScale(target.getLight().getRadius());
     }
 
     @Override
     public void cleanup() {
+        flag.removeFromParent();
         controlSpatial.removeFromParent();
         super.cleanup();
     }
 
     @Override
     protected void onLocationUpdated(Vector3f location) {
+        flag.setLocalTranslation(location);
+        controlSpatial.setLocalTranslation(location);
         target.getSpatial().setLocalTranslation(location);
+        target.getLight().setPosition(location);
         target.updateDatas();
         notifyPropertyChanged("location", target.getSpatial().getLocalTranslation());
     }
 
     @Override
     protected void onRotationUpdated(Quaternion rotation) {
-        Vector3f dir = target.getDirection().set(Vector3f.UNIT_Z);
-        rotation.mult(dir, dir);
-        target.setDirection(dir);
-        target.updateDatas();
-        notifyPropertyChanged("direction", dir);
+        // ignore
     }
 
     @Override
     protected void onScaleUpdated(Vector3f scale) {
-        // ignore
+        // 找出最大的一个缩放
+        float radius = Math.max(scale.x, scale.y);
+        radius = Math.max(radius, scale.z);
+        if (radius < 0) {
+            radius = 0.0001f;
+        }
+        controlSpatial.setLocalScale(radius);
+        target.getSpatial().setLocalScale(radius);
+        target.getLight().setRadius(radius);
+        target.updateDatas();
+        notifyPropertyChanged("radius", radius);
     }
 
     @Override
@@ -138,12 +137,4 @@ public class DirectionalLightEntityControlTile extends EntityControlTile<Directi
         return boxGeo;
     }
     
-    private Spatial createLine() {
-        Geometry geo = new Geometry("line", new Line(new Vector3f(), new Vector3f(0, 0, 1f)));
-        Material mat = MaterialUtils.createUnshaded(ColorRGBA.Black);
-        geo.setMaterial(mat);
-        geo.setLocalScale(1000);
-        return geo;
-    }
-
 }

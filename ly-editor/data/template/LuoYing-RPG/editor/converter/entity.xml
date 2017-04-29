@@ -95,6 +95,29 @@
         <field name="color" converter="ColorConverter" />
     </data>
     
+    <data name="entityPointLight" extends="entityBase">
+        <feature name="hideFields" value="rotation,scale,mat" />
+        <field name="color" converter="ColorConverter" />
+        <field name="radius" converter="FloatTextConverter" />
+    </data>
+    
+    <data name="entitySpotLight" extends="entityBase">
+        <feature name="hideFields" value="rotation,scale,mat" />
+        <field name="color" converter="ColorConverter" />
+        <field name="direction" converter="Vector3fConverter">
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="spotInnerAngle" converter="FloatTextConverter">
+            <feature name="min" value="0" />
+            <feature name="max" value="1.57" />
+        </field>
+        <field name="spotOuterAngle" converter="FloatTextConverter">
+            <feature name="min" value="0" />
+            <feature name="max" value="1.57" />
+        </field>
+        <field name="spotRange" converter="FloatTextConverter" />
+    </data>
+    
     <data name="entityDirectionalLightFilterShadow" extends="entityBase">
         <feature name="hideFields" value="location,rotation,scale,mat" />
         <field name="disabledOnPlatforms" converter="TextConverter">

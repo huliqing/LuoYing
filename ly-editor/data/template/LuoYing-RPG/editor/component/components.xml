@@ -6,9 +6,12 @@
     xsi:schemaLocation='http://editor.huliqing.name meta.xsd'>
     
     <!--Entity-->
-    <component id="sysEntitySky" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
     <component id="sysEntityAmbientLight" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
     <component id="sysEntityDirectionalLight" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="sysEntityPointLight" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="sysEntitySpotLight" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+
+    <component id="sysEntitySky" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
     <component id="sysEntityTerrain" type="entity" icon="" converterClass="name.huliqing.editor.component.TerrainEntityComponentConverter" />
     <component id="sysEntityModel" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
     <component id="sysEntityTree" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />

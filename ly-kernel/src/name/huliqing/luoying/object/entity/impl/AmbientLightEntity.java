@@ -36,12 +36,14 @@ public class AmbientLightEntity extends NonModelEntity implements LightEntity {
     @Override
     public void setData(EntityData data) {
         super.setData(data);
+        light.setName(data.getName());
         light.setColor(data.getAsColor("color", light.getColor()));
     }
     
     @Override
     public void updateDatas() {
         super.updateDatas();
+        data.setAttribute("name", light.getName());
         data.setAttribute("color", light.getColor());
     }
 

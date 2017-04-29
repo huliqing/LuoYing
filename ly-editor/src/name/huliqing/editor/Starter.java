@@ -47,7 +47,7 @@ public class Starter {
     private void start() {
         AppSettings settings = new AppSettings(true);
         settings.setResolution(1280, 720);
-        settings.setFrameRate(60);
+        settings.setFrameRate(90);
         settings.setSamples(4);
         
         Jfx.create(Editor.class.getName(), settings);

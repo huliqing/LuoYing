@@ -25,6 +25,7 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
+import com.jme3.util.TempVars;
 
 /**
  * 动态控制场景中物体的大小
@@ -67,9 +68,9 @@ public class AutoScaleControl extends AbstractControl {
         if (scale > 0) {
             spatial.setLocalScale(scale);
         }
-        lastCamLoc.set(camloc);        
+        lastCamLoc.set(camloc);
     }
-
+    
     @Override
     protected void controlRender(RenderManager rm, ViewPort vp) {
         camera = vp.getCamera();

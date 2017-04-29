@@ -58,6 +58,28 @@ public class FeatureHelper {
         return feature != null && feature.getAsBoolean();
     }
     
+    public Float getAsFloat(String key) {
+        if (features == null)
+            return null;
+        
+        Feature feature = features.get(key);
+        if (feature != null) {
+            return feature.getAsFloat();
+        }
+        return null;
+    }
+    
+    public Integer getAsInteger(String key) {
+        if (features == null)
+            return null;
+        
+        Feature feature = features.get(key);
+        if (feature != null) {
+            return feature.getAsInteger();
+        }
+        return null;
+    }
+    
     /**
      * 以数组方式获取参数，如果原数据是字符串形式，则该方法将使用半角逗号","来拆分为数组
      * @param key

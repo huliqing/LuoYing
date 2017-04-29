@@ -57,6 +57,38 @@ public class Feature {
         return Boolean.valueOf((String) value);
     }
     
+    public Float getAsFloat() {
+        if (value == null) 
+            return null;
+        
+        try {
+            return Float.parseFloat(value);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+    
+    public Integer getAsInteger() {
+        if (value == null) 
+            return null;
+        
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+    
+    public Long getAsLong() {
+        if (value == null) 
+            return null;
+        try {
+            return Long.parseLong(value);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+    
     /**
      * 以数组方式获取参数，如果原数据是字符串形式，则该方法将使用半角逗号","来拆分为数组
      * @return 

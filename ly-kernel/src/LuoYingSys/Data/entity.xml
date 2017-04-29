@@ -8,6 +8,13 @@
     <!-- ========================================================================= -->
     <!--基本配置：这些作为内置配置，统一定义不同类型环境物体的基本属性，外部应用可以直接继承后使用，也可以自己另起配置 -->
     <!-- ========================================================================= -->
+
+    <!--基本直射光和环境光-->
+    <entityDirectionalLight id="sysEntityDirectionalLightBase" direction="-1,-1,-1" color="0.8,0.8,0.8,0.8"  />
+    <entityAmbientLight id="sysEntityAmbientLightBase" color="0.7,0.7,0.7,0.7"  />
+    <entityPointLight id="sysEntityPointLightBase" color="1,1,1,1" radius="20" location="0,0,0"  />
+    <entitySpotLight id="sysEntitySpotLightBase" color="1,1,1,1" direction="-1,-1,-1" location="0,0,0" spotInnerAngle="0.0981" spotOuterAngle="0.1308" spotRange="100" />
+
     <!--普通模型的基类-->
     <entitySimpleModel id="sysEntityModelBase" cullHint="Dynamic" queueBucket="Opaque" shadowMode="Cast" />
     
@@ -58,10 +65,6 @@
                    speed="1.0" worldMin="-10000, -10000, -10000" worldMax="10000, 10000, 10000" accuracy="0.0166" 
                    maxSubSteps="4" solverNumIterations="10" />
     
-    <!--基本直射光和环境光-->
-    <entityDirectionalLight id="sysEntityDirectionalLightBase" direction="-1,-1,-1" color="0.8,0.8,0.8,0.8" />
-    <entityAmbientLight id="sysEntityAmbientLightBase" color="0.7,0.7,0.7,0.7" />
-    
     <!--基本阴影配置-->
     <entityDirectionalLightFilterShadow id="sysEntityShadowBase" shadowMapSize="1024" shadowMaps="1" 
                                         edgeFilteringMode="PCF4" edgesThickness="1" enabledStabilization="1" lambda="0.65" 
@@ -76,16 +79,15 @@
     <!-- ========================================================================= -->
     <!-- 以下为内置环境物体 -->
     <!-- ========================================================================= -->
+    <!--内置直射光环境-->
+    <entityDirectionalLight id="sysEntityDirectionalLight" extends="sysEntityDirectionalLightBase" />
+    <entityAmbientLight id="sysEntityAmbientLight" extends="sysEntityAmbientLightBase" />
+    <entityPointLight id="sysEntityPointLight" extends="sysEntityPointLightBase" />
+    <entitySpotLight id="sysEntitySpotLight" extends="sysEntitySpotLightBase" />
     
     <!--内置天空盒-->
     <entitySkyBox id="sysEntitySky" extends="sysEntitySkyBase" />
-    
-    <!--内置直射光环境-->
-    <entityDirectionalLight id="sysEntityDirectionalLight" extends="sysEntityDirectionalLightBase" />
-
-    <!--内置环境光-->
-    <entityAmbientLight id="sysEntityAmbientLight" extends="sysEntityAmbientLightBase" />
-    
+        
     <!--内置简单地形，一个简单的box作为地形-->
     <entitySimpleTerrain id="sysEntityTerrain" extends="sysEntityTerrainBase" file="LuoYingSys/Assets/Models/unitBox.j3o" scale="1,1,1"  />
     

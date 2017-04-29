@@ -35,22 +35,22 @@ import name.huliqing.editor.constants.AssetConstants;
 import name.huliqing.editor.edit.SimpleJmeEdit;
 import name.huliqing.editor.tiles.AutoScaleControl;
 import name.huliqing.fxswing.Jfx;
-import name.huliqing.luoying.object.entity.impl.DirectionalLightEntity;
+import name.huliqing.luoying.object.entity.impl.SpotLightEntity;
 import name.huliqing.luoying.shape.QuadXYC;
 import name.huliqing.luoying.utils.MaterialUtils;
 
 /**
- * DirectionalLightEntity操作物体
+ * SpotLightEntity的操作物体
  * @author huliqing
  */
-public class DirectionalLightEntityControlTile extends EntityControlTile<DirectionalLightEntity> {
+public class SpotLightEntityControlTile extends EntityControlTile<SpotLightEntity> {
 
     private final Node controlSpatial = new Node();
     private final Spatial flag;
     private final Spatial line;
     
-    public DirectionalLightEntityControlTile() {
-        flag = createSunFlag(AssetConstants.INTERFACE_ICON_LIGHT_SUN);
+    public SpotLightEntityControlTile() {
+        flag = createSunFlag(AssetConstants.INTERFACE_ICON_LIGHT_SPOT);
         controlSpatial.attachChild(flag);
         
         line = createLine();
@@ -77,7 +77,7 @@ public class DirectionalLightEntityControlTile extends EntityControlTile<Directi
         controlSpatial.setLocalScale(10);
         
         Quaternion rot = controlSpatial.getLocalRotation();
-        rot.lookAt(target.getDirection(), Vector3f.UNIT_Y);
+        rot.lookAt(target.getLight().getDirection(), Vector3f.UNIT_Y);
         setLocalRotation(rot);
     }
 
@@ -90,15 +90,16 @@ public class DirectionalLightEntityControlTile extends EntityControlTile<Directi
     @Override
     protected void onLocationUpdated(Vector3f location) {
         target.getSpatial().setLocalTranslation(location);
+        target.getLight().setPosition(location);
         target.updateDatas();
         notifyPropertyChanged("location", target.getSpatial().getLocalTranslation());
     }
 
     @Override
     protected void onRotationUpdated(Quaternion rotation) {
-        Vector3f dir = target.getDirection().set(Vector3f.UNIT_Z);
+        Vector3f dir = target.getLight().getDirection().set(Vector3f.UNIT_Z);
         rotation.mult(dir, dir);
-        target.setDirection(dir);
+        target.getLight().setDirection(dir);
         target.updateDatas();
         notifyPropertyChanged("direction", dir);
     }

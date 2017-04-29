@@ -19,7 +19,7 @@
  */
 package name.huliqing.luoying.object.entity.impl;
 
-import com.jme3.light.DirectionalLight;
+import com.jme3.light.PointLight;
 import com.jme3.math.Vector3f;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.object.entity.LightEntity;
@@ -30,24 +30,29 @@ import name.huliqing.luoying.object.scene.Scene;
  *  直射光实体
  * @author huliqing
  */
-public class DirectionalLightEntity extends NonModelEntity implements LightEntity{
+public class PointLightEntity extends NonModelEntity implements LightEntity{
  
-    private final DirectionalLight light = new DirectionalLight();
+    private final PointLight light = new PointLight();
     
     @Override
     public void setData(EntityData data) {
         super.setData(data);
+        Vector3f location = data.getLocation();
+        if (location != null) {
+            light.setPosition(location);
+        }
         light.setName(data.getName());
         light.setColor(data.getAsColor("color", light.getColor()));
-        light.setDirection(data.getAsVector3f("direction", light.getDirection()));
+        light.setRadius(data.getAsFloat("radius", light.getRadius()));
     }
     
     @Override
     public void updateDatas() {
         super.updateDatas();
+        data.setLocation(light.getPosition());
         data.setAttribute("name", light.getName());
         data.setAttribute("color", light.getColor());
-        data.setAttribute("direction", light.getDirection());
+        data.setAttribute("radius", light.getRadius());
     }
 
     @Override
@@ -74,17 +79,10 @@ public class DirectionalLightEntity extends NonModelEntity implements LightEntit
     }
     
     @Override
-    public DirectionalLight getLight() {
+    public PointLight getLight() {
         return light;
     }
     
-    public Vector3f getDirection() {
-        return light.getDirection();
-    }
-    
-    public void setDirection(Vector3f direction) {
-        light.setDirection(direction);
-    }
-    
+
     
 }

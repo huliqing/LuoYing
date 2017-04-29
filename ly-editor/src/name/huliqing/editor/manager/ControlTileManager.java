@@ -28,7 +28,9 @@ import name.huliqing.editor.edit.controls.entity.AdvanceWaterEntityControlTile;
 import name.huliqing.editor.edit.controls.entity.DirectionalLightEntityControlTile;
 import name.huliqing.editor.edit.controls.entity.EmptyEntityControlTile;
 import name.huliqing.editor.edit.controls.entity.EntityControlTile;
+import name.huliqing.editor.edit.controls.entity.PointLightEntityControlTile;
 import name.huliqing.editor.edit.controls.entity.SimpleModelEntityControlTile;
+import name.huliqing.editor.edit.controls.entity.SpotLightEntityControlTile;
 import name.huliqing.luoying.data.EntityData;
 
 /**
@@ -42,17 +44,20 @@ public class ControlTileManager {
     private final static Map<String, Class<? extends EntityControlTile>> MAPPING = new HashMap();
     
     static {
+        MAPPING.put("entityAmbientLight", EmptyEntityControlTile.class);
+        MAPPING.put("entityDirectionalLight", DirectionalLightEntityControlTile.class);
+        MAPPING.put("entityPointLight", PointLightEntityControlTile.class);
+        MAPPING.put("entitySpotLight", SpotLightEntityControlTile.class);
+        
         MAPPING.put("entitySimpleModel", SimpleModelEntityControlTile.class);
         MAPPING.put("entitySimpleWater", SimpleModelEntityControlTile.class);
         MAPPING.put("entitySimpleTerrain", SimpleModelEntityControlTile.class);
         MAPPING.put("entityTree", SimpleModelEntityControlTile.class);
         MAPPING.put("entityGrass", SimpleModelEntityControlTile.class);
         MAPPING.put("entityEffect", SimpleModelEntityControlTile.class);
-        MAPPING.put("entityDirectionalLight", DirectionalLightEntityControlTile.class);
         MAPPING.put("entityAdvanceWater", AdvanceWaterEntityControlTile.class);
         
         MAPPING.put("entitySkyBox", EmptyEntityControlTile.class);
-        MAPPING.put("entityAmbientLight", EmptyEntityControlTile.class);
         MAPPING.put("entityDirectionalLightFilterShadow", EmptyEntityControlTile.class);
         MAPPING.put("entityChaseCamera", EmptyEntityControlTile.class);
         MAPPING.put("entityPhysics", EmptyEntityControlTile.class);

@@ -34,8 +34,14 @@ import name.huliqing.luoying.xml.Converter;
  */
 public class FloatTextConverter extends SimpleFieldConverter{
     
+    public final static String FEATURE_MIN = "min"; 
+    public final static String FEATURE_MAX = "max"; 
+    
     private final TextField content = new TextField("");
     private Float lastValueSaved;
+    
+    private Float min;
+    private Float max;
     
     public FloatTextConverter() {
         // 失去焦点时更新
@@ -53,6 +59,13 @@ public class FloatTextConverter extends SimpleFieldConverter{
                 updateChangedAndSave();
             }
         });
+    }
+
+    @Override
+    public void initialize() {
+        super.initialize();
+        min = featureHelper.getAsFloat(FEATURE_MIN);
+        max = featureHelper.getAsFloat(FEATURE_MAX);
     }
 
     @Override
@@ -91,6 +104,13 @@ public class FloatTextConverter extends SimpleFieldConverter{
         if (lastValueSaved != null && lastValueSaved.compareTo(newValue) == 0) {
             return;
         }
+        if (min != null && newValue < min) {
+            newValue = min;
+        }
+        if (max != null && newValue > max) {
+            newValue = max;
+        }
+        content.setText(newValue + "");
         updateAttribute(newValue);
         addUndoRedo(lastValueSaved, newValue);
         lastValueSaved = newValue;

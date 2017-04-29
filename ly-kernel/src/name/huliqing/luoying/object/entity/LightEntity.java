@@ -29,8 +29,9 @@ public interface LightEntity extends Entity {
     
     /**
      * 获取光源
+     * @param <T>
      * @return 
      */
-    Light getLight();
+    <T extends Light> T getLight();
     
 }

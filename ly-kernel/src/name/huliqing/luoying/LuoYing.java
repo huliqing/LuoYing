@@ -310,7 +310,9 @@ import name.huliqing.luoying.object.entity.impl.BatchEntity;
 import name.huliqing.luoying.object.entity.impl.DirectionalLightShadowEntity;
 import name.huliqing.luoying.object.entity.impl.GrassEntity;
 import name.huliqing.luoying.object.entity.impl.InstancedEntity;
+import name.huliqing.luoying.object.entity.impl.PointLightEntity;
 import name.huliqing.luoying.object.entity.impl.SimpleModelEntity;
+import name.huliqing.luoying.object.entity.impl.SpotLightEntity;
 import name.huliqing.luoying.object.entity.impl.UnshadedEntity;
 import name.huliqing.luoying.object.game.SimpleGame;
 import name.huliqing.luoying.object.item.AttributeItem;
@@ -694,12 +696,15 @@ public class LuoYing {
         DataFactory.register("emitter",  EmitterData.class, EmitterDataLoader.class, Emitter.class);
         
         // Entity
-        DataFactory.register("entityAdvanceWater", EntityData.class, EntityDataLoader.class, AdvanceWaterEntity.class);
         DataFactory.register("entityAmbientLight", EntityData.class, EntityDataLoader.class, AmbientLightEntity.class);
+        DataFactory.register("entityDirectionalLight", EntityData.class, EntityDataLoader.class, DirectionalLightEntity.class);
+        DataFactory.register("entityPointLight", EntityData.class, EntityDataLoader.class, PointLightEntity.class);
+        DataFactory.register("entitySpotLight", EntityData.class, EntityDataLoader.class, SpotLightEntity.class);
+        
+        DataFactory.register("entityAdvanceWater", EntityData.class, EntityDataLoader.class, AdvanceWaterEntity.class);
         DataFactory.register("entityAudio", EntityData.class, AudioEntityDataLoader.class, AudioEntity.class);
         DataFactory.register("entityBatch", EntityData.class, EntityDataLoader.class, BatchEntity.class);
         DataFactory.register("entityChaseCamera", EntityData.class, EntityDataLoader.class, ChaseCameraEntity.class);
-        DataFactory.register("entityDirectionalLight", EntityData.class, EntityDataLoader.class, DirectionalLightEntity.class);
         DataFactory.register("entityDirectionalLightFilterShadow", EntityData.class, EntityDataLoader.class, DirectionalLightFilterShadowEntity.class);
         DataFactory.register("entityDirectionalLightShadow", EntityData.class, EntityDataLoader.class, DirectionalLightShadowEntity.class);
         DataFactory.register("entityGrass", EntityData.class, PlantEnvLoader.class, GrassEntity.class);
