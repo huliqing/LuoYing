@@ -49,15 +49,13 @@ public class Quit {
             alert.setHeaderText(Manager.getRes(ResConstants.COMMON_QUICK));
             alert.setContentText(Manager.getRes(ResConstants.COMMON_QUICK_CONFIRM));
             Optional<ButtonType> result = alert.showAndWait();
-            if (!result.isPresent()) {
-                return; // 不按下任何按键,则不退出
-            }
-            // 按下OK或Cancel都需要退出
             ButtonType bt = result.get();
-            if (bt == ButtonType.YES || bt == ButtonType.APPLY || bt == ButtonType.OK) {
-                editor.saveAll();
+            if (bt == ButtonType.CANCEL) {
+                return;
             }
-            Jfx.runOnSwing(() -> {Jfx.getMainFrame().dispose();});
+            if (bt == ButtonType.OK) {
+                Jfx.runOnSwing(() -> {Jfx.getMainFrame().dispose();});
+            }
         });
     }
 }

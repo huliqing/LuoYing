@@ -101,12 +101,12 @@ public class EntityBrushToolbar extends EditToolbar<SimpleJmeEdit> {
         paintToolParams = new ParamsTool("", "", null);
         paintToolParams.addChild(minHeight);
         paintToolParams.addChild(useNormal);
-        paintToolParams.addChild(instancedTool);
         paintToolParams.addChild(locationOffset);
         paintToolParams.addChild(scaleMinAdjust);
         paintToolParams.addChild(scaleMaxAdjust);
         paintToolParams.addChild(rotationMinAdjust);
         paintToolParams.addChild(rotationMaxAdjust);
+        paintToolParams.addChild(instancedTool);
         
         eraseTool = new EraseTool(Manager.getRes(ResConstants.TOOL_ENTITY_BRUSH_ERASE)
                 , Manager.getRes(ResConstants.TOOL_ENTITY_BRUSH_ERASE_TIP)

@@ -46,11 +46,13 @@ public class ResourceZone extends VBox{
         componentsPanel.setContent(cv);
         componentsPanel.setText(Manager.getRes(ResConstants.FORM_COMPONENTS_TITLE));
         
-        testPanel.setContent(new TestForm());
-        testPanel.setText("Test");
-        testPanel.setExpanded(false);
+//        testPanel.setContent(new TestForm());
+//        testPanel.setText("Test");
+//        testPanel.setExpanded(false);
         
-        getChildren().addAll(assetsPanel, componentsPanel, testPanel);
+        getChildren().add(assetsPanel);
+        getChildren().add(componentsPanel);
+//        getChildren().add(testPanel);
         getStyleClass().add(StyleConstants.CLASS_HVBOX);
         setPadding(Insets.EMPTY);
     }
