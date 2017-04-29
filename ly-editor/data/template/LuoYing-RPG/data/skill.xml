@@ -185,4 +185,5 @@
     <skillSummon id="skillSummon" extends="skillSummonBase" />
     <!--野兽召唤术的基本设置-->
     <skillSummon id="skillSummonCreature" extends="skillSummonCreatureBase" />
+    
 </root>

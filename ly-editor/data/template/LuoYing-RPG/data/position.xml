@@ -14,7 +14,7 @@
     <positionRandomSphere id="positionCommonSp0_7" center="0,0,0" radius="0.7" />
     <positionRandomSphere id="positionCommonSp1_0" center="0,0,0" radius="1" />
 
-    <!--默认的射击点1-->
+    <!--默认的射击点-->
     <positionFixedPoint id="positionDefShotUp" point="0,2,7" />
     <positionFixedPoint id="positionDefShotLeft" point="2,1,7" />
     <positionFixedPoint id="positionDefShotRight" point="-2,1,7" />

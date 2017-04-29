@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!--定义角色的可掉落物-->
-
 <root
     xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
     xmlns='http://luoying.huliqing.name'
     xsi:schemaLocation='http://luoying.huliqing.name meta/progress.xsd'>
    
+    <!--简单的进度条指示器-->
+    <progressSimple id="progressSimple" />
+    
 </root>
 
 

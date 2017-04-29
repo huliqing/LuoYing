@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-skillType => see SkillType.java
-weaponLimit => separate by "," (see WeaponType.java).
-loop => 0:dontLoop; 1:loop;
--->
 
 
 <root

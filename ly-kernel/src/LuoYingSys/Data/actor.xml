@@ -9,9 +9,6 @@
     <!--角色配置-->
     <!--==========================================================================-->
     
-    <actor id="sysActorBase" file="LuoYingSys/Assets/Models/unitBoundaryBox.j3o" cullHint="Inherit" 
-           queueBucket="Opaque" shadowMode="Cast" />
-
-    <actor id="sysActor" extends="sysActorBase" />
+    <actor id="sysActor" file="LuoYingSys/Assets/Models/unitBoundaryBox.j3o" cullHint="Dynamic" queueBucket="Opaque" shadowMode="Cast" />
 
 </root>

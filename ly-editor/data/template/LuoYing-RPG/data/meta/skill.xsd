@@ -101,27 +101,22 @@ xs:time
                             <xs:documentation>跳跃作用力的执行时间,单位秒。一般这个时间设置在起跳动画(animStart)执行完之后</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-<!--                    <xs:attribute name="jumpDir" type="xs:stirng" use="optional" >
+                    <xs:attribute name="jumpForce" type="xs:string" use="optional" >
                         <xs:annotation>
-                            <xs:documentation>跳跃的方向, 默认(0,1,0), 这个值会自动归一化.</xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>-->
-                    <xs:attribute name="jumpForce" type="xs:decimal" use="optional" >
-                        <xs:annotation>
-                            <xs:documentation>跳跃的力，格式："x,y,z", 通常来说，如果物体的质量越大，跳跃时需要设置较大的力。</xs:documentation>
+                            <xs:documentation>跳跃的力，格式："x,y,z", 默认值："0,100,0". 通常来说，如果物体的质量越大，跳跃时需要设置较大的力。</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
                     <xs:attribute name="walkForceIntensity" type="xs:decimal" use="optional" >
                         <xs:annotation>
                             <xs:documentation>
                                 如果角色是在向前走动的时候进行跳跃，那么跳跃的时候会有一个向前的冲力，这个参数用于控制这个冲力的大小，
-                                例如，如果不想让角色跳得太远，则要减少这个值，否则增加这个值。默认: 0.5f;
+                                例如，如果不想让角色跳得太远，则要减少这个值，否则增加这个值。默认: 0.3f;
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
                     <xs:attribute name="bindJumpIntensityAttribute" type="xs:string" use="optional" >
                         <xs:annotation>
-                            <xs:documentation>绑定一个实体属性，这个属性的值决定了跳跃强度的倍率, 1为原始大小。</xs:documentation>
+                            <xs:documentation>绑定一个NumberAttribute实体属性，这个属性的值决定了跳跃强度的倍率, 1.0为原始大小。</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
                     <xs:attribute name="timeout" type="xs:decimal" use="optional" >
@@ -790,6 +785,16 @@ xs:time
                         <xs:documentation>技能的model动画名称，角色必须有该动画，否则报错。</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
+                <xs:attribute name="useTime" type="xs:decimal" use="required" >
+                    <xs:annotation>
+                        <xs:documentation>技能的执行时间，单位秒</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="loop" type="bool" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>让技能循环执行</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
                 <xs:attribute name="channels" type="xs:string" use="optional" >
                     <xs:annotation>
                         <xs:documentation>
@@ -817,94 +822,6 @@ xs:time
                 <xs:attribute name="channelLocks" type="xs:string" use="optional" >
                     <xs:annotation>
                         <xs:documentation>指定要锁定那些特定的动画通道, 如果指定了不存在的通道则该通道会被忽略。格式："channel1,channel2,..."</xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="bindCutTimeEndAttribute" type="xs:string" use="optional" >
-                    <xs:annotation>
-                        <xs:documentation>
-                            FloatAttribute, 绑定角色的属性,取值范围为[0.0~1.0]，超出范围将会被截取。
-                            这个属性的值将用于剪裁当前技能的结尾处的时间，0.1表示剪裁掉结束处10%的时间，0.5表示剪裁50%时间，
-                            依次类推。剪裁时间与直接设置技能的时间存在不同的地方，剪裁时间不影响技能动画的执行速度。
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="cutTimeStartMax" type="xs:decimal" use="optional">
-                    <xs:annotation>
-                        <xs:documentation>
-                            时间、动画最高剪裁比率"开始",取值必须在[0.0~1.0)之间，
-                            注：cutTimeStartMax和cutTimeEndMax的值之和也必须在 [0.0~1.0)之间
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="cutTimeEndMax" type="xs:decimal" use="optional">
-                    <xs:annotation>
-                        <xs:documentation>
-                            时间、动画最高剪裁比率"结束",取值必须在[0.0~1.0)之间，这个值是从后往前算起的
-                            注：cutTimeStartMax和cutTimeEndMax的值之和也必须在 [0.0~1.0)之间
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-    
-    <xs:complexType name="skillBase">
-        <xs:complexContent>
-            <xs:extension base="base">
-                <xs:attribute name="icon" type="xs:string" use="required" >
-                    <xs:annotation>
-                        <xs:documentation>定一个图标(64x64), 如：Interface/icon/gold.png.
-                            图标一般用于在物品栏中显示,如果没有图标，则显示为"MISS"
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="useTime" type="xs:decimal" use="required" >
-                    <xs:annotation>
-                        <xs:documentation>技能的执行时间，单位秒</xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="types" type="xs:string" use="required" >
-                    <xs:annotation>
-                        <xs:documentation>技能类型,格式: "skillType1,skillType2,...", 如："walk,run,idle,fight,buff,..."</xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="overlapTypes" type="xs:string" use="optional" >
-                    <xs:annotation>
-                        <xs:documentation>设置当前技能可以覆盖哪些技能进行执行,格式 : "skillType1,skillType2,...",
-                            overlapTypes的优先级最高，当一个技能可以覆盖目标技能执行的时候，当前技能将直接执行，不会中断目标技能，忽略技能优先级(prior)设置。</xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="interruptTypes" type="xs:string" use="optional" >
-                    <xs:annotation>
-                        <xs:documentation>设置当前技能可以强制中断的其它技能,格式 : "skillType1,skillType2,...", 当设置这个参数后，逻辑是这样的：
-                        如果当前技能不能覆盖另一个技能进行执行，则强制中断目标技能后执行,忽略优先级(prior)的设置。</xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="prior" type="xs:integer" use="required" >
-                    <xs:annotation>
-                        <xs:documentation>
-                            技能的优先级,默认值0. 值越高优先级越高，默认情况下优先级高的技能执行时会打断优先级低的技能。
-                            对于一些特殊情况，可以通过参数overlapTypes，interruptTypes来进行例外配置。
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="cooldown" type="xs:decimal" use="optional" >
-                    <xs:annotation>
-                        <xs:documentation>技能的冷却时间单位秒,默认0</xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="weaponStateLimit" type="xs:string" use="required">
-                    <xs:annotation>
-                        <xs:documentation>
-                            武器类型限制，如果想要限制只有装备特定武器之后才可以使用这个技能则可以设置这个参数。
-                            格式："weaponType1|weaponType2|..., weaponTypeX,...", WeaponType参数define.xml中的定义。
-                            示例："leftSword|rightSword,rightSword", 这表示只有使用"二刀流"或"右手剑"时才可以使用这个技能。
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="loop" type="bool" use="optional">
-                    <xs:annotation>
-                        <xs:documentation>让技能循环执行</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
                 <xs:attribute name="sounds" type="xs:string" use="required" >
@@ -953,6 +870,85 @@ xs:time
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
+                <xs:attribute name="cutTimeStartMax" type="xs:decimal" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            时间、动画最高剪裁比率"开始",取值必须在[0.0~1.0)之间，
+                            注：cutTimeStartMax和cutTimeEndMax的值之和也必须在 [0.0~1.0)之间
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="cutTimeEndMax" type="xs:decimal" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            时间、动画最高剪裁比率"结束",取值必须在[0.0~1.0)之间，这个值是从后往前算起的
+                            注：cutTimeStartMax和cutTimeEndMax的值之和也必须在 [0.0~1.0)之间
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="bindCutTimeEndAttribute" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>
+                            FloatAttribute, 绑定角色的属性,取值范围为[0.0~1.0]，超出范围将会被截取。
+                            这个属性的值将用于剪裁当前技能的结尾处的时间，0.1表示剪裁掉结束处10%的时间，0.5表示剪裁50%时间，
+                            依次类推。剪裁时间与直接设置技能的时间存在不同的地方，剪裁时间不影响技能动画的执行速度。
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="skillBase">
+        <xs:complexContent>
+            <xs:extension base="base">
+                <xs:attribute name="icon" type="xs:string" use="required" >
+                    <xs:annotation>
+                        <xs:documentation>定一个图标(64x64), 如：Interface/icon/gold.png.
+                            图标一般用于在物品栏中显示,如果没有图标，则显示为"MISS"
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="types" type="xs:string" use="required" >
+                    <xs:annotation>
+                        <xs:documentation>技能类型,格式: "skillType1,skillType2,...", 如："walk,run,idle,fight,buff,..."</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="overlapTypes" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>设置当前技能可以覆盖哪些技能进行执行,格式 : "skillType1,skillType2,...",
+                            overlapTypes的优先级最高，当一个技能可以覆盖目标技能执行的时候，当前技能将直接执行，不会中断目标技能，忽略技能优先级(prior)设置。</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="interruptTypes" type="xs:string" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>设置当前技能可以强制中断的其它技能,格式 : "skillType1,skillType2,...", 当设置这个参数后，逻辑是这样的：
+                        如果当前技能不能覆盖另一个技能进行执行，则强制中断目标技能后执行,忽略优先级(prior)的设置。</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="prior" type="xs:integer" use="required" >
+                    <xs:annotation>
+                        <xs:documentation>
+                            技能的优先级,默认值0. 值越高优先级越高，默认情况下优先级高的技能执行时会打断优先级低的技能。
+                            对于一些特殊情况，可以通过参数overlapTypes，interruptTypes来进行例外配置。
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="cooldown" type="xs:decimal" use="optional" >
+                    <xs:annotation>
+                        <xs:documentation>技能的冷却时间单位秒,默认0</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="weaponStateLimit" type="xs:string" use="required">
+                    <xs:annotation>
+                        <xs:documentation>
+                            武器类型限制，如果想要限制只有装备特定武器之后才可以使用这个技能则可以设置这个参数。
+                            格式："weaponType1|weaponType2|..., weaponTypeX,...", WeaponType参数define.xml中的定义。
+                            示例："leftSword|rightSword,rightSword", 这表示只有使用"二刀流"或"右手剑"时才可以使用这个技能。
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                
                 <xs:attribute name="checkEl" type="xs:string" use="optional">
                     <xs:annotation>
                         <xs:documentation>绑定或直接填写一个SBooleanEl, 用于检查当前角色是否可以使用这个技能, 示例："#{s.attributeLevel > 7}", 表示只有达到7级时角色才可以使用这个技能</xs:documentation>

@@ -18,16 +18,8 @@
     <!-- ========================================================================= -->
     <!--火塔子弹效果-->
     <!-- ========================================================================= -->
-    <effectParticle id="effectSmokeFire" extends="effectBase" useTime="6"  emitter="emitterSmoketrail" 
-                    traceLocation="always" traceRotation="always" />
+    <effectParticle id="effectSmokeFire" extends="effectBase" useTime="6"  emitter="emitterSmoketrail" />
     
-    <!-- ========================================================================= -->
-    <!--骷髅死亡效果-->
-    <!-- ========================================================================= -->
-    <effectGroup id="effectSkeletonDead" extends="effectBase" useTime="10" traceLocation="once" traceRotation="no"  traceLocationType="origin_bound_center" 
-                 effects="effectSkeletonExplosion,effectSkeletonSmoke" sounds="soundSkeletonDead" />
-    <effectParticle id="effectSkeletonExplosion" extends="effectBase" useTime="3" emitter="emitterSkeletonExplosion" emitAll="1" blendMode="Alpha" />
-    <effectParticle id="effectSkeletonSmoke" extends="effectBase" useTime="3" emitter="emitterSkeletonSmoke" emitAll="1" />
 </root>
 
 

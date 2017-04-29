@@ -6,13 +6,24 @@
     xsi:schemaLocation='http://luoying.huliqing.name meta/shape.xsd'>
     
     <!-- =================================================================== -->
+    <!--网格物体-->
+    <!-- =================================================================== -->
+    
+    <!--单位立方体Box-->
+    <shapeBox id="shapeBox" extents="0.5,0.5,0.5" />
+    
+    <!--单位圆-->
+    <shapeSphere id="shapeSphere" radius="1" zSamples="8" radialSamples="8" />
+    
+    <!--自定义网格: 需要指定一个资源文件(j3o)模型-->
+    <shapeCustom id="shapeCustom" file="" />
+    
+    <!-- =================================================================== -->
     <!--子弹专用Shape-->
     <!-- =================================================================== -->
 
     <shapeBox id="shapeBulletBoxMin" extents="0.5,0.5,0.5" /> 
-    
     <shapeBox id="shapeBulletBox" extents="1,1,2" />
-   
     <shapeBox id="shapeBulletBoxMax" extents="1.5,1.5,3" />
     
 </root>

@@ -6,9 +6,124 @@
     xsi:schemaLocation='http://luoying.huliqing.name meta/entity.xsd'>
     
     <!-- ========================================================================= -->
-    <!-- 实体配置 -->
+    <!-- 内置物体: 光源 -->
     <!-- ========================================================================= -->
     
+    <!--直射光-->
+    <entityDirectionalLight id="entityDirectionalLight" direction="-1,-1,-1" color="0.8,0.8,0.8,0.8"  />
+    <!--环境光-->
+    <entityAmbientLight id="entityAmbientLight" color="0.7,0.7,0.7,0.7"  />
+    <!--点光源-->
+    <entityPointLight id="entityPointLight" color="1,1,1,1" radius="20" location="0,0,0"  />
+    <!--聚光源-->
+    <entitySpotLight id="entitySpotLight" color="1,1,1,1" direction="-1,-1,-1" location="0,0,0" spotInnerAngle="0.0981" spotOuterAngle="0.1308" spotRange="100" />
+
+    <!-- ========================================================================= -->
+    <!-- 内置物体: 过滤器 -->
+    <!-- ========================================================================= -->
+    
+    <!--Bloom高光-->
+    <entityBloomFilter id="entityBloomFilter" bloomIntensity="2.0" blurScale="1.5" downSamplingFactor="1" exposureCutOff="0" exposurePower="5.0" />
+
+    <!--快速近似抗锯齿(Fast Approximate Anti-Aliasing)-->
+    <entityFXAAFilter id="entityFXAAFilter" reduceMul="0.125" spanMax="8" subPixelShift="0.25" vxOffset="0" />
+
+    <!--雾化-->
+    <entityFogFilter id="entityFogFilter" fogColor="1,1,1,1" fogDensity="0.7" fogDistance="1000" />
+    
+    <!--光散射-->
+    <entityLightScatteringFilter id="entityLightScatteringFilter" blurStart="0.02" blurWidth="0.9" lightDensity="1.4" lightPosition="0,0,0" nbSamples="50" />
+    
+    <!--屏幕空间环境光遮蔽（Screen-Space Ambient Occlusion）-->
+    <entitySSAOFilter id="entitySSAOFilter" bias="0.1" intensity="1.5" sampleRadius="5.1" ssaoScale="0.2" />
+    
+    <!--阴影-->
+    <entityDirectionalLightShadowFilter id="entityShadow" shadowMapSize="1024" shadowMaps="1" 
+                                        edgeFilteringMode="PCF4" edgesThickness="1" enabledStabilization="1" lambda="0.65" 
+                                        renderBackFacesShadows="1" shadowCompareMode="Hardware" 
+                                        shadowIntensity="0.5" shadowZExtend="1000" shadowZFadeLength="1000" />
+
+    <!-- ========================================================================= -->
+    <!-- 内置物体: 水体 -->
+    <!-- ========================================================================= -->
+    
+    <!--普通水体，可适用移动平台-->
+    <entitySimpleWater id="entitySimpleWater" cullHint="Dynamic" waterModel="LuoYingSys/Assets/MatDefs/SimpleWater/water.mesh.j3o" scale="300,1,300" 
+        location="0,-2.5,0" rotation="0,0,0" waterColor="0.6, 0.8, 0.9, 1" texScale="10" waveSpeed="0.003" 
+        distortionMix="0.5" distortionScale="0.4"
+        foamMap="LuoYingSys/Assets/MatDefs/SimpleWater/foam.jpg" foamScale="1,1" 
+        foamMaskMap="LuoYingSys/Assets/MatDefs/SimpleWater/foamMask.jpg" foamMaskScale="1.8, 1.8" 
+    />
+    
+    <!--高级水体, 海水环境，不支持移动设备-->
+    <entityAdvanceWater id="entityAdvanceWater" waterColor="0.6, 0.8, 0.9, 1" 
+                        deepWaterColor="0.6, 0.8, 0.9, 1" underWaterFogDistance="80" waterTransparency="0.1" 
+                     foamExistence="0.8,8,1" foamHardness="0.3" foamIntensity="0.4"
+                     reflectionDisplace="50" reflectionMapSize="512" refractionConstant="0.25" refractionStrength="0.2" 
+                     colorExtinction="30, 50, 70" causticsIntensity="0.4" waveScale="0.003" maxAmplitude="2"
+                     waterHeight="0" sunScale="3.0" radius="0" 
+                     lightColor="1,1,1,1" lightDirection="0, -1, 0" normalScale="3.0" shapeType="Circular" shininess="0.7"
+                     shoreHardness="0.1" speed="1.0" useCaustics="1" useFoam="1" useHQShoreline="1" useRefraction="1"
+                    useRipples="1" useSpecular="1" windDirection="0.0, -1.0" 
+                    causticsTexture="Common/MatDefs/Water/Textures/caustics.jpg"
+                    foamTexture="Common/MatDefs/Water/Textures/foam2.jpg"
+                    heightTexture="Common/MatDefs/Water/Textures/heightmap.jpg"
+                    normalTexture="Common/MatDefs/Water/Textures/water_normalmap.dds" />
+    
+    <!-- ========================================================================= -->
+    <!-- 内置物体: 场景优化 -->
+    <!-- ========================================================================= -->
+        
+    <!--Instanced节点实体-->
+    <entityInstanced id="entityInstanced" cullHint="Dynamic" queueBucket="Opaque" shadowMode="Cast"/>
+    
+    <!--BatchNode节点实体-->
+    <entityBatch id="entityBatch" cullHint="Dynamic" queueBucket="Opaque" shadowMode="Cast" />
+    
+    <!-- ========================================================================= -->
+    <!-- 内置物体: 模型及其它 -->
+    <!-- ========================================================================= -->
+    
+    <!--模型：单位立方体-->
+    <entitySimpleModel id="entityModel" cullHint="Dynamic" queueBucket="Opaque" shadowMode="Cast" 
+                       file="LuoYingSys/Assets/Models/unitBox.j3o" scale="1,1,1" />
+    
+    <!--天空盒-->
+    <entitySkyBox id="entitySky" cullHint="Never"
+                 west="LuoYingSys/Assets/Textures/Sky/west.jpg" east="LuoYingSys/Assets/Textures/Sky/east.jpg" 
+                  north="LuoYingSys/Assets/Textures/Sky/north.jpg" south="LuoYingSys/Assets/Textures/Sky/south.jpg" 
+                  up="LuoYingSys/Assets/Textures/Sky/up.jpg" down="LuoYingSys/Assets/Textures/Sky/down.jpg" />
+        
+    <!--地形-->
+    <entitySimpleTerrain id="entityTerrain" shadowMode="Receive" cullHint="Dynamic" queueBucket="Opaque"
+                         file="LuoYingSys/Assets/Models/unitBox.j3o" scale="1,1,1" />
+    
+    <!--树模型-->
+    <entityTree id="entityTree" shadowMode="Cast" cullHint="Dynamic" queueBucket="Opaque" 
+                file="LuoYingSys/Assets/Models/Plants/palm-11225.j3o" />
+    
+    <!--花草植被-->
+    <entityGrass id="entityGrass" shadowMode="Off" cullHint="Dynamic" queueBucket="Opaque" 
+                 file="LuoYingSys/Assets/Models/Plants/flower-428.j3o" />
+    
+    <!--物理环境-->
+    <entityPhysics id="entityPhysics" gravity="0,-9.81,0" threadingType="SEQUENTIAL" broadphaseType="DBVT" 
+                   speed="1.0" worldMin="-10000, -10000, -10000" worldMax="10000, 10000, 10000" accuracy="0.0166" 
+                   maxSubSteps="4" solverNumIterations="10" />
+
+    <!--物理跟随相机-->
+    <entityChaseCamera id="entityChaseCamera" invertVerticalAxis="1" lookAtOffset="0,2,0" zoomSensitivity="0.5" 
+                    rotationSpeed="5" rotationSensitivity="5" maxDistance="15" minDistance="2" defaultDistance="15" 
+                    chasingSensitivity="5" downRotateOnCloseViewOnly="1" upVector="0,1,0" hideCursorOnRotate="0" />
+    
+    <!--声音 -->
+    <entityAudio id="entityAudio" />
+    
+    <!--包围盒-->
+    <entitySimpleModel id="entityBoundary" file="LuoYingSys/Assets/Models/unitBoundaryBox.j3o" scale="100,20,100" cullHint="Always" />
+    
+    <!--特效: 默认的空效果实体，无任何特效，需要在程序中运行时设置效果-->
+    <entityEffect id="entityEffect" effect="" traceEntity="" traceBone="" />
     
 </root>
 

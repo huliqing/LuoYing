@@ -6,7 +6,7 @@
     xsi:schemaLocation='http://luoying.huliqing.name meta/anim.xsd' >
     
     <!--==========================================================================-->
-    <!-- 通用Animation -->
+    <!-- 动画配置 -->
     <!--==========================================================================-->
     <animMove id="animMove"  useTime="1" startPos="0,0,0" endPos="5,5,5" facing="0" />
     <animRotation id="animRotation" loop="loop" axis="0,1,0" degree="360" />

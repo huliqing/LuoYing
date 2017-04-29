@@ -19,14 +19,19 @@ xs:time
     <xs:element name="root">
         <xs:complexType>
             <xs:all>
-                <xs:element ref="entityAdvanceWater" />
                 <xs:element ref="entityAmbientLight" />
-                <xs:element ref="entityAudio" />
-                <xs:element ref="entityChaseCamera" />
                 <xs:element ref="entityDirectionalLight" />
-                <xs:element ref="entityDirectionalLightFilterShadow" />
+                <xs:element ref="entityPointLight" />
+                <xs:element ref="entitySpotLight" />
+
+                <xs:element ref="entityAdvanceWater" />
+                <xs:element ref="entityAudio" />
+                <xs:element ref="entityBatch" />
+                <xs:element ref="entityChaseCamera" />
+                <xs:element ref="entityDirectionalLightShadowFilter" />
                 <xs:element ref="entityDirectionalLightShadow" />
                 <xs:element ref="entityGrass" />
+                <xs:element ref="entityInstanced" />
                 <xs:element ref="entityPhysics" />
                 <xs:element ref="entityPlatformProxy" />
                 <xs:element ref="entitySimpleModel" />
@@ -43,6 +48,104 @@ xs:time
                 <xs:element ref="entityLightScatteringFilter" />
                 <xs:element ref="entitySSAOFilter" />
             </xs:all>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="entityAmbientLight">
+        <xs:annotation>
+            <xs:documentation>环境光源</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="entityBase">
+                    <xs:attribute name="color" type="xs:string" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>环境光颜色,格式："r,g,b,a", 默认: "1,1,1,1"</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="entityDirectionalLight">
+        <xs:annotation>
+            <xs:documentation>直射光源</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="entityBase">
+                    <xs:attribute name="direction" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>直射光方向,默认: "0,-1,0"</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="color" type="xs:string" use="optional" >
+                        <xs:annotation>
+                            <xs:documentation>直射光颜色,格式："r,g,b,a", 默认: "1,1,1,1"</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="entityPointLight">
+        <xs:annotation>
+            <xs:documentation>直射光源</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="entityBase">
+                    <xs:attribute name="color" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>光颜色,格式："r,g,b,a", 默认: "1,1,1,1"</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="radius" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>半径,默认</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="entitySpotLight">
+        <xs:annotation>
+            <xs:documentation>直射光源</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="entityBase">
+                    <xs:attribute name="color" type="xs:string" use="required" >
+                        <xs:annotation>
+                            <xs:documentation>光颜色,格式："r,g,b,a", 默认: "1,1,1,1"</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="direction" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>光方向,默认: "0,-1,0"</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="spotInnerAngle" type="xs:decimal" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>设置内半径的影响范围</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="spotOuterAngle" type="xs:decimal" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>设置外半径的影响范围</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="spotRange" type="xs:decimal" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>设置光的影响范围</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
         </xs:complexType>
     </xs:element>
     
@@ -378,7 +481,7 @@ xs:time
         </xs:complexType>
     </xs:element>
     
-    <xs:element name="entityDirectionalLightFilterShadow">
+    <xs:element name="entityDirectionalLightShadowFilter">
         <xs:annotation>
             <xs:documentation>阴影环境(DirectionalLightShadowFilter),可以使场景中的物体产生阴影效果，注意：要获得阴影效果必须同时满足以下几个条件：
                 1.场景根节点必须有DirectionalLight; 2: 场景中物体的shadowMode必须有Cast和CastAndReceive
@@ -516,45 +619,6 @@ xs:time
         </xs:complexType>
     </xs:element>
     
-    <xs:element name="entityAmbientLight">
-        <xs:annotation>
-            <xs:documentation>环境光源</xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="entityBase">
-                    <xs:attribute name="color" type="xs:string" use="optional" >
-                        <xs:annotation>
-                            <xs:documentation>环境光颜色,格式："r,g,b,a", 默认: "1,1,1,1"</xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
-                </xs:extension>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:element name="entityDirectionalLight">
-        <xs:annotation>
-            <xs:documentation>直射光源</xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="entityBase">
-                    <xs:attribute name="direction" type="xs:string" use="optional">
-                        <xs:annotation>
-                            <xs:documentation>直射光方向,默认: "0,-1,0"</xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
-                    <xs:attribute name="color" type="xs:string" use="optional" >
-                        <xs:annotation>
-                            <xs:documentation>直射光颜色,格式："r,g,b,a", 默认: "1,1,1,1"</xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
-                </xs:extension>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
-    
     <xs:element name="entityAudio">
         <xs:annotation>
             <xs:documentation>环境声音</xs:documentation>
@@ -566,6 +630,18 @@ xs:time
                     <xs:attribute name="sound" type="xs:string" use="required">
                         <xs:annotation><xs:documentation>关联到一个sound(sound.xml).</xs:documentation></xs:annotation>
                     </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="entityBatch">
+        <xs:annotation>
+            <xs:documentation>BatchEntity</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="entityBase">
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
@@ -801,10 +877,25 @@ xs:time
     </xs:element>
     
     <xs:element name="entitySimpleModel">
+        <xs:annotation>
+            <xs:documentation>普通模型</xs:documentation>
+        </xs:annotation>
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="entityModelBase">
                     <xs:attribute ref="file" />
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="entityInstanced">
+        <xs:annotation>
+            <xs:documentation>Instanced实体</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="entityModelBase">
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>

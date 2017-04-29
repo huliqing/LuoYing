@@ -10,7 +10,7 @@
     <!-- ========================================================================= -->
     
     <!--系统默认骨架的动画通道配置，适应于使用系统默认骨架的角色 -->
-    <channel id="channelRoot" bones="root" />
+<!--    <channel id="channelRoot" bones="root" />
     <channel id="channelHips" bones="hips" />
     <channel id="channelWaist" bones="spine,spine-1,chest,chest-1" />
     <channel id="channelHead" bones="neck,head" />
@@ -21,6 +21,6 @@
     <channel id="channelLeftArm" bones="shoulder.L,shoulder-1.L,upper_arm.L,forearm.L" />
     <channel id="channelRightArm" bones="shoulder.R,shoulder-1.R,upper_arm.R,forearm.R" />
     <channel id="channelLeftHand" fromRootBones="hand.L" />
-    <channel id="channelRightHand" fromRootBones="hand.R" />
+    <channel id="channelRightHand" fromRootBones="hand.R" />-->
     
 </root>

@@ -25,11 +25,11 @@ import com.jme3.scene.Spatial;
 import name.huliqing.luoying.data.PhysicsShapeData;
 
 /**
- *
+ * 使用球形网格来创建碰撞网格。
  * @author huliqing
  */
 public class SpherePhysicsShape extends AbstractPhysicsShape {
-
+    
     private float radius = 1.0f;
 
     @Override

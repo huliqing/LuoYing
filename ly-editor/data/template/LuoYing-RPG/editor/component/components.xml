@@ -6,35 +6,35 @@
     xsi:schemaLocation='http://editor.huliqing.name meta.xsd'>
     
     <!--Entity-->
-    <component id="sysEntityAmbientLight" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
-    <component id="sysEntityDirectionalLight" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
-    <component id="sysEntityPointLight" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
-    <component id="sysEntitySpotLight" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="entityAmbientLight" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="entityDirectionalLight" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="entityPointLight" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="entitySpotLight" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
 
-    <component id="sysEntitySky" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
-    <component id="sysEntityTerrain" type="entity" icon="" converterClass="name.huliqing.editor.component.TerrainEntityComponentConverter" />
-    <component id="sysEntityModel" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
-    <component id="sysEntityTree" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
-    <component id="sysEntityGrass" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
-    <component id="sysEntitySimpleWater" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
-    <component id="sysEntityAdvanceWater" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
-    <component id="sysEntityBoundary" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
-    <component id="sysEntityChaseCamera" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
-    <component id="sysEntityPhysics" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
-    <component id="sysEntityShadow" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
-    <component id="sysEntityAudio" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
-    <component id="sysEntityEffect" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
-    <component id="sysEntityInstanced" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
-    <component id="sysActor" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="entitySky" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="entityTerrain" type="entity" icon="" converterClass="name.huliqing.editor.component.TerrainEntityComponentConverter" />
+    <component id="entityModel" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="entityTree" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="entityGrass" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="entitySimpleWater" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="entityAdvanceWater" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="entityBoundary" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="entityChaseCamera" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="entityPhysics" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="entityShadow" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="entityAudio" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="entityEffect" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="entityInstanced" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="actor" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
     
-    <component id="sysEntityBloomFilter" type="entityFilter" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
-    <component id="sysEntityFXAAFilter" type="entityFilter" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
-    <component id="sysEntityFogFilter" type="entityFilter" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
-    <component id="sysEntityLightScatteringFilter" type="entityFilter" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
-    <component id="sysEntitySSAOFilter" type="entityFilter" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="entityBloomFilter" type="entityFilter" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="entityFXAAFilter" type="entityFilter" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="entityFogFilter" type="entityFilter" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="entityLightScatteringFilter" type="entityFilter" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="entitySSAOFilter" type="entityFilter" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
     
     <!--Progress-->
-    <component id="sysProgressSimple" type="progress" />
+    <component id="progressSimple" type="progress" />
     
     <!--Module-->
     <component id="modulePhysics" type="module" />
@@ -100,7 +100,7 @@
     <component id="attributeLocation" type="attribute" />
     <component id="attributeColor" type="attribute" />
     <component id="attributeMessage" type="attribute" />
-   <component id="attributeGroupBase" type="attribute" />
+    <component id="attributeGroupBase" type="attribute" />
     <component id="attributeDynamicBuildingGroup" type="attribute" />
     <component id="attributeStaticBuildingGroup" type="attribute" />
     <component id="attributeCreatureGroup" type="attribute" />
@@ -140,15 +140,15 @@
     <component id="skillSummonCreature" type="skill" />
     
     <!--shape-->
-    <component id="sysShapeBox" type="shape" />
-    <component id="sysShapeSphere" type="shape" />
-    <component id="sysShapeCustom" type="shape" />
+    <component id="shapeBox" type="shape" />
+    <component id="shapeSphere" type="shape" />
+    <component id="shapeCustom" type="shape" />
 
     <!--physicsShape-->
-    <component id="sysPhysicsShapeBox" type="physicsShape" />
-    <component id="sysPhysicsShapeCapsule" type="physicsShape" />
-    <component id="sysPhysicsShapeDynamicMesh" type="physicsShape" />
-    <component id="sysPhysicsShapeSphere" type="physicsShape" />
-    <component id="sysPhysicsShapeStaticCustomMesh" type="physicsShape" />
-    <component id="sysPhysicsShapeStaticMesh" type="physicsShape" />
+    <component id="physicsShapeBox" type="physicsShape" />
+    <component id="physicsShapeCapsule" type="physicsShape" />
+    <component id="physicsShapeDynamicMesh" type="physicsShape" />
+    <component id="physicsShapeSphere" type="physicsShape" />
+    <component id="physicsShapeStaticCustomMesh" type="physicsShape" />
+    <component id="physicsShapeStaticMesh" type="physicsShape" />
 </root>

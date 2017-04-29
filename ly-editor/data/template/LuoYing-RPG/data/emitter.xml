@@ -48,18 +48,6 @@
              texture="LuoYing/assets/Textures/effect/smoketrail.png" imagesX="1" imagesY="3"
              facingVelocity="1" initialVelocity="0,0,1" velocityVariation="0" gravity="0,0,0"
     />
-    
-    <!--==========================================================================-->
-    <!--骷髅散架，死亡-->
-    <!--==========================================================================-->
-    <emitter id="emitterSkeletonExplosion" numParticles="12" particlesPerSec="0" startColor="1,1,1,1" endColor="1,1,1,0.1" 
-             startSize="0.2" endSize="0.1" highLife="2" lowLife="2" texture="LuoYing/assets/Textures/effect/skeleton.png" imagesX="3" imagesY="3" 
-             initialVelocity="0,6,0" velocityVariation="0.5" randomAngle="1" selectRandomImage="1" gravity="0,10,0"
-        />
-    <emitter id="emitterSkeletonSmoke" numParticles="10" particlesPerSec="0" startColor="1,1,1,0.1" endColor="1,1,1,0" 
-             startSize="1.2" endSize="6" highLife="3" lowLife="3" 
-             texture="LuoYing/assets/Textures/effect/flame.jpg" imagesX="2" imagesY="2" 
-             initialVelocity="0,4,0" velocityVariation="1"  />
  
 </root>
 

@@ -28,7 +28,7 @@ xs:time
                 <xs:element ref="entityAudio" />
                 <xs:element ref="entityBatch" />
                 <xs:element ref="entityChaseCamera" />
-                <xs:element ref="entityDirectionalLightFilterShadow" />
+                <xs:element ref="entityDirectionalLightShadowFilter" />
                 <xs:element ref="entityDirectionalLightShadow" />
                 <xs:element ref="entityGrass" />
                 <xs:element ref="entityInstanced" />
@@ -481,7 +481,7 @@ xs:time
         </xs:complexType>
     </xs:element>
     
-    <xs:element name="entityDirectionalLightFilterShadow">
+    <xs:element name="entityDirectionalLightShadowFilter">
         <xs:annotation>
             <xs:documentation>阴影环境(DirectionalLightShadowFilter),可以使场景中的物体产生阴影效果，注意：要获得阴影效果必须同时满足以下几个条件：
                 1.场景根节点必须有DirectionalLight; 2: 场景中物体的shadowMode必须有Cast和CastAndReceive

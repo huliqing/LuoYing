@@ -13,7 +13,7 @@
     <bulletBase id="bulletBase" shape="shapeBulletBox" shapeOffset="0,0,-1.9" baseSpeed="30" timeout="6" 
                 debug="0" queueBucket="Translucent" />
     
-    <!--    子弹基本配置-->    
+    <!-- 子弹基本配置-->    
     <bulletStraight id="bulletStraightBase" extends="bulletBase" facing="1" />
     
     <!--快速直线型子弹:不跟随-->
@@ -49,26 +49,21 @@
     <!--特殊技能子弹-->
     <!--=====================================================================-->
     
-    <!--闪电箭: 直线型--> 
+<!--    闪电箭: 直线型 
     <bulletStraight id="bulletArrowQuick" extends="bulletQuickBase" effects="effectLightningShotBullet" 
                     hitEffects="effectLightningShotHit" hitSounds="soundBowHit" />
     
-     <!--落樱飞舞：曲线拖尾--> 
+     落樱飞舞：曲线拖尾 
      <bulletCurveTrail id="bulletCurve" extends="bulletTrailBase"  effects="effectDanceSakuraBullet"
                        hitEffects="effectDanceSakuraHit" positions="positionDanceSakuraWaypoint,positionDanceSakuraWaypoint2" />
     
-     <!--电光火石-->
+     电光火石
      <bulletCurve id="bulletFlowLight" extends="bulletStraightBase" trace="1" effects="effectFlowLight" 
                   hitEffects="effectFlowLightHit" positions="positionFlowLight"/>
      
-     <!--寒冰箭：拖尾形子弹三连发-->
+     寒冰箭：拖尾形子弹三连发
      <bulletCurveTrail id="bulletIceTrailUp" extends="bulletTrailBase" effects="effectIceBullet" positions="positionDefShotUp" />
      <bulletCurveTrail id="bulletIceTrailLeft" extends="bulletIceTrailUp" positions="positionDefShotLeft" />
-     <bulletCurveTrail id="bulletIceTrailRight" extends="bulletIceTrailUp" positions="positionDefShotRight"  />
+     <bulletCurveTrail id="bulletIceTrailRight" extends="bulletIceTrailUp" positions="positionDefShotRight"  />-->
 
-    <!--=====================================================================-->
-    <!--二刀流冲击波-->
-    <!--=====================================================================-->
-     <bulletCurve id="bulletWave" extends="bulletStraightBase" effects="effectWave" 
-                  trace="1" hitEffects="effectFlowLightHit" positions="positionShapeWave" />
 </root>

@@ -6,79 +6,8 @@
     xsi:schemaLocation='http://luoying.huliqing.name meta/actor.xsd'>
     
     <!--==========================================================================-->
-    <!--角色基本配置-->
+    <!--角色配置-->
     <!--==========================================================================-->
+    <actor id="actor" file="LuoYingSys/Assets/Models/unitBoundaryBox.j3o" cullHint="Dynamic" queueBucket="Opaque" shadowMode="Cast" />
     
-    <!--所有角色基本配置-->
-    <actor id="actorBase" objectDatas="chatSimple"
-        modules="moduleActor,moduleAction,moduleChannel,moduleChat,moduleItem,moduleLogic
-,moduleSkill,moduleSkin,moduleState,moduleTalent,moduleTask,moduleLevel,moduleDrop,moduleColor,moduleResist"
-    />
-    
-    <!--未分类生物：生物、种族未知、性别未知、可移动、可转向的角色。如：虫子、怪物、野兽、飞禽、未知生物等活动类角色. -->
-    <actor id="actorCreatureBase" extends="actorBase" 
-           attributes="attributeCreatureGroup"
-           logics="logicSearchEnemy,logicDynamicFight,logicPatrol,logicFollow,logicDefend"
-           resists="resistCreatureGroup"
-           />
-    
-    <!-- 静态建筑物角色，如: 炮塔、宝箱、祭坛、房屋等-->
-    <actor id="actorStaticBuildingBase" extends="actorBase" 
-           attributes="attributeStaticBuildingGroup"
-           logics="logicSearchEnemy,logicStaticFight"
-           resists="resistNonLifeGroup"
-           />
-
-    <!--种族配置： 人类女性-->
-    <actor id="actorHumanFemaleBase" extends="actorBase" 
-           attributes="attributeHumanFemale"
-            logics="logicSearchEnemy,logicDynamicFight,logicPatrol,logicFollow,logicDefend"
-            channels="channelRoot,channelHips,channelWaist,channelHead,channelLeftLeg,channelRightLeg
-,channelLeftFoot,channelRightFoot,channelLeftArm,channelRightArm,channelLeftHand,channelRightHand"
-            resists="resistHumanRace"
-            file="Models/actor/ske.mesh.j3o"
-            icon="Interface/face/female1.jpg"
-            skinBase="skinEar000,skinEye000,skinFace000,skinFoot000,skinHair010,skinHand000,skinLowerBody000,skinUpperBody000"
-            skins="skinLowerBody002|1,weaponSword000"
-            skinOutfit="skinFoot003,skinHand003,skinLowerBody003,skinUpperBody003"
-            skinWeapon="weaponSword000"
-            skills="skillWait,skillWalk,skillRun,skillReset,skillDead,skillHurtFront,skillHurtBack
-,skillDefend1,skillDefend2
-,skillDuckLeft,skillDuckRight,skillDuckBack,skillDuckLeftRoll,skillDuckRightRoll
-,skillAttack,skillAttack2,skillAttack3
-,skillBowShot
-,skillDualSwordAttack"
-            scale="0.2,0.2,0.2" mat="derma"
-           />
-    
-    <!--==========================================================================-->
-    <!-- 角色配置 -->
-    <!--==========================================================================-->
-    
-    <!-- 丛林蜘蛛 -->
-    <actor id="actorSpider" extends="actorCreatureBase" icon="Interface/face/spider.jpg"
-           file="Models/monster/spider/spider.j3o" scale="0.5,0.5,0.5"
-           drops="dropSpider"
-           skills="skillSpiderWait,skillSpiderHurt,skillSpiderDead,skillSpiderReset,skillSpiderWalk,skillSpiderRun,skillSpiderAttack,skillSpiderWeb" mat="derma"
-           skinWeapon="weaponMockAnimalClaw"
-           collisionRadius="0.6" />
-    
-    <!--Raptor-->
-    <actor id="actorRaptor" extends="actorCreatureBase" file="Models/monster/raptor/raptor.mesh.j3o" 
-           items="itemTonicRed|10,itemTonicBlue|10" icon="Interface/face/dinosaur_raptor.jpg"
-           talents="talentRaptorMoveSpeed"
-           scale="0.75,0.75,0.75"
-           skills="skillRaptorWait,skillRaptorWalk,skillRaptorRun,skillRaptorHurt1,skillRaptorHurt2,skillRaptorDead,skillRaptorAttack,skillRaptorIdle" 
-           mat="derma" drops="dropRaptor" collisionShape="capsule" 
-           collisionRadius="1.4" collisionHeight="4.2" />
-           
-    <!--Skeleton-->
-    <actor id="actorSkeleton" extends="actorCreatureBase" file="Models/monster/skeleton/skeleton.mesh.j3o" 
-           items="" icon="Interface/face/skeleton.jpg" 
-           talents="" mat="calcium" resists="resistUndeadRace" drops="" 
-           skinWeapon="weaponSword000" 
-           scale="0.2,0.2,0.2"
-           skills="skillSkeletonWait,skillSkeletonAttack,skillSkeletonDead,skillSkeletonRun
-,skillWalk,skillRun,skillReset,skillHurtFront,skillHurtBack,skillBowShot,skillDualSwordAttack," />
-
 </root>

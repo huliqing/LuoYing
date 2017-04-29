@@ -6,10 +6,9 @@
     xsi:schemaLocation='http://luoying.huliqing.name meta/game.xsd'>
     
     <!-- ========================================================================= -->
-    <!-- SimpleGame -->
+    <!-- 游戏配置 -->
     <!-- ========================================================================= -->
     
-    <gameSimple id="gameRpgBase" availableActors="actorSpider" gameLogics="gameLogicActorClean,gameLogicHealthRecover,gameLogicManaRecover" />
 
 </root>
 

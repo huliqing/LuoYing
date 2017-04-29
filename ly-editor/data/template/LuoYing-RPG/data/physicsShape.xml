@@ -10,22 +10,22 @@
     <!--==========================================================================-->
 
     <!--使用物体的包围盒来创建碰撞网格-->
-    <physicsShapeBox id="sysPhysicsShapeBox" extents="1.0,1.0,1.0" />
+    <physicsShapeBox id="physicsShapeBox" extents="1.0,1.0,1.0" />
     
     <!--胶囊型的碰撞网格，适合可直立行走、移动的角色物体-->
-    <physicsShapeCapsule id="sysPhysicsShapeCapsule" radius="2" height="6" axis="1" />
+    <physicsShapeCapsule id="physicsShapeCapsule" radius="2" height="6" axis="1" />
     
     <!--创建动态碰撞网格(hull collision shape), 适合可移动的角色或物体等-->
-    <physicsShapeDynamicMesh id="sysPhysicsShapeDynamicMesh" />
+    <physicsShapeDynamicMesh id="physicsShapeDynamicMesh" />
     
     <!--使用球形网格来作为碰撞网格-->
-    <physicsShapeSphere id="sysPhysicsShapeSphere" radius="1.0" />
+    <physicsShapeSphere id="physicsShapeSphere" radius="1.0" />
     
     <!--使用自定义的网格创建静态的碰撞网格,适合于需要定制碰撞网格的不可移动的物体-->
-    <physicsShapeStaticCustomMesh id="sysPhysicsShapeStaticCustomMesh" shape="sysShapeBox" />
+    <physicsShapeStaticCustomMesh id="physicsShapeStaticCustomMesh" shape="shapeBox" />
     
     <!--创建静态类型的碰撞网格，适合不可移动的物体，如地形，房屋，树木等。-->
-    <physicsShapeStaticMesh id="sysPhysicsShapeStaticMesh" />
+    <physicsShapeStaticMesh id="physicsShapeStaticMesh" />
     
 </root>
 

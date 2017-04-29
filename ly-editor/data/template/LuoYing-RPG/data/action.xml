@@ -14,7 +14,7 @@
     <actionDynamicFight id="actionFightBase" allowFollow="1" autoFacing="1" fightSkillTypes="fight,attack" attackIntervalAttribute="attributeGhostRate" />
     
     <!--==========================================================================-->
-    <!-- Action配置 -->
+    <!-- 其它配置 -->
     <!--==========================================================================-->
     
     <!--普通动态角色的战斗行为，会跟随，会转向，如：人物，怪物，能移动的武器-->

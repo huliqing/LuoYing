@@ -5,7 +5,7 @@
     xmlns='http://luoying.huliqing.name'
     xsi:schemaLocation='http://luoying.huliqing.name meta/attribute.xsd'>
     
-    <attributeBoolean id="attributeBoolean" name="attributeBoolean" value="0" />
+<!--    <attributeBoolean id="attributeBoolean" name="attributeBoolean" value="0" />
     <attributeFloat id="attributeFloat" name="attributeFloat" value="0" />
     <attributeInteger id="attributeInteger" name="attributeInteger" value="0" />
     <attributeLevelFloat id="attributeLevelFloat" name="attributeLevelFloat" value="0" />
@@ -17,7 +17,7 @@
     <attributeStringList id="attributeStringList" name="attributeStringList" value="" />
     <attributeVector2f id="attributeVector2f" name="attributeVector2f" value="0,0" />
     <attributeVector3f id="attributeVector3f" name="attributeVector3f" value="0,0,0" />
-    <attributeVector4f id="attributeVector4f" name="attributeVector4f" value="0,0,0,0" />
+    <attributeVector4f id="attributeVector4f" name="attributeVector4f" value="0,0,0,0" />-->
     
     <!--==========================================================================-->
     <!--标准属性
@@ -253,7 +253,7 @@
     
     
     <!--==========================================================================-->
-    <!-- 特殊角色的属性 -->
+    <!-- 特殊角色配置参考 -->
     <!--==========================================================================-->
     
     <!--蒂娜的武器槽位：挂在左腰间-->

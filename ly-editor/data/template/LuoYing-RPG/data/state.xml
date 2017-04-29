@@ -11,27 +11,10 @@
     3.状态是动态的，会有时间限制,一般在状态结束时应该恢复角色的原始状态。
     -->
 
-
     <!-- =========================================================================-->
-    <!--特殊类型-->
-    <!-- =========================================================================-->
-    
-    <!--保护: 用于在剧情过程中保护角色别死-->
-    <statePrivateGroup id="stateSafe" icon="Interface/skill/shield.jpg" useTime="99999" states="stateSafe1,stateSafe2" />
-    <stateAttribute id="stateSafe1" useTime="99999" bindNumberAttribute="attributeDefence" addValue="99999" restore="1" />
-    <stateAttribute id="stateSafe2" useTime="99999" bindNumberAttribute="attributeMagicDefence" addValue="99999" restore="1" />
-
-    <!-- =========================================================================-->
-    <!--冰\霜类型状态-->
+    <!--状态配置-->
     <!-- =========================================================================-->
     
-    <!--冰霜: 减速50%-->
-    <stateAttribute id="stateSnowFrost" icon="Interface/skill/snow.jpg" useTime="6" 
-                        bindNumberAttribute="attributeMoveSpeed" addValue="-0.5" restore="1" animations="animColorFrost" />
-    
-    <!--冰冻：6秒冰冻，让角色不能动-->
-    <stateSkillLocked id="stateIceFrozen" icon="Interface/skill/ysh_33.jpg" useTime="6" lockAtFrame="1" 
-                      lockAllSkillTypes="1" lockLocation="1" effects="effectFrozen" />
     
 </root>
 

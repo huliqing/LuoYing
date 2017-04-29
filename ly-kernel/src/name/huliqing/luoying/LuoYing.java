@@ -191,7 +191,7 @@ import name.huliqing.luoying.loader.EffectEntityDataLoader;
 import name.huliqing.luoying.loader.EntityDataLoader;
 import name.huliqing.luoying.object.entity.impl.PhysicsEntity;
 import name.huliqing.luoying.object.entity.impl.PlatformProxyEntity;
-import name.huliqing.luoying.object.entity.impl.DirectionalLightFilterShadowEntity;
+import name.huliqing.luoying.object.entity.impl.DirectionalLightShadowFilterEntity;
 import name.huliqing.luoying.object.entity.impl.SkyBoxEntity;
 import name.huliqing.luoying.object.entity.impl.SimpleTerrainEntity;
 import name.huliqing.luoying.object.entity.impl.TreeEntity;
@@ -706,7 +706,7 @@ public class LuoYing {
         DataFactory.register("entityAudio", EntityData.class, AudioEntityDataLoader.class, AudioEntity.class);
         DataFactory.register("entityBatch", EntityData.class, EntityDataLoader.class, BatchEntity.class);
         DataFactory.register("entityChaseCamera", EntityData.class, EntityDataLoader.class, ChaseCameraEntity.class);
-        DataFactory.register("entityDirectionalLightFilterShadow", EntityData.class, EntityDataLoader.class, DirectionalLightFilterShadowEntity.class);
+        DataFactory.register("entityDirectionalLightShadowFilter", EntityData.class, EntityDataLoader.class, DirectionalLightShadowFilterEntity.class);
         DataFactory.register("entityDirectionalLightShadow", EntityData.class, EntityDataLoader.class, DirectionalLightShadowEntity.class);
         DataFactory.register("entityGrass", EntityData.class, PlantEnvLoader.class, GrassEntity.class);
         DataFactory.register("entityInstanced", EntityData.class, EntityDataLoader.class, InstancedEntity.class);

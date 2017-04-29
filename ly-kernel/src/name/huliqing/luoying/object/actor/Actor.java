@@ -37,14 +37,12 @@ public class Actor extends ModelEntity {
     
     private String file;
     private String icon;
-//    private Vector3f localForward;
     
     @Override
     public void setData(EntityData data) {
         super.setData(data); 
         file = data.getAsString("file");
         icon = data.getAsString("icon");
-//        localForward = data.getAsVector3f("localForward");
     }
     
     public String getIcon() {

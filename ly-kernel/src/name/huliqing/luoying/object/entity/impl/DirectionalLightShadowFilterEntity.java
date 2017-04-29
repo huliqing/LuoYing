@@ -39,9 +39,9 @@ import name.huliqing.luoying.utils.MathUtils;
  * 阴影环境(目前不支持移动设备), 给场景添加这个环境后，可以让场景中的物体有阴影效果
  * @author huliqing
  */
-public class DirectionalLightFilterShadowEntity extends ShadowEntity {
+public class DirectionalLightShadowFilterEntity extends ShadowEntity {
 
-    private static final Logger LOG = Logger.getLogger(DirectionalLightFilterShadowEntity.class.getName());
+    private static final Logger LOG = Logger.getLogger(DirectionalLightShadowFilterEntity.class.getName());
 
     private int shadowMapSize = 1024;
     private int shadowMaps = 1;

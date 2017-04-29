@@ -13,22 +13,22 @@
     <itemSimple id="itemBase" checkEl="elItemSimpleUse" />
     
     <!--药水类-->
-    <itemAttribute id="itemTonicBase" extends="itemBase" effects="effectRandomFire" />
+    <itemAttribute id="itemTonicBase" extends="itemBase" />
     
     <!-- ========================================================================= -->
     <!--特殊物品-->
     <!-- ========================================================================= -->
     
-    <!--Gold-->
-    <itemSimple id="itemGold" extends="itemBase" icon="Interface/item/gold.png" tradeInfos="itemGold|1" sellable="1" />
+    <!--金币(Gold)-->
+    <!--<itemSimple id="itemGold" extends="itemBase" icon="Interface/item/gold.png" tradeInfos="itemGold|1" sellable="1" />-->
     
     <!-- ========================================================================= -->
     <!--药品类\增益类-->
     <!-- ========================================================================= -->
     
     <!--红瓶和蓝瓶-->
-    <itemAttribute id="itemTonicRed" extends="itemTonicBase"  icon="Interface/item/tonic_red.png" attribute="attributeHealth" amount="200" tradeInfos="itemGold|50" />
-    <itemAttribute id="itemTonicBlue" extends="itemTonicBase" icon="Interface/item/tonic_blue.png" attribute="attributeMana" amount="200" tradeInfos="itemGold|50" />
+<!--    <itemAttribute id="itemTonicRed" extends="itemTonicBase"  icon="Interface/item/tonic_red.png" attribute="attributeHealth" amount="200" tradeInfos="itemGold|50" />
+    <itemAttribute id="itemTonicBlue" extends="itemTonicBase" icon="Interface/item/tonic_blue.png" attribute="attributeMana" amount="200" tradeInfos="itemGold|50" />-->
    
 </root>
 

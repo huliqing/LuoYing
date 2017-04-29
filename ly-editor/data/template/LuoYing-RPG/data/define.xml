@@ -33,7 +33,7 @@
     <defineWeaponType id="sysDefineWeaponType" weaponTypes="leftSword,rightSword,bow,wand,leftClaw,rightClaw" />
     
     <!-- ========================================================================= -->
-    <!--物体的质地定义：与网格的材质(material)不同，这里主要用于定义物体的构成成分以及不同质地的碰撞声效。
+    <!--物体的质地定义(id不能改)：与网格的材质(material)不同，这里主要用于定义物体的构成成分以及不同质地的碰撞声效。
     用于作为物体的默认碰撞声音。
     metal: 金属; 
     wood: 木材; 
@@ -45,14 +45,7 @@
     <!-- ========================================================================= -->
     
     <defineMat id="sysDefineMat" mats="metal,wood,stone,derma,calcium,cloth" 
-               collisionSounds="metal|metal|soundCollisionMM
-, metal|stone|soundCollisionMS
-, metal|wood|soundCollisionWM 
-, metal|derma|soundCollisionMB
-, wood|wood|soundCollisionWW
-, wood|stone|soundCollisionWS
-, wood|derma|soundCollisionWB" collisionEffects="metal|metal|effectCollisionMM"
-    />
+               collisionSounds="" collisionEffects="" />
     
 </root>
 
