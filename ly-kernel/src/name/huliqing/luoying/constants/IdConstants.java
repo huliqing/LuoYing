@@ -172,6 +172,16 @@ public class IdConstants {
     /** 声音 */
     public final static String SYS_SOUND = "sysSound";
     
-
+    // =============================================================================
+    // Module
+    // =============================================================================
+    
+    /**  物理模块 */
+    public final static String SYS_MODULE_PHYSICS = "sysModulePhysics";
+    
+    /**  树木、花草摇摆控制模块  */
+    public final static String SYS_MODULE_SWAY = "sysModuleSway";
+    
+    
     
 }

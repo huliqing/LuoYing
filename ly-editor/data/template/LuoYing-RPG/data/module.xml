@@ -103,4 +103,8 @@
 
     <!--颜色模块，这个模块允许动态改变角色的材质颜色。-->
     <moduleColor id="moduleColor" extends="moduleBase" moduleOrder="60" bindColorAttribute="attributeColor" />
+    
+    <!-- 树木、花草摇摆控制模块 -->
+    <moduleSway id="moduleSway" extends="moduleBase" moduleOrder="999" sway="1" swayDistance="1.0" 
+                swayFrequency="1.5" swayGeometries="" swayVariation="1.0" swayWind="0,1" />
 </root>

@@ -17,9 +17,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with LuoYing.  If not, see <http://www.gnu.org/licenses/>.
  */
-package name.huliqing.luoying.object.entity.impl;
+package name.huliqing.luoying.object.module;
 
-import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.material.MatParam;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState;
@@ -29,29 +28,22 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.shader.VarType;
-import java.util.ArrayList;
 import java.util.List;
 import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.constants.AssetConstants;
-import name.huliqing.luoying.data.EntityData;
-import name.huliqing.luoying.object.entity.ModelEntity;
-import name.huliqing.luoying.object.entity.TerrainEntity;
-import name.huliqing.luoying.object.scene.Scene;
-import name.huliqing.luoying.object.scene.SceneListener;
-import name.huliqing.luoying.object.scene.SceneListenerAdapter;
+import name.huliqing.luoying.data.ModuleData;
+import name.huliqing.luoying.xml.ObjectData;
 
 /**
- * 植被环境物体，如：花草等物体
+ * SwayModule用于让模形实体的网格有摇动的功能, 一般可用于花草树木等场景实体，
+ * 可以让这些物体如树叶进行摆动。
+ * 这个模块会替换掉物体的材质。
  * @author huliqing
  */
-public abstract class PlantEntity extends ModelEntity {
+public class SwayModule extends AbstractModule {
     
-    private SceneListener sceneListener;
-    
-    // 当树木放入到场景时自动将树木移动到地面上。
-    private boolean makeOnTerrain;
-    // 树叶、草叶摇摆 
-    private boolean sway;
+    // 摇摆开关 
+    private boolean sway = true;
     // 摇动的频率
     private float swayFrequency = 1.5f;
     // 摇动扭曲
@@ -62,11 +54,10 @@ public abstract class PlantEntity extends ModelEntity {
     private Vector2f swayWind= new Vector2f(0,1);
     // 指定要摇动哪些网格(名称)，如果没有指定则全部摇动
     private List<String> swayGeometries;
-
+    
     @Override
-    public void setData(EntityData data) {
+    public void setData(ModuleData data) {
         super.setData(data);
-        makeOnTerrain = data.getAsBoolean("makeOnTerrain", makeOnTerrain);
         sway = data.getAsBoolean("sway", sway);
         swayFrequency = data.getAsFloat("swayFrequency", swayFrequency);
         swayVariation = data.getAsFloat("swayVariation", swayVariation);
@@ -76,74 +67,12 @@ public abstract class PlantEntity extends ModelEntity {
     }
 
     @Override
-    protected Spatial loadModel() {
-        Spatial temp = LuoYing.getAssetManager().loadModel(data.getAsString("file"));
-        return temp;
-    }
-
-    @Override
-    public void initEntity() {
-        super.initEntity();
+    public void initialize() {
+        super.initialize();
         
         if (sway) {
-            converterToGrass(spatial, swayGeometries);
+            converterToGrass(entity.getSpatial(), swayGeometries);
         }
-    }
-    
-    @Override
-    public void onInitScene(Scene scene) {
-        super.onInitScene(scene);
-        if (makeOnTerrain) {
-            if (scene.isInitialized()) {
-                // 把植皮移到地形上面
-                makePlantOnTerrain(scene);
-            } else {
-                sceneListener = new SceneListenerAdapter() {
-                    @Override
-                    public void onSceneLoaded(Scene scene) {
-                        // 把植皮移到地形上面
-                        makePlantOnTerrain(scene);
-                        // 在处理完位置点之后就可以不再需要侦听了
-                        scene.removeSceneListener(sceneListener);
-                        sceneListener = null;
-                    }
-                };
-                scene.addSceneListener(sceneListener);
-            }
-        }
-    }
-    
-    @Override
-    public void cleanup() {
-        if (sceneListener != null) {
-            scene.removeSceneListener(sceneListener);
-            sceneListener = null;
-        }
-        super.cleanup();
-    }
-
-    private void makePlantOnTerrain(Scene scene) {
-        // 在场景载入完毕之后将植皮位置移到terrain节点的上面。
-        List<TerrainEntity> sos = scene.getEntities(TerrainEntity.class, new ArrayList<TerrainEntity>());
-        Vector3f location = null;
-        for (TerrainEntity terrain : sos) {
-            Vector3f terrainPoint = terrain.getHeight(spatial.getWorldTranslation().x, spatial.getWorldTranslation().z);
-            if (terrainPoint != null) {
-                if (location == null || terrainPoint.y > location.y) {
-                    location = terrainPoint;
-                }
-            }
-        }
-        
-        if (location != null) {
-            location.addLocal(0, -0.1f, 0); // 下移一点
-            RigidBodyControl rbc = spatial.getControl(RigidBodyControl.class);
-            if (rbc != null) {
-                rbc.setPhysicsLocation(location);
-            } else {
-                spatial.setLocalTranslation(location);
-            }
-        } 
     }
     
     private void converterToGrass(Spatial model, List<String> geometries) {
@@ -194,4 +123,12 @@ public abstract class PlantEntity extends ModelEntity {
             to.setParam(matName, varType, matParam.getValue());
         }
     }
+    
+    @Override
+    public boolean handleDataAdd(ObjectData hData, int amount) {return false;}
+    @Override
+    public boolean handleDataRemove(ObjectData hData, int amount) {return false;}
+    @Override
+    public boolean handleDataUse(ObjectData hData) {return false;}
+    
 }

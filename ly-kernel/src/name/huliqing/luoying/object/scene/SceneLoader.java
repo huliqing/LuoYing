@@ -33,7 +33,7 @@ import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.layer.service.PlayService;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.Entity;
-import name.huliqing.luoying.object.module.AdapterControl;
+import name.huliqing.luoying.controls.AdapterControl;
 import name.huliqing.luoying.object.progress.Progress;
 
 /**

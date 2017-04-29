@@ -49,6 +49,7 @@
     <component id="moduleChat" type="module" />
     <component id="moduleTask" type="module" />
     <component id="moduleState" type="module" />
+    <component id="moduleSway" type="module" />
     <component id="moduleResist" type="module" />
     <component id="moduleTalent" type="module" />
     <component id="moduleLevel" type="module" />

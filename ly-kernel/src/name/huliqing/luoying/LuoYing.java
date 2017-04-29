@@ -328,6 +328,7 @@ import name.huliqing.luoying.object.module.DropModule;
 import name.huliqing.luoying.object.module.LevelModule;
 import name.huliqing.luoying.object.module.PhysicsModule;
 import name.huliqing.luoying.object.module.ResistModule;
+import name.huliqing.luoying.object.module.SwayModule;
 import name.huliqing.luoying.object.physicsshape.BoxPhysicsShape;
 import name.huliqing.luoying.object.physicsshape.CapsulePhysicsShape;
 import name.huliqing.luoying.object.physicsshape.StaticCustomMeshPhysicsShape;
@@ -772,6 +773,7 @@ public class LuoYing {
         DataFactory.register("moduleSkill",  ModuleData.class, null, SkillModule.class);
         DataFactory.register("moduleSkin",  ModuleData.class, null, SkinModule.class);
         DataFactory.register("moduleState",  ModuleData.class, null, StateModule.class);
+        DataFactory.register("moduleSway",  ModuleData.class, null, SwayModule.class);
         DataFactory.register("moduleTalent",  ModuleData.class, null, TalentModule.class);
         DataFactory.register("moduleTask",  ModuleData.class, null, TaskModule.class);
         

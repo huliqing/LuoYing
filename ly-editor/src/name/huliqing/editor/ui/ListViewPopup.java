@@ -36,7 +36,7 @@ import name.huliqing.editor.ui.utils.SearchListView;
 public class ListViewPopup<T> {
     
     private final Popup popup = new Popup();
-    private final SearchListView<T> searchListView = new SearchListView(new ListView<T>());
+    private final SearchListView<T> searchListView = new SearchListView(new ListView());
     
     public ListViewPopup() {
         this(null);

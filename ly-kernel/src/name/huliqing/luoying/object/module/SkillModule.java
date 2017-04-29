@@ -19,6 +19,7 @@
  */
 package name.huliqing.luoying.object.module;
 
+import name.huliqing.luoying.controls.AdapterControl;
 import com.jme3.scene.control.Control;
 import com.jme3.util.SafeArrayList;
 import java.util.ArrayList;

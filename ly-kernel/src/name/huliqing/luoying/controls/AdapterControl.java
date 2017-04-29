@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with LuoYing.  If not, see <http://www.gnu.org/licenses/>.
  */
-package name.huliqing.luoying.object.module;
+package name.huliqing.luoying.controls;
 
 import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;

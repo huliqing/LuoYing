@@ -5,6 +5,8 @@
     xmlns='http://editor.huliqing.name'
     xsi:schemaLocation='http://editor.huliqing.name meta.xsd'>
     
+    <converter name="ModuleSwayGeometriesFieldConverter" value="name.huliqing.editor.converter.field.ModuleSwayGeometriesFieldConverter" />
+    
     <data name="moduleBase" extends="base">
         <field name="moduleOrder" converter="IntegerTextConverter" />
         <field name="bindMessageEnabledAttribute" converter="TextConverter" />
@@ -126,6 +128,17 @@
     </data>
 
     <data name="moduleState" extends="moduleBase">
+    </data>
+
+    <data name="moduleSway" extends="moduleBase">
+        <field name="sway" converter="CheckBoxConverter" />
+        <field name="swayFrequency" converter="FloatTextConverter" />
+        <field name="swayVariation" converter="FloatTextConverter" />
+        <field name="swayDistance" converter="FloatTextConverter" />
+        <field name="swayWind" converter="Vector2fConverter">
+            <feature name="collapsed" value="true" />
+        </field>
+        <field name="swayGeometries" converter="ModuleSwayGeometriesFieldConverter" />
     </data>
 
     <data name="moduleTalent" extends="moduleBase">

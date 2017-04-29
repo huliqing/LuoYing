@@ -37,6 +37,7 @@ xs:time
                 <xs:element ref="moduleSkill" />
                 <xs:element ref="moduleSkin" />
                 <xs:element ref="moduleState" />
+                <xs:element ref="moduleSway" />
                 <xs:element ref="moduleTalent" />
                 <xs:element ref="moduleTask" />
             </xs:all>
@@ -399,6 +400,51 @@ xs:time
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="moduleBase"></xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="moduleSway">
+        <xs:annotation>
+            <xs:documentation>
+                SwayModule用于让模形实体的网格有摇动的功能, 一般可用于花草树木等场景实体，可以让这些物体如树叶进行摆动。
+                这个模块会替换掉物体的材质。
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="moduleBase">
+                    <xs:attribute name="sway" type="bool" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>打开树叶、草叶摇摆功能</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="swayFrequency" type="xs:decimal" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>摇摆频率</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="swayVariation" type="xs:decimal" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>摇摆扭曲</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="swayDistance" type="xs:decimal" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>最大摇摆距离</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="swayWind" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>风向, 格式："x,y"</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="swayGeometries" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>特殊指定要摇摆的网格物体，格式："geometryName1,geometryName2,...", 如果没有指定则所有网格摆动。</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
             </xs:complexContent>
         </xs:complexType>
     </xs:element>

@@ -19,6 +19,7 @@
  */
 package name.huliqing.luoying.object.module;
 
+import name.huliqing.luoying.controls.AdapterControl;
 import com.jme3.scene.control.Control;
 import name.huliqing.luoying.data.ModuleData;
 import name.huliqing.luoying.object.action.Action;

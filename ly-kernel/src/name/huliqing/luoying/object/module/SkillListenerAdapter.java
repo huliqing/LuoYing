@@ -33,11 +33,9 @@ public class SkillListenerAdapter implements SkillListener {
     }
 
     @Override
-    public void onSkillStart(Skill skill) {
-    }
+    public void onSkillStart(Skill skill) {}
 
     @Override
-    public void onSkillEnd(Skill skill) {
-    }
+    public void onSkillEnd(Skill skill) {}
     
 }
