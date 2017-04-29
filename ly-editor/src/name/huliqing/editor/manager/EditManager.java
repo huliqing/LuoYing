@@ -97,15 +97,13 @@ public class EditManager {
             alert.initModality(Modality.APPLICATION_MODAL);
             alert.setContentText(Manager.getRes(ResConstants.COMMON_QUICK_CONFIRM));
             Optional<ButtonType> result = alert.showAndWait();
-            if (!result.isPresent()) {
+            ButtonType bt = result.get();
+            if (bt == ButtonType.CANCEL) {
                 return;
             }
-            // 按下OK或Cancel都需要退出
-            ButtonType bt = result.get();
-            if (bt == ButtonType.YES || bt == ButtonType.APPLY || bt == ButtonType.OK) {
-                editor.saveAll();
+            if (bt == ButtonType.OK) {
+                callback.call(null);
             }
-            callback.call(null);
         });
     }
     

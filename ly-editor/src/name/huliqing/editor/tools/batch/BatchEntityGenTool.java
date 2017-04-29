@@ -240,8 +240,7 @@ public class BatchEntityGenTool extends AbstractTool<SimpleJmeEdit, EntityBatchT
         Material mat = MaterialUtils.createUnshaded();
         mat.setColor("Color", new ColorRGBA(0f, 0f, 1.0f, 0.3f));
         mat.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Alpha);
-        mat.getAdditionalRenderState().setFaceCullMode(RenderState.FaceCullMode.Off);
-//        mat.getAdditionalRenderState().setDepthWrite(false);
+        mat.getAdditionalRenderState().setFaceCullMode(RenderState.FaceCullMode.Front);
         geo.setMaterial(mat);
         geo.setLocalTranslation(center);
         return geo;
