@@ -27,48 +27,37 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 
 /**
- * @deprecated 使用AutoScaleControl2代替
  * 动态控制场景中物体的大小
  * @author huliqing
  */
-public class AutoScaleControl extends AbstractControl {
+public class AutoScaleControl2 extends AbstractControl {
     
-    private final Vector3f lastCamLoc = new Vector3f();
-    private float size = 0.15f;
     private Camera camera;
+    private final Vector3f fixScale = new Vector3f(1,1,1);
+    private final Vector3f tempScale = new Vector3f();
     
-    public AutoScaleControl() {}
+    public AutoScaleControl2() {}
     
-    public AutoScaleControl(float size) {
-        this.size = size;
+    public AutoScaleControl2(float fixScale) {
+        this.fixScale.set(fixScale, fixScale, fixScale);
     }
     
-    /**
-     * 设置图标大小，默认0.15f
-     * @param size 
-     */
-    public void setSize(float size) {
-        this.size = size;
+    public AutoScaleControl2(Vector3f fixScale) {
+        this.fixScale.set(fixScale);
     }
     
-    /**
-     * 强制立即更新，计算缩放
-     */
-    public void forceUpdate() {
-        controlUpdate(0.016f);
+    public void setFixScale(Vector3f fixScale) {
+        this.fixScale.set(fixScale);
     }
     
     @Override
     protected void controlUpdate(float tpf) {
-         if (camera == null || spatial.getCullHint() == Spatial.CullHint.Always) {
+        if (camera == null || spatial.getCullHint() == Spatial.CullHint.Always) {
             return;
         }
-        Vector3f camloc = camera.getLocation();
-        float scale = size * spatial.getWorldTranslation().distance(camloc);
-        if (scale > 0) {
-            spatial.setLocalScale(scale);
-        }
-        lastCamLoc.set(camloc);
+        tempScale.set(fixScale).divideLocal(spatial.getParent().getWorldScale());
+        tempScale.multLocal(spatial.getWorldTranslation().distance(camera.getLocation()));
+        spatial.setLocalScale(tempScale);
     }
     
     @Override

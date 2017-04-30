@@ -31,7 +31,7 @@ import com.jme3.scene.control.BillboardControl;
 import com.jme3.scene.shape.Box;
 import name.huliqing.editor.constants.AssetConstants;
 import name.huliqing.editor.edit.SimpleJmeEdit;
-import name.huliqing.editor.tiles.AutoScaleControl;
+import name.huliqing.editor.tiles.AutoScaleControl2;
 import name.huliqing.fxswing.Jfx;
 import name.huliqing.luoying.object.entity.impl.PointLightEntity;
 import name.huliqing.luoying.shape.QuadXYC;
@@ -44,49 +44,44 @@ import name.huliqing.luoying.utils.MaterialUtils;
 public class PointLightEntityControlTile extends EntityControlTile<PointLightEntity> {
 
     private final Node controlSpatial = new Node();
-    private final Spatial flag;
     
     public PointLightEntityControlTile() {
-        flag = createSunFlag(AssetConstants.INTERFACE_ICON_LIGHT_POINT);
-        flag.addControl(new AutoScaleControl(0.05f));
-        
-        // 添加一个box，这样更容易被选中
-        controlSpatial.attachChild(createBox()); 
+        Node flag = new Node("flag");
+        flag.attachChild(createSunFlag(AssetConstants.INTERFACE_ICON_LIGHT_POINT));
+        flag.attachChild(createBox()); // 添加一个box，这样更容易被选中
+        flag.addControl(new AutoScaleControl2(0.05f));
+        controlSpatial.attachChild(flag); 
     }
     
     @Override
     public void initialize(SimpleJmeEdit edit) {
         super.initialize(edit);
         edit.getEditRoot().attachChild(controlSpatial);
-        edit.getEditRoot().attachChild(flag);
         updateState();
     }
     
     @Override
     public void updateState() {
         super.updateState();
-        flag.setLocalTranslation(target.getLight().getPosition());
         controlSpatial.setLocalTranslation(target.getLight().getPosition());
         controlSpatial.setLocalScale(target.getLight().getRadius());
     }
 
     @Override
     public void cleanup() {
-        flag.removeFromParent();
         controlSpatial.removeFromParent();
         super.cleanup();
     }
 
     @Override
     protected void onLocationUpdated(Vector3f location) {
-        flag.setLocalTranslation(location);
         controlSpatial.setLocalTranslation(location);
         target.getSpatial().setLocalTranslation(location);
         target.getLight().setPosition(location);
         target.updateDatas();
         notifyPropertyChanged("location", target.getSpatial().getLocalTranslation());
     }
-
+    
     @Override
     protected void onRotationUpdated(Quaternion rotation) {
         // ignore

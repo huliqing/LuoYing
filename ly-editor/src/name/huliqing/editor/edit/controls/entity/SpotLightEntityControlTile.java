@@ -31,9 +31,10 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.control.BillboardControl;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Line;
+import java.util.logging.Logger;
 import name.huliqing.editor.constants.AssetConstants;
 import name.huliqing.editor.edit.SimpleJmeEdit;
-import name.huliqing.editor.tiles.AutoScaleControl;
+import name.huliqing.editor.tiles.AutoScaleControl2;
 import name.huliqing.fxswing.Jfx;
 import name.huliqing.luoying.object.entity.impl.SpotLightEntity;
 import name.huliqing.luoying.shape.QuadXYC;
@@ -45,22 +46,17 @@ import name.huliqing.luoying.utils.MaterialUtils;
  */
 public class SpotLightEntityControlTile extends EntityControlTile<SpotLightEntity> {
 
+    private static final Logger LOG = Logger.getLogger(SpotLightEntityControlTile.class.getName());
+
     private final Node controlSpatial = new Node();
-    private final Spatial flag;
-    private final Spatial line;
     
     public SpotLightEntityControlTile() {
-        flag = createSunFlag(AssetConstants.INTERFACE_ICON_LIGHT_SPOT);
+        Node flag = new Node();
+        flag.attachChild(createSunFlag(AssetConstants.INTERFACE_ICON_LIGHT_SPOT));
+        flag.attachChild(createLine());
+        flag.attachChild(createBox());
+        flag.addControl(new AutoScaleControl2(0.05f));
         controlSpatial.attachChild(flag);
-        
-        line = createLine();
-        controlSpatial.attachChild(line);
-        
-        // 添加一个box，这样更容易被选中
-        controlSpatial.attachChild(createBox()); 
-        
-        AutoScaleControl asc = new AutoScaleControl(0.05f);
-        controlSpatial.addControl(asc);
     }
     
     @Override
@@ -74,7 +70,6 @@ public class SpotLightEntityControlTile extends EntityControlTile<SpotLightEntit
     public void updateState() {
         super.updateState();
         controlSpatial.setLocalTranslation(target.getSpatial().getLocalTranslation());
-        controlSpatial.setLocalScale(10);
         
         Quaternion rot = controlSpatial.getLocalRotation();
         rot.lookAt(target.getLight().getDirection(), Vector3f.UNIT_Y);

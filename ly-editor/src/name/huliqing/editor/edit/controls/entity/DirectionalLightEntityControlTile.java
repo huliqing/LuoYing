@@ -34,6 +34,7 @@ import com.jme3.scene.shape.Line;
 import name.huliqing.editor.constants.AssetConstants;
 import name.huliqing.editor.edit.SimpleJmeEdit;
 import name.huliqing.editor.tiles.AutoScaleControl;
+import name.huliqing.editor.tiles.AutoScaleControl2;
 import name.huliqing.fxswing.Jfx;
 import name.huliqing.luoying.object.entity.impl.DirectionalLightEntity;
 import name.huliqing.luoying.shape.QuadXYC;
@@ -46,21 +47,14 @@ import name.huliqing.luoying.utils.MaterialUtils;
 public class DirectionalLightEntityControlTile extends EntityControlTile<DirectionalLightEntity> {
 
     private final Node controlSpatial = new Node();
-    private final Spatial flag;
-    private final Spatial line;
     
     public DirectionalLightEntityControlTile() {
-        flag = createSunFlag(AssetConstants.INTERFACE_ICON_LIGHT_SUN);
+        Node flag = new Node();
+        flag.attachChild(createSunFlag(AssetConstants.INTERFACE_ICON_LIGHT_SUN));
+        flag.attachChild(createLine());
+        flag.attachChild(createBox()); // 添加一个box，这样更容易被选中
+        flag.addControl(new AutoScaleControl2(0.05f));
         controlSpatial.attachChild(flag);
-        
-        line = createLine();
-        controlSpatial.attachChild(line);
-        
-        // 添加一个box，这样更容易被选中
-        controlSpatial.attachChild(createBox()); 
-        
-        AutoScaleControl asc = new AutoScaleControl(0.05f);
-        controlSpatial.addControl(asc);
     }
     
     @Override
@@ -74,7 +68,6 @@ public class DirectionalLightEntityControlTile extends EntityControlTile<Directi
     public void updateState() {
         super.updateState();
         controlSpatial.setLocalTranslation(target.getSpatial().getLocalTranslation());
-        controlSpatial.setLocalScale(10);
         
         Quaternion rot = controlSpatial.getLocalRotation();
         rot.lookAt(target.getDirection(), Vector3f.UNIT_Y);
