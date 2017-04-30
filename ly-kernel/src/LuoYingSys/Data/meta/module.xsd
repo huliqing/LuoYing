@@ -31,6 +31,7 @@ xs:time
                 <xs:element ref="moduleDrop" />
                 <xs:element ref="moduleItem" />
                 <xs:element ref="moduleLevel" />
+                <xs:element ref="moduleLod" />
                 <xs:element ref="moduleLogic" />
                 <xs:element ref="modulePhysics" />
                 <xs:element ref="moduleResist" />
@@ -228,6 +229,26 @@ xs:time
                         <xs:annotation>
                             <xs:documentation>升级时的特效,关联一个特殊ID</xs:documentation>
                         </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="moduleLod">
+        <xs:annotation>
+            <xs:documentation>Level of Detail 模块,需要首先为物体创建LOD才有用。</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="moduleBase">
+                    <xs:attribute name="distTolerance" type="xs:decimal" use="optional">
+                        <xs:annotation><xs:documentation>Specifies the distance tolerance for changing the LOD level on the geometry. The LOD level will only get changed if the geometry has moved
+                            this distance beyond the current LOD level.</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="trisPerPixel" type="xs:decimal" use="optional">
+                        <xs:annotation><xs:documentation>Sets the triangles per pixel value. The LodControl will use this value as an error metric to determine which LOD level to use based on the geometry's area on the screen.</xs:documentation></xs:annotation>
                     </xs:attribute>
                 </xs:extension>
             </xs:complexContent>

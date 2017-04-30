@@ -52,6 +52,11 @@
         <field name="maxLevel" converter="IntegerTextConverter" />
         <field name="effect" converter="TextConverter" />
     </data>
+    
+    <data name="moduleLod" extends="moduleBase">
+        <field name="distTolerance" converter="FloatTextConverter" />
+        <field name="trisPerPixel" converter="FloatTextConverter" />
+    </data>
 
     <data name="moduleLogic" extends="moduleBase">
         <field name="bindEnabledAttribute" converter="TextConverter" />

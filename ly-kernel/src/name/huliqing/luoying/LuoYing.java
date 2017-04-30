@@ -326,6 +326,7 @@ import name.huliqing.luoying.object.item.TestItem;
 import name.huliqing.luoying.object.module.ColorModule;
 import name.huliqing.luoying.object.module.DropModule;
 import name.huliqing.luoying.object.module.LevelModule;
+import name.huliqing.luoying.object.module.LodModule;
 import name.huliqing.luoying.object.module.PhysicsModule;
 import name.huliqing.luoying.object.module.ResistModule;
 import name.huliqing.luoying.object.module.SwayModule;
@@ -767,6 +768,7 @@ public class LuoYing {
         DataFactory.register("moduleDrop",  ModuleData.class, null, DropModule.class);
         DataFactory.register("moduleItem",  ModuleData.class, null, ItemModule.class);
         DataFactory.register("moduleLevel",  ModuleData.class, null, LevelModule.class);
+        DataFactory.register("moduleLod",  ModuleData.class, null, LodModule.class);
         DataFactory.register("moduleLogic",  ModuleData.class, null, LogicModule.class);
         DataFactory.register("modulePhysics",  ModuleData.class, PhysicsModuleDataLoader.class, PhysicsModule.class);
         DataFactory.register("moduleResist",  ModuleData.class, null, ResistModule.class);

@@ -132,12 +132,10 @@ public class EntitiesFieldConverter extends FieldConverter<JfxSceneEdit, EntityD
         // 列表
         filterListView.listView.setCellFactory(new CellInner());
         filterListView.listView.getSelectionModel().selectedItemProperty().addListener(this::onJfxSelectChanged);
-//        listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         
         layout.getStyleClass().add(StyleConstants.CLASS_HVBOX);
         toolBar.getItems().addAll(add, remove, multSelect);
         layout.getChildren().addAll(toolBar, filterListView);
-        
     }
         
     @Override
@@ -361,9 +359,20 @@ public class EntitiesFieldConverter extends FieldConverter<JfxSceneEdit, EntityD
             
             List<Entity> entities = scene.getEntities();
             String filterText = inputFilter.getText().trim().toLowerCase();
+            // 无任何过滤
+            if (filterText.isEmpty()) {
+                for (Entity e : entities) {
+                    tempList.add(e.getData());
+                }
+                listView.getItems().addAll(tempList);
+                return;
+            }
+            
+            // 允许通过半角","号分隔多个过滤项
+            String[] filters = filterText.split(",");
             String entityStr;
             for (Entity e : entities) {
-                if (filterText.isEmpty()) {
+                if (filters.length <= 0) {
                     tempList.add(e.getData());
                     continue;
                 }
@@ -371,8 +380,10 @@ public class EntitiesFieldConverter extends FieldConverter<JfxSceneEdit, EntityD
                 if (e.getData().getName() != null) {
                     entityStr += "(" + e.getData().getName() + ")";
                 }
-                if (entityStr.toLowerCase().contains(filterText)) {
-                    tempList.add(e.getData());
+                for (String filter : filters) {
+                    if (!filter.isEmpty() && entityStr.toLowerCase().contains(filter)) {
+                        tempList.add(e.getData());
+                    }
                 }
             }
             listView.getItems().addAll(tempList);

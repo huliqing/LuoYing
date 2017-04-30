@@ -35,7 +35,8 @@
     <modulePhysics id="sysModuleBoundaryPhysics" extends="sysModulePhysicsBase" mass="0" physicsShape="sysPhysicsShapeStaticMesh" />
     
     <!-- 树木、花草摇摆控制模块 -->
-    <moduleSway id="sysModuleSway" moduleOrder="99" sway="1" swayDistance="1.0" swayFrequency="1.5" swayGeometries="" swayVariation="1.0" swayWind="0,1" />
+    <moduleSway id="sysModuleSway" moduleOrder="999" sway="1" swayDistance="1.0" swayFrequency="1.5" swayGeometries="" swayVariation="1.0" swayWind="0,1" />
     
-
+     <!--Lod模块:需要为物体创建LOD网格信息才有意义-->
+    <moduleLod id="sysModuleLod" moduleOrder="999" distTolerance="1.0" trisPerPixel="1.0"/>
 </root>

@@ -53,6 +53,7 @@
     <component id="moduleResist" type="module" />
     <component id="moduleTalent" type="module" />
     <component id="moduleLevel" type="module" />
+    <component id="moduleLod" type="module" />
     <component id="moduleColor" type="module" />
     
     <!--Attribute-->

@@ -102,7 +102,7 @@ public class JfxSourceTool extends JfxAbstractTool<SourceTool>{
                 setText(null);
                 setGraphic(null);
                 if (!empty && item != null) {
-                    setText(item.getId() + "(" + item.getUniqueId() + ")");
+                    setText(item.getId() + "(" + item.getName() + ")(" + item.getUniqueId() + ")");
                 }
             }
         });
