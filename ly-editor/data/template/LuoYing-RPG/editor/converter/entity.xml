@@ -57,23 +57,6 @@
         </field>-->
     </data>
     
-    <data name="entityPlantBase" extends="entityModelBase">
-        <field name="file" converter="FileConverter">
-            <feature name="filters" value="Model Files|*.j3o,All Files|*.*" />
-        </field>
-        <field name="sway" converter="CheckBoxConverter" />
-        <field name="swayFrequency" converter="FloatTextConverter" />
-        <field name="swayVariation" converter="FloatTextConverter" />
-        <field name="swayDistance" converter="FloatTextConverter" />
-        <field name="swayWind" converter="Vector2fConverter">
-            <feature name="collapsed" value="true" />
-        </field>
-        <field name="swayGeometries" converter="SwayGeometriesFieldConverter" />
-<!--        <field name="randomScale" converter="CheckBoxConverter" />
-        <field name="minScale" converter="TextConverter" />
-        <field name="maxScale" converter="TextConverter" />-->
-    </data>
-    
     <data name="entityAudio" extends="entityBase">
         <feature name="hideFields" value="rotation,scale,mat" />
         <field name="debug" converter="CheckBoxConverter" />
@@ -316,10 +299,6 @@
             <feature name="filters" value="Images|*.jpg|*.jpeg|*.png,All Files|*.*" />
         </field>
     </data>
-
-    <data name="entityTree" extends="entityPlantBase" />
-    
-    <data name="entityGrass" extends="entityPlantBase" />
     
     <data name="entityEffect" extends="entityModelBase">
         <feature name="hideFields" value="mat,preferUnshaded" />

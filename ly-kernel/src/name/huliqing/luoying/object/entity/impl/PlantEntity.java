@@ -42,6 +42,7 @@ import name.huliqing.luoying.object.scene.SceneListenerAdapter;
 
 /**
  * 植被环境物体，如：花草等物体
+ * @deprecated 不再使用,使用SimpleModelEntity代替就可以
  * @author huliqing
  */
 public abstract class PlantEntity extends ModelEntity {

@@ -22,6 +22,7 @@ package name.huliqing.luoying.object.entity.impl;
 /**
  * 环境物体树，这个处理器为树模型定制一个更简单的物理包围盒。来简化物体碰撞
  * 计算。
+ * @deprecated 不再使用,使用SimpleModelEntity代替就可以
  * @author huliqing
  */
 public class TreeEntity extends PlantEntity {

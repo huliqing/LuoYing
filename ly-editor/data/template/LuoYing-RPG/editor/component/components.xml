@@ -14,8 +14,6 @@
     <component id="entitySky" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
     <component id="entityTerrain" type="entity" icon="" converterClass="name.huliqing.editor.component.TerrainEntityComponentConverter" />
     <component id="entityModel" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
-    <component id="entityTree" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
-    <component id="entityGrass" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
     <component id="entitySimpleWater" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
     <component id="entityAdvanceWater" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
     <component id="entityBoundary" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
