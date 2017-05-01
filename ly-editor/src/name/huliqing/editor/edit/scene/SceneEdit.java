@@ -43,6 +43,7 @@ import name.huliqing.editor.edit.UndoRedo;
 import name.huliqing.editor.edit.controls.ControlTile;
 import name.huliqing.editor.toolbar.EntityBatchToolbar;
 import name.huliqing.editor.toolbar.EntityBrushToolbar;
+import name.huliqing.editor.toolbar.NavMeshToolbar;
 import name.huliqing.editor.toolbar.TerrainToolbar;
 import name.huliqing.editor.toolbar.Toolbar;
 import name.huliqing.fxswing.Jfx;
@@ -70,6 +71,7 @@ public class SceneEdit extends SimpleJmeEdit implements SceneListener {
     private final Toolbar extTerrainToolbar = new TerrainToolbar(this);
     private final Toolbar extEntityBrushToolbar = new EntityBrushToolbar(this);
     private final Toolbar extEntityBatchToolbar = new EntityBatchToolbar(this);
+    private final Toolbar extNavMeshToolbar = new NavMeshToolbar(this);
 
     private Game game;
     private Scene scene;
@@ -99,6 +101,7 @@ public class SceneEdit extends SimpleJmeEdit implements SceneListener {
         tbs.add(extTerrainToolbar);
         tbs.add(extEntityBrushToolbar);
         tbs.add(extEntityBatchToolbar);
+        tbs.add(extNavMeshToolbar);
         return tbs;
     }
     

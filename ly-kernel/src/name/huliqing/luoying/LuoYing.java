@@ -310,6 +310,7 @@ import name.huliqing.luoying.object.entity.impl.BatchEntity;
 import name.huliqing.luoying.object.entity.impl.DirectionalLightShadowEntity;
 import name.huliqing.luoying.object.entity.impl.GrassEntity;
 import name.huliqing.luoying.object.entity.impl.InstancedEntity;
+import name.huliqing.luoying.object.entity.impl.NavMeshEntity;
 import name.huliqing.luoying.object.entity.impl.PointLightEntity;
 import name.huliqing.luoying.object.entity.impl.SimpleModelEntity;
 import name.huliqing.luoying.object.entity.impl.SpotLightEntity;
@@ -711,6 +712,7 @@ public class LuoYing {
         DataFactory.register("entityDirectionalLightShadow", EntityData.class, EntityDataLoader.class, DirectionalLightShadowEntity.class);
         DataFactory.register("entityGrass", EntityData.class, PlantEnvLoader.class, GrassEntity.class);
         DataFactory.register("entityInstanced", EntityData.class, EntityDataLoader.class, InstancedEntity.class);
+        DataFactory.register("entityNavMesh", EntityData.class, EntityDataLoader.class, NavMeshEntity.class);
         DataFactory.register("entityPhysics", EntityData.class, EntityDataLoader.class, PhysicsEntity.class);
         DataFactory.register("entityPlatformProxy", EntityData.class, EntityDataLoader.class, PlatformProxyEntity.class);
         DataFactory.register("entitySimpleModel", EntityData.class, EntityDataLoader.class, SimpleModelEntity.class);

@@ -74,6 +74,14 @@ public class JfxBooleanValueTool extends JfxAbstractTool<BooleanValueTool> imple
         super.initialize();
         label.setText(tool.getName());
         checkBox.setSelected(tool.getValue());
+        
+        tool.addValueChangeListener(this);
+    }
+
+    @Override
+    public void cleanup() {
+        tool.removeValueChangeListener(this);
+        super.cleanup();
     }
     
 }

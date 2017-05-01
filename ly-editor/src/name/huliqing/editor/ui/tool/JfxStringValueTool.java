@@ -81,13 +81,18 @@ public class JfxStringValueTool extends JfxAbstractTool<StringValueTool>
     public void initialize() {
         super.initialize();
         label.setText(tool.getName());
-        updateValueToView(tool.getValue());
-        tool.addValueChangeListener(this);
-        
-        // tooltip
         if (tool.getTips() != null) {
             label.setTooltip(new Tooltip(tool.getTips()));
         }
+        
+        updateValueToView(tool.getValue());
+        tool.addValueChangeListener(this);
+    }
+
+    @Override
+    public void cleanup() {
+        tool.addValueChangeListener(this);
+        super.cleanup();
     }
 
     // 当3d场景工具值发生变化时更新到JFX组件

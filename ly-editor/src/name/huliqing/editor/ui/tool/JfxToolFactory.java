@@ -27,6 +27,7 @@ import java.util.logging.Logger;
 import name.huliqing.editor.toolbar.Toolbar;
 import name.huliqing.editor.tools.BooleanValueTool;
 import name.huliqing.editor.tools.ButtonTool;
+import name.huliqing.editor.tools.EntityValueTool;
 import name.huliqing.editor.tools.NumberValueTool;
 import name.huliqing.editor.tools.ParamsTool;
 import name.huliqing.editor.tools.StringValueTool;
@@ -40,10 +41,8 @@ import name.huliqing.editor.tools.base.ScaleTool;
 import name.huliqing.editor.tools.Tool;
 import name.huliqing.editor.tools.Vector2fValueTool;
 import name.huliqing.editor.tools.Vector3fValueTool;
-import name.huliqing.editor.tools.batch.BatchEntityGenTool;
 import name.huliqing.editor.tools.batch.BatchSourceTool;
 import name.huliqing.editor.tools.batch.BatchTargetTool;
-import name.huliqing.editor.tools.batch.BatchTool;
 import name.huliqing.editor.tools.entity.InstancedTool;
 import name.huliqing.editor.tools.entity.SourceTool;
 import name.huliqing.editor.tools.terrain.TexLayerTool;
@@ -71,6 +70,7 @@ public class JfxToolFactory {
         TOOL_MAPPING.put(BooleanValueTool.class, JfxBooleanValueTool.class);
         TOOL_MAPPING.put(Vector2fValueTool.class, JfxVector2fValueTool.class);
         TOOL_MAPPING.put(Vector3fValueTool.class, JfxVector3fValueTool.class);
+        TOOL_MAPPING.put(EntityValueTool.class, JfxEntityValueTool.class);
         
         // ---- 基本工具
         // 模式切换工具

@@ -27,6 +27,7 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.Region;
 import javafx.stage.Popup;
 import name.huliqing.editor.ui.utils.SearchListView;
+import name.huliqing.editor.ui.utils.SearchListView.Converter;
 import name.huliqing.luoying.xml.DataProcessor;
 
 /**
@@ -74,6 +75,10 @@ public final class DataProcessorSearch<T extends DataProcessor> {
         if (items == null) 
             return;
         searchListView.setAllItems(items);
+    }
+    
+    public void setConverter(Converter<T> converter) {
+        searchListView.setConverter(converter);
     }
     
     public SearchListView getView() {

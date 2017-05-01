@@ -112,22 +112,6 @@ public class PlayServiceImpl implements PlayService {
     public float getScreenHeight() {
         return LuoYing.getSettings().getHeight();
     }
-
-//    @Override
-//    public Vector3f getTerrainHeight(Scene scene, float x, float z) {
-//        // 在场景载入完毕之后将植皮位置移到terrain节点的上面。
-//        List<TerrainEntity> sos = scene.getEntities(TerrainEntity.class, new ArrayList<TerrainEntity>());
-//        Vector3f result = null;
-//        for (TerrainEntity terrain : sos) {
-//            Vector3f tp = terrain.getHeight(x, z);
-//            if (tp != null) {
-//                if (result == null || tp.y > result.y) {
-//                    result = tp;
-//                }
-//            }
-//        }
-//        return result;
-//    }
     
     @Override
     public void attack(Entity actor, Entity target) {

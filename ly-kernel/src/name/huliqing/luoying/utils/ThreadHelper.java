@@ -77,4 +77,12 @@ public class ThreadHelper {
             executor = null;
         }
     }
+    
+    /**
+     * 设置线程数, 默认8线程。线程数不是越多越好， 一般可以设置为: CPU核心数 * 2;  
+     * @param corePoolSize 
+     */
+    public void setCorePoolSize(int corePoolSize) {
+        executor.setCorePoolSize(corePoolSize);
+    }
 }

@@ -41,6 +41,7 @@ import name.huliqing.luoying.xml.ObjectData;
 
 /**
  * 用于转换PlantEntity的SwayGeometries字段，以方便选择”摇动“的网格物体.
+ * @deprecated 20170501不再需要，因为已经不再需要有PlantEntity
  * @author huliqing
  */
 public class SwayGeometriesFieldConverter extends SimpleFieldConverter<JfxSceneEdit, ObjectData>{

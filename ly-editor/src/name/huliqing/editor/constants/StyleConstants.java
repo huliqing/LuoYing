@@ -41,4 +41,16 @@ public class StyleConstants {
     
     /** 状态栏样式 */
     public final static String CLASS_STATUS_BAR = "statusBar";
+    
+    /** css 左边圆角化， 即左下和左上*/
+    public final static String CSS_CORNER_ROUND_LEFT ="-fx-background-radius:7 0 0 7;";
+    
+    /** css 右边圆角化， 即右下和右上*/
+    public final static String CSS_CORNER_ROUND_RIGHT ="-fx-background-radius:0 7 7 0;";
+    
+    /** css 上边圆角化，即左上和右上 */
+    public final static String CSS_CORNER_ROUND_TOP ="-fx-background-radius:7 7 0 0;";
+    
+    /** css 下边圆角化，即左下和右下 */
+    public final static String CSS_CORNER_ROUND_BOTTOM ="-fx-background-radius:0 0 7 7;";
 }
