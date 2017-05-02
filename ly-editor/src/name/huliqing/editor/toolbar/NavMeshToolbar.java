@@ -19,6 +19,7 @@
  */
 package name.huliqing.editor.toolbar;
 
+import name.huliqing.editor.constants.ResConstants;
 import name.huliqing.editor.edit.SimpleJmeEdit;
 import name.huliqing.editor.manager.Manager;
 import name.huliqing.editor.tools.BooleanValueTool;
@@ -35,7 +36,6 @@ import name.huliqing.luoying.object.entity.impl.NavMeshEntity;
 public class NavMeshToolbar extends EditToolbar<SimpleJmeEdit> {
     
     private EntityValueTool navMeshSourceTool;
-    
     private FloatValueTool cellSize;
     private FloatValueTool cellHeight;
     private FloatValueTool minTraversableHeight;
@@ -55,6 +55,7 @@ public class NavMeshToolbar extends EditToolbar<SimpleJmeEdit> {
 //    private FloatValueTool intermediateData;
     private FloatValueTool timeout;
     
+    private BooleanValueTool displayNavMeshTool;
     private NavMeshGenTool navMeshGenTool;
 
     public NavMeshToolbar(SimpleJmeEdit edit) {
@@ -69,25 +70,26 @@ public class NavMeshToolbar extends EditToolbar<SimpleJmeEdit> {
     @Override
     public void initialize() {
         super.initialize();
-        navMeshSourceTool = new EntityValueTool("NavMeshSourceTool", "NavMeshSourceTool", null);
-        cellSize = new FloatValueTool("<cellSize>", "<cellSize>", null);
-        cellHeight = new FloatValueTool("<cellHeight>", "<cellHeight>", null);
-        minTraversableHeight = new FloatValueTool("<minTraversableHeight>", "<minTraversableHeight>", null);
-        maxTraversableStep = new FloatValueTool("<maxTraversableStep>", "<maxTraversableStep>", null);
-        maxTraversableSlope = new FloatValueTool("<maxTraversableSlope>", "<maxTraversableSlope>", null);
-        clipLedges = new BooleanValueTool("<clipLedges>", "<clipLedges>", null);
-        traversableAreaBorderSize = new FloatValueTool("<traversableAreaBorderSize>", "<traversableAreaBorderSize>", null);
-        smoothingThreshold = new IntegerValueTool("<smoothingThreshold>", "<smoothingThreshold>", null);
-        useConservativeExpansion = new BooleanValueTool("<useConservativeExpansion>", "<useConservativeExpansion>", null);
-        minUnconnectedRegionSize = new IntegerValueTool("<minUnconnectedRegionSize>", "<minUnconnectedRegionSize>", null);
-        mergeRegionSize = new IntegerValueTool("<mergeRegionSize>", "<mergeRegionSize>", null);
-        maxEdgeLength = new FloatValueTool("<maxEdgeLength>", "<maxEdgeLength>", null);
-        edgeMaxDeviation = new FloatValueTool("<edgeMaxDeviation>", "<edgeMaxDeviation>", null);
-        maxVertsPerPoly = new IntegerValueTool("<maxVertsPerPoly>", "<maxVertsPerPoly>", null);
-        contourSampleDistance = new FloatValueTool("<contourSampleDistance>", "<contourSampleDistance>", null);
-        contourMaxDeviation = new FloatValueTool("<contourMaxDeviation>", "<contourMaxDeviation>", null);
-        timeout = new FloatValueTool("<timeout>", "<timeout>", null);
-        navMeshGenTool = new NavMeshGenTool("<navMeshGenTool>", "<navMeshGenTool>", null);
+        navMeshSourceTool = new EntityValueTool(Manager.getRes(ResConstants.TOOL_NAVMESH_SOURCE), Manager.getRes(ResConstants.TOOL_NAVMESH_SOURCE_TIP), null);
+        cellSize = new FloatValueTool(Manager.getRes(ResConstants.TOOL_NAVMESH_CELLSIZE), Manager.getRes(ResConstants.TOOL_NAVMESH_CELLSIZE_TIP), null);
+        cellHeight = new FloatValueTool(Manager.getRes(ResConstants.TOOL_NAVMESH_CELLHEIGHT), Manager.getRes(ResConstants.TOOL_NAVMESH_CELLHEIGHT_TIP), null);
+        minTraversableHeight = new FloatValueTool(Manager.getRes(ResConstants.TOOL_NAVMESH_MINTRAVERSABLEHEIGHT), Manager.getRes(ResConstants.TOOL_NAVMESH_MINTRAVERSABLEHEIGHT_TIP), null);
+        maxTraversableStep = new FloatValueTool(Manager.getRes(ResConstants.TOOL_NAVMESH_MAXTRAVERSABLESTEP), Manager.getRes(ResConstants.TOOL_NAVMESH_MAXTRAVERSABLESTEP_TIP), null);
+        maxTraversableSlope = new FloatValueTool(Manager.getRes(ResConstants.TOOL_NAVMESH_MAXTRAVERSABLESLOPE), Manager.getRes(ResConstants.TOOL_NAVMESH_MAXTRAVERSABLESLOPE_TIP), null);
+        clipLedges = new BooleanValueTool(Manager.getRes(ResConstants.TOOL_NAVMESH_CLIPLEDGES), Manager.getRes(ResConstants.TOOL_NAVMESH_CLIPLEDGES_TIP), null);
+        traversableAreaBorderSize = new FloatValueTool(Manager.getRes(ResConstants.TOOL_NAVMESH_TRAVERSABLEAREABORDERSIZE), Manager.getRes(ResConstants.TOOL_NAVMESH_TRAVERSABLEAREABORDERSIZE_TIP), null);
+        smoothingThreshold = new IntegerValueTool(Manager.getRes(ResConstants.TOOL_NAVMESH_SMOOTHINGTHRESHOLD), Manager.getRes(ResConstants.TOOL_NAVMESH_SMOOTHINGTHRESHOLD_TIP), null);
+        useConservativeExpansion = new BooleanValueTool(Manager.getRes(ResConstants.TOOL_NAVMESH_USECONSERVATIVEEXPANSION), Manager.getRes(ResConstants.TOOL_NAVMESH_USECONSERVATIVEEXPANSION_TIP), null);
+        minUnconnectedRegionSize = new IntegerValueTool(Manager.getRes(ResConstants.TOOL_NAVMESH_MINUNCONNECTEDREGIONSIZE), Manager.getRes(ResConstants.TOOL_NAVMESH_MINUNCONNECTEDREGIONSIZE_TIP), null);
+        mergeRegionSize = new IntegerValueTool(Manager.getRes(ResConstants.TOOL_NAVMESH_MERGEREGIONSIZE), Manager.getRes(ResConstants.TOOL_NAVMESH_MERGEREGIONSIZE_TIP), null);
+        maxEdgeLength = new FloatValueTool(Manager.getRes(ResConstants.TOOL_NAVMESH_MAXEDGELENGTH), Manager.getRes(ResConstants.TOOL_NAVMESH_MAXEDGELENGTH_TIP), null);
+        edgeMaxDeviation = new FloatValueTool(Manager.getRes(ResConstants.TOOL_NAVMESH_EDGEMAXDEVIATION), Manager.getRes(ResConstants.TOOL_NAVMESH_EDGEMAXDEVIATION_TIP), null);
+        maxVertsPerPoly = new IntegerValueTool(Manager.getRes(ResConstants.TOOL_NAVMESH_MAXVERTSPERPOLY), Manager.getRes(ResConstants.TOOL_NAVMESH_MAXVERTSPERPOLY_TIP), null);
+        contourSampleDistance = new FloatValueTool(Manager.getRes(ResConstants.TOOL_NAVMESH_CONTOURSAMPLEDISTANCE), Manager.getRes(ResConstants.TOOL_NAVMESH_CONTOURSAMPLEDISTANCE_TIP), null);
+        contourMaxDeviation = new FloatValueTool(Manager.getRes(ResConstants.TOOL_NAVMESH_CONTOURMAXDEVIATION), Manager.getRes(ResConstants.TOOL_NAVMESH_CONTOURMAXDEVIATION_TIP), null);
+        timeout = new FloatValueTool(Manager.getRes(ResConstants.TOOL_NAVMESH_TIMEOUT), Manager.getRes(ResConstants.TOOL_NAVMESH_TIMEOUT_TIP), null);
+        displayNavMeshTool = new BooleanValueTool(Manager.getRes(ResConstants.TOOL_NAVMESH_DISPLAY), Manager.getRes(ResConstants.TOOL_NAVMESH_DISPLAY_TIP), null);
+        navMeshGenTool = new NavMeshGenTool(Manager.getRes(ResConstants.TOOL_NAVMESH_GEN), Manager.getRes(ResConstants.TOOL_NAVMESH_GEN_TIP), null);
         
         navMeshSourceTool.setEntityType(NavMeshEntity.class);
         cellSize.setValue(1f);
@@ -107,6 +109,7 @@ public class NavMeshToolbar extends EditToolbar<SimpleJmeEdit> {
         contourSampleDistance.setValue(25);
         contourMaxDeviation.setValue(25);
         timeout.setValue(10000);
+        displayNavMeshTool.setValue(true);
         
         add(navMeshSourceTool);
         add(cellSize);
@@ -126,6 +129,7 @@ public class NavMeshToolbar extends EditToolbar<SimpleJmeEdit> {
         add(contourSampleDistance);
         add(contourMaxDeviation);
         add(timeout);
+        add(displayNavMeshTool);
         add(navMeshGenTool);
         
         setEnabled(navMeshSourceTool, true);
@@ -146,6 +150,7 @@ public class NavMeshToolbar extends EditToolbar<SimpleJmeEdit> {
         setEnabled(contourSampleDistance, true);
         setEnabled(contourMaxDeviation, true);
         setEnabled(timeout, true);
+        setEnabled(displayNavMeshTool, true);
         setEnabled(navMeshGenTool, true);
     }
 
@@ -226,6 +231,10 @@ public class NavMeshToolbar extends EditToolbar<SimpleJmeEdit> {
 
     public FloatValueTool getTimeout() {
         return timeout;
+    }
+
+    public BooleanValueTool getDisplayNavMeshTool() {
+        return displayNavMeshTool;
     }
 
     public NavMeshGenTool getNavMeshGenTool() {

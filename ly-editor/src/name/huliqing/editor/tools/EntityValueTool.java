@@ -54,4 +54,6 @@ public class EntityValueTool extends AbstractValueTool<Entity> {
     public void setEntityType(Class<? extends Entity> entityType) {
         this.entityType = entityType;
     }
+
+    
 }

@@ -52,9 +52,6 @@
             <feature name="items" value="Opaque,Transparent,Sky,Translucent,Gui,Inherit" />
             <feature name="collapsed" value="true" />
         </field>
-<!--        <field name="preferUnshaded" converter="CheckBoxConverter">
-            <feature name="collapsed" value="true" />
-        </field>-->
     </data>
     
     <data name="entityAudio" extends="entityBase">
@@ -183,7 +180,7 @@
     </data>
 
     <data name="entitySimpleWater" extends="entityModelBase">
-        <feature name="hideFields" value="mat,shadowMode,cullHint,queueBucket,preferUnshaded" />
+        <feature name="hideFields" value="mat,shadowMode,cullHint,queueBucket" />
         <field name="waterModel" converter="FileConverter">
             <feature name="filters" value="Model Files|*.j3o,All Files|*.*" />
         </field>
@@ -207,7 +204,7 @@
     </data>
     
     <data name="entityAdvanceWater" extends="entityModelBase">
-        <feature name="hideFields" value="mat,rotation,scale,shadowMode,cullHint,queueBucket,preferUnshaded" />
+        <feature name="hideFields" value="mat,rotation,scale,shadowMode,cullHint,queueBucket" />
         <field name="center" converter="Vector3fConverter">
             <feature name="collapsed" value="true" />
         </field>
@@ -279,7 +276,7 @@
     </data>
     
     <data name="entitySkyBox" extends="entityModelBase">
-        <feature name="hideFields" value="location,rotation,scale,mat,shadowMode,cullHint,queueBucket,preferUnshaded" />
+        <feature name="hideFields" value="location,rotation,scale,mat,shadowMode,cullHint,queueBucket" />
         <field name="west" converter="FileConverter">
             <feature name="filters" value="Images|*.jpg|*.jpeg|*.png,All Files|*.*" />
         </field>
@@ -301,17 +298,23 @@
     </data>
     
     <data name="entityEffect" extends="entityModelBase">
-        <feature name="hideFields" value="mat,preferUnshaded" />
+        <feature name="hideFields" value="mat" />
         <field name="effect" converter="DataFieldConverter">
             <feature name="componentType" value="effect" />
         </field>
     </data>
     
     <data name="entityInstanced" extends="entityModelBase">
-        <feature name="hideFields" value="location,rotation,scale,mat,preferUnshaded" />
+        <feature name="hideFields" value="location,rotation,scale,mat" />
     </data>
     <data name="entityBatch" extends="entityModelBase">
-        <feature name="hideFields" value="location,rotation,scale,mat,preferUnshaded" />
+        <feature name="hideFields" value="location,rotation,scale,mat" />
+    </data>
+    <data name="entityNavMesh" extends="entityBase">
+        <feature name="hideFields" value="location,rotation,scale,mat" />
+        <field name="file" converter="FileConverter">
+            <feature name="filters" value="Model|*.j3o,All Files|*.*" />
+        </field>
     </data>
     
     

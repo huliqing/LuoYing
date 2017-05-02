@@ -910,11 +910,15 @@ xs:time
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="entityBase">
+                    <xs:attribute name="file" type="xs:string" use="required">
+                        <xs:annotation><xs:documentation>指定一个模型物体，这个模型中的网格将作为导航网格使用。</xs:documentation></xs:annotation>
+                    </xs:attribute>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
     </xs:element>
     
+    <!-- remove20170502,不再需要-->
 <!--    <xs:element name="entityGrass">
         <xs:complexType>
             <xs:complexContent>

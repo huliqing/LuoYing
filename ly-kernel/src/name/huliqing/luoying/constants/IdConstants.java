@@ -132,6 +132,8 @@ public class IdConstants {
     public final static String SYS_ENTITY_INSTANCED = "sysEntityInstanced";
     /** sysEntityBatch */
     public final static String SYS_ENTITY_BATCH = "sysEntityBatch";
+    /** sysEntityNavMesh*/
+    public final static String SYS_ENTITY_NAV_MESH = "sysEntityNavMesh";
     
     // =============================================================================
     // El

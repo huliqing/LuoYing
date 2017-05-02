@@ -261,14 +261,6 @@ public class SceneEdit extends SimpleJmeEdit implements SceneListener {
         EntityControlTile<Entity> ect = controlTileMap.get(entityData);
         if (ect != null) {
             ect.reloadEntity(scene);
-            
-            // remove20170410,后续直接使用 scene.notifyEntityStateChanged(ect.getTarget());就可以
-//            // 当EntityControlTile重新载入的时候会进行cleanup，导致实体会从物理空间中移除。
-//            // 这里需要重新把它加进去。
-//            if (physicsEntity != null && physicsEntity.isInitialized()) {
-//                physicsEntity.onSceneEntityAdded(scene, ect.getTarget());
-//            }
-            
             this.scene.notifyEntityStateChanged(ect.getTarget());
         }
     }
@@ -307,6 +299,24 @@ public class SceneEdit extends SimpleJmeEdit implements SceneListener {
         }
         Entity entity = Loader.load(ed);
         EntityControlTile<Entity> ect = ControlTileManager.createEntityControlTile(ed);
+        ect.setTarget(entity);
+        EntityAddedUndoRedo eaur = new EntityAddedUndoRedo(ect);
+        eaur.redo();
+        addUndoRedo(eaur);
+    }
+    
+    /**
+     * 向场景中添加实体，这个方法会记录历史操作, 如果指定的实体已经存在于场景中则什么也不做。
+     * @param entity 
+     */
+    public void addEntityUseUndoRedo(Entity entity) {
+        if (controlTileMap.containsKey(entity.getData())) {
+            return;
+        }
+        if (scene.getEntity(entity.getEntityId()) != null) {
+            return;
+        }
+        EntityControlTile<Entity> ect = ControlTileManager.createEntityControlTile(entity.getData());
         ect.setTarget(entity);
         EntityAddedUndoRedo eaur = new EntityAddedUndoRedo(ect);
         eaur.redo();

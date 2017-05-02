@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javafx.beans.Observable;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -343,8 +342,8 @@ public class EntitiesFieldConverter extends FieldConverter<JfxSceneEdit, EntityD
                 updateList();
             });
             
-            listView.setStyle("-fx-background-radius: 0 0 7 7;");
-            inputFilter.setStyle("-fx-background-radius: 7 7 0 0;");
+            listView.setStyle(StyleConstants.CSS_CORNER_ROUND_BOTTOM);
+            inputFilter.setStyle(StyleConstants.CSS_CORNER_ROUND_TOP);
         }
         
         public void updateList() {

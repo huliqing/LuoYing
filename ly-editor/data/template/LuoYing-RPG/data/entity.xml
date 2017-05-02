@@ -125,6 +125,8 @@
     <!--特效: 默认的空效果实体，无任何特效，需要在程序中运行时设置效果-->
     <entityEffect id="entityEffect" effect="" traceEntity="" traceBone="" />
     
+    <!--寻路网格功能: 需要动态设置网格-->
+    <entityNavMesh id="entityNavMesh" file="" />
 </root>
 
 

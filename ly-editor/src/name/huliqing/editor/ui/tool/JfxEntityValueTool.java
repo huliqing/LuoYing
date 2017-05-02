@@ -24,11 +24,14 @@ import java.util.logging.Logger;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.util.Callback;
 import name.huliqing.editor.constants.AssetConstants;
 import name.huliqing.editor.constants.StyleConstants;
 import name.huliqing.editor.edit.JmeEdit;
@@ -43,7 +46,7 @@ import name.huliqing.fxswing.Jfx;
 import name.huliqing.luoying.object.entity.Entity;
 
 /**
- *  用于从场景中选择一个实体
+ *  用于从场景中选择一个实体, 这个工具组件渲染为一个输入框及一个用于从场景中搜索实体的搜索框。
  * @author huliqing
  */
 public class JfxEntityValueTool extends JfxAbstractTool<EntityValueTool> implements ValueChangedListener<Entity>{
@@ -81,6 +84,7 @@ public class JfxEntityValueTool extends JfxAbstractTool<EntityValueTool> impleme
             searchHelper.show(selectButton, -10, -10);
         });
 
+        searchHelper.getListView().setCellFactory(new CellInner());
         searchHelper.setConverter(converter);
         searchHelper.getListView().setOnMouseClicked(e -> {
             searchHelper.hide();
@@ -144,6 +148,24 @@ public class JfxEntityValueTool extends JfxAbstractTool<EntityValueTool> impleme
             input.setText(converter.convertToString(newValue));
         } else {
             input.setText("");
+        }
+    }
+    
+    private class CellInner implements Callback<ListView<Entity>, ListCell<Entity>> {
+        @Override
+        public ListCell<Entity> call(ListView<Entity> param) {
+            ListCell<Entity> lc = new ListCell<Entity>() {
+                @Override
+                protected void updateItem(Entity item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setText(null);
+                    setGraphic(null);
+                    if (!empty && item != null) {
+                        setText(converter.convertToString(item));
+                    }
+                }
+            };
+            return lc;
         }
     }
     

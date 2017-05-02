@@ -128,6 +128,8 @@
 <!--    特效: 内置示例
     <entityEffect id="sysEntityEffectFire" effect="sysEffectFire" />-->
     
+    <!--寻路网格功能: 需要动态设置网格-->
+    <entityNavMesh id="sysEntityNavMesh" file="" />
 </root>
 
 

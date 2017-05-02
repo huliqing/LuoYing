@@ -21,43 +21,40 @@ package name.huliqing.luoying.object.entity.impl;
 
 import com.jme3.ai.navmesh.NavMesh;
 import com.jme3.ai.navmesh.NavMeshPathfinder;
-import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
-import com.jme3.scene.SceneGraphVisitor;
 import com.jme3.scene.Spatial;
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import jme3tools.optimize.GeometryBatchFactory;
 import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.object.entity.NonModelEntity;
 import name.huliqing.luoying.object.scene.Scene;
-import name.huliqing.luoying.utils.MaterialUtils;
+import name.huliqing.luoying.utils.GeometryUtils;
 
 /**
  * NavMeshEntity用于作为场景的寻路网格而存在。这个实体可以载入一个模形并用这个模型的Mesh作为寻路网格.
- * 也可以指定一个已经生成好的寻路网格模型
+ * 注：所指定的模型中的网格将<strong>直接</strong>作为寻路网格, 如果模型中存在多个网格，则这些网格会被合并在一起，
+ * 然后作为用于生成NavMesh的网格，其它不会再做优化处理。
  * @author huliqing
  */
 public class NavMeshEntity extends NonModelEntity{
 
     // 这个File指向一个j3o模型文件，这个文件中的mesh将作为寻路网格用于NavMesh
     private String file;
-    private boolean debug;
     
     // ---- inner
     //  原始网格
     private Mesh mesh;
     // 导航网格
     private NavMesh navMesh;
-    // Debug
-    private Geometry debugGeo;
     
     @Override
     public void setData(EntityData data) {
         super.setData(data);
         file = data.getAsString("file");
-        debug = data.getAsBoolean("debug", debug);
     }
     
     @Override
@@ -65,46 +62,36 @@ public class NavMeshEntity extends NonModelEntity{
         if (file == null) {
             return;
         }
-        // 如果存在多个网格，则最后找到的一个为准。
+        mesh = null;
+        // 如果存在多个网格, 则把网格合并到一起
         Spatial meshFile = Loader.loadModel(file);
-        meshFile.depthFirstTraversal(new SceneGraphVisitor() {
-            @Override
-            public void visit(Spatial spatial) {
-                if (spatial instanceof Geometry) {
-                    mesh = ((Geometry) spatial).getMesh();
-                }
-            }
-        });
-        if (mesh != null) {
-            navMesh = new NavMesh(mesh);
-            if (debug) {
-                debugGeo = new Geometry("NavMesh", mesh);
-                debugGeo.setCullHint(Spatial.CullHint.Never);
-                debugGeo.setMaterial(MaterialUtils.createUnshaded(ColorRGBA.Green));
-            }
-        } else {
+        LinkedList<Geometry> meshGeos = new LinkedList<Geometry>();
+        GeometryUtils.findAllGeometry(meshFile, meshGeos);
+        
+        if (meshGeos.size() <= 0) {
             Logger.getLogger(NavMeshEntity.class.getName()).log(Level.WARNING, "No mesh found for NavMesh"
                     + ", NavMeshEntityId={0}, entityName={1}, uniqueId={2}"
                     , new Object[] {data.getId(), data.getName(), data.getUniqueId()});
+            return;
+        } else if (meshGeos.size() == 1) {
+            mesh = meshGeos.get(0).getMesh();
+        } else {
+            GeometryBatchFactory.mergeGeometries(meshGeos, mesh);
         }
-    }
-
-    @Override
-    public void cleanup() {
-        mesh = null;
-        if (debugGeo != null) {
-            debugGeo.removeFromParent();
-            debugGeo = null;
-        }
-        super.cleanup();
+        navMesh = new NavMesh(mesh);
     }
 
     @Override
     public void onInitScene(Scene scene) {
         super.onInitScene(scene);
-        if (debug && debugGeo != null) {
-            scene.getRoot().attachChild(debugGeo);
-        }
+    }
+    
+    /**
+     * 获取用于寻路的网格
+     * @return 
+     */
+    public Mesh getNavMesh() {
+        return mesh;
     }
     
     public NavMeshPathfinder createPathfinder() {

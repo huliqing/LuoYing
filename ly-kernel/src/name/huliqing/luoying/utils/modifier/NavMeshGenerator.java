@@ -1,34 +1,3 @@
-/*
- * Copyright (c) 2009-2012 jMonkeyEngine
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are
- * met:
- *
- * * Redistributions of source code must retain the above copyright
- *   notice, this list of conditions and the following disclaimer.
- *
- * * Redistributions in binary form must reproduce the above copyright
- *   notice, this list of conditions and the following disclaimer in the
- *   documentation and/or other materials provided with the distribution.
- *
- * * Neither the name of 'jMonkeyEngine' nor the names of its contributors
- *   may be used to endorse or promote products derived from this software
- *   without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
- * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
- * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
 package name.huliqing.luoying.utils.modifier;
 
 import com.jme3.export.InputCapsule;
@@ -56,37 +25,15 @@ import org.critterai.nmgen.TriangleMesh;
  */ 
 public class NavMeshGenerator implements Savable {
 
-    // bak
-//    private org.critterai.nmgen.NavmeshGenerator nmgen;
-//    private float cellSize = 1f;
-//    private float cellHeight = 1.5f;
-//    private float minTraversableHeight = 7.5f;
-//    private float maxTraversableStep = 1f;
-//    private float maxTraversableSlope = 48.0f;
-//    private boolean clipLedges = false;
-//    private float traversableAreaBorderSize = 1.2f;
-//    private int smoothingThreshold = 2;
-//    private boolean useConservativeExpansion = true;
-//    private int minUnconnectedRegionSize = 3;
-//    private int mergeRegionSize = 10;
-//    private float maxEdgeLength = 0;
-//    private float edgeMaxDeviation = 2.4f;
-//    private int maxVertsPerPoly = 6;
-//    private float contourSampleDistance = 25;
-//    private float contourMaxDeviation = 25;
-//    private IntermediateData intermediateData;
-//    private int timeout = 10000;
-    
-    // -- test
     private org.critterai.nmgen.NavmeshGenerator nmgen;
     private float cellSize = 1f;
     private float cellHeight = 1.5f;
-    private float minTraversableHeight = 2f; // default 7.5
+    private float minTraversableHeight = 7.5f;
     private float maxTraversableStep = 1f;
-    private float maxTraversableSlope = 35.0f; // def 48
+    private float maxTraversableSlope = 48.0f;
     private boolean clipLedges = false;
     private float traversableAreaBorderSize = 1.2f;
-    private int smoothingThreshold = 1; //2;
+    private int smoothingThreshold = 2;
     private boolean useConservativeExpansion = true;
     private int minUnconnectedRegionSize = 3;
     private int mergeRegionSize = 10;

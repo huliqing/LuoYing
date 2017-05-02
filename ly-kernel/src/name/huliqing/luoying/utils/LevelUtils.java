@@ -24,7 +24,7 @@ import java.util.Map;
 
 /**
  * 管理角色等级相关信息
- *
+ * @deprecated 不再使用
  * @author huliqing
  */
 public class LevelUtils {

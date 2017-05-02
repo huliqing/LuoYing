@@ -126,6 +126,7 @@ public abstract class AbstractScene implements Scene, SceneLoader.Listener {
             sceneOrigin = new Geometry("sceneOrigin", new Box(1,1,1));
             sceneOrigin.setMaterial(MaterialUtils.createUnshaded());
             sceneOrigin.setCullHint(Spatial.CullHint.Always);
+            sceneOrigin.setLocalScale(0.0001f, 0.0001f, 0.0001f);
         }
         root.attachChildAt(sceneOrigin, 0);
         
