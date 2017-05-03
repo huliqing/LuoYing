@@ -7,7 +7,7 @@
     
     <!--Entity FieldConverter-->
     <converter name="EntityDataConverter" value="name.huliqing.editor.converter.data.EntityDataConverter" />
-    <converter name="SwayGeometriesFieldConverter" value="name.huliqing.editor.converter.field.SwayGeometriesFieldConverter" />
+    <converter name="SwayGeometriesConverter" value="name.huliqing.editor.converter.field.SwayGeometriesConverter" />
 
     <data name="entityBase" extends="base" converter="EntityDataConverter">
         <field name="name" converter="TextConverter">
@@ -25,14 +25,14 @@
         <field name="mat" converter="TextConverter">
             <feature name="collapsed" value="true" />
         </field>
-        <field name="objectDatas" converter="ListDataFieldConverter">
+        <field name="objectDatas" converter="ListDataConverter">
             <feature name="collapsed" value="true" />
         </field>
-        <field name="modules" converter="ListDataFieldConverter">
+        <field name="modules" converter="ListDataConverter">
             <feature name="componentType" value="module" />
             <feature name="collapsed" value="true" />
         </field>
-        <field name="attributes" converter="EntityObjectDatasFieldConverter">
+        <field name="attributes" converter="EntityObjectDatasConverter">
             <feature name="dataType" value="name.huliqing.luoying.data.AttributeData" />
             <feature name="componentType" value="attribute" />
             <feature name="collapsed" value="true" />
@@ -57,7 +57,7 @@
     <data name="entityAudio" extends="entityBase">
         <feature name="hideFields" value="rotation,scale,mat" />
         <field name="debug" converter="CheckBoxConverter" />
-        <field name="sound" converter="DataFieldConverter">
+        <field name="sound" converter="DataConverter">
             <feature name="componentType" value="sound" />
         </field>
     </data>
@@ -141,6 +141,9 @@
             <feature name="collapsed" value="true" />
         </field>
        <field name="hideCursorOnRotate" converter="CheckBoxConverter"/>
+       <field name="rotationEnabled" converter="CheckBoxConverter"/>
+       <field name="physicsEnabled" converter="CheckBoxConverter"/>
+       <field name="chaseTarget" converter="UniqueIdConverter"/>
     </data>
 
     <data name="entityPhysics" extends="entityBase">
@@ -299,7 +302,7 @@
     
     <data name="entityEffect" extends="entityModelBase">
         <feature name="hideFields" value="mat" />
-        <field name="effect" converter="DataFieldConverter">
+        <field name="effect" converter="DataConverter">
             <feature name="componentType" value="effect" />
         </field>
     </data>

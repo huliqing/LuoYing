@@ -6,7 +6,7 @@
     xsi:schemaLocation='http://editor.huliqing.name meta.xsd'>
     
     <data name="dropBase" extends="base">
-        <field name="sounds" converter="ListDataFieldConverter" />
+        <field name="sounds" converter="ListDataConverter" />
     </data>
 
     <data name="dropAttribute" extends="dropBase">

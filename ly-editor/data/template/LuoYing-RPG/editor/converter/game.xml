@@ -9,10 +9,10 @@
         <field name="icon" converter="FileConverter">
             <feature name="filters" value="Images|*.jpg|*.jpeg|*.png,All Files|*.*" />
         </field>
-        <field name="scene" converter="DataFieldConverter" >
+        <field name="scene" converter="DataComponentConverter" >
             <feature name="componentType" value="scene" />
         </field>
-        <field name="guiScene" converter="DataFieldConverter">
+        <field name="guiScene" converter="DataComponentConverter">
             <feature name="componentType" value="scene" />
         </field>
         <field name="gameLogics" converter="TextConverter" />

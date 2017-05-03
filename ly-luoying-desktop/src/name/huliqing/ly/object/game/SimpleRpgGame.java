@@ -397,7 +397,7 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
         ChaseCameraEntity cce = getChaseCamera();
         if (cce != null) {
             cce.setEnabled(true);
-            cce.setEnabledRotation(enabled);
+            cce.setRotationEnabled(enabled);
         }
     }
     

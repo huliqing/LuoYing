@@ -5,7 +5,7 @@
     xmlns='http://editor.huliqing.name'
     xsi:schemaLocation='http://editor.huliqing.name meta.xsd'>
     
-    <converter name="SkillAnimationFieldConverter" value="name.huliqing.editor.converter.field.SkillAnimationFieldConverter" />
+    <converter name="SkillAnimationConverter" value="name.huliqing.editor.converter.field.SkillAnimationConverter" />
     
     <data name="skillBase" extends="base" >
         <field name="icon" converter="FileConverter">
@@ -29,7 +29,7 @@
     </data>
     
     <data name="skillSimpleAnimationBase" extends="skillBase" >
-        <field name="animation" converter="SkillAnimationFieldConverter" />
+        <field name="animation" converter="SkillAnimationConverter" />
         <field name="useTime" converter="FloatTextConverter" />
         <field name="loop" converter="CheckBoxConverter" />
         <field name="channels" converter="TextConverter" />
@@ -57,9 +57,9 @@
     <data name="skillIdle" extends="skillSimpleAnimationBase" />
     
     <data name="skillJump" extends="skillBase" >
-        <field name="animStart" converter="SkillAnimationFieldConverter" />
-        <field name="animInAir" converter="SkillAnimationFieldConverter" />
-        <field name="animEnd" converter="SkillAnimationFieldConverter" />
+        <field name="animStart" converter="SkillAnimationConverter" />
+        <field name="animInAir" converter="SkillAnimationConverter" />
+        <field name="animEnd" converter="SkillAnimationConverter" />
         <field name="animInAirLoop" converter="ChoiceConverter" >
             <feature name="items" value="Loop,DontLoop,Cycle" />
         </field>

@@ -19,11 +19,26 @@
  */
 package name.huliqing.editor.converter.field;
 
+import javafx.scene.Node;
+import javafx.scene.control.TextField;
+import name.huliqing.editor.converter.SimpleFieldConverter;
+
 /**
- *
+ * 对于ObjectData的唯一ID进行转换，只读
  * @author huliqing
  */
-public class ListIdFieldConverter {
- 
-    // TODO
+public class DataUniqueIdConverter extends SimpleFieldConverter {
+
+    private final TextField layout = new TextField("");
+    
+    @Override
+    protected void updateUI() {
+        layout.setText(data.getUniqueId() + "");
+    }
+
+    @Override
+    protected Node createLayout() {
+        return layout;
+    }
+    
 }

@@ -27,7 +27,7 @@
     </data>
     
     <data name="physicsShapeStaticCustomMesh" extends="physicsShapeBase">
-        <field name="shape" converter="DataFieldConverter">
+        <field name="shape" converter="DataComponentConverter">
             <feature name="componentType" value="shape" />
         </field>
     </data>

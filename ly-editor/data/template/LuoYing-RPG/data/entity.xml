@@ -114,7 +114,8 @@
     <!--物理跟随相机-->
     <entityChaseCamera id="entityChaseCamera" invertVerticalAxis="1" lookAtOffset="0,2,0" zoomSensitivity="0.5" 
                     rotationSpeed="5" rotationSensitivity="5" maxDistance="15" minDistance="2" defaultDistance="15" 
-                    chasingSensitivity="5" downRotateOnCloseViewOnly="1" upVector="0,1,0" hideCursorOnRotate="0" />
+                    chasingSensitivity="5" downRotateOnCloseViewOnly="1" upVector="0,1,0" hideCursorOnRotate="0"  
+                    rotationEnabled="1" physicsEnabled="1" chaseTarget="" />
     
     <!--声音 -->
     <entityAudio id="entityAudio" />

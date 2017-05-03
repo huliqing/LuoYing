@@ -30,7 +30,7 @@
         <field name="selectRandomImage" converter="CheckBoxConverter" />
         <field name="faceNormal" converter="Vector3fConverter" />
         <field name="facingVelocity" converter="CheckBoxConverter" />
-        <field name="shape" converter="DataFieldConverter">
+        <field name="shape" converter="DataComponentConverter">
             <feature name="componentType" value="shape" />
         </field>
     </data>

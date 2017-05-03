@@ -31,6 +31,7 @@ import name.huliqing.editor.tools.base.ModeTool;
 import name.huliqing.editor.tools.base.RotationTool;
 import name.huliqing.editor.tools.base.ScaleTool;
 import name.huliqing.editor.tools.Tool;
+import name.huliqing.editor.tools.base.CameraViewTool;
 import name.huliqing.editor.tools.base.MoveTool;
 import name.huliqing.editor.tools.base.PickTool;
 import name.huliqing.editor.tools.base.UndoRedoTool;
@@ -42,8 +43,9 @@ import name.huliqing.editor.tools.base.UndoRedoTool;
 public class BaseEditToolbar extends EditToolbar<SimpleJmeEdit>{
     
     private UndoRedoTool undoRedoTool;
-    private CameraTool cameraTool;
     private ModeTool modeTool;
+    private CameraViewTool cameraViewTool;
+    private CameraTool cameraTool;
     private GridTool gridTool;
     private PickTool pickTool;
     
@@ -65,8 +67,9 @@ public class BaseEditToolbar extends EditToolbar<SimpleJmeEdit>{
         super.initialize();
         
         undoRedoTool = new UndoRedoTool("undoRedoTool", Manager.getRes(ResConstants.TOOL_MODE_TIP), null);
-        cameraTool = new CameraTool(Manager.getRes(ResConstants.TOOL_CAMERA), Manager.getRes(ResConstants.TOOL_CAMERA_TIP), null);
         modeTool = new ModeTool(Manager.getRes(ResConstants.TOOL_MODE), Manager.getRes(ResConstants.TOOL_MODE_TIP), null);
+        cameraViewTool = new CameraViewTool(Manager.getRes(ResConstants.TOOL_CAMERAVIEW), Manager.getRes(ResConstants.TOOL_CAMERAVIEW_TIP), null);
+        cameraTool = new CameraTool(Manager.getRes(ResConstants.TOOL_CAMERA), Manager.getRes(ResConstants.TOOL_CAMERA_TIP), null);
         gridTool = new GridTool(Manager.getRes(ResConstants.TOOL_GRID), Manager.getRes(ResConstants.TOOL_GRID_TIP), AssetConstants.INTERFACE_TOOL_GRID);
         pickTool = new PickTool("pickTool", null, null);
         moveTool = new MoveTool(Manager.getRes(ResConstants.TOOL_MOVE), Manager.getRes(ResConstants.TOOL_MOVE_TIP),  AssetConstants.INTERFACE_TOOL_MOVE);
@@ -106,8 +109,9 @@ public class BaseEditToolbar extends EditToolbar<SimpleJmeEdit>{
         addToggleMapping(new ToggleMappingEvent(KeyInput.KEY_R, rotationTool).setConflicts(conflicts));
         
         add(undoRedoTool);
-        add(cameraTool);
         add(modeTool);
+        add(cameraViewTool);
+        add(cameraTool);
         add(gridTool);
         add(pickTool);
         add(moveTool);
@@ -115,6 +119,7 @@ public class BaseEditToolbar extends EditToolbar<SimpleJmeEdit>{
         add(scaleTool);
         
         setEnabled(undoRedoTool, true);
+        setEnabled(cameraViewTool, true);
         setEnabled(cameraTool, true);
         setEnabled(modeTool, true);
         setEnabled(gridTool, true);
@@ -127,6 +132,42 @@ public class BaseEditToolbar extends EditToolbar<SimpleJmeEdit>{
         clearToggleMappings();
         removeAll();
         super.cleanup(); 
+    }
+
+    public UndoRedoTool getUndoRedoTool() {
+        return undoRedoTool;
+    }
+
+    public ModeTool getModeTool() {
+        return modeTool;
+    }
+
+    public CameraViewTool getCameraViewTool() {
+        return cameraViewTool;
+    }
+
+    public CameraTool getCameraTool() {
+        return cameraTool;
+    }
+
+    public GridTool getGridTool() {
+        return gridTool;
+    }
+
+    public PickTool getPickTool() {
+        return pickTool;
+    }
+
+    public MoveTool getMoveTool() {
+        return moveTool;
+    }
+
+    public RotationTool getRotationTool() {
+        return rotationTool;
+    }
+
+    public ScaleTool getScaleTool() {
+        return scaleTool;
     }
     
 }

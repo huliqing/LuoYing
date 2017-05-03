@@ -19,7 +19,6 @@
  */
 package name.huliqing.editor.utils;
 
-import com.jme3.input.CameraInput;
 import com.jme3.input.InputManager;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.*;
@@ -30,8 +29,16 @@ import com.jme3.renderer.Camera;
 import com.jme3.util.TempVars;
 
 public class BestEditCamera implements ActionListener, AnalogListener {
-
+    
 //    private static final Logger LOG = Logger.getLogger(BestEditCamera.class.getName());
+    
+    private final static String EDIT_CAMERA_TOGGLEROTATE = "EditCameraToggleRotate";
+    private final static String EDIT_CAMERA_DOWN = "EditCameraDown";
+    private final static String EDIT_CAMERA_UP = "EditCameraUp";
+    private final static String EDIT_CAMERA_MOVELEFT = "EditCameraMoveLeft";
+    private final static String EDIT_CAMERA_MOVERIGHT = "EditCameraMoveRight";
+    private final static String EDIT_CAMERA_ZOOMIN = "EditCameraZoomIn";
+    private final static String EDIT_CAMERA_ZOOMOUT = "EditCameraZoomOut";
     
     public enum View {
         front, back, left, right, top, bottom, user;
@@ -68,7 +75,7 @@ public class BestEditCamera implements ActionListener, AnalogListener {
     
     @Override
     public void onAction(String name, boolean keyPressed, float tpf) {
-        if (name.equals(CameraInput.CHASECAM_TOGGLEROTATE)) {
+        if (name.equals(EDIT_CAMERA_TOGGLEROTATE)) {
             if (keyPressed) {
                 canRotate = true;
             } else {
@@ -79,17 +86,17 @@ public class BestEditCamera implements ActionListener, AnalogListener {
 
     @Override
     public void onAnalog(String name, float value, float tpf) {
-        if (name.equals(CameraInput.CHASECAM_MOVELEFT)) {
+        if (name.equals(EDIT_CAMERA_MOVELEFT)) {
             doRotateCamera(Vector3f.UNIT_Y, value * 2.5f);
-        } else if (name.equals(CameraInput.CHASECAM_MOVERIGHT)) {
+        } else if (name.equals(EDIT_CAMERA_MOVERIGHT)) {
             doRotateCamera(Vector3f.UNIT_Y, -value * 2.5f);
-        } else if (name.equals(CameraInput.CHASECAM_UP)) {
+        } else if (name.equals(EDIT_CAMERA_UP)) {
             doRotateCamera(cam.getLeft(), -value * 2.5f);
-        } else if (name.equals(CameraInput.CHASECAM_DOWN)) {
+        } else if (name.equals(EDIT_CAMERA_DOWN)) {
             doRotateCamera(cam.getLeft(), value * 2.5f);
-        } else if (name.equals(CameraInput.CHASECAM_ZOOMIN)) {
+        } else if (name.equals(EDIT_CAMERA_ZOOMIN)) {
             doZoomCamera(value);
-        } else if (name.equals(CameraInput.CHASECAM_ZOOMOUT)) {
+        } else if (name.equals(EDIT_CAMERA_ZOOMOUT)) {
             doZoomCamera(-value);
         }
     }
@@ -100,25 +107,25 @@ public class BestEditCamera implements ActionListener, AnalogListener {
      */
     public final void registerWithInput(InputManager inputManager) {
 
-        String[] inputs = {CameraInput.CHASECAM_TOGGLEROTATE,
-            CameraInput.CHASECAM_DOWN,
-            CameraInput.CHASECAM_UP,
-            CameraInput.CHASECAM_MOVELEFT,
-            CameraInput.CHASECAM_MOVERIGHT,
-            CameraInput.CHASECAM_ZOOMIN,
-            CameraInput.CHASECAM_ZOOMOUT};
+        String[] inputs = {EDIT_CAMERA_TOGGLEROTATE,
+            EDIT_CAMERA_DOWN,
+            EDIT_CAMERA_UP,
+            EDIT_CAMERA_MOVELEFT,
+            EDIT_CAMERA_MOVERIGHT,
+            EDIT_CAMERA_ZOOMIN,
+            EDIT_CAMERA_ZOOMOUT};
 
         this.inputManager = inputManager;
-        inputManager.addMapping(CameraInput.CHASECAM_DOWN, new MouseAxisTrigger(MouseInput.AXIS_Y, true));
-        inputManager.addMapping(CameraInput.CHASECAM_UP, new MouseAxisTrigger(MouseInput.AXIS_Y, false));
+        inputManager.addMapping(EDIT_CAMERA_DOWN, new MouseAxisTrigger(MouseInput.AXIS_Y, true));
+        inputManager.addMapping(EDIT_CAMERA_UP, new MouseAxisTrigger(MouseInput.AXIS_Y, false));
         
-        inputManager.addMapping(CameraInput.CHASECAM_ZOOMIN, new MouseAxisTrigger(MouseInput.AXIS_WHEEL, false));
-        inputManager.addMapping(CameraInput.CHASECAM_ZOOMOUT, new MouseAxisTrigger(MouseInput.AXIS_WHEEL, true));
+        inputManager.addMapping(EDIT_CAMERA_ZOOMIN, new MouseAxisTrigger(MouseInput.AXIS_WHEEL, false));
+        inputManager.addMapping(EDIT_CAMERA_ZOOMOUT, new MouseAxisTrigger(MouseInput.AXIS_WHEEL, true));
         
-        inputManager.addMapping(CameraInput.CHASECAM_MOVELEFT, new MouseAxisTrigger(MouseInput.AXIS_X, true));
-        inputManager.addMapping(CameraInput.CHASECAM_MOVERIGHT, new MouseAxisTrigger(MouseInput.AXIS_X, false));
+        inputManager.addMapping(EDIT_CAMERA_MOVELEFT, new MouseAxisTrigger(MouseInput.AXIS_X, true));
+        inputManager.addMapping(EDIT_CAMERA_MOVERIGHT, new MouseAxisTrigger(MouseInput.AXIS_X, false));
         
-        inputManager.addMapping(CameraInput.CHASECAM_TOGGLEROTATE, new MouseButtonTrigger(MouseInput.BUTTON_MIDDLE));
+        inputManager.addMapping(EDIT_CAMERA_TOGGLEROTATE, new MouseButtonTrigger(MouseInput.BUTTON_MIDDLE));
 
         inputManager.addListener(this, inputs);
     }
@@ -127,15 +134,17 @@ public class BestEditCamera implements ActionListener, AnalogListener {
      * 清理相机的按键绑定
      */
     public void cleanup() {
-        String[] inputs = {CameraInput.CHASECAM_TOGGLEROTATE,
-            CameraInput.CHASECAM_DOWN,
-            CameraInput.CHASECAM_UP,
-            CameraInput.CHASECAM_MOVELEFT,
-            CameraInput.CHASECAM_MOVERIGHT,
-            CameraInput.CHASECAM_ZOOMIN,
-            CameraInput.CHASECAM_ZOOMOUT};
+        String[] inputs = {EDIT_CAMERA_TOGGLEROTATE,
+            EDIT_CAMERA_DOWN,
+            EDIT_CAMERA_UP,
+            EDIT_CAMERA_MOVELEFT,
+            EDIT_CAMERA_MOVERIGHT,
+            EDIT_CAMERA_ZOOMIN,
+            EDIT_CAMERA_ZOOMOUT};
         for (String input : inputs) {
-            inputManager.deleteMapping(input);
+            if (inputManager.hasMapping(input)) {
+                inputManager.deleteMapping(input);
+            }
         }
     }
     

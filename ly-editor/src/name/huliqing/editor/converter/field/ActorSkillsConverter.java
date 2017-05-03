@@ -44,10 +44,10 @@ import name.huliqing.luoying.xml.ObjectData;
  * EntityData的objectData字段中，所以需要继承自EntityObjectDatasFieldConverter
  * @author huliqing
  */
-public class ActorSkillsFieldConverter extends EntityObjectDatasFieldConverter {
-    private static final Logger LOG = Logger.getLogger(ActorSkillsFieldConverter.class.getName());
+public class ActorSkillsConverter extends EntityObjectDatasConverter {
+    private static final Logger LOG = Logger.getLogger(ActorSkillsConverter.class.getName());
 
-    public ActorSkillsFieldConverter() {
+    public ActorSkillsConverter() {
         super();
         Button playAndStop = new Button("", JfxUtils.createIcon(AssetConstants.INTERFACE_ICON_PLAY));
         toolbar.getItems().add(playAndStop);

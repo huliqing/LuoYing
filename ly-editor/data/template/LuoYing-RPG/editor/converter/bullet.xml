@@ -10,10 +10,10 @@
         <field name="shape" converter="TextConverter" />
         <field name="shapeOffset" converter="Vector3fConverter" />
         <field name="timeout" converter="FloatTextConverter" />
-        <field name="effects" converter="ListDataFieldConverter" />
-        <field name="hitEffects" converter="ListDataFieldConverter" />
-        <field name="sounds" converter="ListDataFieldConverter" />
-        <field name="hitSounds" converter="ListDataFieldConverter" />
+        <field name="effects" converter="ListDataConverter" />
+        <field name="hitEffects" converter="ListDataConverter" />
+        <field name="sounds" converter="ListDataConverter" />
+        <field name="hitSounds" converter="ListDataConverter" />
     </data>
     
     <data name="bulletPathBase" extends="bulletBase">
@@ -24,7 +24,7 @@
     
     <data name="bulletCurveBase" extends="bulletPathBase">
         <field name="tension" converter="FloatTextConverter" />
-        <field name="positions" converter="ListDataFieldConverter" />
+        <field name="positions" converter="ListDataConverter" />
         <field name="up" converter="Vector3fConverter" />
     </data>
 

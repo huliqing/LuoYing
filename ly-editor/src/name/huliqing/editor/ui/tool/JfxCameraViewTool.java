@@ -25,19 +25,19 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Region;
 import name.huliqing.editor.constants.ResConstants;
 import name.huliqing.editor.manager.Manager;
-import name.huliqing.editor.tools.base.CameraTool;
+import name.huliqing.editor.tools.base.CameraViewTool;
 import name.huliqing.editor.utils.BestEditCamera;
 import name.huliqing.fxswing.Jfx;
 
 /**
- *
+ * Jfx界面相机视角操作工具
  * @author huliqing
  */
-public class JfxCameraTool extends JfxAbstractTool<CameraTool> {
+public class JfxCameraViewTool extends JfxAbstractTool<CameraViewTool> {
     
     private final MenuButton view = new MenuButton();
 
-    public JfxCameraTool() {
+    public JfxCameraViewTool() {
         view.setPrefWidth(80);
         view.setPrefHeight(25);
         view.setMaxHeight(25);

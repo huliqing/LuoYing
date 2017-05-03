@@ -40,13 +40,13 @@ import name.huliqing.luoying.object.entity.Entity;
  * 用于转换技能的animation字段,从模型中获取所有的动画，让用户选择用哪一个动画设置到该字段中。
  * @author huliqing
  */
-public class SkillAnimationFieldConverter extends SimpleFieldConverter{
+public class SkillAnimationConverter extends SimpleFieldConverter{
 
     private final ComboBox<String> animField = new ComboBox();
     private final AutoCompleteComboBoxListener acControl = new AutoCompleteComboBoxListener(animField);
     private String lastValueSaved;
     
-    public SkillAnimationFieldConverter() {
+    public SkillAnimationConverter() {
         animField.focusedProperty().addListener((ObservableValue<? extends Boolean> observable
                 , Boolean oldValue, Boolean newValue) -> {
             if (newValue) return;

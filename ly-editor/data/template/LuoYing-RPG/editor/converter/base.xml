@@ -9,7 +9,8 @@
     <converter name="SimpleDataConverter" value="name.huliqing.editor.converter.data.SimpleDataConverter" />
     
     <!--FieldConverters-->
-    <converter name="UniqueIdConverter" value="name.huliqing.editor.converter.field.UniqueIdConverter" />
+    <converter name="TagNameConverter" value="name.huliqing.editor.converter.field.TagNameConverter" />
+    <converter name="DataUniqueIdConverter" value="name.huliqing.editor.converter.field.DataUniqueIdConverter" />
     <converter name="TextConverter" value="name.huliqing.editor.converter.field.TextConverter" />
     <converter name="FloatTextConverter" value="name.huliqing.editor.converter.field.FloatTextConverter" />
     <converter name="IntegerTextConverter" value="name.huliqing.editor.converter.field.IntegerTextConverter" />
@@ -22,9 +23,9 @@
     <converter name="Vector4fConverter" value="name.huliqing.editor.converter.field.Vector4fConverter" />
     <converter name="QuaternionConverter" value="name.huliqing.editor.converter.field.QuaternionConverter" />
     <converter name="FileConverter" value="name.huliqing.editor.converter.field.FileConverter" />
-    <converter name="DataFieldConverter" value="name.huliqing.editor.converter.field.DataFieldConverter" />
-    <converter name="ListDataFieldConverter" value="name.huliqing.editor.converter.field.ListDataFieldConverter" />
-    <converter name="TagNameConverter" value="name.huliqing.editor.converter.field.TagNameConverter" />
+    <converter name="DataComponentConverter" value="name.huliqing.editor.converter.field.DataComponentConverter" />
+    <converter name="ListDataConverter" value="name.huliqing.editor.converter.field.ListDataConverter" />
+    <converter name="UniqueIdConverter" value="name.huliqing.editor.converter.field.UniqueIdConverter" />
     
     <data name="base" extends="" converter="SimpleDataConverter">
         <field name="tagName" converter="TagNameConverter">
@@ -35,7 +36,7 @@
             <feature name="disabled" value="true" />
             <feature name="collapsed" value="true" />
         </field>
-        <field name="uniqueId" converter="UniqueIdConverter" >
+        <field name="uniqueId" converter="DataUniqueIdConverter">
             <feature name="disabled" value="true" />
             <feature name="collapsed" value="true" />
         </field>

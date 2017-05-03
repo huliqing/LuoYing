@@ -18,7 +18,7 @@
  * along with LuoYing.  If not, see <http://www.gnu.org/licenses/>.
  */
 package name.huliqing.luoying.object.skill;
-
+ 
 import com.jme3.bounding.BoundingBox;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;

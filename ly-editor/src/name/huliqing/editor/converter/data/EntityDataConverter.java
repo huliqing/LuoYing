@@ -31,7 +31,7 @@ import name.huliqing.editor.edit.controls.ControlTile;
 import name.huliqing.editor.edit.controls.entity.EntityControlTileListener;
 
 /**
- *
+ * 场景实体转换器
  * @author huliqing
  */
 public class EntityDataConverter extends DataConverter<JfxSceneEdit, EntityData> 

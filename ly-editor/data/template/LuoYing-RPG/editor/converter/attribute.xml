@@ -22,7 +22,7 @@
     </data>
     
     <data name="attributeGroup" extends="attributeBase">
-        <field name="attributes" converter="ListDataFieldConverter">
+        <field name="attributes" converter="ListDataConverter">
             <feature name="componentType" value="attribute" />
             <feature name="collapsed" value="false" />
         </field>

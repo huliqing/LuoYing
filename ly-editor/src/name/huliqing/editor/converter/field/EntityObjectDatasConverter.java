@@ -51,9 +51,9 @@ import name.huliqing.luoying.xml.ObjectData;
  * 所有包含在EntityData的objectDatas字段中的列表数据都需要继承自这个类, 例如：SkillData,ChannelData,EffectData,LogicDatas...等等
  * @author huliqing
  */
-public class EntityObjectDatasFieldConverter extends SimpleFieldConverter<JfxSceneEdit, EntityData>{
+public class EntityObjectDatasConverter extends SimpleFieldConverter<JfxSceneEdit, EntityData>{
 
-    private static final Logger LOG = Logger.getLogger(EntityObjectDatasFieldConverter.class.getName());
+    private static final Logger LOG = Logger.getLogger(EntityObjectDatasConverter.class.getName());
     
     private final static String FEATURE_DATA_TYPE = "dataType";
     private final static String FEATURE_COMPONENT_TYPE = "componentType";
@@ -68,7 +68,7 @@ public class EntityObjectDatasFieldConverter extends SimpleFieldConverter<JfxSce
     
     private DataConverter dataConverter;
     
-    public EntityObjectDatasFieldConverter() {
+    public EntityObjectDatasConverter() {
         Button add = new Button("", JfxUtils.createIcon(AssetConstants.INTERFACE_ICON_ADD));
         Button remove = new Button("", JfxUtils.createIcon(AssetConstants.INTERFACE_ICON_SUBTRACT));
         
@@ -131,7 +131,7 @@ public class EntityObjectDatasFieldConverter extends SimpleFieldConverter<JfxSce
             if (newValue == null) {
                 return;
             }
-            dataConverter = ConverterManager.createDataConverter(jfxEdit, newValue, EntityObjectDatasFieldConverter.this);
+            dataConverter = ConverterManager.createDataConverter(jfxEdit, newValue, EntityObjectDatasConverter.this);
             dataConverter.initialize();
 //            getParent().setChildContent(newValue.getId(), dataConverter.getLayout());
             getParent().setChildLayout(newValue.getId(), dataConverter);

@@ -67,7 +67,7 @@ import name.huliqing.luoying.object.scene.Scene;
  * 场景的"entities"字段的转换器, 将entities转换为列表
  * @author huliqing
  */
-public class EntitiesFieldConverter extends FieldConverter<JfxSceneEdit, EntityData> implements JfxSceneEditListener {
+public class SceneEntitiesConverter extends FieldConverter<JfxSceneEdit, EntityData> implements JfxSceneEditListener {
 
     private final VBox layout = new VBox();
     private final ToolBar toolBar = new ToolBar();
@@ -80,7 +80,7 @@ public class EntitiesFieldConverter extends FieldConverter<JfxSceneEdit, EntityD
     private DataConverter dataConverter;
     private final ComponentSearch<ComponentDefine> componentSearch = new ComponentSearch(ComponentManager.getComponentsByType(ComponentConstants.ENTITY));
     
-    public EntitiesFieldConverter() {
+    public SceneEntitiesConverter() {
         // 工具栏
         Button add = new Button("", JfxUtils.createIcon(AssetConstants.INTERFACE_ICON_ADD));
         Button remove = new Button("", JfxUtils.createIcon(AssetConstants.INTERFACE_ICON_SUBTRACT));

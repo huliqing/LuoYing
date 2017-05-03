@@ -32,7 +32,6 @@ import name.huliqing.editor.tools.NumberValueTool;
 import name.huliqing.editor.tools.ParamsTool;
 import name.huliqing.editor.tools.StringValueTool;
 import name.huliqing.editor.tools.ToggleTool;
-import name.huliqing.editor.tools.base.CameraTool;
 import name.huliqing.editor.tools.base.GridTool;
 import name.huliqing.editor.tools.base.ModeTool;
 import name.huliqing.editor.tools.base.MoveTool;
@@ -41,6 +40,8 @@ import name.huliqing.editor.tools.base.ScaleTool;
 import name.huliqing.editor.tools.Tool;
 import name.huliqing.editor.tools.Vector2fValueTool;
 import name.huliqing.editor.tools.Vector3fValueTool;
+import name.huliqing.editor.tools.base.CameraTool;
+import name.huliqing.editor.tools.base.CameraViewTool;
 import name.huliqing.editor.tools.batch.BatchSourceTool;
 import name.huliqing.editor.tools.batch.BatchTargetTool;
 import name.huliqing.editor.tools.entity.InstancedTool;
@@ -75,8 +76,10 @@ public class JfxToolFactory {
         // ---- 基本工具
         // 模式切换工具
         TOOL_MAPPING.put(ModeTool.class, JfxModeTool.class);
+        // 相机视角切换工具
+        TOOL_MAPPING.put(CameraViewTool.class, JfxCameraViewTool.class);
         // 相机工具
-        TOOL_MAPPING.put(CameraTool.class, JfxCameraTool.class);
+        TOOL_MAPPING.put(CameraTool.class, JfxToggleTool.class);
         // 网格显示工具
         TOOL_MAPPING.put(GridTool.class, JfxToggleTool.class);
         // 移动工具

@@ -64,7 +64,7 @@ public class NavMeshToolbar extends EditToolbar<SimpleJmeEdit> {
 
     @Override
     public String getName() {
-        return Manager.getRes("<NavMeshToolbar>");
+        return Manager.getRes(ResConstants.EDIT_TOOLBAR_NAVMESH);
     }
 
     @Override

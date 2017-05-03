@@ -55,8 +55,7 @@
     </data>
     
     <data name="effectParticle" extends="effectBase">
-        <!--<field name="emitter" converter="TextConverter" />-->
-        <field name="emitter" converter="DataFieldConverter" />
+        <field name="emitter" converter="DataComponentConverter" />
         <field name="emitAll" converter="CheckBoxConverter" />
         <field name="randomColor" converter="CheckBoxConverter" />
         <field name="inWorldSpace" converter="CheckBoxConverter" />

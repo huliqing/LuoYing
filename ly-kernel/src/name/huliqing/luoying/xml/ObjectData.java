@@ -168,6 +168,16 @@ public class ObjectData implements Savable, Cloneable {
         }
     }
     
+    private void removeLocalAttribute(String key) {
+        if (localData == null) {
+            return;
+        }
+        localData.remove(key);
+        if (localData.isEmpty()) {
+            localData = null;
+        }
+    }
+    
     /**
      * 设置参数值，如果参数已经存在，则该参数将被替换
      * @param key
@@ -175,78 +185,146 @@ public class ObjectData implements Savable, Cloneable {
      */
     public void setAttribute(String key, Savable value) {
         if (value == null) {
-            if (localData != null) {
-                localData.remove(key);
-                if (localData.isEmpty()) {
-                    localData = null;
-                }
-            }
+            removeLocalAttribute(key);
             return;
         } 
-        
         if (localData == null) {
             localData = new HashMap<String, Savable>();
         }
-        
         localData.put(key, value);
-
     }
     
-    public void setAttribute(String key, byte value) {
+    public void setAttribute(String key, Byte value) {
+        if (value == null) {
+            removeLocalAttribute(key);
+            return;
+        }
         setAttribute(key, new SavableByte(value));
     }
-    public void setAttribute(String key, short value) {
+    public void setAttribute(String key, Short value) {
+        if (value == null) {
+            removeLocalAttribute(key);
+            return;
+        }
         setAttribute(key, new SavableShort(value));
     }
-    public void setAttribute(String key, int value) {
+    public void setAttribute(String key, Integer value) {
+        if (value == null) {
+            removeLocalAttribute(key);
+            return;
+        }
         setAttribute(key, new SavableInteger(value));
     }
-    public void setAttribute(String key, float value) {
+    public void setAttribute(String key, Float value) {
+        if (value == null) {
+            removeLocalAttribute(key);
+            return;
+        }
         setAttribute(key, new SavableFloat(value));
     }
-    public void setAttribute(String key, long value) {
+    public void setAttribute(String key, Long value) {
+        if (value == null) {
+            removeLocalAttribute(key);
+            return;
+        }
         setAttribute(key, new SavableLong(value));
     }
-    public void setAttribute(String key, double value) {
+    public void setAttribute(String key, Double value) {
+        if (value == null) {
+            removeLocalAttribute(key);
+            return;
+        }
         setAttribute(key, new SavableDouble(value));
     }
-    public void setAttribute(String key, boolean value) {
+    public void setAttribute(String key, Boolean value) {
+        if (value == null) {
+            removeLocalAttribute(key);
+            return;
+        }
         setAttribute(key, new SavableBoolean(value));
     }
     public void setAttribute(String key, byte[] value) {
+        if (value == null) {
+            removeLocalAttribute(key);
+            return;
+        }
         setAttribute(key, new SavablePrimitiveArray(SavablePrimitiveArray.ARRAY_BYTE, value));
     }
     public void setAttribute(String key, short[] value) {
+        if (value == null) {
+            removeLocalAttribute(key);
+            return;
+        }
         setAttribute(key, new SavablePrimitiveArray(SavablePrimitiveArray.ARRAY_SHORT, value));
     }
     public void setAttribute(String key, int[] value) {
+        if (value == null) {
+            removeLocalAttribute(key);
+            return;
+        }
         setAttribute(key, new SavablePrimitiveArray(SavablePrimitiveArray.ARRAY_INTEGER, value));
     }
     public void setAttribute(String key, float[] value) {
+        if (value == null) {
+            removeLocalAttribute(key);
+            return;
+        }
         setAttribute(key, new SavablePrimitiveArray(SavablePrimitiveArray.ARRAY_FLOAT, value));
     }
     public void setAttribute(String key, long[] value) {
+        if (value == null) {
+            removeLocalAttribute(key);
+            return;
+        }
         setAttribute(key, new SavablePrimitiveArray(SavablePrimitiveArray.ARRAY_LONG, value));
     }
     public void setAttribute(String key, double[] value) {
+        if (value == null) {
+            removeLocalAttribute(key);
+            return;
+        }
         setAttribute(key, new SavablePrimitiveArray(SavablePrimitiveArray.ARRAY_DOUBLE, value));
     }
     public void setAttribute(String key, boolean[] value) {
+        if (value == null) {
+            removeLocalAttribute(key);
+            return;
+        }
         setAttribute(key, new SavablePrimitiveArray(SavablePrimitiveArray.ARRAY_BOOLEAN, value));
     }
     public void setAttribute(String key, String value) {
+        if (value == null) {
+            removeLocalAttribute(key);
+            return;
+        }
         setAttribute(key, new SavableString(value));
     }
     public void setAttributeStringArray(String key, String[] value) {
+        if (value == null) {
+            removeLocalAttribute(key);
+            return;
+        }
         setAttribute(key, new SavableStringArray(value));
     }
     public void setAttributeStringList(String key, List<String> value) {
+        if (value == null) {
+            removeLocalAttribute(key);
+            return;
+        }
         setAttribute(key, new SavableStringList(value));
     }
     public void setAttributeSavableArray(String key, Savable[] value) {
+        if (value == null) {
+            removeLocalAttribute(key);
+            return;
+        }
         setAttribute(key, new SavableArray(value));
     }
     public void setAttributeSavableList(String key, List<? extends Savable> value) {
+        if (value == null) {
+            removeLocalAttribute(key);
+            return;
+        }
         setAttribute(key, new SavableList(value));
     }
     

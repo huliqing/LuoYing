@@ -82,10 +82,13 @@ public class ResConstants {
     public final static String EDIT_TOOLBAR_TERRAIN = "edit.toolbar.terrain";
     public final static String EDIT_TOOLBAR_ENTITY_BRUSH = "edit.toolbar.entity.brush";
     public final static String EDIT_TOOLBAR_ENTITY_BATCH = "edit.toolbar.entity.batch";
+    public final static String EDIT_TOOLBAR_NAVMESH = "edit.toolbar.navMesh";
     
     // 基本工具
     public final static String TOOL_MODE = "tool.mode";
     public final static String TOOL_MODE_TIP = "tool.mode.tip";
+    public final static String TOOL_CAMERAVIEW = "tool.cameraview";
+    public final static String TOOL_CAMERAVIEW_TIP = "tool.cameraview.tip";
     public final static String TOOL_CAMERA = "tool.camera";
     public final static String TOOL_CAMERA_TIP = "tool.camera.tip";
     public final static String TOOL_GRID = "tool.grid";

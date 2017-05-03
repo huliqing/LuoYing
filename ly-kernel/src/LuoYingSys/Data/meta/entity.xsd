@@ -387,6 +387,15 @@ xs:time
                     <xs:attribute name="hideCursorOnRotate" type="bool" use="optional" >
                         <xs:annotation><xs:documentation>hideCursorOnRotate, default: "1"</xs:documentation></xs:annotation>
                     </xs:attribute>
+                    <xs:attribute name="rotationEnabled" type="bool" use="optional" >
+                        <xs:annotation><xs:documentation>是否开启相机镜头旋转功能，默认:是</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="physicsEnabled" type="bool" use="optional" >
+                        <xs:annotation><xs:documentation>是否开启物理碰撞（防穿墙）,默认:是</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="chaseTarget" type="xs:integer" use="optional" >
+                        <xs:annotation><xs:documentation>指定一个跟随目标（实体对象唯 一id）</xs:documentation></xs:annotation>
+                    </xs:attribute>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>

@@ -54,11 +54,14 @@ edit.toolbar.base=基本工具
 edit.toolbar.terrain=地形编辑
 edit.toolbar.entity.brush=实体刷
 edit.toolbar.entity.batch=批处理
+edit.toolbar.navMesh=寻路网格
 
 tool.mode=模式
 tool.mode.tip=切换操作模式(Tab)
-tool.camera=相机视角
-tool.camera.tip=切换相机视角
+tool.cameraview=视角
+tool.cameraview.tip=切换视角
+tool.camera=相机
+tool.camera.tip=开关相机
 tool.grid=网格
 tool.grid.tip=切换显示网格
 tool.move=移动
@@ -148,7 +151,7 @@ tool.entity.batch.gen.info.tip=显示划分后的区域
 tool.entity.batch.gen.submit=创建批处理区域
 tool.entity.batch.gen.submit.tip=立即创建批处理区域
 
-tool.navmesh.source=NavMeshEntity源
+tool.navmesh.source=NavMesh源
 tool.navmesh.source.tip=选择一个NavMeshEntity,寻路网格创建后将保存在这个实体中。
 tool.navmesh.cellSize=单元格大小
 tool.navmesh.cellSize.tip=采样源网格时使用的宽度和深度分辨率, 默认1

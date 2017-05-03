@@ -40,11 +40,12 @@ import name.huliqing.luoying.object.Loader;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
- * 用于转换所有属性值为单个ObjectData的字段.
+ * 这个转换器用于转换字段类型为： 单个ObjectData的字段。
+ * 这个转换器允许从已经定义的组件中选择一个组件，在组件载入后，将组件的数据(ObjectData)设置到这个源对象的字段。
  * @author huliqing
  */
-public class DataFieldConverter extends SimpleFieldConverter {
-    private static final Logger LOG = Logger.getLogger(DataFieldConverter.class.getName());
+public class DataComponentConverter extends SimpleFieldConverter {
+    private static final Logger LOG = Logger.getLogger(DataComponentConverter.class.getName());
     
     private final static String FEATURE_COMPONENT_TYPE = "componentType";
     private String componentType;
@@ -57,7 +58,7 @@ public class DataFieldConverter extends SimpleFieldConverter {
     private ObjectData lastObjectData;
     private DataConverter dataConverter;
     
-    public DataFieldConverter() {
+    public DataComponentConverter() {
         input.setStyle("-fx-background-radius:7 0 0 7;");
         selectButton.setStyle("-fx-background-radius: 0 7 7 0;");
         layout.getChildren().addAll(input, selectButton);

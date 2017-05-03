@@ -38,6 +38,7 @@ import name.huliqing.editor.manager.Manager;
 import name.huliqing.editor.manager.ResManager;
 import name.huliqing.editor.toolbar.EditToolbar;
 import name.huliqing.editor.tools.AbstractTool;
+import name.huliqing.editor.tools.ToggleTool;
 import name.huliqing.editor.utils.BestEditCamera;
 import name.huliqing.editor.utils.BestEditCamera.View;
 import name.huliqing.luoying.object.anim.Anim;
@@ -48,7 +49,7 @@ import name.huliqing.luoying.object.anim.CurveMoveAnim;
  * 场景镜头工具
  * @author huliqing
  */
-public class CameraTool extends AbstractTool implements EditorListener {
+public class CameraTool extends AbstractTool implements EditorListener, ToggleTool {
     
 //    private static final Logger LOG = Logger.getLogger(CameraTool.class.getName());
     
@@ -108,14 +109,12 @@ public class CameraTool extends AbstractTool implements EditorListener {
         updateViewText();
         editor.getGuiNode().attachChild(viewText);
         editor.addListener(this);
-        
     }
 
     @Override
     public void cleanup() {
         editor.removeListener(this);
         editorCam.cleanup();
-        editorCam = null;
         viewText.removeFromParent();
         super.cleanup(); 
     }
@@ -234,7 +233,7 @@ public class CameraTool extends AbstractTool implements EditorListener {
      */
     public void doChaseSelected() {
         if (edit.getSelected() != null && edit.getSelected().getControlSpatial() != null) {
-            doChase(edit.getSelected().getControlSpatial().getWorldTranslation());
+            doChase(edit.getSelected().getControlSpatial().getWorldTranslation(), editorCam.getFocus().distance(editorCam.getCamera().getLocation()));
         }
     }
     
@@ -242,7 +241,7 @@ public class CameraTool extends AbstractTool implements EditorListener {
      * 把镜头移动到场景原点
      */
     public void doChaseOrigin() {
-        doChase(new Vector3f());
+        doChase(new Vector3f(), 5);
     }
     
     /**
@@ -253,21 +252,24 @@ public class CameraTool extends AbstractTool implements EditorListener {
         editorCam.doSwitchView(view);
     }
     
+    /**
+     * 切换到正交视角
+     */
     public void doOrthoView() {
         editorCam.doOrthoMode();
     }
     
+    /**
+     * 切换到透视视角
+     */
     public void doPerspView() {
         editorCam.doPerspMode();
     }
     
-    private void doChase(Vector3f position) {
+    private void doChase(Vector3f position, float distance) {
         Camera camera = editorCam.getCamera();
         
-        // defFocusDistance会导致镜头拉近或拉远，因物体大小不一，这有可能会导致拉到物体内部。所以不再去拉近距离
-        // 只要定位镜头位置就可以。
-//        Vector3f camEndLoc = new Vector3f().set(position).subtractLocal(camera.getDirection().mult(defFocusDistance));
-        Vector3f camEndLoc = new Vector3f().set(position).subtractLocal(camera.getDirection().mult(editorCam.getFocus().distance(camera.getLocation())));
+        Vector3f camEndLoc = new Vector3f().set(position).subtractLocal(camera.getDirection().mult(distance));
         
         CameraNode cameraNode = new CameraNode("", editorCam.getCamera());
         cameraNode.setLocalRotation(editorCam.getCamera().getRotation());
@@ -286,6 +288,33 @@ public class CameraTool extends AbstractTool implements EditorListener {
         locAnimNode.attachChild(cameraNode);
         edit.getEditRoot().attachChild(locAnimNode);
     }
+    
+    // remove20170503
+//    private void doChase(Vector3f position) {
+//        Camera camera = editorCam.getCamera();
+//        
+//        // defFocusDistance会导致镜头拉近或拉远，因物体大小不一，这有可能会导致拉到物体内部。所以不再去拉近距离
+//        // 只要定位镜头位置就可以。
+////        Vector3f camEndLoc = new Vector3f().set(position).subtractLocal(camera.getDirection().mult(defFocusDistance));
+//        Vector3f camEndLoc = new Vector3f().set(position).subtractLocal(camera.getDirection().mult(editorCam.getFocus().distance(camera.getLocation())));
+//        
+//        CameraNode cameraNode = new CameraNode("", editorCam.getCamera());
+//        cameraNode.setLocalRotation(editorCam.getCamera().getRotation());
+//        cameraNode.setControlDir(CameraControl.ControlDirection.SpatialToCamera);
+//
+//        CurveMoveAnim locAnim = new CurveMoveAnim();
+//        locAnim.setControlPoints(Arrays.asList(camera.getLocation(), camEndLoc));
+//        locAnim.setCurveTension(0);
+//        locAnim.setTarget(cameraNode);
+//        locAnim.setUseTime(0.5f);
+//        locAnim.addListener((Anim anim) -> {
+//            editorCam.setFocus(position);
+//        });
+//        locAnim.start();
+//        AnimNode locAnimNode = new AnimNode(locAnim, true);
+//        locAnimNode.attachChild(cameraNode);
+//        edit.getEditRoot().attachChild(locAnimNode);
+//    }
 
     @Override
     public void update(float tpf) {

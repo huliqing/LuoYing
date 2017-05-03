@@ -86,6 +86,11 @@ public class CollisionChaseCamera extends ChaseCamera
     private Spatial collisionTarget;
     private final Ray ray = new Ray();
     
+    // 是否允许旋转镜头
+    private boolean rotationEnabled = true;
+    // 是否开启物理碰撞特性
+    private boolean physicsEnabled = true;
+    
     public CollisionChaseCamera(Camera cam, InputManager inputManager) {
         super(cam, inputManager);
 
@@ -93,6 +98,20 @@ public class CollisionChaseCamera extends ChaseCamera
 
         // 用于提供在移动平台下双手指缩放调整镜头远近的事件监听
         registerTouchListener(inputManager);
+    }
+
+    @Override
+    public void onAction(String name, boolean keyPressed, float tpf) {
+        if (!enabled)
+            return;
+        super.onAction(name, keyPressed, tpf);
+    }
+
+    @Override
+    public void onAnalog(String name, float value, float tpf) {
+        if (!enabled) 
+            return;
+        super.onAnalog(name, value, tpf);
     }
     
     /**
@@ -160,21 +179,42 @@ public class CollisionChaseCamera extends ChaseCamera
     
     /**
      * 开关相机的旋转功能
-     * @param bool 
+     * @param enabled 
      */
-    public void setEnabledRotation(boolean bool) {
-        if (!bool) {
+    public void setRotationEnabled(boolean enabled) {
+        rotationEnabled = enabled;
+        if (!rotationEnabled) {
             super.setRotationSpeed(0);
         } else {
             super.setRotationSpeed(tempRotationSpeed);
         }
     }
     
+    /**
+     * 判断是否开始相机跟随功能
+     * @return 
+     */
+    public boolean isRotationEnabled() {
+        return rotationEnabled;
+    }
+
+    /**
+     * 设置是否开启物理特性,物理碰撞、防穿墙功能
+     * @param physicsEnabled 
+     */
+    public void setPhysicsEnabled(boolean physicsEnabled) {
+        this.physicsEnabled = physicsEnabled;
+    }
+
+    public boolean isPhysicsEnabled() {
+        return physicsEnabled;
+    }
+    
     @Override
     public void update(float tpf) {
         super.update(tpf);
         
-        if (!enabled) {
+        if (!enabled || !physicsEnabled) {
             return;
         }
         
@@ -335,11 +375,12 @@ public class CollisionChaseCamera extends ChaseCamera
             CameraInput.CHASECAM_ZOOMIN,
             CameraInput.CHASECAM_ZOOMOUT};
         for (String s : inputs) {
-            inputManager.deleteMapping(s);
+            if (inputManager.hasMapping(s)) {
+                inputManager.deleteMapping(s);
+            }
         }
         
         // 4.ChaseCamera中自定义的监听
-        inputManager.deleteMapping(TOUCH_SCALE_EVENT);
         inputManager.deleteMapping(TOUCH_SCALE_EVENT);
     }
     

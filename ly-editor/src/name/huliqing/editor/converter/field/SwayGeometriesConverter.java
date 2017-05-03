@@ -35,16 +35,16 @@ import name.huliqing.editor.edit.scene.JfxSceneEdit;
 import name.huliqing.editor.ui.ListViewPopup;
 import name.huliqing.editor.ui.utils.JfxUtils;
 import name.huliqing.fxswing.Jfx;
-import name.huliqing.luoying.data.EntityData;
 import name.huliqing.luoying.object.entity.Entity;
 import name.huliqing.luoying.utils.GeometryUtils;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
- * 用于SwayModule的SwayGeometries字段转换器，以方便选择”摇动“的网格物体.
+ * 用于转换PlantEntity的SwayGeometries字段，以方便选择”摇动“的网格物体.
+ * @deprecated 20170501不再需要，因为已经不再需要有PlantEntity
  * @author huliqing
  */
-public class ModuleSwayGeometriesFieldConverter extends SimpleFieldConverter<JfxSceneEdit, ObjectData>{
+public class SwayGeometriesConverter extends SimpleFieldConverter<JfxSceneEdit, ObjectData>{
 
     private final VBox layout = new VBox();
     private final ToolBar toolbar = new ToolBar();
@@ -53,7 +53,7 @@ public class ModuleSwayGeometriesFieldConverter extends SimpleFieldConverter<Jfx
     
     private List<String> lastValues;
     
-    public ModuleSwayGeometriesFieldConverter() {
+    public SwayGeometriesConverter() {
         Button add = new Button("", JfxUtils.createIcon(AssetConstants.INTERFACE_ICON_ADD));
         Button remove = new Button("", JfxUtils.createIcon(AssetConstants.INTERFACE_ICON_SUBTRACT));
         
@@ -109,8 +109,7 @@ public class ModuleSwayGeometriesFieldConverter extends SimpleFieldConverter<Jfx
     @Override
     public void initialize() {
         super.initialize();
-        EntityData ed = (EntityData) this.parent.getParent().getData();
-        Entity en = jfxEdit.getJmeEdit().getScene().getEntity(ed.getUniqueId());
+        Entity en = jfxEdit.getJmeEdit().getScene().getEntity(data.getUniqueId());
         if (en != null) {
             Jfx.runOnJme(() -> {
                 List<Geometry> geos = GeometryUtils.findAllGeometry(en.getSpatial());

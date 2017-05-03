@@ -5,11 +5,11 @@
     xmlns='http://editor.huliqing.name'
     xsi:schemaLocation='http://editor.huliqing.name meta.xsd'>
     
-    <converter name="EntitiesFieldConverter" value="name.huliqing.editor.converter.field.EntitiesFieldConverter" />
+    <converter name="SceneEntitiesConverter" value="name.huliqing.editor.converter.field.SceneEntitiesConverter" />
     
     <data name="scene" extends="base">
-        <field name="entities" converter="EntitiesFieldConverter" />
-        <field name="progress" converter="DataFieldConverter">
+        <field name="entities" converter="SceneEntitiesConverter" />
+        <field name="progress" converter="DataComponentConverter">
             <feature name="componentType" value="progress" />
             <feature name="collapsed" value="true" />
         </field>

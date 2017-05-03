@@ -5,7 +5,7 @@
     xmlns='http://editor.huliqing.name'
     xsi:schemaLocation='http://editor.huliqing.name meta.xsd'>
     
-    <converter name="ModuleSwayGeometriesFieldConverter" value="name.huliqing.editor.converter.field.ModuleSwayGeometriesFieldConverter" />
+    <converter name="ModuleSwayGeometriesConverter" value="name.huliqing.editor.converter.field.ModuleSwayGeometriesConverter" />
     
     <data name="moduleBase" extends="base">
         <field name="moduleOrder" converter="IntegerTextConverter" />
@@ -67,7 +67,7 @@
         <field name="friction" converter="FloatTextConverter" />
         <field name="restitution" converter="FloatTextConverter" />
         <field name="kinematic" converter="CheckBoxConverter" />
-        <field name="physicsShape" converter="DataFieldConverter">
+        <field name="physicsShape" converter="DataComponentConverter">
             <feature name="componentType" value="physicsShape" />
         </field>
         <field name="angularDamping" converter="FloatTextConverter">
@@ -143,7 +143,7 @@
         <field name="swayWind" converter="Vector2fConverter">
             <feature name="collapsed" value="true" />
         </field>
-        <field name="swayGeometries" converter="ModuleSwayGeometriesFieldConverter" />
+        <field name="swayGeometries" converter="ModuleSwayGeometriesConverter" />
     </data>
 
     <data name="moduleTalent" extends="moduleBase">

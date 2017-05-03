@@ -45,13 +45,12 @@ import name.huliqing.luoying.xml.ObjectData;
 
 /**
  * 默认的列表数据类型转换器，主要用于转换所有字段类型为
- * List&lt;T extends ObjectData&gt;
- * 的字段。可以指定DataType和ComponentType
+ * List&lt;T extends ObjectData&gt; 的字段。可以指定DataType和ComponentType
  * @author huliqing
  * @param <E>
  * @param <T>
  */
-public class ListDataFieldConverter<E extends JfxAbstractEdit, T extends ObjectData> extends SimpleFieldConverter<E, T> {
+public class ListDataConverter<E extends JfxAbstractEdit, T extends ObjectData> extends SimpleFieldConverter<E, T> {
 
 //    private static final Logger LOG = Logger.getLogger(ListDataFieldConverter.class.getName());
     
@@ -66,7 +65,7 @@ public class ListDataFieldConverter<E extends JfxAbstractEdit, T extends ObjectD
     
     private DataConverter dataConverter;
     
-    public ListDataFieldConverter() {
+    public ListDataConverter() {
         Button add = new Button("", JfxUtils.createIcon(AssetConstants.INTERFACE_ICON_ADD));
         Button remove = new Button("", JfxUtils.createIcon(AssetConstants.INTERFACE_ICON_SUBTRACT));
         
@@ -129,7 +128,7 @@ public class ListDataFieldConverter<E extends JfxAbstractEdit, T extends ObjectD
             if (newValue == null) {
                 return;
             }
-            dataConverter = ConverterManager.createDataConverter(jfxEdit, newValue, ListDataFieldConverter.this);
+            dataConverter = ConverterManager.createDataConverter(jfxEdit, newValue, ListDataConverter.this);
             dataConverter.initialize();
 //            getParent().setChildContent(newValue.getId(), dataConverter.getLayout());
             getParent().setChildLayout(newValue.getId(), dataConverter);
