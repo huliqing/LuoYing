@@ -5,6 +5,7 @@
 
 这个项目的主要目的用于更高效方便的创建3D游戏，落樱采用完全开放式的配置设计，并且内置了大量的游戏组件，只要通过对各种配置文件的灵活设置并写少量的逻辑代码就可以非常自由方便的构建自己的3D游戏，同时也允许灵活的扩展自己的各种组件。
 使用落樱编辑器还可以使用更直观的可视化方式轻松构建3D场景及配置各种组件。
+![editor](https://git.oschina.net/uploads/images/2017/0510/221959_d8713ee1_1322184.jpeg)
 
 ![editor](https://raw.githubusercontent.com/huliqing/LuoYing/master/docs/public/screenshots/editor-20170429.jpg)
 编辑器演示一:  [http://v.youku.com/v_show/id_XMjY0MTM3NjQyOA==.html](http://v.youku.com/v_show/id_XMjY0MTM3NjQyOA==.html "http://v.youku.com/v_show/id_XMjY0MTM3NjQyOA==.html")
