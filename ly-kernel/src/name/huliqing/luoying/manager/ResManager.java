@@ -48,11 +48,9 @@ public class ResManager {
     
     /**
      * 载入classPath路径下的资源文件,示例: <br>
-     * <code>
      * <pre>
      *  loadResource("/data/resource", "utf-8", "zh_CN")
      * </pre>
-     * </code>
      * @param classPathFile classPath资源路径
      * @param encoding 字符集编码，如果没有指定则默认使用"utf-8"
      * @param locale 

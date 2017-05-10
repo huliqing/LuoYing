@@ -38,7 +38,6 @@ public class ThreadHelper {
     
     /**
      * 创建一个需要在新线程中运行的任务。
-     * <code>
      * <pre>
      * if (future != null) {
      *      if (future.isDone()) {
@@ -59,7 +58,6 @@ public class ThreadHelper {
      *      }
      * }
      * </pre>
-     * </code>
      * @param <T>
      * @param callable
      * @return 

@@ -100,7 +100,6 @@ public interface ActorService extends ActorNetwork {
      * 角色在死后需要停止活动，则可使用该方法来停止正在执行的动画。
      * @param actor
      * @return 
-     * @see #resetToAnimationTime(Actor, String, float) 
      */
     boolean reset(Entity actor);
     

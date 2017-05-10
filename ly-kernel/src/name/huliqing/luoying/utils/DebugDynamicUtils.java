@@ -127,7 +127,6 @@ public class DebugDynamicUtils {
     /**
      * 在原点显示一个坐标
      * @param debugId
-     * @param shape
      * @return 
      */
     public static Spatial debugCoordinate(String debugId) {

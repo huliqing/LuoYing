@@ -121,7 +121,6 @@ public class DebugUtils {
 
     /**
      * Wireframe Sphere
-     * @param pos
      * @param size
      * @param color
      * @return

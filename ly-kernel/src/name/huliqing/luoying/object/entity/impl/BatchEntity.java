@@ -131,7 +131,6 @@ public class BatchEntity extends ModelEntity {
     
     /**
      * 调用Batch(),对已经添加到当前BatchEntity中的所有实体进行批处理。
-     * @see BatchNode#batch() }
      */
     public void batch() {
         batchNode.batch();

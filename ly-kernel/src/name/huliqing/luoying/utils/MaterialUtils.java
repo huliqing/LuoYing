@@ -71,7 +71,6 @@ public class MaterialUtils {
     /**
      * @param tex 贴图文件路径
      * @return 
-     * @see #createTransparent(com.jme3.texture.Texture) 
      */
     public static Material createTransparent(String tex) {
         Texture texture = LuoYing.getAssetManager().loadTexture(tex);

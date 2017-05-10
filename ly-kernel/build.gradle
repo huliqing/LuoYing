@@ -35,6 +35,10 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
 
+configurations {
+    jaxDoclet
+}
+
 // Java项目的目录结构与默认的gradle定义不同，需要特别指定src、test等文件夹的路径
 sourceSets {
     main {
@@ -54,3 +58,13 @@ targetCompatibility = 1.6
 
 archivesBaseName = kernelArchivesBaseName
 version = kernelArchivesVersion
+
+task buildDocs(type: Javadoc) {
+    title = " common API"
+    source = sourceSets.main.allJava
+    destinationDir = reporting.file("rest-api-docs")
+    options.docletpath = configurations.jaxDoclet.files.asType(List)
+    options.encoding = "UTF-8"
+    options.charSet = 'UTF-8'
+    options.links("http://docs.oracle.com/javase/6/docs/api/");
+}

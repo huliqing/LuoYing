@@ -861,13 +861,11 @@ public class LuoYing {
     
     /**
      * 载入数据, 如：
-     * <code>
      * <pre>
      * loadData("data/game.xml");
      * loadData("data/scene.xml");
      * ...
      * </pre>
-     * </code>
      * @param dataFile
      * @throws LuoYingException 
      */

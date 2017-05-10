@@ -257,7 +257,7 @@ public class SkillModule extends AbstractModule implements ValueChangeListener, 
     }
     
     /**
-     * 检查技能在当前状态下是否可以执行，如果返回值为 {@link SkillConstants#STATE_OK} 则表示可以执行，
+     * 检查技能在当前状态下是否可以执行，如果返回值为 {@link StateCode#SKILL_USE_OK} 则表示可以执行，
      * 否则不能执行。
      * @param skill
      * @return 

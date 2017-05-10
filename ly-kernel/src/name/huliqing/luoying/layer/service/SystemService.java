@@ -55,8 +55,7 @@ public interface SystemService extends Inject {
     InetAddress getBroadcastAddress();
     
     /**
-     * 获取系统平台名称
-     * @see com.jme3.system.Platform
+     * 获取系统平台名称 , 参考（com.jme3.system.Platform)
      * @return 
      */
     String getPlatformName();

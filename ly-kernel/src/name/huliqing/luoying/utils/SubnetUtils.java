@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
  * subnet mask.
  *
  * @see "http://www.faqs.org/rfcs/rfc1519.html"
- * @author <rwinston@apache.org>
+ * @author rwinston@apache.org
  * @since 2.0
  */
 public class SubnetUtils {
