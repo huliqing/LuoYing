@@ -40,8 +40,8 @@ public class AboutMenuItem extends MenuItem {
         super(Manager.getRes(ResConstants.MENU_HELP_ABOUT));
         setOnAction(e -> {
             if (dialog == null) {
-                Label name = new Label("落梅");
-                Label version = new Label("版本：1.0-Alpha");
+                Label name = new Label("落樱RPG编辑器");
+                Label version = new Label("版本：3.0-Alpha");
                 Label email = new Label("联系：31703299@qq.com");
                 VBox layout = new VBox();
                 layout.getChildren().addAll(name, version, email);

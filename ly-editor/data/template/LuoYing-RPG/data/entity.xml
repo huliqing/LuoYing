@@ -118,7 +118,7 @@
                     rotationEnabled="1" physicsEnabled="1" chaseTarget="" />
     
     <!--声音 -->
-    <entityAudio id="entityAudio" />
+    <entityAudio id="entityAudio" sound="sound" />
     
     <!--包围盒-->
     <entitySimpleModel id="entityBoundary" file="LuoYingSys/Assets/Models/unitBoundaryBox.j3o" scale="100,20,100" cullHint="Always" />

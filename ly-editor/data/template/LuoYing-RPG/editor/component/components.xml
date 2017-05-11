@@ -151,4 +151,7 @@
     <component id="physicsShapeSphere" type="physicsShape" />
     <component id="physicsShapeStaticCustomMesh" type="physicsShape" />
     <component id="physicsShapeStaticMesh" type="physicsShape" />
+    
+    <!-- sounds -->
+    <component id="sound" type="sound" />
 </root>

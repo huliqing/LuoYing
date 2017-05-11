@@ -57,7 +57,7 @@
     <data name="entityAudio" extends="entityBase">
         <feature name="hideFields" value="rotation,scale,mat" />
         <field name="debug" converter="CheckBoxConverter" />
-        <field name="sound" converter="DataConverter">
+        <field name="sound" converter="DataComponentConverter">
             <feature name="componentType" value="sound" />
         </field>
     </data>

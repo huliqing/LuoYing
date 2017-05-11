@@ -13,6 +13,10 @@
     <!--音效配置-->
     <!--==========================================================================-->
     
+    <sound id="sound" file="" direction="0,0,1" directional="0" positional="1" innerAngle="45" outerAngle="90" 
+           looping="1" maxDistance="200" pitch="1.0" refDistance="10" reverbEnabled="0" timeOffset="0" 
+           type="Buffer" velocity="0,0,0" velocityFromTranslation="0" volume="1.0" />
+    
 </root>
 
 

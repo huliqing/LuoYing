@@ -28,8 +28,7 @@ import name.huliqing.luoying.object.skill.Skill;
 import name.huliqing.luoying.object.module.SkillListener;
 
 /**
- * 执行技能，如果没有特别说明，如果返回false则说明执行失败。返回true则说明
- * 执行成功.
+ * 技能服务类,这个类主要用于查找技能、执行技能以及一些技能相关的工具类方法。
  * @author huliqing
  */
 public interface SkillService extends SkillNetwork {
