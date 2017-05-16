@@ -534,10 +534,7 @@ public class ObjectData implements Savable, Cloneable {
     }
     
     /**
-     * 获取参数值，并以Vector3f形式返回，原始格式必须如："x"或 "x,y" 或 "x,y,z"，
-     * 如果参数不对，将返回null.<br>
-     * 当只有x值时，则y = z =x; <br>
-     * 当只有x,y值时，z = 1; <br>
+     * 获取参数值，并以Vector3f形式返回，原始格式必须是：""x,y,z"
      * @param key
      * @return 
      */
@@ -558,7 +555,7 @@ public class ObjectData implements Savable, Cloneable {
     }
     
     /**
-     * 格式, "x|y|z,x|y|z,...", 如果没有指定参数则返回null.
+     * 格式, "x|y|z,x|y|z,..."
      * @param key
      * @return 
      */

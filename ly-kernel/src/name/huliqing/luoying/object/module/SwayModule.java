@@ -21,7 +21,6 @@ package name.huliqing.luoying.object.module;
 
 import com.jme3.material.MatParam;
 import com.jme3.material.Material;
-import com.jme3.material.RenderState;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
@@ -92,6 +91,7 @@ public class SwayModule extends AbstractModule {
 
     private Material convertToGrassMaterial(Material originMat
             , boolean swaying, float swayFrequency, float swayVariation, float swayDistance, Vector2f wind) {
+        
         Material grassMat = new Material(LuoYing.getAssetManager(), AssetConstants.MATERIAL_GRASS);
         grassMat.setName("Grass Material");
         transferMatParam(originMat, grassMat, "AlphaDiscardThreshold", VarType.Float);
@@ -101,14 +101,18 @@ public class SwayModule extends AbstractModule {
         transferMatParam(originMat, grassMat, "Diffuse", VarType.Vector4);
         transferMatParam(originMat, grassMat, "Specular", VarType.Vector4);
         transferMatParam(originMat, grassMat, "Shininess", VarType.Float);
+        transferMatParam(originMat, grassMat, "ParallaxHeight", VarType.Float);
         transferMatParam(originMat, grassMat, "DiffuseMap", VarType.Texture2D);
         transferMatParam(originMat, grassMat, "NormalMap", VarType.Texture2D);
         transferMatParam(originMat, grassMat, "SpecularMap", VarType.Texture2D);
         
-        grassMat.setTransparent(true);
-        grassMat.getAdditionalRenderState().setDepthWrite(true);
-        grassMat.getAdditionalRenderState().setDepthTest(true);
-        grassMat.getAdditionalRenderState().setFaceCullMode(RenderState.FaceCullMode.Off);
+        // remove20170516
+//        grassMat.setTransparent(true);
+//        grassMat.getAdditionalRenderState().setDepthWrite(originMat.getAdditionalRenderState().isDepthWrite());
+//        grassMat.getAdditionalRenderState().setDepthTest(originMat.getAdditionalRenderState().isDepthTest());
+//        grassMat.getAdditionalRenderState().setFaceCullMode(originMat.getAdditionalRenderState().getFaceCullMode());
+
+        grassMat.getAdditionalRenderState().set(originMat.getAdditionalRenderState().clone());
         
         grassMat.setBoolean("Swaying", swaying);
         grassMat.setVector3("SwayData", new Vector3f(swayFrequency, swayVariation, swayDistance));

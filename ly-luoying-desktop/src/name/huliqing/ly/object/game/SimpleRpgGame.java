@@ -102,7 +102,7 @@ public abstract class SimpleRpgGame extends SimpleGame implements UIEventListene
     
     // 场景相机
     protected ChaseCameraEntity chaseCamera;
-
+    
     private final List<Actor> tempActorsPicked = new ArrayList<Actor>();
     private final CollisionResults tempTerrainsPicked = new CollisionResults();
     

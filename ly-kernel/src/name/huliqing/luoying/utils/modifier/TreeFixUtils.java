@@ -32,7 +32,21 @@ import name.huliqing.luoying.LuoYing;
 import name.huliqing.luoying.utils.ModelFileUtils;
 
 /**
- * 该类主要用于处理简模树的透明问题。通过将J3O载入并设置材质后再重新编译。
+ * 该类主要用于处理简模树叶的透明问题。通过将J3O载入并对指定的几何物体的材质进行设置，让树叶变透明，注：树叶贴图
+ * 必须是使用带有透明通道的png贴图。<br>
+ * 材质的设置主要针对以下几个属性进行：<br>
+ * 
+ * // 设置AlphaDiscardThreshold,必须的，如果不设置则会导致树叶的透明部分会遮住其它树叶
+ * geo.getMaterial().setFloat("AlphaDiscardThreshold", 0.1f);
+ * 
+ * <br>
+ * // 设置混合模式为Alpha
+ * geo.getMaterial().getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Alpha);
+ * 
+ * <br>
+ * // 打开双面树叶
+ * geo.getMaterial().getAdditionalRenderState().setFaceCullMode(RenderState.FaceCullMode.Off);
+ * 
  * @author huliqing
  */
 public class TreeFixUtils {
