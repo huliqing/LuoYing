@@ -78,7 +78,7 @@
     <entityInstanced id="sysEntityInstanced" cullHint="Dynamic" queueBucket="Opaque" shadowMode="Cast"/>
     
     <!--BatchNode节点实体-->
-    <entityBatch id="sysEntityBatch" cullHint="Dynamic" queueBucket="Opaque" shadowMode="Cast" />
+    <entityBatch id="sysEntityBatch" cullHint="Dynamic" queueBucket="Opaque" shadowMode="Inherit" rows="8" columns="8" extents="256, 256, 256" debug="0" />
     
     <!-- ========================================================================= -->
     <!-- 内置物体: 模型及其它 -->

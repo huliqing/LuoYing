@@ -652,7 +652,25 @@ xs:time
         </xs:annotation>
         <xs:complexType>
             <xs:complexContent>
-                <xs:extension base="entityBase">
+                <xs:extension base="entityModelBase">
+                    <xs:attribute name="rows" type="xs:integer" use="required">
+                        <xs:annotation><xs:documentation>设置Batch分区的行数</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="columns" type="xs:integer" use="required">
+                        <xs:annotation><xs:documentation>设置Batch分区的列数</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="extents" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>设置整个Batch区的大小，只有在这个区域中的实体才会被进行Batch处理，格式："xExtent, yExtent, zExtent", 分别表示在各个方向上的延伸.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="debug" type="bool" use="optional">
+                        <xs:annotation><xs:documentation>可视化显示划分区别的大小</xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="entities" type="xs:string" use="optional">
+                        <xs:annotation><xs:documentation>指定要进行batch的所有实体，格式:"entityId,entityId,...", entityId是实体的唯一ID，这个参数一般在运行时设置。</xs:documentation></xs:annotation>
+                    </xs:attribute>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>

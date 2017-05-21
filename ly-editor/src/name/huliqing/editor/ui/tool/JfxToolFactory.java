@@ -42,8 +42,6 @@ import name.huliqing.editor.tools.Vector2fValueTool;
 import name.huliqing.editor.tools.Vector3fValueTool;
 import name.huliqing.editor.tools.base.CameraTool;
 import name.huliqing.editor.tools.base.CameraViewTool;
-import name.huliqing.editor.tools.batch.BatchSourceTool;
-import name.huliqing.editor.tools.batch.BatchTargetTool;
 import name.huliqing.editor.tools.entity.InstancedTool;
 import name.huliqing.editor.tools.entity.SourceTool;
 import name.huliqing.editor.tools.terrain.TexLayerTool;
@@ -100,9 +98,9 @@ public class JfxToolFactory {
         // 实体刷的选择Instanced实例的工具
         TOOL_MAPPING.put(InstancedTool.class, JfxInstancedTool.class);
         
-        // ---- Batch工具栏
-        TOOL_MAPPING.put(BatchSourceTool.class, JfxBatchSourceTool.class);
-        TOOL_MAPPING.put(BatchTargetTool.class, JfxBatchTargetTool.class);
+//        // ---- Batch工具栏
+//        TOOL_MAPPING.put(BatchSourceTool.class, JfxBatchSourceTool.class);
+//        TOOL_MAPPING.put(BatchTargetTool.class, JfxBatchTargetTool.class);
         
     }
     

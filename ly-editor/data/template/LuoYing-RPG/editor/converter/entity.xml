@@ -8,6 +8,7 @@
     <!--Entity FieldConverter-->
     <converter name="EntityDataConverter" value="name.huliqing.editor.converter.data.EntityDataConverter" />
     <converter name="SwayGeometriesConverter" value="name.huliqing.editor.converter.field.SwayGeometriesConverter" />
+    <converter name="BatchEntityEntitiesConverter" value="name.huliqing.editor.converter.field.BatchEntityEntitiesConverter" />
 
     <data name="entityBase" extends="base" converter="EntityDataConverter">
         <field name="name" converter="TextConverter">
@@ -310,9 +311,16 @@
     <data name="entityInstanced" extends="entityModelBase">
         <feature name="hideFields" value="location,rotation,scale,mat" />
     </data>
+    
     <data name="entityBatch" extends="entityModelBase">
         <feature name="hideFields" value="location,rotation,scale,mat" />
+        <field name="debug" converter="CheckBoxConverter" />
+        <field name="rows" converter="IntegerTextConverter" />
+        <field name="columns" converter="IntegerTextConverter" />
+        <field name="extents" converter="Vector3fConverter" />
+        <field name="entities" converter="BatchEntityEntitiesConverter" />
     </data>
+    
     <data name="entityNavMesh" extends="entityBase">
         <feature name="hideFields" value="location,rotation,scale,mat" />
         <field name="file" converter="FileConverter">

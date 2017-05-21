@@ -17,13 +17,14 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with LuoYing.  If not, see <http://www.gnu.org/licenses/>.
  */
-package name.huliqing.editor.ui.tool;
+package name.huliqing.editor.converter.field;
 
+import java.util.LinkedList;
 import java.util.List;
 import javafx.event.ActionEvent;
 import javafx.geometry.Point2D;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
@@ -34,36 +35,44 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Popup;
 import name.huliqing.editor.constants.AssetConstants;
+import name.huliqing.editor.converter.SimpleFieldConverter;
+import name.huliqing.editor.edit.scene.JfxSceneEdit;
 import name.huliqing.editor.edit.scene.SceneEdit;
-import name.huliqing.editor.tools.batch.BatchSourceTool;
 import name.huliqing.editor.ui.utils.JfxUtils;
 import name.huliqing.editor.ui.utils.SearchListView;
 import name.huliqing.fxswing.Jfx;
 import name.huliqing.luoying.object.entity.Entity;
+import name.huliqing.luoying.object.entity.impl.BatchEntity;
+import name.huliqing.luoying.object.scene.Scene;
+import name.huliqing.luoying.xml.ObjectData;
 
 /**
- * 用于选择实体列表进行batch
+ * BatchEntity的entities字段的转换器。
+ * 通过从场景中添加实体后添加到BatchEntity中。
  * @author huliqing
  */
-public class JfxBatchSourceTool extends JfxAbstractTool<BatchSourceTool>{
+public class BatchEntityEntitiesConverter extends SimpleFieldConverter<JfxSceneEdit, ObjectData> {
 
-    private final VBox view = new VBox();
+    private final VBox layout = new VBox();
+    private final ToolBar toolbar = new ToolBar();
+    private final ListView<Entity> entitiesListView = new ListView();
     
-    private final Label title = new Label();
-    private final ToolBar btnPanel = new ToolBar();
     private final Button add = new Button("", JfxUtils.createIcon(AssetConstants.INTERFACE_ICON_ADD));
     private final Button remove = new Button("", JfxUtils.createIcon(AssetConstants.INTERFACE_ICON_SUBTRACT));
+    private final Button rebatch = new Button("", JfxUtils.createIcon(AssetConstants.INTERFACE_ICON_REFRESH));
     
     private final EntitySearch<Entity> entitySearch= new EntitySearch();
     
-    private final ListView<Entity> content = new ListView();
+    // 当前的BatchEntity实体
+    private BatchEntity batchEntity;
     
-    public JfxBatchSourceTool() {
-        btnPanel.getItems().addAll(add, remove);
-        view.getChildren().addAll(title, btnPanel, content);
+    public BatchEntityEntitiesConverter() {
+        layout.getChildren().add(toolbar);
+        layout.getChildren().add(entitiesListView);
+        toolbar.getItems().addAll(add, remove, rebatch);
         
         add.setOnAction((ActionEvent event) -> {
-            SceneEdit se = (SceneEdit) toolbar.getEdit();
+            SceneEdit se = this.jfxEdit.getJmeEdit();
             if (se == null || se.getScene() == null)
                 return;
             entitySearch.setItems(se.getScene().getEntities());
@@ -71,16 +80,27 @@ public class JfxBatchSourceTool extends JfxAbstractTool<BatchSourceTool>{
         });
         
         remove.setOnAction((ActionEvent event) -> {
-            List<Entity> items = content.getSelectionModel().getSelectedItems();
+            List<Entity> items = entitiesListView.getSelectionModel().getSelectedItems();
             if (items == null)
                 return;
+            SceneEdit sceneEdit = this.jfxEdit.getJmeEdit();
             Jfx.runOnJme(() -> {
-                tool.removeEntities(items);
+                items.forEach(e -> {
+                    batchEntity.removeBatchEntity(e);
+                });
+                batchEntity.applyBatch();
+                batchEntity.updateDatas();
                 Jfx.runOnJfx(() -> {updateView();});
             });
         });
         
-        content.setCellFactory((ListView<Entity> param) -> new ListCell<Entity>() {
+        rebatch.setOnAction(e -> {
+            Jfx.runOnJme(() -> {
+                batchEntity.doRebatch();
+            });
+        });
+        
+        entitiesListView.setCellFactory((ListView<Entity> param) -> new ListCell<Entity>() {
             @Override
             protected void updateItem(Entity item, boolean empty) {
                 super.updateItem(item, empty);
@@ -91,38 +111,41 @@ public class JfxBatchSourceTool extends JfxAbstractTool<BatchSourceTool>{
                 }
             }
         });
-        content.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        content.prefWidthProperty().bind(view.widthProperty());
-        content.prefHeightProperty().bind(view.heightProperty().subtract(btnPanel.heightProperty()));
-        view.setMinHeight(256);
-    }
-    
-    @Override
-    protected Region createView() {
-        return view;
+        entitiesListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        entitiesListView.setPrefHeight(200);
     }
 
     @Override
     public void initialize() {
         super.initialize();
-        title.setText(tool.getName());
-        if (tool.getTips() != null) {
-            btnPanel.setTooltip(new Tooltip(tool.getTips()));
-        }
-        updateView();
+        // 从场景找到BatchEntity
+        batchEntity = (BatchEntity) jfxEdit.getJmeEdit().getScene().getEntity(data.getUniqueId());
     }
     
-    private void updateView() {
-        List<Entity> entities = tool.getEntities();
-        content.getItems().clear();
-        if (entities != null) {
-            content.getItems().addAll(entities);
+    @Override
+    protected void updateUI() {
+        entitiesListView.getItems().clear();
+        long[] tempEntities = data.getAsLongArray(field);
+        if (tempEntities != null) {
+            Scene scene = this.jfxEdit.getJmeEdit().getScene();
+            List<Entity> entities = new LinkedList();
+            for (long eid : tempEntities) {
+                Entity entity = scene.getEntity(eid);
+                if (entity != null) {
+                    entities.add(entity);
+                }
+            }
+            entitiesListView.getItems().addAll(entities);
         }
     }
-    
-    // ---- 用于查询场景中的实体
-    private final class EntitySearch<T extends Entity> {
 
+    @Override
+    protected Node createLayout() {
+        return layout;
+    }
+    
+      // ---- 用于查询场景中的实体
+    private final class EntitySearch<T extends Entity> {
         private final Popup popup = new Popup();
         private final VBox searchViewGroup = new VBox();
         private final SearchListView<Entity> searchListView = new SearchListView(new ListView());
@@ -164,7 +187,11 @@ public class JfxBatchSourceTool extends JfxAbstractTool<BatchSourceTool>{
                 popup.hide();
                 List<Entity> filterItems = searchListView.getListView().getItems();
                 Jfx.runOnJme(() -> {
-                    tool.addEntities(filterItems);
+                    filterItems.forEach(entity -> {
+                        batchEntity.addBatchEntity(entity);
+                    });
+                    batchEntity.applyBatch();
+                    batchEntity.updateDatas();
                     Jfx.runOnJfx(() -> {updateView();});
                 });
             });
@@ -175,7 +202,9 @@ public class JfxBatchSourceTool extends JfxAbstractTool<BatchSourceTool>{
                 if (entity == null)
                     return;
                 Jfx.runOnJme(() -> {
-                    tool.addEntity(entity);
+                    batchEntity.addBatchEntity(entity);
+                    batchEntity.applyBatch();
+                    batchEntity.updateDatas();
                     Jfx.runOnJfx(() -> {updateView();});
                 });
             });
@@ -195,5 +224,4 @@ public class JfxBatchSourceTool extends JfxAbstractTool<BatchSourceTool>{
                     txtCoords.getY() + node.getScene().getY() + node.getScene().getWindow().getY() + offsetY + node.heightProperty().getValue());
         }
     }
-
 }

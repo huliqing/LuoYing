@@ -27,7 +27,7 @@ import name.huliqing.fxswing.Jfx;
 import name.huliqing.luoying.xml.ObjectData;
 
 /**
- *  普通ObjectData字段转换器, 
+ * 普通ObjectData字段转换器, 
  * @author huliqing
  * @param <E>
  * @param <T>

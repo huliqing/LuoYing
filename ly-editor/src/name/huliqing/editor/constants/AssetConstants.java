@@ -44,6 +44,7 @@ public class AssetConstants {
     public final static String INTERFACE_ICON_STATISTICS = "Interface/icon/statistics.png";
     public final static String INTERFACE_ICON_MULT_SELECT = "Interface/icon/mult-select.png";
     public final static String INTERFACE_ICON_EYE = "Interface/icon/eye.png";
+    public final static String INTERFACE_ICON_REFRESH = "Interface/icon/refresh.png";
     
     
     public final static String INTERFACE_MENU_OPEN_DIR = "Interface/icon/open.png";

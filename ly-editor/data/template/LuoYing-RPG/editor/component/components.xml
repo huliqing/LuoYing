@@ -23,6 +23,7 @@
     <component id="entityAudio" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
     <component id="entityEffect" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
     <component id="entityInstanced" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
+    <component id="entityBatch" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
     <component id="entityNavMesh" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
     <component id="actor" type="entity" icon="" converterClass="name.huliqing.editor.component.EntityComponentConverter" />
     
